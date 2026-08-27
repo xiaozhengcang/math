@@ -346,6 +346,11 @@
       border-left-color: var(--accent-emerald);
       border: 1px solid rgba(16, 185, 129, 0.2);
     }
+    .callout-purple {
+      background: rgba(168, 85, 247, 0.08);
+      border-left-color: var(--accent-purple);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
 
     /* Grid layout */
     .grid-2 {
@@ -692,6 +697,7 @@
     </a>
     <nav class="nav-links">
       <a href="#s0" class="nav-link">0. 为什么投影</a>
+      <a href="#sproj" class="nav-link">★ 什么是投影点</a>
       <a href="#s1" class="nav-link">1. 列空间 Span</a>
       <a href="#s2" class="nav-link">2. 解的三种命运</a>
       <a href="#s3" class="nav-link">3. 正交投影与法方程</a>
@@ -754,6 +760,118 @@
         既然目标点 $\mathbf{z}$ 不在矩阵能够精准表达的平面上，我们就<strong>退而求其次</strong> —— 在该平面上寻找一个<strong>离目标点 $\mathbf{z}$ 欧氏距离最近的点 $\hat{\mathbf{z}}$</strong>。<br>
         而在欧几里得几何中，从一点向一个平面引出的线段中，<strong>垂线段最短</strong>！这个垂足 $\hat{\mathbf{z}}$，就是 $\mathbf{z}$ 在子空间上的<strong>正交投影（Orthogonal Projection）</strong>。
       </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- ★ 核心概念深度剖析：究竟什么是“投影点”（Projection Point）？ -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="sproj" class="section-title">
+    <span class="sec-num">★</span>
+    核心概念深度剖析：究竟什么是“投影点”（Projection Point / 垂足）？
+  </h2>
+
+  <div class="card">
+    <p>初学者在学习高维投影时，往往会被符号群（$\mathbf{z}, \hat{\mathbf{z}}, \tilde{\mathbf{z}}, \mathbf{w}, \mathbf{P}$）绕晕。为了扫清认知障碍，我们从<strong>生活直觉、严格数学定义、三重身份到核心概念四方对照</strong>，彻底讲透“投影点”。</p>
+
+    <h3>1. 生活直觉：正午阳光下的“影子”（Shadow）</h3>
+    <div class="grid-2">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">☀️</div>
+        <div class="callout-content">
+          <strong>垂直打光（正交投影）</strong><br>
+          地面是一块平整的水泥操场（子空间 $S$），空中悬停着一架无人机（全空间目标点 $\mathbf{z}$）。<br>
+          正午的太阳垂直于地面向下直射，无人机在地面上留下的<strong>影子位置</strong>，就是无人机在地面上的<strong>投影点 $\hat{\mathbf{z}}$（Projection Point）</strong>！<br>
+          从无人机垂直连向影子的这根垂线段，就是<strong>误差/残差向量 $\tilde{\mathbf{z}} = \mathbf{z} - \hat{\mathbf{z}}$</strong>。
+        </div>
+      </div>
+      <div class="callout callout-warn" style="margin:0">
+        <div class="callout-icon">🔦</div>
+        <div class="callout-content">
+          <strong>为什么必须是“垂直（正交）”投影？</strong><br>
+          如果是清晨或傍晚的斜向阳光照射（斜投影），影子会被拉得很长，此时无人机与影子的距离并不是最短的。<br>
+          在欧几里得几何中，<strong>只有垂直照射形成的垂足，才是平面上离空中目标最近的那个点</strong>！这就是为什么数据拟合中默认全部采用“正交投影”。
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">2. 严格几何定义：子空间中唯一的“欧氏最近邻”</h3>
+    <p>给定空间 $\mathbb{R}^N$ 中的任意目标向量 $\mathbf{z}$ 和一个子空间 $S$（例如矩阵各列张成的列空间 $\text{Col}(\mathbf{R})$）：</p>
+    <div class="math-block">
+      <div class="math-block-title">投影点的严格几何定义（最近点极小化问题）</div>
+      $$\hat{\mathbf{z}} = \operatorname{proj}_S(\mathbf{z}) = \arg\min_{\mathbf{v} \in S} \|\mathbf{z} - \mathbf{v}\|$$
+    </div>
+    <p>这个定义表明：在子空间 $S$ 中存在无数个点 $\mathbf{v}$，但有且仅有一个点 $\hat{\mathbf{z}}$ 能够使得从目标 $\mathbf{z}$ 到它的直线欧氏距离达到全局最小。初等几何的<strong>“垂线段最短定理”</strong>证明了这个点恰好就是从 $\mathbf{z}$ 向子空间引出的<strong>垂足（Foot of Perpendicular）</strong>。</p>
+
+    <h3 style="margin-top:1.8rem">3. 投影点的“代数与几何三重身份”</h3>
+    <div class="grid-3">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">🏠</div>
+        <div class="callout-content">
+          <strong>身份 ①：子空间内的合法居民</strong><br>
+          投影点 $\hat{\mathbf{z}}$ 既然完全落在子空间 $\text{Col}(\mathbf{R})$ 内，它就<strong>必须能够用基向量线性组合出来</strong>：<br>
+          $$\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}^* = w_1^* \mathbf{r}_1 + \dots + w_K^* \mathbf{r}_K$$
+          其中 $\mathbf{w}^*$ 是它在子空间基底下的“局部导航坐标”。
+        </div>
+      </div>
+      <div class="callout callout-success" style="margin:0">
+        <div class="callout-icon">⚡</div>
+        <div class="callout-content">
+          <strong>身份 ②：有效信号的正交提取</strong><br>
+          任意向量都可被正交无损分解为“有效信号 + 丢失噪声”：<br>
+          $$\mathbf{z} = \underbrace{\hat{\mathbf{z}}}_{\text{子空间有效信号}} + \underbrace{\tilde{\mathbf{z}}}_{\text{垂直残差/噪声}}$$
+          因为 $\hat{\mathbf{z}} \perp \tilde{\mathbf{z}}$，满足勾股定理 $\|\mathbf{z}\|^2 = \|\hat{\mathbf{z}}\|^2 + \|\tilde{\mathbf{z}}\|^2$。
+        </div>
+      </div>
+      <div class="callout callout-purple" style="margin:0">
+        <div class="callout-icon">⚙️</div>
+        <div class="callout-content">
+          <strong>身份 ③：投影矩阵算子的输出</strong><br>
+          投影点是全空间向量通过<strong>投影矩阵 $\mathbf{P}$</strong> 变换后的结果：<br>
+          $$\hat{\mathbf{z}} = \mathbf{P}\mathbf{z}$$
+          $\mathbf{P}$ 就像一台高维压路机，把空间所有点“垂直拍平”落到子空间上。
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">4. 易混淆核心概念四方对照表（新手必读）</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>概念术语</th>
+            <th>数学符号</th>
+            <th>所处空间与几何位置</th>
+            <th>物理含义与形象比喻</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>目标向量 (Target)</strong></td>
+            <td>$\mathbf{z}$</td>
+            <td>全空间 $\mathbb{R}^N$（通常在平面外）</td>
+            <td>天空中的真实目标 / 含有噪声的原始测量数据</td>
+          </tr>
+          <tr>
+            <td><strong>投影点 (Projection Point)</strong></td>
+            <td>$\hat{\mathbf{z}}$ 或 $\mathbf{p}$</td>
+            <td>全空间 $\mathbb{R}^N$，但<strong>严格位于子空间内</strong></td>
+            <td>地面上的垂足影子 / 在子空间能力范围内所能达到的<strong>最佳逼近值</strong></td>
+          </tr>
+          <tr>
+            <td><strong>最优加权系数 (Weights)</strong></td>
+            <td>$\mathbf{w}^*$</td>
+            <td>参数空间 $\mathbb{R}^K$（低维）</td>
+            <td>为了合成出影子 $\hat{\mathbf{z}}$，各列基底所需要的“调配比例/配方”</td>
+          </tr>
+          <tr>
+            <td><strong>残差向量 (Residual)</strong></td>
+            <td>$\tilde{\mathbf{z}} = \mathbf{z} - \hat{\mathbf{z}}$</td>
+            <td>正交补空间 $\text{Col}(\mathbf{R})^\perp$</td>
+            <td>连接目标与影子的垂直垂线段 / 模型无法拟合的误差与噪声</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
