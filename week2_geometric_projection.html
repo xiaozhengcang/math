@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第二阶段：空间与几何投影 —— 几何直觉、法方程推导与子空间本质</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for beautiful LaTeX rendering in HTML -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: rgba(19, 27, 46, 0.75);
+      --bg-card-hover: rgba(28, 39, 66, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.35);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-blue: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      
+      --gradient-brand: linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #10b981 100%);
+      --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+      
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 25px rgba(56, 189, 248, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.8;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(99, 102, 241, 0.12) 0px, transparent 40%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* KaTeX customization */
+    .katex {
+      font-size: 1.08em !important;
+      color: #f1f5f9;
+    }
+    .katex-display {
+      margin: 1.2rem 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.5rem 0;
+    }
+
+    /* Top Progress Bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--gradient-brand);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.1s ease;
+    }
+
+    /* Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(10, 14, 23, 0.88);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 50;
+      padding: 0.85rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 6rem;
+    }
+
+    /* Hero Banner */
+    .hero {
+      text-align: center;
+      padding: 3rem 1.5rem 3.5rem;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 14px;
+      border-radius: 20px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-blue);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 4vw, 2.9rem);
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+      background: linear-gradient(135deg, #ffffff 0%, #38bdf8 45%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 1.12rem;
+      max-width: 820px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .hero-quote {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--accent-blue);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 20px;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      display: inline-block;
+      max-width: 780px;
+      text-align: left;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.16);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Headings */
+    h2.section-title {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 3.5rem 0 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    h2.section-title .sec-num {
+      background: var(--gradient-brand);
+      color: #0a0e17;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      margin: 1.6rem 0 0.8rem;
+    }
+
+    h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--accent-amber);
+      margin: 1.2rem 0 0.6rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #cbd5e1;
+    }
+
+    /* Tags & Badges */
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 6px;
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+
+    .tag-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+    .tag-green { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-rose { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .tag-amber { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+
+    /* Alert / Callout Boxes */
+    .callout {
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      margin: 1.2rem 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      border-left: 4px solid;
+    }
+
+    .callout-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .callout-content {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+
+    .callout-content strong {
+      color: #fff;
+    }
+
+    .callout-info {
+      background: rgba(56, 189, 248, 0.08);
+      border-left-color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+    .callout-warn {
+      background: rgba(245, 158, 11, 0.08);
+      border-left-color: var(--accent-amber);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .callout-danger {
+      background: rgba(244, 63, 94, 0.08);
+      border-left-color: var(--accent-rose);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+    .callout-success {
+      background: rgba(16, 185, 129, 0.08);
+      border-left-color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    /* Grid layout */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      margin: 1.2rem 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin: 1.2rem 0;
+    }
+
+    @media(max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Equations container */
+    .math-block {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      margin: 1.2rem 0;
+      position: relative;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .math-block-title {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    /* Step List */
+    .step-list {
+      list-style: none;
+      counter-reset: step-counter;
+      margin: 1.2rem 0;
+    }
+
+    .step-item {
+      position: relative;
+      padding-left: 3rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .step-item::before {
+      counter-increment: step-counter;
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2.2rem;
+      height: 2.2rem;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1.2rem 0;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(17, 24, 39, 0.9);
+      color: var(--accent-blue);
+      padding: 12px 16px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #cbd5e1;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Interactive Canvas & UI */
+    .canvas-container {
+      position: relative;
+      background: #080c14;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 1.2rem 0;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
+    }
+
+    canvas {
+      display: block;
+      margin: 0 auto;
+      cursor: grab;
+    }
+
+    canvas:active {
+      cursor: grabbing;
+    }
+
+    .canvas-overlay {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      pointer-events: none;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: rgba(10, 14, 23, 0.7);
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .controls-panel {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin-top: 1rem;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 8px 0;
+      flex-wrap: wrap;
+    }
+
+    .control-row label {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      min-width: 80px;
+    }
+
+    .slider-val {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent-cyan);
+      min-width: 45px;
+    }
+
+    input[type=range] {
+      flex: 1;
+      min-width: 140px;
+      max-width: 320px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      outline: none;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--accent-blue);
+      color: #0a0e17;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: none;
+    }
+
+    .btn-emerald {
+      background: var(--accent-emerald);
+      color: #0a0e17;
+    }
+
+    .btn-amber {
+      background: var(--accent-amber);
+      color: #0a0e17;
+    }
+
+    /* Live Output Box */
+    .live-calc {
+      background: rgba(10, 14, 23, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+
+    /* Comparison Box */
+    .compare-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 1.2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .compare-container { grid-template-columns: 1fr; }
+    }
+
+    .compare-box {
+      border-radius: 10px;
+      padding: 1.2rem;
+      border: 1px solid;
+    }
+
+    .compare-algebra {
+      background: rgba(99, 102, 241, 0.06);
+      border-color: rgba(99, 102, 241, 0.25);
+    }
+
+    .compare-geometry {
+      background: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    /* Matrix input table */
+    .matrix-input-table {
+      border-collapse: separate;
+      border-spacing: 4px;
+      margin: 8px 0;
+    }
+
+    .matrix-input-table input {
+      width: 54px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 6px;
+      border-radius: 4px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+    }
+
+    .matrix-input-table input:focus {
+      border-color: var(--accent-blue);
+      outline: none;
+      background: rgba(56, 189, 248, 0.1);
+    }
+
+    /* Accordion / Details */
+    details {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 10px 0;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--accent-blue);
+      user-select: none;
+    }
+
+    summary:hover {
+      color: #fff;
+    }
+
+    details[open] summary {
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 6px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<header>
+  <div class="nav-container">
+    <a href="#" class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+        <polyline points="2 17 12 22 22 17"></polyline>
+        <polyline points="2 12 12 17 22 12"></polyline>
+      </svg>
+      <span>第2周：空间与几何投影</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#s0" class="nav-link">0. 为什么投影</a>
+      <a href="#s1" class="nav-link">1. 列空间 Span</a>
+      <a href="#s2" class="nav-link">2. 解的三种命运</a>
+      <a href="#s3" class="nav-link">3. 正交投影与法方程</a>
+      <a href="#s4" class="nav-link">4. 投影矩阵 P</a>
+      <a href="#s5" class="nav-link">5. 手算 Step-by-Step</a>
+      <a href="#s6" class="nav-link">6. 交互实验台</a>
+      <a href="#s7" class="nav-link">7. 工业应用</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-badge">📐 线性代数的几何之眼</div>
+    <h1>从“无解方程”到“子空间最佳逼近”</h1>
+    <p>摆脱死记硬背的代数公式，从 1D 垂线、2D 平面到高维超空间，真正看懂列空间 $\text{Col}(\mathbf{R})$、法方程 $\mathbf{R}^T\mathbf{R}\mathbf{w} = \mathbf{R}^T\mathbf{z}$ 与投影矩阵 $\mathbf{P}$ 的几何本质。</p>
+    <div class="hero-quote">
+      💡 <strong>核心心法：</strong>“在现实世界中，方程组 99.9% 都是‘无解’的超定系统。几何投影的精髓，就是用<strong>垂线段最短（正交性）</strong>在子空间里找到离现实最近的那个最佳拟合点。”
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 0. 为什么需要几何投影？（思维跃迁） -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s0" class="section-title">
+    <span class="sec-num">0</span>
+    思维跃迁：为什么我们需要“几何投影”？
+  </h2>
+
+  <div class="card">
+    <h3>从中学代数的“死胡同”说起</h3>
+    <p>在初中和高中阶段，我们习惯了求解形如 $\mathbf{A}\mathbf{x} = \mathbf{b}$ 的方程组。当时的思维模式是<strong>二元非黑即白</strong>的：</p>
+
+    <div class="grid-2">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">📚</div>
+        <div class="callout-content">
+          <strong>传统代数视角（理想世界）</strong><br>
+          2 个未知数，2 个方程：解出唯一的 $(x_1, x_2)$。精确命中，皆大欢喜。
+        </div>
+      </div>
+      <div class="callout callout-warn" style="margin:0">
+        <div class="callout-icon">⚠️</div>
+        <div class="callout-content">
+          <strong>遇到现实数据（真实世界）</strong><br>
+          测量了 100 个带噪声的数据点，试图用直线 $y = kx + b$ 拟合（100 个方程，2 个未知数）。代数老师会告诉你：<strong>“方程组无解！”</strong>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">工程现实的呼唤：难道“无解”就放弃了吗？</h3>
+    <p>显然不能！在机器学习、自动驾驶、计算机视觉和金融量化中，数据点永远远多于模型参数（<strong>超定系统 Overdetermined System</strong>），且每个测量值都有微小噪声。如果直接说“无解”，整个现代数据科学就无法运转了。</p>
+
+    <div class="callout callout-success">
+      <div class="callout-icon">🚀</div>
+      <div class="callout-content">
+        <strong>思维跃迁（The Geometric Leap）：</strong><br>
+        既然目标点 $\mathbf{z}$ 不在矩阵能够精准表达的平面上，我们就<strong>退而求其次</strong> —— 在该平面上寻找一个<strong>离目标点 $\mathbf{z}$ 欧氏距离最近的点 $\hat{\mathbf{z}}$</strong>。<br>
+        而在欧几里得几何中，从一点向一个平面引出的线段中，<strong>垂线段最短</strong>！这个垂足 $\hat{\mathbf{z}}$，就是 $\mathbf{z}$ 在子空间上的<strong>正交投影（Orthogonal Projection）</strong>。
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 1. 概念基石：向量、Span 与列空间 Col(R) -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s1" class="section-title">
+    <span class="sec-num">1</span>
+    概念基石：向量、线性组合、张成空间 (Span) 与列空间
+  </h2>
+
+  <div class="card">
+    <p>为了理解投影，我们必须先搞清楚：<strong>矩阵到底能生成什么样的空间？它的“射程范围”在哪里？</strong></p>
+
+    <h3>1.1 什么是线性组合（Linear Combination）？</h3>
+    <p>在线性代数中，我们只允许对一组向量做两种基本操作：<strong>标量缩放（乘常数）</strong>与<strong>向量相加</strong>。</p>
+    <p>给定 $K$ 个 $N$ 维向量 $\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_K \in \mathbb{R}^N$，它们的线性组合定义为：</p>
+    <div class="math-block">
+      <div class="math-block-title">线性组合数学表达式</div>
+      $$\mathbf{v} = w_1 \mathbf{r}_1 + w_2 \mathbf{r}_2 + \cdots + w_K \mathbf{r}_K = \sum_{k=1}^K w_k \mathbf{r}_k \quad (w_k \in \mathbb{R})$$
+    </div>
+
+    <h3>1.2 什么是张成空间（Span）？从 1D 到 3D 渐进理解</h3>
+    <p>张成空间（Span）就是<strong>所有可能的线性组合汇聚成的集合</strong>。想象一下：你拥有这几个向量作为方向舵，通过调节权重 $w_k$，你能在空间中到达哪些位置？</p>
+
+    <div class="grid-3">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">1️⃣</div>
+        <div class="callout-content">
+          <strong>1 个向量 $\text{Span}\{\mathbf{r}_1\}$</strong><br>
+          只能前后伸缩：$w_1 \mathbf{r}_1$。<br>
+          👉 几何形态：一条穿过原点的<strong>无限 1D 直线</strong>。
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">2️⃣</div>
+        <div class="callout-content">
+          <strong>2 个不共线向量 $\text{Span}\{\mathbf{r}_1, \mathbf{r}_2\}$</strong><br>
+          两方向自由合成：$w_1 \mathbf{r}_1 + w_2 \mathbf{r}_2$。<br>
+          👉 几何形态：一个穿过原点的<strong>无限 2D 平面</strong>。
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">3️⃣</div>
+        <div class="callout-content">
+          <strong>$K$ 个线性无关向量 $\text{Span}\{\dots\}$</strong><br>
+          $K$ 个自由度线性合成。<br>
+          👉 几何形态：嵌入在 $\mathbb{R}^N$ 空间中的一个 <strong>$K$ 维超子空间（Subspace）</strong>。
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">1.3 矩阵乘法的“列视角”与列空间 $\text{Col}(\mathbf{R})$</h3>
+    <p>把这 $K$ 个列向量水平拼成一个 $N \times K$ 的矩阵 $\mathbf{R} = [\mathbf{r}_1 \ \mathbf{r}_2 \ \cdots \ \mathbf{r}_K]$。此时，矩阵乘以向量 $\mathbf{R}\mathbf{w}$ 的真正含义是什么？</p>
+
+    <div class="math-block">
+      <div class="math-block-title">矩阵向量乘法的列视角本质</div>
+      $$\mathbf{R}\mathbf{w} = \begin{bmatrix} \mid & \mid & & \mid \\ \mathbf{r}_1 & \mathbf{r}_2 & \cdots & \mathbf{r}_K \\ \mid & \mid & & \mid \end{bmatrix} \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_K \end{bmatrix} = w_1 \mathbf{r}_1 + w_2 \mathbf{r}_2 + \cdots + w_K \mathbf{r}_K$$
+    </div>
+
+    <div class="callout callout-success">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-content">
+        <strong>一语道破天机：</strong><br>
+        $\mathbf{R}\mathbf{w}$ 本质上就是<strong>用权重向量 $\mathbf{w}$ 对矩阵 $\mathbf{R}$ 的各个列向量进行线性加权</strong>！<br>
+        因此，矩阵 $\mathbf{R}$ 所有可能输出构成的集合，正是各列向量的张成空间，被称为 <strong>列空间（Column Space，记作 $\text{Col}(\mathbf{R})$）</strong>。<br>
+        💡 <strong>直观心智模型：$\text{Col}(\mathbf{R})$ 就是矩阵 $\mathbf{R}$ 的“全部射程范围”。</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 2. 方程组解的三种命运 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s2" class="section-title">
+    <span class="sec-num">2</span>
+    方程 $\mathbf{R}\mathbf{w} = \mathbf{z}$ 的三种命运与几何全貌
+  </h2>
+
+  <div class="card">
+    <p>当我们面对线性方程组 $\mathbf{R}\mathbf{w} = \mathbf{z}$ 时，我们在问什么？</p>
+    <p>根据上面的列视角，这其实是在问：<strong>“目标向量 $\mathbf{z}$ 是否落在矩阵 $\mathbf{R}$ 的射程范围 $\text{Col}(\mathbf{R})$ 之内？”</strong></p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>代数状态</th>
+            <th>几何判定条件</th>
+            <th>直观几何场景</th>
+            <th>应对处理策略</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>① 唯一精确解</strong></td>
+            <td>$\mathbf{z} \in \text{Col}(\mathbf{R})$ 且 $\mathbf{R}$ 各列线性无关</td>
+            <td>目标点 $\mathbf{z}$ 刚好落在平面上，且基底坐标轴没有多余冗余</td>
+            <td><span class="tag tag-green">精确命中</span> $\mathbf{w}^* = (\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T\mathbf{z}$</td>
+          </tr>
+          <tr>
+            <td><strong>② 无精确解（超定）</strong></td>
+            <td>$\mathbf{z} \notin \text{Col}(\mathbf{R})$（通常 $N > K$）</td>
+            <td>目标点 $\mathbf{z}$ 悬浮在平面外（空中），无论怎么调整 $\mathbf{w}$ 都在平面上够不着</td>
+            <td><span class="tag tag-rose">正交投影</span> 寻找平面上离 $\mathbf{z}$ 最近的垂足 $\hat{\mathbf{z}}$</td>
+          </tr>
+          <tr>
+            <td><strong>③ 无穷多解</strong></td>
+            <td>$\mathbf{z} \in \text{Col}(\mathbf{R})$ 但 $\mathbf{R}$ 各列线性相关（退化）</td>
+            <td>子空间维度退化（如两向量共线），有冗余自由度，存在非零<strong>零空间 $\text{Null}(\mathbf{R})$</strong></td>
+            <td><span class="tag tag-amber">自由平移</span> $\mathbf{w} = \mathbf{w}_0 + t\mathbf{n}$，所有解映射到同一个点</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>深度剖析：为什么“无穷多解”时投影依然唯一？</h3>
+    <p>很多初学者会困惑：<em>既然有无穷多组解 $\mathbf{w}$，为什么拟合出来的点 $\hat{\mathbf{z}}$ 却是唯一确定的？</em></p>
+
+    <div class="grid-2">
+      <div class="callout callout-info" style="margin:0">
+        <strong>参数空间（$\mathbf{w}$ 空间，$\mathbb{R}^K$）</strong><br>
+        因为列之间存在冗余（例如 $\mathbf{r}_2 = 2\mathbf{r}_1$），使得存在非零向量 $\mathbf{n} = \begin{bmatrix}-2\\1\end{bmatrix}$ 满足 $\mathbf{R}\mathbf{n} = -2\mathbf{r}_1 + 1\mathbf{r}_2 = \mathbf{0}$。这个 $\mathbf{n}$ 属于<strong>零空间 $\text{Null}(\mathbf{R})$</strong>。<br>
+        你可以任意加上 $t\mathbf{n}$，$\mathbf{w} = \mathbf{w}_0 + t\mathbf{n}$ 有无数个！
+      </div>
+      <div class="callout callout-success" style="margin:0">
+        <strong>物理输出空间（$\hat{\mathbf{z}}$ 空间，$\mathbb{R}^N$）</strong><br>
+        计算物理投影点：
+        $$\mathbf{R}\mathbf{w} = \mathbf{R}(\mathbf{w}_0 + t\mathbf{n}) = \mathbf{R}\mathbf{w}_0 + t(\mathbf{R}\mathbf{n}) = \mathbf{R}\mathbf{w}_0 + \mathbf{0} = \mathbf{R}\mathbf{w}_0$$
+        看到了吗？虽然你的<strong>配方（系数 $\mathbf{w}$）</strong>有无穷多种调配方式，但烘焙出来的<strong>成品（几何位置 $\hat{\mathbf{z}}$）</strong>在物理空间中只有一个！
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 3. 正交投影与法方程推导 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s3" class="section-title">
+    <span class="sec-num">3</span>
+    正交投影与法方程（Normal Equation）：从 1D 到高维的保姆级推导
+  </h2>
+
+  <div class="card">
+    <h3>3.1 初阶启蒙：1D 向量点向直线的投影</h3>
+    <p>在推导高维矩阵之前，我们先看初中几何就熟悉的 1 维情况：给定一条过原点的直线方向 $\mathbf{a} \in \mathbb{R}^N$，以及空间中任意一点 $\mathbf{b} \in \mathbb{R}^N$，求 $\mathbf{b}$ 在直线 $\mathbf{a}$ 上的投影点 $\hat{\mathbf{b}}$。</p>
+
+    <div class="grid-2">
+      <div>
+        <p>1. <strong>表达投影点：</strong>因为 $\hat{\mathbf{b}}$ 在直线 $\mathbf{a}$ 上，它一定是 $\mathbf{a}$ 的倍数，记作 $\hat{\mathbf{b}} = \hat{x} \mathbf{a}$（其中 $\hat{x}$ 是待求的标量系数）。</p>
+        <p>2. <strong>残差误差向量：</strong>连接 $\mathbf{b}$ 与 $\hat{\mathbf{b}}$ 的误差向量为 $\mathbf{e} = \mathbf{b} - \hat{\mathbf{b}} = \mathbf{b} - \hat{x}\mathbf{a}$。</p>
+        <p>3. <strong>正交条件（核心！）：</strong>根据垂线段最短，误差 $\mathbf{e}$ 必须垂直于直线方向 $\mathbf{a}$，即两者的<strong>点积（内积）必须为 0</strong>：</p>
+        <div class="math-block">
+          $$\mathbf{a}^T \mathbf{e} = 0 \implies \mathbf{a}^T (\mathbf{b} - \hat{x}\mathbf{a}) = 0$$
+          $$\mathbf{a}^T \mathbf{b} - \hat{x} \mathbf{a}^T \mathbf{a} = 0 \implies \hat{x} = \frac{\mathbf{a}^T \mathbf{b}}{\mathbf{a}^T \mathbf{a}}$$
+        </div>
+      </div>
+      <div>
+        <p>4. <strong>带回得到投影点与 1D 投影矩阵：</strong></p>
+        <div class="math-block">
+          $$\hat{\mathbf{b}} = \mathbf{a} \hat{x} = \mathbf{a} \frac{\mathbf{a}^T \mathbf{b}}{\mathbf{a}^T \mathbf{a}} = \left( \frac{\mathbf{a} \mathbf{a}^T}{\mathbf{a}^T \mathbf{a}} \right) \mathbf{b}$$
+        </div>
+        <div class="callout callout-info" style="margin-top:10px">
+          <strong>注意分子与分母的维度区别：</strong><br>
+          分母 $\mathbf{a}^T \mathbf{a} = \|\mathbf{a}\|^2$ 是一个<strong>纯标量（数字）</strong>；<br>
+          分子 $\mathbf{a} \mathbf{a}^T$ 是外积，是一个 $N \times N$ 的<strong>矩阵</strong>！<br>
+          因此，$\mathbf{P}_{1D} = \frac{\mathbf{a}\mathbf{a}^T}{\mathbf{a}^T\mathbf{a}}$ 就是 1D 投影矩阵。
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">3.2 高阶推广：高维子空间 $\text{Col}(\mathbf{R})$ 的正交投影</h3>
+    <p>现在，我们将直线 $\mathbf{a}$ 升级为由 $K$ 个基底向量张成的子空间平面 $\mathbf{R} = [\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_K]$。目标是将向量 $\mathbf{z} \in \mathbb{R}^N$ 投影到该平面上，得到拟合点 $\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}$。</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">❓</div>
+      <div class="callout-content">
+        <strong>核心思考：高维情况下，残差向量 $\tilde{\mathbf{z}} = \mathbf{z} - \mathbf{R}\mathbf{w}$ 需要满足什么几何性质？</strong><br>
+        答：残差向量必须<strong>垂直于子空间平面内的每一根基底向量 $\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_K$</strong>！<br>
+        <em>直觉证明：</em>假设残差与某根基底向量 $\mathbf{r}_1$ 不垂直（夹角不是 90°），那么你在该基底方向上稍微走动一点点，就能让距离更近。只有当残差与平面内所有可能方向都垂直时，才达到全局欧氏距离最短！
+      </div>
+    </div>
+
+    <h3>3.3 四步手把手推导法方程（Normal Equation）</h3>
+    <ol class="step-list">
+      <li class="step-item">
+        <strong>写出每个基底向量的正交等式：</strong><br>
+        残差 $\tilde{\mathbf{z}} = \mathbf{z} - \mathbf{R}\mathbf{w}$ 与第 $j$ 个基向量 $\mathbf{r}_j$ 垂直，其内积为 0：
+        $$\mathbf{r}_1^T (\mathbf{z} - \mathbf{R}\mathbf{w}) = 0, \quad \mathbf{r}_2^T (\mathbf{z} - \mathbf{R}\mathbf{w}) = 0, \quad \dots, \quad \mathbf{r}_K^T (\mathbf{z} - \mathbf{R}\mathbf{w}) = 0$$
+      </li>
+      <li class="step-item">
+        <strong>将 $K$ 个等式垂直打包成矩阵乘法：</strong><br>
+        把每一行 $\mathbf{r}_j^T$ 叠起来，正好就是转置矩阵 $\mathbf{R}^T$！
+        $$\begin{bmatrix} \mathbf{r}_1^T \\ \mathbf{r}_2^T \\ \vdots \\ \mathbf{r}_K^T \end{bmatrix} (\mathbf{z} - \mathbf{R}\mathbf{w}) = \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 0 \end{bmatrix} \implies \mathbf{R}^T (\mathbf{z} - \mathbf{R}\mathbf{w}) = \mathbf{0}$$
+      </li>
+      <li class="step-item">
+        <strong>利用矩阵分配律拆开括号：</strong>
+        $$\mathbf{R}^T \mathbf{z} - \mathbf{R}^T \mathbf{R} \mathbf{w} = \mathbf{0}$$
+      </li>
+      <li class="step-item">
+        <strong>移项得到闻名遐迩的“法方程（Normal Equation）”：</strong>
+        <div class="math-block">
+          <div class="math-block-title">法方程（Normal Equation）</div>
+          $$\mathbf{R}^T \mathbf{R} \mathbf{w} = \mathbf{R}^T \mathbf{z}$$
+        </div>
+      </li>
+    </ol>
+
+    <div class="callout callout-success">
+      <div class="callout-icon">💡</div>
+      <div class="callout-content">
+        <strong>几何美感：</strong><br>
+        原来看似玄妙的法方程 $\mathbf{R}^T \mathbf{R}\mathbf{w} = \mathbf{R}^T\mathbf{z}$，没有任何高深莫测的魔法，它仅仅是<strong>“垂线垂直于平面内的每一根基准线”</strong>用矩阵语言书写出来的一句话而已！
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 4. 投影矩阵 P (Hat Matrix) 与避坑指南 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s4" class="section-title">
+    <span class="sec-num">4</span>
+    投影矩阵 $\mathbf{P}$（Hat Matrix）的数学本质与避坑指南
+  </h2>
+
+  <div class="card">
+    <h3>4.1 解出最优系数 $\mathbf{w}^*$ 与构造投影矩阵 $\mathbf{P}$</h3>
+    <p>当 $\mathbf{R}$ 的列线性无关时，矩阵 $\mathbf{R}^T\mathbf{R}$ 是一个 $K \times K$ 的对称正定可逆方阵。我们在法方程两边同时左乘逆矩阵 $(\mathbf{R}^T\mathbf{R})^{-1}$：</p>
+    
+    <div class="math-block">
+      $$\mathbf{w}^* = (\mathbf{R}^T\mathbf{R})^{-1} \mathbf{R}^T \mathbf{z}$$
+    </div>
+
+    <p>将求出的最优加权系数 $\mathbf{w}^*$ 代回到拟合值 $\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}^*$ 中：</p>
+
+    <div class="math-block">
+      <div class="math-block-title">投影矩阵（Projection Matrix / Hat Matrix）</div>
+      $$\hat{\mathbf{z}} = \mathbf{R} \left[ (\mathbf{R}^T\mathbf{R})^{-1} \mathbf{R}^T \mathbf{z} \right] = \underbrace{\left[ \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T \right]}_{\mathbf{P}} \mathbf{z} = \mathbf{P}\mathbf{z}$$
+      $$\mathbf{P} = \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T$$
+    </div>
+    <p>在统计学中，$\mathbf{P}$ 也被称为 <strong>Hat Matrix（帽子矩阵）</strong>，因为它是把 $z$ 戴上帽子变成 $\hat{z}$ 的算子。</p>
+
+    <!-- 避坑专题 -->
+    <div class="callout callout-danger" style="margin-top:1.5rem">
+      <div class="callout-icon">🚨</div>
+      <div class="callout-content">
+        <strong style="font-size:1.05rem">初学者致命陷阱：为什么不能直接拆括号？</strong><br>
+        很多初学者在草稿纸上推导时会这样写：<br>
+        <span style="color:#f87171;text-decoration:line-through;font-family:var(--font-mono)">
+          $\mathbf{P} = \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T = \mathbf{R} \mathbf{R}^{-1} (\mathbf{R}^T)^{-1} \mathbf{R}^T = \mathbf{I} \cdot \mathbf{I} = \mathbf{I}$ （❌ 严重错误！）
+        </span><br>
+        <strong>问：错在哪里？</strong><br>
+        <strong>答：</strong>因为 $\mathbf{R}$ 是一个 $N \times K$ 的<strong>长方形瘦高矩阵（$N > K$）</strong>！长方矩阵<strong>根本不存在普通逆矩阵 $\mathbf{R}^{-1}$</strong>！只有当方阵满秩时 $(AB)^{-1} = B^{-1}A^{-1}$ 的分配法则才成立。虽然 $\mathbf{R}^T\mathbf{R}$ 是 $K \times K$ 的可逆方阵，但绝不能拆开成单个非方阵的逆。
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">4.2 投影矩阵 $\mathbf{P}$ 的两大核心几何性质</h3>
+
+    <div class="grid-2">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">1️⃣</div>
+        <div class="callout-content">
+          <strong>对称性（Symmetric）：$\mathbf{P}^T = \mathbf{P}$</strong><br>
+          <em>代数验证：</em>
+          $$\begin{aligned}
+          \mathbf{P}^T &= \left[ \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T \right]^T \\
+          &= (\mathbf{R}^T)^T [(\mathbf{R}^T\mathbf{R})^{-1}]^T \mathbf{R}^T \\
+          &= \mathbf{R} [(\mathbf{R}^T\mathbf{R})^T]^{-1} \mathbf{R}^T \\
+          &= \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T = \mathbf{P} \quad \checkmark
+          \end{aligned}$$
+          👉 <em>几何含义：正交投影没有扭曲与旋转剪切。</em>
+        </div>
+      </div>
+
+      <div class="callout callout-success" style="margin:0">
+        <div class="callout-icon">2️⃣</div>
+        <div class="callout-content">
+          <strong>幂等性（Idempotent）：$\mathbf{P}^2 = \mathbf{P}$</strong><br>
+          <em>代数验证：</em>
+          $$\begin{aligned}
+          \mathbf{P}^2 &= \left[ \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T \right] \cdot \left[ \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T \right] \\
+          &= \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1} \underbrace{(\mathbf{R}^T\mathbf{R}) (\mathbf{R}^T\mathbf{R})^{-1}}_{\mathbf{I}} \mathbf{R}^T \\
+          &= \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T = \mathbf{P} \quad \checkmark
+          \end{aligned}$$
+          👉 <em>几何含义（熨斗原理）：把一件衣服熨平到桌面上后，再拿熨斗熨一次，衣服位置绝不会再改变！</em>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:1.8rem">4.3 正交补空间与高维勾股定理</h3>
+    <p>空间中的任意向量 $\mathbf{z}$ 都可以唯一正交分解为<strong>子空间分量 $\hat{\mathbf{z}}$</strong> 与<strong>正交补空间分量（残差）$\tilde{\mathbf{z}}$</strong>：</p>
+    <div class="math-block">
+      $$\mathbf{z} = \hat{\mathbf{z}} + \tilde{\mathbf{z}} = \mathbf{P}\mathbf{z} + (\mathbf{I} - \mathbf{P})\mathbf{z}$$
+      $$\tilde{\mathbf{z}} = (\mathbf{I} - \mathbf{P})\mathbf{z} \quad (\mathbf{I} - \mathbf{P} \text{ 是向正交补空间的投影矩阵})$$
+    </div>
+    <p>由于 $\hat{\mathbf{z}} \perp \tilde{\mathbf{z}}$，勾股定理（毕达哥拉斯定理）在高维空间依然严格成立：</p>
+    <div class="math-block">
+      <div class="math-block-title">高维毕达哥拉斯正交分解定理</div>
+      $$\|\mathbf{z}\|^2 = \|\hat{\mathbf{z}}\|^2 + \|\tilde{\mathbf{z}}\|^2 \iff \|\mathbf{z}\|^2 = \|\mathbf{P}\mathbf{z}\|^2 + \|(\mathbf{I}-\mathbf{P})\mathbf{z}\|^2$$
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 5. 手算 Step-by-Step 实战演练 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s5" class="section-title">
+    <span class="sec-num">5</span>
+    实战手算演练：Step-by-Step 完整算一遍！
+  </h2>
+
+  <div class="card">
+    <p>理论懂了，只有亲手一步步算一次具体的数字，才能彻底建立肌肉记忆。我们用一个经典的 3D 空间例子：</p>
+    
+    <div class="callout callout-info">
+      <strong>【题目设定】</strong><br>
+      在 3 维空间 $\mathbb{R}^3$ 中，给定平面基底向量 $\mathbf{r}_1 = \begin{bmatrix}1\\1\\0\end{bmatrix}, \mathbf{r}_2 = \begin{bmatrix}0\\1\\1\end{bmatrix}$，拼成矩阵 $\mathbf{R} = \begin{bmatrix}1 & 0\\1 & 1\\0 & 1\end{bmatrix}$。<br>
+      目标向量为悬浮在空中的点 $\mathbf{z} = \begin{bmatrix}1\\2\\2\end{bmatrix}$。<br>
+      <strong>请计算：最优加权系数 $\mathbf{w}$、平面上的拟合点 $\hat{\mathbf{z}}$、残差向量 $\tilde{\mathbf{z}}$，并验证正交性与勾股定理。</strong>
+    </div>
+
+    <details open>
+      <summary>👉 第一步：计算转置乘积 $\mathbf{R}^T\mathbf{R}$ 与 $\mathbf{R}^T\mathbf{z}$</summary>
+      <div style="padding:10px 0">
+        $$\mathbf{R}^T\mathbf{R} = \begin{bmatrix}1 & 1 & 0\\0 & 1 & 1\end{bmatrix} \begin{bmatrix}1 & 0\\1 & 1\\0 & 1\end{bmatrix} = \begin{bmatrix}1\cdot 1 + 1\cdot 1 + 0 & 1\cdot 0 + 1\cdot 1 + 0\\0 + 1\cdot 1 + 0 & 0 + 1\cdot 1 + 1\cdot 1\end{bmatrix} = \begin{bmatrix}2 & 1\\1 & 2\end{bmatrix}$$
+        $$\mathbf{R}^T\mathbf{z} = \begin{bmatrix}1 & 1 & 0\\0 & 1 & 1\end{bmatrix} \begin{bmatrix}1\\2\\2\end{bmatrix} = \begin{bmatrix}1\cdot 1 + 1\cdot 2 + 0\\0 + 1\cdot 2 + 1\cdot 2\end{bmatrix} = \begin{bmatrix}3\\4\end{bmatrix}$$
+      </div>
+    </details>
+
+    <details open>
+      <summary>👉 第二步：求 $2\times 2$ 矩阵逆 $(\mathbf{R}^T\mathbf{R})^{-1}$ 并解出 $\mathbf{w}^*$</summary>
+      <div style="padding:10px 0">
+        矩阵行列式 $\det(\mathbf{R}^T\mathbf{R}) = 2\times 2 - 1\times 1 = 3$。<br>
+        根据二阶矩阵求逆公式 $\begin{bmatrix}a & b\\c & d\end{bmatrix}^{-1} = \frac{1}{ad-bc}\begin{bmatrix}d & -b\\-c & a\end{bmatrix}$：
+        $$(\mathbf{R}^T\mathbf{R})^{-1} = \frac{1}{3} \begin{bmatrix}2 & -1\\-1 & 2\end{bmatrix}$$
+        最优解 $\mathbf{w}^*$ 为：
+        $$\mathbf{w}^* = (\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T\mathbf{z} = \frac{1}{3}\begin{bmatrix}2 & -1\\-1 & 2\end{bmatrix}\begin{bmatrix}3\\4\end{bmatrix} = \frac{1}{3}\begin{bmatrix}2\cdot 3 - 1\cdot 4\\-1\cdot 3 + 2\cdot 4\end{bmatrix} = \frac{1}{3}\begin{bmatrix}2\\5\end{bmatrix} = \begin{bmatrix}2/3\\5/3\end{bmatrix}$$
+      </div>
+    </details>
+
+    <details open>
+      <summary>👉 第三步：计算投影拟合点 $\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}^*$</summary>
+      <div style="padding:10px 0">
+        $$\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}^* = \frac{2}{3}\mathbf{r}_1 + \frac{5}{3}\mathbf{r}_2 = \frac{2}{3}\begin{bmatrix}1\\1\\0\end{bmatrix} + \frac{5}{3}\begin{bmatrix}0\\1\\1\end{bmatrix} = \begin{bmatrix}2/3\\7/3\\5/3\end{bmatrix}$$
+      </div>
+    </details>
+
+    <details open>
+      <summary>👉 第四步：计算残差向量 $\tilde{\mathbf{z}}$ 并验证正交性</summary>
+      <div style="padding:10px 0">
+        残差向量：
+        $$\tilde{\mathbf{z}} = \mathbf{z} - \hat{\mathbf{z}} = \begin{bmatrix}1\\2\\2\end{bmatrix} - \begin{bmatrix}2/3\\7/3\\5/3\end{bmatrix} = \begin{bmatrix}1/3\\-1/3\\1/3\end{bmatrix}$$
+        <strong>检验正交性（残差是否垂直于平面上的每一个基向量？）：</strong>
+        $$\mathbf{r}_1^T \tilde{\mathbf{z}} = \begin{bmatrix}1 & 1 & 0\end{bmatrix} \begin{bmatrix}1/3\\-1/3\\1/3\end{bmatrix} = \frac{1}{3} - \frac{1}{3} + 0 = 0 \quad \checkmark$$
+        $$\mathbf{r}_2^T \tilde{\mathbf{z}} = \begin{bmatrix}0 & 1 & 1\end{bmatrix} \begin{bmatrix}1/3\\-1/3\\1/3\end{bmatrix} = 0 - \frac{1}{3} + \frac{1}{3} = 0 \quad \checkmark$$
+        正交条件完全成立！证明我们找到的确实是严格的垂足。
+      </div>
+    </details>
+
+    <details open>
+      <summary>👉 第五步：验证勾股定理长度关系</summary>
+      <div style="padding:10px 0">
+        $$\|\mathbf{z}\|^2 = 1^2 + 2^2 + 2^2 = 9 = \frac{81}{9}$$
+        $$\|\hat{\mathbf{z}}\|^2 = (2/3)^2 + (7/3)^2 + (5/3)^2 = \frac{4 + 49 + 25}{9} = \frac{78}{9}$$
+        $$\|\tilde{\mathbf{z}}\|^2 = (1/3)^2 + (-1/3)^2 + (1/3)^2 = \frac{1 + 1 + 1}{9} = \frac{3}{9}$$
+        $$\|\hat{\mathbf{z}}\|^2 + \|\tilde{\mathbf{z}}\|^2 = \frac{78}{9} + \frac{3}{9} = \frac{81}{9} = 9 = \|\mathbf{z}\|^2 \quad \checkmark$$
+        高维勾股定理丝毫不差！
+      </div>
+    </details>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 6. 交互式实验工坊 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s6" class="section-title">
+    <span class="sec-num">6</span>
+    交互式实验工坊 (Interactive Labs)
+  </h2>
+
+  <!-- Lab 1: 1D 直线投影探索器 -->
+  <div class="card">
+    <h3>Lab 1: 1D 直线投影即时模拟器</h3>
+    <p>拖动滑块改变目标向量 $\mathbf{b}$ 和基准向量 $\mathbf{a}$，实时观察标量系数 $\hat{x}$、垂足投影 $\hat{\mathbf{b}}$ 与残差 $\mathbf{e}$ 的垂直正交关系。</p>
+    
+    <div class="canvas-container">
+      <div class="canvas-overlay">1D 几何投影（绿色=投影点，红色=残差垂直线）</div>
+      <canvas id="c1D" width="700" height="340"></canvas>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-row">
+        <label>基准向量 a 角度:</label>
+        <input type="range" id="s1_ang" min="0" max="6.28" step="0.02" value="0.52">
+        <span class="slider-val" id="v1_ang">30°</span>
+        
+        <label style="margin-left:20px">目标点 b_x:</label>
+        <input type="range" id="s1_bx" min="-4" max="4" step="0.1" value="2.5">
+        <span class="slider-val" id="v1_bx">2.5</span>
+        
+        <label style="margin-left:20px">目标点 b_y:</label>
+        <input type="range" id="s1_by" min="-4" max="4" step="0.1" value="2.0">
+        <span class="slider-val" id="v1_by">2.0</span>
+      </div>
+      <div id="out1D" class="live-calc"></div>
+    </div>
+  </div>
+
+  <!-- Lab 2: 3D 平面投影与垂足实验室 -->
+  <div class="card">
+    <h3>Lab 2: 3D 平面正交投影与垂足实验室</h3>
+    <p><strong>操作提示：</strong>在画布上<strong>按住鼠标左键拖动可自由 3D 旋转视角</strong>，滚动鼠标滚轮可缩放。调节下方滑块改变空间目标点 $\mathbf{z}$ 的三维坐标。</p>
+    
+    <div class="canvas-container">
+      <div class="canvas-overlay">3D 子空间投影（蓝色网格=平面 Col(R)，橙色=目标 z，绿色=垂足 ẑ，红色=残差 z̃）</div>
+      <canvas id="c3D" width="700" height="420"></canvas>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-row">
+        <label>目标 z₁:</label><input type="range" id="z1" min="-3" max="3" step="0.1" value="1.0">
+        <span class="slider-val" id="vz1">1.0</span>
+        
+        <label>目标 z₂:</label><input type="range" id="z2" min="-3" max="3" step="0.1" value="2.0">
+        <span class="slider-val" id="vz2">2.0</span>
+        
+        <label>目标 z₃:</label><input type="range" id="z3" min="-3" max="3" step="0.1" value="2.0">
+        <span class="slider-val" id="vz3">2.0</span>
+      </div>
+      <div style="margin:10px 0;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn-emerald" onclick="setPresetZ([1.0, 2.0, 1.0])">📍 预设：设为平面上的点（精确解，残差=0）</button>
+        <button class="btn btn-secondary" onclick="setPresetZ([1.0, 2.0, 2.0])">🔄 预设：悬浮在空中（超定无解，找垂足）</button>
+      </div>
+      <div id="out3D" class="live-calc"></div>
+    </div>
+  </div>
+
+  <!-- Lab 3: 零空间与无穷多解动态演示台 -->
+  <div class="card">
+    <h3>Lab 3: 零空间与无穷多解动态演示台（退化列空间）</h3>
+    <p>当基向量共线（例如 $\mathbf{r}_2 = 2\mathbf{r}_1$）时，列空间退化为一条直线。此时只要 $\mathbf{z}$ 在线上就有解，且解有无穷多个！</p>
+    <p><strong>动手试试：</strong>拖动下方自由参数 $t$，你会发现加权系数 $\mathbf{w} = (w_1, w_2)$ 剧烈变动，但在 3D 物理空间中合成的向量 $\hat{\mathbf{z}} = \mathbf{R}\mathbf{w}$ 却<strong>纹丝不动</strong>！这就是零空间平移的几何魔力。</p>
+    
+    <div class="canvas-container">
+      <div class="canvas-overlay">退化子空间（零空间自由度演示）</div>
+      <canvas id="cInfLab" width="700" height="380"></canvas>
+    </div>
+
+    <div class="controls-panel">
+      <div class="control-row">
+        <label style="color:var(--accent-emerald);font-weight:700">零空间自由参数 t:</label>
+        <input type="range" id="s_null_t" min="-3" max="3" step="0.1" value="0.0" style="accent-color:var(--accent-emerald)">
+        <span class="slider-val" id="v_null_t" style="color:var(--accent-emerald)">0.0</span>
+        
+        <label style="margin-left:20px">目标点 z 偏离度:</label>
+        <input type="range" id="s_null_off" min="-2" max="2" step="0.1" value="0.0">
+        <span class="slider-val" id="v_null_off">0.0</span>
+      </div>
+      <div id="outInfLab" class="live-calc"></div>
+    </div>
+  </div>
+
+  <!-- Lab 4: 实数矩阵正交投影即时计算器 -->
+  <div class="card">
+    <h3>Lab 4: 任意 $3\times 2$ 矩阵正交投影即时计算器</h3>
+    <p>输入你的自定义矩阵 $\mathbf{R}$ 和目标向量 $\mathbf{z}$，系统将立即进行实数符号级矩阵运算，给出完整的投影矩阵 $\mathbf{P}$、法方程解 $\mathbf{w}$ 与残差分解：</p>
+
+    <div class="grid-2" style="align-items:center">
+      <div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:4px">输入矩阵 R（3行2列）:</div>
+        <table class="matrix-input-table">
+          <tr>
+            <td><input type="number" id="m_r11" value="1" step="0.5"></td>
+            <td><input type="number" id="m_r12" value="0" step="0.5"></td>
+          </tr>
+          <tr>
+            <td><input type="number" id="m_r21" value="1" step="0.5"></td>
+            <td><input type="number" id="m_r22" value="1" step="0.5"></td>
+          </tr>
+          <tr>
+            <td><input type="number" id="m_r31" value="0" step="0.5"></td>
+            <td><input type="number" id="m_r32" value="1" step="0.5"></td>
+          </tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:4px">输入目标向量 z（3维）:</div>
+        <table class="matrix-input-table">
+          <tr><td><input type="number" id="m_z1" value="1" step="0.5"></td></tr>
+          <tr><td><input type="number" id="m_z2" value="2" step="0.5"></td></tr>
+          <tr><td><input type="number" id="m_z3" value="2" step="0.5"></td></tr>
+        </table>
+      </div>
+    </div>
+
+    <button class="btn btn-emerald" onclick="calcCustomMatrix()" style="margin-top:10px">⚡ 执行正交投影解算与验证</button>
+    <div id="outMatrixCalc" class="live-calc" style="margin-top:12px"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- 7. 工业应用与总结 -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <h2 id="s7" class="section-title">
+    <span class="sec-num">7</span>
+    工业应用与知识地图：从这里通向何方？
+  </h2>
+
+  <div class="card">
+    <div class="grid-3">
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">📈</div>
+        <div class="callout-content">
+          <strong>1. 最小二乘法 (OLS)</strong><br>
+          机器学习中最经典的线性回归（Linear Regression）损失函数最小化：$\min_{\mathbf{w}} \|\mathbf{X}\mathbf{w} - \mathbf{y}\|^2$，求导等于 0 得到的正是 $\mathbf{X}^T\mathbf{X}\mathbf{w} = \mathbf{X}^T\mathbf{y}$！
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">📉</div>
+        <div class="callout-content">
+          <strong>2. 主成分分析 (PCA)</strong><br>
+          高维数据降维的本质，就是寻找一个低维正交子空间，使得数据在投影到该子空间后的<strong>重构误差（残差平方和）最小</strong>。
+        </div>
+      </div>
+      <div class="callout callout-info" style="margin:0">
+        <div class="callout-icon">🤖</div>
+        <div class="callout-content">
+          <strong>3. Attention (QKV) 机制</strong><br>
+          大模型中的 Attention 矩阵计算，本质是 Query 向量向各个 Key 向量所张成的语义子空间进行内积投影与注意力打分匹配。
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top:2rem">第2周核心知识卡片速查表</h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>核心概念</th>
+            <th>代数符号</th>
+            <th>几何直观与心智模型</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>张成空间 Span</strong></td>
+            <td>$\text{Span}\{\mathbf{r}_1,\dots,\mathbf{r}_K\}$</td>
+            <td>给定基向量所有可能线性伸缩相加能达到的全部空间</td>
+          </tr>
+          <tr>
+            <td><strong>列空间 Col</strong></td>
+            <td>$\text{Col}(\mathbf{R})$</td>
+            <td>矩阵各列张成的子空间，即矩阵输出的“全部射程”</td>
+          </tr>
+          <tr>
+            <td><strong>残差向量</strong></td>
+            <td>$\tilde{\mathbf{z}} = \mathbf{z} - \hat{\mathbf{z}} = \mathbf{z} - \mathbf{R}\mathbf{w}$</td>
+            <td>目标点到子空间垂足的垂线段，垂直于平面内所有向量</td>
+          </tr>
+          <tr>
+            <td><strong>法方程</strong></td>
+            <td>$\mathbf{R}^T\mathbf{R}\mathbf{w} = \mathbf{R}^T\mathbf{z}$</td>
+            <td>正交条件 $\mathbf{R}^T(\mathbf{z}-\mathbf{R}\mathbf{w})=\mathbf{0}$ 展开后的核心方程</td>
+          </tr>
+          <tr>
+            <td><strong>投影矩阵</strong></td>
+            <td>$\mathbf{P} = \mathbf{R}(\mathbf{R}^T\mathbf{R})^{-1}\mathbf{R}^T$</td>
+            <td>把空间任意向量正交“拍平”到列空间上的算子，满足 $\mathbf{P}^T=\mathbf{P}, \mathbf{P}^2=\mathbf{P}$</td>
+          </tr>
+          <tr>
+            <td><strong>零空间自由度</strong></td>
+            <td>$\mathbf{R}\mathbf{n} = \mathbf{0} \implies \mathbf{w} = \mathbf{w}_0 + t\mathbf{n}$</td>
+            <td>冗余基底导致参数配方不唯一，但物理合成结果 $\mathbf{R}\mathbf{w}$ 唯一</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div style="max-width:900px;margin:0 auto">
+    <p style="color:var(--text-secondary);margin-bottom:8px">🎉 恭喜完成第 2 周《空间与几何投影》的学习！从代数到几何，你已经掌握了现代高维数据科学的核心基石。</p>
+    <p style="color:var(--text-muted);font-size:0.85rem">线性代数可视化互动教程 · Designed with KaTeX & HTML5 Canvas</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- JavaScript 交互式脚本 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<script>
+// 1. 顶部进度条与导航高亮
+window.addEventListener('scroll', function(){
+  var st = document.documentElement.scrollTop || document.body.scrollTop;
+  var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  var pct = (st / (sh || 1)) * 100;
+  document.getElementById('progress-bar').style.width = pct + '%';
+});
+
+// 2. 向量基本运算工具函数
+function dot(a, b){ return a[0]*b[0] + a[1]*b[1] + (a[2]||0)*(b[2]||0); }
+function sub(a, b){ return [a[0]-b[0], a[1]-b[1], (a[2]||0)-(b[2]||0)]; }
+function add(a, b){ return [a[0]+b[0], a[1]+b[1], (a[2]||0)+(b[2]||0)]; }
+function norm(a){ return Math.sqrt(dot(a, a)); }
+
+// ═══════════════════════════════════════════════════════════════
+// Lab 1: 1D 直线投影互动画板
+// ═══════════════════════════════════════════════════════════════
+(function initLab1D(){
+  var cv = document.getElementById('c1D');
+  var ctx = cv.getContext('2d');
+  var sAng = document.getElementById('s1_ang');
+  var sBx = document.getElementById('s1_bx');
+  var sBy = document.getElementById('s1_by');
+  var out = document.getElementById('out1D');
+
+  function render(){
+    var ang = +sAng.value;
+    var bx = +sBx.value;
+    var by = +sBy.value;
+
+    document.getElementById('v1_ang').textContent = (ang * 180 / Math.PI).toFixed(0) + '°';
+    document.getElementById('v1_bx').textContent = bx.toFixed(1);
+    document.getElementById('v1_by').textContent = by.toFixed(1);
+
+    var a = [Math.cos(ang) * 2.8, Math.sin(ang) * 2.8];
+    var b = [bx, by];
+
+    // 计算投影系数 x_hat = (a.b) / (a.a)
+    var aDotA = a[0]*a[0] + a[1]*a[1];
+    var aDotB = a[0]*b[0] + a[1]*b[1];
+    var xHat = aDotB / aDotA;
+    var pHat = [xHat * a[0], xHat * a[1]];
+    var err = [b[0] - pHat[0], b[1] - pHat[1]];
+    var errLen = Math.sqrt(err[0]*err[0] + err[1]*err[1]);
+
+    var W = cv.width, H = cv.height;
+    var ox = W / 2, oy = H / 2;
+    var scale = 48;
+
+    ctx.clearRect(0, 0, W, H);
+
+    // 网格线
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    for(var x = ox % scale; x < W; x += scale){
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+    }
+    for(var y = oy % scale; y < H; y += scale){
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+
+    // 坐标轴
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, oy); ctx.lineTo(W, oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox, 0); ctx.lineTo(ox, H); ctx.stroke();
+
+    // 绘制穿过原点的无限直线 a (Span{a})
+    var dirX = Math.cos(ang), dirY = Math.sin(ang);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([6, 6]);
+    ctx.beginPath();
+    ctx.moveTo(ox - dirX * 500, oy + dirY * 500);
+    ctx.lineTo(ox + dirX * 500, oy - dirY * 500);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    function toScreen(pt){ return { x: ox + pt[0]*scale, y: oy - pt[1]*scale }; }
+
+    // 绘制向量 a
+    var pA = toScreen(a);
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(pA.x, pA.y); ctx.stroke();
+    ctx.fillStyle = '#38bdf8'; ctx.font = '13px Fira Code, sans-serif';
+    ctx.fillText('基准 a', pA.x + 8, pA.y - 4);
+
+    // 绘制目标向量 b
+    var pB = toScreen(b);
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(pB.x, pB.y); ctx.stroke();
+    ctx.fillStyle = '#f59e0b';
+    ctx.fillText('目标 b ('+b[0].toFixed(1)+', '+b[1].toFixed(1)+')', pB.x + 8, pB.y - 6);
+
+    // 绘制投影点 p_hat (绿色)
+    var pP = toScreen(pHat);
+    ctx.strokeStyle = '#10b981';
+    ctx.lineWidth = 4;
+    ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(pP.x, pP.y); ctx.stroke();
+    ctx.fillStyle = '#10b981';
+    ctx.beginPath(); ctx.arc(pP.x, pP.y, 5, 0, Math.PI*2); ctx.fill();
+    ctx.fillText('垂足 ƀ = x̂ a', pP.x + 8, pP.y + 16);
+
+    // 绘制残差虚线 e (红色)
+    ctx.strokeStyle = '#f43f5e';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(pB.x, pB.y); ctx.lineTo(pP.x, pP.y); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#f43f5e';
+    ctx.fillText('残差 e (长度='+errLen.toFixed(2)+')', (pB.x+pP.x)/2 + 8, (pB.y+pP.y)/2);
+
+    // 验证点积 a^T e = 0
+    var dotAE = a[0]*err[0] + a[1]*err[1];
+
+    out.innerHTML = 
+      '📐 <strong>实时运算：</strong> 标量投影系数 $\\hat{x} = \\frac{\\mathbf{a}^T\\mathbf{b}}{\\mathbf{a}^T\\mathbf{a}} = \\frac{'+aDotB.toFixed(2)+'}{'+aDotA.toFixed(2)+'} = \\mathbf{'+xHat.toFixed(3)+'}$' +
+      '<br>🎯 <strong>垂足坐标：</strong> $\\hat{\\mathbf{b}} = ('+pHat[0].toFixed(2)+',\\ '+pHat[1].toFixed(2)+')^T$' +
+      '<br>🔍 <strong>正交性验证：</strong> $\\mathbf{a}^T \\mathbf{e} = ('+a[0].toFixed(2)+')('+err[0].toFixed(2)+') + ('+a[1].toFixed(2)+')('+err[1].toFixed(2)+') = \\mathbf{'+dotAE.toFixed(4)+'}$ (严格等于 0，垂直成立！)';
+    
+    if(window.renderMathInElement) renderMathInElement(out, {delimiters:[{left:'$',right:'$',display:false}]});
+  }
+
+  sAng.oninput = render;
+  sBx.oninput = render;
+  sBy.oninput = render;
+  render();
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// 3D 渲染引擎（支持平滑等距旋转与缩放）
+// ═══════════════════════════════════════════════════════════════
+function create3DViewer(canvasId, drawSceneCallback){
+  var cv = document.getElementById(canvasId);
+  var ctx = cv.getContext('2d');
+  var cam = { rx: 0.45, ry: 0.55, scale: 75 };
+  var isDrag = false, lastX, lastY;
+
+  cv.onmousedown = function(e){ isDrag = true; lastX = e.offsetX; lastY = e.offsetY; };
+  window.addEventListener('mouseup', function(){ isDrag = false; });
+  cv.onmousemove = function(e){
+    if(!isDrag) return;
+    var dx = e.offsetX - lastX;
+    var dy = e.offsetY - lastY;
+    cam.ry += dx * 0.01;
+    cam.rx += dy * 0.01;
+    cam.rx = Math.max(-1.5, Math.min(1.5, cam.rx));
+    lastX = e.offsetX;
+    lastY = e.offsetY;
+    redraw();
+  };
+
+  cv.onwheel = function(e){
+    e.preventDefault();
+    cam.scale *= (e.deltaY > 0 ? 0.92 : 1.08);
+    cam.scale = Math.max(30, Math.min(220, cam.scale));
+    redraw();
+  };
+
+  function redraw(){
+    drawSceneCallback(ctx, cam, cv.width, cv.height);
+  }
+
+  return { redraw: redraw, getCam: function(){ return cam; } };
+}
+
+// 3D 投影到 2D 屏幕坐标
+function project3D(v, w, h, cam){
+  // 绕 Y 轴旋转，再绕 X 轴旋转
+  var cosY = Math.cos(cam.ry), sinY = Math.sin(cam.ry);
+  var cosX = Math.cos(cam.rx), sinX = Math.sin(cam.rx);
+
+  var x1 = v[0]*cosY + v[2]*sinY;
+  var y1 = v[1];
+  var z1 = -v[0]*sinY + v[2]*cosY;
+
+  var x2 = x1;
+  var y2 = y1*cosX - z1*sinX;
+  var z2 = y1*sinX + z1*cosX;
+
+  return {
+    x: w / 2 + x2 * cam.scale,
+    y: h / 2 - y2 * cam.scale,
+    depth: z2
+  };
+}
+
+// 绘制 3D 向量箭头
+function draw3DVector(ctx, from, to, cam, color, lw, label){
+  var W = ctx.canvas.width, H = ctx.canvas.height;
+  var p0 = project3D(from, W, H, cam);
+  var p1 = project3D(to, W, H, cam);
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lw || 3;
+  ctx.beginPath();
+  ctx.moveTo(p0.x, p0.y);
+  ctx.lineTo(p1.x, p1.y);
+  ctx.stroke();
+
+  // 终点实心圆
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  ctx.arc(p1.x, p1.y, Math.max(3, lw+1), 0, Math.PI*2);
+  ctx.fill();
+
+  if(label){
+    ctx.font = 'bold 13px Fira Code, sans-serif';
+    ctx.fillStyle = color;
+    ctx.fillText(label, p1.x + 8, p1.y - 4);
+  }
+}
+
+// 绘制 3D 平面 Span 网格
+function draw3DPlaneGrid(ctx, r1, r2, cam){
+  var W = ctx.canvas.width, H = ctx.canvas.height;
+  var steps = 8;
+  var lim = 2.2;
+
+  ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+  ctx.lineWidth = 1;
+
+  for(var i = 0; i <= steps; i++){
+    var u = -lim + i * (2 * lim / steps);
+    // 固定 u，沿 v 画线
+    var pStart = project3D([u*r1[0] - lim*r2[0], u*r1[1] - lim*r2[1], u*r1[2] - lim*r2[2]], W, H, cam);
+    var pEnd   = project3D([u*r1[0] + lim*r2[0], u*r1[1] + lim*r2[1], u*r1[2] + lim*r2[2]], W, H, cam);
+    ctx.beginPath(); ctx.moveTo(pStart.x, pStart.y); ctx.lineTo(pEnd.x, pEnd.y); ctx.stroke();
+
+    // 固定 v，沿 u 画线
+    var vStart = project3D([-lim*r1[0] + u*r2[0], -lim*r1[1] + u*r2[1], -lim*r1[2] + u*r2[2]], W, H, cam);
+    var vEnd   = project3D([lim*r1[0] + u*r2[0], lim*r1[1] + u*r2[1], lim*r1[2] + u*r2[2]], W, H, cam);
+    ctx.beginPath(); ctx.moveTo(vStart.x, vStart.y); ctx.lineTo(vEnd.x, vEnd.y); ctx.stroke();
+  }
+}
+
+// 解 2x2 正规方程求投影 w 与 p
+function solveOrtho2D(z, r1, r2){
+  var g11 = dot(r1, r1), g12 = dot(r1, r2);
+  var g21 = dot(r2, r1), g22 = dot(r2, r2);
+  var det = g11 * g22 - g12 * g21;
+  if(Math.abs(det) < 1e-6){
+    return null; // 退化
+  }
+  var inv11 = g22 / det, inv12 = -g12 / det;
+  var inv21 = -g21 / det, inv22 = g11 / det;
+
+  var b1 = dot(r1, z), b2 = dot(r2, z);
+  var w1 = inv11 * b1 + inv12 * b2;
+  var w2 = inv21 * b1 + inv22 * b2;
+
+  var p = [
+    w1 * r1[0] + w2 * r2[0],
+    w1 * r1[1] + w2 * r2[1],
+    w1 * r1[2] + w2 * r2[2]
+  ];
+  return { w: [w1, w2], p: p, det: det };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Lab 2: 3D 平面投影实验室
+// ═══════════════════════════════════════════════════════════════
+var viewer3D;
+(function initLab3D(){
+  var r1 = [1, 1, 0];
+  var r2 = [0, 1, 1];
+  var sz1 = document.getElementById('z1');
+  var sz2 = document.getElementById('z2');
+  var sz3 = document.getElementById('z3');
+  var out = document.getElementById('out3D');
+
+  viewer3D = create3DViewer('c3D', function(ctx, cam, W, H){
+    ctx.clearRect(0, 0, W, H);
+
+    // 绘制坐标轴 (虚线淡色)
+    var origin = [0, 0, 0];
+    draw3DVector(ctx, origin, [3, 0, 0], cam, 'rgba(255,255,255,0.15)', 1, 'X');
+    draw3DVector(ctx, origin, [0, 3, 0], cam, 'rgba(255,255,255,0.15)', 1, 'Y');
+    draw3DVector(ctx, origin, [0, 0, 3], cam, 'rgba(255,255,255,0.15)', 1, 'Z');
+
+    // 绘制子空间 Col(R) 网格
+    draw3DPlaneGrid(ctx, r1, r2, cam);
+
+    // 绘制基向量 r1, r2
+    draw3DVector(ctx, origin, r1, cam, '#38bdf8', 3, 'r₁ (1,1,0)');
+    draw3DVector(ctx, origin, r2, cam, '#38bdf8', 3, 'r₂ (0,1,1)');
+
+    // 获取当前目标 z
+    var z = [+sz1.value, +sz2.value, +sz3.value];
+    document.getElementById('vz1').textContent = z[0].toFixed(1);
+    document.getElementById('vz2').textContent = z[1].toFixed(1);
+    document.getElementById('vz3').textContent = z[2].toFixed(1);
+
+    var res = solveOrtho2D(z, r1, r2);
+    if(!res) return;
+    var p = res.p;
+    var w = res.w;
+    var resVec = sub(z, p);
+    var errNorm = norm(resVec);
+
+    // 绘制目标向量 z (橙色)
+    draw3DVector(ctx, origin, z, cam, '#f59e0b', 3.5, 'z ('+z.map(function(v){return v.toFixed(1);}).join(',')+')');
+
+    // 绘制垂足投影点 p (绿色)
+    draw3DVector(ctx, origin, p, cam, '#10b981', 3.5, 'ẑ ('+p.map(function(v){return v.toFixed(2);}).join(',')+')');
+
+    // 绘制残差线段 z_tilde (从 p 指向 z)
+    if(errNorm > 0.02){
+      var pp = project3D(p, W, H, cam);
+      var pz = project3D(z, W, H, cam);
+      ctx.strokeStyle = '#f43f5e';
+      ctx.lineWidth = 2.5;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath(); ctx.moveTo(pp.x, pp.y); ctx.lineTo(pz.x, pz.y); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#f43f5e';
+      ctx.font = 'bold 12px Fira Code';
+      ctx.fillText('残差 z̃ (‖z̃‖='+errNorm.toFixed(2)+')', (pp.x+pz.x)/2 + 10, (pp.y+pz.y)/2);
+    }
+
+    var r1_dot_err = dot(r1, resVec);
+    var r2_dot_err = dot(r2, resVec);
+    var isOnPlane = errNorm < 0.05;
+
+    out.innerHTML = 
+      (isOnPlane 
+        ? '<span class="tag tag-green">✔ z 在列空间 Col(R) 内（方程有精确解）</span>' 
+        : '<span class="tag tag-rose">✘ z 在列空间外（超定无解，正交投影找最佳近似）</span>') +
+      '<br>📊 <strong>最优权重解：</strong> $\\mathbf{w}^* = ('+w[0].toFixed(3)+',\\ '+w[1].toFixed(3)+')^T$' +
+      '<br>🎯 <strong>拟合垂足：</strong> $\\hat{\\mathbf{z}} = '+w[0].toFixed(2)+'\\mathbf{r}_1 + '+w[1].toFixed(2)+'\\mathbf{r}_2 = ('+p.map(function(v){return v.toFixed(2);}).join(', ')+')^T$' +
+      '<br>📐 <strong>正交性验证：</strong> $\\mathbf{r}_1^T \\tilde{\\mathbf{z}} = '+r1_dot_err.toFixed(4)+', \\quad \\mathbf{r}_2^T \\tilde{\\mathbf{z}} = '+r2_dot_err.toFixed(4)+'$ (严格正交于平面基底！)';
+
+    if(window.renderMathInElement) renderMathInElement(out, {delimiters:[{left:'$',right:'$',display:false}]});
+  });
+
+  sz1.oninput = viewer3D.redraw;
+  sz2.oninput = viewer3D.redraw;
+  sz3.oninput = viewer3D.redraw;
+  viewer3D.redraw();
+
+  window.setPresetZ = function(vals){
+    sz1.value = vals[0];
+    sz2.value = vals[1];
+    sz3.value = vals[2];
+    viewer3D.redraw();
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// Lab 3: 零空间与无穷多解实验室
+// ═══════════════════════════════════════════════════════════════
+(function initLabInf(){
+  var r1 = [1, 0.5, 0];
+  var r2 = [2, 1, 0]; // 共线退化
+  var st = document.getElementById('s_null_t');
+  var soff = document.getElementById('s_null_off');
+  var out = document.getElementById('outInfLab');
+
+  var viewerInf = create3DViewer('cInfLab', function(ctx, cam, W, H){
+    ctx.clearRect(0, 0, W, H);
+    var origin = [0, 0, 0];
+
+    // 绘制一条退化的 1D 直线（Span）
+    var pStart = project3D([-4*r1[0], -4*r1[1], -4*r1[2]], W, H, cam);
+    var pEnd   = project3D([ 4*r1[0],  4*r1[1],  4*r1[2]], W, H, cam);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(pStart.x, pStart.y); ctx.lineTo(pEnd.x, pEnd.y); ctx.stroke();
+
+    draw3DVector(ctx, origin, r1, cam, '#38bdf8', 2.5, 'r₁');
+    draw3DVector(ctx, origin, r2, cam, '#06b6d4', 2.5, 'r₂=2r₁');
+
+    var t = +st.value;
+    var off = +soff.value;
+    document.getElementById('v_null_t').textContent = t.toFixed(1);
+    document.getElementById('v_null_off').textContent = off.toFixed(1);
+
+    // 基础目标点 z_base = (2, 1, 0)
+    var z = [2, 1, off];
+    // 通解 w = (2 - 2t, t)
+    var w = [2 - 2*t, t];
+    var Rw = [
+      w[0]*r1[0] + w[1]*r2[0],
+      w[0]*r1[1] + w[1]*r2[1],
+      w[0]*r1[2] + w[1]*r2[2]
+    ];
+
+    draw3DVector(ctx, origin, z, cam, '#f59e0b', 3.5, 'z ('+z.join(',')+')');
+    draw3DVector(ctx, origin, Rw, cam, '#10b981', 3.5, 'Rw = ẑ ('+Rw.map(function(v){return v.toFixed(1);}).join(',')+')');
+
+    if(Math.abs(off) > 0.05){
+      var pz = project3D(z, W, H, cam);
+      var prw = project3D(Rw, W, H, cam);
+      ctx.strokeStyle = '#f43f5e';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(pz.x, pz.y); ctx.lineTo(prw.x, prw.y); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    out.innerHTML = 
+      '🕹️ <strong>参数化解系：</strong> $\\mathbf{w}(t) = \\begin{bmatrix}2\\\\0\\end{bmatrix} + t \\begin{bmatrix}-2\\\\1\\end{bmatrix} = \\begin{bmatrix}'+w[0].toFixed(2)+'\\\\'+w[1].toFixed(2)+'\\end{bmatrix}$' +
+      '<br>🔥 <strong>物理合成验证：</strong> $\\mathbf{R}\\mathbf{w} = '+w[0].toFixed(2)+'\\mathbf{r}_1 + '+w[1].toFixed(2)+'\\mathbf{r}_2 = \\mathbf{('+Rw.map(function(v){return v.toFixed(2);}).join(', ')+')^T}$' +
+      '<br>💡 <strong>几何发现：</strong> 无论你将 $t$ 拖动到多大或多小，合成点 $\\mathbf{R}\\mathbf{w}$ <strong>始终锁定在完全相同的空间位置</strong>！这就是零空间平移的不变性。';
+
+    if(window.renderMathInElement) renderMathInElement(out, {delimiters:[{left:'$',right:'$',display:false}]});
+  });
+
+  st.oninput = viewerInf.redraw;
+  soff.oninput = viewerInf.redraw;
+  viewerInf.redraw();
+})();
+
+// ═══════════════════════════════════════════════════════════════
+// Lab 4: 自定义矩阵正交投影解算器
+// ═══════════════════════════════════════════════════════════════
+window.calcCustomMatrix = function(){
+  var r11 = +document.getElementById('m_r11').value;
+  var r12 = +document.getElementById('m_r12').value;
+  var r21 = +document.getElementById('m_r21').value;
+  var r22 = +document.getElementById('m_r22').value;
+  var r31 = +document.getElementById('m_r31').value;
+  var r32 = +document.getElementById('m_r32').value;
+
+  var z1 = +document.getElementById('m_z1').value;
+  var z2 = +document.getElementById('m_z2').value;
+  var z3 = +document.getElementById('m_z3').value;
+
+  var r1 = [r11, r21, r31];
+  var r2 = [r12, r22, r32];
+  var z = [z1, z2, z3];
+
+  var out = document.getElementById('outMatrixCalc');
+
+  var g11 = dot(r1, r1), g12 = dot(r1, r2);
+  var g21 = dot(r2, r1), g22 = dot(r2, r2);
+  var det = g11 * g22 - g12 * g21;
+
+  if(Math.abs(det) < 1e-7){
+    out.innerHTML = '<span class="tag tag-rose">❌ 矩阵各列线性相关（det(R^T R) = 0），R^T R 不可逆！请修改列向量使其线性无关。</span>';
+    return;
+  }
+
+  var inv11 = g22 / det, inv12 = -g12 / det;
+  var inv21 = -g21 / det, inv22 = g11 / det;
+
+  var b1 = dot(r1, z), b2 = dot(r2, z);
+  var w1 = inv11 * b1 + inv12 * b2;
+  var w2 = inv21 * b1 + inv22 * b2;
+
+  var p = [
+    w1 * r11 + w2 * r12,
+    w1 * r21 + w2 * r22,
+    w1 * r31 + w2 * r32
+  ];
+
+  var resVec = sub(z, p);
+  var errNorm = norm(resVec);
+
+  out.innerHTML = 
+    '✅ <strong>解算完成：</strong>' +
+    '<br>1. $\\mathbf{R}^T\\mathbf{R} = \\begin{bmatrix}'+g11.toFixed(2)+' & '+g12.toFixed(2)+'\\\\'+g21.toFixed(2)+' & '+g22.toFixed(2)+'\\end{bmatrix}, \\quad \\det(\\mathbf{R}^T\\mathbf{R}) = '+det.toFixed(3)+'$' +
+    '<br>2. 最优解 $\\mathbf{w}^* = \\begin{bmatrix}'+w1.toFixed(3)+'\\\\'+w2.toFixed(3)+'\\end{bmatrix}$' +
+    '<br>3. 投影垂足 $\\hat{\\mathbf{z}} = \\begin{bmatrix}'+p[0].toFixed(3)+'\\\\'+p[1].toFixed(3)+'\\\\'+p[2].toFixed(3)+'\\end{bmatrix}, \\quad$ 残差 $\\tilde{\\mathbf{z}} = \\begin{bmatrix}'+resVec[0].toFixed(3)+'\\\\'+resVec[1].toFixed(3)+'\\\\'+resVec[2].toFixed(3)+'\\end{bmatrix}$' +
+    '<br>4. 误差长度 $\\|\\tilde{\\mathbf{z}}\\| = '+errNorm.toFixed(4)+'$；正交性验算 $\\mathbf{R}^T\\tilde{\\mathbf{z}} = \\begin{bmatrix}'+dot(r1,resVec).toFixed(5)+'\\\\'+dot(r2,resVec).toFixed(5)+'\\end{bmatrix} \\approx \\mathbf{0}$';
+
+  if(window.renderMathInElement) renderMathInElement(out, {delimiters:[{left:'$',right:'$',display:false}]});
+};
+</script>
+
+</body>
+</html>

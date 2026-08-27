@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attention (QKV) 矩阵运算的几何本质与线性代数直觉</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX for beautiful LaTeX rendering in HTML -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    :root {
+      --bg-primary: #0a0e17;
+      --bg-secondary: #111827;
+      --bg-card: rgba(19, 27, 46, 0.75);
+      --bg-card-hover: rgba(28, 39, 66, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.35);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-q: #f43f5e; /* Query - Rose/Red */
+      --accent-k: #06b6d4; /* Key - Cyan */
+      --accent-v: #10b981; /* Value - Emerald */
+      --accent-out: #a855f7; /* Output - Purple */
+      --accent-indigo: #6366f1;
+      --accent-amber: #f59e0b;
+      
+      --gradient-qkv: linear-gradient(135deg, #f43f5e 0%, #06b6d4 50%, #10b981 100%);
+      --gradient-brand: linear-gradient(135deg, #6366f1 0%, #38bdf8 50%, #10b981 100%);
+      --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
+      
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.8;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.12) 0px, transparent 45%),
+        radial-gradient(at 100% 20%, rgba(6, 182, 212, 0.12) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* KaTeX customization */
+    .katex {
+      font-size: 1.1em !important;
+      color: #f1f5f9;
+    }
+    .katex-display {
+      margin: 1.2rem 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.6rem 0;
+    }
+    .katex-display > .katex {
+      white-space: normal;
+    }
+
+    /* Top Progress Bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3.5px;
+      background: var(--gradient-qkv);
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.1s ease;
+    }
+
+    /* Header & Navigation */
+    header {
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(10, 14, 23, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-badge {
+      background: var(--gradient-qkv);
+      color: white;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      letter-spacing: 1px;
+    }
+
+    .site-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #fff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    nav a:hover {
+      color: var(--accent-k);
+    }
+
+    /* Container Layout */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding: 3.5rem 1rem 4.5rem;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1.1rem;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 9999px;
+      color: #a5b4fc;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 span.q { color: var(--accent-q); }
+    .hero h1 span.k { color: var(--accent-k); }
+    .hero h1 span.v { color: var(--accent-v); }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      max-width: 760px;
+      margin: 0 auto 2.5rem;
+      font-weight: 400;
+    }
+
+    .qkv-pill-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .qkv-pill {
+      padding: 0.6rem 1.2rem;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.95rem;
+    }
+
+    .pill-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    /* Chapter Cards & Sections */
+    .chapter {
+      margin-bottom: 4.5rem;
+      scroll-margin-top: 5rem;
+    }
+
+    .chapter-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .chapter-num {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.15);
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .chapter-title {
+      font-size: 1.7rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #f1f5f9;
+    }
+
+    /* Conceptual Callouts */
+    .callout {
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      border-left: 4px solid;
+    }
+
+    .callout-q {
+      background: rgba(244, 63, 94, 0.08);
+      border-color: var(--accent-q);
+    }
+    .callout-k {
+      background: rgba(6, 182, 212, 0.08);
+      border-color: var(--accent-k);
+    }
+    .callout-v {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: var(--accent-v);
+    }
+    .callout-idea {
+      background: rgba(99, 102, 241, 0.08);
+      border-color: var(--accent-indigo);
+    }
+
+    .callout-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+      margin-top: 0.2rem;
+    }
+
+    .callout-body {
+      flex: 1;
+      font-size: 0.98rem;
+    }
+
+    .callout-body strong {
+      color: #fff;
+    }
+
+    /* Formula Highlight Box */
+    .formula-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .formula-tag {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--gradient-brand);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.75rem;
+      border-radius: 9999px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Grid Layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .sub-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .sub-card h4 {
+      font-size: 1.05rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Interactive Canvas Modules */
+    .interactive-panel {
+      background: #080c14;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 18px;
+      padding: 1.5rem;
+      margin: 1.75rem 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .panel-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      background: #040711;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    canvas {
+      display: block;
+      cursor: crosshair;
+    }
+
+    .controls-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.9rem;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .control-group label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      background: #1e293b;
+      height: 6px;
+      border-radius: 3px;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--accent-indigo);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(99, 102, 241, 0.6);
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.06);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-primary {
+      background: var(--accent-indigo);
+      border-color: transparent;
+    }
+
+    .btn-primary:hover {
+      background: #4f46e5;
+    }
+
+    /* Live Data Readout Cards */
+    .readout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .readout-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .readout-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .readout-value {
+      font-family: var(--font-mono);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    /* Interactive Comparison Table */
+    .geo-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.95rem;
+    }
+
+    .geo-table th, .geo-table td {
+      padding: 1rem 1.25rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .geo-table th {
+      background: rgba(255, 255, 255, 0.03);
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .geo-table tr:hover td {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    /* Interactive Quiz / Challenge Section */
+    .quiz-card {
+      background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-question {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .quiz-opt {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.8rem 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.92rem;
+    }
+
+    .quiz-opt:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .quiz-opt.correct {
+      background: rgba(16, 185, 129, 0.15) !important;
+      border-color: var(--accent-v) !important;
+      color: #a7f3d0;
+    }
+
+    .quiz-opt.wrong {
+      background: rgba(244, 63, 94, 0.15) !important;
+      border-color: var(--accent-q) !important;
+      color: #fecdd3;
+    }
+
+    .quiz-explanation {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Utility Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      font-family: var(--font-mono);
+    }
+    .badge-q { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+    .badge-k { background: rgba(6, 182, 212, 0.2); color: #38bdf8; }
+    .badge-v { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .badge-out { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
+
+    @media (max-width: 768px) {
+      header { padding: 1rem; }
+      nav { display: none; }
+      .container { padding: 1.5rem 1rem 4rem; }
+      .card { padding: 1.25rem; }
+      .formula-box { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Scroll Progress -->
+  <div id="progress-bar"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-badge">MATH & AI</div>
+      <div class="site-title">Attention 几何本质教程</div>
+    </div>
+    <nav>
+      <a href="algebra1.html" style="color: #6366f1; font-weight: 600;">⬅ 返回代数底座</a>
+      <a href="#ch1">1. 空间投影与解耦</a>
+      <a href="#ch2">2. 点积与夹角对齐</a>
+      <a href="#ch3">3. 高维缩放机制</a>
+      <a href="#ch4">4. 单纯形与重心</a>
+      <a href="#ch5">5. Value 凸包插值</a>
+      <a href="#ch6">6. 多头子空间</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-badge">📐 线性代数直觉 · 高维几何 · 交互式探究</div>
+      <h1>
+        如何从<span style="background: linear-gradient(90deg, #6366f1, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">几何视角</span>直观理解<br/>
+        Attention <span class="q">Q</span><span class="k">K</span><span class="v">V</span> 矩阵运算？
+      </h1>
+      <p class="hero-desc">
+        抛开枯燥的张量代码与矩阵符号，我们将从<b>向量空间变换、夹角余弦对齐、概率单纯形映射</b>以及<b>凸包重心重构</b>四个层次，透视 Transformer 自注意力机制背后的几何直觉。
+      </p>
+
+      <div class="qkv-pill-group">
+        <div class="qkv-pill">
+          <span class="pill-dot" style="background: var(--accent-q);"></span>
+          <span><b>Query ($Q$)</b>：探针空间（我想找什么？）</span>
+        </div>
+        <div class="qkv-pill">
+          <span class="pill-dot" style="background: var(--accent-k);"></span>
+          <span><b>Key ($K$)</b>：索引空间（我有什么特征？）</span>
+        </div>
+        <div class="qkv-pill">
+          <span class="pill-dot" style="background: var(--accent-v);"></span>
+          <span><b>Value ($V$)</b>：载荷空间（我能提供什么内容？）</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Formula Anchor -->
+    <div class="formula-box">
+      <div class="formula-tag">核心公式</div>
+      $$\text{Attention}(Q, K, V) = \operatorname{Softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$
+      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem;">
+        几何本质：通过 <b>Query-Key 方向对齐度</b> 构建 <b>重心坐标（Barycentric Coordinates）</b>，并在 <b>Value 向量构成的凸包（Convex Hull）</b> 内部进行插值重构。
+      </p>
+    </div>
+
+    <!-- Chapter 1 -->
+    <section id="ch1" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">01</div>
+        <h2 class="chapter-title">线性变换 $W_Q, W_K, W_V$：基底旋转与特征空间解耦</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">💡 为什么不直接用输入 $X$ 计算两两相似度？</h3>
+        <p>
+          在序列模型中，每个词首先被表示为一个 $d$ 维向量 $x \in \mathbb{R}^d$（嵌入向量）。如果直接计算 $X X^T$，意味着：
+          <b>一个词的“自我表达”、“它想寻找的目标”以及“它能贡献的内容”，被强行限制在同一个几何坐标系中。</b>
+        </p>
+
+        <div class="grid-3">
+          <div class="sub-card" style="border-top: 3px solid var(--accent-q);">
+            <h4 style="color: var(--accent-q);"><span class="badge badge-q">Q 空间</span> 意图探针</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              $$q_i = x_i W_Q$$
+              通过矩阵 $W_Q$ 进行旋转和拉伸，把原始词向量映射为<b>“主动发起检索的探针”</b>（例如：动词在寻找它的宾语）。
+            </p>
+          </div>
+          <div class="sub-card" style="border-top: 3px solid var(--accent-k);">
+            <h4 style="color: var(--accent-k);"><span class="badge badge-k">K 空间</span> 特征被查靶</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              $$k_j = x_j W_K$$
+              通过矩阵 $W_K$ 将词向量投影到<b>“被动匹配的特征靶点”</b>（例如：名词暴露自己的“实体属性”、“性数格”标签）。
+            </p>
+          </div>
+          <div class="sub-card" style="border-top: 3px solid var(--accent-v);">
+            <h4 style="color: var(--accent-v);"><span class="badge badge-v">V 空间</span> 语义载荷</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              $$v_j = x_j W_V$$
+              通过矩阵 $W_V$ 映射到<b>“真正用于传输的信息载荷空间”</b>。即使两个词在匹配阶段匹配度高，其传递的内容形态也可以完全不同。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-idea">
+          <div class="callout-icon">✨</div>
+          <div class="callout-body">
+            <strong>几何本质：仿射变换与子空间拆分 (Subspace Projection)</strong><br>
+            矩阵乘法 $x W$ 是线性代数中最纯粹的操作——它对原始高维空间进行<strong>旋转（Rotation）、剪切（Shear）与缩放（Scaling）</strong>。这让同一个物理实体在“寻人”、“应聘”与“干活”三种角色中拥有完全独立的几何构型。
+          </div>
+        </div>
+
+        <!-- Interactive 1: Linear Transformation of Vector Space -->
+        <div class="interactive-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              🎮 交互实验 1：输入向量 $x$ 在 $W_Q, W_K, W_V$ 空间中的三路投影变换
+            </div>
+            <div class="panel-badge">鼠标拖动画布中的点</div>
+          </div>
+          
+          <div class="canvas-container">
+            <canvas id="canvas-projection" width="800" height="340"></canvas>
+          </div>
+
+          <div class="controls-bar">
+            <div class="control-group">
+              <label>旋转变换矩阵 $W_Q$ 角度：</label>
+              <input type="range" id="slider-wq-angle" min="-180" max="180" value="35">
+              <span id="label-wq-angle" style="font-family: var(--font-mono); color: var(--accent-q);">35°</span>
+            </div>
+            <div class="control-group">
+              <label>变换矩阵 $W_K$ 缩放：</label>
+              <input type="range" id="slider-wk-scale" min="5" max="20" value="12">
+              <span id="label-wk-scale" style="font-family: var(--font-mono); color: var(--accent-k);">1.2x</span>
+            </div>
+            <button class="btn" id="btn-reset-proj">重置输入向量</button>
+          </div>
+
+          <div class="readout-grid">
+            <div class="readout-card">
+              <div class="readout-label">输入向量 $x$</div>
+              <div class="readout-value" id="val-x" style="color: #cbd5e1;">[1.00, 1.20]</div>
+            </div>
+            <div class="readout-card">
+              <div class="readout-label">Query 探针 $q = x W_Q$</div>
+              <div class="readout-value" id="val-q" style="color: var(--accent-q);">[0.82, 1.45]</div>
+            </div>
+            <div class="readout-card">
+              <div class="readout-label">Key 靶点 $k = x W_K$</div>
+              <div class="readout-value" id="val-k" style="color: var(--accent-k);">[1.20, -0.60]</div>
+            </div>
+            <div class="readout-card">
+              <div class="readout-label">Value 载荷 $v = x W_V$</div>
+              <div class="readout-value" id="val-v" style="color: var(--accent-v);">[-0.95, 1.10]</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Chapter 2 -->
+    <section id="ch2" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">02</div>
+        <h2 class="chapter-title">点积打分 $Q K^T$：高维向量的夹角对齐与正交投影</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">🎯 点积在几何学中到底度量了什么？</h3>
+        <p>
+          注意力机制第一步的核心计算是内积矩阵 $A = Q K^T$。对于第 $i$ 个词的 Query 向量 $q_i$ 与第 $j$ 个词的 Key 向量 $k_j$，其标量点积为：
+        </p>
+
+        <div class="formula-box">
+          $$\text{Score}(q_i, k_j) = q_i \cdot k_j = \|q_i\| \cdot \|k_j\| \cdot \cos(\theta)$$
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            其中 $\theta$ 是向量 $q_i$ 与 $k_j$ 在特征空间中的夹角，$\|q_i\|$ 与 $\|k_j\|$ 分别为向量的欧氏长度（模长）。
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="sub-card">
+            <h4>📐 1. 方向一致性 ($\cos\theta$)</h4>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">
+              当 $\theta = 0^\circ$（两向量同向）时，$\cos\theta = 1$ 达到最大正相关；当 $\theta = 90^\circ$（正交）时，积为 0；当 $\theta = 180^\circ$ 时为负最大值。
+              <b>夹角越小，意味着 Query 的检索意图与 Key 的特征高度共鸣对齐。</b>
+            </p>
+          </div>
+          <div class="sub-card">
+            <h4>📏 2. 模长敏感度 ($\|q\| \|k\|$)</h4>
+            <p style="font-size: 0.92rem; color: var(--text-secondary);">
+              向量的模长代表了该词在空间中的<b>“显著性权重 (Salience)”</b>。一个模长很大的 Key 向量在几何上具有更大的“引力半径”，更容易引起所有 Query 的关注。
+            </p>
+          </div>
+        </div>
+
+        <!-- Dedicated Section: Why Q multiplies K Transpose -->
+        <div style="margin: 2.2rem 0; padding: 1.75rem; background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: 16px;">
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: #38bdf8; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem;">
+            🔍 深度剖析：为什么公式中 $Q$ 必须乘以 $K$ 的转置（$Q K^T$）？
+          </h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.2rem;">
+            很多初学者会好奇：既然我们想计算 Query 和 Key 的相似度，为什么不能直接写 $Q K$？为什么一定要对 $K$ 进行转置（Transpose）？这背后包含了<b>维度守恒、代数内积、几何拓扑</b>与<b>硬件并行</b>四个层面的必然要求。
+          </p>
+
+          <div class="grid-2" style="gap: 1.25rem;">
+            <!-- 1. 维度视角 -->
+            <div class="sub-card" style="border-left: 3px solid #38bdf8;">
+              <h4 style="color: #38bdf8; font-size: 1rem;">1. 维度守恒法则：让矩阵乘法能够成立</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                设序列长度为 $N$（Token 数），特征维度为 $d_k$。$Q$ 和 $K$ 的尺寸均为 $(N \times d_k)$。
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; background: rgba(0,0,0,0.3); padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                直接相乘：$(N \times d_k) \times (N \times d_k) \rightarrow$ <span style="color: #f43f5e; font-weight: 700;">❌ 维度冲突</span><br>
+                转置相乘：$\underbrace{Q}_{(N \times d_k)} \times \underbrace{K^T}_{(d_k \times N)} \rightarrow$ <span style="color: #34d399; font-weight: 700;">✅ 生成 (N × N) 方阵</span>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                内部的特征维度 $d_k$ 恰好对齐并在乘法中求和消除，生成一个 $N \times N$ 的<b>全序列两两交互矩阵</b>。
+              </p>
+            </div>
+
+            <!-- 2. 代数视角 -->
+            <div class="sub-card" style="border-left: 3px solid #f43f5e;">
+              <h4 style="color: #f43f5e; font-size: 1rem;">2. 代数内积本质：批量计算 $N^2$ 对点积</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.6rem;">
+                矩阵乘法中第 $(i, j)$ 位置的元素，等于前者的<b>第 $i$ 行</b>与后者的<b>第 $j$ 列</b>相乘：
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; background: rgba(0,0,0,0.3); padding: 0.6rem 0.8rem; border-radius: 8px; margin-bottom: 0.5rem;">
+                $$\text{Score}_{i, j} = \text{Row}_i(Q) \times \text{Col}_j(K^T) = q_i \cdot k_j$$
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">
+                将 $K$ 转置后，$K$ 的第 $j$ 行（即第 $j$ 个词的 Key 向量 $k_j$）恰好变成了 $K^T$ 的<b>第 $j$ 列</b>，从而精准完成了 $q_i$ 与 $k_j$ 的内积！
+              </p>
+            </div>
+
+            <!-- 3. 几何视角 -->
+            <div class="sub-card" style="border-left: 3px solid #a855f7;">
+              <h4 style="color: #a855f7; font-size: 1rem;">3. 几何流形：从绝对坐标到全息引力图</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                $Q, K$ 各自记录高维特征空间中的<b>点坐标位置</b>；相乘转置后在数学上构成了<b>广义 Gram 矩阵（关联拓扑图）</b>。
+                它把各个独立的坐标点映射为全序列节点之间的<b>两两相对引力网络</b>。
+              </p>
+            </div>
+
+            <!-- 4. 硬件视角 -->
+            <div class="sub-card" style="border-left: 3px solid #10b981;">
+              <h4 style="color: #10b981; font-size: 1rem;">4. GPU 极致并行：避免双重循环</h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary);">
+                如果不写成矩阵形式，需要写两层 `for` 循环遍历 $N^2$ 次点积。而 $Q K^T$ 是一次标准的<b>通用矩阵乘法（GEMM）</b>，能够让 GPU Tensor Cores 迸发极限吞吐性能。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive 2: Dot Product and Projection Visualizer -->
+        <div class="interactive-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              🎮 交互实验 2：拖拽 Query 向量与 3 个 Key 向量，观察正交投影与点积分数
+            </div>
+            <div class="panel-badge">拖拽红点 $q$ 或蓝点 $k_1, k_2, k_3$</div>
+          </div>
+          
+          <div class="canvas-container">
+            <canvas id="canvas-dotprod" width="800" height="380"></canvas>
+          </div>
+
+          <div class="controls-bar">
+            <span style="color: var(--text-secondary); font-size: 0.85rem;">
+              💡 提示：虚线展示了向量 $q$ 在各 $k$ 上的正交投影。投影越长且同向，点积分数越高。
+            </span>
+          </div>
+
+          <div class="readout-grid">
+            <div class="readout-card" style="border-color: rgba(6, 182, 212, 0.4);">
+              <div class="readout-label">$q \cdot k_1$ (得分)</div>
+              <div class="readout-value" id="score-k1" style="color: var(--accent-k);">+4.25</div>
+            </div>
+            <div class="readout-card" style="border-color: rgba(6, 182, 212, 0.4);">
+              <div class="readout-label">$q \cdot k_2$ (得分)</div>
+              <div class="readout-value" id="score-k2" style="color: var(--accent-k);">-1.12</div>
+            </div>
+            <div class="readout-card" style="border-color: rgba(6, 182, 212, 0.4);">
+              <div class="readout-label">$q \cdot k_3$ (得分)</div>
+              <div class="readout-value" id="score-k3" style="color: var(--accent-k);">+2.80</div>
+            </div>
+            <div class="readout-card" style="border-color: rgba(99, 102, 241, 0.4);">
+              <div class="readout-label">最大相似度方向</div>
+              <div class="readout-value" id="best-key" style="color: var(--accent-indigo);">Target $k_1$</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Chapter 3 -->
+    <section id="ch3" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">03</div>
+        <h2 class="chapter-title">缩放因子 $1/\sqrt{d_k}$：对抗高维球面的方差爆炸</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">⚡ 为什么必须除以 $\sqrt{d_k}$？高维空间的几何反直觉</h3>
+        <p>
+          在低维（如 2D、3D）空间中，点积数值很温和。但是在工业级大模型中，隐藏层维度 $d_k$ 通常是 64、128 甚至更高。
+        </p>
+
+        <div class="callout callout-idea">
+          <div class="callout-icon">🎲</div>
+          <div class="callout-body">
+            <strong>统计与几何推导：</strong><br>
+            假设 $q$ 与 $k$ 的每个分量都是独立同分布的标准正态分布（均值 0，方差 1），则它们在 $d_k$ 维空间中的点积：
+            $$q \cdot k = \sum_{i=1}^{d_k} q_i k_i$$
+            其数学期望 $\mathbb{E}[q \cdot k] = 0$，而<strong>方差为 $\operatorname{Var}(q \cdot k) = d_k$</strong>！标准差为 $\sqrt{d_k}$。
+          </div>
+        </div>
+
+        <p>
+          当维度 $d_k = 64$ 时，点积的标准差是 8；当 $d_k = 1024$ 时，标准差是 32。
+          这意味着高维空间中点积很容易出现绝对值极大（如 +30 或 -30）的极端值。
+        </p>
+
+        <div class="grid-2">
+          <div class="sub-card" style="border-left: 3px solid var(--accent-q);">
+            <h4 style="color: var(--accent-q);">❌ 如果不缩放（Without Scale）</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              过大的点积分数输入 Softmax 后，指数函数 $e^{30}$ 会吞噬一切，Softmax 输出直接退化为接近 <b>One-Hot（极值硬匹配）</b>。导致几何流形极度陡峭，反向传播时的梯度趋于 0（梯度饱和与弥散）。
+            </p>
+          </div>
+          <div class="sub-card" style="border-left: 3px solid var(--accent-v);">
+            <h4 style="color: var(--accent-v);">✅ 缩放后的几何效果（With Scale $\frac{1}{\sqrt{d_k}}$）</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              把点积除以 $\sqrt{d_k}$，在几何上相当于把高维超球面的分散点积<b>拉回标准方差为 1 的温和球面区域</b>，确保 Softmax 拥有平滑的概率过渡，模型能同时兼顾多个相关词。
+            </p>
+          </div>
+        </div>
+
+        <!-- Interactive 3: Softmax Temperature & High Dim Variance Simulator -->
+        <div class="interactive-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              🎮 交互实验 3：调节向量维度 $d_k$ 与缩放开关，观察 Softmax 概率分布的极化与平滑
+            </div>
+            <div class="panel-badge">观察 Softmax 曲线形态</div>
+          </div>
+          
+          <div class="canvas-container">
+            <canvas id="canvas-scaling" width="800" height="300"></canvas>
+          </div>
+
+          <div class="controls-bar">
+            <div class="control-group">
+              <label>特征维度 $d_k$：</label>
+              <input type="range" id="slider-dk" min="4" max="256" value="64" step="4">
+              <span id="label-dk" style="font-family: var(--font-mono); color: var(--accent-k);">64</span>
+            </div>
+            <div class="control-group">
+              <label><input type="checkbox" id="check-scaling" checked style="margin-right: 5px;"> 启用 $\frac{1}{\sqrt{d_k}}$ 缩放</label>
+            </div>
+            <button class="btn" id="btn-resample-scores">🎲 重新随机采样高维向量</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Chapter 4 -->
+    <section id="ch4" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">04</div>
+        <h2 class="chapter-title">Softmax 归一化：映射到概率单纯形（Simplex）与重心坐标</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">🔺 Softmax 在几何上的本质：标准单纯形（Probability Simplex）</h3>
+        <p>
+          Softmax 接收实数打分向量 $s = [s_1, s_2, \dots, s_n]$，输出一组权重 $\alpha = [\alpha_1, \alpha_2, \dots, \alpha_n]$：
+        </p>
+
+        <div class="formula-box">
+          $$\alpha_i = \frac{e^{s_i / \sqrt{d_k}}}{\sum_{j=1}^n e^{s_j / \sqrt{d_k}}}, \quad \text{满足} \quad \sum_{i=1}^n \alpha_i = 1 \quad \text{且} \quad \alpha_i \ge 0$$
+        </div>
+
+        <p>
+          在多维几何中，所有满足“非负且和为 1”的点集构成了数学上的**标准概率单纯形（Standard Probability Simplex $\Delta^{n-1}$）**：
+        </p>
+
+        <div class="grid-3">
+          <div class="sub-card">
+            <h4>2 个 Token ($n=2$)</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              单纯形是一条<b>线段</b>。点在这条线段上滑动，$\alpha_1 + \alpha_2 = 1$。
+            </p>
+          </div>
+          <div class="sub-card">
+            <h4>3 个 Token ($n=3$)</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              单纯形是一个<b>平面正三角形</b>。三角形内部的每一个点坐标 $(\alpha_1, \alpha_2, \alpha_3)$ 就是一组<b>重心坐标</b>。
+            </p>
+          </div>
+          <div class="sub-card">
+            <h4>4 个 Token ($n=4$)</h4>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">
+              单纯形是一个<b>三维正四面体</b>。内部每一点对应 4 个顶点引力的动态平衡点。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout callout-k">
+          <div class="callout-icon">⚖️</div>
+          <div class="callout-body">
+            <strong>物理力学比喻：重心坐标 (Barycentric Coordinates)</strong><br>
+            想象在三角形的 3 个顶点分别放置质量为 $\alpha_1, \alpha_2, \alpha_3$ 的砝码。因为总质量归一化为 1，这个刚体系统的<strong>质心（Center of Mass）</strong>位置就是 Softmax 给出的几何插值坐标！
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Chapter 5 -->
+    <section id="ch5" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">05</div>
+        <h2 class="chapter-title">乘载荷矩阵 $V$：在 Value 凸包（Convex Hull）内的重心插值与坐标跃迁</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">🌌 终局：从单纯形权重到物理空间的加权位移</h3>
+        <p>
+          Attention 的最后一步是加权求和输出：
+          $$\text{Output}_i = \sum_{j=1}^n \alpha_{ij} v_j$$
+        </p>
+
+        <div class="callout callout-v">
+          <div class="callout-icon">💎</div>
+          <div class="callout-body">
+            <strong>黄金定理：凸组合（Convex Combination）与凸包（Convex Hull）</strong><br>
+            因为权重满足 $\alpha_j \ge 0$ 且 $\sum \alpha_j = 1$，输出向量 $\text{Output}_i$ 在几何上是所有 Value 向量 $\{v_1, v_2, \dots, v_n\}$ 的<strong>凸组合</strong>。
+            也就是说：<strong>输出向量在几何空间中必然被严格包围在 $\{v_1, \dots, v_n\}$ 张成的“凸多胞体（Convex Hull）”内部！</strong>
+          </div>
+        </div>
+
+        <!-- Interactive 4: The Complete QKV Unified Geometric Simulation -->
+        <div class="interactive-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              🎮 交互实验 4：全流程几何引擎 —— 探针检索、凸包引力与输出重构
+            </div>
+            <div class="panel-badge">动态可拖拽系统</div>
+          </div>
+          
+          <div class="canvas-container">
+            <canvas id="canvas-unified" width="850" height="460"></canvas>
+          </div>
+
+          <div class="controls-bar">
+            <span style="color: var(--text-secondary); font-size: 0.85rem;">
+              操作提示：左侧拖动当前词的 <b style="color: var(--accent-q);">Query 探针 (红)</b> 与环境词的 <b style="color: var(--accent-k);">Key 靶点 (蓝)</b>；右侧将实时查看 <b style="color: var(--accent-v);">Value 空间中的凸多边形</b> 以及最终的 <b style="color: var(--accent-out);">Output 重心位移点 (紫)</b>！
+            </span>
+          </div>
+
+          <div class="readout-grid">
+            <div class="readout-card">
+              <div class="readout-label">Token 1 权重 $\alpha_1$</div>
+              <div class="readout-value" id="weight-t1" style="color: #38bdf8;">0.72</div>
+            </div>
+            <div class="readout-card">
+              <div class="readout-label">Token 2 权重 $\alpha_2$</div>
+              <div class="readout-value" id="weight-t2" style="color: #38bdf8;">0.18</div>
+            </div>
+            <div class="readout-card">
+              <div class="readout-label">Token 3 权重 $\alpha_3$</div>
+              <div class="readout-value" id="weight-t3" style="color: #38bdf8;">0.10</div>
+            </div>
+            <div class="readout-card" style="border-color: rgba(168, 85, 247, 0.5);">
+              <div class="readout-label">最终输出 Output 坐标</div>
+              <div class="readout-value" id="out-pos" style="color: var(--accent-out);">[1.24, 0.86]</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Chapter 6 -->
+    <section id="ch6" class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">06</div>
+        <h2 class="chapter-title">多头注意力（Multi-Head Attention）：多子空间联合观测与流形重构</h2>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title">👁️ 为什么要拆分成多个 Head？</h3>
+        <p>
+          如果只有单一的 Attention 运算，模型就只能在单一的几何视角下计算引力。但自然语言中一个词往往有多重关系：
+        </p>
+
+        <div class="grid-3">
+          <div class="sub-card">
+            <h4 style="color: #38bdf8;">Head 1：句法依赖子空间</h4>
+            <p style="font-size: 0.88rem; color: var(--text-secondary);">
+              关注动宾搭配、主谓关系。几何上倾向于捕获短距离或特定语法角色的投影。
+            </p>
+          </div>
+          <div class="sub-card" style="color: #a855f7;">
+            <h4 style="color: #a855f7;">Head 2：代词指代子空间</h4>
+            <p style="font-size: 0.88rem; color: var(--text-secondary);">
+              例如将 “it” 与几句话前的 “animal” 关联，在语义特征子空间建立超长距离引力通道。
+            </p>
+          </div>
+          <div class="sub-card" style="color: #10b981;">
+            <h4 style="color: #10b981;">Head 3：实体属性子空间</h4>
+            <p style="font-size: 0.88rem; color: var(--text-secondary);">
+              捕获名词与其修饰语（颜色、大小、类别）的空间共线关系。
+            </p>
+          </div>
+        </div>
+
+        <div class="formula-box">
+          $$\text{MultiHead}(Q, K, V) = \operatorname{Concat}(\text{head}_1, \dots, \text{head}_h) W_O$$
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;">
+            几何含义：在 $h$ 个互相平行的低维子空间中各自完成“重心重构”，然后把各个子空间的重构结果通过<b>正交拼接</b>合成高维向量，最后用 $W_O$ 矩阵做全空间的<b>线性融合（Linear Mixing）</b>。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Comprehensive Summary Table -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">07</div>
+        <h2 class="chapter-title">总结：代数运算、几何直觉与物理比喻速查</h2>
+      </div>
+
+      <div class="card">
+        <table class="geo-table">
+          <thead>
+            <tr>
+              <th>计算步骤</th>
+              <th>线性代数公式</th>
+              <th>高维几何解释</th>
+              <th>直观物理比喻</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>1. 矩阵投影</b></td>
+              <td>$Q=XW_Q, K=XW_K, V=XW_V$</td>
+              <td>线性空间基底变换与子空间解耦</td>
+              <td>分别化身为“探针”、“靶标”与“信息包裹”</td>
+            </tr>
+            <tr>
+              <td><b>2. 打分匹配</b></td>
+              <td>$S = Q K^T$</td>
+              <td>高维向量内积与正交投影长度度量</td>
+              <td>测试探针与各个靶标的方向对齐程度与共鸣度</td>
+            </tr>
+            <tr>
+              <td><b>3. 尺度缩放</b></td>
+              <td>$S / \sqrt{d_k}$</td>
+              <td>对抗高维球面方差爆炸，平滑几何流形</td>
+              <td>调低温度，防止个别极端点霸占全部引力</td>
+            </tr>
+            <tr>
+              <td><b>4. 归一化</b></td>
+              <td>$A = \operatorname{Softmax}(\dots)$</td>
+              <td>将无界实数投影到标准概率单纯形 $\Delta^{n-1}$</td>
+              <td>计算各顶点的重心质量分配系数</td>
+            </tr>
+            <tr>
+              <td><b>5. 加权汇聚</b></td>
+              <td>$\text{Out} = A V$</td>
+              <td>在 Value 空间<b>凸包 (Convex Hull)</b> 内部求重心插值</td>
+              <td>当前词坐标被引力拉向最相关信息源的质心</td>
+            </tr>
+            <tr>
+              <td><b>6. 多头融合</b></td>
+              <td>$\operatorname{Concat}(\dots) W_O$</td>
+              <td>多子空间投影聚合与全空间重映射</td>
+              <td>多台摄像机多角度拍摄后全息合成</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Interactive Challenge Quiz -->
+    <section class="chapter">
+      <div class="chapter-header">
+        <div class="chapter-num">08</div>
+        <h2 class="chapter-title">几何直觉随堂测验</h2>
+      </div>
+
+      <div class="card">
+        <div class="quiz-card" id="quiz-1">
+          <div class="quiz-question">
+            ❓ 思考题 1：如果某个词的 Key 向量模长 $\|k_j\| \to 0$（几乎退化为原点），在几何与物理上意味着什么？
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="checkQuiz(1, 0, false)">A. 它将吸引所有 Query 的最大注意力</div>
+            <div class="quiz-opt" onclick="checkQuiz(1, 1, true)">B. 它的正交投影长度接近 0，在空间中几乎处于“隐形/无引力”状态</div>
+            <div class="quiz-opt" onclick="checkQuiz(1, 2, false)">C. 会导致 Softmax 计算出现除以 0 崩溃</div>
+          </div>
+          <div class="quiz-explanation" id="quiz-exp-1">
+            <b>解析：正确！</b> 依据点积公式 $q \cdot k = \|q\| \|k\| \cos\theta$，若 $\|k\| \approx 0$，则不论 Query 的方向如何，点积得分都接近 0，在 Softmax 中不会产生显著吸引力，相当于静默节点（如停用词）。
+          </div>
+        </div>
+
+        <div class="quiz-card" id="quiz-2" style="margin-top: 1.5rem;">
+          <div class="quiz-question">
+            ❓ 思考题 2：为什么 Attention 的输出向量不可能跑到 Value 向量构成的凸包（Convex Hull）外面？
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="checkQuiz(2, 0, false)">A. 因为矩阵 $W_V$ 是正交矩阵</div>
+            <div class="quiz-opt" onclick="checkQuiz(2, 1, true)">B. 因为 Softmax 的权重全部非负且总和恒等于 1，满足严格的凸组合定义</div>
+            <div class="quiz-opt" onclick="checkQuiz(2, 2, false)">C. 因为缩放因子 $\sqrt{d_k}$ 限制了向量的长度</div>
+          </div>
+          <div class="quiz-explanation" id="quiz-exp-2">
+            <b>解析：正确！</b> 凸组合（Convex Combination）的数学定义就是系数 $\sum \alpha_i = 1$ 且 $\alpha_i \ge 0$ 的线性组合。根据凸几何学基本定理，有限点集的任意凸组合必然位于该点集的凸包之内。
+          </div>
+        </div>
+
+        <div class="quiz-card" id="quiz-3" style="margin-top: 1.5rem;">
+          <div class="quiz-question">
+            ❓ 思考题 3：如果输入序列长度为 $N=512$，特征维度 $d_k=64$，那么 $Q K^T$ 运算得到的矩阵尺寸是什么？其中每个元素 $(i, j)$ 表示什么？
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-opt" onclick="checkQuiz(3, 0, false)">A. 尺寸为 64 × 64，表示特征维度之间的相关系数</div>
+            <div class="quiz-opt" onclick="checkQuiz(3, 1, true)">B. 尺寸为 512 × 512，元素 (i, j) 表示第 i 个词对第 j 个词发起的两两内积相似度得分</div>
+            <div class="quiz-opt" onclick="checkQuiz(3, 2, false)">C. 尺寸为 512 × 64，表示投影后的加权特征向量</div>
+          </div>
+          <div class="quiz-explanation" id="quiz-exp-3">
+            <b>解析：正确！</b> $Q$ 的形状是 $512 \times 64$，$K^T$ 的形状是 $64 \times 512$，矩阵相乘后内层 64 维对齐求和消除，生成 $512 \times 512$ 的全局两两交互得分方阵。
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>© 2026 几何与线性代数直觉实验室 · Designed for Deep Learning & Math Beginners</p>
+    <p style="margin-top: 0.5rem; color: #475569; font-size: 0.8rem;">
+      Formula rendered by KaTeX · Interactive Visualizations powered by HTML5 Canvas
+    </p>
+  </footer>
+
+  <!-- Interactive Visualizers JavaScript Logic -->
+  <script>
+    // --- Scroll Progress Bar ---
+    window.addEventListener('scroll', () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.pageYOffset / totalHeight) * 100;
+      document.getElementById('progress-bar').style.width = progress + '%';
+    });
+
+    // --- Utility: Coordinate Helper ---
+    function drawGrid(ctx, w, h, originX, originY, step = 30) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let x = originX % step; x < w; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+      }
+      for (let y = originY % step; y < h; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+      }
+      // Main axes
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(0, originY); ctx.lineTo(w, originY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(originX, 0); ctx.lineTo(originX, h); ctx.stroke();
+    }
+
+    function drawVector(ctx, ox, oy, vx, vy, color, label = '', lineWidth = 2.5) {
+      const tx = ox + vx;
+      const ty = oy - vy; // canvas y is inverted
+      
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = lineWidth;
+      
+      // Line
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(tx, ty);
+      ctx.stroke();
+
+      // Arrow head
+      const angle = Math.atan2(-(ty - oy), tx - ox);
+      const headlen = 10;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty);
+      ctx.lineTo(tx - headlen * Math.cos(angle - Math.PI / 6), ty + headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tx - headlen * Math.cos(angle + Math.PI / 6), ty + headlen * Math.sin(angle + Math.PI / 6));
+      ctx.fill();
+
+      // Point circle
+      ctx.beginPath();
+      ctx.arc(tx, ty, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Label
+      if (label) {
+        ctx.font = '600 13px Outfit, sans-serif';
+        ctx.fillText(label, tx + 10, ty - 5);
+      }
+    }
+
+    // ==========================================
+    // INTERACTIVE 1: 3-Way Linear Projection
+    // ==========================================
+    (function initInteractive1() {
+      const canvas = document.getElementById('canvas-projection');
+      const ctx = canvas.getContext('2d');
+      
+      let inputVector = { x: 50, y: 70 }; // relative to sub-origin
+      let isDragging = false;
+
+      const sliderWq = document.getElementById('slider-wq-angle');
+      const sliderWk = document.getElementById('slider-wk-scale');
+      const labelWq = document.getElementById('label-wq-angle');
+      const labelWk = document.getElementById('label-wk-scale');
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        const padX = canvas.width / 4;
+        const cy = canvas.height / 2;
+
+        // 4 Sub-spaces
+        const spaces = [
+          { name: "原始输入空间 X", ox: padX * 0.5, oy: cy, color: "#cbd5e1" },
+          { name: "Query 空间 (旋转)", ox: padX * 1.5, oy: cy, color: "var(--accent-q)" },
+          { name: "Key 空间 (伸缩)", ox: padX * 2.5, oy: cy, color: "var(--accent-k)" },
+          { name: "Value 空间 (剪切)", ox: padX * 3.5, oy: cy, color: "var(--accent-v)" }
+        ];
+
+        // Draw sub space backgrounds
+        spaces.forEach((s, idx) => {
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.strokeRect(idx * padX + 5, 10, padX - 10, canvas.height - 20);
+          
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.02)';
+          ctx.fillRect(idx * padX + 5, 10, padX - 10, canvas.height - 20);
+
+          drawGrid(ctx, padX - 10, canvas.height - 20, padX * 0.5 - 5, cy - 10);
+
+          ctx.fillStyle = s.color;
+          ctx.font = '600 12px Outfit, sans-serif';
+          ctx.fillText(s.name, idx * padX + 15, 30);
+        });
+
+        // 1. Original X
+        drawVector(ctx, spaces[0].ox, spaces[0].oy, inputVector.x, inputVector.y, '#94a3b8', 'x', 3);
+
+        // 2. Query = Rotate
+        const angleRad = (parseFloat(sliderWq.value) * Math.PI) / 180;
+        const qx = inputVector.x * Math.cos(angleRad) - inputVector.y * Math.sin(angleRad);
+        const qy = inputVector.x * Math.sin(angleRad) + inputVector.y * Math.cos(angleRad);
+        drawVector(ctx, spaces[1].ox, spaces[1].oy, qx, qy, '#f43f5e', 'q', 3);
+
+        // 3. Key = Scale
+        const scaleK = parseFloat(sliderWk.value) / 10;
+        const kx = inputVector.x * scaleK;
+        const ky = -inputVector.y * 0.7 * scaleK;
+        drawVector(ctx, spaces[2].ox, spaces[2].oy, kx, ky, '#06b6d4', 'k', 3);
+
+        // 4. Value = Shear
+        const vx = inputVector.x - 0.5 * inputVector.y;
+        const vy = 0.8 * inputVector.x + 0.9 * inputVector.y;
+        drawVector(ctx, spaces[3].ox, spaces[3].oy, vx, vy, '#10b981', 'v', 3);
+
+        // Update readouts
+        document.getElementById('val-x').textContent = `[${(inputVector.x/40).toFixed(2)}, ${(inputVector.y/40).toFixed(2)}]`;
+        document.getElementById('val-q').textContent = `[${(qx/40).toFixed(2)}, ${(qy/40).toFixed(2)}]`;
+        document.getElementById('val-k').textContent = `[${(kx/40).toFixed(2)}, ${(ky/40).toFixed(2)}]`;
+        document.getElementById('val-v').textContent = `[${(vx/40).toFixed(2)}, ${(vy/40).toFixed(2)}]`;
+      }
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: e.clientX - rect.left,
+          y: e.clientY - rect.top
+        };
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        const pos = getPos(e);
+        const padX = canvas.width / 4;
+        const ox = padX * 0.5;
+        const oy = canvas.height / 2;
+        const targetX = ox + inputVector.x;
+        const targetY = oy - inputVector.y;
+        const dist = Math.hypot(pos.x - targetX, pos.y - targetY);
+        if (dist < 30 || pos.x < padX) {
+          isDragging = true;
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const pos = getPos(e);
+        const padX = canvas.width / 4;
+        const ox = padX * 0.5;
+        const oy = canvas.height / 2;
+        inputVector.x = Math.max(-60, Math.min(60, pos.x - ox));
+        inputVector.y = Math.max(-60, Math.min(60, oy - pos.y));
+        render();
+      });
+
+      window.addEventListener('mouseup', () => { isDragging = false; });
+
+      sliderWq.addEventListener('input', () => {
+        labelWq.textContent = sliderWq.value + '°';
+        render();
+      });
+
+      sliderWk.addEventListener('input', () => {
+        labelWk.textContent = (sliderWk.value / 10) + 'x';
+        render();
+      });
+
+      document.getElementById('btn-reset-proj').addEventListener('click', () => {
+        inputVector = { x: 50, y: 70 };
+        sliderWq.value = 35; labelWq.textContent = '35°';
+        sliderWk.value = 12; labelWk.textContent = '1.2x';
+        render();
+      });
+
+      render();
+    })();
+
+    // ==========================================
+    // INTERACTIVE 2: Dot Product & Projection
+    // ==========================================
+    (function initInteractive2() {
+      const canvas = document.getElementById('canvas-dotprod');
+      const ctx = canvas.getContext('2d');
+
+      const ox = canvas.width / 2;
+      const oy = canvas.height / 2;
+
+      let q = { x: 120, y: 80 };
+      let keys = [
+        { x: 150, y: 30, color: '#38bdf8', label: 'k₁ (高相似)' },
+        { x: -90, y: 120, color: '#06b6d4', label: 'k₂ (负相关)' },
+        { x: 20, y: 140, color: '#22d3ee', label: 'k₃ (正交弱相关)' }
+      ];
+
+      let activeDrag = null;
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawGrid(ctx, canvas.width, canvas.height, ox, oy);
+
+        // Draw Keys and Projections
+        const scores = [];
+        keys.forEach((k, idx) => {
+          // Draw Key Vector
+          drawVector(ctx, ox, oy, k.x, k.y, k.color, k.label, 3);
+
+          // Dot product: q.x * k.x + q.y * k.y
+          // Scale down for readable score
+          const rawDot = (q.x * k.x + q.y * k.y) / 2500;
+          scores.push({ idx: idx + 1, score: rawDot });
+
+          // Projection line of q onto k
+          const kLenSq = k.x * k.x + k.y * k.y;
+          if (kLenSq > 0.001) {
+            const scalar = (q.x * k.x + q.y * k.y) / kLenSq;
+            const projX = ox + scalar * k.x;
+            const projY = oy - scalar * k.y;
+
+            // Dashed projection drop line
+            ctx.setLineDash([4, 4]);
+            ctx.strokeStyle = 'rgba(244, 63, 94, 0.4)';
+            ctx.beginPath();
+            ctx.moveTo(ox + q.x, oy - q.y);
+            ctx.lineTo(projX, projY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw projection segment
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(ox, oy);
+            ctx.lineTo(projX, projY);
+            ctx.stroke();
+          }
+        });
+
+        // Draw Query Vector (Red)
+        drawVector(ctx, ox, oy, q.x, q.y, '#f43f5e', 'Query 探针 (q)', 3.5);
+
+        // Update readouts
+        document.getElementById('score-k1').textContent = (scores[0].score > 0 ? '+' : '') + scores[0].score.toFixed(2);
+        document.getElementById('score-k2').textContent = (scores[1].score > 0 ? '+' : '') + scores[1].score.toFixed(2);
+        document.getElementById('score-k3').textContent = (scores[2].score > 0 ? '+' : '') + scores[2].score.toFixed(2);
+
+        // Find max
+        const maxItem = scores.reduce((prev, curr) => curr.score > prev.score ? curr : prev);
+        document.getElementById('best-key').textContent = `Target k_${maxItem.idx} (${maxItem.score > 0 ? '+' : ''}${maxItem.score.toFixed(2)})`;
+      }
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        const pos = getPos(e);
+        // Check Query
+        if (Math.hypot(pos.x - (ox + q.x), pos.y - (oy - q.y)) < 20) {
+          activeDrag = 'q';
+          return;
+        }
+        // Check Keys
+        keys.forEach((k, idx) => {
+          if (Math.hypot(pos.x - (ox + k.x), pos.y - (oy - k.y)) < 20) {
+            activeDrag = idx;
+          }
+        });
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (activeDrag === null) return;
+        const pos = getPos(e);
+        const vx = Math.max(-250, Math.min(250, pos.x - ox));
+        const vy = Math.max(-180, Math.min(180, oy - pos.y));
+        if (activeDrag === 'q') {
+          q.x = vx; q.y = vy;
+        } else if (typeof activeDrag === 'number') {
+          keys[activeDrag].x = vx;
+          keys[activeDrag].y = vy;
+        }
+        render();
+      });
+
+      window.addEventListener('mouseup', () => { activeDrag = null; });
+
+      render();
+    })();
+
+    // ==========================================
+    // INTERACTIVE 3: Scaling & Softmax Simulator
+    // ==========================================
+    (function initInteractive3() {
+      const canvas = document.getElementById('canvas-scaling');
+      const ctx = canvas.getContext('2d');
+
+      const sliderDk = document.getElementById('slider-dk');
+      const labelDk = document.getElementById('label-dk');
+      const checkScaling = document.getElementById('check-scaling');
+      const btnResample = document.getElementById('btn-resample-scores');
+
+      let rawTokens = [
+        { name: "Token 1 (最匹配)", baseScore: 2.8 },
+        { name: "Token 2 (次相关)", baseScore: 1.5 },
+        { name: "Token 3 (微弱相关)", baseScore: 0.2 },
+        { name: "Token 4 (无关词)", baseScore: -1.2 },
+        { name: "Token 5 (冲突词)", baseScore: -2.4 }
+      ];
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const dk = parseFloat(sliderDk.value);
+        const sqrtDk = Math.sqrt(dk);
+        const useScale = checkScaling.checked;
+
+        // Multiply scores by standard dev scale sqrt(dk/16)
+        const effectiveScores = rawTokens.map(t => {
+          const scaledVariance = t.baseScore * (sqrtDk / 2);
+          return useScale ? (scaledVariance / sqrtDk) : scaledVariance;
+        });
+
+        // Compute Softmax
+        const maxScore = Math.max(...effectiveScores);
+        const expScores = effectiveScores.map(s => Math.exp(s - maxScore));
+        const sumExp = expScores.reduce((a, b) => a + b, 0);
+        const probs = expScores.map(e => e / sumExp);
+
+        // Draw Bar chart comparison
+        const barWidth = 70;
+        const gap = 50;
+        const startX = (canvas.width - (rawTokens.length * (barWidth + gap) - gap)) / 2;
+        const groundY = canvas.height - 50;
+
+        rawTokens.forEach((t, i) => {
+          const x = startX + i * (barWidth + gap);
+          const p = probs[i];
+          const barHeight = p * 180;
+
+          // Bar Background
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+          ctx.fillRect(x, groundY - 180, barWidth, 180);
+
+          // Bar Fill
+          const grad = ctx.createLinearGradient(x, groundY - barHeight, x, groundY);
+          grad.addColorStop(0, p > 0.6 ? '#f43f5e' : '#38bdf8');
+          grad.addColorStop(1, '#6366f1');
+          ctx.fillStyle = grad;
+          ctx.fillRect(x, groundY - barHeight, barWidth, barHeight);
+
+          // Top border glow
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(x, groundY - barHeight, barWidth, 2);
+
+          // Percentage Text
+          ctx.fillStyle = '#f8fafc';
+          ctx.font = '600 13px Fira Code, monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText((p * 100).toFixed(1) + '%', x + barWidth / 2, groundY - barHeight - 8);
+
+          // Token Name
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '500 12px Outfit, sans-serif';
+          ctx.fillText(`T_${i+1}`, x + barWidth / 2, groundY + 20);
+
+          // Score info
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px Fira Code, monospace';
+          ctx.fillText(`s=${effectiveScores[i].toFixed(1)}`, x + barWidth / 2, groundY + 36);
+        });
+
+        ctx.textAlign = 'left';
+      }
+
+      sliderDk.addEventListener('input', () => {
+        labelDk.textContent = sliderDk.value;
+        render();
+      });
+
+      checkScaling.addEventListener('change', render);
+
+      btnResample.addEventListener('click', () => {
+        rawTokens.forEach(t => {
+          t.baseScore = (Math.random() * 5 - 2.5);
+        });
+        rawTokens.sort((a,b) => b.baseScore - a.baseScore);
+        render();
+      });
+
+      render();
+    })();
+
+    // ==========================================
+    // INTERACTIVE 4: Unified Complete QKV Engine
+    // ==========================================
+    (function initInteractive4() {
+      const canvas = document.getElementById('canvas-unified');
+      const ctx = canvas.getContext('2d');
+
+      const splitX = canvas.width / 2;
+      const ox1 = splitX / 2;
+      const oy1 = canvas.height / 2;
+      const ox2 = splitX + splitX / 2;
+      const oy2 = canvas.height / 2;
+
+      // Q and Keys (Left Plane)
+      let q = { x: 70, y: 60 };
+      let keys = [
+        { x: 90, y: 70, name: "K₁" },
+        { x: -50, y: 80, name: "K₂" },
+        { x: 40, y: -70, name: "K₃" }
+      ];
+
+      // Values (Right Plane)
+      let values = [
+        { x: 100, y: 90, name: "V₁" },
+        { x: -110, y: 70, name: "V₂" },
+        { x: -20, y: -110, name: "V₃" }
+      ];
+
+      let activeHandle = null;
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Left Boundary Box
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.strokeRect(10, 10, splitX - 20, canvas.height - 20);
+        drawGrid(ctx, splitX - 20, canvas.height - 20, ox1 - 10, oy1 - 10);
+        ctx.fillStyle = 'rgba(244, 63, 94, 0.9)';
+        ctx.font = '700 13px Outfit, sans-serif';
+        ctx.fillText("左侧：Query-Key 匹配空间 (检索阶段)", 25, 35);
+
+        // Right Boundary Box
+        ctx.strokeRect(splitX + 10, 10, splitX - 20, canvas.height - 20);
+        drawGrid(ctx, splitX - 20, canvas.height - 20, ox2 - (splitX + 10), oy2 - 10);
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.9)';
+        ctx.fillText("右侧：Value 空间凸包与 Output 重心重构 (载荷阶段)", splitX + 25, 35);
+
+        // Calculate Attention Weights
+        const dotScores = keys.map(k => (q.x * k.x + q.y * k.y) / 1000);
+        const maxScore = Math.max(...dotScores);
+        const expScores = dotScores.map(s => Math.exp(s - maxScore));
+        const sumExp = expScores.reduce((a, b) => a + b, 0);
+        const alphas = expScores.map(e => e / sumExp);
+
+        // --- Draw Left Side (Q and Keys) ---
+        keys.forEach((k, i) => {
+          drawVector(ctx, ox1, oy1, k.x, k.y, 'rgba(6, 182, 212, 0.8)', `${k.name} (α=${alphas[i].toFixed(2)})`, 2.5);
+        });
+        drawVector(ctx, ox1, oy1, q.x, q.y, '#f43f5e', 'Query 探针', 3.5);
+
+        // --- Draw Right Side (Convex Hull & Output) ---
+        // 1. Draw Convex Polygon of Values
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(ox2 + values[0].x, oy2 - values[0].y);
+        ctx.lineTo(ox2 + values[1].x, oy2 - values[1].y);
+        ctx.lineTo(ox2 + values[2].x, oy2 - values[2].y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 2. Draw Value Vectors
+        values.forEach((v, i) => {
+          drawVector(ctx, ox2, oy2, v.x, v.y, '#10b981', `${v.name} (质重=${(alphas[i]*100).toFixed(0)}%)`, 2);
+        });
+
+        // 3. Compute Output Barycentric Combination
+        let outX = 0, outY = 0;
+        values.forEach((v, i) => {
+          outX += alphas[i] * v.x;
+          outY += alphas[i] * v.y;
+        });
+
+        // Draw Gravitational Pull lines from V_i to Output
+        values.forEach((v, i) => {
+          ctx.strokeStyle = `rgba(168, 85, 247, ${Math.max(0.15, alphas[i])})`;
+          ctx.lineWidth = 1 + alphas[i] * 4;
+          ctx.beginPath();
+          ctx.moveTo(ox2 + v.x, oy2 - v.y);
+          ctx.lineTo(ox2 + outX, oy2 - outY);
+          ctx.stroke();
+        });
+
+        // Draw Output Point (Purple Glowing Center)
+        drawVector(ctx, ox2, oy2, outX, outY, '#a855f7', 'Output 重心向量', 4);
+        
+        ctx.beginPath();
+        ctx.arc(ox2 + outX, oy2 - outY, 8, 0, Math.PI * 2);
+        ctx.fillStyle = '#f43f5e';
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Update readouts
+        document.getElementById('weight-t1').textContent = alphas[0].toFixed(3);
+        document.getElementById('weight-t2').textContent = alphas[1].toFixed(3);
+        document.getElementById('weight-t3').textContent = alphas[2].toFixed(3);
+        document.getElementById('out-pos').textContent = `[${(outX/40).toFixed(2)}, ${(outY/40).toFixed(2)}]`;
+      }
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      }
+
+      canvas.addEventListener('mousedown', (e) => {
+        const pos = getPos(e);
+        // Check Q
+        if (Math.hypot(pos.x - (ox1 + q.x), pos.y - (oy1 - q.y)) < 20) {
+          activeHandle = { type: 'q' }; return;
+        }
+        // Check Keys
+        keys.forEach((k, i) => {
+          if (Math.hypot(pos.x - (ox1 + k.x), pos.y - (oy1 - k.y)) < 20) {
+            activeHandle = { type: 'k', index: i }; return;
+          }
+        });
+        // Check Values
+        values.forEach((v, i) => {
+          if (Math.hypot(pos.x - (ox2 + v.x), pos.y - (oy2 - v.y)) < 20) {
+            activeHandle = { type: 'v', index: i }; return;
+          }
+        });
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!activeHandle) return;
+        const pos = getPos(e);
+        if (activeHandle.type === 'q') {
+          q.x = Math.max(-160, Math.min(160, pos.x - ox1));
+          q.y = Math.max(-160, Math.min(160, oy1 - pos.y));
+        } else if (activeHandle.type === 'k') {
+          keys[activeHandle.index].x = Math.max(-160, Math.min(160, pos.x - ox1));
+          keys[activeHandle.index].y = Math.max(-160, Math.min(160, oy1 - pos.y));
+        } else if (activeHandle.type === 'v') {
+          values[activeHandle.index].x = Math.max(-160, Math.min(160, pos.x - ox2));
+          values[activeHandle.index].y = Math.max(-160, Math.min(160, oy2 - pos.y));
+        }
+        render();
+      });
+
+      window.addEventListener('mouseup', () => { activeHandle = null; });
+
+      render();
+    })();
+
+    // ==========================================
+    // QUIZ CHECK LOGIC
+    // ==========================================
+    function checkQuiz(qNum, optIdx, isCorrect) {
+      const card = document.getElementById(`quiz-${qNum}`);
+      const opts = card.querySelectorAll('.quiz-opt');
+      opts.forEach((opt, idx) => {
+        opt.classList.remove('correct', 'wrong');
+        if (idx === optIdx) {
+          opt.classList.add(isCorrect ? 'correct' : 'wrong');
+        }
+      });
+      document.getElementById(`quiz-exp-${qNum}`).style.display = 'block';
+    }
+  </script>
+</body>
+</html>
