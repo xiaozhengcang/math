@@ -1,0 +1,2107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>空间平面全参数解析：三大本质定义、点法式推导、法向模长与 D 电梯平移</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <!-- Three.js and OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <style>
+    :root {
+      --bg-primary: #090d16;
+      --bg-secondary: #0f172a;
+      --bg-card: rgba(17, 24, 39, 0.78);
+      --bg-card-hover: rgba(30, 41, 59, 0.88);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(56, 189, 248, 0.35);
+      
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-blue: #38bdf8;
+      --accent-indigo: #6366f1;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      
+      --gradient-brand: linear-gradient(135deg, #38bdf8 0%, #6366f1 50%, #10b981 100%);
+      --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+      --gradient-purple: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+      
+      --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.8;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(99, 102, 241, 0.12) 0px, transparent 40%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .katex {
+      font-size: 1.06em !important;
+      color: #f1f5f9;
+    }
+    .katex-display {
+      margin: 1.1rem 0 !important;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.4rem 0;
+    }
+
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--gradient-brand);
+      width: 0%;
+      z-index: 100;
+      transition: width 0.1s ease;
+    }
+
+    header {
+      padding: 4.5rem 2rem 3rem 2rem;
+      text-align: center;
+      position: relative;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(9, 13, 22, 0.4) 100%);
+      backdrop-filter: blur(12px);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 1.2rem;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.15rem;
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    .nav-pills {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .nav-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.45rem 1rem;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .nav-pill:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 3rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+    }
+
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .sec-num {
+      background: var(--gradient-brand);
+      color: #fff;
+      width: 2.2rem;
+      height: 2.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    /* 3D Canvas Box */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      background: #060911;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+      margin: 1.5rem 0;
+    }
+
+    .canvas-container canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: grab;
+    }
+    .canvas-container canvas:active {
+      cursor: grabbing;
+    }
+
+    .canvas-overlay-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      z-index: 5;
+    }
+
+    .canvas-legend {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .canvas-controls-hint {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.78rem;
+      color: var(--accent-cyan);
+      pointer-events: none;
+      backdrop-filter: blur(8px);
+      z-index: 5;
+    }
+
+    /* Controls Panel */
+    .controls-panel {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1.2rem;
+    }
+
+    .control-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.2rem;
+      align-items: center;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .control-header strong {
+      color: var(--text-primary);
+    }
+    .control-val {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 3px;
+      outline: none;
+      transition: background 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-blue);
+      transition: transform 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.25);
+    }
+
+    #rangeD::-webkit-slider-thumb {
+      background: var(--accent-amber);
+      box-shadow: 0 0 12px var(--accent-amber);
+    }
+    #rangeD {
+      accent-color: var(--accent-amber);
+    }
+
+    /* Buttons */
+    .btn-group {
+      display: flex;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent-blue);
+      color: #04101e;
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+    }
+    .btn-primary:hover {
+      background: #7dd3fc;
+      transform: translateY(-2px);
+    }
+    .btn-amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--accent-amber);
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+    .btn-amber:hover {
+      background: rgba(245, 158, 11, 0.28);
+      transform: translateY(-2px);
+    }
+    .btn-emerald {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent-emerald);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+    .btn-emerald:hover {
+      background: rgba(16, 185, 129, 0.28);
+      transform: translateY(-2px);
+    }
+    .btn-purple {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--accent-purple);
+      border-color: rgba(168, 85, 247, 0.4);
+    }
+    .btn-purple:hover {
+      background: rgba(168, 85, 247, 0.28);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-secondary);
+      border-color: var(--border-color);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Live readout */
+    .live-calc {
+      margin-top: 1.2rem;
+      padding: 1.1rem 1.4rem;
+      background: rgba(6, 10, 18, 0.75);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* Grids & Feature Cards */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-glow);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 0.25rem;
+    }
+    .feature-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Callout */
+    .callout {
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      border: 1px solid transparent;
+    }
+    .callout-icon {
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .callout-content {
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .callout-info {
+      background: rgba(56, 189, 248, 0.08);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+    .callout-warning {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.25);
+    }
+    .callout-emerald {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    .callout-purple {
+      background: rgba(168, 85, 247, 0.08);
+      border-color: rgba(168, 85, 247, 0.25);
+    }
+
+    /* Elevator Building */
+    .building-container {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+      background: rgba(10, 15, 28, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .elevator-shaft {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 180px;
+    }
+    .floor-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 1rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .floor-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border-color: rgba(56, 189, 248, 0.35);
+    }
+    .floor-btn.active {
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.08));
+      color: var(--accent-amber);
+      border-color: var(--accent-amber);
+      font-weight: 700;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+    }
+
+    .building-desc {
+      flex: 1;
+      min-width: 280px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    /* Math Steps Box */
+    .math-step-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+      position: relative;
+    }
+    .step-badge {
+      display: inline-block;
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    th, td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+    th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Matrix Inputs */
+    .matrix-input-table {
+      border-collapse: separate;
+      border-spacing: 6px;
+    }
+    .matrix-input-table input {
+      width: 65px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      color: var(--accent-emerald);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      text-align: center;
+      outline: none;
+    }
+    .matrix-input-table input:focus {
+      border-color: var(--accent-emerald);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Room Quiz Box */
+    .quiz-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+    .quiz-option {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--accent-blue);
+    }
+    .quiz-answer {
+      display: none;
+      margin-top: 0.6rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed rgba(255,255,255,0.15);
+      color: var(--accent-emerald);
+      font-size: 0.9rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      background: rgba(9, 13, 22, 0.8);
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 2rem; }
+      .canvas-container { height: 380px; }
+      .card { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="badge">
+      <span>📐</span> 空间解析几何与线性代数几何直觉
+    </div>
+    <h1>空间平面全参数解析：本质定义、点法式推导、法向模长与 $D$ 平移</h1>
+    <p class="subtitle">
+      “在空间中，所有与某根固定钉子（法向量 $\vec{n}$）保持垂直的线段，它们的终点共同组成了一个平面。”
+      从平面的<strong>三大本质定义</strong>、<strong>降维哲学</strong>、<strong>法向量模长比例尺</strong>到点法式内积 $\vec{n} \cdot \overrightarrow{M_0M} = 0$，再到一般式 $Ax + By + Cz + D = 0$ 的电梯平移。
+    </p>
+
+    <div class="nav-pills">
+      <a href="#lab-3d" class="nav-pill">🕹️ 3D 全参数实时互动实验室</a>
+      <a href="#sec-definition" class="nav-pill">1. 溯源觉醒：到底什么才算是一个“平面”？</a>
+      <a href="#sec-origin-proof" class="nav-pill">2. 本源几何推导：为什么三元一次方程能定平面？</a>
+      <a href="#sec-abc" class="nav-pill">3. 深入拆解 A, B, C 的三个直观视角</a>
+      <a href="#sec-norm-length" class="nav-pill">4. 📏 法向量的长度/模长与标准化比例尺</a>
+      <a href="#sec-room" class="nav-pill">5. 💡 极简总结与房间立体直觉测验</a>
+      <a href="#sec-d" class="nav-pill">6. 常数项 D 与电梯平移规律</a>
+      <a href="#sec-proof" class="nav-pill">7. 严格推导：为什么改变 D 是纯平移？</a>
+      <a href="#sec-case" class="nav-pill">8. 经典实战：2x + 3y + 6z - 12 = 0 全景解构</a>
+      <a href="#sec-special-coincidence" class="nav-pill">9. 🎯 绝妙特例：平面恰过点 (A, B, C) 与垂足定理</a>
+      <a href="#sec-proj" class="nav-pill">10. 点到平面最短距离与垂足投影</a>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- LAB: 3D 全参数实时互动实验室 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="lab-3d" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">🕹️</span>
+        3D 互动实验室：点法式正交、法向量步长走位与电梯滑行
+      </h2>
+      <p style="color:var(--text-secondary)">
+        <strong>操作提示：</strong>
+        在 3D 画布上<strong>按住鼠标左键拖拽可 360° 自由旋转视角</strong>，<strong>滚轮缩放</strong>。
+        调节下方滑块，实时观察法向量“钉子”、平面内切向向量垂直性、三步走位轨迹与电梯平移！
+      </p>
+
+      <div class="canvas-container" id="canvas3d-box">
+        <div class="canvas-overlay-tag">
+          <strong>当前平面方程：</strong> <span id="eq-display" style="color:var(--accent-cyan);font-family:var(--font-mono)">2.0x + 3.0y + 6.0z - 12.0 = 0</span>
+        </div>
+        <div class="canvas-controls-hint">
+          🖱️ 旋转: 左键拖拽 | 🔍 缩放: 滚轮 | ↔️ 平移: 右键拖拽
+        </div>
+        <div class="canvas-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#38bdf8"></span> <span>空间平面 $\pi (Ax+By+Cz+D=0)$</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> <span>法向量 $\vec{n} = [A,B,C]^T$（垂直钉子 / 长度模长）</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span> <span>三步走位轨迹：红(X) $\to$ 绿(Y) $\to$ 蓝(Z)</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:#a855f7"></span> <span>三轴交点与截距三角形 ($P_x, P_y, P_z$)</span></div>
+          <div class="legend-item"><span class="legend-dot" style="background:#10b981"></span> <span>原点至平面垂线（长度 = 距离 $d$）</span></div>
+        </div>
+        <canvas id="three-canvas"></canvas>
+      </div>
+
+      <!-- Controls Panel -->
+      <div class="controls-panel">
+        <div class="control-grid">
+          <!-- Parameter D Slider (Elevator) -->
+          <div class="control-group" style="grid-column: 1 / -1; background: rgba(245, 158, 11, 0.08); padding: 12px; border-radius: 8px; border: 1px solid rgba(245, 158, 11, 0.25);">
+            <div class="control-header">
+              <strong style="color:var(--accent-amber)">🛗 常数项 D（控制电梯楼层 / 纯平移）:</strong>
+              <span class="control-val" id="valD" style="color:var(--accent-amber); background:rgba(245, 158, 11, 0.2)">-12.0</span>
+            </div>
+            <input type="range" id="rangeD" min="-24" max="24" step="0.5" value="-12.0">
+          </div>
+
+          <!-- Parameter A -->
+          <div class="control-group">
+            <div class="control-header">
+              <strong>法向量 A (X轴步长 / 左右倾斜):</strong>
+              <span class="control-val" id="valA">2.0</span>
+            </div>
+            <input type="range" id="rangeA" min="-6" max="6" step="0.5" value="2.0">
+          </div>
+
+          <!-- Parameter B -->
+          <div class="control-group">
+            <div class="control-header">
+              <strong>法向量 B (Y轴步长 / 前后倾斜):</strong>
+              <span class="control-val" id="valB">3.0</span>
+            </div>
+            <input type="range" id="rangeB" min="-6" max="6" step="0.5" value="3.0">
+          </div>
+
+          <!-- Parameter C -->
+          <div class="control-group">
+            <div class="control-header">
+              <strong>法向量 C (Z轴步长 / 上下倾斜):</strong>
+              <span class="control-val" id="valC">6.0</span>
+            </div>
+            <input type="range" id="rangeC" min="-6" max="6" step="0.5" value="6.0">
+          </div>
+        </div>
+
+        <!-- Presets & Actions -->
+        <div class="btn-group">
+          <button class="btn btn-purple" onclick="setPreset(2, 3, 6, -12)">
+            ⭐ 经典案例 ($2x+3y+6z-12=0$)
+          </button>
+          <button class="btn btn-primary" onclick="setPreset(3, 4, 0, -10)">
+            📏 模长实算 ($3x+4y+0z-10=0$, 模长=5)
+          </button>
+          <button class="btn btn-emerald" onclick="setFootPointPreset(1, 2, 3)">
+            🎯 绝妙特例：$x+2y+3z-14=0$ (垂足恰为(1,2,3))
+          </button>
+          <button class="btn btn-emerald" onclick="setFootPointPreset(1, 1, 1)">
+            🎯 绝妙特例：$x+y+z-3=0$ (垂足恰为(1,1,1))
+          </button>
+          <button class="btn btn-amber" id="btn-animate-d">
+            <span id="anim-icon">▶</span> 启动电梯升降动画
+          </button>
+          <button class="btn btn-secondary" onclick="setPreset(1, 0, 0, -4)">
+            🚪 房间侧面墙壁 ($[1,0,0]^T$)
+          </button>
+          <button class="btn btn-secondary" onclick="setPreset(0, 0, 1, -5)">
+            🏠 水平天花板 ($[0,0,1]^T$)
+          </button>
+          <button class="btn btn-secondary" onclick="toggleInterceptTriangle()">
+            🔺 切换截距三角形高亮
+          </button>
+        </div>
+
+        <!-- Live Calculation Box -->
+        <div class="live-calc" id="calc-readout">
+          <!-- Dynamic Content Rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 1. 溯源觉醒：到底什么才算是一个“平面”？ -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-definition" class="card" style="border: 1px solid rgba(99, 102, 241, 0.35); background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, rgba(17, 24, 39, 0.8) 100%);">
+      <h2 class="section-title">
+        <span class="sec-num" style="background: var(--gradient-purple);">1</span>
+        溯源觉醒：到底什么才算是一个“平面”？（三大本质定义与降维哲学）
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        我们要先搞清楚“平面”在人类直觉和几何学上的本质，才能真正明白为什么代数方程能够代表它。
+        在几何学中，定义一个“平面”通常有以下<strong>三种最本质的方法</strong>：
+      </p>
+
+      <div class="grid-3">
+        <!-- Def 1: Intuition -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-cyan);">
+          <div class="feature-icon">🪞</div>
+          <div class="feature-title">定义 1：直觉定义 —— 处处平整、无弯曲的无限延伸面</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            这是最符合人类直觉的物理感知：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px">
+            <li><strong>平整性：</strong> 像一张无限大的完美镜面、绝对平静的水面，没有任何波浪（零曲率）、没有厚度、两端无限延伸。</li>
+            <li><strong>判定公理（拉线检验）：</strong> 如果你在桌面上钉两颗钉子并拉紧一根细线，<strong>这根线上的每一个点都必须完全贴在桌面上</strong>。若能做到，该面就是几何平面。</li>
+          </ul>
+        </div>
+
+        <!-- Def 2: 2 Directions Span -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-emerald);">
+          <div class="feature-icon">🗺️</div>
+          <div class="feature-title">定义 2：几何核心 —— 两个不平行方向铺开的二维世界</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            这是理解为什么能用线性代数表达平面的关键：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px">
+            <li><strong>线是一维的：</strong> 只有一个方向向量 $\mathbf{v}$，只能前进或后退，画出一条直线。</li>
+            <li><strong>面是二维的：</strong> 拥有两个不同方向的向量（例如向东 $\mathbf{v}_1$，向北 $\mathbf{v}_2$）。</li>
+            <li><strong>线性组合铺满空间：</strong> 任意点 $\mathbf{x} = t_1 \mathbf{v}_1 + t_2 \mathbf{v}_2$。只要不断调节步长 $(t_1, t_2)$，就能遍历这张无边无际网格面上的任意角落！</li>
+          </ul>
+        </div>
+
+        <!-- Def 3: Normal Vector Spine -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-amber);">
+          <div class="feature-icon">🔩</div>
+          <div class="feature-title">定义 3：法向正交 —— 被一根“脊梁骨”锁死的所有方向</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            既然平面是由两个方向 $\mathbf{v}_1, \mathbf{v}_2$ 铺开的，三维空间中必然存在一根<strong>同时垂直于这两个方向的钢筋</strong>（法向量 $\vec{n}$）：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px">
+            <li><strong>思想实验：</strong> 在空间中竖立一根坚硬钢筋（法向量 $\vec{n}$）。</li>
+            <li><strong>360度扫射：</strong> 寻找空间中所有垂直于这根钢筋的射线。往左、往右、往前、往后……</li>
+            <li>当所有正交射线“360度扫射一圈”时，交织平铺出来的刚好就是一张水平切面！</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Core Dimension Reduction Philosophy -->
+      <div class="callout callout-info" style="margin-top:1.8rem">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <h4 style="color:#fff; margin-bottom:6px; font-size:1.1rem">核心启示：回到方程 $Ax + By + Cz + D = 0$ 的降维哲学</h4>
+          <p style="color:var(--text-secondary); font-size:0.95rem; margin-bottom:8px">
+            为什么这个方程能完美抓牢上面的“第3种法向定义”？因为在三维空间中：
+          </p>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:6px; font-size:0.92rem">
+            <li>1. 空间中一个自由动点原本有 <strong>3 个自由度 $(x, y, z)$</strong>，可以上下左右前后到处乱飘（这是一个三维大世界）。</li>
+            <li>2. 当你写下方程 $Ax + By + Cz + D = 0$ 时，你其实是下达了一个<strong>死命令（强制约束条件）</strong>：要求坐标在法向量方向上的投影必须等于固定值。</li>
+            <li>3. 由于这个硬性限制，动点<strong>丢掉了 1 个维度的自由度（$3 - 1 = 2$）</strong>。剩下的点就只能在剩下的 2 个自由度（方向）里随意滑动。</li>
+          </ul>
+          <div style="background:rgba(56,189,248,0.12); padding:8px 14px; border-radius:6px; font-weight:700; color:var(--accent-blue); margin-top:8px">
+            🌟 简而言之：平面就是三维空间中被抽走了一个维度（被拍扁）后剩下的那个二维世界！
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 2. 本源几何推导：为什么三元一次方程能完美确定一个平面？ -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-origin-proof" class="card" style="border:1px solid rgba(56, 189, 248, 0.35); background:linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, rgba(17, 24, 39, 0.8) 100%);">
+      <h2 class="section-title">
+        <span class="sec-num">2</span>
+        本源几何推导：从“点法式”点积展开到“一般式”
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        根据定义 3，空间中所有与某根固定钉子（法向量 $\vec{n}$）保持垂直的线段，它们的终点共同组成了平面。我们通过两步严密推导解开方程的诞生过程：
+      </p>
+
+      <!-- Step 1: Dot Product -->
+      <div class="math-step-box">
+        <div class="step-badge" style="background:rgba(56, 189, 248, 0.2); color:var(--accent-blue)">步骤 1：核心工具 —— 点积为 0 代表垂直</div>
+        <p>在向量代数中，如果两个非零向量 $\vec{u}$ 和 $\vec{v}$ 正交垂直，它们的内积（Dot Product）必然严格等于 0：</p>
+        $$\vec{u} \cdot \vec{v} = 0 \iff \|\vec{u}\|\|\vec{v}\|\cos(90^\circ) = 0$$
+      </div>
+
+      <!-- Step 2: Plane construction -->
+      <div class="math-step-box">
+        <div class="step-badge" style="background:rgba(245, 158, 11, 0.2); color:var(--accent-amber)">步骤 2：空间建面 —— 钉子与木板</div>
+        <p>现在，我们在空间中确定两样东西来造一个平面：</p>
+        <ol style="padding-left:1.2rem; display:flex; flex-direction:column; gap:6px; margin:8px 0">
+          <li><strong>一个固定的方向：</strong> 平面的法向量 $\vec{n} = [A, B, C]^T$（就像一根垂直于平面的钉子）。</li>
+          <li><strong>一个固定的锚点：</strong> 平面上已知的一个固定点 $M_0 = (x_0, y_0, z_0)$。</li>
+        </ol>
+        <p>有了这两样东西，平面就已经被唯一固定了。那么，空间中任意一个动点 $M = (x, y, z)$ 如果想要在这个平面上，它必须满足什么条件呢？</p>
+        <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:4px; margin-top:6px">
+          <li>我们可以在平面上连一根线段（向量），从已知点指向动点：$\overrightarrow{M_0M} = [x - x_0, \, y - y_0, \, z - z_0]^T$。</li>
+          <li>因为 $\vec{n}$ 垂直于整个平面，所以它必须垂直于平面上的<strong>任意线段 $\overrightarrow{M_0M}$</strong>。</li>
+        </ul>
+        <p style="margin-top:8px">根据垂直性质，它们的内积必须恒为 0（这就是经典的<strong>点法式方程</strong>）：</p>
+        $$\vec{n} \cdot \overrightarrow{M_0M} = 0$$
+      </div>
+
+      <!-- Step 3: Expansion -->
+      <div class="math-step-box">
+        <div class="step-badge" style="background:rgba(16, 185, 129, 0.2); color:var(--accent-emerald)">步骤 3：坐标代入与展开化简</div>
+        <p>我们将坐标分量代入这个点积公式：</p>
+        $$[A, B, C] \cdot [x - x_0, \, y - y_0, \, z - z_0] = 0$$
+        <p>分配律展开各项：</p>
+        $$A(x - x_0) + B(y - y_0) + C(z - z_0) = 0$$
+        $$Ax - Ax_0 + By - By_0 + Cz - Cz_0 = 0$$
+        <p>现在，我们把含有未知变元 $x, y, z$ 的项放在前面，把剩下的已知常数组合堆在后面：</p>
+        $$Ax + By + Cz + \underbrace{(-Ax_0 - By_0 - Cz_0)}_{\text{这是一个固定的常数，我们记作 } D} = 0$$
+        <p>令常数项 $\mathbf{D = -Ax_0 - By_0 - Cz_0}$，方程就化简为了空间平面的一般式：</p>
+        $$\mathbf{Ax + By + Cz + D = 0}$$
+      </div>
+
+      <!-- Summary Callout -->
+      <div class="callout callout-info">
+        <div class="callout-icon">🎯</div>
+        <div class="callout-content">
+          <h4 style="color:#fff; margin-bottom:4px; font-size:1.05rem">总结：为什么三元一次方程能唯一锁定平面？</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:4px; font-size:0.92rem">
+            <li>🔹 <strong>$A, B, C$ 锁定了平面的倾斜朝向（法向量）：</strong> 决定了垂直这根钉子的木板朝哪个方向倾斜。</li>
+            <li>🔹 <strong>$D$ 锁定了平面与原点的相对位置（距离标尺）：</strong> 通过已知锚点坐标代入计算得出。</li>
+            <li>🔹 任何满足该方程的 $(x,y,z)$ 组合，在空间中连线出来的方向都刚好和 $[A,B,C]^T$ 垂直。无数个这样的点密密麻麻平铺开来，就构成了一张无限延伸的平滑刚体几何平面！</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 3. 深入拆解 A, B, C 的三个直观视角 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-abc" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">3</span>
+        深入拆解：$A, B, C$ 最核心的三个直观视角
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        在空间中，法向量的三个数字（比如 $\vec{n} = [A, B, C]^T$）最核心的含义是：<strong>它代表了在 $X, Y, Z$ 三个轴上的“步长分量”或“分力”，它们共同决定了平面的倾斜方向</strong>。
+        为了让你最容易理解，我们可以用三个最直观的视角来解释这三个数字的具体含义：
+      </p>
+
+      <!-- 3 Viewpoints -->
+      <div class="grid-3">
+        <!-- Viewpoint 1: Endpoint & Steps -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-rose);">
+          <div class="feature-icon">🚶</div>
+          <div class="feature-title">视角一：箭头的“终点坐标”（从原点出发三步走）</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            如果你把法向量画在原点 $(0,0,0)$，那么这三个数字就是这个箭头的<strong>空间终点坐标</strong>：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px">
+            <li><strong>$A$：</strong> 从原点出发，沿着 $X$ 轴正方向走 $A$ 步（红色）。</li>
+            <li><strong>$B$：</strong> 接着，沿着 $Y$ 轴正方向走 $B$ 步（绿色）。</li>
+            <li><strong>$C$：</strong> 最后，沿着 $Z$ 轴正方向走 $C$ 步（蓝色）。</li>
+          </ul>
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:4px">
+            这三步走完后停在空间里的点就是 $(A, B, C)$。连接原点和该点的箭头，就是平面的法向量！
+          </p>
+        </div>
+
+        <!-- Viewpoint 2: Steepness & Slope Control -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-amber);">
+          <div class="feature-icon">🏎️</div>
+          <div class="feature-title">视角二：控制平面在各方向的“陡峭程度”</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            法向量的每一个数字，都像是一个转动方向盘的控制杆。数字越大，平面在该轴方向被拔得越高（倾斜得越陡）：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px">
+            <li><strong>$A$ 决定 $X$ 轴坡度：</strong> $A$ 很大则法向强烈偏向 $X$，平面在 $X$ 轴极度陡峭；若 $A=0$，平面在 $X$ 轴完全水平无坡度（平行于 $X$ 轴）。</li>
+            <li><strong>$B$ 决定 $Y$ 轴坡度：</strong> 若 $B=0$，平面在 $Y$ 轴方向没有坡度（平行于 $Y$ 轴）。</li>
+            <li><strong>$C$ 决定 $Z$ 轴坡度（上下倾斜）：</strong> 若 $C=0$，在 $Z$ 轴无坡度，平面是一张完全垂直于地面的“竖直墙面”。</li>
+          </ul>
+        </div>
+
+        <!-- Viewpoint 3: Direction Cosines -->
+        <div class="feature-card" style="border-top: 3px solid var(--accent-purple);">
+          <div class="feature-icon">🧭</div>
+          <div class="feature-title">视角三：方向余弦（三个数字的比例代表夹角）</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            法向量里三个数字相互之间的比例关系，决定了平面与三个坐标轴的空间夹角。将其归一化为<strong>单位法向量</strong>：
+          </p>
+          $$\vec{n}_{\text{unit}} = \begin{bmatrix} \frac{A}{\sqrt{A^2+B^2+C^2}} \\ \frac{B}{\sqrt{A^2+B^2+C^2}} \\ \frac{C}{\sqrt{A^2+B^2+C^2}} \end{bmatrix} = \begin{bmatrix} \cos(\alpha) \\ \cos(\beta) \\ \cos(\gamma) \end{bmatrix}$$
+          <ul style="padding-left:1.1rem; font-size:0.85rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px">
+            <li>$\cos(\alpha)$：法向量与 $X$ 轴夹角余弦</li>
+            <li>$\cos(\beta)$：法向量与 $Y$ 轴夹角余弦</li>
+            <li>$\cos(\gamma)$：法向量与 $Z$ 轴夹角余弦</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 4. 法向量的长度/模长与标准化比例尺 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-norm-length" class="card" style="border: 1px solid rgba(245, 158, 11, 0.35); background: linear-gradient(180deg, rgba(245, 158, 11, 0.05) 0%, rgba(17, 24, 39, 0.8) 100%);">
+      <h2 class="section-title">
+        <span class="sec-num" style="background: var(--gradient-accent);">4</span>
+        📏 法向量的长度（模长）与标准化比例尺
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        <strong>是的，法向量既代表方向，也代表长度！</strong><br>
+        在向量数学中，任何一个向量（包括法向量）都同时具备两个基本属性：<strong>方向（Direction）</strong>与<strong>长度（Magnitude / Length / 模长）</strong>。
+        虽然在很多几何问题中，我们主要利用法向量的“方向”来确定平面的倾斜度，但它的“长度”绝对不是没有意义的。
+      </p>
+
+      <div class="grid-2">
+        <!-- Part 1: How length is determined -->
+        <div class="math-step-box" style="margin:0">
+          <div class="step-badge" style="background:rgba(245, 158, 11, 0.2); color:var(--accent-amber)">1. 法向量的长度是由什么决定的？</div>
+          <p>在平面方程 $Ax + By + Cz + D = 0$ 中，法向量是 $\vec{n} = [A, B, C]^T$。它的长度（模长）是通过三维勾股定理计算出来的：</p>
+          $$\|\vec{n}\| = \sqrt{A^2 + B^2 + C^2}$$
+          <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:8px">
+            🔹 这意味着，如果你把 $A, B, C$ 整体放大 2 倍，法向量的方向完全没变，但它的<strong>长度变成了原来的 2 倍</strong>。
+          </p>
+        </div>
+
+        <!-- Part 2: Core Usages -->
+        <div class="math-step-box" style="margin:0">
+          <div class="step-badge" style="background:rgba(16, 185, 129, 0.2); color:var(--accent-emerald)">2. 核心用途：关键的“缩放标准化比例尺”</div>
+          <p>在计算几何距离时，法向量的长度扮演了至关重要的<strong>标准化分母</strong>角色：</p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px; margin-top:6px">
+            <li>
+              <strong>🎯 用途一：点到平面绝对距离：</strong>
+              $$d(P, \pi) = \frac{|Ax_0 + By_0 + Cz_0 + D|}{\sqrt{A^2 + B^2 + C^2}}$$
+              如果你把方程各项扩大 2 倍，分子变大 2 倍，分母（法向长度）也同步变大 2 倍，<strong>正好完美抵消</strong>，保证真实空间几何距离绝对不变！
+            </li>
+            <li>
+              <strong>🎯 用途二：平面到原点距离：</strong>
+              当法向量长度刚好为 1（单位法向量 $\|\vec{n}\|=1$）时，常数项 $|D|$ <strong>直接等于平面到原点的真实几何物理距离</strong>！
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Arrow metaphor & 3D game engines -->
+      <div class="callout callout-info" style="margin-top:1.5rem">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <h4 style="color:#fff; margin-bottom:4px; font-size:1.05rem">形象比喻：带刻度的箭与 3D 游戏开发中的“归一化”</h4>
+          <p style="font-size:0.92rem; color:var(--text-secondary)">
+            把法向量想象成空间中一根带有刻度的箭：<strong>箭头的朝向</strong>告诉平面往哪边倾斜；<strong>箭的长短</strong>代表了方程系数的数学强度（权重）。<br>
+            在实际工业应用（如 3D 游戏引擎 Unity / Unreal、电脑图形学光照渲染）中，为了避免光照强弱受系数缩放干扰，图形算法通常会执行一步 <strong>“归一化（Normalization）”</strong> —— 强行把所有法向量长度缩放到 1，只保留纯粹的方向。
+          </p>
+        </div>
+      </div>
+
+      <!-- Practice Example -->
+      <div class="feature-card" style="margin-top:1rem; border-left:4px solid var(--accent-emerald)">
+        <h4 style="color:#fff; font-size:1.05rem">🔢 动手实战算一算：以 $3x + 4y + 0z - 10 = 0$ 为例</h4>
+        <div class="grid-2" style="margin-top:8px">
+          <div style="font-size:0.9rem; color:var(--text-secondary)">
+            1. 法向量为 $\vec{n} = [3, 4, 0]^T$<br>
+            2. 法向量长度：$\|\vec{n}\| = \sqrt{3^2 + 4^2 + 0^2} = \sqrt{9+16} = \mathbf{5}$
+          </div>
+          <div style="font-size:0.9rem; color:var(--text-secondary)">
+            3. 平面到原点的真实几何距离：$d = \frac{|-10|}{5} = \mathbf{2.0}$<br>
+            4. 标准化单位法向量方程：$\frac{3}{5}x + \frac{4}{5}y + 0z - 2 = 0$
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 5. 💡 极简总结与房间立体直觉测验 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-room" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">5</span>
+        💡 极简总结与房间立体直觉探索
+      </h2>
+
+      <!-- Summary Bullet Box -->
+      <div class="callout callout-info" style="margin:0 0 1.5rem 0">
+        <div class="callout-icon">💡</div>
+        <div class="callout-content">
+          <h4 style="color:#fff; margin-bottom:6px; font-size:1.05rem">法向量 $A, B, C$ 极简几何口诀：</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:4px; font-size:0.95rem">
+            <li>🔹 <strong>$A$ 是法向量在 $X$ 轴上的投影长度</strong>，控制平面<strong>左右倾斜</strong>。</li>
+            <li>🔹 <strong>$B$ 是法向量在 $Y$ 轴上的投影长度</strong>，控制平面<strong>前后倾斜</strong>。</li>
+            <li>🔹 <strong>$C$ 是法向量在 $Z$ 轴上的投影长度</strong>，控制平面<strong>上下倾斜</strong>。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Room Quiz Interactive Card -->
+      <div class="quiz-card">
+        <h3 style="color:#fff; font-size:1.15rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px">
+          <span>🏠</span> 房间空间直觉小测验：你能想象出它们在房间里长什么样吗？
+        </h3>
+        <p style="color:var(--text-secondary); font-size:0.92rem; margin-bottom:1rem">
+          如果现在给你两个平面的法向量，点击下方卡片即可在 3D 实验室中即时载入并揭晓答案：
+        </p>
+
+        <!-- Quiz 1 -->
+        <div class="quiz-option" onclick="toggleQuizAnswer('ans1'); setPreset(1, 0, 0, -4);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>🚪 平面一：法向量为 $[1, 0, 0]^T$（点击载入 3D）</strong>
+            <span style="color:var(--accent-blue); font-size:0.85rem">👇 点击查看几何揭秘</span>
+          </div>
+          <div id="ans1" class="quiz-answer">
+            ✅ <strong>答案揭晓：</strong> 这是一个<strong>垂直于 $X$ 轴的侧面墙壁</strong>（方程形如 $1x + 0y + 0z - 4 = 0 \implies x = 4$）。
+            它在 $Y$ 轴和 $Z$ 轴方向完全没有倾斜，是一堵平行于 $YZ$ 平面的房间左右侧墙！
+          </div>
+        </div>
+
+        <!-- Quiz 2 -->
+        <div class="quiz-option" onclick="toggleQuizAnswer('ans2'); setPreset(0, 0, 1, -5);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>🏠 平面二：法向量为 $[0, 0, 1]^T$（点击载入 3D）</strong>
+            <span style="color:var(--accent-emerald); font-size:0.85rem">👇 点击查看几何揭秘</span>
+          </div>
+          <div id="ans2" class="quiz-answer">
+            ✅ <strong>答案揭晓：</strong> 这是一个<strong>垂直于 $Z$ 轴的完全水平面</strong>（方程形如 $0x + 0y + 1z - 5 = 0 \implies z = 5$）。
+            它是房间里平坦的地板或天花板，左右和前后都没有任何坡度！
+          </div>
+        </div>
+
+        <!-- Quiz 3 -->
+        <div class="quiz-option" onclick="toggleQuizAnswer('ans3'); setPreset(0, 1, 0, -4);">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <strong>🖼️ 平面三：法向量为 $[0, 1, 0]^T$（点击载入 3D）</strong>
+            <span style="color:var(--accent-purple); font-size:0.85rem">👇 点击查看几何揭秘</span>
+          </div>
+          <div id="ans3" class="quiz-answer">
+            ✅ <strong>答案揭晓：</strong> 这是一个<strong>垂直于 $Y$ 轴的前后立面</strong>（方程形如 $0x + 1y + 0z - 4 = 0 \implies y = 4$）。
+            它是你正前方悬挂电视或黑板的正向背景墙！
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 6. 常数项 D 与电梯平移规律 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-d" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">6</span>
+        常数项 $D$ 与电梯平移规律
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        如果保持 $A, B, C$ 不变（即“钉子”方向不动），只改变 $D$ 的值，平面在空间中会发生<strong>纯粹的平行移动（平移）</strong>。
+        平面的倾斜角度（朝向）完全不会改变，它会像电梯一样，沿着法向量的方向平行滑行。
+      </p>
+
+      <div class="grid-3">
+        <div class="feature-card" style="border-top: 3px solid var(--accent-cyan);">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-title">当 $D = 0$ 时</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            代入原点坐标 $(0,0,0)$ 可得 $A(0) + B(0) + C(0) + 0 = 0$ 恒成立。
+          </p>
+          <div style="background:rgba(6,182,212,0.1); padding:8px 12px; border-radius:6px; font-size:0.88rem; color:var(--accent-cyan); font-weight:600;">
+            ✅ 平面恰好穿过原点 $(0,0,0)$，构成真正的线性子空间 $\text{Null}(\vec{n}^T)$。
+          </div>
+        </div>
+
+        <div class="feature-card" style="border-top: 3px solid var(--accent-amber);">
+          <div class="feature-icon">📏</div>
+          <div class="feature-title">改变 $|D|$ 的绝对值</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            平面与原点之间的垂直最短距离为 $d = \frac{|D|}{\sqrt{A^2+B^2+C^2}}$。
+          </p>
+          <div style="background:rgba(245,158,11,0.1); padding:8px 12px; border-radius:6px; font-size:0.88rem; color:var(--accent-amber); font-weight:600;">
+            ✅ $|D|$ 变大则平面远离原点；$|D|$ 变小则平面靠近原点。
+          </div>
+        </div>
+
+        <div class="feature-card" style="border-top: 3px solid var(--accent-emerald);">
+          <div class="feature-icon">🔄</div>
+          <div class="feature-title">改变 $D$ 的正负号</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            法向量 $\vec{n}$ 指向的一侧为“正半空间”，背向的一侧为“负半空间”。
+          </p>
+          <div style="background:rgba(168,85,247,0.12); padding:8px 12px; border-radius:6px; font-size:0.88rem; color:var(--accent-purple); font-weight:600;">
+            ✅ $D$ 从正变负（或负变正）时，平面平移到原点的对称另一侧。
+          </div>
+        </div>
+      </div>
+
+      <!-- Building Mental Model -->
+      <div class="building-container">
+        <div class="elevator-shaft">
+          <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:4px; font-weight:700">🏢 点击楼层呼叫电梯：</div>
+          <button class="floor-btn" onclick="selectBuildingFloor(-12, this)"><span>顶楼露台</span> <span>D = -12</span></button>
+          <button class="floor-btn" onclick="selectBuildingFloor(-6, this)"><span>高层办公</span> <span>D = -6</span></button>
+          <button class="floor-btn active" onclick="selectBuildingFloor(0, this)"><span>原点大厅 (G)</span> <span>D = 0</span></button>
+          <button class="floor-btn" onclick="selectBuildingFloor(6, this)"><span>地下停车场 (B1)</span> <span>D = +6</span></button>
+          <button class="floor-btn" onclick="selectBuildingFloor(12, this)"><span>地底机房 (B2)</span> <span>D = +12</span></button>
+        </div>
+
+        <div class="building-desc">
+          <h4 style="color:#fff; margin-bottom:0.75rem; font-size:1.1rem">🏢 摩天大楼与电梯心智模型：</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:0.5rem">
+            <li><strong>平面的朝向（$A, B, C$）：</strong> 决定了地板是水平的还是带有特定倾角。</li>
+            <li><strong>常数项 $D$：</strong> 决定了你现在在几楼。</li>
+            <li><strong>平移本质：</strong> 当你把 $D$ 从 $0$ 变到 $-12$ 时，地板没有发生任何角度扭曲或倾斜，它只是从 $1$ 楼平行升到了顶楼。这就是“平行移动”。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 7. 为什么是平移？严格代数推导 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-proof" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">7</span>
+        为什么是平移？（直观推导与标准距离式）
+      </h2>
+      <p style="color:var(--text-secondary)">
+        我们可以把 $D$ 移到等号右边：
+      </p>
+
+      <div class="math-step-box">
+        <div class="step-badge">推导过程</div>
+        $$Ax + By + Cz = -D$$
+        <p>如果我们将等式两边同时除以法向量的欧氏长度 $\sqrt{A^2+B^2+C^2}$，方程就会变成经典的<strong>Hesse标准距离式（法式方程）</strong>：</p>
+        $$\frac{A}{\sqrt{A^2+B^2+C^2}}x + \frac{B}{\sqrt{A^2+B^2+C^2}}y + \frac{C}{\sqrt{A^2+B^2+C^2}}z = \frac{-D}{\sqrt{A^2+B^2+C^2}}$$
+        <p>此时，等号右边的整体物理意义就是：<strong>平面到原点的垂直距离 $d$</strong>：</p>
+        $$d = \frac{|D|}{\sqrt{A^2+B^2+C^2}}$$
+        <div class="grid-2" style="margin-top:1rem">
+          <div style="background:rgba(56,189,248,0.08); padding:10px 14px; border-radius:6px; font-size:0.9rem">
+            🔹 <strong>因为 $A, B, C$ 没变：</strong> 分母（法向量长度）固定，平面法向严格锁死。
+          </div>
+          <div style="background:rgba(245,158,11,0.08); padding:10px 14px; border-radius:6px; font-size:0.9rem">
+            🔸 <strong>所以改变 $D$ 的大小：</strong> 本质上就是在直接改变平面到原点的垂直距离。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 8. 经典案例解构：2x + 3y + 6z - 12 = 0 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-case" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">8</span>
+        经典实战解构：以 $2x + 3y + 6z - 12 = 0$ 为例
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom:1.5rem">
+        给定具体的平面方程 $2x + 3y + 6z - 12 = 0$，让我们一步步求解它的<strong>三轴交点</strong>、<strong>原点距离</strong>以及<strong>空间倾斜角度（方向余弦）</strong>：
+      </p>
+
+      <div class="grid-3">
+        <!-- Step 1: Intercepts -->
+        <div class="feature-card">
+          <div class="feature-title" style="color:var(--accent-purple)">📐 1. 寻找与三条轴的交点</div>
+          <p style="font-size:0.9rem; color:var(--text-secondary)">
+            把其他两个坐标设为 0：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px">
+            <li>$X$ 轴交点：$2x = 12 \implies \mathbf{P_x = (6, 0, 0)}$</li>
+            <li>$Y$ 轴交点：$3y = 12 \implies \mathbf{P_y = (0, 4, 0)}$</li>
+            <li>$Z$ 轴交点：$6z = 12 \implies \mathbf{P_z = (0, 0, 2)}$</li>
+          </ul>
+          <div style="background:rgba(168,85,247,0.12); padding:6px 10px; border-radius:6px; font-size:0.85rem; color:var(--accent-purple); font-weight:600">
+            🔺 这三个交点在第一卦限围成了一个“截距三角形”。
+          </div>
+        </div>
+
+        <!-- Step 2: Distance to origin -->
+        <div class="feature-card">
+          <div class="feature-title" style="color:var(--accent-amber)">📏 2. 原点垂直距离 $d$</div>
+          <p style="font-size:0.9rem; color:var(--text-secondary)">
+            法向量为 $\vec{n} = [2, 3, 6]^T$。计算其欧氏模长：
+          </p>
+          $$\|\vec{n}\| = \sqrt{2^2 + 3^2 + 6^2} = \sqrt{4+9+36} = \sqrt{49} = \mathbf{7}$$
+          <p style="font-size:0.9rem; color:var(--text-secondary)">
+            原点至平面的最短垂直距离为：
+          </p>
+          $$d = \frac{|-12|}{7} = \mathbf{\frac{12}{7} \approx 1.714}$$
+        </div>
+
+        <!-- Step 3: Tilt angles -->
+        <div class="feature-card">
+          <div class="feature-title" style="color:var(--accent-emerald)">🧭 3. 倾斜了多少度？（方向余弦）</div>
+          <p style="font-size:0.9rem; color:var(--text-secondary)">
+            单位法向量 $\vec{u} = \left[\frac{2}{7}, \frac{3}{7}, \frac{6}{7}\right]^T$：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.85rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px">
+            <li>与 $X$ 轴夹角：$\cos\alpha = \frac{2}{7} \implies \alpha \approx \mathbf{73.4^\circ}$</li>
+            <li>与 $Y$ 轴夹角：$\cos\beta = \frac{3}{7} \implies \beta \approx \mathbf{64.6^\circ}$</li>
+            <li>与 $Z$ 轴夹角：$\cos\gamma = \frac{6}{7} \implies \gamma \approx \mathbf{31.0^\circ}$</li>
+          </ul>
+          <div style="background:rgba(168,85,247,0.12); padding:6px 10px; border-radius:6px; font-size:0.82rem; color:var(--accent-purple); font-weight:600">
+            💡 法向量偏向 $Z$ 轴最剧烈（$C=6$ 最大），说明平面相对平缓，与水平面夹角仅为 $31.0^\circ$！
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 9. 绝妙特例：平面恰好过点 (A, B, C) 与垂足定理 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-special-coincidence" class="card" style="border: 1px solid rgba(16, 185, 129, 0.35); background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, rgba(17, 24, 39, 0.8) 100%);">
+      <h2 class="section-title">
+        <span class="sec-num" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);">9</span>
+        🎯 绝妙的几何巧合：当法向量为 $[A, B, C]^T$ 且平面恰好穿过点 $(A, B, C)$ 时
+      </h2>
+      <p style="color:var(--text-secondary); margin-bottom: 1.5rem;">
+        这是一个非常绝妙的几何巧合！
+        要让一个平面的法向量刚好是 $[A, B, C]^T$，同时这个平面还恰好穿过点 $(A, B, C)$，必须满足一个特定的数学条件。
+        我们通过代数方程可以直接推导出来：
+      </p>
+
+      <!-- Step 1 & 2 Math Derivation -->
+      <div class="math-step-box">
+        <div class="step-badge" style="background:rgba(16, 185, 129, 0.2); color:var(--accent-emerald)">1. 公式推导</div>
+        <ol style="padding-left:1.2rem; display:flex; flex-direction:column; gap:8px">
+          <li>
+            <strong>确定法向量：</strong> 法向量为 $\vec{n} = [A, B, C]^T$，所以平面方程的前半部分必然是：
+            $$Ax + By + Cz + D = 0$$
+          </li>
+          <li>
+            <strong>带入已知点：</strong> 因为平面经过点 $(A, B, C)$，我们将 $x=A, y=B, z=C$ 带入方程中以求出常数项 $D$：
+            $$A(A) + B(B) + C(C) + D = 0 \implies A^2 + B^2 + C^2 + D = 0$$
+            $$\mathbf{D = -(A^2 + B^2 + C^2) = -\|\vec{n}\|^2}$$
+          </li>
+        </ol>
+        <div style="background:rgba(16,185,129,0.12); padding:10px 16px; border-radius:8px; margin-top:12px; font-size:1.05rem; font-weight:700; color:#fff">
+          因此，这个特殊的平面方程必然是：
+          $$Ax + By + Cz - (A^2 + B^2 + C^2) = 0 \iff \vec{n} \cdot (\vec{x} - \vec{n}) = 0$$
+        </div>
+      </div>
+
+      <!-- Geometric Meaning -->
+      <div class="grid-2" style="margin-top:1.5rem">
+        <div class="feature-card">
+          <div class="feature-title" style="color:var(--accent-emerald)">🌟 2. 这种情况有什么特殊的几何含义？</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            在几何上，这代表<strong>从原点 $(0,0,0)$ 出发，向该平面引一条垂线，垂足（最近的点）恰好就是点 $(A, B, C)$ 本身</strong>！
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:6px; margin-top:6px">
+            <li>向量 $[A,B,C]^T$ 是一根从原点指向点 $(A,B,C)$ 的箭头。</li>
+            <li>因为它同时又是平面的法向量，所以这根箭头必须与平面垂直。</li>
+            <li>既然箭头的一头在原点，另一头在点 $(A,B,C)$ 且与平面垂直，那么<strong>点 $(A,B,C)$ 就只能是这个平面与垂线的交点（正交垂足）</strong>！</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-title" style="color:var(--accent-amber)">🔢 3. 举个具体的数字例子</div>
+          <p style="color:var(--text-secondary); font-size:0.92rem;">
+            假设 $A=1, B=2, C=3$：
+          </p>
+          <ul style="padding-left:1.1rem; font-size:0.88rem; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px">
+            <li>法向量是 $\vec{n} = [1, 2, 3]^T$。</li>
+            <li>平面经过点 $(1, 2, 3)$。</li>
+            <li>计算常数项：$D = -(1^2 + 2^2 + 3^2) = \mathbf{-14}$。</li>
+            <li>最终的平面方程就是：$\mathbf{x + 2y + 3z - 14 = 0}$。</li>
+          </ul>
+          <div style="background:rgba(245,158,11,0.12); padding:8px 12px; border-radius:6px; font-size:0.85rem; color:var(--accent-amber); margin-top:6px">
+            📏 在这张平面上，点 $(1,2,3)$ 就是整个平面上离原点最近的那个点，最短距离为 $d = \frac{14}{\sqrt{14}} = \mathbf{\sqrt{14} \approx 3.742}$。
+          </div>
+        </div>
+      </div>
+
+      <!-- Generalization -->
+      <div class="callout callout-purple" style="margin-top:1.5rem">
+        <div class="callout-icon">🚀</div>
+        <div class="callout-content">
+          <h4 style="color:#fff; margin-bottom:4px; font-size:1.05rem">知识升华与高维推广：</h4>
+          <ul style="padding-left:1.2rem; display:flex; flex-direction:column; gap:4px; font-size:0.92rem">
+            <li>
+              <strong>推广到 $N$ 维超平面：</strong> 设超平面法权重为 $\mathbf{w} \in \mathbb{R}^N$，若超平面经过点 $\mathbf{w}$，则方程为：
+              $$\mathbf{w}^T \mathbf{x} - \|\mathbf{w}\|^2 = 0 \iff \mathbf{w}^T(\mathbf{x} - \mathbf{w}) = 0$$
+              这在机器学习（SVM 支持向量机、线性分类器决策面）中代表<strong>偏置项 $b = -\|\mathbf{w}\|^2$</strong>，原点在决策面上的正交投影点恰好就是权重向量 $\mathbf{w}$。
+            </li>
+            <li>
+              <strong>当 $A=B=C=1$ 时：</strong> 方程退化为 $x + y + z - 3 = 0$。垂足恰好是对称点 $(1, 1, 1)$，到原点的距离为 $\sqrt{3} \approx 1.732$。
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <!-- 10. 空间点到平面最短距离与垂足投影算法 -->
+    <!-- ═══════════════════════════════════════════════════════════════ -->
+    <div id="sec-proj" class="card">
+      <h2 class="section-title">
+        <span class="sec-num">10</span>
+        进阶探索：空间任意点到平面的最短距离与正交投影算法
+      </h2>
+      <p style="color:var(--text-secondary)">
+        将空间直线投影与平面方程结合，我们可以求出任意空间点 $P(x_0, y_0, z_0)$ 到平面 $Ax+By+Cz+D=0$ 的最短垂直距离与垂足坐标：
+      </p>
+
+      <div class="grid-2" style="margin-top:1.5rem">
+        <div class="math-step-box" style="margin:0">
+          <div class="step-badge" style="background:rgba(56, 189, 248, 0.2); color:var(--accent-blue)">公式 1：空间点到平面的最短垂直距离</div>
+          $$d(P, \pi) = \frac{|A x_0 + B y_0 + C z_0 + D|}{\sqrt{A^2 + B^2 + C^2}}$$
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.5rem">
+            <strong>记忆技巧：</strong> 分子即把目标点坐标直接代入方程左侧求绝对值，分母即法向量长度。
+          </p>
+        </div>
+
+        <div class="math-step-box" style="margin:0">
+          <div class="step-badge" style="background:rgba(16, 185, 129, 0.2); color:var(--accent-emerald)">公式 2：空间点在平面上的正交垂足坐标</div>
+          $$P_{\text{proj}} = \begin{pmatrix} x_0 \\ y_0 \\ z_0 \end{pmatrix} - \frac{A x_0 + B y_0 + C z_0 + D}{A^2 + B^2 + C^2} \begin{pmatrix} A \\ B \\ C \end{pmatrix}$$
+          <p style="font-size:0.86rem; color:var(--text-secondary); margin-top:0.5rem">
+            <strong>几何本质：</strong> 从点 $P$ 沿法向量反向平移一段有向残差，正交落在平面上。
+          </p>
+        </div>
+      </div>
+
+      <!-- Live Point Projection Calculator -->
+      <div style="margin-top:2rem; background:rgba(10, 15, 28, 0.7); border:1px solid var(--border-color); border-radius:12px; padding:1.5rem">
+        <h3 style="color:#fff; font-size:1.15rem; margin-bottom:1rem; display:flex; align-items:center; gap:8px">
+          <span>⚡</span> 实数即时演算：空间点到当前平面的投影与残差检验
+        </h3>
+
+        <div style="display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center;">
+          <div>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:6px">输入空间目标点 $P(x_0, y_0, z_0)$：</div>
+            <table class="matrix-input-table">
+              <tr>
+                <td>$x_0$: <input type="number" id="pt_x" value="2.0" step="0.5"></td>
+                <td>$y_0$: <input type="number" id="pt_y" value="3.0" step="0.5"></td>
+                <td>$z_0$: <input type="number" id="pt_z" value="4.0" step="0.5"></td>
+              </tr>
+            </table>
+          </div>
+          <div>
+            <button class="btn btn-emerald" onclick="calculatePointProjection()" style="margin-top:18px">
+              🎯 执行点面垂足与距离解算
+            </button>
+          </div>
+        </div>
+
+        <div id="point-calc-result" class="live-calc" style="margin-top:1.2rem;">
+          <!-- Live result injected by JS -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>空间解析几何与线性代数直觉图解 · 平面三大本质定义与全参数 $Ax + By + Cz + D = 0$ 几何系统</p>
+    <p style="margin-top:0.4rem; color:var(--text-muted); font-size:0.8rem">
+      Interactive Linear Algebra & 3D Analytic Geometry Visualizer
+    </p>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <!-- JavaScript Logic & 3D Three.js Engine -->
+  <!-- ═══════════════════════════════════════════════════════════════ -->
+  <script>
+    // Global State for Plane Equation Ax + By + Cz + D = 0
+    let params = {
+      A: 2.0,
+      B: 3.0,
+      C: 6.0,
+      D: -12.0
+    };
+
+    let isAnimating = false;
+    let animDirection = 1;
+    let showInterceptTriangle = true;
+
+    // DOM Elements
+    const rangeA = document.getElementById('rangeA');
+    const rangeB = document.getElementById('rangeB');
+    const rangeC = document.getElementById('rangeC');
+    const rangeD = document.getElementById('rangeD');
+
+    const valA = document.getElementById('valA');
+    const valB = document.getElementById('valB');
+    const valC = document.getElementById('valC');
+    const valD = document.getElementById('valD');
+
+    const eqDisplay = document.getElementById('eq-display');
+    const calcReadout = document.getElementById('calc-readout');
+    const btnAnimateD = document.getElementById('btn-animate-d');
+
+    // ─────────────────────────────────────────────────────────────
+    // Three.js 3D Setup
+    // ─────────────────────────────────────────────────────────────
+    let scene, camera, renderer, controls;
+    let planeMesh, planeWireframe, normalArrow, normalLine;
+    let stepLineGroup; // 3-step trajectory lines: X (red) -> Y (green) -> Z (blue)
+    let originDropLine, footPointSphere;
+    let interceptGroup; // Spheres and Triangle for X, Y, Z intercepts
+    let testPointSphere, testPointDropLine, testPointProjSphere;
+
+    function init3D() {
+      const container = document.getElementById('canvas3d-box');
+      const canvas = document.getElementById('three-canvas');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // Scene
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x060911);
+
+      // Camera
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(13, 11, 15);
+
+      // Renderer
+      renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      // OrbitControls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxDistance = 45;
+      controls.minDistance = 3;
+      controls.target.set(0, 0, 0);
+
+      // Lighting
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+      scene.add(ambientLight);
+
+      const dirLight1 = new THREE.DirectionalLight(0x38bdf8, 0.85);
+      dirLight1.position.set(10, 20, 15);
+      scene.add(dirLight1);
+
+      const dirLight2 = new THREE.DirectionalLight(0xf59e0b, 0.5);
+      dirLight2.position.set(-10, -10, -10);
+      scene.add(dirLight2);
+
+      // Coordinate Grid on XZ plane
+      const grid = new THREE.GridHelper(18, 36, 0x38bdf8, 0x1e293b);
+      grid.position.y = 0;
+      scene.add(grid);
+
+      // Coordinate Axes
+      buildAxes();
+
+      // Plane Mesh Setup
+      buildPlaneObjects();
+
+      // Step Line Group (Three Steps: X -> Y -> Z)
+      stepLineGroup = new THREE.Group();
+      scene.add(stepLineGroup);
+
+      // Intercept Triangle Group
+      interceptGroup = new THREE.Group();
+      scene.add(interceptGroup);
+
+      // Handle Resize
+      window.addEventListener('resize', onWindowResize);
+
+      // Initial Update
+      updatePlaneGeometry();
+      calculatePointProjection();
+
+      // Render Loop
+      animate();
+    }
+
+    function buildAxes() {
+      const axesLength = 10;
+      // X Axis - Red
+      const xMat = new THREE.LineBasicMaterial({ color: 0xf43f5e, linewidth: 2 });
+      const xGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-axesLength,0,0), new THREE.Vector3(axesLength,0,0)]);
+      scene.add(new THREE.Line(xGeo, xMat));
+
+      // Y Axis - Green
+      const yMat = new THREE.LineBasicMaterial({ color: 0x10b981, linewidth: 2 });
+      const yGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,-axesLength,0), new THREE.Vector3(0,axesLength,0)]);
+      scene.add(new THREE.Line(yGeo, yMat));
+
+      // Z Axis - Blue
+      const zMat = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 2 });
+      const zGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,-axesLength), new THREE.Vector3(0,0,axesLength)]);
+      scene.add(new THREE.Line(zGeo, zMat));
+
+      // Origin Sphere
+      const origGeo = new THREE.SphereGeometry(0.14, 16, 16);
+      const origMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      scene.add(new THREE.Mesh(origGeo, origMat));
+    }
+
+    function buildPlaneObjects() {
+      // 1. Moving Plane Mesh (Translucent Cyan/Blue)
+      const planeGeo = new THREE.PlaneGeometry(14, 14, 16, 16);
+      const planeMat = new THREE.MeshPhysicalMaterial({
+        color: 0x0284c7,
+        transparent: true,
+        opacity: 0.42,
+        roughness: 0.2,
+        metalness: 0.1,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      planeMesh = new THREE.Mesh(planeGeo, planeMat);
+      scene.add(planeMesh);
+
+      // Plane wireframe border
+      const wireMat = new THREE.MeshBasicMaterial({
+        color: 0x38bdf8,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.35
+      });
+      planeWireframe = new THREE.Mesh(planeGeo, wireMat);
+      planeMesh.add(planeWireframe);
+
+      // 2. Normal Vector Arrow
+      normalArrow = new THREE.ArrowHelper(
+        new THREE.Vector3(0, 1, 0).normalize(),
+        new THREE.Vector3(0, 0, 0),
+        4.0,
+        0xf59e0b,
+        0.6,
+        0.35
+      );
+      scene.add(normalArrow);
+
+      // 3. Normal Shaft Line (Elevator Rail spanning through origin)
+      const railMat = new THREE.LineDashedMaterial({
+        color: 0xf59e0b,
+        dashSize: 0.35,
+        gapSize: 0.25,
+        opacity: 0.4,
+        transparent: true
+      });
+      const railGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(-20, -20, -20),
+        new THREE.Vector3(20, 20, 20)
+      ]);
+      normalLine = new THREE.Line(railGeo, railMat);
+      normalLine.computeLineDistances();
+      scene.add(normalLine);
+
+      // 4. Perpendicular Drop Line from Origin to Plane
+      const dropMat = new THREE.LineBasicMaterial({ color: 0x10b981, linewidth: 3 });
+      const dropGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0)]);
+      originDropLine = new THREE.Line(dropGeo, dropMat);
+      scene.add(originDropLine);
+
+      // Foot point sphere on plane
+      const footGeo = new THREE.SphereGeometry(0.16, 16, 16);
+      const footMat = new THREE.MeshBasicMaterial({ color: 0x10b981 });
+      footPointSphere = new THREE.Mesh(footGeo, footMat);
+      scene.add(footPointSphere);
+
+      // 5. Test Point & Projection Objects
+      const ptGeo = new THREE.SphereGeometry(0.15, 16, 16);
+      const ptMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
+      testPointSphere = new THREE.Mesh(ptGeo, ptMat);
+      scene.add(testPointSphere);
+
+      const projGeo = new THREE.SphereGeometry(0.13, 16, 16);
+      const projMat = new THREE.MeshBasicMaterial({ color: 0xf43f5e });
+      testPointProjSphere = new THREE.Mesh(projGeo, projMat);
+      scene.add(testPointProjSphere);
+
+      const testDropMat = new THREE.LineDashedMaterial({
+        color: 0xf43f5e,
+        dashSize: 0.25,
+        gapSize: 0.15
+      });
+      const testDropGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0)]);
+      testPointDropLine = new THREE.Line(testDropGeo, testDropMat);
+      scene.add(testPointDropLine);
+    }
+
+    function updatePlaneGeometry() {
+      const A = params.A;
+      const B = params.B;
+      const C = params.C;
+      const D = params.D;
+
+      const normLen = Math.sqrt(A*A + B*B + C*C);
+      if (normLen < 0.001) return;
+
+      const nNorm = new THREE.Vector3(A / normLen, B / normLen, C / normLen);
+
+      // Update Normal Arrow & Shaft
+      normalArrow.setDirection(nNorm);
+      normalArrow.setLength(Math.max(3.0, Math.min(8.0, normLen)), 0.5, 0.3);
+
+      const railPts = [
+        nNorm.clone().multiplyScalar(-22),
+        nNorm.clone().multiplyScalar(22)
+      ];
+      normalLine.geometry.setFromPoints(railPts);
+      normalLine.computeLineDistances();
+
+      // Update Three-step walk trajectory: (0,0,0) -> (A,0,0) -> (A,B,0) -> (A,B,C)
+      updateStepTrajectory(A, B, C);
+
+      // Foot point of origin on the plane: p0 = -D / (||n||^2) * n
+      const distSigned = -D / normLen;
+      const footPos = nNorm.clone().multiplyScalar(distSigned);
+
+      // Orientation of plane mesh
+      const defaultNormal = new THREE.Vector3(0, 0, 1);
+      const quaternion = new THREE.Quaternion().setFromUnitVectors(defaultNormal, nNorm);
+
+      planeMesh.position.copy(footPos);
+      planeMesh.quaternion.copy(quaternion);
+
+      // Drop Line from Origin
+      originDropLine.geometry.setFromPoints([new THREE.Vector3(0,0,0), footPos]);
+      footPointSphere.position.copy(footPos);
+
+      // Update Intercept Points and Triangle
+      updateInterceptObjects(A, B, C, D);
+
+      // Update Text Readout
+      updateEquationAndCalc(A, B, C, D, normLen, distSigned, footPos);
+    }
+
+    function updateStepTrajectory(A, B, C) {
+      stepLineGroup.clear();
+
+      // Step 1: Origin to (A, 0, 0) - Red
+      const p0 = new THREE.Vector3(0, 0, 0);
+      const p1 = new THREE.Vector3(A, 0, 0);
+      const p2 = new THREE.Vector3(A, B, 0);
+      const p3 = new THREE.Vector3(A, B, C);
+
+      const matX = new THREE.LineDashedMaterial({ color: 0xf43f5e, dashSize: 0.2, gapSize: 0.1 });
+      const geoX = new THREE.BufferGeometry().setFromPoints([p0, p1]);
+      const lineX = new THREE.Line(geoX, matX);
+      lineX.computeLineDistances();
+      stepLineGroup.add(lineX);
+
+      // Step 2: (A, 0, 0) to (A, B, 0) - Green
+      const matY = new THREE.LineDashedMaterial({ color: 0x10b981, dashSize: 0.2, gapSize: 0.1 });
+      const geoY = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const lineY = new THREE.Line(geoY, matY);
+      lineY.computeLineDistances();
+      stepLineGroup.add(lineY);
+
+      // Step 3: (A, B, 0) to (A, B, C) - Blue
+      const matZ = new THREE.LineDashedMaterial({ color: 0x38bdf8, dashSize: 0.2, gapSize: 0.1 });
+      const geoZ = new THREE.BufferGeometry().setFromPoints([p2, p3]);
+      const lineZ = new THREE.Line(geoZ, matZ);
+      lineZ.computeLineDistances();
+      stepLineGroup.add(lineZ);
+
+      // Terminal point sphere at (A, B, C)
+      const tipGeo = new THREE.SphereGeometry(0.14, 16, 16);
+      const tipMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
+      const tipMesh = new THREE.Mesh(tipGeo, tipMat);
+      tipMesh.position.copy(p3);
+      stepLineGroup.add(tipMesh);
+    }
+
+    function updateInterceptObjects(A, B, C, D) {
+      interceptGroup.clear();
+      if (!showInterceptTriangle) return;
+
+      const hasX = Math.abs(A) > 0.001;
+      const hasY = Math.abs(B) > 0.001;
+      const hasZ = Math.abs(C) > 0.001;
+
+      const ix = hasX ? -D / A : null;
+      const iy = hasY ? -D / B : null;
+      const iz = hasZ ? -D / C : null;
+
+      const sphereGeo = new THREE.SphereGeometry(0.16, 16, 16);
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xa855f7 });
+
+      const pts = [];
+
+      if (ix !== null && Math.abs(ix) <= 15) {
+        const sX = new THREE.Mesh(sphereGeo, sphereMat);
+        sX.position.set(ix, 0, 0);
+        interceptGroup.add(sX);
+        pts.push(new THREE.Vector3(ix, 0, 0));
+      }
+
+      if (iy !== null && Math.abs(iy) <= 15) {
+        const sY = new THREE.Mesh(sphereGeo, sphereMat);
+        sY.position.set(0, iy, 0);
+        interceptGroup.add(sY);
+        pts.push(new THREE.Vector3(0, iy, 0));
+      }
+
+      if (iz !== null && Math.abs(iz) <= 15) {
+        const sZ = new THREE.Mesh(sphereGeo, sphereMat);
+        sZ.position.set(0, 0, iz);
+        interceptGroup.add(sZ);
+        pts.push(new THREE.Vector3(0, 0, iz));
+      }
+
+      // Draw triangle edges if all 3 intercepts exist
+      if (pts.length === 3) {
+        const triMat = new THREE.LineBasicMaterial({ color: 0xa855f7, linewidth: 2 });
+        const triGeo = new THREE.BufferGeometry().setFromPoints([pts[0], pts[1], pts[2], pts[0]]);
+        const triLine = new THREE.Line(triGeo, triMat);
+        interceptGroup.add(triLine);
+
+        // Translucent triangle surface
+        const shapeGeo = new THREE.BufferGeometry();
+        const vertices = new Float32Array([
+          pts[0].x, pts[0].y, pts[0].z,
+          pts[1].x, pts[1].y, pts[1].z,
+          pts[2].x, pts[2].y, pts[2].z
+        ]);
+        shapeGeo.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        shapeGeo.computeVertexNormals();
+
+        const shapeMat = new THREE.MeshBasicMaterial({
+          color: 0xa855f7,
+          transparent: true,
+          opacity: 0.25,
+          side: THREE.DoubleSide
+        });
+        const shapeMesh = new THREE.Mesh(shapeGeo, shapeMat);
+        interceptGroup.add(shapeMesh);
+      }
+    }
+
+    function toggleInterceptTriangle() {
+      showInterceptTriangle = !showInterceptTriangle;
+      updatePlaneGeometry();
+    }
+
+    function updateEquationAndCalc(A, B, C, D, normLen, distSigned, footPos) {
+      // Equation string
+      const signB = B >= 0 ? `+ ${B.toFixed(1)}y` : `- ${Math.abs(B).toFixed(1)}y`;
+      const signC = C >= 0 ? `+ ${C.toFixed(1)}z` : `- ${Math.abs(C).toFixed(1)}z`;
+      const signD = D >= 0 ? `+ ${D.toFixed(1)}` : `- ${Math.abs(D).toFixed(1)}`;
+      eqDisplay.textContent = `${A.toFixed(1)}x ${signB} ${signC} ${signD} = 0`;
+
+      const distAbs = Math.abs(D) / normLen;
+
+      // Intercept strings
+      const ixStr = Math.abs(A) > 0.001 ? (-D/A).toFixed(2) : '平行 (无交点)';
+      const iyStr = Math.abs(B) > 0.001 ? (-D/B).toFixed(2) : '平行 (无交点)';
+      const izStr = Math.abs(C) > 0.001 ? (-D/C).toFixed(2) : '平行 (无交点)';
+
+      // Check if this matches the special condition D = -(A^2+B^2+C^2)
+      const specialD = -(A*A + B*B + C*C);
+      const isFootCoincidence = Math.abs(D - specialD) < 0.05;
+
+      // Direction angles (degrees)
+      const degX = (Math.acos(Math.min(1, Math.max(-1, A / normLen))) * 180 / Math.PI).toFixed(1);
+      const degY = (Math.acos(Math.min(1, Math.max(-1, B / normLen))) * 180 / Math.PI).toFixed(1);
+      const degZ = (Math.acos(Math.min(1, Math.max(-1, C / normLen))) * 180 / Math.PI).toFixed(1);
+
+      calcReadout.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:space-between; align-items:center;">
+            <div>
+              📐 <strong>法向量模长 (比例尺)：</strong> $\|\vec{n}\| = \\sqrt{(${A.toFixed(1)})^2 + (${B.toFixed(1)})^2 + (${C.toFixed(1)})^2} = \\mathbf{${normLen.toFixed(3)}}$
+              <br>
+              📏 <strong>原点至平面垂直距离：</strong> $d = \\frac{|D|}{\\|\\vec{n}\\|} = \\frac{|${D.toFixed(1)}|}{${normLen.toFixed(3)}} = \\mathbf{${distAbs.toFixed(3)}}$
+            </div>
+            <div style="background:rgba(168,85,247,0.12); border:1px solid rgba(168,85,247,0.3); border-radius:6px; padding:6px 12px; font-size:0.88rem;">
+              🔺 <strong>三轴截距坐标：</strong>
+              <span style="color:var(--accent-purple); font-weight:700; font-family:var(--font-mono)">
+                X: ${ixStr}, Y: ${iyStr}, Z: ${izStr}
+              </span>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:0.88rem; color:var(--text-secondary); border-top:1px solid rgba(255,255,255,0.08); padding-top:8px;">
+            <div>
+              🧭 <strong>法向倾角：</strong> $\\alpha = ${degX}^\\circ$, $\\beta = ${degY}^\\circ$, $\\gamma = ${degZ}^\\circ$
+              <br>
+              🎯 <strong>原点垂足坐标：</strong> $H = (${footPos.x.toFixed(2)},\\ ${footPos.y.toFixed(2)},\\ ${footPos.z.toFixed(2)})^T$
+            </div>
+            ${isFootCoincidence ? `
+              <div style="background:rgba(16,185,129,0.18); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:4px 10px; border-radius:6px; font-weight:700;">
+                ✨ 触发绝妙特例：垂足精确等于法向量终点 (${A.toFixed(1)}, ${B.toFixed(1)}, ${C.toFixed(1)})！
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(calcReadout, {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+      }
+    }
+
+    // Event Listeners for Range Sliders
+    rangeA.oninput = (e) => {
+      params.A = parseFloat(e.target.value);
+      valA.textContent = params.A.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    };
+    rangeB.oninput = (e) => {
+      params.B = parseFloat(e.target.value);
+      valB.textContent = params.B.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    };
+    rangeC.oninput = (e) => {
+      params.C = parseFloat(e.target.value);
+      valC.textContent = params.C.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    };
+    rangeD.oninput = (e) => {
+      params.D = parseFloat(e.target.value);
+      valD.textContent = params.D.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    };
+
+    function setPreset(a, b, c, d) {
+      params.A = a; params.B = b; params.C = c; params.D = d;
+      rangeA.value = a; valA.textContent = a.toFixed(1);
+      rangeB.value = b; valB.textContent = b.toFixed(1);
+      rangeC.value = c; valC.textContent = c.toFixed(1);
+      rangeD.value = d; valD.textContent = d.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    }
+
+    function setFootPointPreset(a, b, c) {
+      const d = -(a*a + b*b + c*c);
+      setPreset(a, b, c, d);
+    }
+
+    // Elevator Animation
+    btnAnimateD.onclick = () => {
+      isAnimating = !isAnimating;
+      if (isAnimating) {
+        btnAnimateD.classList.remove('btn-amber');
+        btnAnimateD.classList.add('btn-emerald');
+        btnAnimateD.innerHTML = '<span id="anim-icon">⏸</span> 暂停电梯升降动画';
+      } else {
+        btnAnimateD.classList.remove('btn-emerald');
+        btnAnimateD.classList.add('btn-amber');
+        btnAnimateD.innerHTML = '<span id="anim-icon">▶</span> 启动电梯升降动画';
+      }
+    };
+
+    function selectBuildingFloor(targetD, btnElem) {
+      document.querySelectorAll('.floor-btn').forEach(b => b.classList.remove('active'));
+      if (btnElem) btnElem.classList.add('active');
+
+      params.D = targetD;
+      rangeD.value = targetD;
+      valD.textContent = targetD.toFixed(1);
+      updatePlaneGeometry();
+      calculatePointProjection();
+    }
+
+    function toggleQuizAnswer(ansId) {
+      const el = document.getElementById(ansId);
+      if (el) {
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+
+    // Point Projection Logic
+    function calculatePointProjection() {
+      const ptX = parseFloat(document.getElementById('pt_x').value) || 0;
+      const ptY = parseFloat(document.getElementById('pt_y').value) || 0;
+      const ptZ = parseFloat(document.getElementById('pt_z').value) || 0;
+
+      const A = params.A, B = params.B, C = params.C, D = params.D;
+      const nDotN = A*A + B*B + C*C;
+      const normLen = Math.sqrt(nDotN);
+
+      if (normLen < 0.001) return;
+
+      const evalVal = A*ptX + B*ptY + C*ptZ + D;
+      const dist = Math.abs(evalVal) / normLen;
+
+      const factor = evalVal / nDotN;
+      const projX = ptX - factor * A;
+      const projY = ptY - factor * B;
+      const projZ = ptZ - factor * C;
+
+      // Update 3D visualization objects
+      const pPos = new THREE.Vector3(ptX, ptY, ptZ);
+      const projPos = new THREE.Vector3(projX, projY, projZ);
+
+      testPointSphere.position.copy(pPos);
+      testPointProjSphere.position.copy(projPos);
+
+      testPointDropLine.geometry.setFromPoints([pPos, projPos]);
+      testPointDropLine.computeLineDistances();
+
+      // Render math explanation
+      const resultBox = document.getElementById('point-calc-result');
+      resultBox.innerHTML = `
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div>
+            🎯 <strong>代入方程求值：</strong> $Ax_0 + By_0 + Cz_0 + D = (${A.toFixed(1)})(${ptX.toFixed(1)}) + (${B.toFixed(1)})(${ptY.toFixed(1)}) + (${C.toFixed(1)})(${ptZ.toFixed(1)}) + (${D.toFixed(1)}) = \\mathbf{${evalVal.toFixed(3)}}$
+          </div>
+          <div>
+            📏 <strong>最短垂直距离：</strong> $d(P, \\pi) = \\frac{|${evalVal.toFixed(3)}|}{${normLen.toFixed(3)}} = \\mathbf{${dist.toFixed(4)}}$
+          </div>
+          <div>
+            📍 <strong>垂足精确坐标：</strong> $P_{\\text{proj}} = (${projX.toFixed(3)},\\ ${projY.toFixed(3)},\\ ${projZ.toFixed(3)})^T$
+            <span style="color:var(--accent-emerald); font-size:0.85rem; margin-left:10px">✅ 代入平面方程残差严格为 0</span>
+          </div>
+        </div>
+      `;
+
+      if (window.renderMathInElement) {
+        renderMathInElement(resultBox, {
+          delimiters: [{left: '$', right: '$', display: false}]
+        });
+      }
+    }
+
+    document.getElementById('pt_x').oninput = calculatePointProjection;
+    document.getElementById('pt_y').oninput = calculatePointProjection;
+    document.getElementById('pt_z').oninput = calculatePointProjection;
+
+    // Window Resize and Animation Loop
+    function onWindowResize() {
+      const container = document.getElementById('canvas3d-box');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      if (isAnimating) {
+        params.D += 0.1 * animDirection;
+        if (params.D > 22) {
+          params.D = 22;
+          animDirection = -1;
+        } else if (params.D < -22) {
+          params.D = -22;
+          animDirection = 1;
+        }
+        rangeD.value = params.D;
+        valD.textContent = params.D.toFixed(1);
+        updatePlaneGeometry();
+        calculatePointProjection();
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // Scroll Progress Bar
+    window.addEventListener('scroll', () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      document.getElementById('progress-bar').style.width = scrolled + '%';
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      init3D();
+    });
+  </script>
+</body>
+</html>
