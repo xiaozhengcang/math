@@ -361,6 +361,7 @@ document.addEventListener('DOMContentLoaded', () => {
         cardEl.className = `node-card ${isDone ? 'done' : ''}`;
         cardEl.dataset.id = node.id;
 
+        const tutorialUrl = (node.localLinks && node.localLinks.length > 0) ? node.localLinks[0].url : '#';
         cardEl.innerHTML = `
           <div>
             <div class="card-top">
@@ -375,12 +376,17 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <div class="card-footer">
-            <button class="btn-detail" onclick="window.openNodeModal('${node.id}')">查看完整理论与论文 ➔</button>
-            <label class="check-label">
-              <input type="checkbox" ${isDone ? 'checked' : ''} onchange="window.toggleNodeProgress('${node.id}')">
-              打卡
-            </label>
+          <div class="card-footer" style="display:flex; flex-direction:column; gap:0.6rem; align-items:stretch;">
+            <div style="display:flex; gap:0.5rem;">
+              <a href="${tutorialUrl}" target="_blank" class="btn-detail" style="text-decoration:none; text-align:center; flex:1; background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%); border: 1px solid rgba(56, 189, 248, 0.4); color: #38bdf8; font-weight:700;">🚀 直达子目录教程 ➔</a>
+              <button class="btn-detail" onclick="window.openNodeModal('${node.id}')" title="查看完整理论与论文">📖 详情</button>
+            </div>
+            <div style="display:flex; justify-content:flex-end;">
+              <label class="check-label">
+                <input type="checkbox" ${isDone ? 'checked' : ''} onchange="window.toggleNodeProgress('${node.id}')">
+                打卡
+              </label>
+            </div>
           </div>
         `;
 
