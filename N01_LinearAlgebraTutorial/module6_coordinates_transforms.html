@@ -103,30 +103,200 @@
         <!-- Section 1 -->
         <h2 class="section-title">1. 什么是坐标系 (Coordinate System)？基即观察网格</h2>
 
-        <!-- SVG Graphic 6.1: Cartesian vs Non-Cartesian Grid -->
-        <div style="text-align:center; margin: 1.5rem 0;">
-          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
-            <!-- Left: Standard Cartesian Grid -->
-            <g stroke="#334155" stroke-width="1">
-              <line x1="20" y1="100" x2="180" y2="100"/>
-              <line x1="100" y1="20" x2="100" y2="180"/>
-              <line x1="100" y1="100" x2="160" y2="40" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
-            </g>
-            <text x="100" y="195" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle"> 标准笛卡尔坐标 x = [2, 2]ᵀ</text>
+        <!-- Subsection 1.1 -->
+        <h3 class="subsection-title">1.1 💡 坐标的几何本质：客观向量 vs 观察视角网格（度量眼镜）</h3>
+        <p>在研究线性代数时，最容易混淆的一个根本概念是：<b>“空间中的向量”与“用数组表示的坐标”并不是一回事！</b></p>
+        
+        <div class="intuition-box">
+          <div class="box-title">💡 关键洞察：同一客观箭头的不同网格刻度描述</div>
+          <p>假设你在物理空间中从原点 $O$ 划出一根固定不动的客观箭头 $\mathbf{x}$（例如地图上从北京指向上海的物理位移）。这个箭头的长度、方向与客观位置在物理世界中是<b>绝对固定且唯一</b>的。</p>
+          <p style="margin-top:0.5rem;">然而，我们要如何向计算机或他人描述这个箭头？这就必须引入一个<b>观察网格/参考刻度尺（即“基” Basis $\mathcal{B}$）</b>：</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8; margin-top:0.4rem;">
+            <li>如果我们戴上<b>标准正交笛卡尔眼镜</b>，网格是横平竖直的正方形，我们测得横向走了 4 步、纵向走了 5 步，记作 $\begin{bmatrix} 4 \\ 5 \end{bmatrix}$。</li>
+            <li>如果我们换上一副<b>倾斜平行四边形眼镜</b>（以倾斜向量为网格基），沿着倾斜网格线度量，发现只需走 2 步与 3 步，记作 $\begin{bmatrix} 2 \\ 3 \end{bmatrix}$。</li>
+          </ul>
+          <p style="margin-top:0.6rem; font-weight:bold; color:var(--accent-blue);">结论：基 $\mathcal{B}$ 就是观察网格，而坐标向量 $[\mathbf{x}]_\mathcal{B}$ 只是戴上特定网格眼镜后测得的步数列元组！</p>
+        </div>
 
-            <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+        <!-- Subsection 1.2 -->
+        <h3 class="subsection-title">1.2 📐 严密数学定义：坐标向量与唯一坐标表示定理</h3>
+        <p>设 $\mathcal{V}$ 是一个 $n$ 维向量空间，选定一组基 $\mathcal{B} = \{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$。</p>
 
-            <!-- Right: Oblique Non-Cartesian Grid B -->
-            <g stroke="#334155" stroke-width="1">
-              <line x1="260" y1="140" x2="440" y2="60"/>
-              <line x1="280" y1="180" x2="440" y2="20"/>
-              <line x1="340" y1="100" x2="400" y2="40" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">📜 定理：唯一坐标表示定理 (Uniqueness of Coordinate Representation)</div>
+          <p>对于向量空间 $\mathcal{V}$ 中的<b>任意一个向量 $\mathbf{x}$</b>，存在且仅存在一组<b>唯一的标量系数</b> $c_1, c_2, \dots, c_n \in \mathbb{R}$，使得向量 $\mathbf{x}$ 可以按基 $\mathcal{B}$ 进行线性组合扩展：</p>
+          <div class="math-block">
+            $$\mathbf{x} = c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2 + \dots + c_n \mathbf{b}_n$$
+          </div>
+          <p>这组唯一的系数排成的 $n \times 1$ 列向量，称为向量 $\mathbf{x}$ 在基 $\mathcal{B}$ 下的<b>坐标向量 (Coordinate Vector)</b>，记作：</p>
+          <div class="math-block">
+            $$[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix} \in \mathbb{R}^n$$
+          </div>
+        </div>
+
+        <div class="concept-box">
+          <div class="box-title">🌐 坐标映射与空间线性同构 (Linear Isomorphism)</div>
+          <p>映射 $[\cdot]_\mathcal{B}: \mathcal{V} \to \mathbb{R}^n$ 将抽象向量空间 $\mathcal{V}$ 中的向量 $\mathbf{x}$ 映射到具体连续空间 $\mathbb{R}^n$ 中的数值坐标向量 $[\mathbf{x}]_\mathcal{B}$。该映射完全保持了向量加法与数乘性质：</p>
+          <div class="math-block">
+            $$[\mathbf{u} + \mathbf{v}]_\mathcal{B} = [\mathbf{u}]_\mathcal{B} + [\mathbf{v}]_\mathcal{B}, \quad [c\mathbf{u}]_\mathcal{B} = c[\mathbf{u}]_\mathcal{B}$$
+          </div>
+          <p>这说明在基 $\mathcal{B}$ 下，对抽象向量的操作与对其坐标数组的操作完全一一对应（线性同构）！</p>
+        </div>
+
+        <!-- Subsection 1.3 -->
+        <h3 class="subsection-title">1.3 🔍 实际数值例题：同一物理向量在不同基下的手算推导</h3>
+        <p>下面我们用一个具体的二维数值例子，直观展示同一客观向量在不同观察网格下的坐标计算过程。</p>
+
+        <div class="proof-box">
+          <div class="box-title">✍️ 【手算例题】已知标准坐标 $\mathbf{x}$，求不同基下的坐标向量</div>
+          <p>设二维平面中有一个客观物理向量 $\mathbf{x}$，在<b>标准笛卡尔基 $\mathcal{E} = \left\{\begin{bmatrix} 1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \end{bmatrix}\right\}$</b> 下的坐标为：</p>
+          <div class="math-block">
+            $$[\mathbf{x}]_\mathcal{E} = \begin{bmatrix} 4 \\ 5 \end{bmatrix} \iff \mathbf{x} = 4 \mathbf{e}_1 + 5 \mathbf{e}_2 = 4 \begin{bmatrix} 1 \\ 0 \end{bmatrix} + 5 \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 4 \\ 5 \end{bmatrix}$$
+          </div>
+
+          <h4 style="color:var(--accent-purple); font-size:1.02rem; margin: 1rem 0 0.5rem 0;">1️⃣ 情况一：在倾斜非正交基 $\mathcal{B}$ 下的坐标求解</h4>
+          <p>引入一组倾斜观察网格基 $\mathcal{B} = \{\mathbf{b}_1, \mathbf{b}_2\}$，其中 $\mathbf{b}_1 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}, \mathbf{b}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$。</p>
+          <p><strong>求解目标</strong>：求向量 $\mathbf{x}$ 在基 $\mathcal{B}$ 下的坐标向量 $[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} c_1 \\ c_2 \end{bmatrix}$。</p>
+          <div class="step-container">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <div class="step-title">建立基向量线性组合等式</div>
+                <p>根据坐标定义：$\mathbf{x} = c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2$。代入具体数值：</p>
+                <div class="math-block">
+                  $$\begin{bmatrix} 4 \\ 5 \end{bmatrix} = c_1 \begin{bmatrix} 2 \\ 1 \end{bmatrix} + c_2 \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 2c_1 + 0c_2 \\ 1c_1 + 1c_2 \end{bmatrix}$$
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <div class="step-title">联立二元一次线性方程组并求解</div>
+                <p>写出分量方程并逐项解出：</p>
+                <div class="math-block">
+                  $$\begin{cases} 2c_1 = 4 \implies c_1 = 2 \\ c_1 + c_2 = 5 \implies 2 + c_2 = 5 \implies c_2 = 3 \end{cases}$$
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <div class="step-title">得出坐标向量结论</div>
+                <p>在倾斜基 $\mathcal{B}$ 下，同一个物理向量的坐标向量为：</p>
+                <div class="math-block">
+                  $$[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} 2 \\ 3 \end{bmatrix} \quad \blacksquare$$
+                </div>
+                <p style="color:var(--accent-green); font-size:0.92rem;">💡 几何验证：在倾斜网格尺上，先沿 $\mathbf{b}_1$ 走 2 步到达 $(4,2)$，再沿 $\mathbf{b}_2$ 走 3 步向上移，恰好抵达 $(4,5)$！</p>
+              </div>
+            </div>
+          </div>
+
+          <h4 style="color:var(--accent-blue); font-size:1.02rem; margin: 1.5rem 0 0.5rem 0;">2️⃣ 情况二：在 45° 旋转正交/轴对称基 $\mathcal{C}$ 下的坐标求解</h4>
+          <p>引入另一组旋转观察网格基 $\mathcal{C} = \{\mathbf{c}_1, \mathbf{c}_2\}$，其中 $\mathbf{c}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \mathbf{c}_2 = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$。</p>
+          <p><strong>求解目标</strong>：求向量 $\mathbf{x}$ 在基 $\mathcal{C}$ 下的坐标向量 $[\mathbf{x}]_\mathcal{C} = \begin{bmatrix} d_1 \\ d_2 \end{bmatrix}$。</p>
+          <div class="math-block">
+            $$\begin{bmatrix} 4 \\ 5 \end{bmatrix} = d_1 \begin{bmatrix} 1 \\ 1 \end{bmatrix} + d_2 \begin{bmatrix} -1 \\ 1 \end{bmatrix} \implies \begin{cases} d_1 - d_2 = 4 \\ d_1 + d_2 = 5 \end{cases}$$
+          </div>
+          <p>两式相加得 $2d_1 = 9 \implies d_1 = 4.5$；相减得 $2d_2 = 1 \implies d_2 = 0.5$。故：</p>
+          <div class="math-block">
+            $$[\mathbf{x}]_\mathcal{C} = \begin{bmatrix} 4.5 \\ 0.5 \end{bmatrix} \quad \blacksquare$$
+          </div>
+        </div>
+
+        <!-- Subsection 1.4 -->
+        <h3 class="subsection-title">1.4 🖼️ 精美几何图形说明：标准笛卡尔网格 vs 倾斜基观察网格</h3>
+        <p>为了深刻理解“基即观察网格”，下面并排对比同一个物理向量 $\mathbf{x}$ 在两种网格下的合成路径：</p>
+
+        <!-- SVG Graphic 6.1: Cartesian vs Oblique Grid Breakdown -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="720" height="280" viewBox="0 0 720 280" style="background:#090d16; border-radius:12px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Left Panel: Standard Cartesian Grid E -->
+            <g transform="translate(10, 10)">
+              <rect x="0" y="0" width="340" height="260" fill="rgba(15, 23, 42, 0.4)" rx="8" stroke="#334155" stroke-width="1"/>
+              <text x="170" y="24" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">图 6.1a: 标准笛卡尔网格 ℰ ([x]ℰ = [4, 5]ᵀ)</text>
+              
+              <!-- Grid lines -->
+              <g stroke="rgba(56, 189, 248, 0.12)" stroke-width="1">
+                <line x1="30" y1="210" x2="310" y2="210"/>
+                <line x1="30" y1="170" x2="310" y2="170"/>
+                <line x1="30" y1="130" x2="310" y2="130"/>
+                <line x1="30" y1="90" x2="310" y2="90"/>
+                <line x1="30" y1="50" x2="310" y2="50"/>
+
+                <line x1="70" y1="40" x2="70" y2="230"/>
+                <line x1="110" y1="40" x2="110" y2="230"/>
+                <line x1="150" y1="40" x2="150" y2="230"/>
+                <line x1="190" y1="40" x2="190" y2="230"/>
+                <line x1="230" y1="40" x2="230" y2="230"/>
+              </g>
+
+              <!-- Axes -->
+              <line x1="30" y1="210" x2="310" y2="210" stroke="#475569" stroke-width="1.5"/>
+              <line x1="70" y1="40" x2="70" y2="230" stroke="#475569" stroke-width="1.5"/>
+              <circle cx="70" cy="210" r="3" fill="#94a3b8"/>
+              <text x="60" y="225" fill="#94a3b8" font-size="10">O(0,0)</text>
+
+              <!-- Path under E: 4*e1 + 5*e2 -->
+              <line x1="70" y1="210" x2="230" y2="210" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow-amber)"/>
+              <line x1="230" y1="210" x2="230" y2="50" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow-purple)"/>
+              <text x="150" y="225" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">4e₁ (4步)</text>
+              <text x="245" y="130" fill="#a855f7" font-size="11" font-weight="bold">5e₂ (5步)</text>
+
+              <!-- Objective Vector x -->
+              <line x1="70" y1="210" x2="230" y2="50" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arrow-blue)"/>
+              <text x="145" y="120" fill="#38bdf8" font-size="13" font-weight="bold">x</text>
+              <circle cx="230" cy="50" r="4" fill="#38bdf8"/>
             </g>
-            <text x="360" y="195" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 倾斜基 B 下坐标 [x]_B = [1, 1]ᵀ</text>
+
+            <!-- Right Panel: Oblique Basis Grid B -->
+            <g transform="translate(370, 10)">
+              <rect x="0" y="0" width="340" height="260" fill="rgba(15, 23, 42, 0.4)" rx="8" stroke="#334155" stroke-width="1"/>
+              <text x="170" y="24" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle">图 6.1b: 倾斜观察网格 ℬ ([x]ℬ = [2, 3]ᵀ)</text>
+
+              <!-- Oblique grid lines (b1=[2,1], b2=[0,1], scale factor=40px/unit, b1_dx=80, b1_dy=-40, b2_dx=0, b2_dy=-40) -->
+              <g stroke="rgba(192, 132, 252, 0.15)" stroke-width="1" stroke-dasharray="3">
+                <!-- Lines parallel to b1 -->
+                <line x1="30" y1="210" x2="270" y2="90"/>
+                <line x1="30" y1="170" x2="270" y2="50"/>
+                <line x1="30" y1="130" x2="270" y2="10"/>
+                <line x1="70" y1="210" x2="310" y2="90"/>
+
+                <!-- Lines parallel to b2 (vertical) -->
+                <line x1="70" y1="30" x2="70" y2="230"/>
+                <line x1="150" y1="30" x2="150" y2="230"/>
+                <line x1="230" y1="30" x2="230" y2="230"/>
+                <line x1="310" y1="30" x2="310" y2="230"/>
+              </g>
+
+              <!-- Axes -->
+              <line x1="30" y1="210" x2="310" y2="210" stroke="#475569" stroke-width="1.5"/>
+              <line x1="70" y1="40" x2="70" y2="230" stroke="#475569" stroke-width="1.5"/>
+              <circle cx="70" cy="210" r="3" fill="#94a3b8"/>
+              <text x="60" y="225" fill="#94a3b8" font-size="10">O(0,0)</text>
+
+              <!-- Path under B: 2*b1 + 3*b2 -->
+              <!-- Step 1: 2*b1 from (70,210) to (230, 170) -->
+              <line x1="70" y1="210" x2="230" y2="170" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow-amber)"/>
+              <!-- Step 2: 3*b2 from (230, 170) to (230, 50) -->
+              <line x1="230" y1="170" x2="230" y2="50" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow-purple)"/>
+              
+              <text x="145" y="200" fill="#fbbf24" font-size="11" font-weight="bold" text-anchor="middle">2b₁ (沿斜线 2步)</text>
+              <text x="245" y="110" fill="#a855f7" font-size="11" font-weight="bold">3b₂ (向上 3步)</text>
+
+              <!-- Objective Vector x -->
+              <line x1="70" y1="210" x2="230" y2="50" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arrow-blue)"/>
+              <text x="145" y="120" fill="#38bdf8" font-size="13" font-weight="bold">x</text>
+              <circle cx="230" cy="50" r="4" fill="#38bdf8"/>
+            </g>
 
             <defs>
               <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+              </marker>
+              <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
               </marker>
               <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
@@ -135,30 +305,426 @@
           </svg>
         </div>
 
-        <div class="intuition-box">
-          <div class="box-title">💡 坐标的本质：同一客观物理箭头的不同描述</div>
-          <p>空间中有一个固定的物理箭头向量 $\mathbf{v}$。当我们选择不同的基 $\mathcal{B} = \{\mathbf{u}_1, \dots, \mathbf{u}_n\}$ 时，相当于戴上了不同的坐标网格眼镜：</p>
-          <div class="math-block">
-            $$\mathbf{v} = c_1 \mathbf{u}_1 + c_2 \mathbf{u}_2 + \dots + c_n \mathbf{u}_n \iff [\mathbf{v}]_\mathcal{B} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}$$
-          </div>
-          <p>数组 $[\mathbf{v}]_\mathcal{B}$ 就是向量 $\mathbf{v}$ 在基 $\mathcal{B}$ 下的<strong>坐标向量 (Coordinate Vector)</strong>。</p>
+        <div class="intuition-box" style="background: rgba(52, 211, 153, 0.06); border-color: rgba(52, 211, 153, 0.3);">
+          <div class="box-title" style="color:var(--accent-green);">🔍 对照图深度几何解析</div>
+          <p>观察图 6.1a 与 图 6.1b：</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><b>不变的物理实体</b>：亮蓝色的向量箭头 $\mathbf{x}$ 极其顶点终点位置（在屏幕绝对像素坐标中）<b>完全一致、重合锁定</b>！</li>
+            <li><b>改变的视线网格</b>：图 6.1a 使用正方形标准网格，坐标计算为 $4\mathbf{e}_1 + 5\mathbf{e}_2$；图 6.1b 使用平行四边形倾斜网格（基向量 $\mathbf{b}_1 = [2,1]^T, \mathbf{b}_2 = [0,1]^T$），计算路线变为沿着斜线走 2 步、纵向走 3 步（$2\mathbf{b}_1 + 3\mathbf{b}_2$）。</li>
+            <li><b>基矩阵拼列公式</b>：以基向量为列构成的矩阵 $B = [\mathbf{b}_1 \,\, \mathbf{b}_2] = \begin{bmatrix} 2 & 0 \\ 1 & 1 \end{bmatrix}$，完成了从坐标空间到标准物理空间的直接映射：
+              $$B [\mathbf{x}]_\mathcal{B} = \begin{bmatrix} 2 & 0 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 2 \\ 3 \end{bmatrix} = \begin{bmatrix} 2(2) + 0(3) \\ 1(2) + 1(3) \end{bmatrix} = \begin{bmatrix} 4 \\ 5 \end{bmatrix} = [\mathbf{x}]_\mathcal{E} \quad \blacksquare$$
+            </li>
+          </ul>
         </div>
+
+        <!-- Subsection 1.5: Interactive Visualizer -->
+        <h3 class="subsection-title">1.5 🎮 动态交互实验：坐标系网格实验室 (Interactive Coordinate Grid Explorer)</h3>
+        <p>拖动滑块调整物理向量 $\mathbf{x}$ 的分量，实时观察同一向量在标准笛卡尔网格 $\mathcal{E}$ 与倾斜观察网格 $\mathcal{B}$ 下的坐标分解与数值变化：</p>
+
+        <div class="visualizer-wrapper">
+          <div class="visualizer-header">
+            <div class="visualizer-title">
+              <span>📐</span> 坐标系统与多网格视角交互实验室
+            </div>
+            <span style="font-size:0.85rem; color:var(--accent-blue);">倾斜基 ℬ: b₁ = [2,1]ᵀ, b₂ = [0,1]ᵀ</span>
+          </div>
+
+          <canvas id="coordGridCanvas" class="interactive-canvas" width="560" height="340"></canvas>
+
+          <div class="visualizer-controls">
+            <div class="control-group">
+              <label style="color:#38bdf8; font-weight:600;">物理向量 X 分量: <span id="valVecX">4.0</span></label>
+              <input type="range" id="sliderVecX" min="-6" max="6" step="0.5" value="4">
+            </div>
+
+            <div class="control-group">
+              <label style="color:#38bdf8; font-weight:600;">物理向量 Y 分量: <span id="valVecY">5.0</span></label>
+              <input type="range" id="sliderVecY" min="-6" max="6" step="0.5" value="5">
+            </div>
+
+            <div class="control-group" style="gap:1.5rem; margin-top:0.3rem;">
+              <label style="cursor:pointer; color:var(--accent-blue);">
+                <input type="checkbox" id="checkGridE" checked> 显示标准网格 ℰ
+              </label>
+              <label style="cursor:pointer; color:var(--accent-purple);">
+                <input type="checkbox" id="checkGridB" checked> 显示倾斜观察网格 ℬ
+              </label>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:1.5rem; flex-wrap:wrap; justify-content:center; width:100%; font-size:0.92rem; margin-top:0.5rem;">
+            <div class="stat-badge" style="background:rgba(56, 189, 248, 0.12); border:1px solid rgba(56, 189, 248, 0.4); padding:0.4rem 1rem; border-radius:6px;">
+              <span>标准笛卡尔坐标 [x]ℰ:</span>
+              <span id="coordEText" style="color:#38bdf8; font-weight:bold; margin-left:0.4rem;">[4.0, 5.0]ᵀ</span>
+            </div>
+            <div class="stat-badge" style="background:rgba(192, 132, 252, 0.12); border:1px solid rgba(192, 132, 252, 0.4); padding:0.4rem 1rem; border-radius:6px;">
+              <span>倾斜基坐标 [x]ℬ:</span>
+              <span id="coordBText" style="color:#a855f7; font-weight:bold; margin-left:0.4rem;">[2.00, 3.00]ᵀ</span>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('coordGridCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const sliderX = document.getElementById('sliderVecX');
+            const sliderY = document.getElementById('sliderVecY');
+            const valX = document.getElementById('valVecX');
+            const valY = document.getElementById('valVecY');
+            const checkGridE = document.getElementById('checkGridE');
+            const checkGridB = document.getElementById('checkGridB');
+            const coordEText = document.getElementById('coordEText');
+            const coordBText = document.getElementById('coordBText');
+
+            const origin = { x: 280, y: 190 };
+            const unitPx = 32;
+
+            const b1 = { x: 2, y: 1 };
+            const b2 = { x: 0, y: 1 };
+
+            function drawArrow(fromX, fromY, toX, toY, color, width = 2.5, dash = []) {
+              ctx.save();
+              ctx.strokeStyle = color;
+              ctx.fillStyle = color;
+              ctx.lineWidth = width;
+              if (dash.length > 0) ctx.setLineDash(dash);
+
+              ctx.beginPath();
+              ctx.moveTo(fromX, fromY);
+              ctx.lineTo(toX, toY);
+              ctx.stroke();
+
+              if (dash.length === 0) {
+                const headLen = 8;
+                const angle = Math.atan2(toY - fromY, toX - fromX);
+                ctx.beginPath();
+                ctx.moveTo(toX, toY);
+                ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+                ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fill();
+              }
+              ctx.restore();
+            }
+
+            function render() {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const xVal = parseFloat(sliderX.value);
+              const yVal = parseFloat(sliderY.value);
+              valX.textContent = xVal.toFixed(1);
+              valY.textContent = yVal.toFixed(1);
+
+              const targetPx = {
+                x: origin.x + xVal * unitPx,
+                y: origin.y - yVal * unitPx
+              };
+
+              const c1 = xVal / 2;
+              const c2 = yVal - xVal / 2;
+
+              coordEText.textContent = `[${xVal.toFixed(1)}, ${yVal.toFixed(1)}]ᵀ`;
+              coordBText.textContent = `[${c1.toFixed(2)}, ${c2.toFixed(2)}]ᵀ`;
+
+              // Draw Standard Grid E
+              if (checkGridE.checked) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+                ctx.lineWidth = 1;
+                for (let i = -8; i <= 8; i++) {
+                  const px = origin.x + i * unitPx;
+                  ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, canvas.height); ctx.stroke();
+                  const py = origin.y - i * unitPx;
+                  ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(canvas.width, py); ctx.stroke();
+                }
+                ctx.restore();
+              }
+
+              // Draw Oblique Grid B
+              if (checkGridB.checked) {
+                ctx.save();
+                ctx.strokeStyle = 'rgba(192, 132, 252, 0.18)';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+
+                for (let i = -6; i <= 6; i++) {
+                  for (let j = -6; j <= 6; j++) {
+                    const startX1 = origin.x + i * b1.x * unitPx - 6 * b2.x * unitPx;
+                    const startY1 = origin.y - i * b1.y * unitPx + 6 * b2.y * unitPx;
+                    const endX1 = origin.x + i * b1.x * unitPx + 6 * b2.x * unitPx;
+                    const endY1 = origin.y - i * b1.y * unitPx - 6 * b2.y * unitPx;
+                    ctx.beginPath(); ctx.moveTo(startX1, startY1); ctx.lineTo(endX1, endY1); ctx.stroke();
+
+                    const startX2 = origin.x - 6 * b1.x * unitPx + j * b2.x * unitPx;
+                    const startY2 = origin.y + 6 * b1.y * unitPx - j * b2.y * unitPx;
+                    const endX2 = origin.x + 6 * b1.x * unitPx + j * b2.x * unitPx;
+                    const endY2 = origin.y - 6 * b1.y * unitPx - j * b2.y * unitPx;
+                    ctx.beginPath(); ctx.moveTo(startX2, startY2); ctx.lineTo(endX2, endY2); ctx.stroke();
+                  }
+                }
+                ctx.restore();
+              }
+
+              // Axes
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+              ctx.lineWidth = 1.5;
+              ctx.beginPath();
+              ctx.moveTo(0, origin.y); ctx.lineTo(canvas.width, origin.y);
+              ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, canvas.height);
+              ctx.stroke();
+
+              // Path under B
+              if (checkGridB.checked) {
+                const midPx = {
+                  x: origin.x + c1 * b1.x * unitPx,
+                  y: origin.y - c1 * b1.y * unitPx
+                };
+                drawArrow(origin.x, origin.y, midPx.x, midPx.y, '#fbbf24', 2, [4, 3]);
+                drawArrow(midPx.x, midPx.y, targetPx.x, targetPx.y, '#c084fc', 2, [4, 3]);
+              }
+
+              // Draw Basis Vectors
+              drawArrow(origin.x, origin.y, origin.x + b1.x * unitPx, origin.y - b1.y * unitPx, '#fbbf24', 2.5);
+              drawArrow(origin.x, origin.y, origin.x + b2.x * unitPx, origin.y - b2.y * unitPx, '#34d399', 2.5);
+
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillStyle = '#fbbf24';
+              ctx.fillText('b₁[2,1]', origin.x + b1.x * unitPx + 5, origin.y - b1.y * unitPx);
+              ctx.fillStyle = '#34d399';
+              ctx.fillText('b₂[0,1]', origin.x + b2.x * unitPx + 5, origin.y - b2.y * unitPx - 5);
+
+              // Draw Vector x
+              drawArrow(origin.x, origin.y, targetPx.x, targetPx.y, '#38bdf8', 3.5);
+              ctx.fillStyle = '#38bdf8';
+              ctx.font = 'bold 13px sans-serif';
+              ctx.fillText('x (物理矢量)', targetPx.x + 8, targetPx.y - 8);
+            }
+
+            sliderX.addEventListener('input', render);
+            sliderY.addEventListener('input', render);
+            checkGridE.addEventListener('change', render);
+            checkGridB.addEventListener('change', render);
+
+            render();
+          });
+        </script>
 
         <!-- Section 2 -->
-        <h2 class="section-title">2. 坐标变换矩阵 (Change of Coordinate Matrix)</h2>
-        <p>设从新基 $\mathcal{B} = \{\mathbf{u}_1, \dots, \mathbf{u}_n\}$ 转换到标准基 $\mathcal{E}$，将新基向量拼成矩阵 $B = [\mathbf{u}_1 \,\, \mathbf{u}_2 \,\, \dots \,\, \mathbf{u}_n]$。则：</p>
+        <h2 class="section-title">2. 坐标变换矩阵 (Change of Coordinate Matrix) 与双基转换全推导</h2>
 
+        <!-- Subsection 2.1 -->
+        <h3 class="subsection-title">2.1 🔗 基矩阵 (Basis Matrix) 与标准笛卡尔坐标的来回转换</h3>
+        <p>假设我们有一个非标准基 $\mathcal{B} = \{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$。将这 $n$ 个基向量按列拼成一个 $n \times n$ 矩阵：</p>
         <div class="math-block">
-          $$\text{原标准坐标 } \mathbf{x} = B [\mathbf{x}]_\mathcal{B} \implies \text{新坐标 } [\mathbf{x}]_\mathcal{B} = B^{-1} \mathbf{x}$$
+          $$B = [\mathbf{b}_1 \,\, \mathbf{b}_2 \,\, \dots \,\, \mathbf{b}_n]$$
+        </div>
+        <p>因为 $\mathcal{B}$ 是向量空间的一组基，基向量线性无关，所以矩阵 $B$ 必定是<b>非奇异可逆矩阵 ($\det(B) \neq 0$)</b>。</p>
+
+        <div class="grid-2">
+          <div class="concept-box" style="margin:0;">
+            <div class="box-title">① 从基 ℬ 坐标还原为标准坐标 🎯</div>
+            <p>若已知向量 $\mathbf{x}$ 在基 $\mathcal{B}$ 下的坐标为 $[\mathbf{x}]_\mathcal{B} = [c_1, \dots, c_n]^T$：</p>
+            <div class="math-block">
+              $$\mathbf{x} = c_1\mathbf{b}_1 + \dots + c_n\mathbf{b}_n = [\mathbf{b}_1 \dots \mathbf{b}_n] \begin{bmatrix} c_1 \\ \vdots \\ c_n \end{bmatrix} = B [\mathbf{x}]_\mathcal{B}$$
+            </div>
+            <p style="font-size:0.9rem; color:var(--accent-blue);"><b>含义</b>：基矩阵 $B$ 恰好是从基 $\mathcal{B}$ 坐标映射到标准笛卡尔坐标的变换矩阵 $P_{\mathcal{B} \to \mathcal{E}} = B$！</p>
+          </div>
+
+          <div class="concept-box" style="margin:0;">
+            <div class="box-title">② 从标准坐标求解基 ℬ 坐标 🔍</div>
+            <p>若已知标准坐标 $\mathbf{x}$，要求出它在基 $\mathcal{B}$ 眼镜下的坐标 $[\mathbf{x}]_\mathcal{B}$：</p>
+            <div class="math-block">
+              $$\mathbf{x} = B [\mathbf{x}]_\mathcal{B} \xrightarrow{\text{两边左乘 } B^{-1}} [\mathbf{x}]_\mathcal{B} = B^{-1} \mathbf{x}$$
+            </div>
+            <p style="font-size:0.9rem; color:var(--accent-purple);"><b>含义</b>：逆矩阵 $B^{-1}$ 恰好是从标准坐标转换到基 $\mathcal{B}$ 坐标的变换矩阵 $P_{\mathcal{E} \to \mathcal{B}} = B^{-1}$！</p>
+          </div>
         </div>
 
-        <div class="proof-box">
-          <div class="box-title">双基转换公式 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$</div>
-          <p>设向量 $\mathbf{x}$ 在基 $\mathcal{B}$ 下坐标为 $[\mathbf{x}]_\mathcal{B}$，在基 $\mathcal{C}$ 下坐标为 $[\mathbf{x}]_\mathcal{C}$。根据标准坐标相等原理：</p>
+        <!-- Subsection 2.2 -->
+        <h3 class="subsection-title">2.2 👑 双基转换公式 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$ 的两种严密数学推导</h3>
+        <p>假设空间中存在两组不同的观察网格基：<b>旧基 $\mathcal{B}$</b> (对应矩阵 $B$) 与 <b>新基 $\mathcal{C}$</b> (对应矩阵 $C$)。我们希望找到一个直接将旧坐标 $[\mathbf{x}]_\mathcal{B}$ 转化为新坐标 $[\mathbf{x}]_\mathcal{C}$ 的基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}}$：</p>
+        <div class="math-block">
+          $$[\mathbf{x}]_\mathcal{C} = P_{\mathcal{B} \to \mathcal{C}} [\mathbf{x}]_\mathcal{B}$$
+        </div>
+
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">📜 【推导方法一】标准坐标中介桥梁法 (Standard Basis Bridge Method)</div>
+          
+          <p><strong>第一步：回归相同的物理实体向量 $\mathbf{x}$</strong></p>
+          <p>不论观察视角怎么改变，对应的客观物理向量 $\mathbf{x}$ 在标准笛卡尔坐标系下的表达都是不变的。根据 2.1 节结论，用旧基与新基分别展开：</p>
           <div class="math-block">
-            $$\mathbf{x} = B [\mathbf{x}]_\mathcal{B} = C [\mathbf{x}]_\mathcal{C} \implies [\mathbf{x}]_\mathcal{C} = C^{-1} B [\mathbf{x}]_\mathcal{B}$$
+            $$\mathbf{x} = B [\mathbf{x}]_\mathcal{B} \quad \text{且} \quad \mathbf{x} = C [\mathbf{x}]_\mathcal{C}$$
           </div>
-          <p>故基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$。$\blacksquare$</p>
+
+          <p><strong>第二步：建立客观标准坐标相等恒等式</strong></p>
+          <p>由于两式都等于相同的物理向量 $\mathbf{x}$，故两式直接相等：</p>
+          <div class="math-block">
+            $$C [\mathbf{x}]_\mathcal{C} = B [\mathbf{x}]_\mathcal{B}$$
+          </div>
+
+          <p><strong>第三步：两边左乘新基矩阵的逆 $C^{-1}$</strong></p>
+          <p>因为 $C$ 是由基向量拼成的矩阵，必可逆。在等式两边同乘以 $C^{-1}$：</p>
+          <div class="math-block">
+            $$C^{-1} \Big( C [\mathbf{x}]_\mathcal{C} \Big) = C^{-1} \Big( B [\mathbf{x}]_\mathcal{B} \Big) \implies (C^{-1} C) [\mathbf{x}]_\mathcal{C} = (C^{-1} B) [\mathbf{x}]_\mathcal{B}$$
+          </div>
+          <p>由于 $C^{-1} C = I_n$，直接化简得出：</p>
+          <div class="math-block">
+            $$[\mathbf{x}]_\mathcal{C} = \Big( C^{-1} B \Big) [\mathbf{x}]_\mathcal{B}$$
+          </div>
+
+          <p><strong>第四步：得出结论</strong></p>
+          <p>对比转换矩阵定义，即得到双基转换公式：</p>
+          <div class="math-block">
+            $$P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B \quad \blacksquare$$
+          </div>
+        </div>
+
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">📜 【推导方法二】旧基向量在新基下的展开拼列法 (Column Expansion Method)</div>
+          
+          <p><strong>第一步：将旧基 $\mathcal{B}$ 的每个向量按新基 $\mathcal{C}$ 进行坐标展开</strong></p>
+          <p>设旧基向量为 $\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n$。将每个旧基向量在基 $\mathcal{C}$ 下展开：</p>
+          <div class="math-block">
+            $$\mathbf{b}_j = C [\mathbf{b}_j]_\mathcal{C} \quad (j = 1, 2, \dots, n)$$
+          </div>
+
+          <p><strong>第二步：将旧基矩阵 $B$ 整体按列写出</strong></p>
+          <div class="math-block">
+            $$B = [\mathbf{b}_1 \,\, \mathbf{b}_2 \,\, \dots \,\, \mathbf{b}_n] = [C[\mathbf{b}_1]_\mathcal{C} \,\, C[\mathbf{b}_2]_\mathcal{C} \,\, \dots \,\, C[\mathbf{b}_n]_\mathcal{C}] = C \Big[ [\mathbf{b}_1]_\mathcal{C} \,\, [\mathbf{b}_2]_\mathcal{C} \,\, \dots \,\, [\mathbf{b}_n]_\mathcal{C} \Big]$$
+          </div>
+
+          <p><strong>第三步：解出列拼矩阵</strong></p>
+          <p>两边左乘 $C^{-1}$：</p>
+          <div class="math-block">
+            $$\Big[ [\mathbf{b}_1]_\mathcal{C} \,\, [\mathbf{b}_2]_\mathcal{C} \,\, \dots \,\, [\mathbf{b}_n]_\mathcal{C} \Big] = C^{-1} B$$
+          </div>
+          <p style="color:var(--accent-green); font-size:0.92rem;"><b>几何结论</b>：转换矩阵 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$ 的<b>第 $j$ 列，精确等于旧基向量 $\mathbf{b}_j$ 在新基 $\mathcal{C}$ 眼镜下测出的坐标向量 $[\mathbf{b}_j]_\mathcal{C}$！</b> $\blacksquare$</p>
+        </div>
+
+        <!-- Subsection 2.3 -->
+        <h3 class="subsection-title">2.3 🌐 几何原理全解析：中转映射、网格换算与“反向性”</h3>
+        <p>基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$ 不仅是一个代数公式，它包含着非常透彻的几何变换逻辑：</p>
+
+        <!-- SVG Graphic 6.2: Transition Matrix Topology Diagram -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="640" height="220" viewBox="0 0 640 220" style="background:#090d16; border-radius:12px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Top Node: Standard Physical x -->
+            <rect x="250" y="20" width="140" height="45" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2" rx="8"/>
+            <text x="320" y="47" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">客观物理实体 x</text>
+
+            <!-- Bottom Left Node: Old Basis B Coord -->
+            <rect x="40" y="140" width="160" height="45" fill="rgba(251, 191, 36, 0.15)" stroke="#fbbf24" stroke-width="2" rx="8"/>
+            <text x="120" y="167" fill="#fbbf24" font-size="13" font-weight="bold" text-anchor="middle">旧基坐标 [x]ℬ</text>
+
+            <!-- Bottom Right Node: New Basis C Coord -->
+            <rect x="440" y="140" width="160" height="45" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2" rx="8"/>
+            <text x="520" y="167" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle">新基坐标 [x]𝒞</text>
+
+            <!-- Arrow 1: [x]B -> x (Multiply B) -->
+            <path d="M 140 140 L 250 65" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arrow-amber)"/>
+            <text x="175" y="90" fill="#fbbf24" font-size="11" font-weight="bold">① 乘 B (摘掉眼镜ℬ, 还原为标准矢量)</text>
+
+            <!-- Arrow 2: x -> [x]C (Multiply C^-1) -->
+            <path d="M 390 65 L 500 140" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+            <text x="465" y="90" fill="#a855f7" font-size="11" font-weight="bold">② 乘 C⁻¹ (戴上眼镜𝒞, 测出新坐标)</text>
+
+            <!-- Direct Channel Arrow: [x]B -> [x]C (Multiply P = C^-1 B) -->
+            <path d="M 200 162 L 440 162" stroke="#34d399" stroke-width="3" marker-end="url(#arrow-green)"/>
+            <text x="320" y="185" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">直接跨越通道: P = C⁻¹ B</text>
+
+            <defs>
+              <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+              </marker>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="intuition-box">
+          <div class="box-title">💡 几何原理解析：“两步走”中转路径与“反向性”深刻洞察</div>
+          <ol style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>
+              <strong>“两步走”中介路径</strong>：从旧坐标 $[\mathbf{x}]_\mathcal{B}$ 直接跨越到新坐标 $[\mathbf{x}]_\mathcal{C}$ 在几何上等价于：
+              <br><b>第 1 步 (乘 $B$)</b>：把旧坐标乘以 $B$，摘下旧观察眼镜 $\mathcal{B}$，回到标准的客观物理空间，求出客观实际向量 $\mathbf{x} = B [\mathbf{x}]_\mathcal{B}$。
+              <br><b>第 2 步 (乘 $C^{-1}$)</b>：对客观实际向量 $\mathbf{x}$ 乘以 $C^{-1}$，戴上新观察眼镜 $\mathcal{C}$，测量得到新坐标 $[\mathbf{x}]_\mathcal{C} = C^{-1} \mathbf{x}$。
+              <br>复合起来就是：$P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$！
+            </li>
+            <li style="margin-top:0.5rem;">
+              <strong>坐标变换的“反向对偶性” (Duality of Basis vs Coordinates)</strong>：
+              <br>为什么公式里是 $C^{-1}$ 而不是 $C$？
+              <br>因为基矩阵 $C = [\mathbf{c}_1 \dots \mathbf{c}_n]$ 描述的是“新基向量在标准空间中的位置”；而计算“向量在新基下的坐标”，本质上是要回答：“新基刻度尺要缩小/旋转多少倍才能拼出该向量”。
+              <br><b>记忆口诀</b>：基向量放大 2 倍，测量出来的坐标数值就缩小到 1/2；基网格顺时针旋转，测出的坐标数值向逆时针旋转！基的变动与坐标数值的变动呈<b>逆矩阵 (Inverse) 反向对应关系</b>！
+            </li>
+          </ol>
+        </div>
+
+        <!-- Subsection 2.4 -->
+        <h3 class="subsection-title">2.4 ✍️ 手把手手算例题与双向验证</h3>
+
+        <div class="proof-box">
+          <div class="box-title">✍️ 【完整手算数值例题】求解 $P_{\mathcal{B} \to \mathcal{C}}$ 并进行双向验证</div>
+          <p>已知旧基 $\mathcal{B} = \left\{\begin{bmatrix} 1 \\ 1 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \end{bmatrix}\right\}$，新基 $\mathcal{C} = \left\{\begin{bmatrix} 2 \\ 1 \end{bmatrix}, \begin{bmatrix} 1 \\ 1 \end{bmatrix}\right\}$。</p>
+          <p>求基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}}$，并验证向量在旧基下坐标为 $[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} 3 \\ 2 \end{bmatrix}$ 时的转换结果。</p>
+
+          <div class="step-container">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <div class="step-title">写出基矩阵 B 与 C</div>
+                <div class="math-block">
+                  $$B = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}, \quad C = \begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix}$$
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <div class="step-title">求解新基矩阵的逆 C⁻¹</div>
+                <p>计算 $\det(C) = 2(1) - 1(1) = 1$。利用二阶伴随矩阵公式“主对角线互换，副对角线变号”：</p>
+                <div class="math-block">
+                  $$C^{-1} = \frac{1}{1} \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix} = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$$
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <div class="step-title">计算基变换矩阵 P_(B → C) = C⁻¹ B</div>
+                <div class="math-block">
+                  $$P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix} = \begin{bmatrix} 1(1)+(-1)(1) & 1(0)+(-1)(1) \\ (-1)(1)+2(1) & (-1)(0)+2(1) \end{bmatrix} = \begin{bmatrix} 0 & -1 \\ 1 & 2 \end{bmatrix}$$
+                </div>
+              </div>
+            </div>
+
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <div class="step-title">数值计算与双向几何验证</div>
+                <p>直接用转换矩阵计算新坐标 $[\mathbf{x}]_\mathcal{C}$：</p>
+                <div class="math-block">
+                  $$[\mathbf{x}]_\mathcal{C} = P_{\mathcal{B} \to \mathcal{C}} [\mathbf{x}]_\mathcal{B} = \begin{bmatrix} 0 & -1 \\ 1 & 2 \end{bmatrix} \begin{bmatrix} 3 \\ 2 \end{bmatrix} = \begin{bmatrix} 0(3) + (-1)(2) \\ 1(3) + 2(2) \end{bmatrix} = \begin{bmatrix} -2 \\ 7 \end{bmatrix}$$
+                </div>
+
+                <p style="margin-top:0.6rem;"><strong>🔍 中介路径双重核验</strong>：</p>
+                <ul style="margin-left: 1.2rem; line-height: 1.8;">
+                  <li>通过旧基还原标准物理矢量：$\mathbf{x} = B [\mathbf{x}]_\mathcal{B} = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 3 \\ 2 \end{bmatrix} = \begin{bmatrix} 3 \\ 5 \end{bmatrix}$。</li>
+                  <li>用新坐标代入新基检验：$-2 \mathbf{c}_1 + 7 \mathbf{c}_2 = -2 \begin{bmatrix} 2 \\ 1 \end{bmatrix} + 7 \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} -4 + 7 \\ -2 + 7 \end{bmatrix} = \begin{bmatrix} 3 \\ 5 \end{bmatrix}$！</li>
+                </ul>
+                <p style="color:var(--accent-green); font-weight:bold; margin-top:0.4rem;">直接转换结果 $[-2, 7]^T$ 与标准中介结果完全一致，验证成功！$\blacksquare$</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Section 3 -->
