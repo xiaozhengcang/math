@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8: 正交投影、SVD 与超越向量 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item active">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 8: 正交投影、SVD 与超越向量空间</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块八：正交投影、奇异值分解 (SVD) 与超越向量空间</h1>
+        <div class="module-subtitle">从 Gram-Schmidt 正交化到奇异值分解 $A=U\Sigma V^T$ 3 步旋转拉伸与公理化向量空间扩展</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块对应讲义 Chapter 7 与 Chapter 6 的全部内容：从<strong>几何三大不等式（勾股、柯西-施瓦茨、三角不等式）</strong>与正交基分解，到<strong>Gram-Schmidt 正交化与正交投影矩阵 $P = A(A^TA)^{-1}A^T$</strong>；接着全剖析现代 AI 与数据科学顶峰<strong>奇异值分解 (SVD: $A = U\Sigma V^T$) 与伪逆 $A^+$</strong>；最后打破几何箭头的局限，开启<strong>超越向量空间 (Beyond Vectors)</strong> 的广阔公理化视角。
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 几何三大不等式与正交基 (Orthonormal Basis)</h2>
+
+        <!-- SVG Graphic 8.1: 3 Geometric Inequalities -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <line x1="40" y1="140" x2="240" y2="140" stroke="#38bdf8" stroke-width="3"/>
+            <text x="140" y="165" fill="#38bdf8" font-size="13" font-weight="bold"> 向量 u</text>
+
+            <line x1="240" y1="140" x2="240" y2="40" stroke="#a855f7" stroke-width="3"/>
+            <text x="255" y="90" fill="#a855f7" font-size="13" font-weight="bold"> 向量 v (垂直)</text>
+
+            <line x1="40" y1="140" x2="240" y2="40" stroke="#4ade80" stroke-width="3.5"/>
+            <text x="120" y="75" fill="#4ade80" font-size="14" font-weight="bold"> 斜边 u+v: ||u+v||² = ||u||² + ||v||²</text>
+          </svg>
+        </div>
+
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="box-title">1. 勾股定理 (Pythagorean Theorem)</div>
+            <p>$\mathbf{u} \perp \mathbf{v} \iff \|\mathbf{u} + \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2$</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">2. 柯西-施瓦茨不等式 (Cauchy-Schwarz)</div>
+            <p>$|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$ （当且仅当两向量共线时取等号）</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">3. 三角不等式 (Triangle Inequality)</div>
+            <p>$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$ （两点之间线段最短）</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">正交基投影分解（免求逆！）</div>
+            <p>若 $\{\mathbf{u}_1, \dots, \mathbf{u}_k\}$ 为正交基，则 $\mathbf{v} = \sum \frac{\mathbf{v} \cdot \mathbf{u}_i}{\|\mathbf{u}_i\|^2} \mathbf{u}_i$！</p>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. Gram-Schmidt 正交化算法与正交投影矩阵 $P$</h2>
+
+        <!-- SVG Graphic 8.2: Orthogonal Projection Residual -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Subspace Plane W -->
+            <polygon points="40,160 260,160 380,120 160,120" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
+            <text x="310" y="145" fill="#38bdf8" font-size="13" font-weight="bold"> 列空间 Col(A)</text>
+
+            <!-- Vector b -->
+            <line x1="160" y1="140" x2="300" y2="40" stroke="#ef4444" stroke-width="3" marker-end="url(#arrow-red)"/>
+            <text x="210" y="80" fill="#ef4444" font-size="13" font-weight="bold"> 向量 b</text>
+
+            <!-- Projection Pb -->
+            <line x1="160" y1="140" x2="300" y2="140" stroke="#4ade80" stroke-width="3" marker-end="url(#arrow-green)"/>
+            <text x="230" y="155" fill="#4ade80" font-size="13" font-weight="bold"> 影子 ɓ = Pb</text>
+
+            <!-- Residual Line e -->
+            <line x1="300" y1="140" x2="300" y2="40" stroke="#fbbf24" stroke-dasharray="4" stroke-width="2"/>
+            <text x="315" y="90" fill="#fbbf24" font-size="13" font-weight="bold"> 误差 e ⊥ Col(A)</text>
+
+            <defs>
+              <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <p>正交投影矩阵 $P$ 将全空间向量投射到子空间 $W = \text{Col}(A)$ 上，寻找距离目标最近的影子：</p>
+        <div class="math-block">
+          $$\text{投影矩阵 } P = A (A^T A)^{-1} A^T, \quad \text{影子向量 } \hat{\mathbf{b}} = P \mathbf{b}$$
+        </div>
+        <p><strong>正规方程 (Normal Equation)</strong>：求解最小二乘近似解 $A^T A \hat{\mathbf{x}} = A^T \mathbf{b}$。</p>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 实对称矩阵与谱定理 (Spectral Theorem $A = Q \Lambda Q^T$)</h2>
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">👑 实对称矩阵的超级定理：谱定理</div>
+          <p>若 $n \times n$ 矩阵 $A$ 为实对称矩阵 ($A^T = A$)，则：</p>
+          <ol style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>$A$ 的所有特征值**全部都是实数**！</li>
+            <li>对应于不同特征值的特征向量**自动相互正交**！</li>
+            <li>$A$ 一定可以被**正交对角化**：$A = Q \Lambda Q^T = \sum \lambda_i \mathbf{q}_i \mathbf{q}_i^T$，其中 $Q$ 为正交矩阵 ($Q^T Q = I$)。</li>
+          </ol>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 🌟 奇异值分解 (SVD: $A = U \Sigma V^T$) 与 Moore-Penrose 伪逆 $A^+$</h2>
+
+        <!-- SVG Graphic 8.3: SVD 3-step Transformation Diagram -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="520" height="180" viewBox="0 0 520 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Step 1: Circle -->
+            <circle cx="70" cy="90" r="40" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="70" y="150" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle"> 1. 单位圆</text>
+
+            <path d="M 120 90 L 160 90" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+            <text x="140" y="80" fill="#a855f7" font-size="11" font-weight="bold" text-anchor="middle"> Vᵀ 旋转</text>
+
+            <!-- Step 2: Axis-aligned Ellipse -->
+            <ellipse cx="230" cy="90" rx="55" ry="25" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2"/>
+            <text x="230" y="150" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 2. Σ 奇异值拉伸</text>
+
+            <path d="M 300 90 L 340 90" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+            <text x="320" y="80" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle"> U 旋转</text>
+
+            <!-- Step 3: Rotated Ellipse -->
+            <g transform="rotate(-30 430 90)">
+              <ellipse cx="430" cy="90" rx="55" ry="25" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-width="2"/>
+            </g>
+            <text x="430" y="150" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle"> 3. 最终变形椭圆</text>
+
+            <defs>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">💎 现代 AI 降维与特征提取终极武器：SVD 奇异值分解</div>
+          <p>任何 $m \times n$ 的实数矩阵 $A$，无论是否为方阵，无论是否满秩，均可唯一分解为：</p>
+          <div class="math-block">
+            $$A = U \Sigma V^T$$
+          </div>
+          <ul style="margin-left: 1.2rem; line-height: 1.8;">
+            <li>$V = [\mathbf{v}_1 \dots \mathbf{v}_n]$ 为 $n \times n$ 正交矩阵，列向量为 $A^T A$ 的特征向量（右奇异向量）。</li>
+            <li>$U = [\mathbf{u}_1 \dots \mathbf{u}_m]$ 为 $m \times m$ 正交矩阵，列向量为 $A A^T$ 的特征向量（左奇异向量）。</li>
+            <li>$\Sigma$ 为 $m \times n$ 对角矩形矩阵，主对角线元素为奇异值 $\sigma_i = \sqrt{\lambda_i(A^T A)} \ge 0$。</li>
+          </ul>
+
+          <p style="margin-top:0.8rem;"><strong>几何三步曲</strong>：任何矩阵变换 $A$ 都可以精确解构为：<strong>输入空间正交旋转 ($V^T$) $\to$ 主轴缩放 $(\Sigma)$ $\to$ 输出空间正交旋转 ($U$)</strong>！</p>
+          <p style="margin-top:0.5rem;"><strong>广义伪逆 (Pseudo-Inverse $A^+$)</strong>：$A^+ = V \Sigma^+ U^T$，彻底解决非方阵与不可逆方程组的极小范数近似解！</p>
+        </div>
+
+        <!-- Section 5 -->
+        <h2 class="section-title">5. 🌌 超越向量空间 (Beyond Vectors - Chapter 6) 与傅里叶级数</h2>
+        <p>突破“几何箭头”与“平面数字”的框架！根据公理化定义，任何定义了加法与数乘且满足 8 大封闭与结合律公理的集合均称为**向量空间 (Vector Space)**：</p>
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="box-title">连续函数空间 $C[a,b]$</div>
+            <p>函数即向量！如 $f(x) = \sin(x), g(x) = e^x$，内积定义为积分 $\langle f, g \rangle = \int_a^b f(x)g(x)dx$。正交三角基 $\{\cos(nx), \sin(nx)\}$ 正是傅里叶级数的本质！</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">矩阵空间 $M_{m \times n}$</div>
+            <p>整个矩阵作为一个向量！内积定义为 $\langle A, B \rangle = \text{tr}(A^T B)$。</p>
+          </div>
+        </div>
+
+        <!-- Section 6: Worked Examples -->
+        <h2 class="section-title">6. ✍️ 完整手把手手算数值例题与推导</h2>
+        <div class="proof-box">
+          <div class="box-title">手算例题：Gram-Schmidt 正交化步骤</div>
+          <p>已知独立向量 $\mathbf{x}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \mathbf{x}_2 = \begin{bmatrix} 0 & 2 \end{bmatrix}^T$。构建正交基 $\{\mathbf{v}_1, \mathbf{v}_2\}$。</p>
+          <p><strong>步骤</strong>：</p>
+          <ul>
+            <li>$\mathbf{v}_1 = \mathbf{x}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。</li>
+            <li>扣除投影分量：$\mathbf{v}_2 = \mathbf{x}_2 - \frac{\mathbf{x}_2 \cdot \mathbf{v}_1}{\|\mathbf{v}_1\|^2} \mathbf{v}_1 = \begin{bmatrix} 0 \\ 2 \end{bmatrix} - \frac{2}{2} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$。</li>
+            <li>检验正交性：$\mathbf{v}_1 \cdot \mathbf{v}_2 = 1(-1) + 1(1) = 0 \quad \blacksquare$</li>
+          </ul>
+        </div>
+
+        <!-- Section 7: Interactive Quiz Accordion -->
+        <h2 class="section-title">7. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：广义伪逆 $A^+$ 在矩阵 $A$ 恰好可逆时等于什么？</div>
+          <p>对比 $A^+$ 与 $A^{-1}$。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：正好精确等于原逆矩阵 $A^{-1}$！</strong></p>
+              <p>解析：当 $A$ 可逆时，所有奇异值 $\sigma_i > 0$。伪逆公式 $A^+ = V \Sigma^{-1} U^T = (U \Sigma V^T)^{-1} = A^{-1}$。伪逆是普通逆矩阵向非方阵与不可逆矩阵的完美无缝推广！$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 8: Python Practice -->
+        <h2 class="section-title">8. 💻 编程实战：用 Python / NumPy 求解 SVD 分解与伪逆</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import numpy as np
+
+A = np.array([[1, 2], [3, 4], [5, 6]], dtype=float)
+
+# 1. 奇异值分解 SVD
+U, s, Vt = np.linalg.svd(A)
+print("左奇异矩阵 U:\n", U)
+print("奇异值 (Singular values):", s)
+print("右奇异矩阵 Vᵀ:\n", Vt)
+
+# 2. 计算 Moore-Penrose 广义伪逆 A⁺
+A_pinv = np.linalg.pinv(A)
+print("广义伪逆 A⁺:\n", A_pinv)
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module7_eigenvalues_diagonalization.html" class="btn-nav prev">← 上一模块：特征值与对角化</a>
+          <a href="index.html" class="btn-nav next">返回课程总览与地图 →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N04 信息论基础 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-purple); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N04 · Level 0 先修基础</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N04 · 信息论基础</span>
+      <h1>信息论基础 (Information Theory)</h1>
+      <p style="color: var(--text-secondary);">量化信息量、不确定性与分布差异。香农熵、KL 散度与交叉熵损失函数。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Cover & Thomas: Elements of Information Theory</span>
+        <span class="badge">📖 MacKay: Information Theory</span>
+        <span class="badge">📄 Shannon (1948) Communication Theory</span>
+        <span class="badge">📄 Tishby et al. (2000) Information Bottleneck</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>信息不是虚无缥缈的概念，它可以像质量和体积一样被精准度量：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>自信息量 $-\log P(x)$</strong>：越罕见的事情发生，包含的信息量越大（“太阳升起”毫无信息量，而“国足夺得世界杯”则包含巨大的信息量）。</li>
+        <li><strong>香农熵 $H(X)$</strong>：衡量一个随机变量的平均不确定性。分布越均匀（随机），熵越大；分布越确定（单一集中），熵越小。</li>
+        <li><strong>KL 散度 $D_{KL}(P || Q)$</strong>：如果你用估计概率 $Q$ 去编码真实概率分布 $P$，你平均会浪费多少额外比特？它度量了两个分布之间的“距离/差异”。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>香农熵 $H(X)$ 与 KL 散度 $D_{KL}(P || Q)$：</p>
+      <div class="math-callout">
+        $$H(X) = -\sum_{x} P(x) \log P(x), \quad D_{KL}(P || Q) = \sum_{x} P(x) \log \frac{P(x)}{Q(x)}$$
+      </div>
+      <p style="color: var(--text-secondary);">交叉熵 $H(P, Q)$ 与 KL 散度的等价关系：</p>
+      <div class="math-callout">
+        $$H(P, Q) = H(P) + D_{KL}(P || Q) \implies \min_{\theta} H(P, Q_\theta) \equiv \min_{\theta} D_{KL}(P || Q_\theta)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文一：A Mathematical Theory of Communication (Shannon, 1948)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 信息论奠基之作！首次引入“比特 (Bit)”概念，证明了信道容量定理与香农无噪编码定理，奠定了数字通信与机器信息的理论根基。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-purple); font-size: 1.1rem;">论文二：Estimating Divergences with Information Bottleneck (Tishby et al., 2000)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了<strong>信息瓶颈原理 (Information Bottleneck)</strong>：$\min I(X; Z) - \beta I(Z; Y)$，揭示了深度学习本质上是在压缩输入 $X$ 的无关噪音同时保留与目标 $Y$ 相关的极简表征 $Z$。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>大语言模型预训练中的 Cross-Entropy 交叉熵损失函数：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{CE}} = -\sum_{t=1}^T \log P_{\theta}(y_t | y_{<t})$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        优化交叉熵损失，本质上就是最小化真实语言概率分布 $P$ 与模型预测分布 $Q_\theta$ 之间的 KL 散度，迫使 LLM 学会大自然的真实语言语法结构。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Cover & Thomas (Chapter 2: Entropy, Relative Entropy, and Mutual Information)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么机器学习中通常最小化 Cross-Entropy 而不是直接算 KL 散度？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！因为真实标签 $P$ 是固定的（One-hot 或真实数据集），其香农熵 $H(P)$ 是常数。由于 $H(P, Q) = H(P) + D_{KL}(P || Q)$，对交叉熵求导和对 KL 散度求导完全等价，且计算更方便！')">
+          A. 因为真实数据集分布的香农熵 $H(P)$ 是与模型参数无关的常数，最小化交叉熵等价于最小化 KL 散度。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，两者在优化导数上是完全等价的。')">
+          B. 因为 KL 散度无法计算梯度。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N03 初等概率论与数理统计 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-secondary: #0d1222;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-emerald); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-emerald); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N03 · Level 0 先修基础</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N03 · 概率论与数理统计</span>
+      <h1>初等概率论与数理统计 (Probability & Statistics)</h1>
+      <p style="color: var(--text-secondary);">量化现实世界的不确定性。从贝叶斯公式到变分推断重参数化与 LLM 核采样解码 (Nucleus Sampling)。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Bertsekas: Introduction to Probability</span>
+        <span class="badge">📖 Wasserman: All of Statistics</span>
+        <span class="badge">📄 Kingma & Welling (ICLR 2014) VAE</span>
+        <span class="badge">📄 Holtzman et al. (ICLR 2020) Nucleus Sampling</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>在 AI 中，几乎没有什么事物是“100% 绝对”的。概率论就是 AI 处理“猜测与不确定”的数学框架：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>贝叶斯定理 $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$</strong>：根据新观察到的证据（如提示词 B），不断更新你对世界原有的信念（先验概率 A）。</li>
+        <li><strong>大数定律 (LLN)</strong>：掷硬币 10 次可能 7 次朝上，但当训练数据增加到 100 万次时，频率必定精准收敛于理论概率 50%。</li>
+        <li><strong>中心极限定理 (CLT)</strong>：无论底层随机变量多么怪异，只要大量独立随机因素叠加，其综合表现必然呈现出完美的正态分布（高斯钟形曲线）。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>贝叶斯公式与极大似然估计 (MLE)：</p>
+      <div class="math-callout">
+        $$P(\theta | X) = \frac{P(X | \theta) P(\theta)}{P(X)}, \quad \theta_{\text{MLE}} = \arg\max_\theta \sum_{i=1}^N \log P(x_i | \theta)$$
+      </div>
+      <p style="color: var(--text-secondary);">多元高斯分布的概率密度函数：</p>
+      <div class="math-callout">
+        $$p(\mathbf{x}) = \frac{1}{(2\pi)^{d/2} |\mathbf{\Sigma}|^{1/2}} \exp\left( -\frac{1}{2}(\mathbf{x}-\boldsymbol{\mu})^T \mathbf{\Sigma}^{-1} (\mathbf{x}-\boldsymbol{\mu}) \right)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文一：Auto-Encoding Variational Bayes (Kingma & Welling, ICLR 2014)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了变分自编码器 (VAE)，发明了<strong>重参数化技巧 (Reparameterization Trick)</strong>：$z = \mu + \sigma \odot \epsilon$（其中 $\epsilon \sim \mathcal{N}(0, I)$），巧妙解决了随机采样过程无法反向传播梯度的难题。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文二：The Curious Case of Neural Text Degeneration (Holtzman et al., ICLR 2020)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 揭示了自回归语言模型在 Greedy/Beam Search 下容易陷入死循环退化的本质，提出了 <strong>Top-p (Nucleus Sampling, 核采样)</strong> 算法，动态截取累积概率达到 $p$ 的最小 Token 集合，极大提升了文本生成的自然度与多样性。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>LLM 文本生成中的 Top-p 概率截断算子伪代码：</p>
+      <div class="math-callout">
+        $$S_p = \arg\min_k \left\{ \sum_{i=1}^k P(x_{(i)}) \ge p \right\}$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在实际采样中，将词表概率降序排列，仅保留前 $S_p$ 个 Token 并重新归一化 Softmax 测度，有效防止了长尾极小概率死循环词的生成。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Bertsekas (Chapter 4: Continuous Random Variables)</em> 与 <em>Wasserman (Chapter 6: Models, Estimators, and Statistical Inference)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：VAE 论文中为什么引入重参数化技巧 $z = \mu + \sigma \odot \epsilon$？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！直接从分布 $\mathcal{N}(\mu, \sigma^2)$ 中采样无法计算对 $\mu$ 和 $\sigma$ 的导数；重参数化将随机性转移至常数噪音 $\epsilon$，使得梯度能够平滑回传！')">
+          A. 将不可导的随机采样节点剥离为常数噪声 $\epsilon$，使梯度能够顺畅传回均值 $\mu$ 与方差 $\sigma$。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾计算图中的梯度反向传播条件。')">
+          B. 为了减少高斯分布的计算开销。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

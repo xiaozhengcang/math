@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6: 坐标系统与基变换矩阵 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item active">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 6: 坐标系统与基变换矩阵</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块六：坐标系统、基变换矩阵与线性算子表示</h1>
+        <div class="module-subtitle">选不同的观察网格眼镜：坐标变换矩阵 $P_{\mathcal{B}\to\mathcal{C}}$ 与微积分求导算子矩阵化</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块对应讲义 Chapter 4-(2) 的全部内容：从<strong>坐标系统 (Coordinate System) 的几何本质</strong>（基即观察网格），到<strong>基变换矩阵 $P$</strong> 的精准计算；接着探索在不同坐标系下描述同一个线性算子 ($B = P^{-1} A P$) 的跨镜头切分几何图景；最后展示将<strong>微积分求导算子 $D = \frac{d}{dx}$ 彻底矩阵化</strong>的震撼应用。
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 什么是坐标系 (Coordinate System)？基即观察网格</h2>
+
+        <!-- SVG Graphic 6.1: Cartesian vs Non-Cartesian Grid -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Left: Standard Cartesian Grid -->
+            <g stroke="#334155" stroke-width="1">
+              <line x1="20" y1="100" x2="180" y2="100"/>
+              <line x1="100" y1="20" x2="100" y2="180"/>
+              <line x1="100" y1="100" x2="160" y2="40" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+            </g>
+            <text x="100" y="195" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle"> 标准笛卡尔坐标 x = [2, 2]ᵀ</text>
+
+            <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- Right: Oblique Non-Cartesian Grid B -->
+            <g stroke="#334155" stroke-width="1">
+              <line x1="260" y1="140" x2="440" y2="60"/>
+              <line x1="280" y1="180" x2="440" y2="20"/>
+              <line x1="340" y1="100" x2="400" y2="40" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+            </g>
+            <text x="360" y="195" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 倾斜基 B 下坐标 [x]_B = [1, 1]ᵀ</text>
+
+            <defs>
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+              </marker>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="intuition-box">
+          <div class="box-title">💡 坐标的本质：同一客观物理箭头的不同描述</div>
+          <p>空间中有一个固定的物理箭头向量 $\mathbf{v}$。当我们选择不同的基 $\mathcal{B} = \{\mathbf{u}_1, \dots, \mathbf{u}_n\}$ 时，相当于戴上了不同的坐标网格眼镜：</p>
+          <div class="math-block">
+            $$\mathbf{v} = c_1 \mathbf{u}_1 + c_2 \mathbf{u}_2 + \dots + c_n \mathbf{u}_n \iff [\mathbf{v}]_\mathcal{B} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix}$$
+          </div>
+          <p>数组 $[\mathbf{v}]_\mathcal{B}$ 就是向量 $\mathbf{v}$ 在基 $\mathcal{B}$ 下的<strong>坐标向量 (Coordinate Vector)</strong>。</p>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. 坐标变换矩阵 (Change of Coordinate Matrix)</h2>
+        <p>设从新基 $\mathcal{B} = \{\mathbf{u}_1, \dots, \mathbf{u}_n\}$ 转换到标准基 $\mathcal{E}$，将新基向量拼成矩阵 $B = [\mathbf{u}_1 \,\, \mathbf{u}_2 \,\, \dots \,\, \mathbf{u}_n]$。则：</p>
+
+        <div class="math-block">
+          $$\text{原标准坐标 } \mathbf{x} = B [\mathbf{x}]_\mathcal{B} \implies \text{新坐标 } [\mathbf{x}]_\mathcal{B} = B^{-1} \mathbf{x}$$
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">双基转换公式 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$</div>
+          <p>设向量 $\mathbf{x}$ 在基 $\mathcal{B}$ 下坐标为 $[\mathbf{x}]_\mathcal{B}$，在基 $\mathcal{C}$ 下坐标为 $[\mathbf{x}]_\mathcal{C}$。根据标准坐标相等原理：</p>
+          <div class="math-block">
+            $$\mathbf{x} = B [\mathbf{x}]_\mathcal{B} = C [\mathbf{x}]_\mathcal{C} \implies [\mathbf{x}]_\mathcal{C} = C^{-1} B [\mathbf{x}]_\mathcal{B}$$
+          </div>
+          <p>故基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B$。$\blacksquare$</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 👑 相似变换：不同坐标系下描述线性算子 ($B = P^{-1} A P$)</h2>
+
+        <!-- SVG Graphic 6.2: Similarity Transformation 3-step Diagram -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Top Step: Standard A -->
+            <rect x="50" y="30" width="130" height="45" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" rx="6"/>
+            <text x="115" y="58" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle"> 标准视角 A (繁琐)</text>
+
+            <rect x="300" y="30" width="130" height="45" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" rx="6"/>
+            <text x="365" y="58" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle"> 映射结果 Ax</text>
+
+            <path d="M 180 52 L 300 52" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+
+            <!-- Bottom Step: Optimal Basis B -->
+            <rect x="50" y="130" width="130" height="45" fill="rgba(168, 85, 247, 0.1)" stroke="#a855f7" rx="6"/>
+            <text x="115" y="158" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle"> 新基视角 [x]_B</text>
+
+            <rect x="300" y="130" width="130" height="45" fill="rgba(168, 85, 247, 0.1)" stroke="#a855f7" rx="6"/>
+            <text x="365" y="158" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle"> 极简计算 B[x]_B</text>
+
+            <path d="M 180 152 L 300 152" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+
+            <!-- Vertical P and P^-1 -->
+            <path d="M 115 75 L 115 130" stroke="#4ade80" stroke-dasharray="3" stroke-width="2"/>
+            <text x="95" y="105" fill="#4ade80" font-size="12" font-weight="bold"> P⁻¹</text>
+
+            <path d="M 365 130 L 365 75" stroke="#4ade80" stroke-dasharray="3" stroke-width="2"/>
+            <text x="375" y="105" fill="#4ade80" font-size="12" font-weight="bold"> P</text>
+          </svg>
+        </div>
+
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">🎬 跨镜头切分与相似矩阵几何视角</div>
+          <p>同一个几何线性变换（如关于某斜线的对称反射）：</p>
+          <ul>
+            <li>在标准坐标系下直接计算，矩阵 $A$ 极其繁琐复杂。</li>
+            <li>若选择沿着斜线与其垂直方向为新基 $\mathcal{B}$，在新坐标系下矩阵 $B = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$ 异常简单（对角矩阵）！</li>
+          </ul>
+          <p style="margin-top:0.8rem;"><strong>三步走跨镜头公式</strong>：</p>
+          <div class="math-block">
+            $$B = P^{-1} A P \iff A = P B P^{-1}$$
+          </div>
+          <p>几何流程：先用 $P$ 切换到新视角，在新视角下进行简单乘法 $B$，再用 $P^{-1}$ 还原会原视角！</p>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 🚀 震撼应用：微积分求导算子 (Derivative Operator) 矩阵化</h2>
+        <p>考虑所有次数不超过 2 的多项式空间 $P_2 = \{a_0 + a_1 x + a_2 x^2 \mid a_i \in \mathbb{R}\}$。选择基 $\mathcal{B} = \{1, x, x^2\}$：</p>
+
+        <div class="step-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">基函数的求导结果</div>
+              <p>对基函数分别求导：$\frac{d}{dx}(1) = 0, \quad \frac{d}{dx}(x) = 1, \quad \frac{d}{dx}(x^2) = 2x$。</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">构建求导算子矩阵 $[D]_\mathcal{B}$</div>
+              <p>将求导结果写成基 $\mathcal{B}$ 下的坐标向量并拼成列：</p>
+              <div class="math-block">
+                $$[D]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix}$$
+              </div>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">微积分转化为矩阵乘法</div>
+              <p>多项式 $p(x) = 3 + 5x + 4x^2$ 的坐标为 $[p]_\mathcal{B} = \begin{bmatrix} 3 \\ 5 \\ 4 \end{bmatrix}$。其导数可以通过矩阵乘法直接算得：</p>
+              <div class="math-block">
+                $$[p']_\mathcal{B} = [D]_\mathcal{B} [p]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} 3 \\ 5 \\ 4 \end{bmatrix} = \begin{bmatrix} 5 \\ 8 \\ 0 \end{bmatrix} \implies p'(x) = 5 + 8x \quad \blacksquare$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: Worked Example -->
+        <h2 class="section-title">5. ✍️ 完整手把手手算数值例题与推导</h2>
+        <div class="proof-box">
+          <div class="box-title">手算例题：求基变换矩阵 $P_{\mathcal{B} \to \mathcal{C}}$</div>
+          <p>已知基 $\mathcal{B} = \left\{\begin{bmatrix} 1 \\ 1 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \end{bmatrix}\right\}$，基 $\mathcal{C} = \left\{\begin{bmatrix} 2 \\ 1 \end{bmatrix}, \begin{bmatrix} 1 \\ 1 \end{bmatrix}\right\}$。求转换矩阵 $P_{\mathcal{B} \to \mathcal{C}}$。</p>
+          <p><strong>解答</strong>：设 $B = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}, C = \begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix}$。则 $C [\mathbf{x}]_\mathcal{C} = B [\mathbf{x}]_\mathcal{B}$。故：</p>
+          <div class="math-block">
+            $$P_{\mathcal{B} \to \mathcal{C}} = C^{-1} B = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix} = \begin{bmatrix} 0 & -1 \\ 1 & 2 \end{bmatrix} \quad \blacksquare$$
+          </div>
+        </div>
+
+        <!-- Section 6: Interactive Quiz Accordion -->
+        <h2 class="section-title">6. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：相似矩阵 $B = P^{-1}AP$ 的行列式是否相同？</div>
+          <p>对比 $\det(A)$ 与 $\det(B)$。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：绝对完全相同！$\det(B) = \det(A)$。</strong></p>
+              <p>解析：根据乘积公式，$\det(B) = \det(P^{-1} A P) = \det(P^{-1}) \det(A) \det(P) = \frac{1}{\det(P)} \det(A) \det(P) = \det(A)$。几何上说明变换引起的空间体积放缩倍率不随坐标系的改变而改变。$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 7: Python Practice -->
+        <h2 class="section-title">7. 💻 编程实战：用 Python / NumPy 求解基变换矩阵</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import numpy as np
+
+B = np.array([[1, 0], [1, 1]], dtype=float)
+C = np.array([[2, 1], [1, 1]], dtype=float)
+
+# 计算转换矩阵 P = C⁻¹ * B
+P_B_to_C = np.dot(np.linalg.inv(C), B)
+print("转换矩阵 P_(B->C):\n", P_B_to_C)
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module5_determinant_cramer.html" class="btn-nav prev">← 上一模块：行列式与克莱姆法则</a>
+          <a href="module7_eigenvalues_diagonalization.html" class="btn-nav next">下一模块：特征值、PageRank 与对角化 →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

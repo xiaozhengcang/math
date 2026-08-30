@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5: 行列式体积与克莱姆法则 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item active">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 5: 行列式体积、余子式与克莱姆法则</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块五：行列式体积缩放、余子式展开与克莱姆法则</h1>
+        <div class="module-subtitle">从 Signed Volume 几何体积放缩率到伴随矩阵公式 $A^{-1}=\frac{1}{\det A}\text{adj}(A)$ 的全严密推导</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块对应讲义 Chapter 3 的全部内容：从<strong>行列式 $\det(A)$ 的有向体积 (Signed Volume) 缩放率</strong>与 3 大公理公理化定义，到<strong>余子式展开 (Cofactor Expansion)</strong> ；接着全推导<strong>伴随矩阵公式 $A^{-1} = \frac{1}{\det(A)}\text{adj}(A)$</strong> 与<strong>克莱姆法则 (Cramer's Rule)</strong> ；最后证明乘积性质 $\det(AB)=\det(A)\det(B)$ 与转置不变性 $\det(A^T)=\det(A)$。
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 行列式 $\det(A)$ 的几何直觉：有向体积 (Signed Volume) 放缩率</h2>
+
+        <!-- SVG Graphic 5.1: 2D & 3D Signed Volume Scaling -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Left: Unit Square (Area = 1) -->
+            <rect x="50" y="80" width="60" height="60" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="80" y="115" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle"> 单位正方形 Area=1</text>
+
+            <path d="M 140 110 L 190 110" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+            <text x="165" y="95" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 矩阵 A 作用</text>
+
+            <!-- Right: Parallelogram (Area = |det(A)|) -->
+            <polygon points="230,140 330,140 390,60 290,60" fill="rgba(168, 85, 247, 0.25)" stroke="#a855f7" stroke-width="2"/>
+            <text x="310" y="110" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle"> 平行四边形 面积 = |det(A)|</text>
+
+            <defs>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="intuition-box">
+          <div class="box-title">💡 什么是行列式？最透彻的几何解释！</div>
+          <p>在 $n$ 维空间中，矩阵 $A$ 作为一个线性变换，将单位正方形（或单位超立方体）拉伸扭曲成一个平行多面体。<strong>行列式 $\det(A)$ 的绝对值 $|\det(A)|$ 精确代表了这一几何区域变换前后“体积放大（或缩小）的倍率”！</strong></p>
+          <ul style="margin-left: 1.2rem; line-height: 1.8; margin-top:0.5rem;">
+            <li>如果 $\det(A) = 2$，说明变换把区域面积/体积放大了 2 倍。</li>
+            <li>如果 $\det(A) = -1$，说明体积大小不变，但手性反转（空间被翻转颠倒，如镜面反射）。</li>
+            <li>如果 $\det(A) = 0$，说明空间被**彻底压扁降维**（3D 压成 2D 平面或 1D 线），体积缩减为 0！降维不可逆，故 $\det(A)=0 \iff A \text{ 不可逆}$！</li>
+          </ul>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. 行列式的 3 大基本性质 (3 Basic Properties)</h2>
+        <p>所有高维行列式的复杂公式，全都可以仅由以下 3 条几何公理唯推导出来：</p>
+
+        <div class="step-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">公理 1：单位矩阵行列式为 1 ($\det(I) = 1$)</div>
+              <p>单位超立方体的体积基准定义为 1。</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">公理 2：交换任意两行，行列式变号 ($\det(\text{Swap}(A)) = -\det(A)$)</div>
+              <p>几何上代表颠倒了两个坐标轴的方向，改变了空间的手性 (Orientation)。</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">公理 3：关于每一行具有多线性 (Multilinear)</div>
+              <p>将单行扩大 $c$ 倍，体积扩大 $c$ 倍：$\det \begin{bmatrix} c\mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix} = c \det \begin{bmatrix} \mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix}$。多项相加可拆分。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">推导定理：行倍加操作不改变行列式 ($\det(R_i + c R_j) = \det(A)$)</div>
+          <p><strong>证明</strong>：根据公理 3（可拆分性）：</p>
+          <div class="math-block">
+            $$\det \begin{bmatrix} \mathbf{r}_1 + c \mathbf{r}_2 \\ \mathbf{r}_2 \end{bmatrix} = \det \begin{bmatrix} \mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix} + c \det \begin{bmatrix} \mathbf{r}_2 \\ \mathbf{r}_2 \end{bmatrix}$$
+          </div>
+          <p>而包含两行相同的矩阵交换该两行得 $\det = -\det \implies \det = 0$。因此 $c(0) = 0$。故行倍加操作完全不改变行列式！$\blacksquare$</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 余子式展开 (Cofactor Expansion) 与三角矩阵计算</h2>
+        <p>设 $M_{ij}$ 为划去矩阵 $A$ 的第 $i$ 行与第 $j$ 列后剩下的 $(n-1) \times (n-1)$ 子矩阵，代数余子式定义为：</p>
+        <div class="math-block">
+          $$C_{ij} = (-1)^{i+j} \det(M_{ij})$$
+        </div>
+        <p>按第 $i$ 行做余子式展开：</p>
+        <div class="math-block">
+          $$\det(A) = a_{i1} C_{i1} + a_{i2} C_{i2} + \dots + a_{in} C_{in} = \sum_{j=1}^n a_{ij} C_{ij}$$
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 🌟 伴随矩阵 (Adjugate Matrix) 求逆公式全推导</h2>
+        
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">👑 伴随矩阵求逆定理全推导</div>
+          <p><strong>定义</strong>：由所有代数余子式 $C_{ij}$ 构成的矩阵的转置矩阵称为**伴随矩阵** $\text{adj}(A) = C^T$，其第 $i$ 行第 $j$ 列元素为 $C_{ji}$。</p>
+
+          <p><strong>关键推导</strong>：计算矩阵乘积 $A \cdot \text{adj}(A)$ 的第 $i$ 行第 $k$ 列元素：</p>
+          <div class="math-block">
+            $$(A \cdot \text{adj}(A))_{ik} = \sum_{j=1}^n a_{ij} C_{kj}$$
+          </div>
+          <ul>
+            <li>当 $i = k$ 时：$\sum_{j=1}^n a_{ij} C_{ij} = \det(A)$（正好是按第 $i$ 行展开的行列式）。</li>
+            <li>当 $i \neq k$ 时：$\sum_{j=1}^n a_{ij} C_{kj} = 0$（相当于含有两行相同的虚构矩阵的行列式，恒等于 0）。</li>
+          </ul>
+
+          <p>因此得出震撼恒等式：</p>
+          <div class="math-block">
+            $$A \cdot \text{adj}(A) = \det(A) I_n \implies A^{-1} = \frac{1}{\det(A)} \text{adj}(A) \quad \blacksquare$$
+          </div>
+        </div>
+
+        <!-- Section 5 -->
+        <h2 class="section-title">5. 克莱姆法则 (Cramer's Rule) 的几何推导</h2>
+
+        <!-- SVG Graphic 5.2: Cramer's Rule Area Replacement -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <polygon points="40,160 160,160 220,60 100,60" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="130" y="110" fill="#38bdf8" font-size="12" font-weight="bold"> 原始面积 det(A)</text>
+
+            <polygon points="40,160 280,160 340,60 100,60" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-dasharray="4" stroke-width="2"/>
+            <text x="240" y="80" fill="#4ade80" font-size="12" font-weight="bold"> 替换第 1 列面积 det(A₁(b))</text>
+          </svg>
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">克莱姆法则公式</div>
+          <p>对于可逆方阵方程 $A\mathbf{x} = \mathbf{b}$，其解向量的第 $j$ 个分量 $x_j$ 可以通过行列式直接求出：</p>
+          <div class="math-block">
+            $$x_j = \frac{\det(A_j(\mathbf{b}))}{\det(A)}$$
+          </div>
+          <p>其中 $A_j(\mathbf{b})$ 是将矩阵 $A$ 的第 $j$ 列替换为常数向量 $\mathbf{b}$ 得到的新矩阵。</p>
+        </div>
+
+        <!-- Section 6: Worked Examples -->
+        <h2 class="section-title">6. ✍️ 完整手把手手算数值例题与推导</h2>
+        <div class="proof-box">
+          <div class="box-title">手算例题：用克莱姆法则解 $2 \times 2$ 方程组</div>
+          <p><strong>方程组</strong>：$\begin{cases} 2x_1 + 3x_2 = 8 \\ 1x_1 + 4x_2 = 9 \end{cases}$</p>
+          <p><strong>计算</strong>：</p>
+          <ul>
+            <li>系数行列式：$\det(A) = \begin{vmatrix} 2 & 3 \\ 1 & 4 \end{vmatrix} = 8 - 3 = 5$。</li>
+            <li>第 1 列替换：$\det(A_1(\mathbf{b})) = \begin{vmatrix} 8 & 3 \\ 9 & 4 \end{vmatrix} = 32 - 27 = 5 \implies x_1 = \frac{5}{5} = 1$。</li>
+            <li>第 2 列替换：$\det(A_2(\mathbf{b})) = \begin{vmatrix} 2 & 8 \\ 1 & 9 \end{vmatrix} = 18 - 8 = 10 \implies x_2 = \frac{10}{5} = 2 \quad \blacksquare$</li>
+          </ul>
+        </div>
+
+        <!-- Section 7: Interactive Quiz Accordion -->
+        <h2 class="section-title">7. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：若矩阵所有元素均扩大为 $2$ 倍，其行列式扩大为多少倍？</div>
+          <p>假设 $A$ 是 $n \times n$ 矩阵，考虑 $\det(2A)$ 的值。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：扩大 $2^n$ 倍！</strong></p>
+              <p>解析：根据公理 3（多线性），将每一行提取标量 $2$，一共提取了 $n$ 次！因此 $\det(2A) = 2^n \det(A)$。几何上代表 $n$ 维超立方体的每个边长都变为 2 倍，总体积放大 $2^n$ 倍。$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 8: Python Practice -->
+        <h2 class="section-title">8. 💻 编程实战：用 Python / NumPy 计算行列式</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import numpy as np
+
+A = np.array([
+    [2, 3, 1],
+    [1, 4, 2],
+    [3, 1, 5]
+], dtype=float)
+
+# 计算行列式 det(A)
+det_A = np.linalg.det(A)
+print("行列式 det(A):", round(det_A, 4))
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module4_subspaces_basis_dimension.html" class="btn-nav prev">← 上一模块：子空间、基与维数</a>
+          <a href="module6_coordinates_transforms.html" class="btn-nav next">下一模块：坐标系统与基变换 →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

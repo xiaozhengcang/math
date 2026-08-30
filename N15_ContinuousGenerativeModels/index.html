@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N15 连续生成模型 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-rose: #f43f5e;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-rose); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(244, 63, 94, 0.1); border-color: var(--accent-rose); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N15 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N15 · 连续生成模型</span>
+      <h1>连续生成模型 (Diffusion / Flow Matching / EBM)</h1>
+      <p style="color: var(--text-secondary);">前沿多模态图像、视频与语音生成底座。得分匹配 SDE、连续归一化流 (CNF) 与概率流 ODE。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Song et al.: Score-Based Generative Modeling</span>
+        <span class="badge">📖 Kobyzev: Normalizing Flows</span>
+        <span class="badge">📄 Ho et al. (NeurIPS 2020) DDPM</span>
+        <span class="badge">📄 Lipman et al. (ICLR 2023) Flow Matching</span>
+        <span class="badge">📄 Song et al. (ICLR 2021) Score SDE</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>从 Stable Diffusion 到 Flux 与 Sora，连续生成模型的核心思想是将“雕塑”的过程倒过来做：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>前向加噪过程 (Forward Noise)</strong>：向一张清晰图像中逐步注入高斯白噪声，直至图像彻底沦为毫无特征的高斯白噪音雪花屏。</li>
+        <li><strong>逆向去噪生成 (Reverse Denoising)</strong>：神经网络预测当前时刻所含的噪声 $\epsilon_\theta(x_t, t)$ 并将其剥离，从一团乱麻的噪声中一步步“雕刻”出逼真的高分辨率图片。</li>
+        <li><strong>流匹配 (Flow Matching)</strong>：抛弃复杂的 SDE 求解，直接在噪声点 $x_0$ 和数据点 $x_1$ 之间连一条最短直线，学习确定性的速度矢量场 $v_t(x)$，实现 4~8 步极速高质量生成！</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>DDPM 前向加噪闭环推导与逆向求解：</p>
+      <div class="math-callout">
+        $$q(x_t | x_0) = \mathcal{N}\left(x_t; \sqrt{\bar{\alpha}_t} x_0, (1 - \bar{\alpha}_t) \mathbf{I}\right) \implies x_t = \sqrt{\bar{\alpha}_t} x_0 + \sqrt{1 - \bar{\alpha}_t} \epsilon$$
+      </div>
+      <p style="color: var(--text-secondary);">Score-based 连续概率流 ODE (Probability Flow ODE)：</p>
+      <div class="math-callout">
+        $$dx = \left[ f(x, t) - \frac{1}{2} g(t)^2 \nabla_x \log p_t(x) \right] dt$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文一：Denoising Diffusion Probabilistic Models (Ho et al., NeurIPS 2020)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 奠基性论文！证明了扩散模型与变分自编码器 ELBO 上界以及得分匹配 (Score Matching) 的等价性，简化了目标损失为 $\mathcal{L}_{\text{simple}}(\theta) = \mathbb{E}[\|\epsilon - \epsilon_\theta(x_t, t)\|^2]$。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Score-Based Generative Modeling through SDEs (Song et al., ICLR 2021 Outstanding Paper)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了<strong>Score SDE 统一大一统框架</strong>！将 SDE（随机采样）与概率流 ODE（确定性采样）统一到逆向时间 SDE 求解框架中，发明了著名的 Predictor-Corrector 采样算法。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文三：Flow Matching for Generative Modeling (Lipman et al., ICLR 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了<strong>流匹配 (Flow Matching)</strong>，通过直接回归向量场 $v_\theta(x, t)$ 替代去噪得分预测，极大简化了生成模型的训练与采样过程，成为 Flux.1 与 SD3 的通用底层支柱。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Flux.1 / Stable Diffusion 中的 U-Net 与 DiT (Diffusion Transformer) 预测噪声/速度场算子：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{FM}}(\theta) = \mathbb{E}_{t, p(x_0, x_1)} \left[ \|v_\theta(x_t, t) - (x_1 - x_0)\|^2 \right]$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        利用 DiT 模块结合交叉注意力 (Cross-Attention) 注入文本 Prompt 条件向量，精准引导速度场 $v_\theta$ 走向用户指定的图像生成空间。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Song et al. (Score-Based Generative Modeling Monograph)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：Flow Matching 相比于传统 DDPM 在采样步数上的核心优势是什么？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！Flow Matching 在噪声与图像之间插值出了直线向量场，生成轨迹极平直，因而可以使用阶数更高的 ODE 求解器在 4~8 步内快速精准生成！')">
+          A. 学习确定性的直线向量场，消除了曲线去噪轨迹的弯曲与随机漂移，极大地减少了 ODE 求解器的步数。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，Flow Matching 依然需要进行前向和逆向过程。')">
+          B. Flow Matching 不需要神经网络预测梯度。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

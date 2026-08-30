@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N06 逼近论与泛函分析 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-emerald); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-emerald); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N06 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N06 · 逼近论与泛函分析</span>
+      <h1>逼近论与泛函分析 (Functional Analysis)</h1>
+      <p style="color: var(--text-secondary);">从有限维向量拓展到无限维连续函数空间。万能逼近定理 (UAT) 与傅里叶神经算子 (FNO)。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Kreyszig: Functional Analysis</span>
+        <span class="badge">📖 Paulsen: An Introduction to RKHS</span>
+        <span class="badge">📄 Cybenko (1989) Universal Approximation</span>
+        <span class="badge">📄 Li et al. (ICLR 2021) Fourier Neural Operator</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>线性代数处理有限的向量（如 3 维坐标），而泛函分析将每个“连续函数 $f(x)$”看作无限维希尔伯特空间中的一个点：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>希尔伯特空间 $L^2$</strong>：函数也有“长度”和“内积”。两个函数的内积是它们在区间上的积分乘积 $\int f(x)g(x)dx$。两函数垂直代表它们正交！</li>
+        <li><strong>万能逼近定理 (UAT)</strong>：证明了一个隐藏层包含足够多神经元的单隐层网络，可以以任意给定的精度 $\epsilon > 0$ 逼近任意连续函数。</li>
+        <li><strong>神经算子 (Neural Operator)</strong>：传统网络拟合“向量到向量”的映射，而神经网络算子（如 FNO）拟合的是“函数到函数”的映射（如输入 PDE 初始流体场，直接输出后续时刻连续流场）。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>希尔伯特空间内积与万能逼近定理数学形式：</p>
+      <div class="math-callout">
+        $$\langle f, g \rangle_{L^2} = \int_{D} f(x) g(x) dx, \quad \|f - G_\sigma\|_{L^\infty} < \epsilon$$
+      </div>
+      <p style="color: var(--text-secondary);">其中逼近网络表达式：$G_\sigma(x) = \sum_{i=1}^N v_i \sigma(w_i^T x + b_i)$。</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文一：Approximation by Superpositions of a Sigmoidal Function (Cybenko, 1989)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 采用哈恩-巴拿赫定理 (Hahn-Banach Theorem) 与里斯表示定理，严密证明了激活函数为 Sigmoid 的单隐层前馈网络具备万能逼近能力。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Fourier Neural Operator for Parametric PDEs (Li et al., ICLR 2021)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了<strong>傅里叶神经算子 (FNO)</strong>，利用 Fast Fourier Transform (FFT) 在频域进行连续算子卷积，求解纳维-斯托克斯方程 (Navier-Stokes) 比传统 PDE 求解器快上千倍。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>AI for Science 中傅里叶神经算子 (FNO) 核心计算层：</p>
+      <div class="math-callout">
+        $$\mathbf{v}(x) = \sigma\left( \mathbf{W} \mathbf{v}(x) + \mathcal{F}^{-1} \left( \mathbf{R} \cdot \mathcal{F}(\mathbf{v}) \right)(x) \right)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        通过正向傅里叶变换 $\mathcal{F}$ 将空域特征映射到频域，经复值参数矩阵 $\mathbf{R}$ 截断滤波后再通过逆变换 $\mathcal{F}^{-1}$ 映射回空域，实现了网格无关（Grid-Independent）的连续解求解。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Kreyszig (Chapter 3: Inner Product Spaces. Hilbert Spaces)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么说 FNO (Fourier Neural Operator) 是“网格无关” (Grid-Independent) 的？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！因为 FNO 参数权重定义在连续频域空间，模型在低分辨率离散网格上训练后，可以直接评估高分辨率网格上的连续函数场，无需重新训练！')">
+          A. 因为 FNO 参数权重定义在连续频域特征空间，可以在任意网格分辨率下评估连续算子解。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，网格无关性正是 FNO 区别于传统 CNN 的核心优势。')">
+          B. 因为它不需要任何网格输入。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

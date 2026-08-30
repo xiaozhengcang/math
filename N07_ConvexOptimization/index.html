@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N07 连续最优化理论与凸分析 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-amber); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(245, 158, 11, 0.1); border-color: var(--accent-amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N07 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N07 · 连续最优化理论与凸分析</span>
+      <h1>连续最优化理论与凸分析 (Continuous Optimization)</h1>
+      <p style="color: var(--text-secondary);">从凸集对偶理论到非凸梯度流与 AdamW / Muon 大规模分布式优化器。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Boyd: Convex Optimization</span>
+        <span class="badge">📖 Nocedal & Wright: Numerical Optimization</span>
+        <span class="badge">📄 Kingma & Ba (ICLR 2015) Adam</span>
+        <span class="badge">📄 Ge et al. (COLT 2015) Escaping Saddle Points</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>最优化是所有机器学习算法运行的发动机：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>凸优化 (Convex Optimization)</strong>：像在完美的圆碗中滚珠，任何局部极小值都是全局最小值。</li>
+        <li><strong>鞍点逃逸 (Saddle Point Escape)</strong>：在神经网络的极高维非凸曲面上，极小值很少，但鞍点（前后下坡左右上坡）极其普遍。SGD 引入的随机梯度噪声就像“脚踏震动”，能帮优化器迅速摆脱鞍点。</li>
+        <li><strong>Adam 动量与自适应矩</strong>：动量 (Momentum) 像具有惯性的滚珠冲过小坑，一阶矩 $m_t$ 平滑方向，二阶矩 $v_t$ 为稀疏梯度自动放大步长。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>KKT 条件 (Karush-Kuhn-Tucker Conditions) 与拉格朗日对偶性：</p>
+      <div class="math-callout">
+        $$\mathcal{L}(x, \lambda, \nu) = f_0(x) + \sum_{i=1}^m \lambda_i f_i(x) + \sum_{i=1}^p \nu_i h_i(x), \quad \lambda_i \ge 0, \lambda_i f_i(x) = 0$$
+      </div>
+      <p style="color: var(--text-secondary);">Adam 优化器更新步长推导：</p>
+      <div class="math-callout">
+        $$m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t, \quad v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2, \quad \theta_t = \theta_{t-1} - \frac{\alpha}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文一：Adam: A Method for Stochastic Optimization (Kingma & Ba, ICLR 2015)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 结合了 AdaGrad（自适应梯度缩放）与 RMSProp（指数衰减平均），提出了 Adam 优化器，对参数尺度变换保持不变，成为深度学习工业界最主流的默认优化器。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Escaping From Saddle Points — Online Stochastic Gradient (Ge et al., COLT 2015)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 严格证明了在严格鞍点 (Strict Saddle Point) 条件下，注入扰动随机梯度的 SGD (Perturbed SGD) 能够在多项式时间内以极高概率逃逸所有鞍点，收敛至局部极小值。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>大模型 AdamW 与 Muon (Momentum Orthogonalized by Newton-schulz) 优化器核心算子：</p>
+      <div class="math-callout">
+        $$\theta_{t+1} = (1 - \lambda \eta) \theta_t - \frac{\eta}{\sqrt{\hat{v}_t} + \epsilon} \hat{m}_t$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        AdamW 将 L2 正则化与梯度解耦（Decoupled Weight Decay），避免了自适应梯度缩放对权重衰减项的扭曲，显著提升了大模型预训练时的泛化能力。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Boyd (Chapter 5: Duality)</em> 与 <em>Nocedal (Chapter 12: Theory of Constrained Optimization)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：AdamW 相比于传统的 L2 正则化 SGD 核心改进是什么？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！AdamW 将权重衰减 $\lambda \theta$ 直接作用于参数更新步长，解耦了自适应二阶矩 $\sqrt{v_t}$ 对衰减力度的非期望缩放！')">
+          A. 将 Weight Decay 从梯度更新中解耦，直接作用在参数更新步骤上，防止学习率大的参数被过小衰减。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，AdamW 保持了二阶矩估计的优势。')">
+          B. 去掉了动量项以节省内存。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

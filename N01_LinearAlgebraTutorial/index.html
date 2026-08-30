@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>线性代数 完整直觉与推导指南 | LA 2022 Fall</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item active">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>课程总览与路线图</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <div class="card" style="background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%); border-color: rgba(99, 102, 241, 0.3);">
+          <h1 class="module-title">线性代数 (Linear Algebra 2022 Fall)</h1>
+          <div class="module-subtitle">面向初学者的 100% 穷尽式几何直觉、全定理推导与 Python 实战教程</div>
+          <p>本平台基于国立台湾大学<strong>李宏毅老师 (Prof. Hung-yi Lee) Linear Algebra 2022 Fall 全部 84 份讲义与课题</strong>重构。完全遵循官方课程主页 <a href="https://googly-mingto.github.io/LA_2022_fall/2022-fall.html" target="_blank" style="color:var(--accent-blue);">2022-fall.html</a> 的教学时间轴顺序，注重将抽象公理化代数转化为<strong>直观的空间几何图像</strong>，提供<strong>完全无遗漏的数学推导</strong>（列对应定理、可逆矩阵 10 条件闭环、伴随矩阵求逆公式、克莱姆法则、基扩展定理、Cayley-Hamilton定理、微积分算子矩阵化、PageRank 幂法、Gram-Schmidt/QR、SVD 奇异值分解与超越向量空间），并附带 <strong>Python / NumPy 代码实战</strong>。</p>
+        </div>
+
+        <h2 class="section-title">✨ 课程五大核心亮点</h2>
+
+        <div class="grid-2">
+          <div class="card">
+            <div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--accent-blue);">👁️ 几何直觉优先 (Geometric Intuition)</div>
+            <p>拒绝死记硬背公式！将矩阵乘法理解为空间网格扭曲，将行列式理解为有向体积放缩因子，将特征向量理解为变换中的不旋转主轴，将 SVD 理解为旋转-拉伸-旋转三步曲。</p>
+          </div>
+          <div class="card">
+            <div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--accent-purple);">✍️ 100% 穷尽式详细推导 (Full Proofs)</div>
+            <p>从<strong>列对应定理 (Column Correspondence Theorem)</strong> 到<strong>可逆矩阵 10 条件闭环</strong>，从伴随矩阵求逆公式到 Cauchy-Schwarz 不等式与广义伪逆 $A^+$，逻辑无缝衔接。</p>
+          </div>
+          <div class="card">
+            <div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--accent-green);">🌱 零基础与历史故事 (Beginner & History)</div>
+            <p>从《九章算术》“禾谷计数”方程术引出高斯消元历史；使用“在 Span 耍废的 Vector”等生动比喻降低理解门槛。</p>
+          </div>
+          <div class="card">
+            <div style="font-size:1.4rem; margin-bottom:0.5rem; color:var(--accent-amber);">💻 Python / NumPy 代码实战 (Python Labs)</div>
+            <p>每个模块均配套 Python/NumPy 工业级代码示例（`np.linalg.solve`, `inv`, `qr`, `eig`, `svd`, `pinv`），学以致用。</p>
+          </div>
+        </div>
+
+        <h2 class="section-title">🗺️ 线性代数 2022 Fall 8 大模块递进路线图</h2>
+
+        <div class="card" style="text-align: center; padding: 2rem;">
+          <svg viewBox="0 0 920 360" style="width: 100%; height: auto; max-width: 900px;">
+            <defs>
+              <linearGradient id="grad-node1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#0ea5e9" />
+              </linearGradient>
+              <linearGradient id="grad-node2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#a855f7" />
+                <stop offset="100%" stop-color="#ec4899" />
+              </linearGradient>
+              <linearGradient id="grad-node3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#10b981" />
+                <stop offset="100%" stop-color="#3b82f6" />
+              </linearGradient>
+            </defs>
+
+            <!-- Row 1: Module 1 to 3 -->
+            <rect x="20" y="20" width="260" height="60" rx="10" fill="url(#grad-node1)" />
+            <text x="150" y="55" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">1. 向量、矩阵与方程组</text>
+
+            <rect x="330" y="20" width="260" height="60" rx="10" fill="url(#grad-node1)" />
+            <text x="460" y="55" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">2. 求解方程组、RREF 与列对应</text>
+
+            <rect x="640" y="20" width="260" height="60" rx="10" fill="url(#grad-node1)" />
+            <text x="770" y="55" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">3. 矩阵四大视角与可逆大一统</text>
+
+            <!-- Row 2: Module 4 to 6 -->
+            <rect x="640" y="140" width="260" height="60" rx="10" fill="url(#grad-node2)" />
+            <text x="770" y="175" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">4. 子空间、基与四大基本子空间</text>
+
+            <rect x="330" y="140" width="260" height="60" rx="10" fill="url(#grad-node2)" />
+            <text x="460" y="175" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">5. 行列式体积与克莱姆法则</text>
+
+            <rect x="20" y="140" width="260" height="60" rx="10" fill="url(#grad-node2)" />
+            <text x="150" y="175" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">6. 坐标系统与基变换矩阵</text>
+
+            <!-- Row 3: Module 7 to 8 -->
+            <rect x="20" y="260" width="410" height="60" rx="10" fill="url(#grad-node3)" />
+            <text x="225" y="295" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">7. 特征值、PageRank 与矩阵对角化</text>
+
+            <rect x="490" y="260" width="410" height="60" rx="10" fill="url(#grad-node3)" />
+            <text x="695" y="295" fill="#fff" font-weight="bold" text-anchor="middle" font-size="14">8. 正交投影、SVD 分解与超越向量空间</text>
+
+            <!-- Connectors -->
+            <path d="M 280 50 L 330 50" stroke="#38bdf8" stroke-width="3" />
+            <path d="M 590 50 L 640 50" stroke="#38bdf8" stroke-width="3" />
+            <path d="M 770 80 L 770 140" stroke="#c084fc" stroke-width="3" />
+            <path d="M 640 170 L 590 170" stroke="#c084fc" stroke-width="3" />
+            <path d="M 330 170 L 280 170" stroke="#c084fc" stroke-width="3" />
+            <path d="M 150 200 L 150 260" stroke="#34d399" stroke-width="3" />
+            <path d="M 430 290 L 490 290" stroke="#34d399" stroke-width="3" />
+          </svg>
+        </div>
+
+        <h2 class="section-title">📚 课程模块列表 (8 大章节)</h2>
+
+        <div class="grid-2">
+          <a href="module1_vectors_linear_systems.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 01</div>
+              <div class="module-card-title">向量、矩阵与线性方程组</div>
+              <div class="module-card-desc">对应讲义 1-1 至 1-5。线性方程组定义与非线性反例；向量点积与几何表示；矩阵基本运算与特殊矩阵（对角、单位、对称、三角）；$A\mathbf{x}$ 列组合视角。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 1</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module2_rref_solutions_rank.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 02</div>
+              <div class="module-card-title">求解方程组、RREF 与列对应定理</div>
+              <div class="module-card-desc">对应讲义 1-6 至 1-7。线性组合与 Span 空间；解结构 $\mathbf{x}=\mathbf{x}_p+\mathbf{x}_n$；线性无关判定；高斯消元与 RREF 唯一性；列对应定理 (Column Correspondence) 完整推导。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 2</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module3_matrix_transforms_inverse.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 03</div>
+              <div class="module-card-title">矩阵四大视角与可逆大一统定理</div>
+              <div class="module-card-desc">对应讲义 2-1 至 2-4。矩阵乘法 4 种解读视角；线性变换几何网格扭曲；初等矩阵与求逆；可逆矩阵 10 大等价条件闭环定理；里昂惕夫投入产出模型。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 3</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module4_subspaces_basis_dimension.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 04</div>
+              <div class="module-card-title">子空间、基与四大基本子空间</div>
+              <div class="module-card-desc">对应 Chapter 4-(1) 讲义。子空间 3 大检验条件；Subspace vs Span；基 (Basis) 与维数 (Dimension) 定理；四大基本子空间与秩-零化度定理 ($\text{rank}+\text{nullity}=n$)。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 4</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module5_determinant_cramer.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 05</div>
+              <div class="module-card-title">行列式体积、余子式与克莱姆法则</div>
+              <div class="module-card-desc">对应 Chapter 3 讲义。行列式 Signed Volume 几何放缩率；三大基本性质；余子式展开；伴随矩阵公式 $A^{-1}=\frac{1}{\det A}\text{adj}(A)$；克莱姆法则 (Cramer's Rule)。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 5</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module6_coordinates_transforms.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 06</div>
+              <div class="module-card-title">坐标系统与基变换矩阵</div>
+              <div class="module-card-desc">对应 Chapter 4-(2) 讲义。选择基作为观察网格；笛卡尔与非笛卡尔坐标转换；坐标变换矩阵 $P_{B\to C}$；不同坐标系下描述线性算子 $B=P^{-1}AP$；微积分求导算子矩阵化。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 6</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module7_eigenvalues_diagonalization.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 07</div>
+              <div class="module-card-title">特征值、PageRank 与矩阵对角化</div>
+              <div class="module-card-desc">对应 Chapter 5 讲义。特征值/向量几何不旋转主轴；特征多项式 $\det(A-\lambda I)=0$；Google PageRank 幂法算法；矩阵对角化 $A=PDP^{-1}$ 判定与 $A^k$ 极速计算。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 7</span>
+              <span>→</span>
+            </div>
+          </a>
+
+          <a href="module8_orthogonality_svd_beyond.html" class="module-card">
+            <div>
+              <div class="module-card-number">Module 08</div>
+              <div class="module-card-title">正交投影、SVD 与超越向量空间</div>
+              <div class="module-card-desc">对应 Chapter 7 & 6 讲义。几何三大不等式；Gram-Schmidt 正交化与 QR 分解；正交投影矩阵 $P=A(A^TA)^{-1}A^T$；实对称矩阵谱定理；SVD 3 步分解与 Moore-Penrose 广义伪逆 $A^+$；超越向量空间。</div>
+            </div>
+            <div class="module-card-footer">
+              <span>进入 Module 8</span>
+              <span>→</span>
+            </div>
+          </a>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

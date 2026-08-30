@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N02 多元微积分与微分分析 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-secondary: #0d1222;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; display: flex; align-items: center; gap: 0.4rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(99, 102, 241, 0.1) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-blue); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N02 · Level 0 先修基础</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N02 · 微积分与微分分析</span>
+      <h1>多元微积分与微分分析 (Multivariable Calculus)</h1>
+      <p style="color: var(--text-secondary);">高维山谷中的最速下降与曲率洞察。从链式法则到自动微分 (Autodiff) 引擎与神经网络常微分方程 (Neural ODEs)。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Rudin: Principles of Mathematical Analysis</span>
+        <span class="badge">📖 Hubbard: Vector Calculus</span>
+        <span class="badge">📄 Baydin et al. (2018) Automatic Differentiation</span>
+        <span class="badge">📄 Chen et al. (NeurIPS 2018) Neural ODEs</span>
+      </div>
+    </div>
+
+    <!-- Section 1: Intuitive Concept -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>想象你在浓雾弥漫的深夜里攀登一座高维大山（损失函数曲面 $L(\theta)$）。你看不见远方的山顶，只能用脚感受地面的倾斜方向：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>梯度 $\nabla f$</strong>：你脚下陡峭度最大的上坡方向。反方向 $-\nabla f$ 即最速下山方向。</li>
+        <li><strong>Jacobian 矩阵 $\mathbf{J}$</strong>：输入向量变化一个小微元 $\mathbf{dx}$ 时，多维输出向量 $\mathbf{dy}$ 随之发生拉伸与旋转的局部线性近似变换。</li>
+        <li><strong>Hessian 矩阵 $\mathbf{H}$</strong>：山谷地貌的“弯曲曲率”。正定 Hessian 意味着你身处碗状谷底（极小值），鞍点形态则意味着前后是下坡、左右是上坡。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2: Math Formulation -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>对于标量损失函数 $f: \mathbb{R}^N \to \mathbb{R}$，其二阶泰勒展开为：</p>
+      <div class="math-callout">
+        $$f(\theta + \Delta \theta) \approx f(\theta) + \nabla f(\theta)^T \Delta \theta + \frac{1}{2} \Delta \theta^T \mathbf{H}(\theta) \Delta \theta$$
+      </div>
+      <p style="color: var(--text-secondary);">其中，Jacobian 矩阵与 Hessian 矩阵定义如下：</p>
+      <div class="math-callout">
+        $$\mathbf{J}_{ij} = \frac{\partial f_i}{\partial x_j}, \quad \mathbf{H}_{ij} = \frac{\partial^2 f}{\partial \theta_i \partial \theta_j}$$
+      </div>
+    </div>
+
+    <!-- Section 3: Seminal Papers -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文一：Automatic Differentiation in Machine Learning: A Survey (Baydin et al., 2018)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 区分符号微分与数值微分，提出计算图上的<strong>前向模式 (VJP)</strong> 与<strong>反向模式 (JVP)</strong> 链式微分法则，成为 PyTorch 与 JAX 自动微分引擎的理论基石。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文二：Neural Ordinary Differential Equations (Chen et al., NeurIPS 2018 Best Paper)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 将 ResNet 的离散残差块极限化为连续时间常微分方程 $\frac{dh(t)}{dt} = f(h(t), t, \theta)$，利用伴随状态法 (Adjoint Sensitivity Method) 实现 $O(1)$ 内存精度的反向传播。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4: AI Applications -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>自动微分中的<strong>向量-Jacobian 积 (VJP)</strong> 是神经网络反向传播算子的核心：</p>
+      <div class="math-callout">
+        $$\text{VJP}: \mathbf{v}^T \mathbf{J} = \sum_{i} v_i \frac{\partial f_i}{\partial \mathbf{x}}$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在 PyTorch 框架中，每一级 autograd 节点无需显式构建巨大的 $N \times M$ Jacobian 矩阵，只需通过链式标量积按层回传梯度，极大降低了显存开销。
+      </p>
+    </div>
+
+    <!-- Section 5: Textbook Guide & Quiz -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Rudin (Chapter 9: Functions of Several Variables)</em> 与 <em>Hubbard (Chapter 2: Differentiation)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么 Hessian 矩阵的特征值可以用来判定 Saddle Point（鞍点）？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！Hessian 矩阵若同时存在正特征值和负特征值，说明在该点沿着某些方向曲率向上、沿着某些方向曲率向下，形成鞍点。')">
+          A. 当 Hessian 矩阵既有正特征值又有负特征值时，说明存在凹凸交错的鞍点方向。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请重新思考特征值正负号代表的二次型曲率含义。')">
+          B. 当所有特征值均为零时才能确定是鞍点。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

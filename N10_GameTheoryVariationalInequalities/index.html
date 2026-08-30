@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N10 博弈论与变分不等式 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-rose); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(244, 63, 94, 0.1); border-color: var(--accent-rose); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N10 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N10 · 博弈论与变分不等式</span>
+      <h1>博弈论与变分不等式 (Game Theory & Variational Inequalities)</h1>
+      <p style="color: var(--text-secondary);">多智能体对抗与协同求解。极小极大定理 (Minimax) 与纳什均衡 (Nash Equilibrium)。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Fudenberg: Game Theory</span>
+        <span class="badge">📖 Facchinei: Variational Inequalities</span>
+        <span class="badge">📄 Goodfellow et al. (NeurIPS 2014) GAN</span>
+        <span class="badge">📄 Busoniu et al. (2008) Multi-Agent RL</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>传统的优化问题是一个人在山谷中下山，而博弈论是两个人（或多主体）在棋盘上相互博弈：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>极小极大博弈 (Minimax Game)</strong>：生成器 $G$ 试图伪造伪造假钞骗过警察，判别器 $D$ 试图练就火眼金睛区分真假。两者博弈直至达到“猫鼠平衡”。</li>
+        <li><strong>纳什均衡 (Nash Equilibrium)</strong>：处于该状态时，任何一方单方面改变策略都不会获得更好的收益。</li>
+        <li><strong>变分不等式 (VI)</strong>：将单目标的求导等于零 $\nabla f(x)=0$，扩展到多目标博弈约束下的通用平衡求解语言。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>GAN 极小极大博弈目标函数 $\min_G \max_D V(D, G)$：</p>
+      <div class="math-callout">
+        $$\min_G \max_D V(D, G) = \mathbb{E}_{x \sim p_{\text{data}}}[\log D(x)] + \mathbb{E}_{z \sim p_z}[\log(1 - D(G(z)))]$$
+      </div>
+      <p style="color: var(--text-secondary);">当判别器达到最优 $D^*(x) = \frac{p_{\text{data}}(x)}{p_{\text{data}}(x) + p_g(x)}$ 时，优化目标退化为最小化 JS 散度：</p>
+      <div class="math-callout">
+        $$V(D^*, G) = -\log(4) + 2 \cdot D_{JS}(p_{\text{data}} || p_g)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文一：Generative Adversarial Nets (Goodfellow et al., NeurIPS 2014)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了 GAN，通过对抗博弈训练生成神经网络，无需显示估计无界配分函数，引发了生成式 AI 的第一次爆发。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Continuous-Time and Multi-Agent Reinforcement Learning (Busoniu et al., 2008)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 系统总结了多智能体强化学习 (MARL) 的博弈框架，分析了非平稳环境下的 Actor-Critic 协同收敛条件。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Actor-Critic 多 Agent 自博弈训练步：</p>
+      <div class="math-callout">
+        $$\nabla_\theta J(\theta) = \mathbb{E}_{\tau} \left[ \sum_{t} \nabla_\theta \log \pi_\theta(a_t | s_t) Q_{\phi}(s_t, a_t) \right]$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        Policy 策略网络（Actor）与 Value 评估网络（Critic）构成双层对偶博弈，在 AlphaGo 与 DeepSeek-R1 自博弈强化学习中起决定性作用。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Fudenberg (Chapter 1: Strategic Form Games and Nash Equilibrium)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：当 GAN 的生成器 $p_g$ 完全拟合了真实分布 $p_{\text{data}}$ 时，最优判别器 $D^*(x)$ 的输出是多少？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！当 $p_g = p_{\text{data}}$ 时，$D^*(x) = \frac{p_{\text{data}}}{p_{\text{data}} + p_{\text{data}}} = \frac{1}{2}$，代表判别器完全无法区分真假样本！')">
+          A. $D^*(x) = 1/2$，代表判别器无法区分真实样本与生成的伪造样本。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾判别器最优解公式。')">
+          B. $D^*(x) = 1$。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

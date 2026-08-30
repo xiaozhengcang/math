@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N08 测度论与高维概率 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-emerald); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-emerald); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N08 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N08 · 测度论与高维概率</span>
+      <h1>测度论与高维概率 (Measure Theory & High-Dim Probability)</h1>
+      <p style="color: var(--text-secondary);">高维几何中的测度集中效应 (Concentration of Measure) 与 Push-forward 测度推前变换。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Wainwright: High-Dimensional Statistics</span>
+        <span class="badge">📖 Dudley: Real Analysis and Probability</span>
+        <span class="badge">📄 Boucheron et al. (2013) Concentration Inequalities</span>
+        <span class="badge">📄 Vershynin (2012) Non-Asymptotic Random Matrices</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>高维空间（如 $d=4096$ 维向量空间）反直觉的几何怪象：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>高维球的体积集中在极薄的表皮上</strong>：在 $d$ 维单位球体中，99.9% 的测度体积都集中在离球面只有 $\epsilon$ 厚度的薄壳中！内部几乎是空的。</li>
+        <li><strong>测度集中效应 (Concentration of Measure)</strong>：高维函数值几乎处处等于其平均值。这种非渐近集中不等式（如 Sub-Gaussian 不等式）保证了在高维大模型中，随机采样的估计偏差极小。</li>
+        <li><strong>测度推前 (Push-forward Measure $T_\sharp \mu = \nu$)</strong>：当随机变量 $X \sim \mu$ 经过连续映射 $T$（如生成网络）时，概率密度是如何被拉伸和重塑为新的概率测度 $\nu$ 的。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>亚高斯集中不等式 (Sub-Gaussian Tail Bound) 与 Radon-Nikodym 导数：</p>
+      <div class="math-callout">
+        $$\mathbb{P}(|X - \mu| \ge t) \le 2 \exp\left( -\frac{t^2}{2\sigma^2} \right), \quad \frac{d\nu}{d\mu}(x)$$
+      </div>
+      <p style="color: var(--text-secondary);">测度推前变量替换公式：</p>
+      <div class="math-callout">
+        $$p_Y(y) = p_X(T^{-1}(y)) \left| \det \mathbf{J}_{T^{-1}}(y) \right|$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文一：Concentration Inequalities: A Nonasymptotic Theory of Independence (Boucheron et al., 2013)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 建立了非渐近集中不等式的统一理论体系（如 McDiarmid 不等式、熵方法），为高维统计学习界（Generalization Bounds）提供了精确的有限样本上界。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：A Non-Asymptotic Approach to Random Matrices (Vershynin, 2012)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 结合 $\varepsilon$-网 (Netting) 技巧与亚高斯矩阵分析，给出了高维随机矩阵奇异值与特征谱的非渐近集中上界，为低秩恢复与高维表征分析提供了数学工具。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Out-of-Distribution (OOD) 高维表征异常检测：</p>
+      <div class="math-callout">
+        $$\text{Score}(x) = \|\mathbf{z} - \boldsymbol{\mu}\|_\mathbf{\Sigma}^2 = (\mathbf{z} - \boldsymbol{\mu})^T \mathbf{\Sigma}^{-1} (\mathbf{z} - \boldsymbol{\mu})$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在高维 Embedding 空间中，利用测度集中效应计算马氏距离 (Mahalanobis Distance)，由于高维采样点必然集中在椭球壳上，偏离该薄壳的点可被精准识别为 OOD 离群点。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Wainwright (Chapter 2: Basic Tail and Concentration Bounds)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么高维标准正态分布采样点并不在原点附近，而是集中在半径为 $\sqrt{d}$ 的球面薄壳上？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！因为高维空间中，半径为 $r = \|\mathbf{x}\|_2$ 的球面壳层表面积随着 $r^{d-1}$ 爆炸式增长，结合高斯密度 $\exp(-r^2/2)$ 乘积，概率质量极其强烈地集中在 $r \approx \sqrt{d}$ 薄壳上！')">
+          A. 体积元随半径 $r^{d-1}$ 呈指数增长，与高斯指数衰减项平衡后，概率质量强烈集中在半径 $\sqrt{d}$ 的壳层上。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，高维几何特征与低维大不相同。')">
+          B. 因为原点处的概率密度为 0。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

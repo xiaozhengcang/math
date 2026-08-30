@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4: 子空间、基与维数 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item active">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 4: 子空间、基与维数</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块四：子空间、基 (Basis) 与四大基本子空间</h1>
+        <div class="module-subtitle">解构向量子空间公理、基定理 (Basis Theorem) 与矩阵四大基本子空间骨架</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块对应讲义 Chapter 4-(1) 的全部内容：从<strong>子空间 (Subspace) 的 3 大检验公理</strong>与 Subspace vs Span 关系，到<strong>基 (Basis) 与维数 (Dimension)</strong> 的精确定义；接着深入剖析<strong>基定理 (Basis Theorem)</strong> 与基扩展定理；最后全面构建矩阵的<strong>四大基本子空间</strong>（列空间、行空间、零空间、左零空间）及秩-零化度定理。
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 什么是子空间 (Subspace)？三大检验公理</h2>
+        <p>子空间 $V \subseteq \mathbb{R}^n$ 是全空间中的一个“平坦的几何部分”（点、过原点直线、过原点平面），必须完全满足 3 大封锁公理：</p>
+
+        <!-- SVG Graphic 4.1: Subspace Axioms vs Non-Subspaces -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Left: Valid Subspace (Line through Origin) -->
+            <g>
+              <line x1="20" y1="180" x2="200" y2="20" stroke="#4ade80" stroke-width="3"/>
+              <circle cx="110" cy="100" r="5" fill="#4ade80"/>
+              <text x="110" y="125" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle"> 原点 (0,0)</text>
+              <text x="110" y="190" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle"> ✅ 合法子空间: 过原点直线</text>
+            </g>
+
+            <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- Right: Invalid Subspace (Line NOT through Origin) -->
+            <g>
+              <line x1="280" y1="140" x2="460" y2="40" stroke="#ef4444" stroke-width="3"/>
+              <circle cx="370" cy="120" r="4" fill="#94a3b8"/>
+              <text x="370" y="140" fill="#94a3b8" font-size="11" text-anchor="middle"> 原点 (0,0)</text>
+              <text x="370" y="190" fill="#ef4444" font-size="13" font-weight="bold" text-anchor="middle"> ❌ 非法子空间: 不过原点!</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="grid-2">
+          <div class="concept-box">
+            <div class="box-title">公理 1：包含零向量 (Contains Zero Vector)</div>
+            <p>零向量必须属于子空间：$\mathbf{0} \in V$。任何不过原点的直线/平面都<strong>绝不是子空间</strong>！</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">公理 2：加法封闭性 (Closed under Addition)</div>
+            <p>对任意 $\mathbf{u}, \mathbf{v} \in V$，其向量和 $\mathbf{u} + \mathbf{v} \in V$。相加后不会飞出集合之外。</p>
+          </div>
+          <div class="concept-box">
+            <div class="box-title">公理 3：数乘封闭性 (Closed under Scalar Multiplication)</div>
+            <p>对任意 $\mathbf{u} \in V$ 及标量 $c \in \mathbb{R}$，标量乘积 $c \mathbf{u} \in V$。沿着向量方向无限延伸均在集合内。</p>
+          </div>
+        </div>
+
+        <!-- Counterexample Analysis Box -->
+        <div class="proof-box" style="margin-top: 1.5rem;">
+          <div class="box-title">🧪 典型反例数值推导：为什么直线 $x + y = 1$ 不是子空间？</div>
+          <p>在 $\mathbb{R}^2$ 中考虑不过原点的直线 $L = \left\{ \begin{bmatrix} x \\ y \end{bmatrix} \in \mathbb{R}^2 \;\middle|\; x + y = 1 \right\}$，它同时破坏了 3 大公理：</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>破坏公理 1 (无零向量)</strong>：零向量 $\mathbf{0} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$，代入方程得 $0 + 0 = 0 \neq 1$，故 $\mathbf{0} \notin L$。</li>
+            <li><strong>破坏公理 2 (加法不封闭)</strong>：取 $\mathbf{u} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \in L$ 与 $\mathbf{v} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \in L$，求和得 $\mathbf{u} + \mathbf{v} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。代入方程检验：$1 + 1 = 2 \neq 1$，故 $\mathbf{u} + \mathbf{v} \notin L$。</li>
+            <li><strong>破坏公理 3 (数乘不封闭)</strong>：取 $\mathbf{u} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \in L$ 及标量 $c = 2$，得 $2\mathbf{u} = \begin{bmatrix} 2 \\ 0 \end{bmatrix}$。代入方程检验：$2 + 0 = 2 \neq 1$，故 $2\mathbf{u} \notin L$。当 $c = 0$ 时，$0\mathbf{u} = \mathbf{0} \notin L$。</li>
+          </ul>
+        </div>
+
+        <!-- Geometric Intuition Box -->
+        <div class="intuition-box" style="margin-top: 1.5rem;">
+          <div class="box-title">📐 几何直观解释：直线不过原点时到底发生了什么？</div>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>数乘的视觉本质（原点射线伸缩）</strong>：向量数乘 $c \mathbf{u}$ 在几何上代表从原点出发、沿着 $\mathbf{u}$ 所在的射线进行拉伸或反向。如果直线不过原点，该直线上点与原点的连线必然与直线相向相交而非重相。因此，任何伸缩变换都会把点“拉出”直线之外。</li>
+            <li><strong>加法的视觉本质（平行四边形法则）</strong>：向量加法遵循平行四边形法则。在不过原点的直线上取两个非零向量 $\mathbf{u}, \mathbf{v}$，它们的和 $\mathbf{u} + \mathbf{v}$ 是以原点为起点、以 $\mathbf{u}, \mathbf{v}$ 为邻边的平行四边形的对角线顶点。由于起点固定在原点，该对角线顶点必然逃逸到直线外部。</li>
+          </ul>
+        </div>
+
+        <!-- Deeper Understanding Box: Affine Subspace -->
+        <div class="concept-box" style="margin-top: 1.5rem; border-left: 4px solid var(--accent-purple);">
+          <div class="box-title" style="color:var(--accent-purple);">🚀 深化理解：向量子空间 (Vector Subspace) vs 仿射子空间 (Affine Subspace)</div>
+          <p style="line-height: 1.7;">在高等线性代数与泛函分析中，不过原点的直线/平面有其专门的数学名称：</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>齐次解集 = 向量子空间</strong>：齐次线性方程组 $A\mathbf{x} = \mathbf{0}$ 的解集必须穿过原点，构成了标准的向量子空间（即零空间 $\text{Null}(A)$）。</li>
+            <li><strong>非齐次解集 = 仿射子空间 (Affine Subspace)</strong>：非齐次线性方程组 $A\mathbf{x} = \mathbf{b} \ (b \neq \mathbf{0})$ 的解集形如 $\mathbf{x} = \mathbf{x}_p + \mathbf{x}_h$，几何上是经过特解向量 $\mathbf{x}_p$ 平移后的平坦集合。它被称为<strong>仿射子空间</strong>。</li>
+            <li><strong>核心差异</strong>：仿射子空间是“平移后的子空间”。它保留了平坦的几何形状，但因为脱离了原点的“锚定”，失去了加法与数乘封闭性，因此<strong>不是向量子空间</strong>。</li>
+          </ul>
+        </div>
+
+        <div class="intuition-box" style="margin-top: 1.5rem;">
+          <div class="box-title">💡 关键定理：Span 必然是子空间</div>
+          <p>对任意向量集合 $S = \{\mathbf{v}_1, \dots, \mathbf{v}_k\}$，其张成空间 $V = \mathrm{Span}(S)$ 必然自动满足上述 3 大公理，因此 <strong>$\mathrm{Span}(S)$ 永远是 $\mathbb{R}^n$ 的一个合法的子空间！</strong></p>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. 基 (Basis) 与维数 (Dimension) 的定义、举例与几何图形</h2>
+        
+        <!-- Core Definition Card -->
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">📌 基 (Basis) 的 2 大金字招牌条件与唯一坐标定理</div>
+          <p>设 $V \subseteq \mathbb{R}^n$ 是一个向量子空间，向量集合 $\mathcal{B} = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\} \subseteq V$ 称为子空间 $V$ 的一组**基 (Basis)** 当且仅当完全满足以下两大黄金条件：</p>
+          <ol style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>高效性（无冗余）</strong>：$\mathcal{B}$ 线性无关 (Linearly Independent) —— 集合内没有“耍废向量”，每个向量都开拓了不可替代的新维度方向。</li>
+            <li><strong>完备性（全覆盖）</strong>：$\mathcal{B}$ 张成整个子空间 $\mathrm{Span}(\mathcal{B}) = V$ —— 集合内的向量通过线性组合可以抵达子空间中的每一个角落。</li>
+          </ol>
+          
+          <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px dashed var(--accent-purple); margin-top: 1rem;">
+            <p style="color: var(--accent-purple); font-weight: 700; margin-bottom: 0.4rem;">🔑 核心等价刻画：唯一坐标定理 (Unique Coordinate Representation)</p>
+            <p style="font-size: 0.95rem; margin-bottom: 0;">
+              $\mathcal{B} = \{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 是 $V$ 的一组基，<strong>当且仅当对于 $V$ 中的任意向量 $\mathbf{v} \in V$，存在且仅存在一组唯一的标量系数 $(c_1, c_2, \dots, c_k)$</strong>，使得：
+              $$\mathbf{v} = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_k \mathbf{v}_k$$
+              这组唯一的系数就构成了向量 $\mathbf{v}$ 在基 $\mathcal{B}$ 下的<strong>坐标向量</strong> $[\mathbf{v}]_{\mathcal{B}} = [c_1, c_2, \dots, c_k]^T$。
+            </p>
+          </div>
+
+          <p style="margin-top:1rem; font-size: 1.02rem;">
+            <strong>📐 维数 (Dimension) 的几何本质</strong>：子空间 $V$ 的任意一组基所包含的向量个数 $k$ 是固定不变的常数，称为 $V$ 的<strong>维数</strong>，记作 $\dim(V) = k$。维数代表了该子空间内部的<strong>固有几何自由度</strong>。
+          </p>
+        </div>
+
+        <!-- Subsection 2.1: Concrete Worked Examples -->
+        <h3 class="subsection-title">2.1 🔢 具体数值与几何举例</h3>
+        <div class="grid-2">
+          <!-- Example 1 -->
+          <div class="concept-box">
+            <div class="box-title">例 1：全空间 $\mathbb{R}^2$ 与 $\mathbb{R}^3$ 的标准正交基</div>
+            <p>最熟悉的基是沿坐标轴方向的单位向量集合：</p>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.92rem;">
+              <li>在 $\mathbb{R}^2$ 中，$\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ 构成标准基。维数 $\dim(\mathbb{R}^2) = 2$。</li>
+              <li>在 $\mathbb{R}^3$ 中，$\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}, \mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}, \mathbf{e}_3 = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$ 构成标准基。维数 $\dim(\mathbb{R}^3) = 3$。</li>
+            </ul>
+            <p style="color:var(--accent-green); font-size: 0.88rem; margin-top:0.5rem;">
+              💡 任意点 $\begin{bmatrix} x \\ y \end{bmatrix} = x \mathbf{e}_1 + y \mathbf{e}_2$，其标准坐标就是 $(x,y)$ 本身。
+            </p>
+          </div>
+
+          <!-- Example 2 -->
+          <div class="concept-box">
+            <div class="box-title">例 2：$\mathbb{R}^2$ 的非标准倾斜基（基的不唯一性）</div>
+            <p>基绝对不是唯一的！考虑向量集合 $\mathcal{B}' = \left\{ \mathbf{b}_1 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}, \mathbf{b}_2 = \begin{bmatrix} 1 \\ 2 \end{bmatrix} \right\}$：</p>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.92rem;">
+              <li><strong>无关性</strong>：矩阵 $\det \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix} = 4 - 1 = 3 \neq 0$，两向量不平行，线性无关。</li>
+              <li><strong>张成性</strong>：任意向量 $\begin{bmatrix} 5 \\ 4 \end{bmatrix} = 2 \mathbf{b}_1 + 1 \mathbf{b}_2$，表达唯一！</li>
+            </ul>
+            <p style="color:var(--accent-purple); font-size: 0.88rem; margin-top:0.5rem;">
+              🚀 <strong>核心洞察</strong>：同一个空间可以有无数组不同的基，但基内向量个数（维数 2）永恒不变！
+            </p>
+          </div>
+        </div>
+
+        <!-- Example 3: Subspace Plane in R^3 -->
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">例 3：$\mathbb{R}^3$ 中高维子空间（过原点平面）的基与维数</div>
+          <p>在三维空间 $\mathbb{R}^3$ 中，考虑方程 $x - 2y + z = 0$ 所代表的过原点平面 $V = \left\{ \begin{bmatrix} x \\ y \\ z \end{bmatrix} \in \mathbb{R}^3 \;\middle|\; x - 2y + z = 0 \right\}$：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix} 2y - z \\ y \\ z \end{bmatrix} = y \underbrace{\begin{bmatrix} 2 \\ 1 \\ 0 \end{bmatrix}}_{\mathbf{v}_1} + z \underbrace{\begin{bmatrix} -1 \\ 0 \\ 1 \end{bmatrix}}_{\mathbf{v}_2}$$
+          </div>
+          <p>因为 $\mathbf{v}_1, \mathbf{v}_2$ 线性无关且张成整个平面 $V$，所以集合 $\mathcal{B}_V = \left\{ \begin{bmatrix} 2 \\ 1 \\ 0 \end{bmatrix}, \begin{bmatrix} -1 \\ 0 \\ 1 \end{bmatrix} \right\}$ 是平面 $V$ 的一组基。该子空间的维数为 $\dim(V) = 2$。</p>
+        </div>
+
+        <!-- Subsection 2.2: Counterexamples Analysis -->
+        <h3 class="subsection-title">2.2 🧪 典型反例深入辨析：为什么它们破坏了基的条件？</h3>
+        <div class="warning-box">
+          <div class="box-title">⚠️ 三大典型非基反例分析</div>
+          <ul style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.95rem;">
+            <li>
+              <strong>反例 1（向量太少 $\to$ 张成不足）</strong>：在 $\mathbb{R}^2$ 中取单向量集合 $\mathcal{S}_1 = \left\{ \begin{bmatrix} 1 \\ 2 \end{bmatrix} \right\}$。
+              <br><span style="color:var(--text-muted);">解析：虽然单非零向量线性无关，但其张成空间仅为一条 1 维直线 $y=2x$，无法覆盖平面上不在该直线上的点（如 $(0,1)$）。<strong>破坏完备性条件</strong>！</span>
+            </li>
+            <li>
+              <strong>反例 2（向量太多 $\to$ 线性相关/信息冗余）</strong>：在 $\mathbb{R}^2$ 中取 3 个向量集合 $\mathcal{S}_2 = \left\{ \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \end{bmatrix}, \begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\}$。
+              <br><span style="color:var(--text-muted);">解析：虽然能够张成整个 $\mathbb{R}^2$，但第 3 个向量 $\mathbf{v}_3 = \mathbf{v}_1 + \mathbf{v}_2$ 是多余的。这导致点 $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ 既可以表示为 $1\mathbf{v}_1 + 1\mathbf{v}_2 + 0\mathbf{v}_3$，又可以表示为 $0\mathbf{v}_1 + 0\mathbf{v}_2 + 1\mathbf{v}_3$，失去了坐标表示的唯一性！<strong>破坏高效性/无冗余条件</strong>！</span>
+            </li>
+            <li>
+              <strong>反例 3（向量共线 $\to$ 维度退化）</strong>：在 $\mathbb{R}^2$ 中取共线向量集合 $\mathcal{S}_3 = \left\{ \begin{bmatrix} 1 \\ 2 \end{bmatrix}, \begin{bmatrix} 2 \\ 4 \end{bmatrix} \right\}$。
+              <br><span style="color:var(--text-muted);">解析：因为 $\mathbf{v}_2 = 2\mathbf{v}_1$，二者处于同一条直线上。既线性相关（存在非零组合 $2\mathbf{v}_1 - \mathbf{v}_2 = \mathbf{0}$），又只能张成 1 维直线，全盘皆输！</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Subsection 2.3: SVG Geometric Diagrams -->
+        <h3 class="subsection-title">2.3 📐 几何图形说明：基与非基形态对比 & 维数阶梯</h3>
+
+        <!-- SVG Graphic 4.3: 4-Panel Basis vs Non-Basis Comparison -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="720" height="360" viewBox="0 0 720 360" style="background:#090d16; border-radius:12px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Panel grid dividers -->
+            <line x1="360" y1="10" x2="360" y2="350" stroke="#334155" stroke-dasharray="4"/>
+            <line x1="10" y1="180" x2="710" y2="180" stroke="#334155" stroke-dasharray="4"/>
+
+            <!-- Panel A: Standard Basis (Top Left) -->
+            <g transform="translate(0, 0)">
+              <text x="180" y="25" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">✅ Panel A: 标准正交基 (Standard Basis)</text>
+              <!-- Grid lines -->
+              <line x1="60" y1="100" x2="300" y2="100" stroke="#1e293b" stroke-width="1"/>
+              <line x1="180" y1="30" x2="180" y2="160" stroke="#1e293b" stroke-width="1"/>
+              <!-- Grid mesh -->
+              <path d="M 60 70 H 300 M 60 130 H 300 M 120 30 V 160 M 240 30 V 160" stroke="rgba(56, 189, 248, 0.1)" stroke-width="1"/>
+              <!-- Axes -->
+              <line x1="60" y1="140" x2="300" y2="140" stroke="#334155" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="160" stroke="#334155" stroke-width="1"/>
+              <!-- Vectors e1, e2 -->
+              <line x1="80" y1="140" x2="140" y2="140" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+              <line x1="80" y1="140" x2="80" y2="80" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+              <text x="145" y="155" fill="#38bdf8" font-size="11" font-weight="bold">e₁ = [1,0]ᵀ</text>
+              <text x="85" y="75" fill="#a855f7" font-size="11" font-weight="bold">e₂ = [0,1]ᵀ</text>
+              <text x="180" y="172" fill="#94a3b8" font-size="11" text-anchor="middle">正交直角网格 · 完美无缝覆盖 R²</text>
+            </g>
+
+            <!-- Panel B: Slanted Basis (Top Right) -->
+            <g transform="translate(360, 0)">
+              <text x="180" y="25" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">✅ Panel B: 倾斜网格基 (Slanted Basis)</text>
+              <line x1="60" y1="140" x2="300" y2="140" stroke="#334155" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="160" stroke="#334155" stroke-width="1"/>
+              <!-- Slanted grid mesh lines -->
+              <path d="M 80 140 L 260 50 M 140 140 L 320 50 M 80 140 L 170 30 M 140 140 L 230 30" stroke="rgba(192, 132, 252, 0.15)" stroke-dasharray="3"/>
+              <!-- Vectors b1, b2 -->
+              <line x1="80" y1="140" x2="170" y2="95" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrow-amber)"/>
+              <line x1="80" y1="140" x2="125" y2="50" stroke="#34d399" stroke-width="3" marker-end="url(#arrow-green)"/>
+              <text x="175" y="105" fill="#fbbf24" font-size="11" font-weight="bold">b₁ = [2,1]ᵀ</text>
+              <text x="130" y="45" fill="#34d399" font-size="11" font-weight="bold">b₂ = [1,2]ᵀ</text>
+              <text x="180" y="172" fill="#94a3b8" font-size="11" text-anchor="middle">倾斜平行四边形网格 · 同样能唯一覆盖</text>
+            </g>
+
+            <!-- Panel C: Redundant Dependent Set (Bottom Left) -->
+            <g transform="translate(0, 180)">
+              <text x="180" y="25" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">❌ Panel C: 冗余相关集 (Redundant Set)</text>
+              <line x1="60" y1="140" x2="300" y2="140" stroke="#334155" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="160" stroke="#334155" stroke-width="1"/>
+              <!-- 3 Vectors -->
+              <line x1="80" y1="140" x2="140" y2="140" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+              <line x1="80" y1="140" x2="80" y2="80" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+              <line x1="80" y1="140" x2="140" y2="80" stroke="#f43f5e" stroke-width="3" stroke-dasharray="4" marker-end="url(#arrow-rose)"/>
+              <text x="145" y="75" fill="#f43f5e" font-size="11" font-weight="bold">v₃ = v₁ + v₂ (耍废向量!)</text>
+              <text x="180" y="172" fill="#ef4444" font-size="11" text-anchor="middle">破坏高效性与唯一坐标表示 (冗余个数 > dim)</text>
+            </g>
+
+            <!-- Panel D: Deficient Spanning Set (Bottom Right) -->
+            <g transform="translate(360, 180)">
+              <text x="180" y="25" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">❌ Panel D: 张成不足集 (Deficient Set)</text>
+              <line x1="60" y1="140" x2="300" y2="140" stroke="#334155" stroke-width="1"/>
+              <line x1="80" y1="40" x2="80" y2="160" stroke="#334155" stroke-width="1"/>
+              <!-- Line span -->
+              <line x1="40" y1="160" x2="220" y2="70" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3"/>
+              <!-- Single Vector -->
+              <line x1="80" y1="140" x2="140" y2="110" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+              <text x="145" y="125" fill="#38bdf8" font-size="11" font-weight="bold">v₁仅形成 1D 直线</text>
+              <circle cx="200" cy="60" r="4" fill="#f43f5e"/>
+              <text x="205" y="60" fill="#f43f5e" font-size="11">目标点 p (无法到达!)</text>
+              <text x="180" y="172" fill="#ef4444" font-size="11" text-anchor="middle">破坏完备性 (张成不到全空间, 个数 < dim)</text>
+            </g>
+
+            <defs>
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+              </marker>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+              <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+              </marker>
+              <marker id="arrow-rose" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f43f5e"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Deep Breakdown Box for Graphic 4.3 -->
+        <div class="proof-box" style="background: rgba(52, 211, 153, 0.05); border-color: rgba(52, 211, 153, 0.3);">
+          <div class="box-title" style="color:var(--accent-green);">🔍 图 4.3 几何直觉深度拆解与代数映射</div>
+          <ul style="margin-left: 1.2rem; line-height: 1.8; font-size: 0.92rem;">
+            <li><strong>👀 图像元素逐一对应</strong>：
+              <ul>
+                <li>Panel A (绿色标记)：标准正交基 $\mathbf{e}_1, \mathbf{e}_2$，构成直角正方形格子，任意点可以通过横平竖直的步伐精准表达。</li>
+                <li>Panel B (绿色标记)：倾斜基 $\mathbf{b}_1, \mathbf{b}_2$，构成倾斜平行四边形格子。网格变形了，但同样能覆盖整个平面且路径唯一！</li>
+                <li>Panel C (红色标记)：引入第 3 个向量 $\mathbf{v}_3$，格子重叠穿插，导致从原点到某个点有成千上万种走法（表示不唯一）。</li>
+                <li>Panel D (红色标记)：单向量 $\mathbf{v}_1$ 只能在一条虚线上前后滑动，无法侧向移动，平面上绝大多数点（如红色点 $\mathbf{p}$）都无法到达。</li>
+              </ul>
+            </li>
+            <li><strong>🌐 几何与物理直觉本质</strong>：“基”就是你在空间中建立的**专属坐标网格 (Coordinate Grid)**！两根网格线不平行，就可以铺满平面；网格线多了就混乱冗余，网格线少了就塌陷缺维。</li>
+            <li><strong>📐 代数公式 1-to-1 精准推导与试金石</strong>：
+              对于 2 维平面 $\mathbb{R}^2$，两个向量 $\mathbf{v}_1 = \begin{bmatrix} a \\ c \end{bmatrix}, \mathbf{v}_2 = \begin{bmatrix} b \\ d \end{bmatrix}$ 能否构成一组基？
+              $$\text{试金石判定法：} \quad \det([\mathbf{v}_1, \mathbf{v}_2]) = \begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc \neq 0$$
+              几何上 $ad - bc$ 恰好等于基向量生成的平行四边形网格单元面积！只要面积不为 0，就必定构成合法基！
+            </li>
+          </ul>
+        </div>
+
+        <!-- SVG Graphic 4.4: Dimension Hierarchy (0D -> 1D -> 2D -> 3D) -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="720" height="180" viewBox="0 0 720 180" style="background:#090d16; border-radius:12px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- 0D Point -->
+            <g transform="translate(30, 20)">
+              <circle cx="60" cy="70" r="7" fill="#f43f5e"/>
+              <text x="60" y="115" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">0 维子空间 (Point)</text>
+              <text x="60" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">V = {0}, dim(V) = 0</text>
+              <text x="60" y="150" fill="#64748b" font-size="10" text-anchor="middle">基为空集 ∅ (0个向量)</text>
+            </g>
+
+            <line x1="170" y1="30" x2="170" y2="150" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- 1D Line -->
+            <g transform="translate(190, 20)">
+              <line x1="20" y1="100" x2="120" y2="40" stroke="#38bdf8" stroke-width="3"/>
+              <circle cx="70" cy="70" r="4" fill="#38bdf8"/>
+              <text x="70" y="115" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">1 维子空间 (Line)</text>
+              <text x="70" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">过原点直线, dim(V) = 1</text>
+              <text x="70" y="150" fill="#64748b" font-size="10" text-anchor="middle">基包含 1 个非零向量</text>
+            </g>
+
+            <line x1="340" y1="30" x2="340" y2="150" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- 2D Plane -->
+            <g transform="translate(360, 20)">
+              <polygon points="20,100 80,110 130,40 70,30" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
+              <text x="75" y="115" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle">2 维子空间 (Plane)</text>
+              <text x="75" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">过原点平面, dim(V) = 2</text>
+              <text x="75" y="150" fill="#64748b" font-size="10" text-anchor="middle">基包含 2 个无关向量</text>
+            </g>
+
+            <line x1="510" y1="30" x2="510" y2="150" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- 3D Cube -->
+            <g transform="translate(530, 20)">
+              <!-- Cube edges -->
+              <rect x="25" y="45" width="55" height="55" fill="rgba(52, 211, 153, 0.1)" stroke="#34d399" stroke-width="1.5"/>
+              <rect x="45" y="25" width="55" height="55" fill="rgba(52, 211, 153, 0.1)" stroke="#34d399" stroke-dasharray="2" stroke-width="1.5"/>
+              <line x1="25" y1="45" x2="45" y2="25" stroke="#34d399" stroke-width="1.5"/>
+              <line x1="80" y1="45" x2="100" y2="25" stroke="#34d399" stroke-width="1.5"/>
+              <line x1="25" y1="100" x2="45" y2="80" stroke="#34d399" stroke-width="1.5"/>
+              <line x1="80" y1="100" x2="100" y2="80" stroke="#34d399" stroke-width="1.5"/>
+              <text x="65" y="115" fill="#34d399" font-size="13" font-weight="bold" text-anchor="middle">3 维全空间 (Space)</text>
+              <text x="65" y="135" fill="#94a3b8" font-size="11" text-anchor="middle">R³ 立体空间, dim = 3</text>
+              <text x="65" y="150" fill="#64748b" font-size="10" text-anchor="middle">基包含 3 个不共面向量</text>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Subsection 2.4: Interactive Canvas Visualizer -->
+        <h3 class="subsection-title">2.4 🎮 动态交互实验：基向量控制与倾斜网格生成器</h3>
+        
+        <div class="visualizer-wrapper">
+          <div class="visualizer-header">
+            <div class="visualizer-title">
+              <span>📐</span> 2D 向量空间基 (Basis) 与坐标网格交互实验
+            </div>
+            <span style="font-size:0.85rem; color:var(--accent-purple);">拖动滑块调节基向量方向与模长</span>
+          </div>
+
+          <canvas id="basisCanvas" class="interactive-canvas" width="540" height="360"></canvas>
+
+          <div class="visualizer-controls">
+            <div class="control-group">
+              <label style="color:#fbbf24; font-weight:600;">向量 v₁ 角度: <span id="valV1Deg">25°</span></label>
+              <input type="range" id="sliderV1Deg" min="0" max="360" value="25">
+            </div>
+
+            <div class="control-group">
+              <label style="color:#34d399; font-weight:600;">向量 v₂ 角度: <span id="valV2Deg">115°</span></label>
+              <input type="range" id="sliderV2Deg" min="0" max="360" value="115">
+            </div>
+
+            <div class="control-group">
+              <label>网格缩放比例: <span id="valGridScale">1.0</span></label>
+              <input type="range" id="sliderGridScale" min="0.5" max="2.0" step="0.1" value="1.0">
+            </div>
+          </div>
+
+          <div style="display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; width:100%; font-size:0.9rem;">
+            <div class="stat-badge">
+              <span>网格单元面积 (det):</span>
+              <span id="statBasisDet" style="color:var(--accent-amber); font-weight:700;">+1.00</span>
+            </div>
+            <div id="statBasisStatus" class="stat-badge" style="background:rgba(52, 211, 153, 0.15); border:1px solid rgba(52, 211, 153, 0.4);">
+              <span>基的资格状态:</span>
+              <span style="color:#34d399; font-weight:700;">✅ 成功构成 R² 的合法基</span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:0.5rem;">
+            <button class="btn btn-secondary" id="btnPresetStandard" style="font-size:0.85rem;">⚡ 一键设为标准基 (90°正交)</button>
+            <button class="btn btn-secondary" id="btnPresetCollinear" style="font-size:0.85rem; color:#f43f5e; border-color:rgba(244,63,94,0.4);">⚠️ 一键制造共线退化 (det=0)</button>
+          </div>
+        </div>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const canvas = document.getElementById('basisCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+
+            const sliderV1 = document.getElementById('sliderV1Deg');
+            const sliderV2 = document.getElementById('sliderV2Deg');
+            const sliderScale = document.getElementById('sliderGridScale');
+            const valV1 = document.getElementById('valV1Deg');
+            const valV2 = document.getElementById('valV2Deg');
+            const valScale = document.getElementById('valGridScale');
+            const statDet = document.getElementById('statBasisDet');
+            const statStatus = document.getElementById('statBasisStatus');
+            const btnStandard = document.getElementById('btnPresetStandard');
+            const btnCollinear = document.getElementById('btnPresetCollinear');
+
+            const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+            const baseLen = 70;
+
+            function drawArrow(fromX, fromY, toX, toY, color, width = 3) {
+              const headLen = 10;
+              const angle = Math.atan2(toY - fromY, toX - fromX);
+              ctx.save();
+              ctx.strokeStyle = color;
+              ctx.fillStyle = color;
+              ctx.lineWidth = width;
+              ctx.beginPath();
+              ctx.moveTo(fromX, fromY);
+              ctx.lineTo(toX, toY);
+              ctx.stroke();
+
+              ctx.beginPath();
+              ctx.moveTo(toX, toY);
+              ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+              ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+              ctx.closePath();
+              ctx.fill();
+              ctx.restore();
+            }
+
+            function render() {
+              ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+              const deg1 = parseFloat(sliderV1.value);
+              const deg2 = parseFloat(sliderV2.value);
+              const scale = parseFloat(sliderScale.value);
+
+              valV1.textContent = deg1 + '°';
+              valV2.textContent = deg2 + '°';
+              valScale.textContent = scale.toFixed(1);
+
+              const rad1 = deg1 * Math.PI / 180;
+              const rad2 = deg2 * Math.PI / 180;
+
+              const v1 = { x: baseLen * scale * Math.cos(rad1), y: -baseLen * scale * Math.sin(rad1) };
+              const v2 = { x: baseLen * scale * Math.cos(rad2), y: -baseLen * scale * Math.sin(rad2) };
+
+              // Calculate determinant (normalized to grid units)
+              const u1 = { x: Math.cos(rad1), y: Math.sin(rad1) };
+              const u2 = { x: Math.cos(rad2), y: Math.sin(rad2) };
+              const detVal = u1.x * u2.y - u1.y * u2.x;
+
+              // Draw coordinate axes
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(0, origin.y); ctx.lineTo(canvas.width, origin.y);
+              ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, canvas.height);
+              ctx.stroke();
+
+              // Draw slanted grid
+              ctx.save();
+              ctx.strokeStyle = Math.abs(detVal) < 0.05 ? 'rgba(244, 63, 94, 0.15)' : 'rgba(168, 85, 247, 0.15)';
+              ctx.lineWidth = 1;
+              ctx.setLineDash([3, 3]);
+
+              for (let i = -5; i <= 5; i++) {
+                for (let j = -5; j <= 5; j++) {
+                  const startX = origin.x + i * v1.x - 5 * v2.x;
+                  const startY = origin.y + i * v1.y - 5 * v2.y;
+                  const endX = origin.x + i * v1.x + 5 * v2.x;
+                  const endY = origin.y + i * v1.y + 5 * v2.y;
+                  ctx.beginPath(); ctx.moveTo(startX, startY); ctx.lineTo(endX, endY); ctx.stroke();
+
+                  const startX2 = origin.x - 5 * v1.x + j * v2.x;
+                  const startY2 = origin.y - 5 * v1.y + j * v2.y;
+                  const endX2 = origin.x + 5 * v1.x + j * v2.x;
+                  const endY2 = origin.y + 5 * v1.y + j * v2.y;
+                  ctx.beginPath(); ctx.moveTo(startX2, startY2); ctx.lineTo(endX2, endY2); ctx.stroke();
+                }
+              }
+              ctx.restore();
+
+              // Draw basis vectors
+              drawArrow(origin.x, origin.y, origin.x + v1.x, origin.y + v1.y, '#fbbf24', 3.5);
+              drawArrow(origin.x, origin.y, origin.x + v2.x, origin.y + v2.y, '#34d399', 3.5);
+
+              ctx.font = 'bold 12px sans-serif';
+              ctx.fillStyle = '#fbbf24';
+              ctx.fillText('v₁', origin.x + v1.x + 8, origin.y + v1.y);
+              ctx.fillStyle = '#34d399';
+              ctx.fillText('v₂', origin.x + v2.x + 8, origin.y + v2.y);
+
+              // Update stats
+              statDet.textContent = (detVal >= 0 ? '+' : '') + detVal.toFixed(2);
+              if (Math.abs(detVal) < 0.05) {
+                statDet.style.color = '#f43f5e';
+                statStatus.style.background = 'rgba(244, 63, 94, 0.15)';
+                statStatus.style.borderColor = 'rgba(244, 63, 94, 0.4)';
+                statStatus.innerHTML = '<span>基的资格状态:</span><span style="color:#f43f5e; font-weight:700;">⚠️ 向量共线！det=0，退化为 1D 直线，失去基资格</span>';
+              } else {
+                statDet.style.color = '#34d399';
+                statStatus.style.background = 'rgba(52, 211, 153, 0.15)';
+                statStatus.style.borderColor = 'rgba(52, 211, 153, 0.4)';
+                statStatus.innerHTML = '<span>基的资格状态:</span><span style="color:#34d399; font-weight:700;">✅ 成功构成 R² 的合法基 (网格无缝覆盖)</span>';
+              }
+            }
+
+            sliderV1.addEventListener('input', render);
+            sliderV2.addEventListener('input', render);
+            sliderScale.addEventListener('input', render);
+
+            btnStandard.addEventListener('click', () => {
+              sliderV1.value = 0;
+              sliderV2.value = 90;
+              render();
+            });
+
+            btnCollinear.addEventListener('click', () => {
+              sliderV1.value = 45;
+              sliderV2.value = 45;
+              render();
+            });
+
+            render();
+          });
+        </script>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 👑 核心定理：基定理 (Basis Theorem) & 扩展定理</h2>
+        <p>假设我们已知子空间 $V$ 的维数是 $\dim(V) = k$：</p>
+        <div class="step-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">基定理 (Basis Theorem)</div>
+              <p>在 $k$ 维子空间中，任何包含正好 $k$ 个向量的集合，只要满足“线性无关”或“能张成 $V$”**任意一条**，它就自动满足另一条，直接晋升为一组基！</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">基扩展定理 (Extension Theorem)</div>
+              <p>在 $k$ 维子空间中，任何线性无关的向量集合 $S$（向量数 $m < k$），都可以通过在全空间中寻找不属于 $\mathrm{Span}(S)$ 的向量补充进来，**扩展成为 $V$ 的一组完整的基**！</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">子空间交集与和的维数公式定理与证明</div>
+          <p><strong>定理</strong>：设 $V_1, V_2$ 为 $\mathbb{R}^n$ 的子空间，定义其子空间和 $V_1 + V_2 = \{\mathbf{v}_1 + \mathbf{v}_2 \mid \mathbf{v}_1 \in V_1, \mathbf{v}_2 \in V_2\}$。则维数满足：</p>
+          <div class="math-block">
+            $$\dim(V_1 + V_2) = \dim(V_1) + \dim(V_2) - \dim(V_1 \cap V_2)$$
+          </div>
+          <p><strong>证明示意</strong>：取交集 $V_1 \cap V_2$ 的一组基 $\mathcal{B}_0$，将其分别扩展成 $V_1$ 的基 $\mathcal{B}_1$ 与 $V_2$ 的基 $\mathcal{B}_2$。合起来的并集即可构成 $V_1+V_2$ 的基。根据容斥原理减去重复计算的交集基数即得证！$\blacksquare$</p>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 矩阵四大基本子空间 (Four Fundamental Subspaces) 深度剖析</h2>
+        <p>对于任意 $m \times n$ 的实数矩阵 $A \in \mathbb{R}^{m \times n}$，麻省理工学院 (MIT) Gilbert Strang 教授将其总结为线性代数的核心宏观骨架。矩阵 $A$ 在定义域 $\mathbb{R}^n$ 与到达域 $\mathbb{R}^m$ 之间建立了 4 个互相对偶、正交补互补的几何基本子空间：</p>
+
+        <!-- Summary Table Card -->
+        <div class="card" style="background: rgba(15, 23, 42, 0.7); border-color: var(--border-color); padding: 1.25rem; overflow-x: auto;">
+          <h3 style="color:var(--accent-blue); font-size:1.1rem; margin-bottom:1rem; text-align:center;">📊 四大基本子空间维度、母空间与基的求法总览表</h3>
+          <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.92rem; color:var(--text-main);">
+            <thead>
+              <tr style="border-bottom: 2px solid var(--border-color); background: rgba(30, 41, 59, 0.8);">
+                <th style="padding: 0.75rem; color: var(--accent-purple);">基本子空间</th>
+                <th style="padding: 0.75rem; color: var(--accent-blue);">符号与代数定义</th>
+                <th style="padding: 0.75rem; color: var(--accent-green);">包含母空间</th>
+                <th style="padding: 0.75rem; color: var(--accent-amber);">维数 (Dimension)</th>
+                <th style="padding: 0.75rem;">一组基的获取方法</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-green);">1. 列空间 (Column Space)</td>
+                <td style="padding: 0.75rem;">$\text{Col}(A) = \{A\mathbf{x} \mid \mathbf{x} \in \mathbb{R}^n\}$</td>
+                <td style="padding: 0.75rem;">$\mathbb{R}^m$ (到达域)</td>
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-amber);">$r = \text{rank}(A)$</td>
+                <td style="padding: 0.75rem;">RREF 中主元列对应的<strong>原矩阵 $A$ 的列向量</strong></td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-blue);">2. 行空间 (Row Space)</td>
+                <td style="padding: 0.75rem;">$\text{Row}(A) = \text{Col}(A^T) \subseteq \mathbb{R}^n$</td>
+                <td style="padding: 0.75rem;">$\mathbb{R}^n$ (定义域)</td>
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-amber);">$r = \text{rank}(A)$</td>
+                <td style="padding: 0.75rem;">$\text{RREF}(A)$ 中的<strong>非零行向量</strong></td>
+              </tr>
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-purple);">3. 零空间 (Nullspace / Kernel)</td>
+                <td style="padding: 0.75rem;">$\text{Null}(A) = \{\mathbf{x} \in \mathbb{R}^n \mid A\mathbf{x} = \mathbf{0}\}$</td>
+                <td style="padding: 0.75rem;">$\mathbb{R}^n$ (定义域)</td>
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-amber);">$n - r$ (零化度)</td>
+                <td style="padding: 0.75rem;">解齐次方程 $A\mathbf{x}=\mathbf{0}$，由自由变量系数构成的基础解系</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-rose);">4. 左零空间 (Left Nullspace)</td>
+                <td style="padding: 0.75rem;">$\text{Null}(A^T) = \{\mathbf{y} \in \mathbb{R}^m \mid A^T\mathbf{y} = \mathbf{0}\}$</td>
+                <td style="padding: 0.75rem;">$\mathbb{R}^m$ (到达域)</td>
+                <td style="padding: 0.75rem; font-weight:700; color:var(--accent-amber);">$m - r$</td>
+                <td style="padding: 0.75rem;">解齐次方程 $A^T\mathbf{y}=\mathbf{0}$，或高斯-若尔当消元中左乘的行变换矩阵 $E$ 的后 $m-r$ 行</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Subsection 4.1: Geometric Meaning & Strang's Big Picture -->
+        <h3 class="subsection-title">4.1 🌐 几何含义：线性代数大一统宏观图景 (Gilbert Strang's Big Picture)</h3>
+        <p>四大基本子空间并不是孤立存在的，它们在几何上将定义域 $\mathbb{R}^n$ 与到达域 $\mathbb{R}^m$ **完全切割拆解为相互垂直的正交补子空间 (Orthogonal Complements)**：</p>
+
+        <!-- Upgraded SVG Graphic 4.2: Gilbert Strang's Big Picture -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="680" height="300" viewBox="0 0 680 300" style="background:#090d16; border-radius:12px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Left Domain Box (R^n) -->
+            <g transform="translate(20, 20)">
+              <rect x="0" y="0" width="270" height="250" fill="rgba(30, 41, 59, 0.5)" stroke="#38bdf8" stroke-width="2" rx="10"/>
+              <text x="135" y="25" fill="#38bdf8" font-size="15" font-weight="bold" text-anchor="middle">定义域 Rⁿ (n 维输入空间)</text>
+
+              <!-- Row Space (Top-Left) -->
+              <path d="M 10 40 H 260 V 135 H 10 Z" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3"/>
+              <text x="135" y="65" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">行空间 Row(A) = Col(Aᵀ)</text>
+              <text x="135" y="85" fill="#94a3b8" font-size="12" text-anchor="middle">维数 dim = r (矩阵的秩)</text>
+              <text x="135" y="105" fill="#34d399" font-size="11" text-anchor="middle">x_row ↔ A x_row (一对一且满射!)</text>
+
+              <!-- Orthogonal Line Divider -->
+              <line x1="10" y1="140" x2="260" y2="140" stroke="#f43f5e" stroke-width="2"/>
+              <text x="250" y="135" fill="#f43f5e" font-size="14" font-weight="bold">⊥</text>
+
+              <!-- Nullspace (Bottom-Left) -->
+              <path d="M 10 145 H 260 V 240 H 10 Z" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="3"/>
+              <text x="135" y="175" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle">零空间 Null(A)</text>
+              <text x="135" y="195" fill="#94a3b8" font-size="12" text-anchor="middle">维数 dim = n - r (零化度)</text>
+              <text x="135" y="215" fill="#ef4444" font-size="11" text-anchor="middle">x_null 映射全被压缩归零 0</text>
+            </g>
+
+            <!-- Mapping Arrow A -->
+            <g transform="translate(300, 100)">
+              <path d="M 0 30 L 70 30" stroke="#4ade80" stroke-width="4" marker-end="url(#arrow-big-green)"/>
+              <text x="35" y="15" fill="#4ade80" font-size="16" font-weight="bold" text-anchor="middle">A (矩阵乘法)</text>
+              <text x="35" y="50" fill="#94a3b8" font-size="11" text-anchor="middle">行空间 1-to-1 变换</text>
+            </g>
+
+            <!-- Right Codomain Box (R^m) -->
+            <g transform="translate(390, 20)">
+              <rect x="0" y="0" width="270" height="250" fill="rgba(30, 41, 59, 0.5)" stroke="#4ade80" stroke-width="2" rx="10"/>
+              <text x="135" y="25" fill="#4ade80" font-size="15" font-weight="bold" text-anchor="middle">到达域 Rᵐ (m 维输出空间)</text>
+
+              <!-- Column Space (Top-Right) -->
+              <path d="M 10 40 H 260 V 135 H 10 Z" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3"/>
+              <text x="135" y="65" fill="#4ade80" font-size="14" font-weight="bold" text-anchor="middle">列空间 Col(A) = Range(A)</text>
+              <text x="135" y="85" fill="#94a3b8" font-size="12" text-anchor="middle">维数 dim = r (矩阵的秩)</text>
+              <text x="135" y="105" fill="#34d399" font-size="11" text-anchor="middle">所有合法输出 A x 落地于此</text>
+
+              <!-- Orthogonal Line Divider -->
+              <line x1="10" y1="140" x2="260" y2="140" stroke="#f43f5e" stroke-width="2"/>
+              <text x="250" y="135" fill="#f43f5e" font-size="14" font-weight="bold">⊥</text>
+
+              <!-- Left Nullspace (Bottom-Right) -->
+              <path d="M 10 145 H 260 V 240 H 10 Z" fill="rgba(251, 191, 36, 0.12)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3"/>
+              <text x="135" y="175" fill="#fbbf24" font-size="14" font-weight="bold" text-anchor="middle">左零空间 Null(Aᵀ)</text>
+              <text x="135" y="195" fill="#94a3b8" font-size="12" text-anchor="middle">维数 dim = m - r</text>
+              <text x="135" y="215" fill="#fbbf24" font-size="11" text-anchor="middle">垂直于 Col(A) 的残差误差空间</text>
+            </g>
+
+            <defs>
+              <marker id="arrow-big-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Deep Breakdown Box for Graphic 4.2 -->
+        <div class="proof-box" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">🔍 图 4.2 几何直觉深度拆解与正交补直和分解</div>
+          <ul style="margin-left: 1.2rem; line-height: 1.8; font-size: 0.92rem;">
+            <li><strong>👀 图像元素逐一对应</strong>：
+              <ul>
+                <li>左侧定义域 $\mathbb{R}^n$ 被分割为两块：上半部分为行空间 $\text{Row}(A)$，下半部分为零空间 $\text{Null}(A)$，二者中间被红色垂直符号 $\perp$ 隔开。</li>
+                <li>右侧到达域 $\mathbb{R}^m$ 被分割为两块：上半部分为列空间 $\text{Col}(A)$，下半部分为左零空间 $\text{Null}(A^T)$。</li>
+                <li>绿色粗箭头代表矩阵乘法变换 $A$ 的几何作用。</li>
+              </ul>
+            </li>
+            <li><strong>🌐 几何与物理直觉本质（正交补直和分解）</strong>：
+              <br>1. <strong>定义域分解</strong>：任意输入向量 $\mathbf{x} \in \mathbb{R}^n$ 都可以正交分解为 $\mathbf{x} = \mathbf{x}_{\text{row}} + \mathbf{x}_{\text{null}}$。矩阵作用后，$A\mathbf{x} = A\mathbf{x}_{\text{row}} + A\mathbf{x}_{\text{null}} = A\mathbf{x}_{\text{row}} + \mathbf{0} = A\mathbf{x}_{\text{row}}$。零空间分量被彻底抹去，<strong>只有行空间分量真正决定了输出！</strong>
+              <br>2. <strong>一对一双射</strong>：$A$ 将 $r$ 维的行空间 $\text{Row}(A)$ **一对一且无损**地映射到 $r$ 维的列空间 $\text{Col}(A)$ 上（在行空间内部，变换是可逆的）。
+              <br>3. <strong>正交补定理</strong>：在 $\mathbb{R}^n$ 中，$\text{Row}(A)^\perp = \text{Null}(A)$（零空间就是行空间的正交补）；在 $\mathbb{R}^m$ 中，$\text{Col}(A)^\perp = \text{Null}(A^T)$（左零空间就是列空间的正交补）。
+            </li>
+            <li><strong>📐 维数守恒恒等式</strong>：
+              $$\dim(\text{Row}(A)) + \dim(\text{Null}(A)) = r + (n - r) = n \quad (\text{定义域总维度})$$
+              $$\dim(\text{Col}(A)) + \dim(\text{Null}(A^T)) = r + (m - r) = m \quad (\text{到达域总维度})$$
+            </li>
+          </ul>
+        </div>
+
+        <!-- Subsection 4.2: Step-by-Step Worked Numerical Example -->
+        <h3 class="subsection-title">4.2 ✍️ 手把手手算数值例题：四大基本子空间基与维数完整推导</h3>
+        
+        <div class="proof-box" style="background: rgba(192, 132, 252, 0.05); border-color: rgba(192, 132, 252, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">🧪 经典手算例题：对 $3 \times 4$ 矩阵求解四大基本子空间的基与维数</div>
+          <p><strong>已知矩阵</strong> $A = \begin{bmatrix} 1 & 2 & 0 & 1 \\ 2 & 4 & 1 & 4 \\ 3 & 6 & 1 & 5 \end{bmatrix} \in \mathbb{R}^{3 \times 4}$，试完整求出 $\text{Col}(A), \text{Row}(A), \text{Null}(A), \text{Null}(A^T)$ 的一组基与维数。</p>
+
+          <p style="color:var(--accent-blue); font-weight:700; margin-top:1rem;">第一步：高斯消元求出行最简形 $\text{RREF}(A)$</p>
+          <div class="math-block">
+            $$A = \begin{bmatrix} 1 & 2 & 0 & 1 \\ 2 & 4 & 1 & 4 \\ 3 & 6 & 1 & 5 \end{bmatrix} \xrightarrow{R_2 - 2R_1, R_3 - 3R_1} \begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 1 & 2 \end{bmatrix} \xrightarrow{R_3 - R_2} \underbrace{\begin{bmatrix} 1 & 2 & 0 & 1 \\ 0 & 0 & 1 & 2 \\ 0 & 0 & 0 & 0 \end{bmatrix}}_{\text{RREF}(A)}$$
+          </div>
+          <p>观察得出：主元位于<strong>第 1 列与第 3 列</strong>（$r = \text{rank}(A) = 2$），自由变量为 $x_2, x_4$。</p>
+
+          <hr style="border:0; border-top:1px dashed var(--border-color); margin:1rem 0;">
+
+          <ul style="margin-left: 1.5rem; line-height: 1.9;">
+            <li>
+              <strong>1. 列空间 $\text{Col}(A) \subseteq \mathbb{R}^3$ 的基与维数</strong>：
+              <br>取原矩阵 $A$ 中主元列（第 1、3 列）：
+              $$\mathcal{B}_{\text{Col}} = \left\{ \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix} \right\}, \quad \dim(\text{Col}(A)) = r = 2$$
+            </li>
+            <li>
+              <strong>2. 行空间 $\text{Row}(A) \subseteq \mathbb{R}^4$ 的基与维数</strong>：
+              <br>取 $\text{RREF}(A)$ 中的非零行向量（转置为列）：
+              $$\mathcal{B}_{\text{Row}} = \left\{ \begin{bmatrix} 1 \\ 2 \\ 0 \\ 1 \end{bmatrix}, \begin{bmatrix} 0 \\ 0 \\ 1 \\ 2 \end{bmatrix} \right\}, \quad \dim(\text{Row}(A)) = r = 2$$
+            </li>
+            <li>
+              <strong>3. 零空间 $\text{Null}(A) \subseteq \mathbb{R}^4$ 的基与维数</strong>：
+              <br>求解齐次方程 $\text{RREF}(A) \mathbf{x} = \mathbf{0} \implies \begin{cases} x_1 + 2x_2 + x_4 = 0 \implies x_1 = -2x_2 - x_4 \\ x_3 + 2x_4 = 0 \implies x_3 = -2x_4 \end{cases}$
+              $$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix} = x_2 \begin{bmatrix} -2 \\ 1 \\ 0 \\ 0 \end{bmatrix} + x_4 \begin{bmatrix} -1 \\ 0 \\ -2 \\ 1 \end{bmatrix} \implies \mathcal{B}_{\text{Null}} = \left\{ \begin{bmatrix} -2 \\ 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} -1 \\ 0 \\ -2 \\ 1 \end{bmatrix} \right\}, \quad \dim(\text{Null}(A)) = 4 - 2 = 2$$
+            </li>
+            <li>
+              <strong>4. 左零空间 $\text{Null}(A^T) \subseteq \mathbb{R}^3$ 的基与维数</strong>：
+              <br>求解 $A^T \mathbf{y} = \mathbf{0} \iff \mathbf{y}^T A = \mathbf{0}^T$。解得 $\mathbf{y} = c \begin{bmatrix} -1 \\ -1 \\ 1 \end{bmatrix}$：
+              $$\mathcal{B}_{\text{Null}(A^T)} = \left\{ \begin{bmatrix} -1 \\ -1 \\ 1 \end{bmatrix} \right\}, \quad \dim(\text{Null}(A^T)) = m - r = 3 - 2 = 1$$
+            </li>
+          </ul>
+
+          <p style="color:var(--accent-green); font-weight:700; margin-top:1rem;">
+            ✅ 正交性硬核验证：
+            <br>● $\mathbf{x}_{\text{null}1} \cdot \mathbf{r}_1 = (-2)(1) + 1(2) + 0(0) + 0(1) = 0$ ✔ （零空间垂直于行空间）
+            <br>● $\mathbf{y}_{\text{left}} \cdot \mathbf{c}_1 = (-1)(1) + (-1)(2) + 1(3) = 0$ ✔ （左零空间垂直于列空间）
+          </p>
+        </div>
+
+        <!-- Subsection 4.3: Practical Applications & Uses -->
+        <h3 class="subsection-title">4.3 🚀 实际工程应用与用途深度剖析</h3>
+        <p>四大基本子空间在数据科学、机器学习、物理仿真与电路分析中拥有至关重要的应用价值：</p>
+
+        <div class="grid-2">
+          <!-- Col(A) Application -->
+          <div class="concept-box">
+            <div class="box-title">1. 列空间 $\text{Col}(A)$ 的用途：解的存在性与生成模型</div>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.9rem;">
+              <li><strong>解的存在性黄金法则</strong>：线性方程组 $A\mathbf{x} = \mathbf{b}$ 有解，当且仅当目标向量 $\mathbf{b} \in \text{Col}(A)$。若 $\mathbf{b} \notin \text{Col}(A)$，方程组绝对无解。</li>
+              <li><strong>机器学习潜在空间 (Latent Space)</strong>：在生成对抗网络 (GAN) 和变分自编码器 (VAE) 中，矩阵/生成网络将低维隐码 $\mathbf{z}$ 映射出高维图像 $\mathbf{x} = G(\mathbf{z})$。所有能生成的逼真图像集合就是生成器的列空间！</li>
+            </ul>
+          </div>
+
+          <!-- Null(A) Application -->
+          <div class="concept-box">
+            <div class="box-title">2. 零空间 $\text{Null}(A)$ 的用途：通解结构与机械冗余</div>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.9rem;">
+              <li><strong>方程组通解刻画</strong>：非齐次方程 $A\mathbf{x} = \mathbf{b}$ 的通解永远表示为特解加零空间通解：$\mathbf{x} = \mathbf{x}_p + \mathbf{x}_h \ (\mathbf{x}_h \in \text{Null}(A))$。零空间的大小决定了解的不唯一程度。</li>
+              <li><strong>机器人学与结构力学</strong>：机械臂的冗余自由度关节对应运动学矩阵的零空间。在零空间方向上的运动不会改变末端执行器的位置（实现“避障无感微调”）。</li>
+            </ul>
+          </div>
+
+          <!-- Row(A) Application -->
+          <div class="concept-box">
+            <div class="box-title">3. 行空间 $\text{Row}(A)$ 的用途：有效信息捕获与压缩感知</div>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.9rem;">
+              <li><strong>唯一对偶映射空间</strong>：矩阵 $A$ 对输入的任何作用，本质上只“看得到”输入向量在行空间 $\text{Row}(A)$ 上的投影。零空间分量全被忽略。</li>
+              <li><strong>压缩感知 (Compressed Sensing) 与 PCA</strong>：在数据降维中，通过提取行空间的正交基，能够用最少的测量维度精准保留信号的核心特征能量。</li>
+            </ul>
+          </div>
+
+          <!-- Null(A^T) Application -->
+          <div class="concept-box">
+            <div class="box-title">4. 左零空间 $\text{Null}(A^T)$ 的用途：最小二乘残差与 KCL 电路</div>
+            <ul style="margin-left: 1.2rem; line-height: 1.7; font-size: 0.9rem;">
+              <li><strong>最小二乘法 (Least Squares) 残差垂直性</strong>：当 $A\mathbf{x} = \mathbf{b}$ 无解时（$\mathbf{b} \notin \text{Col}(A)$），最优估计 $\hat{\mathbf{x}}$ 产生的残差向量 $\mathbf{e} = \mathbf{b} - A\hat{\mathbf{x}}$ 必须正交垂直于列空间，即<strong>残差向量必然落在左零空间中</strong>：$(\mathbf{b} - A\hat{\mathbf{x}}) \in \text{Null}(A^T)$！</li>
+              <li><strong>电路基尔霍夫电流定律 (KCL)</strong>：在图论矩阵中，关联矩阵的左零空间基恰好对应电路网络中的独立节点电流平衡方程。</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Section 6: Interactive Quiz Accordion -->
+        <h2 class="section-title">6. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：一个包含零向量的向量集合 $\mathcal{S}$ 能否构成子空间的一组基？</div>
+          <p>假设集合 $\mathcal{S} = \{\mathbf{v}_1, \mathbf{v}_2, \mathbf{0}\}$。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：绝对不能！</strong></p>
+              <p>解析：因为零向量可以由零系数以外的方式得到（如 $0 \mathbf{v}_1 + 0 \mathbf{v}_2 + 1 \mathbf{0} = \mathbf{0}$，存在不全为零的系数 1），因此**任何包含零向量的集合必然线性相关**！违反了基的第一条金字招牌条件（线性无关）。$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 7: Python Practice -->
+        <h2 class="section-title">7. 💻 编程实战：用 Python / SymPy 计算子空间基与维数</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import sympy as sp
+
+A = sp.Matrix([
+    [1, 2, 1, 3],
+    [2, 4, 0, 4],
+    [3, 6, 1, 7]
+])
+
+print("列空间基 (Column Space Basis):\n", A.columnspace())
+print("零空间基 (Null Space Basis):\n", A.nullspace())
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module3_matrix_transforms_inverse.html" class="btn-nav prev">← 上一模块：矩阵视角与可逆性</a>
+          <a href="module5_determinant_cramer.html" class="btn-nav next">下一模块：行列式体积与克莱姆法则 →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

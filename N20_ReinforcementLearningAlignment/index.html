@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N20 强化学习与对齐理论 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(244, 63, 94, 0.1) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-amber); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(245, 158, 11, 0.1); border-color: var(--accent-amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N20 · Level 3 前沿理论</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N20 · 强化学习与对齐理论</span>
+      <h1>强化学习与对齐理论 (RL & Alignment Theory)</h1>
+      <p style="color: var(--text-secondary);">大模型人类偏好对齐与自博弈强化。MDP 马尔可夫过程、PPO/RLHF、DPO 与 GRPO。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Sutton & Barto: Reinforcement Learning</span>
+        <span class="badge">📖 Lattimore: Bandit Algorithms</span>
+        <span class="badge">📄 Ouyang et al. (NeurIPS 2022) InstructGPT</span>
+        <span class="badge">📄 Rafailov et al. (NeurIPS 2023) DPO</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>大语言模型预训练就像看遍了图书馆（学到了海量语法与知识），而后训练对齐则是教它学会如何做人与回答：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>RLHF (人类反馈强化学习)</strong>：训练一个 Reward Model 模拟人类的偏好与品味。大模型回答好则发“奖学金”（高 Reward），回答带有危害性则“罚款”。</li>
+        <li><strong>KL 散度约束（防止 Reward Hacking）</strong>：如果只追求打高分，模型很快会学会溜须拍马或重复高分废话（奖励篡改）。引入对基座模型的 KL 散度惩罚，保证模型不偏离预训练知识空间。</li>
+        <li><strong>DPO (Direct Preference Optimization)</strong>：数学上证明了语言模型本身就是一个隐式 Reward 模型！无需单独训练复杂的 Reward 神经网络与 PPO 规则，直接在偏好数据对 $(y_w, y_l)$ 上优化交叉熵。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>RLHF 带有 KL 约束的凸优化目标函数与 DPO 解析推导：</p>
+      <div class="math-callout">
+        $$\max_{\pi_\theta} \mathbb{E}_{(x, y) \sim D} [R(x, y)] - \beta D_{KL}(\pi_\theta(y|x) || \pi_{\text{ref}}(y|x))$$
+      </div>
+      <p style="color: var(--text-secondary);">最优策略解解析表达 $R(x,y) = \beta \log \frac{\pi^*(y|x)}{\pi_{\text{ref}}(y|x)} + \beta \log Z(x)$。将其带入 Bradley-Terry 偏好模型直接推出 DPO 损失：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{DPO}}(\theta) = -\mathbb{E}_{(x, y_w, y_l)} \left[ \log \sigma \left( \beta \log \frac{\pi_\theta(y_w|x)}{\pi_{\text{ref}}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{\text{ref}}(y_l|x)} \right) \right]$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文一：Training language models to follow instructions with human feedback (InstructGPT, Ouyang et al., NeurIPS 2022)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 划时代论文！提出了经典的 SFT -> Reward Model -> PPO 强化学习三阶段对齐范式，使 GPT-3 跃升为遵循人类指令的 ChatGPT。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文二：Direct Preference Optimization: Your Language Model is Secretly a Reward Model (DPO, Rafailov et al., NeurIPS 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 颠覆性革新！数学推导出包含 KL 约束的策略优化在全局最优处与基座概率比值的对偶解，省去了额外的 Reward Model 与 PPO 采样，极大降低了对齐复杂度。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>DeepSeek-R1 / GRPO (Group Relative Policy Optimization) 组相对策略优化算子：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{GRPO}}(\theta) = \frac{1}{G} \sum_{i=1}^G \left( \frac{\pi_\theta(y_i|x)}{\pi_{\text{old}}(y_i|x)} \hat{A}_i - \beta D_{KL}(\pi_\theta || \pi_{\text{ref}}) \right), \quad \hat{A}_i = \frac{r_i - \text{mean}(r)}{\text{std}(r)}$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        GRPO 抛弃了内存昂贵的 Critic 网络，对同一个 Prompt 采样 $G$ 个候选回答，利用内部打分的相对均值与标准差计算 Advantage $\hat{A}_i$，驱动推理模型实现强大的自博弈强化进化。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Sutton & Barto (Chapter 13: Policy Gradient Methods)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：在 DPO (Direct Preference Optimization) 中，为什么不需要单独显式训练一个奖励网络 (Reward Model)？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！DPO 从带 KL 约束的强化学习目标中，反向解出了隐式 Reward 与策略概率比值的闭式关系 $R(x,y) = \beta \log \frac{\pi_\theta(y|x)}{\pi_{\text{ref}}(y|x)}$，因而语言模型本身直接充当了隐式奖励函数！')">
+          A. 数学上证明了策略网络本身可以隐式再现奖励函数 $R(x,y) = \beta \log \frac{\pi(y|x)}{\pi_{\text{ref}}(y|x)}$，从而将对齐转化为直接在偏好数据上的交叉熵分类。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，DPO 依然考虑了人类偏好选择。')">
+          B. 因为 DPO 不需要偏好数据集。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

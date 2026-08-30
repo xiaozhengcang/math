@@ -3,1670 +3,298 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>第一阶段：代数与运算底座 —— 维度直觉与几何本质</title>
+  <title>AI & 现代数学前沿理论知识图谱 (N01 - N23) 全景学习门户</title>
+  <meta name="description" content="全景式展现从高维线性代数到超大模型复杂系统 Scaling Laws 的 23 个核心数学节点，涵盖几何直觉、经典教材、必读论文与 AI 落地场景。" />
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
   
-  <!-- KaTeX for beautiful LaTeX rendering in HTML -->
+  <!-- KaTeX for math LaTeX rendering -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false},
-        {left: '\\(', right: '\\)', display: false},
-        {left: '\\[', right: '\\]', display: true}
-      ],
-      throwOnError: false
-    });"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 
-  <style>
-    :root {
-      --bg-primary: #0a0e17;
-      --bg-secondary: #111827;
-      --bg-card: rgba(19, 27, 46, 0.75);
-      --bg-card-hover: rgba(28, 39, 66, 0.85);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-glow: rgba(99, 102, 241, 0.35);
-      
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --text-muted: #64748b;
-      
-      --accent-indigo: #6366f1;
-      --accent-blue: #38bdf8;
-      --accent-cyan: #06b6d4;
-      --accent-emerald: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-rose: #f43f5e;
-      --accent-purple: #a855f7;
-      
-      --gradient-brand: linear-gradient(135deg, #6366f1 0%, #38bdf8 50%, #10b981 100%);
-      --gradient-card: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%);
-      
-      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
-      --font-mono: 'Fira Code', monospace;
-      
-      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
-      --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      font-family: var(--font-sans);
-      line-height: 1.75;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 15%, rgba(56, 189, 248, 0.12) 0px, transparent 40%),
-        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.09) 0px, transparent 50%);
-      background-attachment: fixed;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* KaTeX customization */
-    .katex {
-      font-size: 1.1em !important;
-      color: #f1f5f9;
-    }
-    .katex-display {
-      margin: 1.2rem 0 !important;
-      overflow-x: auto;
-      overflow-y: hidden;
-      padding: 0.5rem 0;
-    }
-    .katex-display > .katex {
-      white-space: normal;
-    }
-
-    /* Top Progress Bar */
-    #progress-bar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      background: var(--gradient-brand);
-      width: 0%;
-      z-index: 100;
-      transition: width 0.1s ease;
-    }
-
-    /* Navigation */
-    header {
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      background: rgba(10, 14, 23, 0.85);
-      border-bottom: 1px solid var(--border-color);
-      z-index: 50;
-      padding: 1rem 2rem;
-    }
-
-    .nav-container {
-      max-width: 1240px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-weight: 800;
-      font-size: 1.25rem;
-      letter-spacing: -0.02em;
-      background: var(--gradient-brand);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .brand-badge {
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: var(--accent-blue);
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 9999px;
-      -webkit-text-fill-color: var(--accent-blue);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.25rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--text-secondary);
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      padding: 0.3rem 0.6rem;
-      border-radius: 6px;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    /* Hero Section */
-    .hero {
-      max-width: 1240px;
-      margin: 3.5rem auto 2.5rem;
-      padding: 0 1.5rem;
-      text-align: center;
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      padding: 0.35rem 1rem;
-      border-radius: 9999px;
-      color: var(--accent-indigo);
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero h1 {
-      font-size: clamp(2rem, 4.5vw, 3.25rem);
-      font-weight: 800;
-      line-height: 1.25;
-      letter-spacing: -0.03em;
-      margin-bottom: 1.25rem;
-    }
-
-    .hero h1 span {
-      background: var(--gradient-brand);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      font-size: 1.15rem;
-      color: var(--text-secondary);
-      max-width: 850px;
-      margin: 0 auto 2rem;
-    }
-
-    .goals-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-top: 2rem;
-      text-align: left;
-    }
-
-    .goal-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.4rem 1.6rem;
-      backdrop-filter: blur(12px);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .goal-card:hover {
-      transform: translateY(-3px);
-      border-color: var(--border-glow);
-    }
-
-    .goal-card .icon {
-      font-size: 1.6rem;
-      margin-bottom: 0.5rem;
-      display: inline-block;
-    }
-
-    .goal-card h3 {
-      font-size: 1.1rem;
-      color: var(--text-primary);
-      margin-bottom: 0.4rem;
-    }
-
-    .goal-card p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      margin: 0;
-      line-height: 1.6;
-    }
-
-    /* Main Container */
-    main {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 1.5rem 6rem;
-    }
-
-    .section-container {
-      margin-bottom: 4.5rem;
-      scroll-margin-top: 5.5rem;
-    }
-
-    .section-header {
-      margin-bottom: 1.8rem;
-    }
-
-    .section-num {
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      color: var(--accent-cyan);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      display: block;
-    }
-
-    .section-title {
-      font-size: 1.85rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    /* Glass Cards */
-    .glass-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 2.2rem;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 2rem;
-      position: relative;
-    }
-
-    .card-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    /* Formula & Latex Boxes */
-    .math-callout {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-left: 4px solid var(--accent-indigo);
-      border-radius: 12px;
-      padding: 1.25rem 1.6rem;
-      margin: 1.25rem 0;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
-    }
-
-    .math-callout.emerald-border {
-      border-left-color: var(--accent-emerald);
-      background: rgba(6, 36, 28, 0.35);
-    }
-
-    .math-callout.blue-border {
-      border-left-color: var(--accent-blue);
-      background: rgba(12, 30, 56, 0.35);
-    }
-
-    .math-callout.amber-border {
-      border-left-color: var(--accent-amber);
-      background: rgba(45, 30, 10, 0.35);
-    }
-
-    .math-callout.purple-border {
-      border-left-color: var(--accent-purple);
-      background: rgba(40, 15, 60, 0.35);
-    }
-
-    /* Interactive Canvas Container */
-    .interactive-container {
-      display: grid;
-      grid-template-columns: 1fr 340px;
-      gap: 1.5rem;
-      background: rgba(10, 14, 26, 0.85);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    @media (max-width: 900px) {
-      .interactive-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .canvas-wrapper {
-      position: relative;
-      background: #080c14;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 380px;
-    }
-
-    canvas {
-      display: block;
-      cursor: crosshair;
-    }
-
-    .controls-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      justify-content: center;
-    }
-
-    .control-group {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 1rem;
-    }
-
-    .control-group label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-    }
-
-    .control-group label span {
-      font-family: var(--font-mono);
-      color: var(--accent-blue);
-    }
-
-    input[type="range"] {
-      width: 100%;
-      height: 6px;
-      background: #1e293b;
-      border-radius: 3px;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: var(--accent-indigo);
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--accent-indigo);
-      transition: transform 0.1s;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-    }
-
-    .stat-badge {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.6rem 0.8rem;
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.9rem;
-      margin-top: 0.4rem;
-    }
-
-    /* Comparison Dual Columns */
-    .dual-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin: 1.5rem 0;
-    }
-
-    @media (max-width: 850px) {
-      .dual-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .perspective-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.6rem;
-      position: relative;
-    }
-
-    .perspective-card.highlight-card {
-      border-color: rgba(99, 102, 241, 0.45);
-      background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 75%);
-    }
-
-    .perspective-badge {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      margin-bottom: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .badge-blue { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
-    .badge-emerald { background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); }
-    .badge-amber { background: rgba(245, 158, 11, 0.15); color: var(--accent-amber); }
-    .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); }
-
-    /* Step-by-Step Derivation Box */
-    .step-box {
-      border-left: 2px dashed rgba(255, 255, 255, 0.15);
-      margin-left: 1rem;
-      padding-left: 1.75rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1.8rem;
-      margin-top: 1.8rem;
-    }
-
-    .step-item {
-      position: relative;
-    }
-
-    .step-item::before {
-      content: "";
-      position: absolute;
-      left: calc(-1.75rem - 6px);
-      top: 6px;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent-indigo);
-      box-shadow: 0 0 10px var(--accent-indigo);
-    }
-
-    .step-title {
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: var(--text-primary);
-      margin-bottom: 0.4rem;
-    }
-
-    .step-desc {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-    }
-
-    /* Dimension Tool Interactive */
-    .dimension-tool {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin: 1.5rem 0;
-      text-align: center;
-    }
-
-    .matrix-dim-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin: 1.5rem 0;
-      font-family: var(--font-mono);
-      font-size: 1.25rem;
-    }
-
-    .matrix-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: rgba(30, 41, 59, 0.6);
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 0.75rem 1.25rem;
-      transition: all 0.3s ease;
-    }
-
-    .matrix-box.active-inner {
-      border-color: var(--accent-amber);
-      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
-    }
-
-    .matrix-box.active-outer {
-      border-color: var(--accent-emerald);
-      box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-    }
-
-    .dim-pill {
-      font-size: 0.85rem;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      margin-top: 0.35rem;
-    }
-
-    .pill-amber { background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
-    .pill-emerald { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); }
-    .pill-blue { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
-
-    /* Quiz */
-    .quiz-container {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .quiz-question {
-      font-weight: 600;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .quiz-options {
-      display: grid;
-      gap: 0.75rem;
-    }
-
-    .quiz-btn {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: var(--text-primary);
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      text-align: left;
-      cursor: pointer;
-      font-family: var(--font-sans);
-      font-size: 0.95rem;
-      transition: all 0.2s ease;
-    }
-
-    .quiz-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .quiz-btn.correct {
-      background: rgba(16, 185, 129, 0.2) !important;
-      border-color: var(--accent-emerald) !important;
-      color: #34d399 !important;
-    }
-
-    .quiz-btn.wrong {
-      background: rgba(244, 63, 94, 0.2) !important;
-      border-color: var(--accent-rose) !important;
-      color: #fb7185 !important;
-    }
-
-    .quiz-feedback {
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      display: none;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent-indigo);
-      color: #fff;
-      font-weight: 600;
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-      background: #4f46e5;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: var(--text-primary);
-    }
-
-    footer {
-      border-top: 1px solid var(--border-color);
-      text-align: center;
-      padding: 3rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-    }
-
-    @media (max-width: 640px) {
-      .nav-links { display: none; }
-      .glass-card { padding: 1.25rem; }
-    }
-  </style>
+  <!-- Global Stylesheet -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Reading Progress Bar -->
-  <div id="progress-bar"></div>
+  <!-- Top Scroll Progress Indicator -->
+  <div id="scroll-progress"></div>
 
-  <!-- Header Navigation -->
+  <!-- Sticky Glass Header Navigation -->
   <header>
     <div class="nav-container">
-      <div class="brand-logo">
-        <span>📐 机器学习数学底座</span>
-        <span class="brand-badge">Week 1 · 代数与运算</span>
+      <a href="#" class="brand-logo">
+        <span>📐 AI 现代数学全景图谱</span>
+        <span class="brand-tag">N01 - N23 全维体系</span>
+      </a>
+
+      <div class="nav-controls">
+        <!-- Live Search Box -->
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="搜索节点、公式、论文或 AI 应用...">
+        </div>
+
+        <!-- Progress Tracker Badge -->
+        <div class="progress-tracker-badge">
+          <span>🏆</span>
+          <span id="progressBadgeText">0/23 打卡 (0%)</span>
+        </div>
       </div>
-      <ul class="nav-links">
-        <li><a href="#dot-product">1. 向量内积</a></li>
-        <li><a href="#matrix-multiply">2. 矩阵乘法双重视角</a></li>
-        <li><a href="#dimension-rule">3. 维度守恒法则</a></li>
-        <li><a href="#transpose-scalar">4. 转置与几何对偶</a></li>
-        <li><a href="#derivation-practice">5. 核心推导实战</a></li>
-        <li><a href="attention.html" style="color: #f43f5e; font-weight: 600; background: rgba(244, 63, 94, 0.1);">🌟 Attention 几何</a></li>
-      </ul>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-tag">🚀 第一阶段核心目标</div>
-    <h1>建立<span>维度直觉</span>与熟练掌握<span>代数法则</span></h1>
-    <p>深度整合高质量 LaTeX 排版与严密矩阵对齐展示，通过交互式可视化图形、物理几何投影、伴随算子对偶与分步代数推导，真正建立高维线性代数的直觉底座。</p>
+  <!-- Main Portal Layout -->
+  <main>
+    <!-- Hero Banner -->
+    <section class="hero">
+      <div class="hero-pill">🚀 AGI 时代底层数学筑基计划</div>
+      <h1>重塑 <span>AI & 现代数学</span> 知识演进图谱</h1>
+      <p>
+        从先修代数与微积分（Level 0），到连续泛函、优化与测度（Level 1），深度网络动力学与生成流形（Level 2），进而攀登至大语言模型数学建模、推理搜索与强化对齐（Level 3），最终收敛于复杂系统 Scaling Laws（顶层目标 N23）。
+      </p>
+    </section>
 
-    <div class="goals-grid">
-      <div class="goal-card">
-        <div class="icon">🎯</div>
-        <h3>几何直觉 (Dot Product)</h3>
-        <p>理解点积不仅是 $\mathbf{x}^T \mathbf{y} = \sum x_i y_i$，更是投影长度与基准长度的乘积，一眼看透正交与相似度。</p>
+    <!-- SECTION 1: Interactive DAG Topology Canvas -->
+    <section id="dag-view" class="dag-section">
+      <div class="dag-header">
+        <div class="section-title">
+          <span>🌐</span> N01~N23 动态拓扑依赖网络 (DAG Topology Graph)
+        </div>
+
+        <!-- Level Legend -->
+        <div class="dag-legend">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--color-level-0);"></span> Level 0 先修基础
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--color-level-1);"></span> Level 1 核心工具
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--color-level-2);"></span> Level 2 模型与几何
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--color-level-3);"></span> Level 3 前沿理论
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--color-level-4);"></span> 顶层目标 N23
+          </div>
+        </div>
       </div>
-      <div class="goal-card">
-        <div class="icon">🧩</div>
-        <h3>列视角 (Linear Combination)</h3>
-        <p>掌握 $\mathbf{R}\mathbf{w} = \sum w_k \mathbf{r}_k$ 的加权求和本质，看清输出向量永远在矩阵的列空间内。</p>
+
+      <div class="canvas-wrapper">
+        <canvas id="dagCanvas"></canvas>
+
+        <!-- Canvas Floating Controls -->
+        <div class="dag-overlay-toolbar">
+          <button class="tool-btn" id="zoomIn" title="放大 (+)">＋</button>
+          <button class="tool-btn" id="zoomOut" title="缩小 (-)">－</button>
+          <button class="tool-btn" id="zoomReset" title="重置视角">⟲</button>
+        </div>
       </div>
-      <div class="goal-card">
-        <div class="icon">⚖️</div>
-        <h3>转置对偶与反序律</h3>
-        <p>从伴随算子 $(\mathbf{A}\mathbf{x}) \cdot \mathbf{y} = \mathbf{x} \cdot (\mathbf{A}^T \mathbf{y})$ 到 $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$，透彻掌握空间变换的逆向与对偶。</p>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; text-align: center;">
+        💡 <strong>交互指南：</strong> 鼠标悬停节点可高亮溯源前置依赖与后继输出流向；拖拽画布或滚轮进行平移/缩放；点击任意节点节点触发详细研讨模态框。
+      </p>
+    </section>
+
+    <!-- SECTION 2: Hierarchical Roadmap View -->
+    <section id="roadmap-view" class="roadmap-section">
+      <div class="section-title-wrapper">
+        <div class="section-title">
+          <span>🛣️</span> 知识模块分层航道 (Roadmap Navigator)
+        </div>
+
+        <!-- Level Filter Buttons -->
+        <div class="level-filter-bar">
+          <button class="filter-btn active" data-filter="all">全部节点 (23)</button>
+          <button class="filter-btn" data-filter="level-0">Level 0 先修</button>
+          <button class="filter-btn" data-filter="level-1">Level 1 工具</button>
+          <button class="filter-btn" data-filter="level-2">Level 2 模型</button>
+          <button class="filter-btn" data-filter="level-3">Level 3 前沿</button>
+          <button class="filter-btn" data-filter="level-4">顶层目标 N23</button>
+        </div>
+      </div>
+
+      <!-- Roadmap Cards Container -->
+      <div id="roadmapContainer"></div>
+    </section>
+
+    <!-- SECTION 3: Interactive Visual Math Labs -->
+    <section id="labs-view" class="lab-section">
+      <div class="section-title">
+        <span>🧪</span> 数学直觉与核心算法交互实验室 (Interactive Visual Labs)
+      </div>
+      <p style="color: var(--text-secondary); margin-top: 0.25rem;">
+        通过直观可交互参数调试，理解高维矩阵低秩分解与 Softmax 概率分布映射。
+      </p>
+
+      <div class="lab-grid">
+        <!-- Lab 1: LoRA Low-rank Decomposition -->
+        <div class="lab-card">
+          <h4><span>📐</span> LoRA 低秩微调参数省减计算器 (N01 / N21)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">
+            全量矩阵 $W_0 \\in \\mathbb{R}^{d \\times d}$ 拆解为 $B \\cdot A$（其中 $B \\in \\mathbb{R}^{d \\times r}, A \\in \\mathbb{R}^{r \\times d}$）。
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <div>
+              <label style="font-size: 0.82rem; color: var(--text-muted);">隐藏层维度 $d$:</label>
+              <input type="range" id="loraDim" min="1024" max="8192" step="1024" value="4096" style="width: 100%;">
+              <span id="loraDimVal" style="font-family: var(--font-mono); color: var(--accent-cyan); font-size: 0.85rem;">4096 × 4096</span>
+            </div>
+            <div>
+              <label style="font-size: 0.82rem; color: var(--text-muted);">低秩秩数 $r$:</label>
+              <input type="range" id="loraRank" min="2" max="64" step="2" value="8" style="width: 100%;">
+              <span id="loraRankVal" style="font-family: var(--font-mono); color: var(--accent-amber); font-size: 0.85rem;">r = 8</span>
+            </div>
+            <div id="loraResult" style="background: rgba(0,0,0,0.4); padding: 0.8rem; border-radius: 8px; font-size: 0.88rem; font-family: var(--font-mono);"></div>
+          </div>
+        </div>
+
+        <!-- Lab 2: Softmax Temperature Decoder Simulator -->
+        <div class="lab-card">
+          <h4><span>🎯</span> Softmax 测度温度 Sampling 解码器 (N03 / N18)</h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+            调节 Temperature $T$，观察高维测度分布 $P(x_i) = \\frac{\\exp(z_i / T)}{\\sum \\exp(z_j / T)}$ 的熵增与突变。
+          </p>
+
+          <div style="margin-bottom: 0.75rem;">
+            <label style="font-size: 0.82rem; color: var(--text-muted);">Temperature ($T$): <span id="tempVal" style="color: var(--accent-blue); font-family: var(--font-mono);">1.00</span></label>
+            <input type="range" id="tempSlider" min="0.1" max="2.5" step="0.05" value="1.0" style="width: 100%;">
+          </div>
+
+          <div style="background: #040711; border-radius: 8px; padding: 0.5rem; text-align: center;">
+            <canvas id="softmaxCanvas" width="280" height="190"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Direct Links to Existing Project Materials -->
+    <section id="resources-view" style="margin-top: 4rem;">
+      <div class="section-title" style="margin-bottom: 1.25rem;">
+        <span>📚</span> 现有交互实验与讲义资源索引 (Project Deep-Dive Modules)
+      </div>
+
+      <div class="cards-grid">
+        <div class="node-card">
+          <div>
+            <span class="node-id" style="color: var(--accent-blue);">Module 01</span>
+            <h3 class="node-title-text" style="margin-top: 0.4rem;">Week 1: 代数与运算底座</h3>
+            <p class="node-desc-short">向量内积投影、矩阵乘法列视角/行视角对偶、转置与几何反序律推导。</p>
+          </div>
+          <div class="card-footer">
+            <a href="algebra1.html" class="btn-detail" style="text-decoration: none;">打开实验 ➔</a>
+          </div>
+        </div>
+
+        <div class="node-card">
+          <div>
+            <span class="node-id" style="color: var(--accent-emerald);">Module 02</span>
+            <h3 class="node-title-text" style="margin-top: 0.4rem;">Week 2: 空间与几何投影</h3>
+            <p class="node-desc-short">列空间 Span、解的三种命运、正交投影与法方程 $R^T R w = R^T z$、投影矩阵 P 几何本质。</p>
+          </div>
+          <div class="card-footer">
+            <a href="week2_geometric_projection.html" class="btn-detail" style="text-decoration: none;">打开实验 ➔</a>
+          </div>
+        </div>
+
+        <div class="node-card">
+          <div>
+            <span class="node-id" style="color: var(--accent-rose);">Module 03</span>
+            <h3 class="node-title-text" style="margin-top: 0.4rem;">Attention (QKV) 矩阵几何本质</h3>
+            <p class="node-desc-short">Query-Key 空间方向对齐、Softmax 重心坐标映射与 Value 凸包插值重构全景几何分析。</p>
+          </div>
+          <div class="card-footer">
+            <a href="attention.html" class="btn-detail" style="text-decoration: none;">打开实验 ➔</a>
+          </div>
+        </div>
+
+        <div class="node-card">
+          <div>
+            <span class="node-id" style="color: var(--accent-purple);">Module 04</span>
+            <h3 class="node-title-text" style="margin-top: 0.4rem;">Linear Algebra 交互式教程 (8大模块)</h3>
+            <p class="node-desc-short">包含向量、RREF、矩阵变换、子空间基底维度、行列式、坐标变换与特征值SVD全套 8 模块。</p>
+          </div>
+          <div class="card-footer">
+            <a href="N01_LinearAlgebraTutorial/index.html" class="btn-detail" style="text-decoration: none;">进入 Tutorial ➔</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Node Details Modal Window -->
+  <div class="modal-backdrop" id="nodeModal">
+    <div class="modal-content">
+      <button class="modal-close-btn" id="modalClose" title="关闭">&times;</button>
+      
+      <div class="modal-header">
+        <span class="modal-node-tag" id="modalNodeTag">N01</span>
+        <h2 class="modal-title" id="modalTitle">节点名称</h2>
+        <p id="modalDesc" style="color: var(--text-secondary); font-size: 0.98rem; line-height: 1.6;"></p>
+      </div>
+
+      <div class="modal-body" id="modalBody">
+        <!-- Math Tools Block -->
+        <div class="detail-block">
+          <h5>🧮 核心概念与数学工具 (Math Tools & Concepts)</h5>
+          <div id="modalMathTools" style="font-size: 0.95rem; color: #f1f5f9; font-family: var(--font-mono);"></div>
+        </div>
+
+        <!-- AI Applications Block -->
+        <div class="detail-block">
+          <h5>⚡ AI 核心落地与应用领域 (AI Applications)</h5>
+          <p id="modalApplications" style="color: #cbd5e1; font-size: 0.92rem;"></p>
+        </div>
+
+        <!-- Linkage Graph -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="detail-block">
+            <h5>⬅ 直接前置依赖 (Prerequisites)</h5>
+            <div id="modalPrereqs" class="node-meta-pills" style="margin:0;"></div>
+          </div>
+          <div class="detail-block">
+            <h5>➔ 递进输出流向 (Outputs)</h5>
+            <div id="modalOutputs" class="node-meta-pills" style="margin:0;"></div>
+          </div>
+        </div>
+
+        <!-- Textbooks -->
+        <div class="detail-block">
+          <h5>📚 推荐经典教材与专著 (Recommended Books)</h5>
+          <div id="modalBooks" class="books-list"></div>
+        </div>
+
+        <!-- Papers -->
+        <div class="detail-block">
+          <h5>📄 推荐必读奠基/经典论文 (Seminal Papers)</h5>
+          <div id="modalPapers" class="papers-list"></div>
+        </div>
+
+        <!-- Local Module Links -->
+        <div class="detail-block" style="border-color: rgba(99, 102, 241, 0.3);">
+          <h5>🔗 本地关联实战实验室与讲义 (Local Labs & Handouts)</h5>
+          <div id="modalLocalLinks" class="local-links-group"></div>
+        </div>
       </div>
     </div>
-  </section>
-
-  <!-- Main Content -->
-  <main>
-
-    <!-- SECTION 1: 向量内积 -->
-    <section id="dot-product" class="section-container">
-      <div class="section-header">
-        <span class="section-num">Module 01</span>
-        <h2 class="section-title">1. 向量内积（Dot Product）的代数与几何本质</h2>
-      </div>
-
-      <div class="glass-card">
-        <h3 class="card-title">📌 代数定义与严密几何推导</h3>
-        <p>对于同维度的两个列向量 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^N$：</p>
-
-        <div class="math-callout blue-border">
-          $$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_N \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix}$$
-          
-          $$\mathbf{x}^T \mathbf{y} = \begin{bmatrix} x_1 & x_2 & \cdots & x_N \end{bmatrix} \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_N \end{bmatrix} = \sum_{i=1}^N x_i y_i$$
-        </div>
-
-        <p style="margin-top: 1.25rem;">
-          <strong>🎯 几何投影等价形式（余弦定理）：</strong>
-        </p>
-
-        <div class="math-callout emerald-border">
-          $$\mathbf{x}^T \mathbf{y} = \|\mathbf{x}\|_2 \|\mathbf{y}\|_2 \cos \theta = \underbrace{\Big(\|\mathbf{x}\|_2 \cos \theta\Big)}_{\mathbf{x}\text{ 在 }\mathbf{y}\text{ 上的有向投影长度}} \times \underbrace{\|\mathbf{y}\|_2}_{\mathbf{y}\text{ 的基准模长}}$$
-        </div>
-
-        <!-- Interactive Canvas: Dot Product -->
-        <div class="interactive-container">
-          <div class="canvas-wrapper">
-            <canvas id="dotCanvas" width="480" height="380"></canvas>
-          </div>
-          <div class="controls-panel">
-            <div style="font-weight: 700; font-size: 1rem; color: var(--accent-blue);">🎮 交互实验：调节向量方向与夹角</div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">
-              滑动调节下方角度，观察黄色虚线投影与实时点积数值的正负突变！
-            </p>
-
-            <div class="control-group">
-              <label>向量 $\mathbf{x}$ 角度: <span id="angleXVal">30°</span></label>
-              <input type="range" id="sliderAngleX" min="0" max="360" value="30">
-            </div>
-
-            <div class="control-group">
-              <label>向量 $\mathbf{y}$ 角度: <span id="angleYVal">0°</span></label>
-              <input type="range" id="sliderAngleY" min="0" max="360" value="0">
-            </div>
-
-            <div class="stat-badge">
-              <span>夹角 $\theta$:</span>
-              <span id="statAngle" style="color: var(--accent-amber);">30.0°</span>
-            </div>
-            <div class="stat-badge">
-              <span>$\cos(\theta)$:</span>
-              <span id="statCos" style="color: var(--accent-cyan);">0.866</span>
-            </div>
-            <div class="stat-badge">
-              <span>内积 $\mathbf{x}^T \mathbf{y}$:</span>
-              <span id="statDot" style="color: var(--accent-emerald); font-weight: 700;">+24.50</span>
-            </div>
-
-            <button class="btn btn-secondary" id="btnSnapOrthogonal" style="justify-content: center;">
-              ⚡ 一键设为正交 ($\theta = 90^\circ, \mathbf{x}^T \mathbf{y} = 0$)
-            </button>
-          </div>
-        </div>
-
-        <!-- 3 Geometric Cases -->
-        <div class="dual-grid" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="perspective-card">
-            <span class="perspective-badge badge-emerald">锐角 ($0^\circ \le \theta < 90^\circ$)</span>
-            <h4>正点积 ($\mathbf{x}^T \mathbf{y} > 0$)</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.5rem;">
-              $\cos\theta > 0$，投影落在正方向。代表两向量具有同向协同趋势（在推荐系统和余弦相似度中表示<strong>高相关性</strong>）。
-            </p>
-          </div>
-
-          <div class="perspective-card">
-            <span class="perspective-badge badge-amber">直角 ($\theta = 90^\circ$)</span>
-            <h4>正交垂直 ($\mathbf{x}^T \mathbf{y} = 0$)</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.5rem;">
-              $\cos 90^\circ = 0$，投影长度为 0。在几何与代数上代表<strong>完全独立、零冗余信息</strong>（PCA 与正交分解的基石）。
-            </p>
-          </div>
-
-          <div class="perspective-card">
-            <span class="perspective-badge badge-blue" style="color: var(--accent-rose); background: rgba(244,63,94,0.15);">钝角 ($90^\circ < \theta \le 180^\circ$)</span>
-            <h4>负点积 ($\mathbf{x}^T \mathbf{y} < 0$)</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.5rem;">
-              $\cos\theta < 0$，投影落在反方向。代表两向量处于背道而驰、对抗互斥的状态。
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: 矩阵乘法双重视角 -->
-    <section id="matrix-multiply" class="section-container">
-      <div class="section-header">
-        <span class="section-num">Module 02</span>
-        <h2 class="section-title">2. 矩阵乘法的两种视角：行视角 vs 列视角</h2>
-      </div>
-
-      <div class="glass-card">
-        <p style="font-size: 1.05rem; margin-bottom: 1.5rem;">
-          设设计矩阵 $\mathbf{R} \in \mathbb{R}^{N \times K}$，权重向量 $\mathbf{w} \in \mathbb{R}^{K \times 1}$，计算矩阵向量积 $\mathbf{y} = \mathbf{R}\mathbf{w}$。
-        </p>
-
-        <div class="dual-grid">
-          <!-- Row Perspective -->
-          <div class="perspective-card">
-            <span class="perspective-badge badge-blue">视角 1 · 传统视角</span>
-            <h3 style="color: var(--accent-blue); margin-bottom: 0.75rem;">行视角（点积视角）</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
-              将矩阵 $\mathbf{R}$ 视作由 $N$ 个行向量 $\mathbf{r}_{i,*}^T$ 上下堆叠而成。结果向量的第 $i$ 个分量，是矩阵第 $i$ 行与权重向量 $\mathbf{w}$ 的点积。
-            </p>
-            
-            <div class="math-callout blue-border" style="font-size: 0.95em;">
-              $$\mathbf{R}\mathbf{w} = \begin{bmatrix} — & \mathbf{r}_{1,*}^T & — \\ — & \mathbf{r}_{2,*}^T & — \\ & \vdots & \\ — & \mathbf{r}_{N,*}^T & — \end{bmatrix} \mathbf{w} = \begin{bmatrix} \mathbf{r}_{1,*}^T \mathbf{w} \\ \mathbf{r}_{2,*}^T \mathbf{w} \\ \vdots \\ \mathbf{r}_{N,*}^T \mathbf{w} \end{bmatrix}$$
-            </div>
-
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem;">
-              📌 <strong>对齐数值示例：</strong>
-            </p>
-            <div class="math-callout" style="font-size: 0.9em;">
-              $$\begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix} \begin{bmatrix} 2 \\ 0 \\ 1 \end{bmatrix} = \begin{bmatrix} 1\times 2 + 2\times 0 + 3\times 1 \\ 4\times 2 + 5\times 0 + 6\times 1 \end{bmatrix} = \begin{bmatrix} 5 \\ 14 \end{bmatrix}$$
-            </div>
-          </div>
-
-          <!-- Column Perspective -->
-          <div class="perspective-card highlight-card">
-            <span class="perspective-badge badge-emerald">视角 2 · 灵魂视角 ★★★</span>
-            <h3 style="color: var(--accent-emerald); margin-bottom: 0.75rem;">列视角（线性组合视角）</h3>
-            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
-              将矩阵 $\mathbf{R}$ 视作由 $K$ 个列向量 $\mathbf{r}_1, \mathbf{r}_2, \dots, \mathbf{r}_K$ 并排组成。<strong>矩阵乘以向量本质上是对各列向量进行加权求和！</strong>
-            </p>
-
-            <div class="math-callout emerald-border" style="font-size: 0.95em;">
-              $$\mathbf{R}\mathbf{w} = \begin{bmatrix} \mid & \mid & & \mid \\ \mathbf{r}_1 & \mathbf{r}_2 & \cdots & \mathbf{r}_K \\ \mid & \mid & & \mid \end{bmatrix} \begin{bmatrix} w_1 \\ w_2 \\ \vdots \\ w_K \end{bmatrix} = \sum_{k=1}^K w_k \mathbf{r}_k$$
-              $$= w_1 \mathbf{r}_1 + w_2 \mathbf{r}_2 + \dots + w_K \mathbf{r}_K$$
-            </div>
-
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem;">
-              📌 <strong>对齐数值示例（完全等价但直觉完全不同）：</strong>
-            </p>
-            <div class="math-callout" style="font-size: 0.9em;">
-              $$\begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix} \begin{bmatrix} 2 \\ 0 \\ 1 \end{bmatrix} = 2 \begin{bmatrix} 1 \\ 4 \end{bmatrix} + 0 \begin{bmatrix} 2 \\ 5 \end{bmatrix} + 1 \begin{bmatrix} 3 \\ 6 \end{bmatrix} = \begin{bmatrix} 2+0+3 \\ 8+0+6 \end{bmatrix} = \begin{bmatrix} 5 \\ 14 \end{bmatrix}$$
-            </div>
-          </div>
-        </div>
-
-        <!-- Interactive Linear Combination Visualizer -->
-        <div class="interactive-container" style="margin-top: 2rem;">
-          <div class="canvas-wrapper">
-            <canvas id="combCanvas" width="480" height="380"></canvas>
-          </div>
-          <div class="controls-panel">
-            <div style="font-weight: 700; font-size: 1rem; color: var(--accent-emerald);">🎨 动态实验：列向量加权求和（基底合成）</div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">
-              矩阵 $\mathbf{R} = [\mathbf{r}_1, \mathbf{r}_2]$。调节权重 $w_1, w_2$，观察向量加法首尾相接与合成向量 $\mathbf{y} = w_1\mathbf{r}_1 + w_2\mathbf{r}_2$！
-            </p>
-
-            <div class="control-group">
-              <label>权重 $w_1$ (缩放 $\mathbf{r}_1$): <span id="valW1">1.2</span></label>
-              <input type="range" id="sliderW1" min="-2.5" max="2.5" step="0.1" value="1.2">
-            </div>
-
-            <div class="control-group">
-              <label>权重 $w_2$ (缩放 $\mathbf{r}_2$): <span id="valW2">0.8</span></label>
-              <input type="range" id="sliderW2" min="-2.5" max="2.5" step="0.1" value="0.8">
-            </div>
-
-            <div class="stat-badge">
-              <span>列基底 $\mathbf{r}_1$ (红):</span>
-              <span style="color: #f87171;">$[2.0, 0.5]^T$</span>
-            </div>
-            <div class="stat-badge">
-              <span>列基底 $\mathbf{r}_2$ (绿):</span>
-              <span style="color: #4ade80;">$[0.8, 2.0]^T$</span>
-            </div>
-            <div class="stat-badge">
-              <span>合成 $\mathbf{y} = \mathbf{R}\mathbf{w}$:</span>
-              <span id="statResultVec" style="color: var(--accent-cyan); font-weight: 700;">$[3.04, 2.20]^T$</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 3: 维度守恒法则 -->
-    <section id="dimension-rule" class="section-container">
-      <div class="section-header">
-        <span class="section-num">Module 03</span>
-        <h2 class="section-title">3. 维度守恒法则（Dimension Matching Rule）</h2>
-      </div>
-
-      <div class="glass-card">
-        <h3 class="card-title">📐 遇到任何矩阵公式，先标定上下标维度</h3>
-        <p>在推导机器学习公式、损失函数与反向传播梯度时，90% 的低级错误都源于维度不匹配。谨记矩阵乘法的黄金法则：</p>
-
-        <!-- Dimension Matcher Sandbox -->
-        <div class="dimension-tool">
-          <div style="font-size: 1.1rem; color: #fff; margin-bottom: 1rem;">
-            矩阵乘法维度匹配法则：<strong>内维严格相等消去，外维决定最终产物形状</strong>
-          </div>
-
-          <div class="matrix-dim-row">
-            <div class="matrix-box active-outer">
-              <span style="font-size: 1.5rem; font-weight: 700; color: #fff;">$\mathbf{A}$</span>
-              <span class="dim-pill pill-emerald">$$N \times K$$</span>
-            </div>
-
-            <span style="font-size: 1.5rem; color: var(--text-muted);">$\times$</span>
-
-            <div class="matrix-box active-inner">
-              <span style="font-size: 1.5rem; font-weight: 700; color: #fff;">$\mathbf{B}$</span>
-              <span class="dim-pill pill-amber">$$K \times M$$</span>
-            </div>
-
-            <span style="font-size: 1.5rem; color: var(--text-muted);">$=$</span>
-
-            <div class="matrix-box" style="border-color: var(--accent-cyan);">
-              <span style="font-size: 1.5rem; font-weight: 700; color: #fff;">$\mathbf{C}$</span>
-              <span class="dim-pill pill-blue">$$N \times M$$</span>
-            </div>
-          </div>
-
-          <div style="display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-top: 1.5rem; font-size: 0.95rem;">
-            <div style="color: var(--accent-amber); display: flex; align-items: center; gap: 0.4rem;">
-              <span>●</span> <strong>内维 $K$ 必须相等</strong>：代表左矩阵每一行的元素个数等于右矩阵每一列的元素个数（点积项数对齐）。
-            </div>
-            <div style="color: var(--accent-emerald); display: flex; align-items: center; gap: 0.4rem;">
-              <span>●</span> <strong>外维 $N \times M$ 决定输出</strong>：左边行数决定结果行数，右边列数决定结果列数。
-            </div>
-          </div>
-        </div>
-
-        <!-- ML Case Studies -->
-        <h4 style="margin: 2rem 0 0.8rem; font-size: 1.15rem;">💡 经典机器学习模型中的维度标注范例</h4>
-        <div class="dual-grid">
-          <div class="perspective-card">
-            <h5 style="color: var(--accent-blue); margin-bottom: 0.5rem;">线性回归预测 (Linear Regression)</h5>
-            <div class="math-callout blue-border">
-              $$\underbrace{\hat{\mathbf{y}}}_{N \times 1} = \underbrace{\mathbf{X}}_{N \times D} \times \underbrace{\mathbf{w}}_{D \times 1}$$
-            </div>
-            <p style="font-size: 0.88rem; color: var(--text-secondary);">
-              $N$ 个样本，$D$ 维特征特征矩阵 $\mathbf{X}$ 乘以 $D$ 维权重向量 $\mathbf{w}$，内维 $D$ 消去，得到 $N$ 个样本的预测标量。
-            </p>
-          </div>
-
-          <div class="perspective-card">
-            <h5 style="color: var(--accent-purple); margin-bottom: 0.5rem;">Transformer 注意力得分 (Self-Attention)</h5>
-            <div class="math-callout" style="border-left-color: var(--accent-purple);">
-              $$\underbrace{\mathbf{S}}_{T \times T} = \underbrace{\mathbf{Q}}_{T \times d_k} \times \underbrace{\mathbf{K}^T}_{d_k \times T}$$
-            </div>
-            <p style="font-size: 0.88rem; color: var(--text-secondary);">
-              Query 矩阵与 Key 矩阵的转置相乘，特征维度 $d_k$ 消去，生成每对 Token 之间的 $T \times T$ 注意力关联矩阵。
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 4: 转置运算与空间几何对偶 (UPGRADED MODULE 04) -->
-    <section id="transpose-scalar" class="section-container">
-      <div class="section-header">
-        <span class="section-num">Module 04</span>
-        <h2 class="section-title">4. 矩阵转置（Transpose）的代数规则与深层几何对偶</h2>
-      </div>
-
-      <div class="glass-card">
-        <h3 class="card-title">🔄 一、代数定义：沿主对角线的镜像翻转</h3>
-        <p>若矩阵 $\mathbf{A} = [a_{ij}] \in \mathbb{R}^{M \times N}$，则其转置矩阵 $\mathbf{A}^T = [a_{ji}] \in \mathbb{R}^{N \times M}$。主对角线元素保持不动，非对角线元素沿主对角线对称互换：</p>
-
-        <div class="math-callout blue-border">
-          $$\mathbf{A} = \begin{bmatrix} \color{#38bdf8}{1} & \color{#f59e0b}{2} & \color{#a855f7}{3} \\ \color{#10b981}{4} & \color{#38bdf8}{5} & \color{#f43f5e}{6} \end{bmatrix}_{2 \times 3} \implies \mathbf{A}^T = \begin{bmatrix} \color{#38bdf8}{1} & \color{#10b981}{4} \\ \color{#f59e0b}{2} & \color{#38bdf8}{5} \\ \color{#a855f7}{3} & \color{#f43f5e}{6} \end{bmatrix}_{3 \times 2}$$
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
-
-        <!-- GEOMETRIC DEEP DIVE 1: Adjoint Operator & Dot Product Duality -->
-        <h3 class="card-title" style="color: var(--accent-emerald);">🎯 二、几何含义 1：伴随算子（Adjoint）与空间点积对偶守恒</h3>
-        <p style="font-size: 0.95rem; line-height: 1.8;">
-          在几何空间中，矩阵 $\mathbf{A}$ 代表一个**空间线性变换**。转置 $\mathbf{A}^T$ 是使得**点积度量保持对偶守恒**的唯一变换：
-        </p>
-
-        <div class="math-callout emerald-border">
-          $$\mathbf{(\mathbf{A}\mathbf{x}) \cdot \mathbf{y} = \mathbf{x} \cdot (\mathbf{A}^T \mathbf{y}) \quad \Longleftrightarrow \quad (\mathbf{A}\mathbf{x})^T \mathbf{y} = \mathbf{x}^T (\mathbf{A}^T \mathbf{y})}$$
-        </div>
-
-        <div class="dual-grid" style="margin-top: 1rem;">
-          <div class="perspective-card">
-            <span class="perspective-badge badge-blue">视角 1 · 先变换 x 再对齐</span>
-            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">$(\mathbf{A}\mathbf{x}) \cdot \mathbf{y}$</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary);">
-              把向量 $\mathbf{x}$ 施加变换 $\mathbf{A}$ 得到 $\mathbf{A}\mathbf{x}$，再去测量它与向量 $\mathbf{y}$ 的重合/投影对齐程度。
-            </p>
-          </div>
-          <div class="perspective-card">
-            <span class="perspective-badge badge-emerald">视角 2 · 转移变换给 y 对齐</span>
-            <h4 style="color: var(--accent-emerald); margin-bottom: 0.5rem;">$\mathbf{x} \cdot (\mathbf{A}^T \mathbf{y})$</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary);">
-              保持 $\mathbf{x}$ 原封不动，把变换效果以伴随方式转移施加给 $\mathbf{y}$（通过 $\mathbf{A}^T$），两者的点积结果**永远绝对相等**！
-            </p>
-          </div>
-        </div>
-
-        <!-- Interactive Canvas: Adjoint Operator Duality Visualizer -->
-        <div class="interactive-container" style="margin-top: 1.5rem;">
-          <div class="canvas-wrapper">
-            <canvas id="adjointCanvas" width="480" height="380"></canvas>
-          </div>
-          <div class="controls-panel">
-            <div style="font-weight: 700; font-size: 1rem; color: var(--accent-emerald);">🎮 交互实验：验证点积对偶守恒恒等式</div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">
-              调节变换矩阵 $\mathbf{A}$ 的拉伸与剪切参数，实时观察 $(\mathbf{A}\mathbf{x}) \cdot \mathbf{y}$ 与 $\mathbf{x} \cdot (\mathbf{A}^T \mathbf{y})$ 永远完全一致！
-            </p>
-
-            <div class="control-group">
-              <label>矩阵剪切/拉伸因子 $a_{12}$: <span id="valA12">0.5</span></label>
-              <input type="range" id="sliderA12" min="-1.5" max="1.5" step="0.1" value="0.5">
-            </div>
-
-            <div class="control-group">
-              <label>矩阵垂直缩放因子 $a_{22}$: <span id="valA22">1.2</span></label>
-              <input type="range" id="sliderA22" min="0.2" max="2.0" step="0.1" value="1.2">
-            </div>
-
-            <div class="stat-badge">
-              <span>左侧 $(\mathbf{A}\mathbf{x})^T \mathbf{y}$:</span>
-              <span id="statLeftDot" style="color: var(--accent-blue); font-weight: 700;">+3.40</span>
-            </div>
-            <div class="stat-badge">
-              <span>右侧 $\mathbf{x}^T (\mathbf{A}^T \mathbf{y})$:</span>
-              <span id="statRightDot" style="color: var(--accent-emerald); font-weight: 700;">+3.40</span>
-            </div>
-            <div class="stat-badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16,185,129,0.3);">
-              <span>对偶守恒状态:</span>
-              <span style="color: #34d399; font-weight: 700;">严格守恒相等 ✔</span>
-            </div>
-          </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
-
-        <!-- GEOMETRIC DEEP DIVE 2: Orthogonal Rotation & Transpose as Inverse -->
-        <h3 class="card-title" style="color: var(--accent-amber);">🔄 三、几何含义 2：正交变换中转置等于“逆向动作倒放”</h3>
-        <p style="font-size: 0.95rem; line-height: 1.8;">
-          对于刚体旋转矩阵 $\mathbf{R}(\theta)$，它的转置矩阵 $\mathbf{R}(\theta)^T$ 恰好等于顺时针反向旋转 $\mathbf{R}(-\theta)$，也就是它的逆矩阵 $\mathbf{R}^{-1}$！
-        </p>
-
-        <div class="math-callout amber-border">
-          $$\mathbf{R}(\theta) = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix} \implies \mathbf{R}(\theta)^T = \begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{bmatrix} = \mathbf{R}(-\theta) = \mathbf{R}(\theta)^{-1}$$
-          
-          $$\mathbf{R}^T \mathbf{R} = \mathbf{I} \quad (\text{旋转矩阵的标准正交性})$$
-        </div>
-
-        <!-- Interactive Canvas: Rotation & Transpose Inverse Visualizer -->
-        <div class="interactive-container" style="margin-top: 1.5rem;">
-          <div class="canvas-wrapper">
-            <canvas id="rotCanvas" width="480" height="380"></canvas>
-          </div>
-          <div class="controls-panel">
-            <div style="font-weight: 700; font-size: 1rem; color: var(--accent-amber);">🎮 交互实验：旋转与转置倒放</div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">
-              拖动滑块旋转物体，点击“转置反向倒放”按钮，观察 $\mathbf{R}^T$ 如何精准消除旋转回到原位！
-            </p>
-
-            <div class="control-group">
-              <label>旋转角度 $\theta$: <span id="valRotAngle">45°</span></label>
-              <input type="range" id="sliderRotAngle" min="0" max="360" value="45">
-            </div>
-
-            <div class="stat-badge">
-              <span>正向旋转 $\mathbf{R}(\theta)$:</span>
-              <span id="statRotFwd" style="color: var(--accent-amber);">+45.0°</span>
-            </div>
-            <div class="stat-badge">
-              <span>转置逆旋转 $\mathbf{R}^T$:</span>
-              <span id="statRotInv" style="color: var(--accent-cyan);">-45.0°</span>
-            </div>
-
-            <button class="btn btn-secondary" id="btnApplyTransposeRot" style="justify-content: center; background: rgba(245, 158, 11, 0.2); border-color: rgba(245,158,11,0.4); color: #fbbf24;">
-              🔄 施加转置变换 $\mathbf{R}^T$（逆向倒放复原）
-            </button>
-          </div>
-        </div>
-
-        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
-
-        <!-- GEOMETRIC DEEP DIVE 3: Dual Space & Two Golden Laws -->
-        <h3 class="card-title" style="color: var(--accent-purple);">🧬 四、几何含义 3：法向量拉回与行/列空间对调</h3>
-        
-        <div class="dual-grid">
-          <div class="perspective-card">
-            <span class="perspective-badge badge-purple">法向量与梯度拉回 (Pull-Back)</span>
-            <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">梯度从输出空间传回输入空间</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-              在神经网络反向传播中，前向传播是 $\mathbf{y} = \mathbf{W}\mathbf{x}$；而损失函数对输入的梯度传播必须经过转置：$\nabla_{\mathbf{x}} L = \mathbf{W}^T \nabla_{\mathbf{y}} L$。
-              转置算子是把对偶空间（法线/梯度）从输出层正确“拉回”到输入参数空间的几何桥梁。
-            </p>
-          </div>
-
-          <div class="perspective-card">
-            <span class="perspective-badge badge-blue">行空间与列空间对调</span>
-            <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">Column Space $\longleftrightarrow$ Row Space</h4>
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-              矩阵 $\mathbf{A}$ 的列向量张成的输出空间（值域），转置后变成 $\mathbf{A}^T$ 的行向量；原矩阵的行空间变成转置后的列空间。在奇异值分解（SVD）中，$\mathbf{A}$ 与 $\mathbf{A}^T$ 的奇异向量正交基构成了输入与输出空间的完美镜像。
-            </p>
-          </div>
-        </div>
-
-        <!-- Two Golden Laws Summary -->
-        <h4 style="margin: 2rem 0 0.8rem; font-size: 1.15rem;">⚖️ 转置运算的两大黄金代数法则</h4>
-        <div class="dual-grid">
-          <!-- Law 1 -->
-          <div class="perspective-card">
-            <span class="perspective-badge badge-amber">黄金法则 1 · 乘积求转置反序律</span>
-            <h4 style="color: var(--accent-amber); margin-bottom: 0.75rem;">$(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$</h4>
-            
-            <div class="math-callout amber-border" style="font-size: 0.95em;">
-              $$(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$$
-              $$\text{推广：}(\mathbf{A}\mathbf{B}\mathbf{C})^T = \mathbf{C}^T \mathbf{B}^T \mathbf{A}^T$$
-            </div>
-
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-              <strong>维度严密证明：</strong> 若 $\mathbf{A} \in \mathbb{R}^{N \times K}, \mathbf{B} \in \mathbb{R}^{K \times M}$，乘积转置结果为 $M \times N$。
-              如果写成 $\mathbf{A}^T \mathbf{B}^T$ 则是 $(K \times N) \times (M \times K)$ 内部维度不合规；只有反序写成 $\underbrace{\mathbf{B}^T}_{M \times K} \underbrace{\mathbf{A}^T}_{K \times N} = M \times N$ 才能合法成立。
-            </p>
-          </div>
-
-          <!-- Law 2 -->
-          <div class="perspective-card">
-            <span class="perspective-badge badge-blue">黄金法则 2 · 标量是 1×1 矩阵</span>
-            <h4 style="color: var(--accent-cyan); margin-bottom: 0.75rem;">若 $s \in \mathbb{R}$，则 $s^T = s$</h4>
-            
-            <div class="math-callout blue-border" style="font-size: 0.95em;">
-              $$\text{对于任意标量 } s \in \mathbb{R}: \quad s^T = s$$
-              $$\mathbf{x}^T \mathbf{y} = (\mathbf{x}^T \mathbf{y})^T = \mathbf{y}^T (\mathbf{x}^T)^T = \mathbf{y}^T \mathbf{x}$$
-            </div>
-
-            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">
-              <strong>化简实战：</strong> 在展开二次型损失时，交叉项 $\mathbf{z}^T \mathbf{R} \mathbf{w}$ 维度为 $1 \times 1$。因为标量转置等于自身，所以 $(\mathbf{z}^T \mathbf{R} \mathbf{w})^T = \mathbf{w}^T \mathbf{R}^T \mathbf{z}$，同类项直接合并为 $2 \mathbf{z}^T \mathbf{R} \mathbf{w}$。
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SECTION 5: 关键推导实战 -->
-    <section id="derivation-practice" class="section-container">
-      <div class="section-header">
-        <span class="section-num">Module 05</span>
-        <h2 class="section-title">5. 关键推导实战：验证 $(\mathbf{z} - \mathbf{R}\mathbf{w})^T = \mathbf{z}^T - \mathbf{w}^T \mathbf{R}^T$</h2>
-      </div>
-
-      <div class="glass-card">
-        <h3 class="card-title">📝 详细逐步代数推导（Step-by-Step）</h3>
-        <p style="font-size: 1rem; color: var(--text-secondary); margin-bottom: 1.5rem;">
-          在回归分析与卡尔曼滤波中，残差向量定义为 $\mathbf{e} = \mathbf{z} - \mathbf{R}\mathbf{w}$。现在我们严格推导其转置表达式。
-        </p>
-
-        <div class="step-box">
-          <!-- Step 1 -->
-          <div class="step-item">
-            <div class="step-title">第一步：标定所有变量的维度（维度守恒检验）</div>
-            <div class="step-desc">
-              设真实标签 $\mathbf{z} \in \mathbb{R}^{N \times 1}$，设计矩阵 $\mathbf{R} \in \mathbb{R}^{N \times K}$，参数 $\mathbf{w} \in \mathbb{R}^{K \times 1}$。
-              <div class="math-callout">
-                $$\text{内部项维度：}\quad \underbrace{\mathbf{R}}_{N \times K} \underbrace{\mathbf{w}}_{K \times 1} \implies N \times 1$$
-                $$\text{差值向量维度：}\quad \underbrace{\mathbf{z}}_{N \times 1} - \underbrace{\mathbf{R}\mathbf{w}}_{N \times 1} \implies \underbrace{(\mathbf{z} - \mathbf{R}\mathbf{w})}_{N \times 1}$$
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 2 -->
-          <div class="step-item">
-            <div class="step-title">第二步：应用矩阵加减法的转置分配律</div>
-            <div class="step-desc">
-              根据转置线性性质 $(\mathbf{A} - \mathbf{B})^T = \mathbf{A}^T - \mathbf{B}^T$，将转置分配进括号中：
-              <div class="math-callout blue-border">
-                $$(\mathbf{z} - \mathbf{R}\mathbf{w})^T = \mathbf{z}^T - (\mathbf{R}\mathbf{w})^T$$
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 3 -->
-          <div class="step-item">
-            <div class="step-title">第三步：对复合乘积项应用乘积求转置反序律</div>
-            <div class="step-desc">
-              对 $(\mathbf{R}\mathbf{w})^T$ 应用法则 $(\mathbf{A}\mathbf{B})^T = \mathbf{B}^T \mathbf{A}^T$：
-              <div class="math-callout amber-border">
-                $$(\mathbf{R}\mathbf{w})^T = \mathbf{w}^T \mathbf{R}^T$$
-              </div>
-            </div>
-          </div>
-
-          <!-- Step 4 -->
-          <div class="step-item">
-            <div class="step-title">第四步：代入整合与两端维度终极核验</div>
-            <div class="step-desc">
-              代入第二步得到最终恒等式：
-              <div class="math-callout emerald-border">
-                $$\mathbf{(\mathbf{z} - \mathbf{R}\mathbf{w})^T = \mathbf{z}^T - \mathbf{w}^T \mathbf{R}^T}$$
-                
-                $$\begin{aligned}
-                \text{左端维度：} & \quad (N \times 1)^T = \mathbf{1 \times N} \\
-                \text{右端项 1 维度：} & \quad \mathbf{z}^T = \mathbf{1 \times N} \\
-                \text{右端项 2 维度：} & \quad \underbrace{\mathbf{w}^T}_{1 \times K} \underbrace{\mathbf{R}^T}_{K \times N} = \mathbf{1 \times N}
-                \end{aligned}$$
-              </div>
-              <p style="color: var(--accent-emerald); font-weight: 600; margin-top: 0.5rem;">
-                ✔ 等式两端每一项的维度均为 $1 \times N$，代数规则与维度守恒完全成立！
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Interactive Quiz Section -->
-        <div class="quiz-container">
-          <div class="quiz-question">
-            🧠 随堂演练：对于最小二乘损失函数 $L(\mathbf{w}) = (\mathbf{z} - \mathbf{R}\mathbf{w})^T (\mathbf{z} - \mathbf{R}\mathbf{w})$，将其完全展开后的正确形式是？
-          </div>
-          <div class="quiz-options">
-            <button class="quiz-btn" onclick="checkQuiz(this, false, '注意 (Rw)^T = w^T R^T，且注意标量项的合并！')">
-              A. $\mathbf{z}^T \mathbf{z} - \mathbf{z}^T \mathbf{R} \mathbf{w} - \mathbf{R}^T \mathbf{w}^T \mathbf{z} + \mathbf{w}^T \mathbf{R}^T \mathbf{R} \mathbf{w}$
-            </button>
-            <button class="quiz-btn" onclick="checkQuiz(this, true, '🎉 回答完全正确！因为 z^T R w 是 1×1 的标量，它的转置等于 w^T R^T z，二者相等故可合并为 -2 z^T R w！')">
-              B. $\mathbf{z}^T \mathbf{z} - 2 \mathbf{z}^T \mathbf{R} \mathbf{w} + \mathbf{w}^T \mathbf{R}^T \mathbf{R} \mathbf{w}$
-            </button>
-            <button class="quiz-btn" onclick="checkQuiz(this, false, '仔细检查各项维度是否匹配？标量转置合并是否正确？')">
-              C. $\mathbf{z}^T \mathbf{z} - 2 \mathbf{R}^T \mathbf{w}^T \mathbf{z} + \mathbf{R}^T \mathbf{R} \mathbf{w}^T \mathbf{w}$
-            </button>
-          </div>
-          <div id="quizFeedback" class="quiz-feedback"></div>
-        </div>
-      </div>
-    </section>
-
-  </main>
+  </div>
 
   <!-- Footer -->
   <footer>
-    <p>📐 机器学习数学代数底座 · 第 1 周精讲教程 · KaTeX + Canvas 交互式呈现</p>
-    <p style="margin-top: 0.5rem; font-size: 0.8rem; color: var(--text-muted);">
-      掌握维度守恒，洞悉几何本质 · 从此告别矩阵公式推导恐惧症
+    <p>📐 AI & 现代数学前沿理论知识图谱体系 · 全景学习门户</p>
+    <p style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-muted);">
+      涵盖 N01 - N23 全量节点理论与 AI 落地场景 · 维持现有子目录 <code style="color:var(--accent-blue);">LA2022Fall/</code> 及 <code style="color:var(--accent-blue);">LA2022Fall_Tutorial/</code> 结构不变
     </p>
   </footer>
 
-  <!-- Scripts -->
-  <script>
-    // 1. Reading Progress Bar
-    window.addEventListener('scroll', () => {
-      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
-      document.getElementById('progress-bar').style.width = scrolled + '%';
-    });
-
-    function drawArrow(ctx, fromx, fromy, tox, toy, color, lineWidth = 3) {
-      const headlen = 10;
-      const angle = Math.atan2(toy - fromy, tox - fromx);
-      ctx.save();
-      ctx.strokeStyle = color;
-      ctx.fillStyle = color;
-      ctx.lineWidth = lineWidth;
-      ctx.beginPath();
-      ctx.moveTo(fromx, fromy);
-      ctx.lineTo(tox, toy);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(tox, toy);
-      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
-      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
-
-    function drawGrid(ctx, width, height, origin) {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-      ctx.lineWidth = 1;
-      for (let x = 0; x < width; x += 30) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-      for (let y = 0; y < height; y += 30) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.beginPath();
-      ctx.moveTo(0, origin.y);
-      ctx.lineTo(width, origin.y);
-      ctx.moveTo(origin.x, 0);
-      ctx.lineTo(origin.x, height);
-      ctx.stroke();
-    }
-
-    // 2. Vector Dot Product Visualizer (Canvas 1)
-    const dotCanvas = document.getElementById('dotCanvas');
-    const dotCtx = dotCanvas.getContext('2d');
-    const sliderAngleX = document.getElementById('sliderAngleX');
-    const sliderAngleY = document.getElementById('sliderAngleY');
-    const angleXVal = document.getElementById('angleXVal');
-    const angleYVal = document.getElementById('angleYVal');
-    const statAngle = document.getElementById('statAngle');
-    const statCos = document.getElementById('statCos');
-    const statDot = document.getElementById('statDot');
-    const btnSnapOrthogonal = document.getElementById('btnSnapOrthogonal');
-
-    let angleX = 30;
-    let angleY = 0;
-    const lenX = 130;
-    const lenY = 150;
-    const dotOrigin = { x: 240, y: 190 };
-
-    function renderDotCanvas() {
-      dotCtx.clearRect(0, 0, dotCanvas.width, dotCanvas.height);
-      drawGrid(dotCtx, dotCanvas.width, dotCanvas.height, dotOrigin);
-
-      const radX = (angleX * Math.PI) / 180;
-      const radY = (angleY * Math.PI) / 180;
-
-      const pX = { x: dotOrigin.x + lenX * Math.cos(radX), y: dotOrigin.y - lenX * Math.sin(radX) };
-      const pY = { x: dotOrigin.x + lenY * Math.cos(radY), y: dotOrigin.y - lenY * Math.sin(radY) };
-
-      const vx = { x: pX.x - dotOrigin.x, y: -(pX.y - dotOrigin.y) };
-      const vy = { x: pY.x - dotOrigin.x, y: -(pY.y - dotOrigin.y) };
-      
-      const dotVal = (vx.x * vy.x + vx.y * vy.y) / 1000;
-      const cosVal = Math.cos(radX - radY);
-      const diffDeg = Math.abs((angleX - angleY) % 360);
-      const normalizedDiff = diffDeg > 180 ? 360 - diffDeg : diffDeg;
-
-      const projScalar = (vx.x * Math.cos(radY) + vx.y * Math.sin(radY));
-      const projPoint = {
-        x: dotOrigin.x + projScalar * Math.cos(radY),
-        y: dotOrigin.y - projScalar * Math.sin(radY)
-      };
-
-      // Draw projection dashed line
-      dotCtx.save();
-      dotCtx.strokeStyle = 'rgba(245, 158, 11, 0.6)';
-      dotCtx.setLineDash([4, 4]);
-      dotCtx.lineWidth = 1.5;
-      dotCtx.beginPath();
-      dotCtx.moveTo(pX.x, pX.y);
-      dotCtx.lineTo(projPoint.x, projPoint.y);
-      dotCtx.stroke();
-
-      // Draw Projection on y
-      dotCtx.setLineDash([]);
-      dotCtx.strokeStyle = '#f59e0b';
-      dotCtx.lineWidth = 4;
-      dotCtx.beginPath();
-      dotCtx.moveTo(dotOrigin.x, dotOrigin.y);
-      dotCtx.lineTo(projPoint.x, projPoint.y);
-      dotCtx.stroke();
-      dotCtx.restore();
-
-      // Draw Vectors
-      drawArrow(dotCtx, dotOrigin.x, dotOrigin.y, pY.x, pY.y, '#38bdf8', 3.5);
-      drawArrow(dotCtx, dotOrigin.x, dotOrigin.y, pX.x, pX.y, '#a855f7', 3.5);
-
-      // Draw Labels
-      dotCtx.font = 'bold 13px Outfit, sans-serif';
-      dotCtx.fillStyle = '#38bdf8';
-      dotCtx.fillText('向量 y (基准)', pY.x + 8, pY.y - 8);
-
-      dotCtx.fillStyle = '#a855f7';
-      dotCtx.fillText('向量 x', pX.x + 8, pX.y - 8);
-
-      dotCtx.fillStyle = '#f59e0b';
-      dotCtx.fillText('x 在 y 上的投影', projPoint.x + 5, projPoint.y + 16);
-
-      angleXVal.textContent = Math.round(angleX) + '°';
-      angleYVal.textContent = Math.round(angleY) + '°';
-      statAngle.textContent = normalizedDiff.toFixed(1) + '°';
-      statCos.textContent = cosVal.toFixed(3);
-      
-      const formattedDot = (dotVal >= 0 ? '+' : '') + dotVal.toFixed(2);
-      statDot.textContent = formattedDot;
-      statDot.style.color = Math.abs(dotVal) < 0.05 ? 'var(--accent-amber)' : (dotVal > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)');
-    }
-
-    sliderAngleX.addEventListener('input', (e) => { angleX = parseFloat(e.target.value); renderDotCanvas(); });
-    sliderAngleY.addEventListener('input', (e) => { angleY = parseFloat(e.target.value); renderDotCanvas(); });
-    btnSnapOrthogonal.addEventListener('click', () => {
-      angleY = 0; angleX = 90;
-      sliderAngleX.value = 90; sliderAngleY.value = 0;
-      renderDotCanvas();
-    });
-
-    // 3. Matrix Column Combination Visualizer (Canvas 2)
-    const combCanvas = document.getElementById('combCanvas');
-    const combCtx = combCanvas.getContext('2d');
-    const sliderW1 = document.getElementById('sliderW1');
-    const sliderW2 = document.getElementById('sliderW2');
-    const valW1 = document.getElementById('valW1');
-    const valW2 = document.getElementById('valW2');
-    const statResultVec = document.getElementById('statResultVec');
-
-    const col_r1 = { x: 50, y: 15 };
-    const col_r2 = { x: 20, y: 55 };
-    const combOrigin = { x: 180, y: 260 };
-
-    function renderCombCanvas() {
-      combCtx.clearRect(0, 0, combCanvas.width, combCanvas.height);
-      drawGrid(combCtx, combCanvas.width, combCanvas.height, combOrigin);
-
-      const w1 = parseFloat(sliderW1.value);
-      const w2 = parseFloat(sliderW2.value);
-
-      const v1 = { x: col_r1.x * w1, y: col_r1.y * w1 };
-      const v2 = { x: col_r2.x * w2, y: col_r2.y * w2 };
-      const vResult = { x: v1.x + v2.x, y: v1.y + v2.y };
-
-      const p1 = { x: combOrigin.x + v1.x, y: combOrigin.y - v1.y };
-      const pResult = { x: combOrigin.x + vResult.x, y: combOrigin.y - vResult.y };
-
-      drawArrow(combCtx, combOrigin.x, combOrigin.y, p1.x, p1.y, '#f87171', 3);
-
-      combCtx.save();
-      combCtx.setLineDash([3, 3]);
-      drawArrow(combCtx, p1.x, p1.y, pResult.x, pResult.y, '#4ade80', 2.5);
-      combCtx.restore();
-
-      drawArrow(combCtx, combOrigin.x, combOrigin.y, pResult.x, pResult.y, '#38bdf8', 4);
-
-      combCtx.font = 'bold 12px Outfit, sans-serif';
-      combCtx.fillStyle = '#f87171';
-      combCtx.fillText(`w₁·r₁ (${w1.toFixed(1)}x)`, p1.x + 5, p1.y + 15);
-
-      combCtx.fillStyle = '#4ade80';
-      combCtx.fillText(`+ w₂·r₂ (${w2.toFixed(1)}x)`, pResult.x + 5, pResult.y + (pResult.y < p1.y ? -10 : 20));
-
-      combCtx.fillStyle = '#38bdf8';
-      combCtx.font = 'bold 13px Outfit, sans-serif';
-      combCtx.fillText('合成 y = R·w', pResult.x + 8, pResult.y - 8);
-
-      valW1.textContent = w1.toFixed(1);
-      valW2.textContent = w2.toFixed(1);
-
-      const trueX = (2.0 * w1 + 0.8 * w2).toFixed(2);
-      const trueY = (0.5 * w1 + 2.0 * w2).toFixed(2);
-      statResultVec.textContent = `[${trueX}, ${trueY}]^T`;
-    }
-
-    sliderW1.addEventListener('input', renderCombCanvas);
-    sliderW2.addEventListener('input', renderCombCanvas);
-
-    // 4. Adjoint Operator & Dot Product Duality (Canvas 3)
-    const adjointCanvas = document.getElementById('adjointCanvas');
-    const adjCtx = adjointCanvas.getContext('2d');
-    const sliderA12 = document.getElementById('sliderA12');
-    const sliderA22 = document.getElementById('sliderA22');
-    const valA12 = document.getElementById('valA12');
-    const valA22 = document.getElementById('valA22');
-    const statLeftDot = document.getElementById('statLeftDot');
-    const statRightDot = document.getElementById('statRightDot');
-
-    const adjOriginL = { x: 120, y: 190 };
-    const adjOriginR = { x: 360, y: 190 };
-
-    const base_x = { x: 1.5, y: 0.8 };
-    const base_y = { x: 0.8, y: 1.4 };
-    const scaleFactor = 45;
-
-    function renderAdjointCanvas() {
-      adjCtx.clearRect(0, 0, adjointCanvas.width, adjointCanvas.height);
-
-      // Divide canvas into 2 visual worlds
-      adjCtx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-      adjCtx.lineWidth = 1;
-      adjCtx.beginPath();
-      adjCtx.moveTo(240, 10);
-      adjCtx.lineTo(240, 370);
-      adjCtx.stroke();
-
-      // Titles for both worlds
-      adjCtx.font = 'bold 13px Outfit, sans-serif';
-      adjCtx.fillStyle = '#38bdf8';
-      adjCtx.fillText('视窗 1: (A·x) 与 y', 60, 25);
-
-      adjCtx.fillStyle = '#10b981';
-      adjCtx.fillText('视窗 2: x 与 (Aᵀ·y)', 295, 25);
-
-      const a11 = 1.0;
-      const a12 = parseFloat(sliderA12.value);
-      const a21 = 0.2;
-      const a22 = parseFloat(sliderA22.value);
-
-      valA12.textContent = a12.toFixed(1);
-      valA22.textContent = a22.toFixed(1);
-
-      // Transform 1: Ax = [a11*x1 + a12*x2, a21*x1 + a22*x2]
-      const Ax = {
-        x: a11 * base_x.x + a12 * base_x.y,
-        y: a21 * base_x.x + a22 * base_x.y
-      };
-
-      // Transform 2: A^T y = [a11*y1 + a21*y2, a12*y1 + a22*y2]
-      const ATy = {
-        x: a11 * base_y.x + a21 * base_y.y,
-        y: a12 * base_y.x + a22 * base_y.y
-      };
-
-      // Calculate Dot Products
-      const leftDot = (Ax.x * base_y.x + Ax.y * base_y.y);
-      const rightDot = (base_x.x * ATy.x + base_x.y * ATy.y);
-
-      // Draw Left World
-      drawGrid(adjCtx, 240, 380, adjOriginL);
-      drawArrow(adjCtx, adjOriginL.x, adjOriginL.y, adjOriginL.x + Ax.x * scaleFactor, adjOriginL.y - Ax.y * scaleFactor, '#38bdf8', 3);
-      drawArrow(adjCtx, adjOriginL.x, adjOriginL.y, adjOriginL.x + base_y.x * scaleFactor, adjOriginL.y - base_y.y * scaleFactor, '#94a3b8', 2.5);
-      
-      adjCtx.fillStyle = '#38bdf8';
-      adjCtx.fillText('A·x', adjOriginL.x + Ax.x * scaleFactor + 6, adjOriginL.y - Ax.y * scaleFactor);
-      adjCtx.fillStyle = '#94a3b8';
-      adjCtx.fillText('y', adjOriginL.x + base_y.x * scaleFactor + 6, adjOriginL.y - base_y.y * scaleFactor);
-
-      // Draw Right World
-      drawGrid(adjCtx, 480, 380, adjOriginR);
-      drawArrow(adjCtx, adjOriginR.x, adjOriginR.y, adjOriginR.x + base_x.x * scaleFactor, adjOriginR.y - base_x.y * scaleFactor, '#94a3b8', 2.5);
-      drawArrow(adjCtx, adjOriginR.x, adjOriginR.y, adjOriginR.x + ATy.x * scaleFactor, adjOriginR.y - ATy.y * scaleFactor, '#10b981', 3);
-
-      adjCtx.fillStyle = '#94a3b8';
-      adjCtx.fillText('x', adjOriginR.x + base_x.x * scaleFactor + 6, adjOriginR.y - base_x.y * scaleFactor);
-      adjCtx.fillStyle = '#10b981';
-      adjCtx.fillText('Aᵀ·y', adjOriginR.x + ATy.x * scaleFactor + 6, adjOriginR.y - ATy.y * scaleFactor);
-
-      statLeftDot.textContent = (leftDot >= 0 ? '+' : '') + leftDot.toFixed(3);
-      statRightDot.textContent = (rightDot >= 0 ? '+' : '') + rightDot.toFixed(3);
-    }
-
-    sliderA12.addEventListener('input', renderAdjointCanvas);
-    sliderA22.addEventListener('input', renderAdjointCanvas);
-
-    // 5. Rotation Matrix and Transpose Inverse (Canvas 4)
-    const rotCanvas = document.getElementById('rotCanvas');
-    const rotCtx = rotCanvas.getContext('2d');
-    const sliderRotAngle = document.getElementById('sliderRotAngle');
-    const valRotAngle = document.getElementById('valRotAngle');
-    const statRotFwd = document.getElementById('statRotFwd');
-    const statRotInv = document.getElementById('statRotInv');
-    const btnApplyTransposeRot = document.getElementById('btnApplyTransposeRot');
-
-    const rotOrigin = { x: 240, y: 190 };
-    let currentRotAngle = 45;
-    let isReverted = false;
-
-    function renderRotCanvas() {
-      rotCtx.clearRect(0, 0, rotCanvas.width, rotCanvas.height);
-      drawGrid(rotCtx, rotCanvas.width, rotCanvas.height, rotOrigin);
-
-      const angle = isReverted ? 0 : currentRotAngle;
-      const rad = (angle * Math.PI) / 180;
-
-      // Base vector (120, 0) rotated by angle
-      const vx = 120 * Math.cos(rad);
-      const vy = 120 * Math.sin(rad);
-
-      // Draw original reference ghost vector (0 deg)
-      rotCtx.save();
-      rotCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-      rotCtx.setLineDash([4, 4]);
-      rotCtx.beginPath();
-      rotCtx.moveTo(rotOrigin.x, rotOrigin.y);
-      rotCtx.lineTo(rotOrigin.x + 120, rotOrigin.y);
-      rotCtx.stroke();
-      rotCtx.restore();
-
-      // Draw transformed vector R(theta) * v
-      drawArrow(rotCtx, rotOrigin.x, rotOrigin.y, rotOrigin.x + vx, rotOrigin.y - vy, isReverted ? '#10b981' : '#f59e0b', 4);
-
-      // Arc
-      rotCtx.save();
-      rotCtx.strokeStyle = isReverted ? '#10b981' : '#f59e0b';
-      rotCtx.lineWidth = 2;
-      rotCtx.beginPath();
-      rotCtx.arc(rotOrigin.x, rotOrigin.y, 40, -rad, 0);
-      rotCtx.stroke();
-      rotCtx.restore();
-
-      rotCtx.font = 'bold 13px Outfit, sans-serif';
-      rotCtx.fillStyle = isReverted ? '#10b981' : '#f59e0b';
-      rotCtx.fillText(isReverted ? 'Rᵀ · (R·v) = v (已复原)' : `R(θ)·v (已旋转 ${angle.toFixed(0)}°)`, rotOrigin.x + vx + 8, rotOrigin.y - vy - 8);
-
-      valRotAngle.textContent = currentRotAngle + '°';
-      statRotFwd.textContent = `+${currentRotAngle.toFixed(1)}°`;
-      statRotInv.textContent = `-${currentRotAngle.toFixed(1)}°`;
-    }
-
-    sliderRotAngle.addEventListener('input', (e) => {
-      currentRotAngle = parseFloat(e.target.value);
-      isReverted = false;
-      btnApplyTransposeRot.textContent = '🔄 施加转置变换 Rᵀ（逆向倒放复原）';
-      renderRotCanvas();
-    });
-
-    btnApplyTransposeRot.addEventListener('click', () => {
-      isReverted = !isReverted;
-      btnApplyTransposeRot.textContent = isReverted ? '⏮ 重新旋转 R(θ)' : '🔄 施加转置变换 Rᵀ（逆向倒放复原）';
-      renderRotCanvas();
-    });
-
-    // 6. Interactive Quiz Check
-    function checkQuiz(btn, isCorrect, feedbackText) {
-      const parent = btn.parentElement;
-      const buttons = parent.querySelectorAll('.quiz-btn');
-      buttons.forEach(b => {
-        b.classList.remove('correct', 'wrong');
-        b.disabled = true;
-      });
-
-      const feedback = document.getElementById('quizFeedback');
-      feedback.style.display = 'block';
-
-      if (isCorrect) {
-        btn.classList.add('correct');
-        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
-        feedback.style.color = '#34d399';
-        feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
-        feedback.innerHTML = '<strong>回答正确！</strong> ' + feedbackText;
-      } else {
-        btn.classList.add('wrong');
-        feedback.style.background = 'rgba(244, 63, 94, 0.15)';
-        feedback.style.color = '#fb7185';
-        feedback.style.border = '1px solid rgba(244, 63, 94, 0.3)';
-        feedback.innerHTML = '<strong>需要再想一想：</strong> ' + feedbackText;
-      }
-    }
-
-    // Initial render
-    window.addEventListener('DOMContentLoaded', () => {
-      renderDotCanvas();
-      renderCombCanvas();
-      renderAdjointCanvas();
-      renderRotCanvas();
-    });
-  </script>
+  <!-- App Scripts -->
+  <script src="nodes_data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

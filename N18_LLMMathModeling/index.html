@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N18 大语言模型 (LLMs) 数学建模 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(244, 63, 94, 0.1) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-amber); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(245, 158, 11, 0.1); border-color: var(--accent-amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N18 · Level 3 前沿理论</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N18 · 大语言模型数学建模</span>
+      <h1>大语言模型 (LLMs) 数学建模 (Mathematical Modeling of LLMs)</h1>
+      <p style="color: var(--text-secondary);">高维联合概率分解、自回归 Softmax 测度流形与上下文学习 (In-Context Learning) 隐式梯度下降。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Roberts: Principles of Deep Learning Theory</span>
+        <span class="badge">📄 Brown et al. (NeurIPS 2020) GPT-3</span>
+        <span class="badge">📄 von Oswald et al. (ICML 2023) In-Context Gradient Descent</span>
+        <span class="badge">📄 Garg et al. (NeurIPS 2022) In-Context Linear Regression</span>
+      </div>
+    </div>
+
+    <!-- Special Link Button -->
+    <div style="margin-bottom: 2rem;">
+      <a href="../attention.html" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%); color: #fff; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 700; text-decoration: none;">
+        🌟 点击打开《Attention (QKV) 矩阵运算几何本质交互教程》
+      </a>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>GPT-4、Claude 与 DeepSeek 背后统一的概率与流形生成框架：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>自回归高维联合概率分解</strong>：世界上所有书籍与代码都可以写为概率联合乘积 $P(x_1, x_2, \dots, x_T) = \prod_{t=1}^T P(x_t | x_{<t})$。LLM 就是在预测“下一个 Token 的概率测度”。</li>
+        <li><strong>上下文学习 (In-Context Learning) 的本质</strong>：当你在 Prompt 里给大模型提供 3 个示例（Few-Shot）时，Transformer 并没有更新任何模型权重 $\theta$，但其注意力层在正向传播中<strong>隐式执行了一次梯度下降更新 (Implicit Gradient Descent)</strong>！</li>
+        <li><strong>注意力机制低秩流形投影</strong>：大模型输入为 4096 维词向量，但在 Transformer 各层中，特征向量始终在极低维的线性子空间流形上旋转与转移。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>上下文学习 (ICL) 隐式梯度更新推导（von Oswald et al., 2023）：</p>
+      <div class="math-callout">
+        $$\text{Attention}(Q, K, V) = (V + \Delta V) K^T Q \approx V K^T Q - \eta \nabla_{W} \mathcal{L}(W) x$$
+      </div>
+      <p style="color: var(--text-secondary);">线性 Transformer 层的前向传播可精确映射为在 Prompt 示例数据上运行一步梯度下降：</p>
+      <div class="math-callout">
+        $$W_1 = W_0 - \eta (W_0 X_{\text{prompt}} - Y_{\text{prompt}}) X_{\text{prompt}}^T$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文一：Language Models are Few-Shot Learners (GPT-3, Brown et al., NeurIPS 2020)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 1750 亿参数的 GPT-3 奠基之作！首次证明了无需微调微调参数，仅仅依靠 Scaling 扩充参数量与 Prompt 上下文学习 (ICL)，模型就能具备涌现式的多任务推理能力。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Transformers learn in-context by gradient descent (von Oswald et al., ICML 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 揭开了 ICL 的数学黑盒！严格证明了单层 Linear Self-Attention 的正向传播与在 Context 示例上求解最小二乘的内步梯度下降 (Inner Gradient Descent) 的代数等价性。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文三：What Can Transformers Learn In-Context? (Garg et al., NeurIPS 2022)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 通过受控实验证明了未微调的 Transformer 可以在 Context 中隐式学会求解线性回归、岭回归、决策树乃至两层神经网络等经典机器学习算法。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>DeepSeek / LLaMA 基座自回归 Logits 计算与 Cross-Entropy 优化：</p>
+      <div class="math-callout">
+        $$\text{Logits}_t = h_t \cdot W_{\text{lm\_head}}^T, \quad P(y_t | y_{<t}) = \text{Softmax}(\text{Logits}_t)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在几万张 H100 构成的千亿参数预训练集群中，通过 FlashAttention-3 与 FP8 混合精度矩阵乘法算子，以极高吞吐优化自回归 Logits 概率流形。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Roberts (The Principles of Deep Learning Theory Chapter 11)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么说 Transformer 的 In-Context Learning (ICL) 是一种“隐式梯度下降”？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！数学推导证明，Self-Attention 矩阵 $QK^T V$ 在正向传播时，对 Query 的变换表达式与在 Prompt 示例数据上计算 MSE 损失并更新一阶梯度完全成代数同构！')">
+          A. 因为注意力机制的正向计算过程在代数形式上精确同构于在 Prompt 示例上执行了一次带权重的梯度更新。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，ICL 并不更新底层的神经网络反向传播权重。')">
+          B. 因为大模型在 Prompt 阶段更新了模型权重 $\theta$。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

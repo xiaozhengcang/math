@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7: 特征值与矩阵对角化 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item active">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 7: 特征值、PageRank 与矩阵对角化</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块七：特征值、特征向量、Google PageRank 与矩阵对角化</h1>
+        <div class="module-subtitle">解构变换中不旋转的几何主轴、Google 搜索排名算法与矩阵高阶幂 $A^k$ 极速计算</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块对应讲义 Chapter 5 的全部内容：从<strong>特征值 (Eigenvalue) 与特征向量 (Eigenvector) 的几何主轴直觉</strong>，到<strong>特征多项式 $\det(A-\lambda I)=0$</strong> 与特征子空间；接着探索工业级应用<strong>Google PageRank 幂法算法</strong>；最后全解构<strong>矩阵对角化 $A = PDP^{-1}$</strong> 的判定条件与高阶幂 $A^k$ 极速计算。
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 特征值与特征向量的几何直觉：变换中不旋转的特征主轴</h2>
+
+        <!-- SVG Graphic 7.1: Ordinary Rotating Vector vs Eigenvector (Non-rotating) -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Left: Ordinary Vector (Rotated and Scaled) -->
+            <g>
+              <line x1="100" y1="120" x2="160" y2="120" stroke="#94a3b8" stroke-width="2"/>
+              <line x1="100" y1="120" x2="150" y2="50" stroke="#ef4444" stroke-width="3" marker-end="url(#arrow-red)"/>
+              <text x="130" y="145" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle"> 普通向量: 偏转 + 改变角度 ❌</text>
+            </g>
+
+            <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+
+            <!-- Right: Eigenvector (Only Scaled along line) -->
+            <g>
+              <line x1="280" y1="160" x2="440" y2="40" stroke="#334155" stroke-dasharray="2"/>
+              <line x1="360" y1="100" x2="400" y2="70" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="360" y1="100" x2="440" y2="40" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrow-green)"/>
+              <text x="390" y="145" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle"> 特征向量: 方向保持同轴 (仅λ倍拉伸) ✅</text>
+            </g>
+
+            <defs>
+              <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+              </marker>
+              <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="intuition-box">
+          <div class="box-title">💡 几何直觉：找寻不变的方向</div>
+          <p>当矩阵 $A$ 作用在绝大多数向量上时，向量不仅会被拉伸，方向还会发生偏转旋转。但是，空间中总存在某些**极其特殊的固有轴方向**，矩阵 $A$ 作用在它们上面时，**只发生纯粹的伸缩放大或缩短，方向完全不改变**！</p>
+          <div class="math-block">
+            $$A \mathbf{v} = \lambda \mathbf{v} \quad (\mathbf{v} \neq \mathbf{0})$$
+          </div>
+          <ul style="margin-left: 1.2rem; line-height: 1.8; margin-top:0.5rem;">
+            <li>非零向量 $\mathbf{v}$ 称为矩阵 $A$ 的**特征向量 (Eigenvector)**。</li>
+            <li>纯标量 $\lambda$ 称为对应特征向量的**特征值 (Eigenvalue)**，代表在该主轴方向上的拉伸倍率。</li>
+          </ul>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. 特征多项式 (Characteristic Polynomial) 与代数/几何重数</h2>
+        <p>将核心方程移项整理：$(A - \lambda I_n)\mathbf{v} = \mathbf{0}$。由于要求存在非零解 $\mathbf{v} \neq \mathbf{0}$，系数矩阵必须不可逆，行列式必须等于 0！</p>
+        <div class="math-block">
+          $$\det(A - \lambda I_n) = 0 \quad \text{(特征方程 / 特征多项式)}$$
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">代数重数 $m_a$ vs 几何重数 $m_g$ 及不可对角化剪切矩阵反例</div>
+          <p>对于重根特征值 $\lambda$：</p>
+          <ul>
+            <li><strong>代数重数 $m_a$</strong>：$\lambda$ 在特征多项式根中的重复次数。</li>
+            <li><strong>几何重数 $m_g$</strong>：对应特征子空间 $\text{Null}(A - \lambda I)$ 的维数 $\dim(E_\lambda)$。满足 $1 \le m_g \le m_a$。</li>
+          </ul>
+          <p style="margin-top:0.6rem;"><strong>缺特征向量经典反例（剪切矩阵）</strong>：$A = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$。特征方程 $(\lambda-1)^2 = 0 \implies \lambda = 1$（$m_a = 2$）。但在解 $(A - 1I)\mathbf{v} = \mathbf{0} \implies \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \mathbf{v} = \mathbf{0}$ 时，只能解出唯一的特征向量基 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$（$m_g = 1 < m_a$）。缺一个特征向量，导致矩阵 $A$ <strong>彻底无法被对角化</strong>！$\blacksquare$</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 🌐 工业级前沿：Google PageRank 网页排名算法</h2>
+
+        <!-- SVG Graphic 7.2: PageRank Web Graph & Markov Transition -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <circle cx="80" cy="90" r="25" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="80" y="95" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle"> 网页 A</text>
+
+            <circle cx="240" cy="50" r="25" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
+            <text x="240" y="55" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle"> 网页 B</text>
+
+            <circle cx="400" cy="90" r="25" fill="rgba(74, 222, 128, 0.2)" stroke="#4ade80" stroke-width="2"/>
+            <text x="400" y="95" fill="#4ade80" font-size="14" font-weight="bold" text-anchor="middle"> 网页 C</text>
+
+            <path d="M 105 80 L 215 55" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+            <path d="M 265 55 L 375 80" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow-purple)"/>
+            <path d="M 375 100 L 105 100" stroke="#4ade80" stroke-width="2" marker-end="url(#arrow-green)"/>
+          </svg>
+        </div>
+
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">Google 创始算法 PageRank 的线性代数本质</div>
+          <p>互联网中 $N$ 个网页之间的超链接构成了一个随机游走图，设其马尔可夫转移矩阵为 $P$。当用户随机点击链接经过长期游走后，网页的重要性概率分布向量 $\mathbf{q}$ 将趋于稳定平衡状态：</p>
+          <div class="math-block">
+            $$P \mathbf{q} = 1 \cdot \mathbf{q}$$
+          </div>
+          <p><strong>数学本质</strong>：PageRank 排名向量 $\mathbf{q}$ 正是马尔可夫转移矩阵 $P$ 对应于<strong>主特征值 $\lambda = 1$ 的特征向量</strong>！Google 使用**幂法 (Power Method)** $\mathbf{x}_{k+1} = P \mathbf{x}_k$ 迭代数十次即可极速求解全网数十亿网页的排名向量。</p>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 👑 矩阵对角化 (Diagonalization) $A = PDP^{-1}$ 与斐波那契矩阵求解</h2>
+        <p>若 $n \times n$ 矩阵 $A$ 拥有 $n$ 个线性无关的特征向量 $\mathbf{v}_1, \dots, \mathbf{v}_n$，分别对应特征值 $\lambda_1, \dots, \lambda_n$：</p>
+
+        <div class="step-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">构造特征向量矩阵 $P$ 与特征值对角矩阵 $D$</div>
+              <div class="math-block">
+                $$P = [\mathbf{v}_1 \,\, \mathbf{v}_2 \,\, \dots \,\, \mathbf{v}_n], \quad D = \begin{bmatrix} \lambda_1 & 0 & \dots & 0 \\ 0 & \lambda_2 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \lambda_n \end{bmatrix}$$
+              </div>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">验证对角化恒等式 $AP = PD$</div>
+              <p>$A P = A [\mathbf{v}_1 \dots \mathbf{v}_n] = [A\mathbf{v}_1 \dots A\mathbf{v}_n] = [\lambda_1 \mathbf{v}_1 \dots \lambda_n \mathbf{v}_n] = P D$。因 $P$ 可逆，两边同右乘 $P^{-1}$ 得：</p>
+              <div class="math-block">
+                $$A = P D P^{-1} \iff D = P^{-1} A P$$
+              </div>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">矩阵高阶幂 $A^k$ 的极速计算</div>
+              <div class="math-block">
+                $$A^k = (P D P^{-1})(P D P^{-1}) \dots (P D P^{-1}) = P D^k P^{-1} = P \begin{bmatrix} \lambda_1^k & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots & \lambda_n^k \end{bmatrix} P^{-1}$$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="proof-box">
+          <div class="box-title">🚀 经典推导：利用矩阵对角化推导斐波那契数列通项公式</div>
+          <p>斐波那契递推式 $F_{k+2} = F_{k+1} + F_k$ 可改写为矩阵形式：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} = A^{k-1} \begin{bmatrix} F_1 \\ F_0 \end{bmatrix}$$
+          </div>
+          <p>对 $A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ 求特征值：$\det(A-\lambda I) = \lambda^2 - \lambda - 1 = 0 \implies \lambda_1 = \frac{1+\sqrt{5}}{2} = \phi$ (黄金分割比), $\lambda_2 = \frac{1-\sqrt{5}}{2}$。</p>
+          <p>通过计算 $A^k = P D^k P^{-1}$ 直接得出比内公式 (Binet's Formula)：$F_k = \frac{1}{\sqrt{5}} \left[ \left(\frac{1+\sqrt{5}}{2}\right)^k - \left(\frac{1-\sqrt{5}}{2}\right)^k \right] \quad \blacksquare$</p>
+        </div>
+
+        <!-- Section 5: Worked Examples -->
+        <h2 class="section-title">5. ✍️ 完整手把手手算数值例题与推导</h2>
+        <div class="proof-box">
+          <div class="box-title">手算例题：对角化 $2 \times 2$ 矩阵并求 $A^{10}$</div>
+          <p><strong>已知矩阵</strong> $A = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$。</p>
+          <p><strong>解答步骤</strong>：</p>
+          <ul>
+            <li>特征方程：$\det(A - \lambda I) = (1-\lambda)^2 - 4 = \lambda^2 - 2\lambda - 3 = (\lambda - 3)(\lambda + 1) = 0$。特征值为 $\lambda_1 = 3, \lambda_2 = -1$。</li>
+            <li>特征向量：对于 $\lambda_1=3$，解 $(A-3I)\mathbf{v}=\mathbf{0} \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$；对于 $\lambda_2=-1$，得 $\mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$。</li>
+            <li>构造对角化：$P = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, D = \begin{bmatrix} 3 & 0 \\ 0 & -1 \end{bmatrix}$。求得 $P^{-1} = \frac{1}{2}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$。</li>
+            <li>计算 $A^{10} = P D^{10} P^{-1} = P \begin{bmatrix} 3^{10} & 0 \\ 0 & (-1)^{10} \end{bmatrix} P^{-1} = \frac{1}{2} \begin{bmatrix} 3^{10}+1 & 3^{10}-1 \\ 3^{10}-1 & 3^{10}+1 \end{bmatrix} \quad \blacksquare$</li>
+          </ul>
+        </div>
+
+        <!-- Section 6: Interactive Quiz Accordion -->
+        <h2 class="section-title">6. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：一个包含 0 特征值的矩阵是否可对角化？</div>
+          <p>对比 $\lambda = 0$ 与矩阵可逆性及对角化的关系。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：完全可以对角化！不可逆不影响对角化！</strong></p>
+              <p>解析：特征值 $\lambda = 0$ 只说明矩阵不可逆（零空间 $\text{Null}(A)$ 不为零）；而矩阵能否对角化只取决于是否有 $n$ 个线性无关的特征向量。例如 $A = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$，特征值为 1 和 0，自身就已经是一个对角矩阵！$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 7: Python Practice -->
+        <h2 class="section-title">7. 💻 编程实战：用 Python / NumPy 计算特征值与对角化</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import numpy as np
+
+A = np.array([[1, 2], [2, 1]], dtype=float)
+
+# 计算特征值 and 特征向量
+eigenvalues, eigenvectors = np.linalg.eig(A)
+
+print("特征值 (Eigenvalues):", eigenvalues)
+print("特征向量矩阵 P (Eigenvectors):\n", eigenvectors)
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module6_coordinates_transforms.html" class="btn-nav prev">← 上一模块：坐标系统与基变换</a>
+          <a href="module8_orthogonality_svd_beyond.html" class="btn-nav next">下一模块：正交投影与 SVD →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3: 矩阵四大视角与可逆大一统 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与地图</span>
+        </a>
+        
+        <div class="nav-section-title">核心模块 (8 大章节)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>向量、矩阵与线性方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>求解方程组、RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item active">
+          <span class="nav-icon">3️⃣</span>
+          <span>矩阵四大视角与可逆大一统</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>子空间、基与四大基本子空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>行列式体积、余子式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>坐标系统与基变换矩阵</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>特征值、PageRank 与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>正交投影、SVD 与超越向量</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">线性代数</a> / <span>Module 3: 矩阵四大视角与可逆大一统</span>
+        </div>
+      </header>
+
+      <main class="content-container">
+        <h1 class="module-title">模块三：矩阵四大视角、几何变换与可逆大一统定理</h1>
+        <div class="module-subtitle">解构矩阵乘法 $AB=C$ 的四大观察镜头与方阵可逆 10 大等价条件的完美闭环</div>
+
+        <!-- Course Guidance Roadmap Card -->
+        <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
+          <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
+            本模块涵盖课程讲义 2-1 至 2-4 的全部内容：从<strong>矩阵乘法的 4 种解读视角</strong>（点积、列组合、行组合、外积），到矩阵作为<strong>线性变换的几何网格扭曲</strong>（旋转、缩放、剪切）；接着引出初等矩阵与求逆算法 $[A \mid I] \to [I \mid A^{-1}]$；最终建立线性代数史上最为壮观的**可逆矩阵 10 大条件大一统定理**！
+          </p>
+        </div>
+
+        <!-- Section 1 -->
+        <h2 class="section-title">1. 矩阵乘法 $AB = C$ 的 4 大观察视角</h2>
+        <p>不要只把矩阵乘法当成死算！针对同一个乘积 $C = AB$，线性代数提供了 4 种截然不同的看问题的眼光：</p>
+
+        <!-- SVG Graphic 3.1: 4 Perspectives of Matrix Multiplication -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="520" height="240" viewBox="0 0 520 240" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Perspective 1: Inner Product -->
+            <rect x="20" y="20" width="220" height="90" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" rx="6"/>
+            <text x="130" y="45" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle"> 1. 点积视角 (Entry-wise)</text>
+            <text x="130" y="75" fill="var(--text-main)" font-size="12" text-anchor="middle"> Cij = Row_i(A) · Col_j(B)</text>
+
+            <!-- Perspective 2: Column Combo -->
+            <rect x="270" y="20" width="230" height="90" fill="rgba(168, 85, 247, 0.08)" stroke="#a855f7" rx="6"/>
+            <text x="385" y="45" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle"> 2. 列组合视角 (Column Combo)</text>
+            <text x="385" y="75" fill="var(--text-main)" font-size="12" text-anchor="middle"> Col_j(C) = A · Col_j(B)</text>
+
+            <!-- Perspective 3: Row Combo -->
+            <rect x="20" y="130" width="220" height="90" fill="rgba(74, 222, 128, 0.08)" stroke="#4ade80" rx="6"/>
+            <text x="130" y="155" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle"> 3. 行组合视角 (Row Combo)</text>
+            <text x="130" y="185" fill="var(--text-main)" font-size="12" text-anchor="middle"> Row_i(C) = Row_i(A) · B</text>
+
+            <!-- Perspective 4: Outer Product -->
+            <rect x="270" y="130" width="230" height="90" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" rx="6"/>
+            <text x="385" y="155" fill="#fbbf24" font-size="13" font-weight="bold" text-anchor="middle"> 4. 外积和视角 (Outer Product)</text>
+            <text x="385" y="185" fill="var(--text-main)" font-size="12" text-anchor="middle"> C = ∑ Col_k(A) · Row_k(B)</text>
+          </svg>
+        </div>
+
+        <div class="proof-box" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">🔍 图 3.1 几何直觉深度拆解与代数映射</div>
+          <ul style="margin-left: 1.2rem; line-height: 1.8; font-size: 0.92rem;">
+            <li><strong>点积视角</strong>：只关心单个位置元素。通过 $A$ 的第 $i$ 行与 $B$ 的第 $j$ 列进行内积计算。</li>
+            <li><strong>列组合视角</strong>：$C$ 的第 $j$ 列是 $A$ 各列向量在 $B$ 的第 $j$ 列系数调配下的加权和。<strong>初等列变换的本质！</strong></li>
+            <li><strong>行组合视角</strong>：$C$ 的第 $i$ 行是 $B$ 各行向量在 $A$ 的第 $i$ 行系数调配下的加权和。<strong>初等行变换的本质！</strong></li>
+            <li><strong>外积和视角</strong>：把矩阵乘法分解为 $r$ 个“秩为 1 的外积矩阵”直接相加。在 PCA 和奇异值分解 (SVD) 中极度关键！</li>
+          </ul>
+        </div>
+
+        <div class="concept-box" style="background: rgba(251, 191, 36, 0.08); border-color: var(--accent-amber);">
+          <div class="box-title" style="color:var(--accent-amber);">🎒 概念微定义：什么是“外积 (Outer Product)”？</div>
+          <p style="font-size:0.92rem; margin-bottom:0;">
+            由一个列向量 $\mathbf{u}$ 与一个行向量 $\mathbf{v}^T$ 相乘得到的矩阵称为<strong>外积 (Outer Product)</strong>，记作 $\mathbf{u}\mathbf{v}^T$。外积矩阵的每一列都是 $\mathbf{u}$ 的倍数，其秩必定等于 1，是构成复杂高阶矩阵的基础“秩-1 几何积木”。
+          </p>
+        </div>
+
+        <!-- Section 1 Numerical Examples Addition -->
+        <div class="card" style="background: rgba(30, 41, 59, 0.5); border-color: var(--border-color); margin-top: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.2rem; margin-bottom:1rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>✍️</span> 4 大视角数值手算全解与实例对照
+          </h3>
+          <p style="font-size:0.95rem; line-height:1.7; margin-bottom:1.2rem;">
+            为了彻底搞懂这 4 种视角，我们以同一组矩阵乘法为例：求矩阵 $A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$ 与 $B = \begin{bmatrix} 5 & 6 \\ 7 & 8 \end{bmatrix}$ 的乘积 $C = AB$。看 4 种视角如何“殊途同归”得到完全相同的 $C = \begin{bmatrix} 19 & 22 \\ 43 & 50 \end{bmatrix}$。
+          </p>
+
+          <!-- Perspective 1 Card -->
+          <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.3); border-left: 4px solid var(--accent-blue); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <h4 style="color:var(--accent-blue); font-size:1.05rem; margin:0;">1️⃣ 视角一：点积视角 (Entry-wise Inner Product)</h4>
+              <span style="font-size:0.8rem; background:rgba(56, 189, 248, 0.15); color:var(--accent-blue); padding:0.2rem 0.6rem; border-radius:4px; font-weight:600;">计算粒度：单个元素 $c_{ij}$</span>
+            </div>
+            <p style="font-size:0.92rem; margin-bottom:0.6rem;"><strong>法则</strong>：$C$ 的第 $i$ 行第 $j$ 列元素 $c_{ij}$ 等于 $A$ 的第 $i$ 行向量与 $B$ 的第 $j$ 列向量的点积。</p>
+            <div class="math-block" style="text-align:left; padding:0.8rem 1.2rem; font-size:0.92rem;">
+              $$\begin{aligned}
+              c_{11} &= \text{Row}_1(A) \cdot \text{Col}_1(B) = \begin{bmatrix} 1 & 2 \end{bmatrix} \begin{bmatrix} 5 \\ 7 \end{bmatrix} = 1 \times 5 + 2 \times 7 = 19 \\
+              c_{12} &= \text{Row}_1(A) \cdot \text{Col}_2(B) = \begin{bmatrix} 1 & 2 \end{bmatrix} \begin{bmatrix} 6 \\ 8 \end{bmatrix} = 1 \times 6 + 2 \times 8 = 22 \\
+              c_{21} &= \text{Row}_2(A) \cdot \text{Col}_1(B) = \begin{bmatrix} 3 & 4 \end{bmatrix} \begin{bmatrix} 5 \\ 7 \end{bmatrix} = 3 \times 5 + 4 \times 7 = 43 \\
+              c_{22} &= \text{Row}_2(A) \cdot \text{Col}_2(B) = \begin{bmatrix} 3 & 4 \end{bmatrix} \begin{bmatrix} 6 \\ 8 \end{bmatrix} = 3 \times 6 + 4 \times 8 = 50
+              \end{aligned}$$
+            </div>
+            <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">💡 <strong>直觉应用</strong>：最基础的标量定义，适合计算结果矩阵中的某个特定单独位置数值。</p>
+          </div>
+
+          <!-- Perspective 2 Card -->
+          <div style="background: rgba(168, 85, 247, 0.05); border: 1px solid rgba(168, 85, 247, 0.3); border-left: 4px solid var(--accent-purple); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <h4 style="color:var(--accent-purple); font-size:1.05rem; margin:0;">2️⃣ 视角二：列组合视角 (Column Combination)</h4>
+              <span style="font-size:0.8rem; background:rgba(168, 85, 247, 0.15); color:var(--accent-purple); padding:0.2rem 0.6rem; border-radius:4px; font-weight:600;">计算粒度：整列向量 $\text{Col}_j(C)$</span>
+            </div>
+            <p style="font-size:0.92rem; margin-bottom:0.6rem;"><strong>法则</strong>：$C$ 的第 $j$ 列是矩阵 $A$ 的各列向量，以 $B$ 的第 $j$ 列元素为权重（加权系数）进行的<strong>线性组合</strong>：$\text{Col}_j(C) = A \cdot \text{Col}_j(B)$。</p>
+            <div class="math-block" style="text-align:left; padding:0.8rem 1.2rem; font-size:0.92rem;">
+              $$\begin{aligned}
+              \text{Col}_1(C) &= 5 \cdot \begin{bmatrix} 1 \\ 3 \end{bmatrix} + 7 \cdot \begin{bmatrix} 2 \\ 4 \end{bmatrix} = \begin{bmatrix} 5 \\ 15 \end{bmatrix} + \begin{bmatrix} 14 \\ 28 \end{bmatrix} = \begin{bmatrix} 19 \\ 43 \end{bmatrix} \\[0.5em]
+              \text{Col}_2(C) &= 6 \cdot \begin{bmatrix} 1 \\ 3 \end{bmatrix} + 8 \cdot \begin{bmatrix} 2 \\ 4 \end{bmatrix} = \begin{bmatrix} 6 \\ 18 \end{bmatrix} + \begin{bmatrix} 16 \\ 32 \end{bmatrix} = \begin{bmatrix} 22 \\ 50 \end{bmatrix}
+              \end{aligned}$$
+            </div>
+            <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">💡 <strong>直觉应用</strong>：<strong>列空间 $\text{Col}(A)$ 的几何本质！</strong> 说明 $C$ 的每一列都是 $A$ 各列向量张成空间内的向量，也是初等列变换与线性方程组 $A\mathbf{x}=\mathbf{b}$ 的核心。</p>
+          </div>
+
+          <!-- Perspective 3 Card -->
+          <div style="background: rgba(74, 222, 128, 0.05); border: 1px solid rgba(74, 222, 128, 0.3); border-left: 4px solid var(--accent-green); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <h4 style="color:var(--accent-green); font-size:1.05rem; margin:0;">3️⃣ 视角三：行组合视角 (Row Combination)</h4>
+              <span style="font-size:0.8rem; background:rgba(74, 222, 128, 0.15); color:var(--accent-green); padding:0.2rem 0.6rem; border-radius:4px; font-weight:600;">计算粒度：整行向量 $\text{Row}_i(C)$</span>
+            </div>
+            <p style="font-size:0.92rem; margin-bottom:0.6rem;"><strong>法则</strong>：$C$ 的第 $i$ 行是矩阵 $B$ 的各行向量，以 $A$ 的第 $i$ 行元素为权重（加权系数）进行的<strong>线性组合</strong>：$\text{Row}_i(C) = \text{Row}_i(A) \cdot B$。</p>
+            <div class="math-block" style="text-align:left; padding:0.8rem 1.2rem; font-size:0.92rem;">
+              $$\begin{aligned}
+              \text{Row}_1(C) &= 1 \cdot \begin{bmatrix} 5 & 6 \end{bmatrix} + 2 \cdot \begin{bmatrix} 7 & 8 \end{bmatrix} = \begin{bmatrix} 5 & 6 \end{bmatrix} + \begin{bmatrix} 14 & 16 \end{bmatrix} = \begin{bmatrix} 19 & 22 \end{bmatrix} \\[0.5em]
+              \text{Row}_2(C) &= 3 \cdot \begin{bmatrix} 5 & 6 \end{bmatrix} + 4 \cdot \begin{bmatrix} 7 & 8 \end{bmatrix} = \begin{bmatrix} 15 & 18 \end{bmatrix} + \begin{bmatrix} 28 & 32 \end{bmatrix} = \begin{bmatrix} 43 & 50 \end{bmatrix}
+              \end{aligned}$$
+            </div>
+            <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">💡 <strong>直觉应用</strong>：<strong>高斯消元法与初等矩阵的基石！</strong> 左乘一个矩阵相当于对右边矩阵的行进行消元、替换和加权组合（RREF 推导的关键）。</p>
+          </div>
+
+          <!-- Perspective 4 Card -->
+          <div style="background: rgba(251, 191, 36, 0.05); border: 1px solid rgba(251, 191, 36, 0.3); border-left: 4px solid var(--accent-amber); border-radius: var(--radius-md); padding: 1.2rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.6rem;">
+              <h4 style="color:var(--accent-amber); font-size:1.05rem; margin:0;">4️⃣ 视角四：外积和视角 (Sum of Outer Products)</h4>
+              <span style="font-size:0.8rem; background:rgba(251, 191, 36, 0.15); color:var(--accent-amber); padding:0.2rem 0.6rem; border-radius:4px; font-weight:600;">计算粒度：矩阵层级的“秩-1 积木”叠加</span>
+            </div>
+            <p style="font-size:0.92rem; margin-bottom:0.6rem;"><strong>法则</strong>：把矩阵乘积 $C$ 拆解为 $A$ 的第 $k$ 列与 $B$ 的第 $k$ 行相乘得到的 $n$ 个<strong>秩为 1 的外积矩阵（Outer Product Matrix）</strong>求和：$C = \sum_{k=1}^n \text{Col}_k(A) \cdot \text{Row}_k(B)$。</p>
+            <div class="math-block" style="text-align:left; padding:0.8rem 1.2rem; font-size:0.92rem;">
+              $$\begin{aligned}
+              R_1 &= \text{Col}_1(A) \cdot \text{Row}_1(B) = \begin{bmatrix} 1 \\ 3 \end{bmatrix} \begin{bmatrix} 5 & 6 \end{bmatrix} = \begin{bmatrix} 1 \times 5 & 1 \times 6 \\ 3 \times 5 & 3 \times 6 \end{bmatrix} = \begin{bmatrix} 5 & 6 \\ 15 & 18 \end{bmatrix} \quad (\text{秩}=1) \\[0.5em]
+              R_2 &= \text{Col}_2(A) \cdot \text{Row}_2(B) = \begin{bmatrix} 2 \\ 4 \end{bmatrix} \begin{bmatrix} 7 & 8 \end{bmatrix} = \begin{bmatrix} 2 \times 7 & 2 \times 8 \\ 4 \times 7 & 4 \times 8 \end{bmatrix} = \begin{bmatrix} 14 & 16 \\ 28 & 32 \end{bmatrix} \quad (\text{秩}=1) \\[0.5em]
+              C &= R_1 + R_2 = \begin{bmatrix} 5 & 6 \\ 15 & 18 \end{bmatrix} + \begin{bmatrix} 14 & 16 \\ 28 & 32 \end{bmatrix} = \begin{bmatrix} 19 & 22 \\ 43 & 50 \end{bmatrix}
+              \end{aligned}$$
+            </div>
+            <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">💡 <strong>直觉应用</strong>：<strong>数据压缩与 SVD / PCA 主成分分析的灵魂！</strong> 任意复杂矩阵都能拆解为若干个简单的“秩-1 物理微元”求和，保留前几个最重要的外积项即可实现极高比例的数据压缩（图像压缩、推荐系统）。</p>
+          </div>
+
+          <!-- Summary Comparison Grid -->
+          <div style="margin-top:1.5rem; padding-top:1rem; border-top:1px dashed var(--border-color);">
+            <h4 style="color:var(--text-main); font-size:0.98rem; margin-bottom:0.8rem;">📊 4 大视角对比总结表</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%; border-collapse:collapse; font-size:0.88rem; color:var(--text-muted);">
+                <thead>
+                  <tr style="background:rgba(15, 23, 42, 0.8); border-bottom:1px solid var(--border-color); color:var(--text-main);">
+                    <th style="padding:0.6rem; text-align:left;">视角</th>
+                    <th style="padding:0.6rem; text-align:left;">计算对象</th>
+                    <th style="padding:0.6rem; text-align:left;">核心代数表达式</th>
+                    <th style="padding:0.6rem; text-align:left;">最经典的应用场景</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-blue); font-weight:600;">1. 点积视角</td>
+                    <td style="padding:0.6rem;">标量 (Scalar)</td>
+                    <td style="padding:0.6rem;">$c_{ij} = \text{Row}_i(A) \cdot \text{Col}_j(B)$</td>
+                    <td style="padding:0.6rem;">计算矩阵中特定单点的值</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-purple); font-weight:600;">2. 列组合视角</td>
+                    <td style="padding:0.6rem;">列向量 (Column)</td>
+                    <td style="padding:0.6rem;">$\text{Col}_j(C) = A \cdot \text{Col}_j(B)$</td>
+                    <td style="padding:0.6rem;">列空间、线性方程组 $A\mathbf{x}=\mathbf{b}$</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-green); font-weight:600;">3. 行组合视角</td>
+                    <td style="padding:0.6rem;">行向量 (Row)</td>
+                    <td style="padding:0.6rem;">$\text{Row}_i(C) = \text{Row}_i(A) \cdot B$</td>
+                    <td style="padding:0.6rem;">高斯消元、初等矩阵与 RREF</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0.6rem; color:var(--accent-amber); font-weight:600;">4. 外积和视角</td>
+                    <td style="padding:0.6rem;">秩-1 矩阵 (Rank-1 Matrix)</td>
+                    <td style="padding:0.6rem;">$C = \sum \text{Col}_k(A) \text{Row}_k(B)$</td>
+                    <td style="padding:0.6rem;">PCA 主成分分析、SVD 矩阵压缩</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 -->
+        <h2 class="section-title">2. 矩阵作为线性变换：网格扭曲与乘法非交换性 ($AB \neq BA$)</h2>
+
+        <!-- SVG Graphic 3.2: Geometric Grid Transformation -->
+        <div style="text-align:center; margin: 1.5rem 0;">
+          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+            <!-- Left: Standard Orthogonal Grid -->
+            <g stroke="#334155" stroke-width="1">
+              <line x1="20" y1="100" x2="180" y2="100"/>
+              <line x1="100" y1="20" x2="100" y2="180"/>
+              <rect x="100" y="50" width="50" height="50" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+            </g>
+            <text x="100" y="195" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle"> 原始标准正交网格 I</text>
+
+            <path d="M 200 100 L 250 100" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+            <text x="225" y="90" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 矩阵 A 作用</text>
+
+            <!-- Right: Sheared/Rotated Grid -->
+            <g stroke="#334155" stroke-width="1">
+              <polygon points="280,150 380,130 440,50 340,70" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
+            </g>
+            <text x="360" y="195" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle"> 扭曲倾斜网格 A (保持平行等距!)</text>
+
+            <defs>
+              <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="intuition-box">
+          <div class="box-title">💡 线性变换的几何公理与网格变形</div>
+          <p>线性变换 (Linear Transformation) $T(\mathbf{x}) = A\mathbf{x}$ 必须满足两条几何铁律：</p>
+          <ol style="margin-left:1.5rem; line-height:1.7;">
+            <li>原点 $(0,0)$ 在变换后保持不动（零向量映射到零向量）。</li>
+            <li>所有的直线变换后依然是直线，且平行等距的网格线变换后依然保持平行等距！</li>
+          </ol>
+          <p style="margin-top:0.6rem;"><strong>为什么 $AB \neq BA$？</strong> 在几何上，$AB$ 代表“先施加变换 $B$，再施加变换 $A$”。先旋转 $90^\circ$ 再向右剪切，与先向右剪切再旋转 $90^\circ$，最终落下的网格形状完全不同！</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. 初等矩阵 (Elementary Matrices) 与加边求逆算法 $[A \mid I] \to [I \mid A^{-1}]$</h2>
+        <p>每一个初等行变换，都精确对应着左乘一个**初等矩阵 $E$**。对于 $n \times n$ 可逆矩阵 $A$，通过一系列初等行变换可将其化简为单位矩阵 $I$：</p>
+        <div class="math-block">
+          $$E_k E_{k-1} \dots E_1 A = I_n \implies A^{-1} = E_k E_{k-1} \dots E_1$$
+        </div>
+        <p>将同样的操作施加在单位矩阵 $I$ 上（即构造加边矩阵 $[A \mid I]$ 并化为 RREF），右半部分自然就变成了 $A^{-1}$！</p>
+
+        <!-- Subsection 3.1: Nilpotent Matrices & Neumann Series Deep Dive -->
+        <div class="card" style="background: rgba(168, 85, 247, 0.04); border-color: rgba(168, 85, 247, 0.3); margin-top: 2rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
+            <h3 style="color:var(--accent-purple); font-size:1.25rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
+              <span>🔮</span> 深入专题：幂零矩阵与 Neumann 级数求逆推导
+            </h3>
+            <span style="font-size:0.82rem; background:rgba(168, 85, 247, 0.15); color:var(--accent-purple); padding:0.25rem 0.75rem; border-radius:12px; font-weight:600;">解析解视角 vs 算法求解</span>
+          </div>
+
+          <!-- Intuition & Analogy Box -->
+          <div class="intuition-box" style="margin-top:0;">
+            <div class="box-title" style="color:var(--accent-purple);">💡 直觉桥梁：从标量几何级数（等比数列求和）到矩阵代数</div>
+            <p style="font-size:0.95rem; line-height:1.7;">
+              在微积分与实分析中，我们熟知的<strong>几何级数 (Geometric Series)</strong> 展开公式为：
+            </p>
+            <div class="math-block" style="background:rgba(15, 23, 42, 0.4); padding:0.6rem;">
+              $$\frac{1}{1 - x} = (1 - x)^{-1} = 1 + x + x^2 + x^3 + \dots \quad (\text{条件：}|x| < 1)$$
+            </div>
+            <p style="font-size:0.95rem; line-height:1.7; margin-bottom:0;">
+              当我们把标量 $x$ 替换为<strong>矩阵 $N$</strong> 时，如果要计算矩阵逆 $(I - N)^{-1}$，通常需要考虑无限级数的收敛性。然而，如果 $N$ 是一个特殊的<strong>幂零矩阵 (Nilpotent Matrix)</strong>（即有限步后自乘归零 $N^k = \mathbf{0}$），这个无穷级数就会在第 $k-1$ 项处<strong>突然精确截断 (Finite Truncation)</strong>，直接演变为一个闭式有限多项式！
+            </p>
+          </div>
+
+          <!-- Concept 1: Nilpotent Definition & SVG Graphic -->
+          <div style="margin: 1.5rem 0;">
+            <h4 style="color:var(--text-main); font-size:1.05rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>1️⃣</span> 什么是幂零矩阵 (Nilpotent Matrix)？
+            </h4>
+            <p style="font-size:0.93rem; line-height:1.7;">
+              <strong>严格定义</strong>：设 $N$ 为 $n \times n$ 实数方阵，若存在正整数 $k$ 使得 $N^k = \mathbf{0}$，且 $N^{k-1} \neq \mathbf{0}$，则称 $N$ 为<strong>阶数为 $k$ 的幂零矩阵</strong>（Nilpotent Index $k$）。
+            </p>
+            <div style="background:rgba(15, 23, 42, 0.7); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:1rem; font-size:0.9rem; line-height:1.6; margin-top:0.8rem;">
+              <span style="color:var(--accent-blue); font-weight:600;">📌 典型特征与判别法则：</span>
+              <ul style="margin-left:1.5rem; margin-top:0.4rem; color:var(--text-muted);">
+                <li><strong>结构特征</strong>：主对角线全为 0 的<strong>严格上三角矩阵</strong>或<strong>严格下三角矩阵</strong>必为幂零矩阵（例如 $n$ 阶严格上三角矩阵满足 $N^n = \mathbf{0}$）。</li>
+                <li><strong>物理直觉</strong>：矩阵 $N$ 代表单向信息流或有向无环图（DAG）的邻接转移。由于图中不存在环路，任何信号经过最多 $k$ 步传输后必定彻底消亡。</li>
+              </ul>
+            </div>
+
+            <!-- SVG Diagram: Nilpotent Propagation & Decay -->
+            <div style="text-align:center; margin: 1.5rem 0;">
+              <svg width="520" height="130" viewBox="0 0 520 130" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+                <!-- Step 0: I -->
+                <rect x="20" y="25" width="80" height="80" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" rx="6"/>
+                <text x="60" y="60" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">I</text>
+                <text x="60" y="82" fill="var(--text-muted)" font-size="11" text-anchor="middle">零阶 (恒等)</text>
+
+                <!-- Arrow 1 -->
+                <path d="M 110 65 L 140 65" stroke="var(--border-highlight)" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+                <!-- Step 1: N -->
+                <rect x="150" y="25" width="80" height="80" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" rx="6"/>
+                <text x="190" y="60" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle">N</text>
+                <text x="190" y="82" fill="var(--text-muted)" font-size="11" text-anchor="middle">1阶 (信息流)</text>
+
+                <!-- Arrow 2 -->
+                <path d="M 240 65 L 270 65" stroke="var(--border-highlight)" stroke-width="2" marker-end="url(#arrow-dim)"/>
+
+                <!-- Step 2: N^2 -->
+                <rect x="280" y="25" width="80" height="80" fill="rgba(251, 191, 36, 0.12)" stroke="#fbbf24" rx="6"/>
+                <text x="320" y="60" fill="#fbbf24" font-size="14" font-weight="bold" text-anchor="middle">N²</text>
+                <text x="320" y="82" fill="var(--text-muted)" font-size="11" text-anchor="middle">2阶 (次级衰减)</text>
+
+                <!-- Arrow 3 -->
+                <path d="M 370 65 L 400 65" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" marker-end="url(#arrow-rose)"/>
+
+                <!-- Step 3: N^k = 0 -->
+                <rect x="410" y="25" width="90" height="80" fill="rgba(244, 63, 94, 0.12)" stroke="#f43f5e" stroke-width="2" rx="6"/>
+                <text x="455" y="60" fill="#f43f5e" font-size="14" font-weight="bold" text-anchor="middle">Nᵏ = 0</text>
+                <text x="455" y="82" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">彻底归零/截断!</text>
+
+                <defs>
+                  <marker id="arrow-dim" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+                  </marker>
+                  <marker id="arrow-rose" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#f43f5e"/>
+                  </marker>
+                </defs>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Concept 2: Neumann Series Theorem & Detailed Derivation -->
+          <div style="margin: 1.5rem 0;">
+            <h4 style="color:var(--text-main); font-size:1.05rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>2️⃣</span> Neumann 级数求逆定理与手把手推导
+            </h4>
+            <div class="proof-box" style="margin: 0.8rem 0; background: rgba(56, 189, 248, 0.04); border-color: rgba(56, 189, 248, 0.3);">
+              <div class="box-title" style="color:var(--accent-blue);">📜 定理 (Neumann Series Theorem for Nilpotent Matrices)</div>
+              <p style="font-size:0.95rem; margin-bottom:0.6rem;">
+                若 $N$ 为阶数为 $k$ 的幂零矩阵（满足 $N^k = \mathbf{0}$），则矩阵 $(I - N)$ <strong>必定可逆</strong>，且其逆矩阵具有如下有限项 Neumann 级数闭式解：
+              </p>
+              <div class="math-block" style="font-size:1.1rem; color:var(--accent-blue); padding:0.8rem;">
+                $$(I - N)^{-1} = I + N + N^2 + N^3 + \dots + N^{k-1} = \sum_{m=0}^{k-1} N^m$$
+              </div>
+
+              <!-- Step-by-Step Proof Details -->
+              <h5 style="color:var(--text-main); font-size:0.98rem; margin:1rem 0 0.5rem 0;">✍️ 详细推导证明步骤（错项相消法 Telescoping Sum）：</h5>
+              <div style="background:rgba(15, 23, 42, 0.6); padding:1rem; border-radius:var(--radius-sm); font-size:0.92rem; line-height:1.8;">
+                <p style="margin-bottom:0.4rem;">设候选逆矩阵为 $S = I + N + N^2 + \dots + N^{k-1}$。我们只需直接检验乘积 $(I - N)S$ 是否等于单位矩阵 $I$：</p>
+                <div class="math-block" style="text-align:left; padding:0.8rem 1.2rem; font-size:0.93rem;">
+                  $$\begin{aligned}
+                  (I - N) \cdot S &= (I - N)\left(I + N + N^2 + \dots + N^{k-1}\right) \\[0.5em]
+                  &= I\left(I + N + N^2 + \dots + N^{k-1}\right) - N\left(I + N + N^2 + \dots + N^{k-1}\right) \\[0.5em]
+                  &= \Big(I + N + N^2 + \dots + N^{k-1}\Big) - \Big(N + N^2 + N^3 + \dots + N^k\Big) \\[0.5em]
+                  &= I + \underbrace{(N - N)}_{=\mathbf{0}} + \underbrace{(N^2 - N^2)}_{=\mathbf{0}} + \dots + \underbrace{(N^{k-1} - N^{k-1})}_{=\mathbf{0}} - N^k \\[0.5em]
+                  &= I - N^k
+                  \end{aligned}$$
+                </div>
+                <p style="margin-bottom:0.4rem; color:var(--accent-green);">
+                  因为 $N$ 是 $k$ 阶幂零矩阵，已知 <strong>$N^k = \mathbf{0}$</strong>，代入上式即得：
+                </p>
+                <div class="math-block" style="text-align:center; padding:0.5rem; font-weight:bold; color:var(--accent-green);">
+                  $$(I - N) \cdot S = I - \mathbf{0} = I$$
+                </div>
+                <p style="margin-bottom:0; font-size:0.88rem; color:var(--text-dim);">
+                  同理可证 $S \cdot (I - N) = I$。由逆矩阵的唯一性，可知 $(I - N)^{-1} = S = \sum_{m=0}^{k-1} N^m$。证毕！$\blacksquare$
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Concept 3: Numerical Example -->
+          <div style="margin: 1.5rem 0;">
+            <h4 style="color:var(--text-main); font-size:1.05rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>3️⃣</span> 完整数值手算例题与校验
+            </h4>
+            <div style="background:rgba(30, 41, 59, 0.5); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.2rem;">
+              <p style="font-size:0.93rem; margin-bottom:0.6rem;">
+                <strong>已知矩阵</strong>：设严格上三角矩阵 $N = \begin{bmatrix} 0 & 2 & 1 \\ 0 & 0 & 3 \\ 0 & 0 & 0 \end{bmatrix}$。求 $A = I - N = \begin{bmatrix} 1 & -2 & -1 \\ 0 & 1 & -3 \\ 0 & 0 & 1 \end{bmatrix}$ 的逆矩阵 $A^{-1}$。
+              </p>
+              
+              <div class="step-container" style="margin:1rem 0 0.5rem 0;">
+                <!-- Step 1 -->
+                <div class="step-card" style="padding:0.9rem;">
+                  <div class="step-number" style="width:26px; height:26px; font-size:0.85rem;">1</div>
+                  <div class="step-content">
+                    <div class="step-title" style="font-size:0.95rem;">计算 $N$ 的各次幂（确认幂零阶数 $k$）</div>
+                    <div class="math-block" style="text-align:left; padding:0.6rem; font-size:0.88rem;">
+                      $$N^2 = \begin{bmatrix} 0 & 2 & 1 \\ 0 & 0 & 3 \\ 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} 0 & 2 & 1 \\ 0 & 0 & 3 \\ 0 & 0 & 0 \end{bmatrix} = \begin{bmatrix} 0 & 0 & 6 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix}, \quad N^3 = N^2 \cdot N = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix} = \mathbf{0}$$
+                    </div>
+                    <p style="font-size:0.86rem; color:var(--accent-amber); margin:0;">👉 说明 $N$ 是阶数 $k=3$ 的幂零矩阵！级数在 $N^2$ 处精准截断。</p>
+                  </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card" style="padding:0.9rem;">
+                  <div class="step-number" style="width:26px; height:26px; font-size:0.85rem;">2</div>
+                  <div class="step-content">
+                    <div class="step-title" style="font-size:0.95rem;">应用 Neumann 级数闭式求和</div>
+                    <div class="math-block" style="text-align:left; padding:0.6rem; font-size:0.88rem;">
+                      $$\begin{aligned}
+                      A^{-1} = (I - N)^{-1} &= I + N + N^2 \\
+                      &= \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \begin{bmatrix} 0 & 2 & 1 \\ 0 & 0 & 3 \\ 0 & 0 & 0 \end{bmatrix} + \begin{bmatrix} 0 & 0 & 6 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix} \\[0.5em]
+                      &= \begin{bmatrix} 1 & 2 & 7 \\ 0 & 1 & 3 \\ 0 & 0 & 1 \end{bmatrix}
+                      \end{aligned}$$
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card" style="padding:0.9rem;">
+                  <div class="step-number" style="width:26px; height:26px; font-size:0.85rem; background:var(--gradient-secondary);">3</div>
+                  <div class="step-content">
+                    <div class="step-title" style="font-size:0.95rem; color:var(--accent-green);">乘积校验 $A \cdot A^{-1} = I$</div>
+                    <div class="math-block" style="text-align:left; padding:0.6rem; font-size:0.88rem;">
+                      $$A \cdot A^{-1} = \begin{bmatrix} 1 & -2 & -1 \\ 0 & 1 & -3 \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 & 2 & 7 \\ 0 & 1 & 3 \\ 0 & 0 & 1 \end{bmatrix} = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} = I_3 \quad \checkmark$$
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Concept 4: Extension to General Matrices (Leontief & PageRank) -->
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+            <h4 style="color:var(--text-main); font-size:1.05rem; margin-bottom:0.6rem; display:flex; align-items:center; gap:0.4rem;">
+              <span>🌐</span> 进阶拓展：从幂零矩阵到一般 Neumann 无穷级数
+            </h4>
+            <p style="font-size:0.92rem; line-height:1.7;">
+              如果矩阵 $C$ 不是严格的幂零矩阵（即 $C^k \neq \mathbf{0}$），但其<strong>算子范数（或最大特征值模长）$\rho(C) < 1$</strong>，则随着 $k \to \infty$，$C^k \to \mathbf{0}$。此时无穷级数依然收敛：
+            </p>
+            <div class="math-block" style="font-size:0.95rem;">
+              $$(I - C)^{-1} = I + C + C^2 + C^3 + \dots = \sum_{m=0}^{\infty} C^m$$
+            </div>
+
+            <!-- Concept Breakdown: What does Convergence mean? -->
+            <div class="concept-box" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.3); margin: 0.8rem 0;">
+              <div class="box-title" style="color:var(--accent-blue); font-size:0.98rem;">❓ 深度解惑：这里的“矩阵级数收敛”具体指什么？</div>
+              <p style="font-size:0.9rem; line-height:1.7; margin-bottom:0.6rem;">
+                设前 $k+1$ 项累加的部分和矩阵为 $S_k = \sum_{m=0}^k C^m = I + C + C^2 + \dots + C^k$。矩阵级数的“收敛”有两种完全等价的直观与严谨含义：
+              </p>
+              <ul style="margin-left:1.4rem; font-size:0.88rem; line-height:1.7; color:var(--text-muted);">
+                <li><strong>1. 按元素收敛 (Entry-wise Convergence)</strong>：部分和矩阵 $S_k$ 中<strong>每一个位置的实数值元素 $(S_k)_{ij}$</strong>，随着累加项数 $k \to \infty$，都会各自作为一个普通实数列收敛到目标逆矩阵 $(I-C)^{-1}$ 的对应元素：
+                  $$\lim_{k \to \infty} (S_k)_{ij} = \left[(I - C)^{-1}\right]_{ij} \quad (\forall i, j)$$
+                </li>
+                <li><strong>2. 矩阵距离/范数收敛 (Norm Convergence)</strong>：部分和矩阵 $S_k$ 与极限逆矩阵 $(I - C)^{-1}$ 之间的“矩阵空间距离（范数）”无限趋近于 0：
+                  $$\lim_{k \to \infty} \|S_k - (I - C)^{-1}\| = 0$$
+                </li>
+              </ul>
+
+              <!-- Concrete Numerical Example -->
+              <div style="background:rgba(15, 23, 42, 0.7); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:0.9rem; margin-top:0.8rem;">
+                <h5 style="color:var(--accent-amber); font-size:0.92rem; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.4rem;">
+                  <span>✍️</span> 具体 $2 \times 2$ 数值演练范例
+                </h5>
+                <p style="font-size:0.88rem; margin-bottom:0.4rem; color:var(--text-main);">
+                  设非幂零矩阵 $C = \begin{bmatrix} 0.5 & 0 \\ 0.2 & 0.5 \end{bmatrix}$。其特征值为 $\lambda = 0.5 < 1$（算子范数小于 1，但 $C^k \neq \mathbf{0}$）。
+                </p>
+                <p style="font-size:0.88rem; margin-bottom:0.4rem;">
+                  <strong>求目标逆矩阵理论值</strong>：$I - C = \begin{bmatrix} 0.5 & 0 \\ -0.2 & 0.5 \end{bmatrix} \implies (I - C)^{-1} = \begin{bmatrix} 2 & 0 \\ 0.8 & 2 \end{bmatrix}$
+                </p>
+                <p style="font-size:0.88rem; margin-bottom:0.4rem;">
+                  <strong>计算部分和矩阵 $S_k = \sum_{m=0}^k C^m$ 的逐项逼近过程</strong>：
+                </p>
+                <div style="font-size:0.85rem; line-height:1.8; color:var(--text-muted); background:rgba(0,0,0,0.3); padding:0.6rem; border-radius:4px;">
+                  • $k=0: \quad S_0 = I = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$ <br>
+                  • $k=1: \quad S_1 = I + C = \begin{bmatrix} 1.5 & 0 \\ 0.2 & 1.5 \end{bmatrix}$ <br>
+                  • $k=2: \quad S_2 = S_1 + C^2 = \begin{bmatrix} 1.75 & 0 \\ 0.4 & 1.75 \end{bmatrix}$ <br>
+                  • $k=3: \quad S_3 = S_2 + C^3 = \begin{bmatrix} 1.875 & 0 \\ 0.55 & 1.875 \end{bmatrix}$ <br>
+                  • $k=4: \quad S_4 = S_3 + C^4 = \begin{bmatrix} 1.9375 & 0 \\ 0.65 & 1.9375 \end{bmatrix}$ <br>
+                  • $\dots \dots$ <br>
+                  • $k \to \infty: \quad S_k \longrightarrow \begin{bmatrix} 2 & 0 \\ 0.8 & 2 \end{bmatrix} = (I - C)^{-1}$
+                </div>
+                <p style="font-size:0.85rem; color:var(--accent-green); margin-top:0.5rem; margin-bottom:0;">
+                  💡 观察：主对角线元素遵循等比数列 $1 + 0.5 + 0.25 + 0.125 + \dots \to 2$；左下角元素 $0 \to 0.2 \to 0.4 \to 0.55 \to 0.65 \dots \to 0.8$。每一个元素都精确逼近目标逆矩阵！
+                </p>
+              </div>
+            </div>
+
+            <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">
+              💡 <strong>现实应用连连看</strong>：这正是第 5 节<strong>里昂惕夫 (Leontief) 经济投入产出模型</strong>中的全产出需求计算，也是 <strong>Google PageRank 隐式阻尼求逆算法</strong> 的理论基石！
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 👑 可逆矩阵大一统定理 (Invertible Matrix Equivalence Theorem) 10 大条件闭环</h2>
+        
+        <div class="concept-box" style="background: rgba(56, 189, 248, 0.08); border-color: var(--accent-blue);">
+          <div class="box-title" style="color:var(--accent-blue);">🎒 前瞻微定义：为什么“$\det(A) \neq 0$”等价于矩阵可逆？</div>
+          <p style="font-size:0.92rem; margin-bottom:0;">
+            <strong>行列式 $\det(A)$</strong> 是矩阵变换带来的空间“有向体积放缩倍率”。若 $\det(A)=0$，说明矩阵把原有的空间彻底压扁降维（如 3D 压成 2D 盘子），丢失了维度信息，不可逆；若 $\det(A) \neq 0$，说明空间体积未被挤压为 0，信息完好保留，故矩阵必然可逆（详细计算与推导见 Module 5）。
+          </p>
+        </div>
+
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">🌟 线性代数的最高巅峰：10 大条件完美闭环</div>
+          <p>对任意 $n \times n$ 实数方阵 $A$，以下 10 个命题互相等价（一真俱真，一假俱假）：</p>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1rem; margin-top:1rem;">
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>1. 可逆性</strong>：逆矩阵 $A^{-1}$ 存在。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>2. 方程解</strong>：对任意 $\mathbf{b}$，$A\mathbf{x}=\mathbf{b}$ 有唯一解 $\mathbf{x}=A^{-1}\mathbf{b}$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>3. 零解性</strong>：齐次方程 $A\mathbf{x}=\mathbf{0}$ 只有唯一零解 $\mathbf{x}=\mathbf{0}$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>4. RREF 结果</strong>：$A$ 的简化行阶梯形为单位矩阵 $\text{RREF}(A) = I_n$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>5. 初等矩阵分解</strong>：$A$ 可写为初等矩阵的乘积 $A = E_1 E_2 \dots E_k$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>6. 满秩性</strong>：矩阵达到最大可能的秩 $\text{rank}(A) = n$ (Full Rank)。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>7. 列无关性</strong>：$A$ 的 $n$ 个列向量线性无关。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>8. 列张成全空间</strong>：$A$ 的列向量张成整个空间 $\mathrm{Span}(\text{Cols}(A)) = \mathbb{R}^n$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>9. 零空间维度</strong>：零空间只有零向量 $\text{Null}(A) = \{\mathbf{0}\}, \text{nullity}(A) = 0$。
+            </div>
+            <div style="background:var(--bg-card); padding:0.8rem; border-radius:6px; border:1px solid var(--border-color);">
+              <strong>10. 行列式非零</strong>：行列式数值非零 $\det(A) \neq 0$。
+            </div>
+          </div>
+
+          <div style="margin-top:1rem; padding-top:1rem; border-top:1px dashed var(--border-color);">
+            <p><strong>闭环推导路线证明</strong>：$1 \implies 2 \implies 3 \implies 4 \implies 5 \implies 6 \implies 7 \implies 8 \implies 9 \implies 10 \implies 1$。每一环的推导均无缝闭合！$\blacksquare$</p>
+          </div>
+        </div>
+
+        <!-- Section 5: Real-World Application -->
+        <h2 class="section-title">5. 现实工业模型：里昂惕夫投入产出模型 (Leontief Model)</h2>
+        <p>诺贝尔经济学奖得主里昂惕夫提出，经济体中各部门互相消耗产出。设消耗矩阵为 $C$，最终消费需求向量为 $\mathbf{d}$，总产出向量 $\mathbf{x}$ 满足：</p>
+        <div class="math-block">
+          $$\mathbf{x} = C\mathbf{x} + \mathbf{d} \implies (\mathbf{I} - C)\mathbf{x} = \mathbf{d} \implies \mathbf{x} = (\mathbf{I} - C)^{-1} \mathbf{d}$$
+        </div>
+
+        <!-- Section 6: Worked Examples -->
+        <h2 class="section-title">6. ✍️ 完整手把手手算数值例题与推导</h2>
+        <div class="proof-box">
+          <div class="box-title">手算例题 1：$2 \times 2$ 矩阵逆公式推导</div>
+          <p>对于 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$，设 $\det(A) = ad - bc \neq 0$。加边构造 $[A \mid I]$：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} a & b & \mid & 1 & 0 \\ c & d & \mid & 0 & 1 \end{bmatrix} \xrightarrow{\text{RREF}} \begin{bmatrix} 1 & 0 & \mid & \frac{d}{ad-bc} & \frac{-b}{ad-bc} \\ 0 & 1 & \mid & \frac{-c}{ad-bc} & \frac{a}{ad-bc} \end{bmatrix}$$
+          </div>
+          <p>即经典伴随公式：$A^{-1} = \frac{1}{ad-bc} \begin{bmatrix} d & -b \\ -c & a \end{bmatrix} \quad \blacksquare$</p>
+        </div>
+
+        <!-- Section 7: Interactive Quiz Accordion -->
+        <h2 class="section-title">7. 🧠 模块自测思考与小试牛刀</h2>
+        <div class="concept-box">
+          <div class="box-title">🎯 思考题：若 $AB = I$，能否直接推出 $BA = I$？</div>
+          <p>假设 $A, B$ 都是 $n \times n$ 的方阵。</p>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：对于方阵可以！对非方阵不行！</strong></p>
+              <p>解析：对于 $n \times n$ 方阵，$AB = I_n \implies \text{rank}(A) = n \implies A$ 可逆！两边同左乘 $A^{-1}$ 可得 $B = A^{-1}$，故 $BA = A^{-1}A = I_n$。但如果 $A$ 是 $2 \times 3$ 矩阵，单侧逆不代表另一侧成立。$\blacksquare$</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 8: Python Code -->
+        <h2 class="section-title">8. 💻 编程实战：用 Python / NumPy 矩阵求逆与 Neumann 级数校验</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+import numpy as np
+
+A = np.array([[1, 2], [3, 4]], dtype=float)
+
+# 1. 求解逆矩阵 A⁻¹
+A_inv = np.linalg.inv(A)
+print("逆矩阵 A⁻¹:\n", A_inv)
+
+# 2. 校验 A * A⁻¹ = I
+identity_check = np.dot(A, A_inv)
+print("校验单位矩阵 (A * A⁻¹):\n", np.round(identity_check, 4))
+          </code></pre>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="page-nav-buttons">
+          <a href="module2_rref_solutions_rank.html" class="btn-nav prev">← 上一模块：RREF 与列对应</a>
+          <a href="module4_subspaces_basis_dimension.html" class="btn-nav next">下一模块：子空间、基与维数 →</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

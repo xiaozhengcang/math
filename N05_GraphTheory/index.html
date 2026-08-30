@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N05 图论与计算图分析 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-emerald); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N05 · Level 0 先修基础</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N05 · 图论与计算图分析</span>
+      <h1>图论与计算图分析 (Graph Theory & Computation Graphs)</h1>
+      <p style="color: var(--text-secondary);">DAG 有向无环图、谱图论拉普拉斯矩阵与 MoE 稀疏专家路由。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 West: Introduction to Graph Theory</span>
+        <span class="badge">📖 Chung: Spectral Graph Theory</span>
+        <span class="badge">📄 Kipf & Welling (ICLR 2017) GCN</span>
+        <span class="badge">📄 Shazeer et al. (2017) MoE</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>在 AI 系统中，一切计算都可以抽象为“点与边”组成的网络结构：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>有向无环图 (DAG)</strong>：就像工业流水线。算子（加法、矩阵乘法）是节点，张量流向是单向边。因为没有死循环（无环），所以可以精准做拓扑排序调度。</li>
+        <li><strong>拉普拉斯矩阵 $\mathbf{L} = \mathbf{D} - \mathbf{A}$</strong>：描述图上信号“平滑度与扩散”的数学算子。图卷积神经网络 (GCN) 就是在图拉普拉斯矩阵的特征谱上做平滑滤波。</li>
+        <li><strong>稀疏专家路由 (MoE)</strong>：二分图匹配思想。根据 Token 的需求，动态将输入调度分配给最擅长处理的 Top-2 专家节点。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>图拉普拉斯矩阵与 GCN 卷积层正向传播公式：</p>
+      <div class="math-callout">
+        $$\mathbf{L} = \mathbf{D} - \mathbf{A}, \quad \tilde{\mathbf{L}} = \mathbf{I}_N - \mathbf{D}^{-1/2} \mathbf{A} \mathbf{D}^{-1/2}$$
+      </div>
+      <p style="color: var(--text-secondary);">GCN 图卷积层推导（谱域一阶泰勒近似）：</p>
+      <div class="math-callout">
+        $$\mathbf{H}^{(l+1)} = \sigma\left( \tilde{\mathbf{D}}^{-1/2} \tilde{\mathbf{A}} \tilde{\mathbf{D}}^{-1/2} \mathbf{H}^{(l)} \mathbf{W}^{(l)} \right)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文一：Semi-Supervised Classification with Graph Convolutional Networks (Kipf & Welling, ICLR 2017)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了经典 GCN，对谱图卷积切比雪夫多项式进行了局部一阶极简近似，使图卷积运算退化为高效的邻域节点加权聚合。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文二：Outrageously Large Neural Networks: The Sparsely-Gated MoE (Shazeer et al., 2017)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了可扩展至千亿参数的<strong>稀疏门控混合专家模型 (Sparsely-Gated MoE)</strong>，引入 Top-k Gating 机制与负载均衡损失，开启了现代大模型 MoE 架构风潮。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>MoE 模型中 Top-2 稀疏专家路由算子：</p>
+      <div class="math-callout">
+        $$G(x) = \text{Softmax}(\text{TopK}(x \cdot W_g + \epsilon, 2))$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        计算图引擎根据路由门控矩阵的稀疏索引，将 Batch 内的不同 Token 动态分发至对应的 FFN 专家算子，大幅节省激活计算 FLOPs。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>West (Chapter 1: Fundamental Concepts)</em> 与 <em>Chung (Chapter 1: Eigenvalues and the Laplacian)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么自动微分引擎将计算图强制约束为“无环” (DAG)？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！若计算图有环，会导致前向传递和反向传播链式求导陷入无限死循环，因此必须保证有向无环 (DAG) 以进行拓扑排序！')">
+          A. 只有无环图才能进行拓扑排序，从而确定算子执行的先后顺序与反向传播求导路径。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，死循环会导致计算无法收敛。')">
+          B. 有环图会导致内存不够用。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

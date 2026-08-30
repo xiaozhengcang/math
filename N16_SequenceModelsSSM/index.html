@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N16 序列模型与状态空间系统 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(244, 63, 94, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-rose); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(244, 63, 94, 0.1); border-color: var(--accent-rose); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N16 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N16 · 序列模型与 SSM</span>
+      <h1>序列模型与状态空间系统 (Sequence Models & SSM)</h1>
+      <p style="color: var(--text-secondary);">长上下文序列建模。注意力机制 $\mathcal{O}(N^2)$、HiPPO 多项式记忆衰减与 Mamba 线性时间 SSM 进化。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Gu et al.: State Space Models for Deep Learning</span>
+        <span class="badge">📖 Katharopoulos: Transformers from First Principles</span>
+        <span class="badge">📄 Vaswani et al. (NeurIPS 2017) Transformer</span>
+        <span class="badge">📄 Gu et al. (NeurIPS 2020) HiPPO</span>
+        <span class="badge">📄 Gu & Dao (2023) Mamba</span>
+      </div>
+    </div>
+
+    <!-- Special Action Button -->
+    <div style="margin-bottom: 2rem;">
+      <a href="../attention.html" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #f43f5e 0%, #06b6d4 100%); color: #fff; padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 700; text-decoration: none;">
+        🌟 点击打开《Attention (QKV) 矩阵运算几何本质交互教程》
+      </a>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>从 Transformer 到 Mamba 的架构进化史：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>Transformer 注意力机制 (QKV)</strong>：每一个词与之前的所有词进行“全对全”相似度对齐打分。精准度极高，但对长文本的计算量呈二次方增长 $\mathcal{O}(N^2)$！</li>
+        <li><strong>HiPPO 矩阵记忆衰减</strong>：用勒让德多项式 (Legendre Polynomials) 正交投影压缩历史信息，实现无限历史信号的最优逼近。</li>
+        <li><strong>Mamba 状态空间模型 (SSM)</strong>：将控制理论中的连续线性系统 $\dot{x}(t) = Ax(t) + B u(t)$ 进行选择性离散化 (Selective Scanning)，兼具 RNN 的线性推理速度 $\mathcal{O}(N)$ 与 Transformer 的全局关联力！</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>Self-Attention 缩放点积公式与连续状态空间方程离散化 (Discretization)：</p>
+      <div class="math-callout">
+        $$\text{Attention}(Q, K, V) = \operatorname{Softmax}\left(\frac{Q K^T}{\sqrt{d_k}}\right) V$$
+      </div>
+      <p style="color: var(--text-secondary);">连续 SSM 经过零阶保持 (ZOH) 离散化为循环与卷积双重重构形式：</p>
+      <div class="math-callout">
+        $$\overline{A} = \exp(\Delta A), \quad \overline{B} = (\Delta A)^{-1} (\overline{A} - I) \cdot \Delta B, \quad h_t = \overline{A} h_{t-1} + \overline{B} x_t$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文一：Attention Is All You Need (Vaswani et al., NeurIPS 2017)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 划时代的经典！彻底弃用了 RNN 与 CNN，仅靠 Multi-Head Self-Attention 实现了并行训练，奠定了大语言模型 (LLMs) 的通用基础。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：HiPPO: Recurrent Memory with Optimal Polynomial Projections (Gu et al., NeurIPS 2020)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了 HiPPO 记忆矩阵，数学上证明了如何通过正交多项式将连续历史信号投影到固定维度的状态向量中，解决了 RNN 长距离记忆遗忘问题。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文三：Mamba: Linear-Time Sequence Modeling with Selective State Spaces (Gu & Dao, 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了<strong>Selective SSM (Mamba)</strong>，让 SSM 的参数矩阵 $B, C, \Delta$ 随输入内容动态改变，结合硬件感知算子并行 (Hardware-aware Parallel Scan)，实现了线性时间复杂度的超长序列建模。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Mamba 选择性离散化与 FlashScan GPU 并行算子：</p>
+      <div class="math-callout">
+        $$\Delta_t = \text{Softplus}(\text{Parameter} + s_\Delta(x_t)), \quad B_t = s_B(x_t), \quad C_t = s_C(x_t)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        将步长 $\Delta_t$ 设置为输入的函数，使模型能选择性地“记住”重要信息并“忽略”无用的填充 Token，在 1M+ 极长文本建模中显存仅随长度线性增加。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Gu et al. (State Space Models for Deep Learning Chapter 2)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么说 Transformer 在推理 KV Cache 时的时间复杂度是 $\mathcal{O}(N)$，而 Mamba 的推理复杂度是 $\mathcal{O}(1)$？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！Transformer 在自回归生成每个 Token 时，必须与历史上所有的 $N$ 个 Token 进行 Key-Value 点积运算；而 Mamba 维持固定大小的隐状态 $h_t$，生成新 Token 只需单步常数更新 $h_t = \overline{A}h_{t-1} + \overline{B}x_t$！')">
+          A. Transformer 生成新 Token 需要与历史全部 $N$ 个 KV 键值做 Attention；而 Mamba 只需常数时间更新固定尺寸的状态 $h_t$。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾 RNN/SSM 单步推理与 Transformer Attention 推理的区别。')">
+          B. Transformer 不需要 KV Cache。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

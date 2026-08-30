@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N22 机器学习统计物理 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --accent-rose: #f43f5e;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(244, 63, 94, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-purple); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N22 · Level 3 前沿理论</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N22 · 机器学习统计物理</span>
+      <h1>机器学习统计物理 (Statistical Physics of Machine Learning)</h1>
+      <p style="color: var(--text-secondary);">热力学自旋玻璃态相变。平均场理论 (Mean Field)、自由能曲面与 Grokking 顿悟现象。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Gabrié: Statistical Physics of ML</span>
+        <span class="badge">📖 Mézard: Spin Glass Theory and Beyond</span>
+        <span class="badge">📄 Mei et al. (PNAS 2018) Mean Field Theory</span>
+        <span class="badge">📄 Power et al. (OpenAI 2022) Grokking</span>
+        <span class="badge">📄 Nanda et al. (ICLR 2023) Mechanistic Interpretability</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>将上百亿参数的网络看作热力学无序自旋系统（Spin Glass System）：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>自由能曲面 (Free Energy Surface $F = U - TS$)</strong>：损失函数 $U$ 是内能，随机梯度噪声是温度 $T$，正则化是熵 $S$。训练过程就是系统在自由能曲面上的热力学退火。</li>
+        <li><strong>Grokking (顿悟现象)</strong>：在训练初期，模型早已 100% 记住训练集中所有数据（训练误差为 0，但测试误差极高）。在继续训练成千上万步后，测试误差突然在瞬间崖式下降到 0（顿悟）。这在物理上对应从无序记忆相向有序泛化相的“一级相变”！</li>
+        <li><strong>平均场理论 (Mean Field Theory)</strong>：将极多神经元互相作用简化为平均场耦合，证明广义深度网络在无限宽极限下的热力学平衡分布。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>吉布斯-玻尔兹曼分布与分配函数 (Partition Function)：</p>
+      <div class="math-callout">
+        $$P(\theta) = \frac{1}{Z(\beta)} \exp\left( -\beta L(\theta) \right), \quad Z(\beta) = \int \exp\left( -\beta L(\theta) \right) d\theta$$
+      </div>
+      <p style="color: var(--text-secondary);">Grokking 机制中权重的 L2 衰减与表达算法相变临界点：</p>
+      <div class="math-callout">
+        $$\mathcal{L}(\theta) = \mathcal{L}_{\text{data}}(\theta) + \lambda \|\theta\|_2^2 \implies \Delta F = F_{\text{generalize}} - F_{\text{memorize}} < 0$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-purple); font-size: 1.1rem;">论文一：The Mean Field Theory of Neural Networks (Mei, Montanari, Nguyen, PNAS 2018)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 将单隐层神经网络参数迭代导出为 Wasserstein 空间中的偏微分方程（McKean-Vlasov SDE），证明了平均场极限下的全局收敛性。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文二：Grokking: Generalization Beyond Overfitting (Power et al., OpenAI 2022)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 发现并命名了 <strong>Grokking (顿悟) 现象</strong>！在模运算等算法数据集上，训练误差达到 0 很久之后，泛化性能突然出现剧烈突变。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文三：Progress measures for grokking via mechanistic interpretability (Nanda et al., ICLR 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 利用机械可解释性 (Mechanistic Interpretability) 拆解了神经网络的内部权重，发现模型在 Grokking 之前已经在内部隐式构建出了利用离散傅里叶变换的圆周运算电路。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>大模型训练相变与表征坍缩临界点监测：</p>
+      <div class="math-callout">
+        $$q_{ab} = \frac{1}{N} \sum_{i=1}^N w_i^a w_i^b \implies \text{Order Parameter } q \to 1 \text{ (Phase Transition)}$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        通过计算神经元重叠度阶参数 (Overlap Order Parameter $q_{ab}$)，在千亿参数训练中实时监测特征表达从无序混乱向涌现结构的物理相变边界。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Mézard (Chapter 1: The Sherrington-Kirkpatrick Model)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：Grokking (顿悟) 现象发生时，模型权重发生的主要变化是什么？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！在持续的 Weight Decay (L2 正则化) 作用下，粗暴的死记硬背权重因范数过大被逐渐惩罚消除，驱动模型转向范数更小但极具泛化力的通用算法电路！')">
+          A. 权重衰减 (L2 Regularization) 逐渐清理了低效的记忆模式权重，促使网络收敛至高效的泛化算法电路。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，死记硬背正是 Grokking 之前的过拟合状态。')">
+          B. 模型学会了死记硬背更多的数据。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

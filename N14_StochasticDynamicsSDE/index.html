@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N14 随机动力学与 SDE | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-amber); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(245, 158, 11, 0.1); border-color: var(--accent-amber); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N14 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N14 · 随机动力学与 SDE</span>
+      <h1>随机动力学与 SDE (Stochastic Dynamics & SDEs)</h1>
+      <p style="color: var(--text-secondary);">连续时间随机过程。朗之万动力学、伊藤引理 (Itô's Lemma) 与 Fokker-Planck 偏微分方程。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Särkkä: Applied Stochastic Differential Equations</span>
+        <span class="badge">📖 Øksendal: Stochastic Differential Equations</span>
+        <span class="badge">📄 Welling & Teh (ICML 2011) SGLD</span>
+        <span class="badge">📄 Su, Boyd, Candès (2016) Continuous Gradient Flow</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>如果说常微分方程 (ODE) 描绘了光滑水流中的花瓣轨迹，那么随机微分方程 (SDE) 就是描述沸水里布朗运动花瓣的动力学：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>漂移项 (Drift) $f(x, t)dt$</strong>：顺水推舟的确定性力量（如梯度的拉力）。</li>
+        <li><strong>扩散项 (Diffusion) $g(t)dW_t$</strong>：随机碰撞的热噪声（布朗运动项 $dW_t$）。</li>
+        <li><strong>Fokker-Planck 方程</strong>：从单个粒子的随机轨迹，转向描述全量概率密度函数 $p(x,t)$ 在空间中如何扩散与演化的宏观偏微分方程。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>伊藤随机微分方程 (Itô SDE) 通式与 Fokker-Planck PDE：</p>
+      <div class="math-callout">
+        $$dx_t = f(x_t, t) dt + g(t) dW_t, \quad W_t \sim \mathcal{N}(0, tI)$$
+      </div>
+      <p style="color: var(--text-secondary);">相应的概率密度演化 Fokker-Planck 方程：</p>
+      <div class="math-callout">
+        $$\frac{\partial p_t(x)}{\partial t} = -\nabla \cdot \left( f(x, t) p_t(x) \right) + \frac{g(t)^2}{2} \nabla^2 p_t(x)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文一：Bayesian Learning via Stochastic Gradient Langevin Dynamics (Welling & Teh, ICML 2011)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了 <strong>SGLD (随机梯度朗之万动力学)</strong>！在 SGD 梯度更新中注入高斯高热噪声，使小批量梯度下降在后期自然过度为 MCMC 贝叶斯后验分布采样。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：A Continuous-Time View of Gradient Methods (Su, Boyd, Candès, 2016)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 将 Nesterov 加速梯度下降法推导为连续时间二阶常微分方程极限 $\ddot{X} + \frac{3}{t} \dot{X} + \nabla f(X) = 0$，开创了从连续动力学视角分析离散优化算法收敛速率的新范式。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>朗之万退火采样 (Annealed Langevin MCMC) 算子：</p>
+      <div class="math-callout">
+        $$x_{k+1} = x_k + \frac{\epsilon}{2} \nabla_x \log p_{\theta}(x_k) + \sqrt{\epsilon} z_k, \quad z_k \sim \mathcal{N}(0, I)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在 Score-based 扩散模型中，沿着得分函数 (Score Function) $\nabla_x \log p(x)$ 运行朗之万动力学，粒子便能自动汇聚到数据概率分布的高密度峰区。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Särkkä (Chapter 4: Itô Calculus)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：伊藤微积分 (Itô Calculus) 中 $(dW_t)^2$ 等于多少？为什么与经典微积分不同？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！在伊藤微积分中，布朗运动二阶微元 $(dW_t)^2 = dt$，导致伊藤引理的二阶泰勒展开项无法被忽略（多出了一项二阶偏导扩散项）！')">
+          A. $(dW_t)^2 = dt$，因为布朗运动具有无穷大的变差，泰勒展开的二阶项不能舍去。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，经典微积分的 $(dt)^2=0$，但布朗运动微元平方为 $dt$。')">
+          B. $(dW_t)^2 = 0$。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

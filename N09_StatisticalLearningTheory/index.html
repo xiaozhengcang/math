@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N09 统计学习理论 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-blue); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N09 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N09 · 统计学习理论</span>
+      <h1>统计学习理论 (Statistical Learning Theory)</h1>
+      <p style="color: var(--text-secondary);">机器学习可学性的数学哲学。PAC 学习框架、VC 维与 Rademacher 复杂度。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Shalev-Shwartz: Understanding Machine Learning</span>
+        <span class="badge">📖 Mohri: Foundations of Machine Learning</span>
+        <span class="badge">📄 Valiant (1984) A Theory of the Learnable</span>
+        <span class="badge">📄 Bartlett & Mendelson (2002) Rademacher Complexity</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>机器学习凭什么在没见过的测试数据上依然有效？</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>PAC 框架（概率大致正确）</strong>：我们无法保证模型 100% 绝对正确，但可以以极高的概率（$1-\delta$）保证误差小于给定阈值 $\epsilon$。</li>
+        <li><strong>Rademacher 复杂度</strong>：衡量一个模型家族“拟合随机纯噪声”的能力。如果一个模型连完全随机的正负噪声都能完美拟合（记忆），说明它的复杂度太高，极其容易过拟合。</li>
+        <li><strong>偏差-方差分解 (Bias-Variance Tradeoff)</strong>：偏差是模型表达太简陋导致的欠拟合，方差是模型对训练数据太敏感导致的过拟合。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>经验 Rademacher 复杂度 $\hat{\mathcal{R}}_S(\mathcal{H})$ 与泛化界上界 (Generalization Bound)：</p>
+      <div class="math-callout">
+        $$\hat{\mathcal{R}}_S(\mathcal{H}) = \mathbb{E}_{\sigma} \left[ \sup_{h \in \mathcal{H}} \frac{1}{N} \sum_{i=1}^N \sigma_i h(x_i) \right]$$
+      </div>
+      <p style="color: var(--text-secondary);">以概率至少 $1-\delta$ 成立的泛化界：</p>
+      <div class="math-callout">
+        $$R(h) \le \hat{R}_S(h) + 2 \mathcal{R}_N(\mathcal{H}) + \sqrt{\frac{\ln(1/\delta)}{2N}}$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文一：A Theory of the Learnable (Valiant, 1984)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 图灵奖得主 Valiant 开创性的论文！首次提出了<strong>概率大致正确 (PAC)</strong> 计算学习理论，奠定了现代统计机器学习的数学基石。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文二：Rademacher and Gaussian Complexities (Bartlett & Mendelson, JMLR 2002)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 引入数据依赖的 Rademacher 复杂度替代经典的 VC 维，给出了连续函数族与核方法的紧凑泛化上界。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Few-shot 微调与数据多样性覆盖度估计：</p>
+      <div class="math-callout">
+        $$N_{sample} \ge \mathcal{O}\left( \frac{\text{VC-Dim}(\mathcal{H}) + \ln(1/\delta)}{\epsilon^2} \right)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        利用 PAC 样本复杂度界，在预训练数据集构建中确定覆盖特定边缘能力所需的极简 Token 样本量，避免低质量重复数据造成的过拟合。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Shalev-Shwartz (Chapter 3: A Formal Learning Model)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：Rademacher 复杂度与 VC 维的核心区别是什么？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！VC 维是依赖于假设空间的最坏情况打散能力；而 Rademacher 复杂度是依赖于具体数据分布 $S$ 的，能更紧凑地反映实际数据集上的泛化性能！')">
+          A. Rademacher 复杂度依赖于具体数据分布，而 VC 维是独立于数据分布的无条件几何组合上界。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾两者定义的差异。')">
+          B. VC 维只能用于回归问题。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

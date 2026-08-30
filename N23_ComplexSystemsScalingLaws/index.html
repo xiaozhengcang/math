@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N23 复杂系统涌现与 Scaling Laws | 顶层目标与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-rose: #f43f5e;
+      --accent-amber: #f59e0b;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(244, 63, 94, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%); border: 1px solid rgba(244, 63, 94, 0.4); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(244, 63, 94, 0.25); color: var(--accent-rose); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-rose); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(244, 63, 94, 0.1); border-color: var(--accent-rose); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N23 · 顶层目标闭环</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N23 · 顶层目标: 复杂系统与 Scaling Laws</span>
+      <h1>复杂系统涌现与 Scaling Laws (Emergence & Scaling Laws)</h1>
+      <p style="color: var(--text-secondary);">人工智能的圣杯准则。幂律标度微分方程、算子-数据-推理最优帕累托边界 (Pareto Frontier)。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Kaplan et al.: Scaling Laws Monograph</span>
+        <span class="badge">📖 Wei et al.: Emergent Abilities of LLMs</span>
+        <span class="badge">📄 Kaplan et al. (OpenAI 2020) Scaling Laws</span>
+        <span class="badge">📄 Hoffmann et al. (DeepMind 2022) Chinchilla</span>
+        <span class="badge">📄 Schaeffer et al. (NeurIPS 2023) Emergent Mirage</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>Scaling Law 是现代 AGI 大模型基础设施建设的指导公理：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>幂律标度 (Power Law $L \propto C^{-\alpha}$)</strong>：跨越数个数量级的算子 FLOPs、参数量 $N$ 与数据集 Token 量 $D$，模型的交叉熵损失呈现出极其平滑且精准可预测的幂律下降！</li>
+        <li><strong>Chinchilla 最优算子分配 ratio</strong>：DeepMind 发现模型参数 $N$ 和数据量 $D$ 应当以 1:1 的同等比例同时扩展（1 个参数匹配约 20 个 Token）。</li>
+        <li><strong>涌现能力 (Emergent Abilities)</strong>：当规模突破某个临界阈值时（如 100B 参数），模型在复杂推理、数学证明与代码生成任务上表现出从 0% 陡峭跃升至 80% 的突变能力。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>Kaplan 与 Chinchilla 训练 Loss 幂律函数形式：</p>
+      <div class="math-callout">
+        $$L(N, D) = E + \frac{A}{N^\alpha} + \frac{B}{D^\beta}$$
+      </div>
+      <p style="color: var(--text-secondary);">在固定总算子预算 $C \approx 6ND$ 约束下，极小化 $L(N,D)$ 的拉格朗日乘子求解可得最优帕累托边界：</p>
+      <div class="math-callout">
+        $$N_{\text{opt}} \propto C^a, \quad D_{\text{opt}} \propto C^b, \quad a = \frac{\beta}{\alpha + \beta} \approx 0.5, \quad b = \frac{\alpha}{\alpha + \beta} \approx 0.5$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-rose); font-size: 1.1rem;">论文一：Scaling Laws for Neural Language Models (Kaplan et al., OpenAI 2020)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 划时代公理论文！首次给出了跨越 7 个数量级算力下 Transformer 损失与参数量 $N$、数据量 $D$ 和算力 $C$ 的定量幂律关系，直接开启了 GPT-3 及大模型时代。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-amber); font-size: 1.1rem;">论文二：Training Compute-Optimal Large Language Models (Chinchilla, Hoffmann et al., DeepMind 2022)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 修正了 OpenAI 的结论！指出大部分模型（如 175B 的 GPT-3）属于“严重欠训练”，证明了算力增加时参数量与数据量应按 $N \propto C^{0.5}, D \propto C^{0.5}$ 同比例扩展。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文三：Are Emergent Abilities of Large Language Models a Mirage? (Schaeffer et al., NeurIPS 2023)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 获得 NeurIPS 杰出论文奖！指出所谓的“能力突变涌现”在很大程度上是由于评估指标（如不连续的 Exact Match 非线性切断）造成的幻觉；若换用平滑交叉熵指标，模型的性能提升始终是连续平滑的 Scaling！
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>超算集群预训练+测试推理 (Pre-train + Test-Time) 联合 Scaling 预算分配：</p>
+      <div class="math-callout">
+        $$\text{Performance}(C_{\text{total}}) = \min_{C_{\text{train}}, C_{\text{infer}}} L\left( N(C_{\text{train}}), D(C_{\text{train}}), \text{Search}(C_{\text{infer}}) \right)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在前沿 AGI 训练集群（万卡 H100/B200 集群）中，通过 Scaling Law 微分方程精准计算每次启动 100B+ 参数实验的极小最优计算 Token 比例，避免上千万美元算力浪费。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Kaplan et al. (Scaling Laws for Neural Language Models Monograph)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：根据 Chinchilla 最优算力分配法则，当给定 10 倍预算算力时，模型参数量 $N$ 与数据集 Token 量 $D$ 应该如何扩展？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！Chinchilla 法则指出 $N \propto C^{0.5}$ 且 $D \propto C^{0.5}$，故参数量与数据集 Tokens 均应同比例扩大约 $\sqrt{10} \approx 3.16$ 倍！')">
+          A. 参数量 $N$ 和 Token 量 $D$ 分别扩大约 $\sqrt{10} \approx 3.16$ 倍（1:1 同比例扩展）。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾 Chinchilla 论文中的 1:1 同比例增长关系。')">
+          B. 参数量扩大 10 倍，数据量保持不变。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
