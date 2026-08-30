@@ -6,6 +6,9 @@
 ![Nodes](https://img.shields.io/badge/Knowledge_Nodes-N01_~_N23-blue.svg)
 ![Interactive](https://img.shields.io/badge/Canvas_DAG-Interactive-emerald.svg)
 ![LaTeX](https://img.shields.io/badge/Math-KaTeX-rose.svg)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Online_Live-brightgreen.svg)](https://xiaozhengcang.github.io/math/)
+
+🌐 **GitHub Pages 离线/在线在线预览**：[https://xiaozhengcang.github.io/math/](https://xiaozhengcang.github.io/math/)
 
 ---
 
