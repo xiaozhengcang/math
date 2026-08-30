@@ -25,7 +25,7 @@ const KNOWLEDGE_NODES = [
       { name: "N01 入门教程: LinearAlgebraTutorial 8 大模块交互指南", url: "N01_LinearAlgebraTutorial/index.html" },
       { name: "Week 1: 代数与运算底座 (Vector & Matrix)", url: "algebra1.html" },
       { name: "Week 2: 空间与几何投影 (Orthogonal Projection)", url: "week2_geometric_projection.html" },
-      { name: "LA 2022 Fall 讲义与习题库 (PDF Resources)", url: "LA2022Fall/" }
+      { name: "LA 2022 Fall 讲义与习题库 (PDF Resources)", url: "References/LA2022Fall/" }
     ]
   },
   {

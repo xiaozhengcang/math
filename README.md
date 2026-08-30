@@ -85,7 +85,8 @@ Math/
 ├── week2_geometric_projection.html # Week 2 实战: 正交投影与法方程
 ├── attention.html               # Attention (QKV) 矩阵运算几何本质交互教程
 ├── plane_translation.html       # 2D/3D 平面变换与梯度几何交互演示
-├── LA2022Fall/                  # Linear Algebra 2022 Fall 官方讲义与习题库 (PDF Resources)
+├── References/
+│   └── LA2022Fall/              # 参考资料: Linear Algebra 2022 Fall 官方讲义与习题库 (PDF Resources)
 ├── N01_LinearAlgebraTutorial/   # N01 专属子目录 (包含 8 大章节完整直觉教程)
 ├── N02_MultivariableCalculus/   # N02 专属子目录 (多元微积分与微分分析 index.html)
 ├── N03_ProbabilityAndStatistics/# N03 专属子目录 (初等概率论与数理统计 index.html)
