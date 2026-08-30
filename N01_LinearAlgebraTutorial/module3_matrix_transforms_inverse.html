@@ -308,14 +308,363 @@
         </div>
 
         <!-- Section 3 -->
-        <h2 class="section-title">3. 初等矩阵 (Elementary Matrices) 与加边求逆算法 $[A \mid I] \to [I \mid A^{-1}]$</h2>
+        <h2 class="section-title">3. 🔄 逆矩阵 (Inverse Matrix)：概念定义、几何撤销映射与求逆例题</h2>
+        
+        <!-- Subsection 3.1: Strict Algebraic Definition & Properties -->
+        <div class="card" style="background: rgba(14, 165, 233, 0.04); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.2rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>📐</span> 1. 逆矩阵的代数严格定义与唯一性推导
+          </h3>
+          <p style="font-size:0.95rem; line-height:1.7; margin-bottom:1rem;">
+            在实数代数中，非零数 $a$ 的倒数 $a^{-1} = \frac{1}{a}$ 满足 $a \cdot a^{-1} = 1$。在矩阵代数中，对于 $n \times n$ 方阵 $A$，其“乘法逆元”正是<strong>逆矩阵 (Inverse Matrix)</strong>：
+          </p>
+
+          <!-- Definition Box -->
+          <div class="proof-box" style="background: rgba(14, 165, 233, 0.06); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 1.2rem;">
+            <div class="box-title" style="color:var(--accent-blue);">📜 严格定义 (Definition of Invertible Matrix)</div>
+            <p style="font-size:0.95rem; line-height:1.7; margin-bottom:0.6rem;">
+              设 $A$ 为 $n \times n$ 实数方阵，若存在一个 $n \times n$ 方阵 $B$，使得左右乘积均精确等于 $n$ 阶单位矩阵：
+            </p>
+            <div class="math-block" style="font-size:1.1rem; color:var(--accent-blue); padding:0.6rem;">
+              $$A B = B A = I_n$$
+            </div>
+            <p style="font-size:0.92rem; line-height:1.7; margin-bottom:0;">
+              则称矩阵 $A$ 为<strong>可逆矩阵 (Invertible Matrix)</strong>（或非奇异矩阵 Non-singular Matrix）；称 $B$ 为 $A$ 的<strong>逆矩阵 (Inverse Matrix)</strong>，记作 <strong>$A^{-1}$</strong>。若不存在这样的矩阵 $B$，则称 $A$ 为<strong>不可逆矩阵 (Non-invertible Matrix)</strong> 或奇异矩阵 (Singular Matrix)。
+            </p>
+          </div>
+
+          <!-- Uniqueness Proof -->
+          <div class="concept-box" style="background: rgba(168, 85, 247, 0.06); border-color: rgba(168, 85, 247, 0.3); margin-bottom: 1.2rem;">
+            <div class="box-title" style="color:var(--accent-purple);">✍️ 核心定理推导：逆矩阵的唯一性证明 (Uniqueness of Inverse)</div>
+            <p style="font-size:0.92rem; line-height:1.7; margin-bottom:0.6rem;">
+              <strong>命题</strong>：若矩阵 $A$ 可逆，则其逆矩阵 $A^{-1}$ 是<strong>唯一确定</strong>的。
+            </p>
+            <div style="background:rgba(15, 23, 42, 0.6); padding:0.9rem; border-radius:var(--radius-sm); font-size:0.9rem; line-height:1.8;">
+              <p style="margin-bottom:0.4rem;"><strong>证明</strong>：假设 $B$ 和 $C$ 都是 $A$ 的逆矩阵，即满足 $AB = BA = I$ 且 $AC = CA = I$。利用矩阵乘法的<strong>结合律 (Associativity)</strong>：</p>
+              <div class="math-block" style="text-align:left; padding:0.6rem 1rem; font-size:0.92rem;">
+                $$\begin{aligned}
+                B &= B \cdot I_n = B \cdot (A \cdot C) \\[0.4em]
+                &= (B \cdot A) \cdot C \quad (\text{矩阵乘法结合律}) \\[0.4em]
+                &= I_n \cdot C = C
+                \end{aligned}$$
+              </div>
+              <p style="margin-bottom:0; color:var(--accent-green);">故 $B = C$。逆矩阵必定唯一！证毕 $\blacksquare$</p>
+            </div>
+          </div>
+
+          <!-- Core Operational Rules -->
+          <div style="background:rgba(30, 41, 59, 0.5); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem;">
+            <h4 style="color:var(--text-main); font-size:0.98rem; margin-bottom:0.6rem;">🔑 逆矩阵 4 大基本代数运算法则</h4>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:0.8rem; font-size:0.88rem;">
+              <div style="background:rgba(15, 23, 42, 0.7); padding:0.7rem; border-radius:6px; border:1px solid var(--border-color);">
+                <strong style="color:var(--accent-blue);">1. 双重求逆律</strong>：$(A^{-1})^{-1} = A$
+              </div>
+              <div style="background:rgba(15, 23, 42, 0.7); padding:0.7rem; border-radius:6px; border:1px solid var(--border-color);">
+                <strong style="color:var(--accent-purple);">2. 乘积求逆律</strong>：$(AB)^{-1} = B^{-1} A^{-1}$<br><span style="color:var(--text-dim); font-size:0.8rem;">💡 “穿鞋脱鞋法则”：顺序必须颠倒！</span>
+              </div>
+              <div style="background:rgba(15, 23, 42, 0.7); padding:0.7rem; border-radius:6px; border:1px solid var(--border-color);">
+                <strong style="color:var(--accent-green);">3. 转置求逆可交换</strong>：$(A^T)^{-1} = (A^{-1})^T$
+              </div>
+              <div style="background:rgba(15, 23, 42, 0.7); padding:0.7rem; border-radius:6px; border:1px solid var(--border-color);">
+                <strong style="color:var(--accent-amber);">4. 标量数乘求逆</strong>：$(cA)^{-1} = \frac{1}{c} A^{-1} \quad (c \neq 0)$
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subsection 3.2: Geometric Interpretation & Flat Collapse -->
+        <div class="card" style="background: rgba(168, 85, 247, 0.04); border-color: rgba(168, 85, 247, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-purple); font-size:1.2rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>💡</span> 2. 几何解释：撤销变换 (Undo Transformation) 与降维不可逆性
+          </h3>
+          <p style="font-size:0.95rem; line-height:1.7;">
+            从几何视角来看，矩阵 $A$ 作为一个线性变换，将原始的标准正交网格进行拉伸、剪切或旋转扭曲。<strong>逆矩阵 $A^{-1}$ 的几何本质，就是执行完全相反的“反向撤销/解扭曲 (Undo Transformation)”操作！</strong>
+          </p>
+
+          <!-- SVG Graphic 3.3: Geometric Undo Transformation Loop -->
+          <div style="text-align:center; margin: 1.5rem 0;">
+            <svg width="540" height="220" viewBox="0 0 540 220" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+              <!-- Step 1: Original Orthogonal Grid -->
+              <g stroke="#334155" stroke-width="1">
+                <line x1="20" y1="90" x2="140" y2="90"/>
+                <line x1="80" y1="30" x2="80" y2="150"/>
+                <rect x="80" y="50" width="40" height="40" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+              </g>
+              <text x="80" y="175" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">1. 标准正交网格 I</text>
+              <text x="80" y="195" fill="var(--text-muted)" font-size="11" text-anchor="middle">向量 x</text>
+
+              <!-- Forward Arrow A -->
+              <path d="M 155 90 L 225 90" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple-undo)"/>
+              <text x="190" y="78" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle">正向变换 A</text>
+
+              <!-- Step 2: Sheared Transformed Grid -->
+              <g stroke="#334155" stroke-width="1">
+                <polygon points="245,130 315,115 355,55 285,70" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
+              </g>
+              <text x="300" y="175" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle">2. 扭曲网格 A</text>
+              <text x="300" y="195" fill="var(--text-muted)" font-size="11" text-anchor="middle">变换结果 Ax</text>
+
+              <!-- Undo Arrow A^-1 -->
+              <path d="M 375 90 L 445 90" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrow-green-undo)"/>
+              <text x="410" y="78" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">逆变换 A⁻¹</text>
+
+              <!-- Step 3: Restored Grid -->
+              <g stroke="#334155" stroke-width="1">
+                <line x1="460" y1="90" x2="520" y2="90"/>
+                <line x1="490" y1="30" x2="490" y2="150"/>
+                <rect x="490" y="50" width="30" height="40" fill="rgba(74, 222, 128, 0.2)" stroke="#4ade80" stroke-width="2"/>
+              </g>
+              <text x="490" y="175" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">3. 100% 完美复原!</text>
+              <text x="490" y="195" fill="var(--text-muted)" font-size="11" text-anchor="middle">A⁻¹(Ax) = Ix = x</text>
+
+              <defs>
+                <marker id="arrow-purple-undo" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+                </marker>
+                <marker id="arrow-green-undo" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+                </marker>
+              </defs>
+            </svg>
+          </div>
+
+          <!-- Why Non-invertible? Singular Flat Collapse -->
+          <div class="warning-box" style="margin-top:1rem;">
+            <div class="box-title" style="color:var(--accent-rose);">❓ 为什么有些矩阵不可逆？（降维压扁的几何本质）</div>
+            <p style="font-size:0.92rem; line-height:1.7; margin-bottom:0.4rem;">
+              如果矩阵 $A$ 将二维平面压缩砸扁成了一条<strong>一维直线</strong>（即行列式 $\det(A) = 0$，空间体积被压缩为 0），那么整张平面上的无数个点都被挤压映射到了同一条直线上。
+            </p>
+            <p style="font-size:0.92rem; line-height:1.7; margin-bottom:0;">
+              在几何上，你<strong>无法仅凭直线上的一点反向推导出它原本来自二维平面的哪个位置</strong>！信息的彻底丢失导致“反向撤销映射”无法存在——这就是<strong>不可逆/奇异矩阵 (Singular Matrix)</strong> 的几何物理真相。
+            </p>
+          </div>
+        </div>
+
+        <!-- Subsection 3.3: Step-by-Step Numerical Example -->
+        <div class="card" style="background: rgba(74, 222, 128, 0.04); border-color: rgba(74, 222, 128, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-green); font-size:1.2rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>✍️</span> 3. 完整数值手算例题与加边消元检验
+          </h3>
+          <p style="font-size:0.95rem; line-height:1.7; margin-bottom:1rem;">
+            <strong>例题</strong>：给定矩阵 $A = \begin{bmatrix} 1 & 2 \\ 3 & 7 \end{bmatrix}$，利用高斯-若尔当消元法 $[A \mid I] \to [I \mid A^{-1}]$ 求解其逆矩阵 $A^{-1}$，并进行乘积校验。
+          </p>
+
+          <div class="step-container">
+            <!-- Step 1 -->
+            <div class="step-card" style="padding:1rem;">
+              <div class="step-number" style="width:28px; height:28px; font-size:0.88rem;">1</div>
+              <div class="step-content">
+                <div class="step-title" style="font-size:0.98rem;">构造加边矩阵 (Augmented Matrix) $[A \mid I_2]$</div>
+                <div class="math-block" style="text-align:left; padding:0.6rem 1rem; font-size:0.9rem;">
+                  $$[A \mid I] = \left[\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\ 3 & 7 & 0 & 1 \end{array}\right]$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card" style="padding:1rem;">
+              <div class="step-number" style="width:28px; height:28px; font-size:0.88rem;">2</div>
+              <div class="step-content">
+                <div class="step-title" style="font-size:0.98rem;">消去左下角元素 (行变换 $R_2 \leftarrow R_2 - 3R_1$)</div>
+                <div class="math-block" style="text-align:left; padding:0.6rem 1rem; font-size:0.9rem;">
+                  $$\left[\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\ 3 - 3(1) & 7 - 3(2) & 0 - 3(1) & 1 - 3(0) \end{array}\right] = \left[\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\ 0 & 1 & -3 & 1 \end{array}\right]$$
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card" style="padding:1rem;">
+              <div class="step-number" style="width:28px; height:28px; font-size:0.88rem;">3</div>
+              <div class="step-content">
+                <div class="step-title" style="font-size:0.98rem;">消去右上角元素 (行变换 $R_1 \leftarrow R_1 - 2R_2$)</div>
+                <div class="math-block" style="text-align:left; padding:0.6rem 1rem; font-size:0.9rem;">
+                  $$\left[\begin{array}{cc|cc} 1 - 2(0) & 2 - 2(1) & 1 - 2(-3) & 0 - 2(1) \\ 0 & 1 & -3 & 1 \end{array}\right] = \left[\begin{array}{cc|cc} 1 & 0 & 7 & -2 \\ 0 & 1 & -3 & 1 \end{array}\right] = [I_2 \mid A^{-1}]$$
+                </div>
+                <p style="font-size:0.9rem; color:var(--accent-green); margin-top:0.4rem; margin-bottom:0;">
+                  👉 得到候选逆矩阵：$A^{-1} = \begin{bmatrix} 7 & -2 \\ -3 & 1 \end{bmatrix}$！
+                </p>
+              </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card" style="padding:1rem;">
+              <div class="step-number" style="width:28px; height:28px; font-size:0.88rem; background:var(--gradient-secondary);">4</div>
+              <div class="step-content">
+                <div class="step-title" style="font-size:0.98rem; color:var(--accent-green);">验证乘积 $A \cdot A^{-1} = I_2$</div>
+                <div class="math-block" style="text-align:left; padding:0.6rem 1rem; font-size:0.9rem;">
+                  $$A \cdot A^{-1} = \begin{bmatrix} 1 & 2 \\ 3 & 7 \end{bmatrix} \begin{bmatrix} 7 & -2 \\ -3 & 1 \end{bmatrix} = \begin{bmatrix} 1(7) + 2(-3) & 1(-2) + 2(1) \\ 3(7) + 7(-3) & 3(-2) + 7(1) \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} = I_2 \quad \checkmark$$
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subsection 3.4: 6 Major Computation Methods Overview -->
+        <div class="card" style="background: rgba(251, 191, 36, 0.04); border-color: rgba(251, 191, 36, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-amber); font-size:1.2rem; margin-bottom:0.8rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>🗺️</span> 4. 逆矩阵计算的 6 大核心途径全景图 (6 Computation Methods)
+          </h3>
+          <p style="font-size:0.95rem; line-height:1.7; margin-bottom:1.2rem;">
+            求解逆矩阵 $A^{-1}$ 在不同场景下有着截然不同的视角与计算工具。从手算消元、代数公式到现代工程求解器与并行计算，线性代数共提供了 <strong>6 大核心途径</strong>：
+          </p>
+
+          <!-- 6 Grid Cards -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-bottom:1.5rem;">
+            
+            <!-- Method 1 -->
+            <div style="background:rgba(56, 189, 248, 0.06); border:1px solid rgba(56, 189, 248, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:var(--accent-blue); font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between;">
+                <span>1️⃣ 高斯-若尔当消元法</span>
+                <span style="font-size:0.75rem; background:rgba(56, 189, 248, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">✍️ 手算 / 基础</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                通过对加边矩阵作初等行变换消元：$[A \mid I_n] \xrightarrow{\text{RREF}} [I_n \mid A^{-1}]$。
+              </p>
+              <div style="font-size:0.82rem; color:var(--accent-blue); background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 复杂度 $\mathcal{O}(n^3)$。最直接通用的解法（见本模块 Section 3.3）。
+              </div>
+            </div>
+
+            <!-- Method 2 -->
+            <div style="background:rgba(168, 85, 247, 0.06); border:1px solid rgba(168, 85, 247, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:var(--accent-purple); font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between;">
+                <span>2️⃣ 伴随矩阵代数余子式法</span>
+                <span style="font-size:0.75rem; background:rgba(168, 85, 247, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">📜 符号推导</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                显式公式：$A^{-1} = \frac{1}{\det(A)} \text{adj}(A)$，其中 $\text{adj}(A) = C^T$。
+              </p>
+              <div style="font-size:0.82rem; color:var(--accent-purple); background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 详见 <a href="module5_determinant_cramer.html" style="color:var(--accent-purple); text-decoration:underline;">Module 5 第 4 节</a>，最适合带参数符号矩阵及小阶数手算。
+              </div>
+            </div>
+
+            <!-- Method 3 -->
+            <div style="background:rgba(74, 222, 128, 0.06); border:1px solid rgba(74, 222, 128, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:var(--accent-green); font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; gap:0.4rem; justify-content:space-between;">
+                <span>3️⃣ 工业级矩阵分解法</span>
+                <span style="font-size:0.75rem; background:rgba(74, 222, 128, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">💻 计算机库首选</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                • LU 分解：$A=LU \implies A^{-1}=U^{-1}L^{-1}$<br>
+                • QR 分解：$A=QR \implies A^{-1}=R^{-1}Q^T$<br>
+                • SVD 奇异值分解：$A=U\Sigma V^T \implies A^+=V\Sigma^{-1}U^T$
+              </p>
+              <div style="font-size:0.82rem; color:var(--accent-green); background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 详见 <a href="module8_orthogonality_svd_beyond.html" style="color:var(--accent-green); text-decoration:underline;">Module 8</a>，NumPy/MATLAB 求逆底层实现，SVD 可无缝推广为伪逆。
+              </div>
+            </div>
+
+            <!-- Method 4 -->
+            <div style="background:rgba(251, 191, 36, 0.06); border:1px solid rgba(251, 191, 36, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:var(--accent-amber); font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between;">
+                <span>4️⃣ Neumann 级数展开法</span>
+                <span style="font-size:0.75rem; background:rgba(251, 191, 36, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">🌐 图计算 / 级数</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                幂零截断或收敛级数：$(I - C)^{-1} = \sum_{m=0}^\infty C^m = I + C + C^2 + \dots$
+              </p>
+              <div style="font-size:0.82rem; color:var(--accent-amber); background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 见本模块 Section 4，适用于 Google PageRank 阻尼迭代与经济投入产出模型。
+              </div>
+            </div>
+
+            <!-- Method 5 -->
+            <div style="background:rgba(244, 63, 94, 0.06); border:1px solid rgba(244, 63, 94, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:#f43f5e; font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between;">
+                <span>5️⃣ Cayley-Hamilton 定理法</span>
+                <span style="font-size:0.75rem; background:rgba(244, 63, 94, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">🎯 特征值代数</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                利用特征多项式 $p(A) = A^n + c_{n-1}A^{n-1} + \dots + c_0 I = \mathbf{0}$ 整理：
+                $A^{-1} = -\frac{1}{c_0} (A^{n-1} + c_{n-1}A^{n-2} + \dots + c_1 I)$
+              </p>
+              <div style="font-size:0.82rem; color:#f43f5e; background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 详见 <a href="module7_eigenvalues_diagonalization.html" style="color:#f43f5e; text-decoration:underline;">Module 7</a>，将求逆转化为高阶矩阵幂次线性组合。
+              </div>
+            </div>
+
+            <!-- Method 6 -->
+            <div style="background:rgba(129, 140, 248, 0.06); border:1px solid rgba(129, 140, 248, 0.3); border-radius:var(--radius-md); padding:1rem;">
+              <h4 style="color:#818cf8; font-size:1.02rem; margin-bottom:0.4rem; display:flex; align-items:center; justify-content:space-between;">
+                <span>6️⃣ 舒尔补分块求逆法</span>
+                <span style="font-size:0.75rem; background:rgba(129, 140, 248, 0.15); padding:0.15rem 0.5rem; border-radius:4px;">⚡ 并行 / 分治</span>
+              </h4>
+              <p style="font-size:0.88rem; line-height:1.6; color:var(--text-muted); margin-bottom:0.5rem;">
+                对 $2 \times 2$ 分块矩阵 $\begin{bmatrix} A & B \\ C & D \end{bmatrix}$ 利用舒尔补 $S = D - CA^{-1}B$ 展开并行离散求解。
+              </p>
+              <div style="font-size:0.82rem; color:#818cf8; background:rgba(0,0,0,0.3); padding:0.4rem; border-radius:4px;">
+                💡 超大规模稀疏矩阵、分布式云计算与图计算分割的首选架构。
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Summary Table -->
+          <div style="margin-top:1.2rem; padding-top:1rem; border-top:1px dashed var(--border-color);">
+            <h4 style="color:var(--text-main); font-size:0.98rem; margin-bottom:0.8rem;">📊 6 大逆矩阵计算途径对比总结表</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%; border-collapse:collapse; font-size:0.88rem; color:var(--text-muted);">
+                <thead>
+                  <tr style="background:rgba(15, 23, 42, 0.8); border-bottom:1px solid var(--border-color); color:var(--text-main);">
+                    <th style="padding:0.6rem; text-align:left;">计算途径</th>
+                    <th style="padding:0.6rem; text-align:left;">计算主体</th>
+                    <th style="padding:0.6rem; text-align:left;">时间复杂度</th>
+                    <th style="padding:0.6rem; text-align:left;">核心优势与最适用场景</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-blue); font-weight:600;">1. 高斯-若尔当消元</td>
+                    <td style="padding:0.6rem;">✍️ 手算 / 💻 基础算法</td>
+                    <td style="padding:0.6rem;">$\mathcal{O}(n^3)$</td>
+                    <td style="padding:0.6rem;">概念直观，通用标准消元求逆法</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-purple); font-weight:600;">2. 伴随矩阵代数余子式</td>
+                    <td style="padding:0.6rem;">✍️ 手算 ($n \le 3$) / 📜 符号推导</td>
+                    <td style="padding:0.6rem;">$\mathcal{O}(n \cdot n!)$</td>
+                    <td style="padding:0.6rem;">符号矩阵、多项式参数矩阵求逆与代数证明</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-green); font-weight:600;">3. 矩阵分解 (LU/QR/SVD)</td>
+                    <td style="padding:0.6rem;">💻 计算机工程库 (NumPy/SciPy)</td>
+                    <td style="padding:0.6rem;">$\mathcal{O}(n^3)$</td>
+                    <td style="padding:0.6rem;">极高数值稳定性；SVD 可推广至奇异矩阵伪逆 $A^+$</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:var(--accent-amber); font-weight:600;">4. Neumann 级数展开</td>
+                    <td style="padding:0.6rem;">💻 计算机迭代求解</td>
+                    <td style="padding:0.6rem;">视截断项数 $k$ 而定</td>
+                    <td style="padding:0.6rem;">Google PageRank、经济学 Leontief 投入产出模型</td>
+                  </tr>
+                  <tr style="border-bottom:1px solid var(--border-color);">
+                    <td style="padding:0.6rem; color:#f43f5e; font-weight:600;">5. Cayley-Hamilton 定理</td>
+                    <td style="padding:0.6rem;">✍️ 理论推导 / 🎯 矩阵代数</td>
+                    <td style="padding:0.6rem;">$\mathcal{O}(n^3)$</td>
+                    <td style="padding:0.6rem;">已知特征值时将求逆转化为矩阵多项式展开</td>
+                  </tr>
+                  <tr>
+                    <td style="padding:0.6rem; color:#818cf8; font-weight:600;">6. 舒尔补分块求逆</td>
+                    <td style="padding:0.6rem;">💻 并行 / 分布式云计算</td>
+                    <td style="padding:0.6rem;">分治优化</td>
+                    <td style="padding:0.6rem;">超大规模稀疏矩阵、图分割与高维并行计算</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 初等矩阵 (Elementary Matrices) 与加边求逆算法 $[A \mid I] \to [I \mid A^{-1}]$</h2>
         <p>每一个初等行变换，都精确对应着左乘一个**初等矩阵 $E$**。对于 $n \times n$ 可逆矩阵 $A$，通过一系列初等行变换可将其化简为单位矩阵 $I$：</p>
         <div class="math-block">
           $$E_k E_{k-1} \dots E_1 A = I_n \implies A^{-1} = E_k E_{k-1} \dots E_1$$
         </div>
         <p>将同样的操作施加在单位矩阵 $I$ 上（即构造加边矩阵 $[A \mid I]$ 并化为 RREF），右半部分自然就变成了 $A^{-1}$！</p>
 
-        <!-- Subsection 3.1: Nilpotent Matrices & Neumann Series Deep Dive -->
+        <!-- Subsection 4.1: Nilpotent Matrices & Neumann Series Deep Dive -->
         <div class="card" style="background: rgba(168, 85, 247, 0.04); border-color: rgba(168, 85, 247, 0.3); margin-top: 2rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid var(--border-color); padding-bottom:0.8rem;">
             <h3 style="color:var(--accent-purple); font-size:1.25rem; margin:0; display:flex; align-items:center; gap:0.5rem;">
@@ -547,13 +896,13 @@
             </div>
 
             <p style="font-size:0.88rem; color:var(--text-dim); margin-bottom:0;">
-              💡 <strong>现实应用连连看</strong>：这正是第 5 节<strong>里昂惕夫 (Leontief) 经济投入产出模型</strong>中的全产出需求计算，也是 <strong>Google PageRank 隐式阻尼求逆算法</strong> 的理论基石！
+              💡 <strong>现实应用连连看</strong>：这正是第 6 节<strong>里昂惕夫 (Leontief) 经济投入产出模型</strong>中的全产出需求计算，也是 <strong>Google PageRank 隐式阻尼求逆算法</strong> 的理论基石！
             </p>
           </div>
         </div>
 
-        <!-- Section 4 -->
-        <h2 class="section-title">4. 👑 可逆矩阵大一统定理 (Invertible Matrix Equivalence Theorem) 10 大条件闭环</h2>
+        <!-- Section 5 -->
+        <h2 class="section-title">5. 👑 可逆矩阵大一统定理 (Invertible Matrix Equivalence Theorem) 10 大条件闭环</h2>
         
         <div class="concept-box" style="background: rgba(56, 189, 248, 0.08); border-color: var(--accent-blue);">
           <div class="box-title" style="color:var(--accent-blue);">🎒 前瞻微定义：为什么“$\det(A) \neq 0$”等价于矩阵可逆？</div>
