@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 7: 特征值与矩阵对角化 | 线性代数直觉指南</title>
+  <title>Module 7: 特征值、特征向量与矩阵对角化 | 线性代数直觉指南</title>
   <link rel="stylesheet" href="css/style.css">
   <script>
     window.MathJax = {
@@ -90,40 +90,60 @@
 
       <main class="content-container">
         <h1 class="module-title">模块七：特征值、特征向量、Google PageRank 与矩阵对角化</h1>
-        <div class="module-subtitle">解构变换中不旋转的几何主轴、Google 搜索排名算法与矩阵高阶幂 $A^k$ 极速计算</div>
+        <div class="module-subtitle">解构变换中不旋转的几何主轴、五大经典变换案例、Google 搜索排名算法与矩阵高阶幂 $A^k$ 极速计算</div>
 
         <!-- Course Guidance Roadmap Card -->
         <div class="card" style="background: linear-gradient(135deg, rgba(14, 165, 233, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
           <h3 style="color:var(--accent-blue); font-size:1.15rem; margin-bottom:0.6rem;">🗺️ 模块导学与循序渐进思考路径</h3>
           <p style="font-size:0.92rem; line-height:1.7; color:var(--text-main);">
-            本模块对应讲义 Chapter 5 的全部内容：从<strong>特征值 (Eigenvalue) 与特征向量 (Eigenvector) 的几何主轴直觉</strong>，到<strong>特征多项式 $\det(A-\lambda I)=0$</strong> 与特征子空间；接着探索工业级应用<strong>Google PageRank 幂法算法</strong>；最后全解构<strong>矩阵对角化 $A = PDP^{-1}$</strong> 的判定条件与高阶幂 $A^k$ 极速计算。
+            本模块对应讲义 Chapter 5 的全部内容：从<strong>特征值 (Eigenvalue) 与特征向量 (Eigenvector) 的几何主轴直觉</strong>（五大经典变换深度剖析），到<strong>特征方程 $\det(A-\lambda I)=0$</strong>、迹与行列式两大黄金验算定理及特征子空间；接着探索工业级应用<strong>Google PageRank 幂法算法与马尔可夫稳态</strong>；最后全解构<strong>矩阵对角化 $A = PDP^{-1}$</strong> 的充要条件、斐波那契通项推导与高阶幂 $A^k$ 极速计算。
           </p>
         </div>
 
         <!-- Section 1 -->
-        <h2 class="section-title">1. 特征值与特征向量的几何直觉：变换中不旋转的特征主轴</h2>
+        <h2 class="section-title">1. 特征值与特征向量的几何直觉：变换中“方向不偏转”的固有主轴</h2>
+
+        <!-- Subsection 1.1 -->
+        <h3 class="subsection-title">1.1 💡 为什么需要特征值与特征向量？从复杂变换中抓住不变的主干</h3>
+        <p>当一个矩阵 $A$ 作为一个线性变换作用在空间中的向量上时，绝大多数向量都会经历复杂的<strong>“既被拉伸伸缩，又发生方向偏转（旋转/歪斜）”</strong>的过程。</p>
+        <p>但是，在线性变换中，空间里往往隐藏着某些<strong>极其神圣且特殊的“固有方向（主轴）”</strong>：当矩阵作用在这些特定方向的向量上时，向量<strong>绝不发生任何方向偏转，只在原本所在的同一直线上进行纯粹的缩放或反向</strong>！</p>
 
         <!-- SVG Graphic 7.1: Ordinary Rotating Vector vs Eigenvector (Non-rotating) -->
         <div style="text-align:center; margin: 1.5rem 0;">
-          <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+          <svg width="520" height="210" viewBox="0 0 520 210" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width:100%;">
             <!-- Left: Ordinary Vector (Rotated and Scaled) -->
             <g>
-              <line x1="100" y1="120" x2="160" y2="120" stroke="#94a3b8" stroke-width="2"/>
-              <line x1="100" y1="120" x2="150" y2="50" stroke="#ef4444" stroke-width="3" marker-end="url(#arrow-red)"/>
-              <text x="130" y="145" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle"> 普通向量: 偏转 + 改变角度 ❌</text>
+              <line x1="80" y1="130" x2="160" y2="130" stroke="#94a3b8" stroke-width="2" stroke-dasharray="3"/>
+              <line x1="80" y1="130" x2="150" y2="130" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+              <text x="115" y="120" fill="#38bdf8" font-size="12" text-anchor="middle">原向量 x</text>
+              
+              <line x1="80" y1="130" x2="165" y2="55" stroke="#ef4444" stroke-width="3.5" marker-end="url(#arrow-red)"/>
+              <text x="160" y="45" fill="#ef4444" font-size="13" font-weight="bold">Ax 偏离了原本直线</text>
+              <text x="130" y="175" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">❌ 普通向量：方向发生偏转</text>
             </g>
 
-            <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+            <line x1="260" y1="20" x2="260" y2="190" stroke="#334155" stroke-dasharray="4"/>
 
             <!-- Right: Eigenvector (Only Scaled along line) -->
             <g>
-              <line x1="280" y1="160" x2="440" y2="40" stroke="#334155" stroke-dasharray="2"/>
-              <line x1="360" y1="100" x2="400" y2="70" stroke="#38bdf8" stroke-width="2"/>
-              <line x1="360" y1="100" x2="440" y2="40" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrow-green)"/>
-              <text x="390" y="145" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle"> 特征向量: 方向保持同轴 (仅λ倍拉伸) ✅</text>
+              <!-- Background span line -->
+              <line x1="290" y1="170" x2="490" y2="30" stroke="#334155" stroke-dasharray="2" stroke-width="1.5"/>
+              
+              <!-- Original Eigenvector v -->
+              <line x1="340" y1="135" x2="390" y2="100" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+              <text x="360" y="145" fill="#38bdf8" font-size="12" font-weight="bold">原特征向量 v</text>
+              
+              <!-- Transformed Av = λv -->
+              <line x1="340" y1="135" x2="465" y2="47" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrow-green)"/>
+              <text x="440" y="38" fill="#4ade80" font-size="13" font-weight="bold">Av = λv (落在同一直线上)</text>
+              
+              <text x="390" y="175" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">✅ 特征向量：方向完全同轴 (仅 λ 倍缩放)</text>
             </g>
 
             <defs>
+              <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+              </marker>
               <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
                 <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
               </marker>
@@ -135,150 +155,907 @@
         </div>
 
         <div class="intuition-box">
-          <div class="box-title">💡 几何直觉：找寻不变的方向</div>
-          <p>当矩阵 $A$ 作用在绝大多数向量上时，向量不仅会被拉伸，方向还会发生偏转旋转。但是，空间中总存在某些**极其特殊的固有轴方向**，矩阵 $A$ 作用在它们上面时，**只发生纯粹的伸缩放大或缩短，方向完全不改变**！</p>
+          <div class="box-title">💡 严格数学定义与物理直觉</div>
+          <p>设 $A$ 为一个 $n \times n$ 的实数方阵。若存在一个<strong>非零向量</strong> $\mathbf{v} \neq \mathbf{0}$ 和一个标量 $\lambda$，满足：</p>
           <div class="math-block">
             $$A \mathbf{v} = \lambda \mathbf{v} \quad (\mathbf{v} \neq \mathbf{0})$$
           </div>
-          <ul style="margin-left: 1.2rem; line-height: 1.8; margin-top:0.5rem;">
-            <li>非零向量 $\mathbf{v}$ 称为矩阵 $A$ 的**特征向量 (Eigenvector)**。</li>
-            <li>纯标量 $\lambda$ 称为对应特征向量的**特征值 (Eigenvalue)**，代表在该主轴方向上的拉伸倍率。</li>
+          <ul style="margin-left: 1.5rem; line-height: 1.8; margin-top:0.6rem;">
+            <li><strong>特征向量 (Eigenvector $\mathbf{v}$)</strong>：矩阵变换下<strong>方向保持不变（或反向）的特殊固有方向</strong>。之所以强制要求 $\mathbf{v} \neq \mathbf{0}$，是因为零向量代入后对任意标量 $\lambda$ 都恒成立 $A\mathbf{0} = \lambda\mathbf{0}$，没有任何方向性，没有任何物理数学信息。</li>
+            <li><strong>特征值 (Eigenvalue $\lambda$)</strong>：矩阵沿着对应特征向量方向的<strong>伸缩拉伸倍率（纯标量）</strong>。</li>
+          </ul>
+        </div>
+
+        <!-- Subsection 1.2: Four Essences of Eigenvectors -->
+        <h3 class="subsection-title">1.2 👑 特征向量的四大本质维度：几何主轴、代数降维、天然网格与系统模态</h3>
+        <p>如果从最本质、最深刻的多学科视角来剖析，<strong>特征向量的内涵可以归结为以下 4 个层面的核心洞察</strong>：</p>
+
+        <!-- SVG Graphic 7.2: Four Essences Panorama Diagram -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="780" height="340" viewBox="0 0 780 340" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Header Title in SVG -->
+            <text x="390" y="30" fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle">特征向量 (Eigenvector) 与特征值 (Eigenvalue) 的四大本质全景图</text>
+            
+            <!-- Box 1: Geometric Essence (Top-Left) -->
+            <g transform="translate(20, 50)">
+              <rect width="360" height="130" rx="8" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="15" y="25" fill="#38bdf8" font-size="14" font-weight="bold">1. 几何本质：空间中“方向不偏转”的固有主轴</text>
+              <line x1="30" y1="90" x2="160" y2="90" stroke="#334155" stroke-dasharray="3"/>
+              <!-- non-eigenvector -->
+              <line x1="40" y1="90" x2="90" y2="50" stroke="#ef4444" stroke-width="2.5" marker-end="url(#arrow-red)"/>
+              <text x="75" y="115" fill="#ef4444" font-size="11" text-anchor="middle">普通向量：方向偏转 ❌</text>
+              <!-- eigenvector -->
+              <line x1="200" y1="90" x2="330" y2="90" stroke="#334155" stroke-dasharray="2"/>
+              <line x1="200" y1="90" x2="260" y2="90" stroke="#38bdf8" stroke-width="2"/>
+              <line x1="200" y1="90" x2="315" y2="90" stroke="#4ade80" stroke-width="3" marker-end="url(#arrow-green)"/>
+              <text x="260" y="115" fill="#4ade80" font-size="11" text-anchor="middle">特征向量：同轴仅 λ 倍缩放 ✅</text>
+            </g>
+
+            <!-- Box 2: Algebraic Essence (Top-Right) -->
+            <g transform="translate(400, 50)">
+              <rect width="360" height="130" rx="8" fill="rgba(168, 85, 247, 0.08)" stroke="#a855f7" stroke-width="1.5"/>
+              <text x="15" y="25" fill="#a855f7" font-size="14" font-weight="bold">2. 代数本质：矩阵乘法降维退化为标量乘法</text>
+              <rect x="25" y="45" width="130" height="40" rx="5" fill="#1e1e2e" stroke="#64748b"/>
+              <text x="90" y="70" fill="#f87171" font-size="13" font-weight="bold" text-anchor="middle">A · v (高维多重交叉)</text>
+              
+              <text x="180" y="72" fill="#fbbf24" font-size="20" font-weight="bold" text-anchor="middle">⟹</text>
+              
+              <rect x="205" y="45" width="130" height="40" rx="5" fill="#1e1e2e" stroke="#a855f7"/>
+              <text x="270" y="70" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">λ · v (单标量纯数倍乘)</text>
+              
+              <text x="180" y="115" fill="#cbd5e1" font-size="11" text-anchor="middle">💡 彻底解耦复杂的多元耦合运算</text>
+            </g>
+
+            <!-- Box 3: Coordinate Basis Essence (Bottom-Left) -->
+            <g transform="translate(20, 195)">
+              <rect width="360" height="130" rx="8" fill="rgba(74, 222, 128, 0.08)" stroke="#4ade80" stroke-width="1.5"/>
+              <text x="15" y="25" fill="#4ade80" font-size="14" font-weight="bold">3. 坐标视角：量身定制的天然解耦观察网格</text>
+              <text x="20" y="55" fill="#94a3b8" font-size="12">以特征向量为基底（换一副特征眼镜）：</text>
+              <text x="20" y="80" fill="#38bdf8" font-size="13" font-weight="bold">矩阵 A 变为对角矩阵 D = diag(λ₁, λ₂, ...)</text>
+              <text x="20" y="110" fill="#cbd5e1" font-size="11">极速求幂：Aᵏ = P · Dᵏ · P⁻¹（各轴独立伸缩 λᵏ）</text>
+            </g>
+
+            <!-- Box 4: Physical Systems Essence (Bottom-Right) -->
+            <g transform="translate(400, 195)">
+              <rect width="360" height="130" rx="8" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" stroke-width="1.5"/>
+              <text x="15" y="25" fill="#fbbf24" font-size="14" font-weight="bold">4. 物理/工程本质：系统固有的基本模态与稳态</text>
+              <text x="20" y="52" fill="#cbd5e1" font-size="11">🔹 结构振动：桥梁/分子的固有振动模态 (Normal Modes)</text>
+              <text x="20" y="74" fill="#cbd5e1" font-size="11">🔹 Google PageRank：随机游走稳态平衡分布 (λ=1)</text>
+              <text x="20" y="96" fill="#cbd5e1" font-size="11">🔹 数据科学 PCA：信息方差最大的主成分方向</text>
+              <text x="20" y="118" fill="#cbd5e1" font-size="11">🔹 量子力学：物理可观测量算符的本征态与本征值</text>
+            </g>
+          </svg>
+        </div>
+
+        <div class="step-container" style="margin-bottom:2rem;">
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-blue);">1</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-blue);">几何本质：变换中绝不偏转的固有主轴骨架</div>
+              <p>在几何空间中，一个矩阵 $A$ 代表一种空间的综合扭曲（拉伸、旋转、剪切）：</p>
+              <ul style="margin-left:1.2rem; line-height:1.7; margin-top:0.3rem;">
+                <li><strong>普通向量</strong>：经过变换后，向量的长度会变，<strong>方向也会发生倾斜或旋转</strong>。</li>
+                <li><strong>特征向量 $\mathbf{v}$</strong>：无论空间整体如何扭曲，在这个特殊方向上的向量在变换后<strong>依然牢牢保持在原本所在的同一直线上，绝不偏转</strong>，仅仅发生纯粹的放大、缩小或反向（即 $A\mathbf{v} = \lambda \mathbf{v}$）！</li>
+              </ul>
+              <p style="margin-top:0.4rem; color:var(--accent-blue); font-weight:bold;">💡 形象比喻：特征向量就是矩阵变换在空间中“发力与拉伸的固有骨架”（类似于地球自转时的固定地轴、椭圆拉伸时的长短主轴）。</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-purple);">2</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-purple);">代数本质：将多维交叉耦合降维解耦为纯标量乘法</div>
+              <p>普通情况下，计算矩阵与向量乘法 $A \mathbf{x}$ 涉及行与列错综复杂的点积与多元线性组合，所有变量互相交叉纠缠。</p>
+              <p>但当输入的是特征向量 $\mathbf{v}$ 时：$A\mathbf{v} = \lambda \mathbf{v}$。左边原本复杂的<strong>高维矩阵映射</strong>瞬间退化成了<strong>简单的纯数倍数缩放（标量乘法）</strong>！特征向量实现了多维复杂耦合计算的彻底降维解耦。</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-green);">3</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-green);">坐标系视角：量身定制的最佳观察网格（对角化的本质）</div>
+              <p>如果我们戴上一副由特征向量组成的<strong>“专属定制观察眼镜”</strong>（以特征向量为坐标基底）：</p>
+              <p>原本充满非对角耦合项的矩阵 $A$ 瞬间变成了最纯粹的<strong>纯对角矩阵 $D = \text{diag}(\lambda_1, \dots, \lambda_n)$</strong>。在特征坐标系下，各个坐标轴之间完全独立演化、互不干涉，求高阶幂 $A^k$ 只需在各个对角轴上独立计算 $\lambda_i^k$。</p>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-orange, #f59e0b);">4</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-orange, #f59e0b);">物理与工程本质：系统固有的基本模态 (Normal Modes) 与稳态</div>
+              <p>在现实世界的动力学、网络与机器学习中，特征向量代表着系统最底层的客观物理规律：</p>
+              <ul style="margin-left:1.2rem; line-height:1.7; margin-top:0.3rem;">
+                <li><strong>结构与振动工程</strong>：大桥或机械结构的复杂混沌摆动，本质上只是少数几个<strong>固有振动模态（特征向量）</strong>的线性叠加；引发共振坍塌的危险频率正是其<strong>特征值</strong>。</li>
+                <li><strong>Google PageRank</strong>：全网数十亿网页链接游走后最终趋于平衡的权威度分布，正是马尔可夫转移矩阵对应于<strong>主特征值 $\lambda = 1$ 的特征向量</strong>。</li>
+                <li><strong>数据科学 PCA</strong>：高维海量数据中信息量最大、方差最宽广的主成分方向，正是协方差矩阵的<strong>主特征向量</strong>。</li>
+                <li><strong>量子力学</strong>：物理观测量的本征态就是算符矩阵的<strong>特征向量</strong>，测得的具体数值就是<strong>特征值</strong>。</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subsection 1.3 -->
+        <h3 class="subsection-title">1.3 标量特征值 $\lambda$ 不同取值的几何/物理图景</h3>
+        <p>特征值 $\lambda$ 就像矩阵在各个主轴上的“力量倍率仪表盘”，不同取值赋予几何空间截然不同的物理行为：</p>
+        
+        <table class="concept-table" style="width:100%; margin:1.2rem 0; font-size:0.9rem;">
+          <thead>
+            <tr>
+              <th style="width:20%;">特征值 $\lambda$ 取值</th>
+              <th style="width:35%;">几何运动图景</th>
+              <th style="width:45%;">典型物理 / 动力系统含义</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$\lambda > 1$</td>
+              <td>沿特征向量方向<strong>加速拉伸放大</strong></td>
+              <td>主导发散方向、爆炸增长模式、不稳定模态</td>
+            </tr>
+            <tr>
+              <td>$0 < \lambda < 1$</td>
+              <td>沿特征向量方向<strong>被压缩缩短</strong></td>
+              <td>阻尼衰减模态、向原点收敛的稳定收缩方向</td>
+            </tr>
+            <tr>
+              <td>$\lambda = 1$</td>
+              <td>长度与方向<strong>完全保持不变（绝对守恒）</strong></td>
+              <td>系统平衡点、三维刚体旋转轴、Google PageRank 稳态概率分布</td>
+            </tr>
+            <tr>
+              <td>$\lambda = 0$</td>
+              <td>向量被<strong>完全压平粉碎至原点 $\mathbf{0}$</strong></td>
+              <td>特征向量正好落在矩阵的<strong>零空间 $\text{Null}(A)$</strong> 中，矩阵不可逆！</td>
+            </tr>
+            <tr>
+              <td>$\lambda < 0$</td>
+              <td>沿特征向量方向<strong>被 180° 反向翻转</strong>并伸缩</td>
+              <td>镜像反射、震荡交替模态（如振幅每步交替翻转）</td>
+            </tr>
+            <tr>
+              <td>$\lambda \in \mathbb{C}$ (虚数)</td>
+              <td>伴随<strong>旋转与螺旋发散 / 衰减</strong></td>
+              <td>实平面内不存在任何不偏转的实数直线（如纯旋转振荡）</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Subsection 1.4 -->
+        <h3 class="subsection-title">1.4 🌟 五大经典几何变换案例：直接从几何直觉一眼看穿特征值与特征向量</h3>
+        <p>理解特征值最快的方式不是盲目套公式，而是通过<strong>5 种最具代表性的二维几何变换</strong>，在头脑中建立直观的几何图像：</p>
+
+        <!-- Case 1: Scaling Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-blue);">案例 1：非均匀拉伸矩阵 (Scaling) —— 轴向保持不变</div>
+          <p>考虑矩阵 $A = \begin{bmatrix} 3 & 0 \\ 0 & 2 \end{bmatrix}$，它将平面沿横向放大 3 倍，纵向放大 2 倍。</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>横轴上的任意向量 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$：作用后 $A\mathbf{v}_1 = \begin{bmatrix} 3 \\ 0 \end{bmatrix} = 3\mathbf{v}_1$。因此 $\mathbf{v}_1$ 是特征向量，对应特征值 $\lambda_1 = 3$。</li>
+            <li>纵轴上的任意向量 $\mathbf{v}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$：作用后 $A\mathbf{v}_2 = \begin{bmatrix} 0 \\ 2 \end{bmatrix} = 2\mathbf{v}_2$。因此 $\mathbf{v}_2$ 是特征向量，对应特征值 $\lambda_2 = 2$。</li>
+            <li>对于任何斜向向量如 $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$，变换后变成 $\begin{bmatrix} 3 \\ 2 \end{bmatrix}$，方向明显变平了（偏离了原直线），因此不是特征向量。</li>
+          </ul>
+        </div>
+
+        <!-- Case 2: Reflection Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-purple);">案例 2：镜像反射矩阵 (Reflection across $y = x$) —— 镜面与法线</div>
+          <p>考虑关于对角直线 $y = x$ 的反射矩阵 $A = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$（将坐标 $(x,y)$ 交换为 $(y,x)$）。</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>镜面轴上的向量</strong>：落在直线 $y=x$ 上的向量 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$，镜面反射后保持完全不动！$A\mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix} = 1 \cdot \mathbf{v}_1 \implies \lambda_1 = 1$。</li>
+            <li><strong>垂直于镜面的向量</strong>：落在垂直直线 $y=-x$ 上的向量 $\mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$，反射后正好翻转 180°！$A\mathbf{v}_2 = \begin{bmatrix} -1 \\ 1 \end{bmatrix} = -1 \cdot \mathbf{v}_2 \implies \lambda_2 = -1$。</li>
+            <li><strong>几何深刻启示</strong>：无需任何代数求解，从“镜面不动”与“法线反转”两个几何事实，就能瞬间锁定全部特征值与特征向量！</li>
+          </ul>
+        </div>
+
+        <!-- Case 3: Projection Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-green);">案例 3：正交投影矩阵 (Projection onto $x$-axis) —— 不动轴与零空间坍缩</div>
+          <p>考虑将全平面向量垂直投影到 $x$ 轴上的投影矩阵 $P = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$。</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li><strong>投影线上的向量</strong>：$x$ 轴上的向量 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ 投影后依然是它自己：$P\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix} = 1 \cdot \mathbf{v}_1 \implies \lambda_1 = 1$。</li>
+            <li><strong>垂直于投影线的向量</strong>：$y$ 轴上的向量 $\mathbf{v}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ 投影后直接被压扁成原点 $\mathbf{0}$：$P\mathbf{v}_2 = \begin{bmatrix} 0 \\ 0 \end{bmatrix} = 0 \cdot \mathbf{v}_2 \implies \lambda_2 = 0$。</li>
+            <li><strong>几何深刻启示</strong>：$\lambda = 0$ 的特征向量本质上就是<strong>被投影矩阵压成零的所有向量，即零空间 $\text{Null}(P)$ 的基</strong>！</li>
+          </ul>
+        </div>
+
+        <!-- Case 4: Pure Rotation Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-red);">案例 4：纯 90° 旋转矩阵 (Pure Rotation) —— 空间中无任何不动直线</div>
+          <p>考虑将二维平面逆时针旋转 90° 的矩阵 $R_{90^\circ} = \begin{bmatrix} \cos 90^\circ & -\sin 90^\circ \\ \sin 90^\circ & \cos 90^\circ \end{bmatrix} = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$。</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>在实数平面 $\mathbb{R}^2$ 中，每一个非零向量经过 90° 旋转后，都必定与自身正交垂直，<strong>绝对不可能有任何实数向量保持在原直线上</strong>！</li>
+            <li>因此，在实数域 $\mathbb{R}$ 上，纯旋转矩阵<strong>没有实数特征值与实数特征向量</strong>。</li>
+            <li>若在复数域 $\mathbb{C}$ 中求解：$\det(R - \lambda I) = \lambda^2 + 1 = 0 \implies \lambda = \pm i$。复数特征值揭示了二维实平面的周期性纯旋转振荡！</li>
+          </ul>
+        </div>
+
+        <!-- Case 5: Shear Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-orange, #f59e0b);">案例 5：水平剪切矩阵 (Shear Matrix) —— 缺失特征向量的病态案例</div>
+          <p>考虑沿横向将图形推歪的水平剪切矩阵 $S = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$。</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>水平轴向量 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ 作用后为 $S\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix} = 1 \cdot \mathbf{v}_1 \implies \lambda_1 = 1$。</li>
+            <li>除水平轴以外的所有向量，都会因为顶部横向推移而被推斜偏转，<strong>再也找不到第二个不偏转的独立方向</strong>！</li>
+            <li>特征方程为 $(\lambda - 1)^2 = 0 \implies \lambda = 1$（代数重数为 2），但独立特征向量只有 1 个（几何重数为 1）。这是导致矩阵<strong>无法对角化</strong>的根本原因！</li>
           </ul>
         </div>
 
         <!-- Section 2 -->
-        <h2 class="section-title">2. 特征多项式 (Characteristic Polynomial) 与代数/几何重数</h2>
-        <p>将核心方程移项整理：$(A - \lambda I_n)\mathbf{v} = \mathbf{0}$。由于要求存在非零解 $\mathbf{v} \neq \mathbf{0}$，系数矩阵必须不可逆，行列式必须等于 0！</p>
-        <div class="math-block">
-          $$\det(A - \lambda I_n) = 0 \quad \text{(特征方程 / 特征多项式)}$$
-        </div>
+        <h2 class="section-title">2. 代数求解机理、特征多项式与两大黄金验算定理</h2>
 
-        <div class="proof-box">
-          <div class="box-title">代数重数 $m_a$ vs 几何重数 $m_g$ 及不可对角化剪切矩阵反例</div>
-          <p>对于重根特征值 $\lambda$：</p>
-          <ul>
-            <li><strong>代数重数 $m_a$</strong>：$\lambda$ 在特征多项式根中的重复次数。</li>
-            <li><strong>几何重数 $m_g$</strong>：对应特征子空间 $\text{Null}(A - \lambda I)$ 的维数 $\dim(E_\lambda)$。满足 $1 \le m_g \le m_a$。</li>
-          </ul>
-          <p style="margin-top:0.6rem;"><strong>缺特征向量经典反例（剪切矩阵）</strong>：$A = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$。特征方程 $(\lambda-1)^2 = 0 \implies \lambda = 1$（$m_a = 2$）。但在解 $(A - 1I)\mathbf{v} = \mathbf{0} \implies \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \mathbf{v} = \mathbf{0}$ 时，只能解出唯一的特征向量基 $\mathbf{v}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$（$m_g = 1 < m_a$）。缺一个特征向量，导致矩阵 $A$ <strong>彻底无法被对角化</strong>！$\blacksquare$</p>
-        </div>
-
-        <!-- Section 3 -->
-        <h2 class="section-title">3. 🌐 工业级前沿：Google PageRank 网页排名算法</h2>
-
-        <!-- SVG Graphic 7.2: PageRank Web Graph & Markov Transition -->
-        <div style="text-align:center; margin: 1.5rem 0;">
-          <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
-            <circle cx="80" cy="90" r="25" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
-            <text x="80" y="95" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle"> 网页 A</text>
-
-            <circle cx="240" cy="50" r="25" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
-            <text x="240" y="55" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle"> 网页 B</text>
-
-            <circle cx="400" cy="90" r="25" fill="rgba(74, 222, 128, 0.2)" stroke="#4ade80" stroke-width="2"/>
-            <text x="400" y="95" fill="#4ade80" font-size="14" font-weight="bold" text-anchor="middle"> 网页 C</text>
-
-            <path d="M 105 80 L 215 55" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
-            <path d="M 265 55 L 375 80" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow-purple)"/>
-            <path d="M 375 100 L 105 100" stroke="#4ade80" stroke-width="2" marker-end="url(#arrow-green)"/>
-          </svg>
-        </div>
-
-        <div class="proof-box" style="background: rgba(56, 189, 248, 0.06); border-color: rgba(56, 189, 248, 0.3);">
-          <div class="box-title" style="color:var(--accent-blue);">Google 创始算法 PageRank 的线性代数本质</div>
-          <p>互联网中 $N$ 个网页之间的超链接构成了一个随机游走图，设其马尔可夫转移矩阵为 $P$。当用户随机点击链接经过长期游走后，网页的重要性概率分布向量 $\mathbf{q}$ 将趋于稳定平衡状态：</p>
-          <div class="math-block">
-            $$P \mathbf{q} = 1 \cdot \mathbf{q}$$
-          </div>
-          <p><strong>数学本质</strong>：PageRank 排名向量 $\mathbf{q}$ 正是马尔可夫转移矩阵 $P$ 对应于<strong>主特征值 $\lambda = 1$ 的特征向量</strong>！Google 使用**幂法 (Power Method)** $\mathbf{x}_{k+1} = P \mathbf{x}_k$ 迭代数十次即可极速求解全网数十亿网页的排名向量。</p>
-        </div>
-
-        <!-- Section 4 -->
-        <h2 class="section-title">4. 👑 矩阵对角化 (Diagonalization) $A = PDP^{-1}$ 与斐波那契矩阵求解</h2>
-        <p>若 $n \times n$ 矩阵 $A$ 拥有 $n$ 个线性无关的特征向量 $\mathbf{v}_1, \dots, \mathbf{v}_n$，分别对应特征值 $\lambda_1, \dots, \lambda_n$：</p>
+        <!-- Subsection 2.1 -->
+        <h3 class="subsection-title">2.1 求解原理推导：从几何方程到可逆性行列式判据 $\det(A - \lambda I) = 0$</h3>
+        <p>我们如何从纯代数角度，系统性地求出一个任意 $n \times n$ 矩阵的全部特征值与特征向量？</p>
 
         <div class="step-container">
           <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="step-title">构造特征向量矩阵 $P$ 与特征值对角矩阵 $D$</div>
+              <div class="step-title">移项提取公因式</div>
+              <p>从定义出发，两边同时引入单位矩阵 $I_n$：</p>
               <div class="math-block">
-                $$P = [\mathbf{v}_1 \,\, \mathbf{v}_2 \,\, \dots \,\, \mathbf{v}_n], \quad D = \begin{bmatrix} \lambda_1 & 0 & \dots & 0 \\ 0 & \lambda_2 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \lambda_n \end{bmatrix}$$
+                $$A\mathbf{v} = \lambda \mathbf{v} \iff A\mathbf{v} - \lambda I_n \mathbf{v} = \mathbf{0} \iff (A - \lambda I_n)\mathbf{v} = \mathbf{0}$$
               </div>
             </div>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
-              <div class="step-title">验证对角化恒等式 $AP = PD$</div>
-              <p>$A P = A [\mathbf{v}_1 \dots \mathbf{v}_n] = [A\mathbf{v}_1 \dots A\mathbf{v}_n] = [\lambda_1 \mathbf{v}_1 \dots \lambda_n \mathbf{v}_n] = P D$。因 $P$ 可逆，两边同右乘 $P^{-1}$ 得：</p>
+              <div class="step-title">非平凡解强制要求系数矩阵不可逆</div>
+              <p>这是一个关于 $\mathbf{v}$ 的齐次线性方程组。我们要求解的是<strong>非零向量 $\mathbf{v} \neq \mathbf{0}$</strong>（非平凡解）。根据<strong>可逆矩阵大一统定理</strong>：</p>
+              <ul style="margin-left: 1.2rem; line-height: 1.7; margin-top:0.4rem;">
+                <li>若矩阵 $(A - \lambda I_n)$ 是可逆的，则 $(A - \lambda I_n)\mathbf{v} = \mathbf{0}$ 只有唯一零解 $\mathbf{v} = \mathbf{0}$（不符合要求）。</li>
+                <li>因此，必须让矩阵 $(A - \lambda I_n)$ <strong>不可逆（奇异矩阵，零空间维数 $\ge 1$）</strong>！</li>
+              </ul>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <div class="step-title">特征多项式方程 (Characteristic Equation)</div>
+              <p>方阵不可逆的充要条件是其行列式等于 0：</p>
               <div class="math-block">
-                $$A = P D P^{-1} \iff D = P^{-1} A P$$
+                $$\det(A - \lambda I_n) = 0 \quad \text{(特征多项式方程)}$$
+              </div>
+              <p>计算 $\det(A - \lambda I_n)$ 会得到一个关于 $\lambda$ 的 $n$ 次多项式 $p(\lambda)$，求出该多项式的所有根，就得到了矩阵 $A$ 的全部特征值！</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subsection 2.2: 4 Calculation Methods -->
+        <h3 class="subsection-title">2.2 🧮 特征多项式的 4 大实战高效计算方法与技巧</h3>
+        <p>求解特征多项式 $p(\lambda) = \det(A - \lambda I)$，本质上是在矩阵 $A$ 的<strong>主对角线元素上全部减去 $\lambda$</strong>，然后计算该行列式。根据矩阵的不同结构，掌握以下 4 种计算技巧可大幅提速并避免繁琐的因式分解：</p>
+
+        <!-- Method 1: 2x2 Fast Formula -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-blue);">方法 1：$2 \times 2$ 矩阵 —— 迹与行列式“秒杀公式”（无需手算交叉行列式）</div>
+          <p>对于任意 $2 \times 2$ 矩阵 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$，特征多项式可直接写出：</p>
+          <div class="math-block">
+            $$p(\lambda) = \lambda^2 - \text{tr}(A) \lambda + \det(A) = 0$$
+          </div>
+          <ul style="margin-left:1.5rem; line-height:1.8;">
+            <li>$\text{tr}(A) = a + d$（矩阵的迹：主对角线元素之和）</li>
+            <li>$\det(A) = ad - bc$（矩阵的行列式）</li>
+          </ul>
+          <p style="margin-top:0.5rem;"><strong>【实战速算示例】</strong>：求 $A = \begin{bmatrix} 3 & 2 \\ 1 & 4 \end{bmatrix}$ 的特征多项式与特征值：</p>
+          <p>① 计算迹：$\text{tr}(A) = 3 + 4 = 7$；② 计算行列式：$\det(A) = 3\times 4 - 2\times 1 = 10$。<br>
+          直接写出：$p(\lambda) = \lambda^2 - 7\lambda + 10 = (\lambda - 2)(\lambda - 5) = 0 \implies \lambda_1 = 2, \lambda_2 = 5$。</p>
+        </div>
+
+        <!-- Method 2: 3x3 Row Operation Common Factor -->
+        <div class="proof-box" style="margin-bottom:1.5rem; border-color: rgba(168, 85, 247, 0.4);">
+          <div class="box-title" style="color:var(--accent-purple);">方法 2：$3 \times 3$ 矩阵 —— “初等行变换提公因式法”（切忌盲目硬算展开三次式）</div>
+          <p>对于 $3 \times 3$ 矩阵，若盲目硬算展开会得到 $\lambda^3 + c_2\lambda^2 + c_1\lambda + c_0$，三次方程在草稿纸上极难因式分解。<br>
+          <strong>高手解法</strong>：<strong>利用行列式性质（行相加/减），先提取含 $\lambda$ 的公因式，制造 0 之后再降阶展开！</strong></p>
+          
+          <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:6px; margin:0.6rem 0;">
+            <p><strong>【经典实战推导】</strong>：求对称矩阵 $A = \begin{bmatrix} 1 & 2 & 2 \\ 2 & 1 & 2 \\ 2 & 2 & 1 \end{bmatrix}$ 的特征多项式：</p>
+            <p><strong>步骤 1（列出行列式）</strong>：</p>
+            <div class="math-block">
+              $$\det(A - \lambda I) = \begin{vmatrix} 1-\lambda & 2 & 2 \\ 2 & 1-\lambda & 2 \\ 2 & 2 & 1-\lambda \end{vmatrix}$$
+            </div>
+            <p><strong>步骤 2（行相加制造公因式：把第 2、3 行全部加到第 1 行）</strong>：</p>
+            <div class="math-block">
+              $$= \begin{vmatrix} 5-\lambda & 5-\lambda & 5-\lambda \\ 2 & 1-\lambda & 2 \\ 2 & 2 & 1-\lambda \end{vmatrix}$$
+            </div>
+            <p><strong>步骤 3（提取第 1 行公因式 $(5 - \lambda)$）</strong>：</p>
+            <div class="math-block">
+              $$= (5 - \lambda) \begin{vmatrix} 1 & 1 & 1 \\ 2 & 1-\lambda & 2 \\ 2 & 2 & 1-\lambda \end{vmatrix}$$
+            </div>
+            <p><strong>步骤 4（消元制造 0：第 2 行减 $2\times$第 1 行，第 3 行减 $2\times$第 1 行）</strong>：</p>
+            <div class="math-block">
+              $$= (5 - \lambda) \begin{vmatrix} 1 & 1 & 1 \\ 0 & -(1+\lambda) & 0 \\ 0 & 0 & -(1+\lambda) \end{vmatrix}$$
+            </div>
+            <p>化为了完美的上三角行列式！主对角线直接相乘：</p>
+            <div class="math-block">
+              $$p(\lambda) = (5 - \lambda) \cdot 1 \cdot [-(1+\lambda)] \cdot [-(1+\lambda)] = (5 - \lambda)(\lambda + 1)^2$$
+            </div>
+            <p><strong>结果</strong>：瞬间解出特征值 $\lambda_1 = 5$，二重根 $\lambda_{2,3} = -1$！完全避开了复杂的三次方程求根公式。</p>
+          </div>
+        </div>
+
+        <!-- Method 3: Triangular Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem; border-color: rgba(74, 222, 128, 0.4);">
+          <div class="box-title" style="color:var(--accent-green);">方法 3：上/下三角矩阵与对角矩阵 —— 主对角线直读法</div>
+          <p>若矩阵是非对角线一侧全为 0 的三角矩阵（如 $A = \begin{bmatrix} 3 & 5 & 7 \\ 0 & 2 & 8 \\ 0 & 0 & -1 \end{bmatrix}$）：</p>
+          <div class="math-block">
+            $$\det(A - \lambda I) = (a_{11} - \lambda)(a_{22} - \lambda) \dots (a_{nn} - \lambda) = (3 - \lambda)(2 - \lambda)(-1 - \lambda)$$
+          </div>
+          <p><strong>结论</strong>：三角矩阵的特征值就是<strong>主对角线上的元素本身</strong>（$\lambda = 3, 2, -1$），无需任何多余计算！</p>
+        </div>
+
+        <!-- Method 4: Rank-1 Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem; border-color: rgba(251, 191, 36, 0.4);">
+          <div class="box-title" style="color:var(--accent-orange, #f59e0b);">方法 4：秩为 1 的矩阵 (Rank-1 Matrix) —— 零空间与迹秒杀法</div>
+          <p>若矩阵各行（或各列）成比例（即可表示为外积 $A = \mathbf{u}\mathbf{v}^T$，$\text{rank}(A) = 1$）：</p>
+          <ul style="margin-left:1.5rem; line-height:1.8;">
+            <li>零空间维数 $\dim(\text{Null}(A)) = n - 1$，因此必有 $n-1$ 个特征值等于 0（即 $\lambda = 0$ 是 $n-1$ 重根）。</li>
+            <li>由迹定理 $\sum \lambda_i = \text{tr}(A)$，唯一个非零特征值必定为 $\lambda = \text{tr}(A)$。</li>
+            <li><strong>特征多项式通式</strong>：$p(\lambda) = \lambda^{n-1}(\lambda - \text{tr}(A))$。</li>
+          </ul>
+        </div>
+
+        <!-- Subsection 2.3 -->
+        <h3 class="subsection-title">2.3 🌟 两大黄金验算定理：迹 (Trace) 与行列式 (Determinant)</h3>
+        <p>在手算或笔试特征值时，极其容易出现符号或因式分解失误。以下两个关于特征值与矩阵核心不变量的铁律是<strong>秒杀验算的神器</strong>：</p>
+
+        <div class="intuition-box" style="background: rgba(168, 85, 247, 0.08); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">👑 特征值的两大宏观守恒律</div>
+          <ol style="margin-left: 1.5rem; line-height: 2;">
+            <li><strong>迹定理 (Trace Theorem)</strong>：矩阵的所有特征值之和，严格等于矩阵主对角线元素之和（即矩阵的迹 $\text{tr}(A)$）：
+              $$\sum_{i=1}^n \lambda_i = \lambda_1 + \lambda_2 + \dots + \lambda_n = \text{tr}(A) = \sum_{i=1}^n a_{ii}$$
+            </li>
+            <li><strong>行列式定理 (Determinant Theorem)</strong>：矩阵的所有特征值之积，严格等于矩阵的行列式：
+              $$\prod_{i=1}^n \lambda_i = \lambda_1 \cdot \lambda_2 \dots \lambda_n = \det(A)$$
+            </li>
+          </ol>
+          <p style="margin-top:0.6rem; color:var(--text-muted); font-size:0.9rem;">
+            💡 <strong>实战验算技巧</strong>：解出特征值后，立刻花 3 秒钟将它们相加和相乘，分别对比 $\text{tr}(A)$ 与 $\det(A)$，若不匹配说明计算必有错误！
+          </p>
+        </div>
+
+        <!-- Subsection 2.4 -->
+        <h3 class="subsection-title">2.4 特征子空间 (Eigenspace) 与特征向量的无限性</h3>
+        <p>对于求出的某一个特定特征值 $\lambda$：</p>
+        <p>满足 $(A - \lambda I)\mathbf{v} = \mathbf{0}$ 的所有解向量构成的集合，不仅包含非零特征向量，还包含零向量 $\mathbf{0}$。这个解集合构成了一个完整的线性子空间，称为对应于 $\lambda$ 的<strong>特征子空间 (Eigenspace)</strong>，记为 $E_\lambda$：</p>
+        <div class="math-block">
+          $$E_\lambda = \text{Null}(A - \lambda I_n) = \{ \mathbf{v} \in \mathbb{R}^n \mid (A - \lambda I_n)\mathbf{v} = \mathbf{0} \}$$
+        </div>
+        <p><strong>重要性质</strong>：如果 $\mathbf{v}_1, \mathbf{v}_2$ 属于同一个特征值 $\lambda$ 的特征向量，那么它们的任意线性组合 $c_1\mathbf{v}_1 + c_2\mathbf{v}_2$（非零）依然是对应于 $\lambda$ 的特征向量！因此，特征向量不是孤立的单个向量，而是一整个方向轴线（或特征超平面）。</p>
+
+        <!-- Subsection 2.5 -->
+        <h3 class="subsection-title">2.5 代数重数 (Algebraic Multiplicity) vs 几何重数 (Geometric Multiplicity)</h3>
+        <div class="proof-box">
+          <div class="box-title">对角化的生死线：$m_g$ 是否能够跑满 $m_a$？</div>
+          <p>当特征方程具有重根时（例如特征方程解出 $(\lambda - 2)^3 = 0$），我们需要区分两个维数概念：</p>
+          <ul>
+            <li><strong>代数重数 (Algebraic Multiplicity, $m_a$)</strong>：特征值 $\lambda$ 在特征多项式 $p(\lambda) = 0$ 中作为根的重复次数。</li>
+            <li><strong>几何重数 (Geometric Multiplicity, $m_g$)</strong>：对应特征子空间 $E_\lambda = \text{Null}(A - \lambda I)$ 的维数，即该特征值能提供多少个<strong>线性无关的特征向量基向量</strong>。</li>
+          </ul>
+          <p style="margin-top:0.6rem;"><strong>铁律不等式</strong>：对任意特征值 $\lambda$，恒有：</p>
+          <div class="math-block">
+            $$1 \le m_g(\lambda) \le m_a(\lambda)$$
+          </div>
+          <p><strong>👑 矩阵能否对角化的终极大一统判定准则</strong>：一个 $n \times n$ 矩阵可对角化 $\iff$ 对其每一个特征值，都有<strong>几何重数严格等于代数重数 ($m_g = m_a$)</strong>（即每一个特征值都能提供足够多的独立特征向量，凑齐 $n$ 个线性无关基向量）！</p>
+        </div>
+
+        <!-- Section 3 -->
+        <h2 class="section-title">3. ✍️ 手把手全流程手算示范与多类型例题精解</h2>
+
+        <!-- Step Recipe -->
+        <div class="card" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <h3 style="color:var(--accent-blue); font-size:1.1rem; margin-bottom:0.5rem;">📋 特征值与特征向量手算四步标准配方 (Standard 4-Step Recipe)</h3>
+          <ol style="margin-left: 1.5rem; line-height: 1.9; font-size:0.92rem;">
+            <li><strong>第 1 步：写出行列式方程 $\det(A - \lambda I) = 0$ 并展开多项式</strong>。</li>
+            <li><strong>第 2 步：因式分解求根，求出所有特征值 $\lambda_1, \lambda_2, \dots$</strong>。</li>
+            <li><strong>第 3 步：快速利用 $\sum \lambda_i = \text{tr}(A)$ 与 $\prod \lambda_i = \det(A)$ 进行验算</strong>。</li>
+            <li><strong>第 4 步：将每个 $\lambda_i$ 依次代入 $(A - \lambda_i I)\mathbf{v} = \mathbf{0}$，通过高斯消元求零空间基础解系，写出特征向量与特征子空间</strong>。</li>
+          </ol>
+        </div>
+
+        <!-- Example 1: Standard 2x2 Matrix -->
+        <div class="proof-box" style="margin-bottom:2rem;">
+          <div class="box-title">例题 1（基础标杆）：求 $2 \times 2$ 矩阵 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$ 的特征值、特征向量与特征子空间</div>
+          <p><strong>步骤一：构造特征多项式</strong></p>
+          <div class="math-block">
+            $$\det(A - \lambda I) = \det\begin{bmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{bmatrix} = (4-\lambda)(3-\lambda) - (1)(2) = \lambda^2 - 7\lambda + 12 - 2 = \lambda^2 - 7\lambda + 10$$
+          </div>
+          <p><strong>步骤二：因式分解求特征值</strong></p>
+          <div class="math-block">
+            $$\lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0 \implies \lambda_1 = 5, \quad \lambda_2 = 2$$
+          </div>
+          <p><strong>步骤三：黄金法则快速验算</strong></p>
+          <ul style="margin-left:1.5rem; line-height:1.7;">
+            <li>迹验算：$\lambda_1 + \lambda_2 = 5 + 2 = 7$；对角线之和 $\text{tr}(A) = 4 + 3 = 7$。✅ 完美匹配！</li>
+            <li>行列式验算：$\lambda_1 \cdot \lambda_2 = 5 \times 2 = 10$；行列式 $\det(A) = 4\times 3 - 1\times 2 = 10$。✅ 完美匹配！</li>
+          </ul>
+          <p style="margin-top:0.6rem;"><strong>步骤四：逐个求解特征向量</strong></p>
+          <div style="background:rgba(255,255,255,0.03); padding:1rem; border-radius:6px; margin:0.5rem 0;">
+            <p><strong>(1) 当 $\lambda_1 = 5$ 时</strong>：解 $(A - 5I)\mathbf{v} = \mathbf{0}$：</p>
+            <div class="math-block">
+              $$\begin{bmatrix} 4-5 & 1 \\ 2 & 3-5 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} -1 & 1 \\ 2 & -2 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+            </div>
+            <p>行化简得 $-x_1 + x_2 = 0 \implies x_1 = x_2$。令自由变量 $x_2 = 1$，得到特征向量基底：</p>
+            <div class="math-block">
+              $$\mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}, \quad \text{特征子空间 } E_5 = \text{span}\left\{ \begin{bmatrix} 1 \\ 1 \end{bmatrix} \right\}$$
+            </div>
+            <p><strong>(2) 当 $\lambda_2 = 2$ 时</strong>：解 $(A - 2I)\mathbf{v} = \mathbf{0}$：</p>
+            <div class="math-block">
+              $$\begin{bmatrix} 4-2 & 1 \\ 2 & 3-2 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 2 & 1 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+            </div>
+            <p>行化简得 $2x_1 + x_2 = 0 \implies x_2 = -2x_1$。令自由变量 $x_1 = 1$，得到特征向量基底：</p>
+            <div class="math-block">
+              $$\mathbf{v}_2 = \begin{bmatrix} 1 \\ -2 \end{bmatrix}, \quad \text{特征子空间 } E_2 = \text{span}\left\{ \begin{bmatrix} 1 \\ -2 \end{bmatrix} \right\}$$
+            </div>
+          </div>
+          <p><strong>几何验证</strong>：检验 $A\mathbf{v}_1 = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}\begin{bmatrix} 1 \\ 1 \end{bmatrix} = \begin{bmatrix} 5 \\ 5 \end{bmatrix} = 5\begin{bmatrix} 1 \\ 1 \end{bmatrix}$；$A\mathbf{v}_2 = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}\begin{bmatrix} 1 \\ -2 \end{bmatrix} = \begin{bmatrix} 2 \\ -4 \end{bmatrix} = 2\begin{bmatrix} 1 \\ -2 \end{bmatrix}$。推导完全正确！$\blacksquare$</p>
+        </div>
+
+        <!-- Example 2: Non-diagonalizable Matrix (Deficient) -->
+        <div class="proof-box" style="margin-bottom:2rem; border-color: rgba(239, 68, 68, 0.4);">
+          <div class="box-title" style="color:var(--accent-red);">例题 2（病态缺陷矩阵）：分析为什么矩阵 $A = \begin{bmatrix} 3 & 1 \\ 0 & 3 \end{bmatrix}$ 无法对角化</div>
+          <p><strong>特征方程求解</strong>：</p>
+          <div class="math-block">
+            $$\det(A - \lambda I) = \det\begin{bmatrix} 3-\lambda & 1 \\ 0 & 3-\lambda \end{bmatrix} = (3-\lambda)^2 = 0 \implies \lambda = 3 \quad (\text{代数重数 } m_a = 2)$$
+          </div>
+          <p><strong>求解特征向量与几何重数</strong>：将 $\lambda = 3$ 代入 $(A - 3I)\mathbf{v} = \mathbf{0}$：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \implies 0x_1 + 1x_2 = 0 \implies x_2 = 0, \quad x_1 \text{ 为自由变量}$$
+          </div>
+          <p>因此解向量为 $\mathbf{v} = x_1 \begin{bmatrix} 1 \\ 0 \end{bmatrix}$，特征子空间 $E_3 = \text{span}\left\{\begin{bmatrix} 1 \\ 0 \end{bmatrix}\right\}$，其维数（几何重数）为：</p>
+          <div class="math-block">
+            $$m_g = \dim(E_3) = 1 < m_a = 2$$
+          </div>
+          <p><strong>核心结论</strong>：虽然 $A$ 是 $2 \times 2$ 矩阵，但在全空间中无论如何只能找到 1 个线性无关的特征向量，无法凑齐构成 $\mathbb{R}^2$ 的 2 个基向量，因此 $A$ <strong>绝不可能被对角化</strong>！$\blacksquare$</p>
+        </div>
+
+        <!-- Example 3: 3x3 Matrix with Repeated Root that IS diagonalizable -->
+        <div class="proof-box" style="margin-bottom:2rem; border-color: rgba(74, 222, 128, 0.4);">
+          <div class="box-title" style="color:var(--accent-green);">例题 3（三维空间重根良态矩阵）：分析 $A = \begin{bmatrix} 2 & 0 & 0 \\ 0 & 2 & 0 \\ 1 & 0 & 3 \end{bmatrix}$ 的对角化可能</div>
+          <p><strong>特征多项式计算</strong>（按第一行展开）：</p>
+          <div class="math-block">
+            $$\det(A - \lambda I) = \det\begin{bmatrix} 2-\lambda & 0 & 0 \\ 0 & 2-\lambda & 0 \\ 1 & 0 & 3-\lambda \end{bmatrix} = (2-\lambda)^2 (3-\lambda) = 0$$
+          </div>
+          <p>求得特征值为：$\lambda_1 = 3$（代数重数 1），$\lambda_{2,3} = 2$（代数重数 2）。</p>
+          <p><strong>探索 $\lambda = 2$ 时的特征子空间维数</strong>：代入 $(A - 2I)\mathbf{v} = \mathbf{0}$：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 1 & 0 & 1 \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \implies x_1 + x_3 = 0 \implies x_3 = -x_1$$
+          </div>
+          <p>此时 $x_1$ 和 $x_2$ 均为自由变量！解向量可以参数化为：</p>
+          <div class="math-block">
+            $$\mathbf{v} = \begin{bmatrix} x_1 \\ x_2 \\ -x_1 \end{bmatrix} = x_1 \begin{bmatrix} 1 \\ 0 \\ -1 \end{bmatrix} + x_2 \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$$
+          </div>
+          <p>解出 2 个线性无关的特征向量基向量！几何重数 $m_g = \dim(E_2) = 2 = m_a$。重根在这里成功张成了一个二维特征平面，矩阵 $A$ <strong>可以完美对角化</strong>！$\blacksquare$</p>
+        </div>
+
+        <!-- Section 4 -->
+        <h2 class="section-title">4. 🌐 工业级前沿：Google PageRank 网页排名算法与马尔可夫稳态全解构</h2>
+
+        <!-- Subsection 4.1 -->
+        <h3 class="subsection-title">4.1 💡 核心直觉：互联网的“民主投票”与权威度传递</h3>
+        <p>在 Google 诞生前，早期搜索引擎主要依靠关键词匹配频次排序，极易被垃圾网站通过堆砌关键词恶意作弊。1998 年，Larry Page 与 Sergey Brin 提出了革命性的 <strong>PageRank 算法</strong>，将互联网抽象为一个互联互通的社会网络：</p>
+        
+        <ul style="margin-left: 1.5rem; line-height: 1.8;">
+          <li><strong>超链接即投票支持 (Vote / Endorsement)</strong>：若网页 A 包含一个指向网页 B 的超链接，代表 A 给 B 投了 1 张信任赞成票。</li>
+          <li><strong>投票者的权威度决定票面价值</strong>：高权重网站（如维基百科、学术机构）投出的一票，价值远超几千个低质量垃圾网站的投票。</li>
+          <li><strong>出链分流稀释效应</strong>：若网页 A 同时投向了 10 个外部网页，则它向每个网页投出的信任度被均分为自身权重的 $\frac{1}{10}$。</li>
+        </ul>
+
+        <!-- SVG Graphic 7.3: PageRank 3-Node Transition Graph -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="560" height="210" viewBox="0 0 560 210" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Node A -->
+            <circle cx="100" cy="105" r="32" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2.5"/>
+            <text x="100" y="102" fill="#38bdf8" font-size="15" font-weight="bold" text-anchor="middle">网页 A</text>
+            <text x="100" y="122" fill="#94a3b8" font-size="11" text-anchor="middle">出链=2 (分流1/2)</text>
+
+            <!-- Node B -->
+            <circle cx="280" cy="50" r="32" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2.5"/>
+            <text x="280" y="47" fill="#a855f7" font-size="15" font-weight="bold" text-anchor="middle">网页 B</text>
+            <text x="280" y="67" fill="#94a3b8" font-size="11" text-anchor="middle">出链=1 (全给C)</text>
+
+            <!-- Node C -->
+            <circle cx="460" cy="105" r="32" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-width="2.5"/>
+            <text x="460" y="102" fill="#4ade80" font-size="15" font-weight="bold" text-anchor="middle">网页 C</text>
+            <text x="460" y="122" fill="#94a3b8" font-size="11" text-anchor="middle">出链=1 (全回A)</text>
+
+            <!-- Directed Arrows with weights -->
+            <!-- A to B (weight 1/2) -->
+            <path d="M 128 85 L 250 56" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+            <text x="180" y="60" fill="#38bdf8" font-size="12" font-weight="bold">1/2</text>
+
+            <!-- A to C (weight 1/2) -->
+            <path d="M 132 105 L 426 105" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4" marker-end="url(#arrow-blue)"/>
+            <text x="280" y="98" fill="#38bdf8" font-size="12" font-weight="bold">1/2 (直接跨越)</text>
+
+            <!-- B to C (weight 1) -->
+            <path d="M 310 56 L 432 85" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+            <text x="380" y="60" fill="#a855f7" font-size="12" font-weight="bold">1.0</text>
+
+            <!-- C to A (weight 1) -->
+            <path d="M 438 130 Q 280 195 124 130" stroke="#4ade80" stroke-width="2.5" fill="none" marker-end="url(#arrow-green)"/>
+            <text x="280" y="185" fill="#4ade80" font-size="12" font-weight="bold">1.0 (底层反馈环)</text>
+          </svg>
+        </div>
+
+        <!-- Subsection 4.2 -->
+        <h3 class="subsection-title">4.2 📐 数学建模：随机游走、概率状态向量与转移矩阵 $P$</h3>
+        <p>假设一个用户在互联网上随机浏览点击超链接。设全网包含 $N$ 个网页：</p>
+        <ul style="margin-left: 1.5rem; line-height: 1.8;">
+          <li><strong>状态概率向量 $\mathbf{x}_k$</strong>：第 $k$ 步时用户停留在各个网页上的概率分布列向量：
+            $$\mathbf{x}_k = \begin{bmatrix} x_1(k) \\ x_2(k) \\ \vdots \\ x_N(k) \end{bmatrix}, \quad \sum_{i=1}^N x_i(k) = 1$$
+          </li>
+          <li><strong>马尔可夫转移矩阵 $P$ (Column Stochastic Matrix)</strong>：若网页 $j$ 有 $c_j$ 个出链且其中一条指向网页 $i$，则 $P_{ij} = \frac{1}{c_j}$；否则 $P_{ij} = 0$。
+            矩阵 $P$ 的每一列元素之和严格等于 1（<strong>列随机矩阵</strong>）。
+          </li>
+          <li><strong>一步转移递推关系</strong>：下一步的概率分布由矩阵乘法决定：
+            $$\mathbf{x}_{k+1} = P \mathbf{x}_k$$
+          </li>
+        </ul>
+
+        <!-- Subsection 4.3 -->
+        <h3 class="subsection-title">4.3 👑 线性代数本质：主特征值 $\lambda = 1$ 的稳态特征向量</h3>
+        <p>当用户在网络中随机游走成千上万步之后，全网每个网页的访问概率将达到动态平衡稳态 $\mathbf{q}$：</p>
+        <div class="math-block">
+          $$P \mathbf{q} = \mathbf{q} \iff P \mathbf{q} = 1 \cdot \mathbf{q}$$
+        </div>
+
+        <div class="intuition-box" style="background: rgba(56, 189, 248, 0.08); border-color: rgba(56, 189, 248, 0.3);">
+          <div class="box-title" style="color:var(--accent-blue);">👑 震撼的线性代数本质</div>
+          <p>全网所有网页的最终 <strong>PageRank 权威排名向量 $\mathbf{q}$</strong>，在数学上严格对应于转移矩阵 $P$ 的<strong>主特征值 $\lambda = 1$ 的特征向量</strong>！</p>
+          <p style="margin-top:0.4rem; color:var(--text-muted); font-size:0.9rem;">
+            根据 <strong>Perron-Frobenius 定理</strong>，任何列随机矩阵的最大特征值绝对值必然等于 1（$\lambda_1 = 1$），且必然存在对应的全正非负稳态特征向量。
+          </p>
+        </div>
+
+        <!-- Subsection 4.4 -->
+        <h3 class="subsection-title">4.4 ⚠️ 现实网络的两大病态陷阱：死胡同与蜘蛛陷阱</h3>
+        <p>在真实互联网图中，马尔可夫链会遇到两个严重破坏稳态的病态结构：</p>
+        <div class="step-container" style="margin-bottom:1.5rem;">
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-red);">1</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-red);">死胡同 (Dangling Nodes / Dead Ends)</div>
+              <p>没有任何外链的网页（如纯 PDF 文件或末端孤岛）。用户进入后无法跳出，全网概率会被逐渐抽干归零，破坏概率守恒。</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number" style="background:var(--accent-orange, #f59e0b);">2</div>
+            <div class="step-content">
+              <div class="step-title" style="color:var(--accent-orange, #f59e0b);">蜘蛛陷阱 (Spider Traps / Cyclic Traps)</div>
+              <p>一组恶意网页之间互相循环链接且无出口。随机游走者一旦进入就会被永远困住，导致这几个网页吸收全网 100% 的权重，其余所有网页权威度归零。</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subsection 4.5 -->
+        <h3 class="subsection-title">4.5 🚀 Google 的破局解法：随机传送模型与 Google 矩阵 $G$</h3>
+        <p>为攻克死胡同与蜘蛛陷阱，Larry Page 引入了<strong>“随机传送 (Random Teleportation)”机制</strong>：</p>
+        <div class="intuition-box">
+          <div class="box-title">💡 随机冲浪者假说 (Random Surfer Model)</div>
+          <p>假想上网者在浏览网页时：</p>
+          <ul style="margin-left:1.5rem; line-height:1.8; margin-top:0.3rem;">
+            <li>以 <strong>$d = 0.85$（阻尼因子 Damping Factor）</strong>的概率继续点击当前页面的超链接顺藤摸瓜；</li>
+            <li>以 <strong>$1 - d = 0.15$</strong> 的概率感到厌倦，直接在浏览器地址栏随机输入全网任意一个网址瞬间“传送”过去！</li>
+          </ul>
+          <p style="margin-top:0.6rem;">由此构造出著名的<strong>全局 Google 矩阵 $G$</strong>：</p>
+          <div class="math-block">
+            $$G = d \cdot P + (1 - d) \cdot \frac{1}{N} \mathbf{E}$$
+          </div>
+          <p>（其中 $\mathbf{E}$ 为全 1 矩阵）。Google 矩阵 $G$ 的每个元素均严格大于 0，保证了主特征值 $\lambda = 1$ 是<strong>严格单根</strong>，且<strong>从任意初始状态出发都必然唯一收敛</strong>！</p>
+        </div>
+
+        <!-- Subsection 4.6 -->
+        <h3 class="subsection-title">4.6 ⚡ 工业级求解算法：极速收敛的幂法 (Power Method)</h3>
+        <p>互联网拥有数十亿网页，矩阵 $G$ 阶数高达数十亿，根本不可能使用高斯消元求零空间。Google 采用极简的<strong>幂法迭代 (Power Method)</strong>：</p>
+        <div class="card" style="background:rgba(14, 165, 233, 0.05); border-color:rgba(14, 165, 233, 0.3); padding:1rem; margin-bottom:1.5rem;">
+          <p><strong>迭代步骤</strong>：</p>
+          <ol style="margin-left:1.5rem; line-height:1.8;">
+            <li>赋予均等初始权重：$\mathbf{x}_0 = \left[\frac{1}{N}, \frac{1}{N}, \dots, \frac{1}{N}\right]^T$；</li>
+            <li>循环迭代：$\mathbf{x}_1 = G\mathbf{x}_0, \quad \mathbf{x}_2 = G\mathbf{x}_1, \quad \dots, \quad \mathbf{x}_{k+1} = G\mathbf{x}_k$；</li>
+            <li>当 $\|\mathbf{x}_{k+1} - \mathbf{x}_k\| < \varepsilon$ 时终止，$\mathbf{x}_{k+1}$ 即为最终的 PageRank 排名分值。</li>
+          </ol>
+          <p style="margin-top:0.6rem; color:var(--accent-blue); font-weight:bold;">
+            💡 为什么极速收敛？因为次大特征值满足 $|\lambda_2| \le d = 0.85$。每迭代一次，非主特征值噪声误差就缩小 0.85 倍：迭代 50 次后误差衰减为 $0.85^{50} \approx 0.00029$；迭代 80 次衰减为 $10^{-6}$！几十次迭代即可精确锁定全网数十亿网页的权威排序！
+          </p>
+        </div>
+
+        <!-- Subsection 4.7 -->
+        <h3 class="subsection-title">4.7 ✍️ 3 节点微型网络完整手算演练例题</h3>
+        <div class="proof-box">
+          <div class="box-title">例题：手算 3 网页网络的马尔可夫稳态与 PageRank 向量</div>
+          <p>网络拓扑如图 7.3 所示：A 链接到 B 和 C（出链 2）；B 链接到 C（出链 1）；C 链接到 A（出链 1）。</p>
+          <p><strong>第 1 步：构造转移矩阵 $P$</strong>（第 1,2,3 列分别代表由 A, B, C 分流出的概率）：</p>
+          <div class="math-block">
+            $$P = \begin{bmatrix} 0 & 0 & 1 \\ 1/2 & 0 & 0 \\ 1/2 & 1 & 0 \end{bmatrix}$$
+          </div>
+          <p><strong>第 2 步：列出稳态特征方程 $P\mathbf{q} = 1\cdot\mathbf{q}$</strong>：</p>
+          <div class="math-block">
+            $$\begin{bmatrix} 0 & 0 & 1 \\ 1/2 & 0 & 0 \\ 1/2 & 1 & 0 \end{bmatrix} \begin{bmatrix} q_A \\ q_B \\ q_C \end{bmatrix} = \begin{bmatrix} q_A \\ q_B \\ q_C \end{bmatrix} \implies \begin{cases} q_C = q_A \\ \frac{1}{2}q_A = q_B \\ \frac{1}{2}q_A + q_B = q_C \end{cases}$$
+          </div>
+          <p><strong>第 3 步：归一化全概率（$q_A + q_B + q_C = 1$）</strong>：</p>
+          <p>将 $q_C = q_A$ 和 $q_B = 0.5 q_A$ 代入归一化条件：</p>
+          <div class="math-block">
+            $$q_A + 0.5 q_A + q_A = 2.5 q_A = 1 \implies q_A = 0.4, \quad q_B = 0.2, \quad q_C = 0.4$$
+          </div>
+          <p><strong>最终排名结论</strong>：$\mathbf{q} = \begin{bmatrix} 0.4 \\ 0.2 \\ 0.4 \end{bmatrix}$。权威度排序为 <strong>网页 A (40%) = 网页 C (40%) > 网页 B (20%)</strong>！$\blacksquare$</p>
+        </div>
+
+        <!-- Section 5 -->
+        <h2 class="section-title">5. 👑 矩阵对角化 (Diagonalization) $A = PDP^{-1}$ 深度解构与四大杀手应用</h2>
+
+        <!-- Subsection 5.1 -->
+        <h3 class="subsection-title">5.1 💡 几何本质：换一副“特征眼镜”看世界（多元耦合 $\implies$ 独立拉伸）</h3>
+        <p>在默认的笛卡尔标准直角坐标系下，一个矩阵 $A$ 的非对角线元素通常不为 0。这意味着当你输入一个向量时，各个坐标分量（$x_1, x_2, \dots$）会<strong>相互交叉干涉、紧密耦合</strong>，几何上表现为图形在空间中既被拉伸又被旋转扭曲。</p>
+        <p><strong>矩阵对角化的终极思想</strong>：如果我们不戴标准的直角眼镜，而是<strong>换上一副由矩阵自身的 $n$ 个特征向量构成的“特征基底眼镜”</strong>：</p>
+        <ul style="margin-left: 1.5rem; line-height: 1.8;">
+          <li>在特征基底坐标系下，复杂的矩阵变换瞬间退化为一个<strong>纯对角矩阵 $D = \text{diag}(\lambda_1, \dots, \lambda_n)$</strong>！</li>
+          <li>空间在各个主轴方向上<strong>完全解耦、互不干涉</strong>，原本复杂的多元耦合运动变成了 $n$ 个互相独立的单维度纯拉伸！</li>
+        </ul>
+
+        <!-- SVG Graphic 7.4: Diagonalization Three-Step Flowchart -->
+        <div style="text-align:center; margin: 1.8rem 0;">
+          <svg width="720" height="230" viewBox="0 0 720 230" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+            <!-- Header Title -->
+            <text x="360" y="28" fill="#38bdf8" font-size="15" font-weight="bold" text-anchor="middle">矩阵对角化 A = P · D · P⁻¹ 的三步曲几何图景</text>
+
+            <!-- Step 1: Input Vector in Standard Basis (Top-Left) -->
+            <g transform="translate(40, 55)">
+              <rect width="180" height="135" rx="8" fill="rgba(239, 68, 68, 0.08)" stroke="#ef4444" stroke-width="1.5"/>
+              <text x="90" y="25" fill="#ef4444" font-size="13" font-weight="bold" text-anchor="middle">① 标准直角坐标系</text>
+              <text x="90" y="50" fill="#cbd5e1" font-size="12" text-anchor="middle">原向量 x</text>
+              <text x="90" y="75" fill="#94a3b8" font-size="11" text-anchor="middle">维度之间交叉耦合</text>
+              <text x="90" y="110" fill="#f87171" font-size="12" font-weight="bold" text-anchor="middle">直接算 Ax 极繁琐</text>
+            </g>
+
+            <!-- Arrow 1: P^(-1) to Eigenspace (Down/Right) -->
+            <path d="M 230 140 L 300 140" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#arrow-yellow)"/>
+            <text x="265" y="130" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">P⁻¹ (换上特征眼镜)</text>
+
+            <!-- Step 2: Eigenspace Basis (Middle) -->
+            <g transform="translate(310, 55)">
+              <rect width="190" height="135" rx="8" fill="rgba(74, 222, 128, 0.08)" stroke="#4ade80" stroke-width="1.5"/>
+              <text x="95" y="25" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">② 特征向量坐标系</text>
+              <text x="95" y="52" fill="#cbd5e1" font-size="12" text-anchor="middle">坐标 [x]_B = P⁻¹ x</text>
+              <text x="95" y="80" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">纯对角缩放 D</text>
+              <text x="95" y="110" fill="#4ade80" font-size="11" text-anchor="middle">各轴独立乘以 λᵢ (彻底解耦)</text>
+            </g>
+
+            <!-- Arrow 2: P back to Standard Basis -->
+            <path d="M 510 140 L 580 140" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+            <text x="545" y="130" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">P (摘下特征眼镜)</text>
+
+            <!-- Step 3: Result Vector in Standard Basis (Top-Right) -->
+            <g transform="translate(590, 55)">
+              <rect width="100" height="135" rx="8" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+              <text x="50" y="25" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">③ 最终结果</text>
+              <text x="50" y="65" fill="#4ade80" font-size="14" font-weight="bold" text-anchor="middle">Ax</text>
+              <text x="50" y="105" fill="#cbd5e1" font-size="11" text-anchor="middle">= P D P⁻¹ x</text>
+            </g>
+
+            <defs>
+              <marker id="arrow-yellow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Subsection 5.2 -->
+        <h3 class="subsection-title">5.2 📐 严密代数推导：从 $AP = PD$ 到 $A = PDP^{-1}$</h3>
+        <p>假设 $n \times n$ 矩阵 $A$ 拥有 $n$ 个线性无关的特征向量 $\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_n$，对应特征值为 $\lambda_1, \lambda_2, \dots, \lambda_n$：</p>
+
+        <div class="step-container">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <div class="step-title">按列构造特征向量矩阵 $P$ 与对角矩阵 $D$</div>
+              <div class="math-block">
+                $$P = \begin{bmatrix} \mathbf{v}_1 & \mathbf{v}_2 & \dots & \mathbf{v}_n \end{bmatrix}, \quad D = \begin{bmatrix} \lambda_1 & 0 & \dots & 0 \\ 0 & \lambda_2 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \lambda_n \end{bmatrix}$$
+              </div>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <div class="step-title">利用矩阵分块乘法展开 $AP$ 与 $PD$</div>
+              <p>利用矩阵按列乘法法则：</p>
+              <div class="math-block">
+                $$A P = A \begin{bmatrix} \mathbf{v}_1 & \mathbf{v}_2 & \dots & \mathbf{v}_n \end{bmatrix} = \begin{bmatrix} A\mathbf{v}_1 & A\mathbf{v}_2 & \dots & A\mathbf{v}_n \end{bmatrix}$$
+              </div>
+              <p>将特征向量定义 $A\mathbf{v}_i = \lambda_i \mathbf{v}_i$ 代入：</p>
+              <div class="math-block">
+                $$= \begin{bmatrix} \lambda_1 \mathbf{v}_1 & \lambda_2 \mathbf{v}_2 & \dots & \lambda_n \mathbf{v}_n \end{bmatrix} = \begin{bmatrix} \mathbf{v}_1 & \mathbf{v}_2 & \dots & \mathbf{v}_n \end{bmatrix} \begin{bmatrix} \lambda_1 & 0 & \dots & 0 \\ 0 & \lambda_2 & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \lambda_n \end{bmatrix} = P D$$
               </div>
             </div>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
-              <div class="step-title">矩阵高阶幂 $A^k$ 的极速计算</div>
+              <div class="step-title">两边右乘 $P^{-1}$ 得到终极对角化公式</div>
+              <p>因为 $\mathbf{v}_1, \dots, \mathbf{v}_n$ 线性无关，矩阵 $P$ 的列向量构成 $\mathbb{R}^n$ 的一组基，因此 <strong>矩阵 $P$ 必定可逆（$\det(P) \neq 0$）</strong>！在 $AP = PD$ 两边同时右乘 $P^{-1}$：</p>
               <div class="math-block">
-                $$A^k = (P D P^{-1})(P D P^{-1}) \dots (P D P^{-1}) = P D^k P^{-1} = P \begin{bmatrix} \lambda_1^k & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots & \lambda_n^k \end{bmatrix} P^{-1}$$
+                $$A = P D P^{-1} \iff D = P^{-1} A P$$
               </div>
             </div>
           </div>
         </div>
 
-        <div class="proof-box">
-          <div class="box-title">🚀 经典推导：利用矩阵对角化推导斐波那契数列通项公式</div>
-          <p>斐波那契递推式 $F_{k+2} = F_{k+1} + F_k$ 可改写为矩阵形式：</p>
+        <!-- Subsection 5.3 -->
+        <h3 class="subsection-title">5.3 👑 矩阵能否对角化的终极大一统判定准则</h3>
+        <p>并非所有方阵都可以对角化。掌握以下 4 大判定准则是判断矩阵能否对角化的黄金指南：</p>
+
+        <table class="concept-table" style="width:100%; margin:1.2rem 0; font-size:0.9rem;">
+          <thead>
+            <tr>
+              <th style="width:25%;">判定准则</th>
+              <th style="width:20%;">条件性质</th>
+              <th style="width:55%;">详细说明与数学判据</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>独立特征向量准则</strong></td>
+              <td><span style="color:#4ade80; font-weight:bold;">充要条件 (iff)</span></td>
+              <td>$n \times n$ 矩阵 $A$ 可对角化 $\iff$ $A$ 拥有 <strong>$n$ 个线性无关的特征向量</strong>（能张成全空间 $\mathbb{R}^n$）。</td>
+            </tr>
+            <tr>
+              <td><strong>互异特征值定理</strong></td>
+              <td><span style="color:#38bdf8; font-weight:bold;">充分条件</span></td>
+              <td>若 $A$ 的特征方程解出 <strong>$n$ 个互不相同的特征值</strong>（$\lambda_1 \neq \lambda_2 \neq \dots \neq \lambda_n$），则对应的特征向量必线性无关，<strong>矩阵 $A$ 必然可对角化</strong>！</td>
+            </tr>
+            <tr>
+              <td><strong>重数匹配准则</strong></td>
+              <td><span style="color:#4ade80; font-weight:bold;">充要条件 (iff)</span></td>
+              <td>对于存在重根的特征值，矩阵 $A$ 可对角化 $\iff$ 对每一个特征值 $\lambda_i$，其<strong>几何重数严格等于代数重数（$m_g = m_a$）</strong>，即重根不会发生“特征向量缺失”。</td>
+            </tr>
+            <tr>
+              <td><strong>实对称矩阵谱定理</strong></td>
+              <td><span style="color:#fbbf24; font-weight:bold;">终极杀手定理</span></td>
+              <td>任何<strong>实对称矩阵（$A = A^T$）必能正交对角化</strong>：$A = Q D Q^T$（其中 $Q$ 为正交矩阵 $Q^{-1} = Q^T$），所有特征值均为实数，且不同特征值的特征向量天然相互垂直正交！</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Subsection 5.4 -->
+        <h3 class="subsection-title">5.4 🚀 矩阵对角化的四大工业级杀手应用</h3>
+
+        <!-- Application 1: Power of Matrix -->
+        <div class="proof-box" style="margin-bottom:1.5rem;">
+          <div class="box-title" style="color:var(--accent-blue);">应用 1：矩阵高阶幂 $A^k$ 的极速秒算（计算复杂度从 $O(k n^3)$ 降至 $O(n^3)$）</div>
+          <p>直接计算 $A^k = A \cdot A \dots A$ 需要执行 $k-1$ 次庞大的矩阵乘法。但利用对角化，中间所有的 $P^{-1}P$ 发生多米诺骨牌式的全部抵消：</p>
           <div class="math-block">
-            $$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} = A^{k-1} \begin{bmatrix} F_1 \\ F_0 \end{bmatrix}$$
+            $$A^k = (PDP^{-1})(PDP^{-1})\dots(PDP^{-1}) = P D^k P^{-1} = P \begin{bmatrix} \lambda_1^k & 0 & \dots & 0 \\ 0 & \lambda_2^k & \dots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & \lambda_n^k \end{bmatrix} P^{-1}$$
           </div>
-          <p>对 $A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ 求特征值：$\det(A-\lambda I) = \lambda^2 - \lambda - 1 = 0 \implies \lambda_1 = \frac{1+\sqrt{5}}{2} = \phi$ (黄金分割比), $\lambda_2 = \frac{1-\sqrt{5}}{2}$。</p>
-          <p>通过计算 $A^k = P D^k P^{-1}$ 直接得出比内公式 (Binet's Formula)：$F_k = \frac{1}{\sqrt{5}} \left[ \left(\frac{1+\sqrt{5}}{2}\right)^k - \left(\frac{1-\sqrt{5}}{2}\right)^k \right] \quad \blacksquare$</p>
+          <p>求 $A^{1000}$ 只需要把每个特征值分别求 1000 次方，再做两次矩阵乘法即可瞬间完成！</p>
         </div>
 
-        <!-- Section 5: Worked Examples -->
-        <h2 class="section-title">5. ✍️ 完整手把手手算数值例题与推导</h2>
-        <div class="proof-box">
-          <div class="box-title">手算例题：对角化 $2 \times 2$ 矩阵并求 $A^{10}$</div>
-          <p><strong>已知矩阵</strong> $A = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$。</p>
-          <p><strong>解答步骤</strong>：</p>
-          <ul>
-            <li>特征方程：$\det(A - \lambda I) = (1-\lambda)^2 - 4 = \lambda^2 - 2\lambda - 3 = (\lambda - 3)(\lambda + 1) = 0$。特征值为 $\lambda_1 = 3, \lambda_2 = -1$。</li>
-            <li>特征向量：对于 $\lambda_1=3$，解 $(A-3I)\mathbf{v}=\mathbf{0} \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$；对于 $\lambda_2=-1$，得 $\mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$。</li>
-            <li>构造对角化：$P = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, D = \begin{bmatrix} 3 & 0 \\ 0 & -1 \end{bmatrix}$。求得 $P^{-1} = \frac{1}{2}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$。</li>
-            <li>计算 $A^{10} = P D^{10} P^{-1} = P \begin{bmatrix} 3^{10} & 0 \\ 0 & (-1)^{10} \end{bmatrix} P^{-1} = \frac{1}{2} \begin{bmatrix} 3^{10}+1 & 3^{10}-1 \\ 3^{10}-1 & 3^{10}+1 \end{bmatrix} \quad \blacksquare$</li>
+        <!-- Application 2: Fibonacci and Difference Equations -->
+        <div class="proof-box" style="margin-bottom:1.5rem; border-color: rgba(168, 85, 247, 0.4);">
+          <div class="box-title" style="color:var(--accent-purple);">应用 2：求解差分方程与斐波那契数列通项比内公式 (Binet's Formula)</div>
+          <p>斐波那契递推式 $F_{k+2} = F_{k+1} + F_k$ 转换为矩阵形式：$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \mathbf{u}_k = A^k \mathbf{u}_0$。</p>
+          <p>对转移矩阵 $A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ 求特征值与对角化：</p>
+          <div class="math-block">
+            $$\det(A-\lambda I) = \lambda^2 - \lambda - 1 = 0 \implies \lambda_1 = \frac{1+\sqrt{5}}{2} = \phi \approx 1.618 \text{ (黄金分割比)}, \quad \lambda_2 = \frac{1-\sqrt{5}}{2}$$
+          </div>
+          <p>通过 $A^k = P D^k P^{-1}$ 计算，直接推导出震惊数学界的解析闭式解：</p>
+          <div class="math-block">
+            $$F_k = \frac{1}{\sqrt{5}} \left[ \left(\frac{1+\sqrt{5}}{2}\right)^k - \left(\frac{1-\sqrt{5}}{2}\right)^k \right] \quad \blacksquare$$
+          </div>
+        </div>
+
+        <!-- Application 3: Differential Equations System -->
+        <div class="proof-box" style="margin-bottom:1.5rem; border-color: rgba(74, 222, 128, 0.4);">
+          <div class="box-title" style="color:var(--accent-green);">应用 3：连续线性微分方程组 (ODE) 的解析解与稳定性分析</div>
+          <p>工程与物理中极其常见的一阶多元常微分方程组 $\frac{d\mathbf{x}}{dt} = A \mathbf{x}(t)$（如电路网络、弹簧振子连通系统、生态种群竞争）：</p>
+          <ul style="margin-left: 1.5rem; line-height: 1.8;">
+            <li>利用对角化令 $\mathbf{x} = P \mathbf{y}$，代入得 $P \frac{d\mathbf{y}}{dt} = A P \mathbf{y} \implies \frac{d\mathbf{y}}{dt} = (P^{-1}AP)\mathbf{y} = D \mathbf{y}$。</li>
+            <li>耦合方程组瞬间解耦为 $n$ 个完全独立的单变量微分方程：$\frac{dy_i}{dt} = \lambda_i y_i \implies y_i(t) = y_i(0) e^{\lambda_i t}$！</li>
+            <li>通解矩阵指数解：$\mathbf{x}(t) = e^{At} \mathbf{x}_0 = P \begin{bmatrix} e^{\lambda_1 t} & \dots & 0 \\ \vdots & \ddots & \vdots \\ 0 & \dots & e^{\lambda_n t} \end{bmatrix} P^{-1} \mathbf{x}_0$。</li>
+            <li><strong>动力系统稳定性判据</strong>：
+              <ul>
+                <li>若所有特征值的实部 $\text{Re}(\lambda_i) < 0$：系统渐近稳定收敛到原点 $\mathbf{0}$；</li>
+                <li>若存在 $\text{Re}(\lambda_i) > 0$：系统不稳定并呈指数爆炸发散；</li>
+                <li>若为纯虚数 $\lambda = \pm i\omega$：系统发生无阻尼等幅周期振荡。</li>
+              </ul>
+            </li>
           </ul>
         </div>
 
-        <!-- Section 6: Interactive Quiz Accordion -->
-        <h2 class="section-title">6. 🧠 模块自测思考与小试牛刀</h2>
+        <!-- Subsection 5.5 -->
+        <h3 class="subsection-title">5.5 📋 对角化标准 4 步手算配方指南</h3>
+        <div class="card" style="background: rgba(14, 165, 233, 0.05); border-color: rgba(14, 165, 233, 0.3); margin-bottom: 2rem;">
+          <ol style="margin-left: 1.5rem; line-height: 2; font-size:0.92rem;">
+            <li><strong>Step 1</strong>：解特征方程 $\det(A - \lambda I) = 0$，求出所有特征值 $\lambda_1, \dots, \lambda_n$。</li>
+            <li><strong>Step 2</strong>：对每个特征值 $\lambda_i$，解齐次方程 $(A - \lambda_i I)\mathbf{v} = \mathbf{0}$ 求出特征向量，确认共有 $n$ 个线性无关特征向量。</li>
+            <li><strong>Step 3</strong>：将特征向量按列拼接构造矩阵 $P = [\mathbf{v}_1 \dots \mathbf{v}_n]$，将对应特征值按相同列顺序拼成对角矩阵 $D = \text{diag}(\lambda_1 \dots \lambda_n)$。</li>
+            <li><strong>Step 4</strong>：计算逆矩阵 $P^{-1}$，写出对角化形式 $A = P D P^{-1}$。</li>
+          </ol>
+        </div>
+
+        <!-- Section 6: Worked Examples -->
+        <h2 class="section-title">6. ✍️ 完整综合对角化数值手算例题与高阶幂计算</h2>
+        <div class="proof-box">
+          <div class="box-title">手算综合标杆例题：对角化对称矩阵 $A = \begin{bmatrix} 1 & 2 \\ 2 & 1 \end{bmatrix}$ 并求 $A^{10}$</div>
+          <p><strong>解答全流程</strong>：</p>
+          <ul style="line-height: 1.9;">
+            <li><strong>第 1 步：求特征值</strong>：$\det(A - \lambda I) = (1-\lambda)^2 - 4 = \lambda^2 - 2\lambda - 3 = (\lambda - 3)(\lambda + 1) = 0 \implies \lambda_1 = 3, \lambda_2 = -1$。两个互异实特征值，矩阵必可对角化！</li>
+            <li><strong>第 2 步：求特征向量</strong>：
+              <ul>
+                <li>对 $\lambda_1 = 3$：解 $(A-3I)\mathbf{v}=\mathbf{0} \implies \begin{bmatrix} -2 & 2 \\ 2 & -2 \end{bmatrix}\mathbf{v}=\mathbf{0} \implies -2x_1+2x_2=0 \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。</li>
+                <li>对 $\lambda_2 = -1$：解 $(A+1I)\mathbf{v}=\mathbf{0} \implies \begin{bmatrix} 2 & 2 \\ 2 & 2 \end{bmatrix}\mathbf{v}=\mathbf{0} \implies 2x_1+2x_2=0 \implies \mathbf{v}_2 = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$。</li>
+              </ul>
+            </li>
+            <li><strong>第 3 步：构造 $P$ 与 $D$ 并求逆</strong>：
+              $$P = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, \quad D = \begin{bmatrix} 3 & 0 \\ 0 & -1 \end{bmatrix}, \quad P^{-1} = \frac{1}{-2}\begin{bmatrix} -1 & -1 \\ -1 & 1 \end{bmatrix} = \frac{1}{2}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+            </li>
+            <li><strong>第 4 步：极速计算 $A^{10}$</strong>：
+              $$A^{10} = P D^{10} P^{-1} = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} \begin{bmatrix} 3^{10} & 0 \\ 0 & (-1)^{10} \end{bmatrix} \frac{1}{2}\begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+              $$= \frac{1}{2} \begin{bmatrix} 3^{10} & 1 \\ 3^{10} & -1 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} = \frac{1}{2} \begin{bmatrix} 3^{10}+1 & 3^{10}-1 \\ 3^{10}-1 & 3^{10}+1 \end{bmatrix} \quad \blacksquare$$
+            </li>
+          </ul>
+        </div>
+
+        <!-- Section 7: Interactive Quiz Accordion -->
+        <h2 class="section-title">7. 🧠 模块自测深度思考与概念辨析</h2>
         <div class="concept-box">
-          <div class="box-title">🎯 思考题：一个包含 0 特征值的矩阵是否可对角化？</div>
-          <p>对比 $\lambda = 0$ 与矩阵可逆性及对角化的关系。</p>
+          <div class="box-title">🎯 深度思考 1：包含 0 特征值的矩阵能否被对角化？“可逆”与“可对角化”是什么关系？</div>
+          <p>对比 $\lambda = 0$ 与矩阵可逆性及对角化的联系与区别。</p>
           <details class="proof-accordion" style="margin-top:0.5rem;">
             <summary> 👉 点击展开查看详细解析与答案</summary>
             <div class="accordion-body">
-              <p><strong>答案：完全可以对角化！不可逆不影响对角化！</strong></p>
-              <p>解析：特征值 $\lambda = 0$ 只说明矩阵不可逆（零空间 $\text{Null}(A)$ 不为零）；而矩阵能否对角化只取决于是否有 $n$ 个线性无关的特征向量。例如 $A = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$，特征值为 1 和 0，自身就已经是一个对角矩阵！$\blacksquare$</p>
+              <p><strong>答案：完全可以对角化！“可逆”与“可对角化”是两个完全独立的维度！</strong></p>
+              <ul style="margin-left: 1.2rem; line-height: 1.8;">
+                <li><strong>可逆性</strong>只关心是否 $\det(A) \neq 0$（即是否所有 $\lambda_i \neq 0$）。</li>
+                <li><strong>可对角化</strong>只关心是否有足够的线性无关特征向量（即是否能张成全空间）。</li>
+                <li><strong>典型矩阵反例与正例</strong>：
+                  <ul>
+                    <li>$A = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$：不可逆（$\lambda=0$），但自身已是对角矩阵，<strong>完全可对角化</strong>！</li>
+                    <li>$B = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$：行列式为 1（可逆），但缺特征向量，<strong>绝对不可对角化</strong>！</li>
+                  </ul>
+                </li>
+              </ul>
             </div>
           </details>
         </div>
 
-        <!-- Section 7: Python Practice -->
-        <h2 class="section-title">7. 💻 编程实战：用 Python / NumPy 计算特征值与对角化</h2>
-        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
-          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
+        <div class="concept-box" style="margin-top:1rem;">
+          <div class="box-title">🎯 深度思考 2：如果实数矩阵有复数特征值，它在实数空间中能对角化吗？</div>
+          <details class="proof-accordion" style="margin-top:0.5rem;">
+            <summary> 👉 点击展开查看详细解析与答案</summary>
+            <div class="accordion-body">
+              <p><strong>答案：在实数域 $\mathbb{R}$ 上不可对角化，但在复数域 $\mathbb{C}$ 上可以对角化！</strong></p>
+              <p>例如 90° 旋转矩阵 $R = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$，特征值为 $\lambda = \pm i$。在实数平面内它没有任何不动轴；但如果把基底扩展到复数向量空间 $\mathbb{C}^2$，可以解出复特征向量 $\begin{bmatrix} 1 \\ -i \end{bmatrix}$ 与 $\begin{bmatrix} 1 \\ i \end{bmatrix}$，在复数域内完成对角化。</p>
+            </div>
+          </details>
+        </div>
+
+        <!-- Section 8: Python Practice -->
+        <h2 class="section-title">8. 💻 编程实战：用 Python / NumPy 求解特征值与验证对角化</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1.2rem;">
+          <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem; line-height:1.6;">
 import numpy as np
 
-A = np.array([[1, 2], [2, 1]], dtype=float)
+# 1. 定义一个 2x2 对称矩阵
+A = np.array([[4, 1], 
+              [2, 3]], dtype=float)
 
-# 计算特征值 and 特征向量
-eigenvalues, eigenvectors = np.linalg.eig(A)
+# 2. 计算特征值 (eigenvalues) 与特征向量 (eigenvectors)
+eigenvalues, P = np.linalg.eig(A)
 
 print("特征值 (Eigenvalues):", eigenvalues)
-print("特征向量矩阵 P (Eigenvectors):\n", eigenvectors)
+print("特征向量矩阵 P (各列为对应特征向量):\n", P)
+
+# 3. 验证对角化关系：P * D * P^(-1) == A
+D = np.diag(eigenvalues)
+P_inv = np.linalg.inv(P)
+A_reconstructed = P @ D @ P_inv
+
+print("\n重构矩阵 P @ D @ P_inv:\n", np.round(A_reconstructed, 4))
+print("是否与原矩阵一致:", np.allclose(A, A_reconstructed))
+
+# 4. 极速计算矩阵高阶幂 A^10
+A_10 = P @ np.diag(eigenvalues ** 10) @ P_inv
+print("\n矩阵 A^10 计算结果:\n", np.round(A_10, 2))
           </code></pre>
         </div>
 

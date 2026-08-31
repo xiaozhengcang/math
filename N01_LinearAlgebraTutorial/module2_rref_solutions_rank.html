@@ -21,6 +21,7 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
 </head>
 <body>
 
@@ -434,16 +435,206 @@
         <h2 class="section-title">3. 高斯消元、初等行变换与 RREF 的 4 大法则</h2>
         
         <div class="concept-box" style="background: rgba(56, 189, 248, 0.08); border-color: var(--accent-blue);">
-          <div class="box-title" style="color:var(--accent-blue);">🎒 基础定义：3 种初等行变换 (Elementary Row Operations)</div>
-          <p>在高斯消元过程中，允许对矩阵施加以下 3 种**保解初等行变换**：</p>
-          <ol style="margin-left:1.5rem; line-height:1.7; font-size:0.92rem;">
-            <li><strong>行交换 (Row Swap)</strong>：交换矩阵的第 $i$ 行与第 $j$ 行（记作 $R_i \leftrightarrow R_j$）。</li>
-            <li><strong>行倍乘 (Row Scaling)</strong>：将第 $i$ 行的所有元素乘以一个非零常数 $c$（记作 $c R_i \to R_i$）。</li>
-            <li><strong>行倍加 (Row Addition)</strong>：将第 $j$ 行乘以常数 $c$ 后的结果加到第 $i$ 行上（记作 $R_i + c R_j \to R_i$）。</li>
+          <div class="box-title" style="color:var(--accent-blue);">🎒 基础定义：3 种初等行变换 (Elementary Row Operations) 与现实方程组映射</div>
+          <p>在高斯消元过程中，允许对矩阵施加以下 3 种<strong>保解初等行变换</strong>：</p>
+          <ol style="margin-left:1.5rem; line-height:1.8; font-size:0.92rem;">
+            <li><strong>行交换 (Row Swap, $R_i \leftrightarrow R_j$)</strong>：
+              <br><span style="color:var(--text-muted);">现实直观：交换两个方程在纸面上的上下书写顺序，方程组逻辑关系毫无变化。</span>
+            </li>
+            <li><strong>行倍乘 (Row Scaling, $c R_i \to R_i, \; c \neq 0$)</strong>：
+              <br><span style="color:var(--text-muted);">现实直观：给某个方程两边同时乘以非零常数 $c$（天平两端同放 $c$ 倍重物，平衡关系不改）。</span>
+            </li>
+            <li><strong>行倍加 (Row Addition, $R_i + c R_j \to R_i$)</strong>：
+              <br><span style="color:var(--text-muted);">现实直观：初中数学中的<strong>加减消元法</strong>（将方程 $j$ 的 $c$ 倍加到方程 $i$ 上消去某个未知数）。</span>
+            </li>
           </ol>
         </div>
 
-        <p>通过初等行变换，任何矩阵 $A$ 都可以化简为唯一的**简化行阶梯形 (RREF - Reduced Row Echelon Form)**：</p>
+        <!-- 3 Core Perspectives of Elementary Transformations -->
+        <div class="concept-box" style="margin-top: 1.5rem; background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3);">
+          <div class="box-title" style="color:var(--accent-purple);">🧠 深度剖析：理解初等变换的 3 大核心维度</div>
+          
+          <div class="grid-2" style="gap: 1rem; margin-top: 0.8rem;">
+            <div style="background: rgba(255,255,255,0.02); padding: 0.9rem; border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: bold; color: #38bdf8; margin-bottom: 0.4rem;">1️⃣ 代数视角：线性方程组的“保解变形”</div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0;">
+                矩阵的行本质上是线性方程组的紧凑简写。初等行变换是<strong>完全可逆的同解变形</strong>：它绝不丢失任何原始信息，也不会凭空引入虚假解。因此，变换前后的方程组解集、零空间 $\text{Null}(A)$ 与矩阵的秩 $\text{rank}(A)$ 保持绝对一致。
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); padding: 0.9rem; border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: bold; color: #4ade80; margin-bottom: 0.4rem;">2️⃣ 几何视角：空间的伸缩、镜像与剪切 (Shear)</div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0;">
+                若将矩阵列向量看作几何空间网格：<br>
+                • <strong>对调</strong>：轴向交换或关于对角面的<strong>镜像反射</strong>。<br>
+                • <strong>倍乘</strong>：沿特定坐标轴的<strong>拉伸或压缩</strong>。<br>
+                • <strong>倍加（核心）</strong>：几何上的<strong>剪切变换 (Shear Mapping)</strong>。如同水平推斜一叠扑克牌，<strong>底不变、高不变，所围成的面积与体积绝对守恒</strong>（$\det(E)=1$）！
+              </p>
+            </div>
+          </div>
+
+          <div style="margin-top: 1rem; background: rgba(255,255,255,0.02); padding: 0.9rem; border-radius: 6px; border: 1px solid var(--border-color);">
+            <div style="font-weight: bold; color: #fbbf24; margin-bottom: 0.4rem;">3️⃣ 矩阵代数视角：初等矩阵与“左行右列”操作法则</div>
+            <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0;">
+              把“变换操作过程”抽象为具体的矩阵对象——<strong>初等矩阵 $E$</strong>（由单位阵 $I$ 经单步初等变换得到）：<br>
+              • <strong>左行右列</strong>：对矩阵 $A$ 施加<strong>行变换</strong> $\iff$ 在 $A$ 左侧乘 $E$（即 $E \cdot A$）；对 $A$ 施加<strong>列变换</strong> $\iff$ 在 $A$ 右侧乘 $E$（即 $A \cdot E$）。<br>
+              • <strong>可逆性</strong>：每一步初等变换都有对应的反向“撤销操作”，因此初等矩阵必定可逆，且其逆矩阵 $E^{-1}$ 仍为同类型的初等矩阵。
+            </p>
+          </div>
+        </div>
+
+        <!-- 2 Core Practical Applications -->
+        <div class="concept-box" style="margin-top: 1.5rem; background: rgba(74, 222, 128, 0.05); border-color: rgba(74, 222, 128, 0.3);">
+          <div class="box-title" style="color:#4ade80;">🚀 初等变换的两大硬核实战应用解析</div>
+          
+          <div class="grid-2" style="gap: 1rem; margin-top: 0.8rem;">
+            <div style="background: rgba(255,255,255,0.02); padding: 0.9rem; border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: bold; color: #38bdf8; margin-bottom: 0.4rem;">💡 应用一：$[A \mid I] \to [I \mid A^{-1}]$ 求逆的“复写纸”机制</div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.4rem;">
+                设一系列初等行变换对应的矩阵乘积为 $P = E_k \cdots E_2 E_1$。若这套变换能将可逆方阵 $A$ 化为单位阵 $I$，则：
+                $$P A = I \implies P = A^{-1}$$
+              </p>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0;">
+                当把同一套行变换作用于增广矩阵 $[A \mid I]$ 时：
+                $$P [A \mid I] = [PA \mid PI] = [I \mid P] = [I \mid A^{-1}]$$
+                <strong>直观比喻</strong>：右侧的单位阵 $I$ 就像一张“复写纸”，忠实记录了将 $A$ 还原为 $I$ 所需的所有步步累乘操作，这些操作的合成正是 $A^{-1}$。
+              </p>
+            </div>
+
+            <div style="background: rgba(255,255,255,0.02); padding: 0.9rem; border-radius: 6px; border: 1px solid var(--border-color);">
+              <div style="font-weight: bold; color: var(--accent-purple); margin-bottom: 0.4rem;">💡 应用二：提炼矩阵骨架（求秩 Rank 与化阶梯形）</div>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0.4rem;">
+                任何矩阵通过初等变换，都能化简为最纯粹的简化行阶梯形 (RREF) 或等价标准型：
+                $$\begin{bmatrix} I_r & 0 \\ 0 & 0 \end{bmatrix}$$
+              </p>
+              <p style="font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 0;">
+                其中 $r$ 即为矩阵的<strong>秩 $\text{rank}(A)$（有效独立维数）</strong>。初等变换如同“剥洋葱”，层层剥离行与列之间的线性相关冗余，暴露出空间最核心的非零主元骨架。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Visualizer: 3 Elementary Transformations -->
+        <div class="visualizer-wrapper" style="margin: 2rem 0; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(56, 189, 248, 0.35);">
+          <div class="visualizer-header">
+            <div class="visualizer-title">
+              <span>🎛️</span> 动态图形实验室：3 种初等变换的几何形变、行列式与面积体积守恒交互
+            </div>
+            <button id="btn-elem-reset" class="elem-btn" style="background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
+              🔄 重置回单位阵 I
+            </button>
+          </div>
+
+          <!-- Mode Tabs -->
+          <div class="elem-tabs">
+            <button id="tab-elem-shear" class="elem-tab-btn active">
+              <span>📐</span> 模式 3：倍加变换 (Shear / 剪切错切 & 面积守恒)
+            </button>
+            <button id="tab-elem-scale" class="elem-tab-btn">
+              <span>↔️</span> 模式 2：倍乘变换 (Scaling / 坐标轴拉伸与翻转)
+            </button>
+            <button id="tab-elem-swap" class="elem-tab-btn">
+              <span>🔄</span> 模式 1：对调变换 (Swap / 镜像反射)
+            </button>
+          </div>
+
+          <!-- Interactive Control Panels -->
+          <!-- Panel 1: Swap Controls -->
+          <div id="panel-elem-swap" class="elem-panel" style="display:none;">
+            <button id="btn-swap-toggle" class="elem-btn" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.2)); border-color: #fbbf24; color: #fbbf24; padding: 0.6rem 1.2rem; font-size: 0.92rem;">
+              🔄 执行对调 R₁ ↔ R₂
+            </button>
+            <button id="btn-swap-diag" class="elem-btn" style="color: var(--text-muted);">
+              📐 切换 y = x 对称轴辅助线
+            </button>
+          </div>
+
+          <!-- Panel 2: Scale Controls -->
+          <div id="panel-elem-scale" class="elem-panel" style="display:none;">
+            <div class="control-group">
+              <label>X轴 / 第1行放缩 k₁: <strong id="val-elem-k1" style="color:#38bdf8;">1.5</strong></label>
+              <input type="range" id="slider-elem-k1" min="-3" max="3" step="0.1" value="1.5">
+            </div>
+            <div class="control-group">
+              <label>Y轴 / 第2行放缩 k₂: <strong id="val-elem-k2" style="color:#c084fc;">1.0</strong></label>
+              <input type="range" id="slider-elem-k2" min="-3" max="3" step="0.1" value="1.0">
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button id="btn-preset-scale-2" class="elem-btn" style="font-size:0.8rem;">放缩 (2.0, 1.5)</button>
+              <button id="btn-preset-scale-neg" class="elem-btn" style="font-size:0.8rem;">X轴翻转 (-1.0, 1.0)</button>
+            </div>
+          </div>
+
+          <!-- Panel 3: Shear Controls -->
+          <div id="panel-elem-shear" class="elem-panel">
+            <div class="control-group">
+              <label>剪切强度 k: <strong id="val-elem-shear-k" style="color:#4ade80;">1.2</strong></label>
+              <input type="range" id="slider-elem-shear-k" min="-3" max="3" step="0.1" value="1.2">
+            </div>
+            <div class="control-group" style="background: rgba(255,255,255,0.04); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
+              <label style="margin-right: 0.5rem; cursor: pointer; color: var(--text-main);">
+                <input type="radio" name="shear-dir" id="radio-shear-h" checked> 水平剪切 (R₁ + k·R₂ → R₁)
+              </label>
+              <label style="cursor: pointer; color: var(--text-main);">
+                <input type="radio" name="shear-dir" id="radio-shear-v"> 垂直剪切 (R₂ + k·R₁ → R₂)
+              </label>
+            </div>
+            <div style="display:flex; gap:0.4rem;">
+              <button id="btn-shear-preset-1" class="elem-btn" style="font-size:0.8rem;">k = 1.0</button>
+              <button id="btn-shear-preset-neg" class="elem-btn" style="font-size:0.8rem;">k = -1.0</button>
+              <button id="btn-shear-preset-2" class="elem-btn" style="font-size:0.8rem;">k = 2.0</button>
+            </div>
+          </div>
+
+          <!-- Canvas Display -->
+          <canvas id="canvas-elem-transform" class="interactive-canvas"></canvas>
+
+          <!-- Realtime Mathematical HUD Matrix & Status -->
+          <div class="elem-hud-container">
+            <div class="elem-hud-card">
+              <div class="elem-hud-title">📐 当前初等矩阵 E 与逆矩阵 E⁻¹</div>
+              <div style="display: flex; align-items: center; justify-content: space-around; gap: 1rem; margin-top: 0.5rem;">
+                <div style="text-align: center;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">当前初等矩阵 E</div>
+                  <div class="elem-matrix-grid">
+                    <span id="mat-e-11" style="color:#38bdf8;">1</span>
+                    <span id="mat-e-12" style="color:#4ade80;">1.2</span>
+                    <span id="mat-e-21" style="color:#c084fc;">0</span>
+                    <span id="mat-e-22" style="color:#fbbf24;">1</span>
+                  </div>
+                </div>
+                <div style="font-size: 1.2rem; color: var(--text-muted);">⇄</div>
+                <div style="text-align: center;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px;">撤销操作 / 逆矩阵 E⁻¹</div>
+                  <div class="elem-matrix-grid" style="border-left-color: var(--accent-purple); border-right-color: var(--accent-purple);">
+                    <span id="mat-inv-11" style="color:#38bdf8;">1</span>
+                    <span id="mat-inv-12" style="color:#4ade80;">-1.2</span>
+                    <span id="mat-inv-21" style="color:#c084fc;">0</span>
+                    <span id="mat-inv-22" style="color:#fbbf24;">1</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="elem-hud-card">
+              <div class="elem-hud-title">🌐 几何性质判定与行列式放缩率</div>
+              <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span>行列式 det(E): <strong id="val-elem-det" style="color:var(--accent-blue); font-size:1.05rem;">1.00</strong></span>
+                  <span>图形面积: <strong id="val-elem-area" style="color:#4ade80; font-size:1.05rem;">1.00</strong></span>
+                </div>
+                <div id="badge-elem-status" style="margin: 0.2rem 0;">
+                  <!-- Dynamic badge -->
+                </div>
+                <div id="elem-geo-explanation" style="font-size: 0.82rem; line-height: 1.5; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 6px 8px; border-radius: 4px;">
+                  <!-- Dynamic text -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p style="margin-top: 1.5rem;">通过初等行变换，任何矩阵 $A$ 都可以化简为唯一的<strong>简化行阶梯形 (RREF - Reduced Row Echelon Form)</strong>，并严格遵循以下 4 大黄金法则：</p>
 
         <div class="step-container">
           <div class="step-card">

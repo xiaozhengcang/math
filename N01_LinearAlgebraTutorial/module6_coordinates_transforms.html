@@ -775,37 +775,143 @@
         </div>
 
         <!-- Section 4 -->
-        <h2 class="section-title">4. 🚀 震撼应用：微积分求导算子 (Derivative Operator) 矩阵化</h2>
-        <p>考虑所有次数不超过 2 的多项式空间 $P_2 = \{a_0 + a_1 x + a_2 x^2 \mid a_i \in \mathbb{R}\}$。选择基 $\mathcal{B} = \{1, x, x^2\}$：</p>
+        <h2 class="section-title">4. 🚀 震撼应用：微积分求导算子 (Derivative Operator) 矩阵化与代数性质全景剖析</h2>
+        <p>在高等数学中，微积分（求导与积分）常被视为与矩阵代数截然不同的连续分析领域。然而，<strong>线性代数的统一威力在于：只要研究对象满足向量空间公理，且映射满足线性性质，微积分运算即可被严格转化为离散的矩阵乘法！</strong></p>
 
+        <!-- 4.1 函数空间与向量空间同构 -->
+        <div class="proof-box" style="background: rgba(56, 189, 248, 0.04); border-color: rgba(56, 189, 248, 0.25);">
+          <div class="box-title" style="color:var(--accent-blue);">4.1 抽象函数空间的向量本质与坐标同构</div>
+          <p>设 $P_n$ 为实系数且最高次数不超过 $n$ 的多项式集合：</p>
+          <div class="math-block">
+            $$P_n = \left\{ p(x) = a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \;\middle|\; a_0, a_1, \dots, a_n \in \mathbb{R} \right\}$$
+          </div>
+          <ul>
+            <li><strong>向量空间性质</strong>：多项式加法与数乘完全满足向量空间的 8 条公理，$P_n$ 是一个维数为 $n+1$ 的实线性空间。</li>
+            <li><strong>标准基选择</strong>：选取单项式集合 $\mathcal{B} = \{1, x, x^2, \dots, x^n\}$ 为 $P_n$ 的一组标准基。</li>
+            <li><strong>坐标映射（线性同构）</strong>：多项式 $p(x)$ 与其在基 $\mathcal{B}$ 下的坐标向量之间存在天然的一一对应：
+              $$p(x) = a_0 \cdot 1 + a_1 \cdot x + \dots + a_n \cdot x^n \;\xleftrightarrow{\text{同构}}\; [p(x)]_\mathcal{B} = \begin{bmatrix} a_0 \\ a_1 \\ \vdots \\ a_n \end{bmatrix} \in \mathbb{R}^{n+1}$$
+            </li>
+          </ul>
+        </div>
+
+        <!-- 4.2 求导算子的线性性证明 -->
+        <div class="concept-box">
+          <div class="box-title">4.2 微分算子 $D = \frac{d}{dx}$ 的线性性证明</div>
+          <p>定义微分算子 $D: P_n \to P_n$，对任意 $p(x), q(x) \in P_n$ 及标量 $c \in \mathbb{R}$：</p>
+          <ol>
+            <li><strong>加法可加性</strong>：$D(p(x) + q(x)) = \frac{d}{dx}(p(x) + q(x)) = \frac{d}{dx}p(x) + \frac{d}{dx}q(x) = D(p(x)) + D(q(x))$</li>
+            <li><strong>数乘齐次性</strong>：$D(c \cdot p(x)) = \frac{d}{dx}(c \cdot p(x)) = c \cdot \frac{d}{dx}p(x) = c \cdot D(p(x))$</li>
+          </ol>
+          <p style="margin-top:0.5rem;">因此，$D$ 是 $P_n$ 上的<strong>严格线性变换 (Linear Operator)</strong>，必然存在唯一的矩阵 $[D]_\mathcal{B}$ 与之对应。</p>
+        </div>
+
+        <!-- 4.3 求导矩阵的标准构造算法 -->
         <div class="step-container">
           <div class="step-card">
             <div class="step-number">1</div>
             <div class="step-content">
-              <div class="step-title">基函数的求导结果</div>
-              <p>对基函数分别求导：$\frac{d}{dx}(1) = 0, \quad \frac{d}{dx}(x) = 1, \quad \frac{d}{dx}(x^2) = 2x$。</p>
+              <div class="step-title">基向量变换求象 (Transform Basis Elements)</div>
+              <p>以 $P_2 = \operatorname{span}\{1, x, x^2\}$ 为例，分别对各基向量求导：</p>
+              <p style="margin-top:0.3rem;">
+                $D(1) = 0, \quad D(x) = 1, \quad D(x^2) = 2x$
+              </p>
             </div>
           </div>
           <div class="step-card">
             <div class="step-number">2</div>
             <div class="step-content">
-              <div class="step-title">构建求导算子矩阵 $[D]_\mathcal{B}$</div>
-              <p>将求导结果写成基 $\mathcal{B}$ 下的坐标向量并拼成列：</p>
-              <div class="math-block">
-                $$[D]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix}$$
-              </div>
+              <div class="step-title">将求导结果分解回基坐标 (Coordinate Decomposition)</div>
+              <p>将上述导数分解为基 $\mathcal{B} = \{1, x, x^2\}$ 的线性组合并写成坐标向量：</p>
+              <ul>
+                <li>$D(1) = 0\cdot 1 + 0\cdot x + 0\cdot x^2 \implies [D(1)]_\mathcal{B} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$</li>
+                <li>$D(x) = 1\cdot 1 + 0\cdot x + 0\cdot x^2 \implies [D(x)]_\mathcal{B} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$</li>
+                <li>$D(x^2) = 0\cdot 1 + 2\cdot x + 0\cdot x^2 \implies [D(x^2)]_\mathcal{B} = \begin{bmatrix} 0 \\ 2 \\ 0 \end{bmatrix}$</li>
+              </ul>
             </div>
           </div>
           <div class="step-card">
             <div class="step-number">3</div>
             <div class="step-content">
-              <div class="step-title">微积分转化为矩阵乘法</div>
-              <p>多项式 $p(x) = 3 + 5x + 4x^2$ 的坐标为 $[p]_\mathcal{B} = \begin{bmatrix} 3 \\ 5 \\ 4 \end{bmatrix}$。其导数可以通过矩阵乘法直接算得：</p>
+              <div class="step-title">按列拼装成算子矩阵 $[D]_\mathcal{B}$ (Assemble Matrix Columns)</div>
+              <p>矩阵的每一列就是对应基向量经变换后的坐标列：</p>
+              <div class="math-block">
+                $$[D]_\mathcal{B} = \begin{bmatrix} [D(1)]_\mathcal{B} & [D(x)]_\mathcal{B} & [D(x^2)]_\mathcal{B} \end{bmatrix} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix}$$
+              </div>
+              <p style="font-size:0.9rem; color:var(--text-muted);">注：在 $n$ 次多项式空间 $P_n$ 下，求导矩阵为 $(n+1)\times(n+1)$ 阶的<strong>严格上超对角矩阵 (Strictly Upper-Shift Matrix)</strong>，第 $k$ 个超对角元为 $k$。</p>
+            </div>
+          </div>
+          <div class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <div class="step-title">数值验证：求导转化为矩阵-向量乘法</div>
+              <p>设多项式 $p(x) = 3 + 5x + 4x^2$，其坐标向量为 $[p]_\mathcal{B} = \begin{bmatrix} 3 \\ 5 \\ 4 \end{bmatrix}$。其一阶导数计算为：</p>
               <div class="math-block">
                 $$[p']_\mathcal{B} = [D]_\mathcal{B} [p]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} 3 \\ 5 \\ 4 \end{bmatrix} = \begin{bmatrix} 5 \\ 8 \\ 0 \end{bmatrix} \implies p'(x) = 5 + 8x \quad \blacksquare$$
               </div>
             </div>
           </div>
+        </div>
+
+        <!-- 4.4 深入代数性质剖析 -->
+        <div class="proof-box" style="background: rgba(168, 85, 247, 0.05); border-color: rgba(168, 85, 247, 0.3); margin-top:1.5rem;">
+          <div class="box-title" style="color:var(--accent-purple);">4.4 深入代数性质：从线性代数视角重新审视微积分规律</div>
+          
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-top:0.8rem;">
+            <!-- 性质 1 -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <h4 style="color:#38bdf8; margin-bottom:0.4rem;">① 幂零性 (Nilpotency) $\leftrightarrow$ 高阶导数降幂归零</h4>
+              <p style="font-size:0.88rem; line-height:1.6;">
+                计算矩阵乘方对应高阶微分：
+                <br>• 二阶导：$[D]_\mathcal{B}^2 = \begin{bmatrix} 0 & 0 & 2 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix} \implies p''(x) = 8$
+                <br>• 三阶导：$[D]_\mathcal{B}^3 = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix} = O$
+                <br><strong>代数结论</strong>：$[D]_\mathcal{B}$ 是幂零指数为 3 的<strong>幂零矩阵 (Nilpotent Matrix)</strong>。这对应微积分定理：<strong>最高次数为 2 的多项式，求导 3 次必然恒等于 0</strong>！
+              </p>
+            </div>
+
+            <!-- 性质 2 -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <h4 style="color:#4ade80; margin-bottom:0.4rem;">② 零空间 (Kernel) $\leftrightarrow$ 常数项求导为零</h4>
+              <p style="font-size:0.88rem; line-height:1.6;">
+                求解方程 $[D]_\mathcal{B} \mathbf{v} = \mathbf{0}$：
+                <br>$\operatorname{Null}([D]_\mathcal{B}) = \operatorname{span}\left\{ \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} \right\} \iff p(x) = C$ (常数函数)
+                <br><strong>代数结论</strong>：求导算子的核空间（零空间）恰好是一维常数多项式空间，完美解释了“常数的导数恒为 0”。
+              </p>
+            </div>
+
+            <!-- 性质 3 -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <h4 style="color:#f59e0b; margin-bottom:0.4rem;">③ 秩-零度定理 $\leftrightarrow$ 导数次数降 1 阶</h4>
+              <p style="font-size:0.88rem; line-height:1.6;">
+                $\operatorname{col}([D]_\mathcal{B}) = \operatorname{span}\left\{ \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 2 \\ 0 \end{bmatrix} \right\} \cong P_1$（所有一次多项式空间）
+                <br>$\operatorname{rank}(D) = 2, \quad \operatorname{nullity}(D) = 1$
+                <br>$\operatorname{rank}(D) + \operatorname{nullity}(D) = 2 + 1 = 3 = \dim(P_2)$
+                <br><strong>代数结论</strong>：二次多项式经求导后，值域被完全压缩到一次多项式子空间中。
+              </p>
+            </div>
+
+            <!-- 性质 4 -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+              <h4 style="color:#f43f5e; margin-bottom:0.4rem;">④ 不可逆性 $\leftrightarrow$ 不定积分常数 $+C$ 的起源</h4>
+              <p style="font-size:0.88rem; line-height:1.6;">
+                $\det([D]_\mathcal{B}) = 0 \implies [D]_\mathcal{B}$ <strong>不可逆 (Singular)</strong>。
+                <br><strong>代数结论</strong>：因为微分算子存在非零核（常数项信息在求导中被压缩归零），所以微分运算不存在单值逆算子。其伪逆（积分）必须添加任意常数 $+C$ 才能描述原像全貌！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4.5 推广：换基视角与微积分基本定理的矩阵乘积 -->
+        <div class="concept-box" style="margin-top:1.5rem;">
+          <div class="box-title">4.5 进阶探索：定积分算子矩阵与微积分基本定理对消律</div>
+          <p>我们进一步定义以 0 为下限的定积分算子 $J: P_1 \to P_2$，满足 $J(q(x)) = \int_0^x q(t) dt$。在基 $\mathcal{B}_1 = \{1, x\}$ 与 $\mathcal{B}_2 = \{1, x, x^2\}$ 下：</p>
+          <div class="math-block">
+            $$J(1) = x \implies \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}, \quad J(x) = \frac{1}{2}x^2 \implies \begin{bmatrix} 0 \\ 0 \\ 1/2 \end{bmatrix} \implies [J] = \begin{bmatrix} 0 & 0 \\ 1 & 0 \\ 0 & 1/2 \end{bmatrix}$$
+          </div>
+          <p>令求导算子矩阵作用于积分算子矩阵：</p>
+          <div class="math-block">
+            $$[D]_{2 \times 3} [J]_{3 \times 2} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \end{bmatrix} \begin{bmatrix} 0 & 0 \\ 1 & 0 \\ 0 & 1/2 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix} = I_2$$
+          </div>
+          <p style="margin-top:0.5rem;"><strong>几何与代数洞察</strong>：$[D][J] = I$ 正是<strong>微积分第一基本定理 $\frac{d}{dx} \left( \int_0^x f(t) dt \right) = f(x)$</strong> 在有限维函数空间下的离散矩阵乘积体现！</p>
         </div>
 
         <!-- Section 5: Worked Example -->
@@ -834,8 +940,9 @@
         </div>
 
         <!-- Section 7: Python Practice -->
-        <h2 class="section-title">7. 💻 编程实战：用 Python / NumPy 求解基变换矩阵</h2>
-        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+        <h2 class="section-title">7. 💻 编程实战：用 Python / NumPy 实现基变换与求导算子矩阵化</h2>
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem; margin-bottom:1.5rem;">
+          <h4 style="color:#38bdf8; margin-bottom:0.5rem;">代码 1：坐标转换矩阵 $P_{\mathcal{B} \to \mathcal{C}}$ 计算</h4>
           <pre><code style="font-family:var(--font-mono); color:#38bdf8; font-size:0.9rem;">
 import numpy as np
 
@@ -845,6 +952,35 @@ C = np.array([[2, 1], [1, 1]], dtype=float)
 # 计算转换矩阵 P = C⁻¹ * B
 P_B_to_C = np.dot(np.linalg.inv(C), B)
 print("转换矩阵 P_(B->C):\n", P_B_to_C)
+          </code></pre>
+        </div>
+
+        <div class="card" style="background:#090d16; border-color:var(--border-color); padding:1rem;">
+          <h4 style="color:#a855f7; margin-bottom:0.5rem;">代码 2：微积分求导算子矩阵 $D$、高阶幂零性及乘法求导验证</h4>
+          <pre><code style="font-family:var(--font-mono); color:#c084fc; font-size:0.9rem;">
+import numpy as np
+
+# 1. 构造 P₂ 空间上的求导算子矩阵 [D] (基为 {1, x, x²})
+D = np.array([
+    [0, 1, 0],
+    [0, 0, 2],
+    [0, 0, 0]
+], dtype=float)
+
+# 2. 多项式 p(x) = 3 + 5x + 4x² -> 坐标向量 [3, 5, 4]ᵀ
+p = np.array([3, 5, 4], dtype=float)
+
+# 3. 矩阵乘法求一阶导数 p'(x) -> [5, 8, 0]ᵀ (即 5 + 8x)
+p_prime = D @ p
+print("一阶导数坐标 [p']_B:", p_prime)
+
+# 4. 二阶导数 D² @ p -> [8, 0, 0]ᵀ (即 8)
+D2 = np.linalg.matrix_power(D, 2)
+print("二阶导数坐标 [p'']_B:", D2 @ p)
+
+# 5. 三阶导数 D³ 为全零矩阵 (幂零性)
+D3 = np.linalg.matrix_power(D, 3)
+print("D³ (幂零矩阵):\n", D3)
           </code></pre>
         </div>
 
