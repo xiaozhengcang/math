@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 1.1: 线性系统与微积分算子 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+            
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        
+        <a href="ch6_2_inner_product_space.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+            
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        
+        <a href="ch7_2_projection_least_squares.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        
+        <a href="ch7_4_svd_low_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+        
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+    
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="#">Chapter 1: 线性系统与求解基础</a> / <span>Ch 1.1: 线性系统与微积分算子</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero">
+          <div class="module-badge">Chapter 1: 线性系统与求解基础</div>
+          <h1 class="module-title">Ch 1.1: 线性系统与微积分算子</h1>
+        </div>
+
+        
+<div class="card">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 什么是“线性”？线性系统的双重公理与判定</h2>
+  </div>
+  <div class="card-body">
+    <p>在整个现代科学与工程中，“<strong>线性 (Linearity)</strong>” 是最基础、最优美、最强大的数学性质。一个变换或系统 $T$ 被称为<b>线性系统 (Linear System)</b>，当且仅当它同时满足以下两大公理（又称<strong>叠加原理 Superposition Principle</strong>）：</p>
+    
+    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📐 线性系统双公理定义 (Linearity Axioms)</h4>
+      <ol style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>可加性 (Additivity)</strong>：输入相加后输出等于各自输出相加：
+          <div style="text-align: center; margin: 0.5rem 0; font-size: 1.1rem;">$$T(u + v) = T(u) + T(v)$$</div>
+        </li>
+        <li><strong>齐次性 / 比例性 (Homogeneity / Scaling)</strong>：输入缩放 $c$ 倍，输出也缩放 $c$ 倍：
+          <div style="text-align: center; margin: 0.5rem 0; font-size: 1.1rem;">$$T(c \cdot u) = c \cdot T(u) \quad (\forall c \in \mathbb{R})$$</div>
+        </li>
+      </ol>
+      <p style="margin-top: 0.5rem;">合并等价公式：$$T(c_1 u + c_2 v) = c_1 T(u) + c_2 T(v)$$</p>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">🔍 几何直觉：线性变换对空间的“两条军规”</h3>
+    <p>从几何视角来看，一个映射如果被称为线性的，它对空间网格必须遵守：</p>
+    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+      <li><strong>原点必须固定不动</strong>：$T(0) = T(0 \cdot u) = 0 \cdot T(u) = 0$。如果一个系统把原点映射到了非零点（例如 $f(x) = ax + b, b \neq 0$），它在几何上是<strong>仿射变换 (Affine)</strong> 而不是纯粹的线性变换！</li>
+      <li><strong>网格线保持平行且等距分布</strong>：空间中的直线经过线性变换后必须仍然是直线（或退化为点），绝不能发生弯曲、折叠或局部膨胀变形。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">微积分联系</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 微积分中的导数与积分：经典线性系统</h2>
+  </div>
+  <div class="card-body">
+    <p>很多同学初学微积分时会觉得微积分与线性代数是两门独立的课，但李宏毅老师在导论中明确指出：<strong>求导与定积分本质上就是最经典的线性算子！</strong></p>
+    
+    <div class="example-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
+      <h4 style="color: var(--accent-purple);">🌟 微积分算子的线性性证明</h4>
+      <p><strong>1. 求导算子 $D = \frac{d}{dx}$：</strong></p>
+      $$\frac{d}{dx}(f(x) + g(x)) = \frac{df}{dx} + \frac{dg}{dx} \quad \text{(可加性)}$$
+      $$\frac{d}{dx}(c \cdot f(x)) = c \cdot \frac{df}{dx} \quad \text{(齐次性)}$$
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+      <p><strong>2. 定积分算子 $I = \int_a^b (\cdot) dx$：</strong></p>
+      $$\int_a^b (f(x) + g(x)) dx = \int_a^b f(x)dx + \int_a^b g(x)dx$$
+      $$\int_a^b c \cdot f(x) dx = c \int_a^b f(x) dx$$
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-green); color: #000;">手算与实战</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 手把手手算例题与自测题</h2>
+  </div>
+  <div class="card-body">
+    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
+      <h4 style="color: var(--accent-green);">例题：判定变换 $T(x_1, x_2) = (2x_1 - x_2, x_1 + 3x_2)$ 的线性性</h4>
+      <p><strong>步骤 1：</strong> 验证可加性：$T(u+v) = (2(u_1+v_1)-(u_2+v_2), (u_1+v_1)+3(u_2+v_2)) = T(u) + T(v)$ 成立。</p>
+      <p><strong>步骤 2：</strong> 验证齐次性：$T(cu) = (2(cu_1)-cu_2, cu_1+3(cu_2)) = c(2u_1-u_2, u_1+3u_2) = c T(u)$ 成立。</p>
+      <p><strong>结论：</strong> $T$ 是严格线性变换，其变换矩阵为 $\begin{bmatrix} 2 & -1 \\ 1 & 3 \end{bmatrix}$。</p>
+    </div>
+
+    <details style="margin-top: 1.5rem; padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+      <summary style="font-weight: 600; cursor: pointer; color: var(--accent-blue);">🧠 概念自测：$f(x) = 5x + 3$ 是线性函数吗？</summary>
+      <div style="margin-top: 0.75rem; color: var(--text-muted); line-height: 1.7;">
+        <strong>解答：</strong>在初等代数中它被称为一次线性函数，但在高等线性代数中它<strong>不是线性变换</strong>（它是一个仿射变换），因为 $f(0) = 3 \neq 0$，破坏了原点固定公理，且 $f(1+1)=f(2)=13 \neq f(1)+f(1)=8+8=16$。
+      </div>
+    </details>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 Python / SymPy 符号化验证线性性</h2>
+  </div>
+  <div class="card-body">
+    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp
+
+x1, x2, y1, y2, c = sp.symbols('x1 x2 y1 y2 c')
+
+def T(v):
+    return sp.Matrix([2*v[0] - v[1], v[0] + 3*v[1]])
+
+u = sp.Matrix([x1, x2])
+v = sp.Matrix([y1, y2])
+
+# 检验可加性与齐次性
+print("可加性残差:", sp.simplify(T(u + v) - (T(u) + T(v))))
+print("齐次性残差:", sp.simplify(T(c * u) - c * T(u)))
+# 残差均为 0 向量，确认是严格线性变换！</code></pre>
+  </div>
+</div>
+
+
+        <!-- Page Navigation Buttons -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch1_1_linear_system.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
+                <div style="font-weight: 600;">Ch 1.1: 线性系统与微积分算子</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回目录
+            </a>
+          </div>
+          <div>
+            <a href="ch1_2_vector.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 1.2: 向量、几何法则与点积</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

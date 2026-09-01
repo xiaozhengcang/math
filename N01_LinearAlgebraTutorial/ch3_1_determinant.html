@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 3.1: 行列式几何体积与余子式展开 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+            
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        
+        <a href="ch6_2_inner_product_space.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+            
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        
+        <a href="ch7_2_projection_least_squares.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        
+        <a href="ch7_4_svd_low_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+        
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+    
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="#">Chapter 3: 行列式</a> / <span>Ch 3.1: 行列式几何体积与余子式展开</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero">
+          <div class="module-badge">Chapter 3: 行列式</div>
+          <h1 class="module-title">Ch 3.1: 行列式几何体积与余子式展开</h1>
+        </div>
+
+        
+<div class="card">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 行列式：有向体积放缩率与三大基本公理</h2>
+  </div>
+  <div class="card-body">
+    <p>行列式 $\det(A)$ 是一个标量，它在几何上度量了<strong>变换 $A$ 对空间有向体积的放缩比例 (Signed Volume Scale Factor)</strong>：</p>
+    
+    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color: var(--accent-blue);">📐 行列式 3 大基本公理 (3 Basic Axioms)</h4>
+      <ol style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>单位矩阵体积为 1</strong>：$\det(I) = 1$。</li>
+        <li><strong>交换两行反转方向（负号）</strong>：$\det(P_{ij} A) = -\det(A)$。</li>
+        <li><strong>关于每一行满足线性性 (Linearity in Each Row)</strong>：
+          $$\det \begin{bmatrix} c \mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix} = c \det \begin{bmatrix} \mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix}, \quad \det \begin{bmatrix} \mathbf{r}_1 + \mathbf{r}_1' \\ \mathbf{r}_2 \end{bmatrix} = \det \begin{bmatrix} \mathbf{r}_1 \\ \mathbf{r}_2 \end{bmatrix} + \det \begin{bmatrix} \mathbf{r}_1' \\ \mathbf{r}_2 \end{bmatrix}$$
+        </li>
+      </ol>
+    </div>
+
+    <h3>👑 行列式的核心推导性质</h3>
+    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+      <li>$\det(AB) = \det(A) \cdot \det(B)$（连续两次变换的体积放缩率等于各自放缩率相乘）。</li>
+      <li>$\det(A^T) = \det(A)$（转置不改变体积放缩率）。</li>
+      <li>$\det(A^{-1}) = \frac{1}{\det(A)}$。</li>
+      <li>若矩阵两行相同，或有一行全为 0，则 $\det(A) = 0$。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">展开算法</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 代数余子式展开 (Cofactor Expansion)</h2>
+  </div>
+  <div class="card-body">
+    <p>对于任意 $n \times n$ 矩阵 $A$，可以沿任意第 $i$ 行展开：</p>
+    $$\det(A) = \sum_{j=1}^n a_{ij} C_{ij} = \sum_{j=1}^n a_{ij} (-1)^{i+j} \det(M_{ij})$$
+    <p>其中 $M_{ij}$ 是划去第 $i$ 行和第 $j$ 列后得到的 $(n-1) \times (n-1)$ <strong>余子矩阵 (Submatrix)</strong>，$C_{ij} = (-1)^{i+j} \det(M_{ij})$ 为<strong>代数余子式 (Cofactor)</strong>。</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 3×3 行列式展开手算示范</h2>
+  </div>
+  <div class="card-body">
+    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
+      <h4 style="color: var(--accent-green);">计算 $A = \begin{bmatrix} 1 & 0 & 2 \\ 2 & 1 & 3 \\ 0 & 4 & 5 \end{bmatrix}$ 的行列式</h4>
+      <p><strong>选择第 1 行展开（利用 0 简化计算）：</strong></p>
+      $$\det(A) = 1 \cdot (-1)^{1+1} \det \begin{bmatrix} 1 & 3 \\ 4 & 5 \end{bmatrix} + 0 + 2 \cdot (-1)^{1+3} \det \begin{bmatrix} 2 & 1 \\ 0 & 4 \end{bmatrix}$$
+      $$= 1 \cdot (5 - 12) + 2 \cdot (8 - 0) = -7 + 16 = 9$$
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 行列式计算</h2>
+  </div>
+  <div class="card-body">
+    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+
+A = np.array([[1, 0, 2],
+              [2, 1, 3],
+              [0, 4, 5]], dtype=float)
+
+det_val = np.linalg.det(A)
+print(f"det(A) = {det_val:.4f}") # 9.0000</code></pre>
+  </div>
+</div>
+
+
+        <!-- Page Navigation Buttons -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch2_2_matrix_inverse.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
+                <div style="font-weight: 600;">Ch 2.2: 逆矩阵、初等矩阵与可逆等价定理</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回目录
+            </a>
+          </div>
+          <div>
+            <a href="ch3_2_cramer_applications.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 3.2: 伴随矩阵求逆与克莱姆法则</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

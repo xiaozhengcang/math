@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 1.6: 高斯消元、RREF 与列对应定理 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+            
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        
+        <a href="ch6_2_inner_product_space.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+            
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        
+        <a href="ch7_2_projection_least_squares.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        
+        <a href="ch7_4_svd_low_rank.html" class="nav-item " style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+        
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+    
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="#">Chapter 1: 线性系统与求解基础</a> / <span>Ch 1.6: 高斯消元、RREF 与列对应定理</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero">
+          <div class="module-badge">Chapter 1: 线性系统与求解基础</div>
+          <h1 class="module-title">Ch 1.6: 高斯消元、RREF 与列对应定理</h1>
+        </div>
+
+        
+<div class="card">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 初等行变换与 RREF 的 4 大严密法则</h2>
+  </div>
+  <div class="card-body">
+    <p>高斯-若尔当消元法通过三种<strong>初等行变换 (Elementary Row Operations)</strong> 将任意矩阵化为唯一的<strong>简化行阶梯形 (RREF, Reduced Row Echelon Form)</strong>：</p>
+    
+    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color: var(--accent-blue);">📐 RREF 的 4 大铁律</h4>
+      <ol style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>全零行位于矩阵最底部</strong>。</li>
+        <li><strong>非零行的首个非零元素（主元 Pivot）必须是 1</strong>。</li>
+        <li><strong>主元位置阶梯严格向右</strong>：下一行的主元列索引必须严格大于上一行的主元列索引。</li>
+        <li><strong>主元所在列的其他元素必须全为 0</strong>（通过向上消元清零）。</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">王牌定理</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌟 列对应定理 (Column Correspondence Theorem)</h2>
+  </div>
+  <div class="card-body">
+    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
+      <h4 style="color: var(--accent-purple);">👑 列对应定理 (Column Correspondence Theorem)</h4>
+      <p>设 $R = \text{RREF}(A)$。则<strong>矩阵 $A$ 的列向量之间的任何线性组合关系，与 $R$ 的列向量之间的线性组合关系完全相同！</strong></p>
+      <div style="font-size: 1.1rem; text-align: center; margin: 0.75rem 0;">
+        $$c_1 \mathbf{a}_1 + c_2 \mathbf{a}_2 + \dots + c_n \mathbf{a}_n = \mathbf{0} \iff c_1 \mathbf{r}_1 + c_2 \mathbf{r}_2 + \dots + c_n \mathbf{r}_n = \mathbf{0}$$
+      </div>
+      <p><strong>证明精要：</strong> 初等行变换相当于在左侧乘上一系列可逆初等矩阵 $E_k \cdots E_1 A = R$。由于初等矩阵可逆，$A\mathbf{x} = \mathbf{0} \iff R\mathbf{x} = \mathbf{0}$，因此二者的零空间完全相同！</p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+      <p><strong>两大推论：</strong></p>
+      <ul style="margin-left: 1.5rem; line-height: 1.8;">
+        <li>$R$ 中的主元列在 $A$ 中对应的原列向量，构成了原矩阵列空间 $\text{Col}(A)$ 的一组基！</li>
+        <li>$R$ 中自由列由主元列表示的权重系数，直接给出了 $A$ 中自由列由主元列表示的精确权重！</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 高斯消元化 RREF 全流程手算</h2>
+  </div>
+  <div class="card-body">
+    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
+      <h4 style="color: var(--accent-green);">例题：求矩阵 $A = \begin{bmatrix} 1 & 2 & 3 \\ 2 & 4 & 7 \\ 3 & 6 & 10 \end{bmatrix}$ 的 RREF 与列空间基底</h4>
+      <p><strong>行变换过程：</strong></p>
+      <p>1. $R_2 - 2R_1 \to R_2, R_3 - 3R_1 \to R_3$：</p>
+      $$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 0 & 1 \\ 0 & 0 & 1 \end{bmatrix}$$
+      <p>2. $R_3 - R_2 \to R_3$（清零底行）：</p>
+      $$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{bmatrix}$$
+      <p>3. $R_1 - 3R_2 \to R_1$（向上清零主元列上方）：</p>
+      $$\text{RREF}(A) = \begin{bmatrix} 1 & 2 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{bmatrix}$$
+      <p><strong>分析：</strong> 主元位于第 1 列和第 3 列。因此原矩阵 $A$ 的第 1 列和第 3 列构成 $\text{Col}(A)$ 的基：$\left\{ \begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix}, \begin{bmatrix} 3 \\ 7 \\ 10 \end{bmatrix} \right\}$。秩 $\text{Rank}(A) = 2$。</p>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 SymPy 计算 RREF 与列基</h2>
+  </div>
+  <div class="card-body">
+    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp
+
+A = sp.Matrix([[1, 2, 3],
+              [2, 4, 7],
+              [3, 6, 10]])
+
+rref_A, pivot_cols = A.rref()
+print("RREF(A):\n", rref_A)
+print("主元列索引 (Pivot Columns):", pivot_cols) # (0, 2)
+
+# 提取 Col(A) 基底
+col_basis = [A.col(i) for i in pivot_cols]
+print("Col(A) 的基底列向量:", col_basis)</code></pre>
+  </div>
+</div>
+
+
+        <!-- Page Navigation Buttons -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch1_5_solution.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
+                <div style="font-weight: 600;">Ch 1.5: 相容性与解集几何结构 (x=xp+xn)</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回目录
+            </a>
+          </div>
+          <div>
+            <a href="ch2_1_matrix_multiplication.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 2.1: 矩阵乘法 4 大视角与几何变换</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>
