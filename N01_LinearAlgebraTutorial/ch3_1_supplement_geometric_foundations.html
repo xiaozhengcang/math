@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 3.1 专题补充: 行列式几何底蕴、二维面积与法向量本质 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式专题
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">专题拓展</span>
+          <span>二维面积推导、减法直觉与法向量底蕴</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div class="nav-section-title">快速跳转</div>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆大模块</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+    
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="ch3_1_determinant.html">Chapter 3.1</a> / <span>专题拓展：二维面积推导与法向量本质</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(192, 132, 252, 0.12) 100%); border-left: 4px solid var(--accent-amber); padding: 1.75rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+          <div class="module-badge" style="background: var(--accent-amber); color: #000; font-weight: bold; display: inline-block; padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.8rem; margin-bottom: 0.5rem;">Ch 3.1 专题深度探究</div>
+          <h1 class="module-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">📐 行列式几何底蕴：二维面积推导、减法项直觉与法向量构造全解析</h1>
+          <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+            为什么二维面积公式是 $x_1 y_2 - x_2 y_1$？中间的“减法”究竟减去了什么？为什么解垂直方程组得到的法向量模长恰好等于底面积？本专题带你从初等几何、空间投影、外代数到德古阿定理，彻底打通代数计算与空间直觉的桥梁。
+          </p>
+        </div>
+
+        <!-- Section 1: 2D Parallelogram Area 3 Derivations -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">基础几何</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 二维平面平行四边形面积公式的三大严格推导</h2>
+          </div>
+          <div class="card-body">
+            <p>设平面上有两个向量 $\mathbf{u} = (x_1, y_1)$ 与 $\mathbf{v} = (x_2, y_2)$，由它们张成的平行四边形面积为：</p>
+            $$\text{Area} = |x_1 y_2 - x_2 y_1| = \left| \det \begin{bmatrix} x_1 & x_2 \\ y_1 & y_2 \end{bmatrix} \right|$$
+
+            <div class="grid-2" style="margin-top: 1.5rem;">
+              <!-- Derivation 1 -->
+              <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔹 视角一：点积与解析三角法</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7;">
+                  平行四边形面积等于底乘高：
+                  $$\text{Area} = \|\mathbf{u}\| \|\mathbf{v}\| \sin\theta = \|\mathbf{u}\| \|\mathbf{v}\| \sqrt{1 - \cos^2\theta}$$
+                  两边平方并利用点积定义 $\mathbf{u} \cdot \mathbf{v} = \|\mathbf{u}\| \|\mathbf{v}\| \cos\theta$：
+                  $$\text{Area}^2 = \|\mathbf{u}\|^2 \|\mathbf{v}\|^2 - (\mathbf{u} \cdot \mathbf{v})^2$$
+                  代入坐标展开计算：
+                  $$= (x_1^2 + y_1^2)(x_2^2 + y_2^2) - (x_1 x_2 + y_1 y_2)^2$$
+                  $$= (x_1^2 x_2^2 + x_1^2 y_2^2 + y_1^2 x_2^2 + y_1^2 y_2^2) - (x_1^2 x_2^2 + 2x_1 x_2 y_1 y_2 + y_1^2 y_2^2)$$
+                  $$= x_1^2 y_2^2 - 2x_1 x_2 y_1 y_2 + y_1^2 x_2^2 = (x_1 y_2 - x_2 y_1)^2$$
+                  开方即得：$\text{Area} = |x_1 y_2 - x_2 y_1|$。
+                </p>
+              </div>
+
+              <!-- Derivation 2 -->
+              <div style="background: rgba(192, 132, 252, 0.05); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">🔮 视角二：外接矩形“割补法”</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7;">
+                  设向量位于第一象限，用一个宽为 $x_1 + x_2$、高为 $y_1 + y_2$ 的外接大矩形包围该平行四边形：
+                  $$S_{\text{大矩形}} = (x_1 + x_2)(y_1 + y_2) = x_1 y_1 + x_1 y_2 + x_2 y_1 + x_2 y_2$$
+                  周围多余面积包含：
+                  <ul style="margin-left: 1.2rem; font-size: 0.84rem;">
+                    <li>两个底 $x_1$ 高 $y_1$ 的三角形：面积共 $x_1 y_1$</li>
+                    <li>两个底 $x_2$ 高 $y_2$ 的三角形：面积共 $x_2 y_2$</li>
+                    <li>两个宽 $x_2$ 高 $y_1$ 的小矩形：面积共 $2x_2 y_1$</li>
+                  </ul>
+                  大矩形减去多余区域：
+                  $$\text{Area} = S_{\text{大矩形}} - (x_1 y_1 + x_2 y_2 + 2x_2 y_1) = x_1 y_2 - x_2 y_1$$
+                </p>
+              </div>
+            </div>
+
+            <!-- Derivation 3 -->
+            <div style="margin-top: 1rem; background: rgba(52, 211, 153, 0.05); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 8px; padding: 1.25rem;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🌱 视角三：极坐标极角差展开</h4>
+              <p style="font-size: 0.88rem; line-height: 1.7;">
+                设 $\mathbf{u} = (r_1 \cos\alpha, r_1 \sin\alpha)$，$\mathbf{v} = (r_2 \cos\beta, r_2 \sin\beta)$，两向量夹角 $\theta = \beta - \alpha$：
+                $$\text{Area} = r_1 r_2 \sin(\beta - \alpha) = r_1 r_2 (\sin\beta \cos\alpha - \cos\beta \sin\alpha)$$
+                $$= (r_1 \cos\alpha)(r_2 \sin\beta) - (r_1 \sin\alpha)(r_2 \cos\beta) = x_1 y_2 - y_1 x_2$$
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Geometric Intuition of Subtraction -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">深度几何直觉与图解</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 减法项 $x_1 y_2 - x_2 y_1$ 的 4 大深层几何直觉与图形辅助解析</h2>
+          </div>
+          <div class="card-body">
+            <p>为什么行列式中必须是<strong>“两项相减”</strong>？这个减法到底在几何上减去了什么？以下通过几何图解与 4 种视角为你逐一揭秘：</p>
+
+            <!-- 4 Intuitions with SVG Illustrations -->
+            <div style="display: flex; flex-direction: column; gap: 2rem; margin-top: 1.5rem;">
+              
+              <!-- Intuition 1: Exact Geometric Dissection -->
+              <div style="background: rgba(56, 189, 248, 0.04); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-blue); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                  <span>💡 直觉 1：外接矩形严密割补 —— 为什么结果刚好是 $x_1 y_2 - x_2 y_1$？</span>
+                </h4>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
+                  <!-- Text -->
+                  <div style="flex: 1 1 340px; font-size: 0.9rem; line-height: 1.8;">
+                    <p>
+                      设 $\mathbf{u} = (x_1, y_1)$，$\mathbf{v} = (x_2, y_2)$。右图展示了<strong>严格按坐标比例绘制的外接大矩形割补剖分</strong>（宽 $x_1+x_2$，高 $y_1+y_2$）：<br>
+                      • <strong>大矩形总面积</strong>：$S_{\text{总}} = (x_1 + x_2)(y_1 + y_2) = x_1 y_1 + x_1 y_2 + x_2 y_1 + x_2 y_2$；<br>
+                      • <strong>两对直角三角形（蓝色与紫色）</strong>：
+                        上下两个底 $x_1$ 高 $y_1$ 的三角形面积和为 $x_1 y_1$；
+                        左右两个底 $x_2$ 高 $y_2$ 的三角形面积和为 $x_2 y_2$；<br>
+                      • <strong>两个角部小矩形（红色区域）</strong>：
+                        左上角与右下角各有一个宽 $x_2$ 高 $y_1$ 的小矩形，面积共 $2 x_2 y_1$。<br>
+                      • <strong>大矩形减去所有周围区域</strong>：
+                        $$\text{平行四边形面积} = S_{\text{总}} - (x_1 y_1 + x_2 y_2 + 2 x_2 y_1) = x_1 y_2 - x_2 y_1$$
+                      👉 <strong>减法本质</strong>：交叉项 $x_2 y_1$ 在外围出现了 2 次，大矩形中只有 1 次，相减后留下 $-x_2 y_1$！
+                    </p>
+                  </div>
+
+                  <!-- SVG Diagram 1 (Mathematically Exact!) -->
+                  <div style="flex: 0 0 320px; text-align: center;">
+                    <svg width="310" height="230" viewBox="0 0 310 230" style="background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                      <!-- Grid / Axes -->
+                      <line x1="30" y1="190" x2="290" y2="190" stroke="#334155" stroke-width="1"/>
+                      <line x1="30" y1="190" x2="30" y2="20" stroke="#334155" stroke-width="1"/>
+                      <text x="295" y="194" fill="#64748b" font-size="10">X</text>
+                      <text x="30" y="14" fill="#64748b" font-size="10">Y</text>
+
+                      <!-- Bounding Box (x1+x2) * (y1+y2) -->
+                      <!-- O=(40,190), u=(150,155) [dx=110,dy=35], v=(75,70) [dx=35,dy=120], C=(185,35) [dx=145,dy=155] -->
+                      <rect x="40" y="35" width="145" height="155" fill="none" stroke="#475569" stroke-dasharray="3,3" stroke-width="1.2"/>
+                      <text x="112" y="28" fill="#94a3b8" font-size="10" text-anchor="middle">外接矩形 (x₁+x₂)(y₁+y₂)</text>
+
+                      <!-- 1. Bottom Triangle (x1 * y1 / 2) -->
+                      <polygon points="40,190 150,190 150,155" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1"/>
+                      <text x="115" y="180" fill="#38bdf8" font-size="8.5">½ x₁y₁</text>
+
+                      <!-- 2. Top Triangle (x1 * y1 / 2) -->
+                      <polygon points="75,70 75,35 185,35" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1"/>
+                      <text x="110" y="52" fill="#38bdf8" font-size="8.5">½ x₁y₁</text>
+
+                      <!-- 3. Left Triangle (x2 * y2 / 2) -->
+                      <polygon points="40,190 40,70 75,70" fill="rgba(192, 132, 252, 0.25)" stroke="#c084fc" stroke-width="1"/>
+                      <text x="52" y="130" fill="#c084fc" font-size="8.5">½ x₂y₂</text>
+
+                      <!-- 4. Right Triangle (x2 * y2 / 2) -->
+                      <polygon points="150,155 185,155 185,35" fill="rgba(192, 132, 252, 0.25)" stroke="#c084fc" stroke-width="1"/>
+                      <text x="170" y="105" fill="#c084fc" font-size="8.5">½ x₂y₂</text>
+
+                      <!-- 5. Top-Left Corner Rect (x2 * y1) -->
+                      <rect x="40" y="35" width="35" height="35" fill="rgba(244, 63, 94, 0.35)" stroke="#f43f5e" stroke-width="1.2"/>
+                      <text x="57" y="56" fill="#f43f5e" font-size="8.5" font-weight="bold" text-anchor="middle">x₂y₁</text>
+
+                      <!-- 6. Bottom-Right Corner Rect (x2 * y1) -->
+                      <rect x="150" y="155" width="35" height="35" fill="rgba(244, 63, 94, 0.35)" stroke="#f43f5e" stroke-width="1.2"/>
+                      <text x="167" y="176" fill="#f43f5e" font-size="8.5" font-weight="bold" text-anchor="middle">x₂y₁</text>
+
+                      <!-- Center Net Parallelogram -->
+                      <polygon points="40,190 150,155 185,35 75,70" fill="rgba(52, 211, 153, 0.35)" stroke="#34d399" stroke-width="2"/>
+                      <text x="112" y="115" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">平行四边形</text>
+                      <text x="112" y="129" fill="#34d399" font-size="9.5" font-weight="bold" text-anchor="middle">x₁y₂ - x₂y₁</text>
+
+                      <!-- Vector Arrows -->
+                      <!-- Vector u -->
+                      <line x1="40" y1="190" x2="150" y2="155" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+                      <text x="100" y="162" fill="#38bdf8" font-size="10" font-weight="bold">u(x₁, y₁)</text>
+
+                      <!-- Vector v -->
+                      <line x1="40" y1="190" x2="75" y2="70" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+                      <text x="35" y="100" fill="#c084fc" font-size="10" font-weight="bold">v(x₂, y₂)</text>
+
+                      <!-- Dimension Labels -->
+                      <text x="95" y="205" fill="#38bdf8" font-size="9">x₁</text>
+                      <text x="167" y="205" fill="#f43f5e" font-size="9">x₂</text>
+                      <text x="22" y="130" fill="#c084fc" font-size="9">y₂</text>
+                      <text x="22" y="52" fill="#f43f5e" font-size="9">y₁</text>
+
+                      <defs>
+                        <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                        </marker>
+                        <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
+                        </marker>
+                      </defs>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Intuition 2 -->
+              <div style="background: rgba(192, 132, 252, 0.04); border: 1px solid rgba(192, 132, 252, 0.2); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-purple); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                  <span>💡 直觉 2：两个向量“斜率坡度差”的量度（张开分离度）</span>
+                </h4>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
+                  <!-- Text -->
+                  <div style="flex: 1 1 320px; font-size: 0.9rem; line-height: 1.8;">
+                    <p>
+                      计算两向量从原点出发的斜率坡度：
+                      $k_1 = \frac{y_1}{x_1}$（向量 $\mathbf{u}$ 的倾斜度），$k_2 = \frac{y_2}{x_2}$（向量 $\mathbf{v}$ 的倾斜度）。<br>
+                      观察两者的<strong>斜率之差</strong>：
+                      $$k_2 - k_1 = \frac{y_2}{x_2} - \frac{y_1}{x_1} = \frac{x_1 y_2 - x_2 y_1}{x_1 x_2} \implies x_1 x_2 (k_2 - k_1) = x_1 y_2 - x_2 y_1$$
+                      • <strong>减法衡量张角大小</strong>：当 $k_2 = k_1$（两向量斜率完全一致，共线重叠）时，减法结果 $x_1 y_2 - x_2 y_1 = 0$，面积被彻底减光退化为 0；<br>
+                      • 坡度差越大，平行四边形张得越开，面积越大。
+                    </p>
+                  </div>
+
+                  <!-- SVG Diagram 2 -->
+                  <div style="flex: 0 0 300px; text-align: center;">
+                    <svg width="290" height="200" viewBox="0 0 290 200" style="background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                      <!-- Axes -->
+                      <line x1="30" y1="170" x2="270" y2="170" stroke="#475569" stroke-width="1"/>
+                      <line x1="30" y1="170" x2="30" y2="20" stroke="#475569" stroke-width="1"/>
+
+                      <!-- Sector / Angle Arc -->
+                      <path d="M 120 170 A 90 90 0 0 0 95 105" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3,3"/>
+                      <text x="130" y="140" fill="#fbbf24" font-size="11" font-weight="bold">坡度差 (k₂ - k₁)</text>
+
+                      <!-- Vector u line (k1) -->
+                      <line x1="30" y1="170" x2="230" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+                      <text x="235" y="125" fill="#38bdf8" font-size="11" font-weight="bold">u (斜率 k₁)</text>
+
+                      <!-- Vector v line (k2) -->
+                      <line x1="30" y1="170" x2="130" y2="40" stroke="#c084fc" stroke-width="2.5"/>
+                      <text x="135" y="38" fill="#c084fc" font-size="11" font-weight="bold">v (斜率 k₂)</text>
+
+                      <!-- Collinear Warning Note -->
+                      <rect x="45" y="160" width="130" height="24" fill="rgba(244, 63, 94, 0.2)" rx="4"/>
+                      <text x="110" y="176" fill="#f43f5e" font-size="9.5" text-anchor="middle">若 k₁ = k₂ ➔ 差值为 0 (退化)</text>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Intuition 3 -->
+              <div style="background: rgba(52, 211, 153, 0.04); border: 1px solid rgba(52, 211, 153, 0.2); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-green); display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                  <span>💡 直觉 3：微积分矢径回路中的“正向扫掠 － 反向回拉”</span>
+                </h4>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: center;">
+                  <!-- Text -->
+                  <div style="flex: 1 1 320px; font-size: 0.9rem; line-height: 1.8;">
+                    <p>
+                      在格林公式（Green's Theorem）与极坐标微积分中，平面闭合区域的面积等于矢径 $\mathbf{r}=(x, y)$ 沿边界扫过的微元线积分：
+                      $$A = \frac{1}{2} \oint (x dy - y dx)$$
+                      对平行四边形边界运动离散化：<br>
+                      • <strong>$+x_1 y_2$</strong>：沿底边水平跨度 $x_1$ 配合对边垂直上升 $y_2$，逆时针扫出了正向面积；<br>
+                      • <strong>$-x_2 y_1$</strong>：返回原点时垂直位移 $y_1$ 配合水平位移 $x_2$ 产生顺时针反向回拉补偿；<br>
+                      • <strong>两式相减，正是闭合曲线内部净圈定的有向真实几何面积。</strong>
+                    </p>
+                  </div>
+
+                  <!-- SVG Diagram 3 -->
+                  <div style="flex: 0 0 300px; text-align: center;">
+                    <svg width="290" height="200" viewBox="0 0 290 200" style="background:#090d16; border-radius:6px; border:1px solid var(--border-color);">
+                      <!-- Closed Path with arrows -->
+                      <!-- O -> u -->
+                      <line x1="40" y1="160" x2="180" y2="160" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+                      <!-- u -> u+v -->
+                      <line x1="180" y1="160" x2="240" y2="50" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+                      <!-- u+v -> v -->
+                      <line x1="240" y1="50" x2="100" y2="50" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrow-red)"/>
+                      <!-- v -> O -->
+                      <line x1="100" y1="50" x2="40" y2="160" stroke="#c084fc" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+                      <!-- Center Area -->
+                      <polygon points="40,160 180,160 240,50 100,50" fill="rgba(52, 211, 153, 0.15)"/>
+                      
+                      <!-- Rotation Flow Symbol -->
+                      <path d="M 130 95 A 20 20 0 1 0 150 115" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arrow-amber)"/>
+                      <text x="140" y="105" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">逆时针 ∮</text>
+
+                      <text x="140" y="180" fill="#38bdf8" font-size="10">+x₁y₂ (正向扫掠)</text>
+                      <text x="170" y="40" fill="#f43f5e" font-size="10">-x₂y₁ (反向回拉)</text>
+
+                      <defs>
+                        <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#34d399"/>
+                        </marker>
+                        <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#f43f5e"/>
+                        </marker>
+                        <marker id="arrow-amber" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                          <path d="M 0 0 L 10 5 L 0 10 z" fill="#fbbf24"/>
+                        </marker>
+                      </defs>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Interactive 2D Subtraction Visualizer -->
+            <div style="margin-top: 2rem; background: #090d16; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <h4 style="color: var(--accent-amber); font-size: 1.05rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🎮 交互实验：动态调节向量，实时观察割补矩形与平行四边形面积</span>
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+                💡 拖动下方滑块调节 $\mathbf{u}(x_1, y_1)$ 与 $\mathbf{v}(x_2, y_2)$。外接大矩形框、4 个直角三角形与 2 个红色小矩形 $(x_2 y_1)$ 将实时联动重绘！
+              </p>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; align-items: center;">
+                <canvas id="canvas-subtraction-2d" width="480" height="320" class="interactive-canvas" style="width: 100%; max-width: 480px; height: 320px; border-radius: 8px;"></canvas>
+
+                <!-- Live Dashboard -->
+                <div style="flex: 1 1 280px; background: rgba(30, 41, 59, 0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 0.88rem; line-height: 1.7;">
+                  <div style="color: var(--text-main); font-weight: 600;">
+                    📦 外接大矩形 $(x_1+x_2)(y_1+y_2)$: <b id="val-box-total">0.00</b>
+                  </div>
+                  <div style="color: var(--accent-blue); font-size: 0.82rem; margin-top: 0.2rem;">
+                    • 4 个直角三角形和 $(x_1 y_1 + x_2 y_2)$: <b id="val-box-triangles">0.00</b>
+                  </div>
+                  <div style="color: var(--accent-rose); font-size: 0.82rem;">
+                    • 2 个角部小矩形 $2(x_2 y_1)$: <b id="val-box-loss">0.00</b>
+                  </div>
+                  <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); color: var(--accent-green); font-size: 1rem; font-weight: bold;">
+                    🟩 平行四边形面积 ($x_1 y_2 - x_2 y_1$): <br><span id="val-box-net" style="font-size: 1.1rem;">0.00</span>
+                  </div>
+
+                  <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 0.5rem;">
+                    <div style="margin-bottom: 0.25rem;"><strong style="color:var(--accent-blue);">u(x₁, y₁):</strong> x₁=<span id="val-u-x">3.0</span>, y₁=<span id="val-u-y">0.8</span></div>
+                    <div><input type="range" id="slide-u-x" min="1.0" max="3.5" step="0.1" value="3.0" style="width:45%;"> <input type="range" id="slide-u-y" min="0.2" max="2.0" step="0.1" value="0.8" style="width:45%;"></div>
+                    <div style="margin: 0.5rem 0 0.25rem;"><strong style="color:var(--accent-purple);">v(x₂, y₂):</strong> x₂=<span id="val-v-x">1.0</span>, y₂=<span id="val-v-y">2.5</span></div>
+                    <div><input type="range" id="slide-v-x" min="0.2" max="2.5" step="0.1" value="1.0" style="width:45%;"> <input type="range" id="slide-v-y" min="1.0" max="3.5" step="0.1" value="2.5" style="width:45%;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <script>
+        // Interactive 2D Subtraction Canvas Visualizer
+        (function() {
+          const canvas = document.getElementById('canvas-subtraction-2d');
+          if (!canvas) return;
+          const ctx = canvas.getContext('2d');
+
+          let ux = 3.0, uy = 0.5;
+          let vx = 1.0, vy = 2.5;
+
+          const sUx = document.getElementById('slide-u-x');
+          const sUy = document.getElementById('slide-u-y');
+          const sVx = document.getElementById('slide-v-x');
+          const sVy = document.getElementById('slide-v-y');
+
+          function syncSliders() {
+            if (sUx) ux = parseFloat(sUx.value);
+            if (sUy) uy = parseFloat(sUy.value);
+            if (sVx) vx = parseFloat(sVx.value);
+            if (sVy) vy = parseFloat(sVy.value);
+
+            document.getElementById('val-u-x').textContent = ux.toFixed(1);
+            document.getElementById('val-u-y').textContent = uy.toFixed(1);
+            document.getElementById('val-v-x').textContent = vx.toFixed(1);
+            document.getElementById('val-v-y').textContent = vy.toFixed(1);
+
+            render();
+          }
+
+          [sUx, sUy, sVx, sVy].forEach(s => {
+            if (s) s.addEventListener('input', syncSliders);
+          });
+
+          function render() {
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            const ox = 45, oy = h - 35;
+            const scale = 55; // 1 unit = 55px
+
+            const pO = { x: ox, y: oy };
+            const pU = { x: ox + ux * scale, y: oy - uy * scale };
+            const pV = { x: ox + vx * scale, y: oy - vy * scale };
+            const pUV = { x: ox + (ux + vx) * scale, y: oy - (uy + vy) * scale };
+
+            // Calculations
+            const totalBox = (ux + vx) * (uy + vy);
+            const triangles = ux * uy + vx * vy;
+            const cornerLoss = 2 * (vx * uy);
+            const netArea = ux * vy - vx * uy;
+
+            document.getElementById('val-box-total').textContent = totalBox.toFixed(2);
+            document.getElementById('val-box-triangles').textContent = triangles.toFixed(2);
+            document.getElementById('val-box-loss').textContent = cornerLoss.toFixed(2);
+            document.getElementById('val-box-net').textContent = `${(ux*vy).toFixed(2)} - ${(vx*uy).toFixed(2)} = ${netArea.toFixed(2)}`;
+
+            // 1. Draw Axes
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.moveTo(ox - 15, oy); ctx.lineTo(w - 15, oy);
+            ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 15);
+            ctx.stroke();
+
+            // 2. Draw Bounding Box (x1+x2) * (y1+y2)
+            const boxW = (ux + vx) * scale;
+            const boxH = (uy + vy) * scale;
+            ctx.strokeStyle = '#475569';
+            ctx.setLineDash([4, 4]);
+            ctx.lineWidth = 1.2;
+            ctx.strokeRect(ox, oy - boxH, boxW, boxH);
+            ctx.setLineDash([]);
+
+            // 3. Draw 4 Right Triangles
+            // Triangle 1: Bottom (0,0) -> (x1,0) -> (x1,y1)
+            ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+            ctx.beginPath();
+            ctx.moveTo(ox, oy); ctx.lineTo(ox + ux * scale, oy); ctx.lineTo(pU.x, pU.y);
+            ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#38bdf8'; ctx.stroke();
+
+            // Triangle 2: Top (x2, y2) -> (x2, y1+y2) -> (x1+x2, y1+y2)
+            ctx.beginPath();
+            ctx.moveTo(pV.x, pV.y); ctx.lineTo(ox + vx * scale, oy - boxH); ctx.lineTo(pUV.x, pUV.y);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            // Triangle 3: Left (0,0) -> (0, y2) -> (x2, y2)
+            ctx.fillStyle = 'rgba(192, 132, 252, 0.2)';
+            ctx.beginPath();
+            ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - vy * scale); ctx.lineTo(pV.x, pV.y);
+            ctx.closePath(); ctx.fill(); ctx.strokeStyle = '#c084fc'; ctx.stroke();
+
+            // Triangle 4: Right (x1, y1) -> (x1+x2, y1) -> (x1+x2, y1+y2)
+            ctx.beginPath();
+            ctx.moveTo(pU.x, pU.y); ctx.lineTo(ox + boxW, oy - uy * scale); ctx.lineTo(pUV.x, pUV.y);
+            ctx.closePath(); ctx.fill(); ctx.stroke();
+
+            // 4. Draw 2 Corner Rectangles (x2 * y1 each)
+            ctx.fillStyle = 'rgba(244, 63, 94, 0.35)';
+            ctx.strokeStyle = '#f43f5e';
+            ctx.lineWidth = 1.2;
+            // Top-left corner rect: [0, x2] * [y2, y1+y2]
+            ctx.fillRect(ox, oy - boxH, vx * scale, uy * scale);
+            ctx.strokeRect(ox, oy - boxH, vx * scale, uy * scale);
+            // Bottom-right corner rect: [x1, x1+x2] * [0, y1]
+            ctx.fillRect(ox + ux * scale, oy - uy * scale, vx * scale, uy * scale);
+            ctx.strokeRect(ox + ux * scale, oy - uy * scale, vx * scale, uy * scale);
+
+            // 5. Draw Central Net Parallelogram
+            ctx.beginPath();
+            ctx.moveTo(pO.x, pO.y);
+            ctx.lineTo(pU.x, pU.y);
+            ctx.lineTo(pUV.x, pUV.y);
+            ctx.lineTo(pV.x, pV.y);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(52, 211, 153, 0.3)';
+            ctx.fill();
+            ctx.strokeStyle = '#34d399';
+            ctx.lineWidth = 2.2;
+            ctx.stroke();
+
+            // 6. Draw Vectors u & v
+            drawArrow(ctx, pO, pU, '#38bdf8', 'u (x₁, y₁)');
+            drawArrow(ctx, pO, pV, '#c084fc', 'v (x₂, y₂)');
+          }
+
+          function drawArrow(ctx, from, to, color, label) {
+            ctx.strokeStyle = color;
+            ctx.fillStyle = color;
+            ctx.lineWidth = 2.5;
+
+            ctx.beginPath();
+            ctx.moveTo(from.x, from.y);
+            ctx.lineTo(to.x, to.y);
+            ctx.stroke();
+
+            const angle = Math.atan2(to.y - from.y, to.x - from.x);
+            const headLen = 8;
+            ctx.beginPath();
+            ctx.moveTo(to.x, to.y);
+            ctx.lineTo(to.x - headLen * Math.cos(angle - Math.PI / 6), to.y - headLen * Math.sin(angle - Math.PI / 6));
+            ctx.lineTo(to.x - headLen * Math.cos(angle + Math.PI / 6), to.y - headLen * Math.sin(angle + Math.PI / 6));
+            ctx.closePath();
+            ctx.fill();
+
+            if (label) {
+              ctx.font = 'bold 11px Inter, sans-serif';
+              ctx.fillText(label, to.x + 6, to.y - 4);
+            }
+          }
+
+          render();
+        })();
+        </script>
+
+        <!-- Section 3: Normal Vector & Cofactors Derivation -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">代数与几何统一</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 三维法向量构造与代数余子式的严密消元证明</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              设三维空间中底面由 $\mathbf{v}_2 = (x_2, y_2, z_2)$ 与 $\mathbf{v}_3 = (x_3, y_3, z_3)$ 张成。底面法向量 $\mathbf{n} = (n_1, n_2, n_3)$ 必须同时垂直于这两个向量：
+            </p>
+            <div style="background: #0f172a; padding: 0.75rem 1.25rem; border-radius: 6px; font-family: var(--font-mono); margin: 1rem 0;">
+              ① $\mathbf{v}_2 \cdot \mathbf{n} = x_2 n_1 + y_2 n_2 + z_2 n_3 = 0$<br>
+              ② $\mathbf{v}_3 \cdot \mathbf{n} = x_3 n_1 + y_3 n_2 + z_3 n_3 = 0$
+            </div>
+
+            <p style="line-height: 1.8;">
+              <strong>消元求解过程：</strong><br>
+              将 ① 乘 $y_3$、② 乘 $y_2$ 两式相减消去 $n_2$：
+              $$(x_2 y_3 - x_3 y_2) n_1 = (y_2 z_3 - z_2 y_3) n_3$$
+              将 ① 乘 $x_3$、② 乘 $x_2$ 两式相减消去 $n_1$：
+              $$(x_2 y_3 - x_3 y_2) n_2 = -(x_2 z_3 - z_2 x_3) n_3$$
+              为了得到不含分母的最简整式解，令 $n_3 = x_2 y_3 - x_3 y_2 = C_{13}$，即可得到解：
+            </p>
+            $$n_1 = y_2 z_3 - z_2 y_3 = C_{11}, \quad n_2 = -(x_2 z_3 - z_2 x_3) = C_{12}, \quad n_3 = x_2 y_3 - x_3 y_2 = C_{13}$$
+            $$\implies \mathbf{n} = \mathbf{v}_2 \times \mathbf{v}_3 = \begin{pmatrix} C_{11} \\ C_{12} \\ C_{13} \end{pmatrix}$$
+          </div>
+        </div>
+
+        <!-- Section 4: Why Norm is Locked to Base Area -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">模长之谜</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 为什么算出的法向量模长必定等于底面积？</h2>
+          </div>
+          <div class="card-body">
+            <div class="intuition-box" style="background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); padding: 1.25rem; border-radius: 4px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">⚖️ 体积公式中的完美代数抵消</h4>
+              <p style="line-height: 1.8;">
+                平行六面体体积等于底面积乘高：$V = S_{\text{base}} \times h$。<br>
+                高 $h$ 是顶向量 $\mathbf{v}_1$ 向单位法向量 $\hat{\mathbf{n}} = \frac{\mathbf{n}}{\|\mathbf{n}\|}$ 的投影长度：$h = \mathbf{v}_1 \cdot \frac{\mathbf{n}}{\|\mathbf{n}\|}$。<br>
+                因此：
+                $$V = S_{\text{base}} \cdot \left( \mathbf{v}_1 \cdot \frac{\mathbf{n}}{\|\mathbf{n}\|} \right) = \mathbf{v}_1 \cdot \left( \frac{S_{\text{base}}}{\|\mathbf{n}\|} \mathbf{n} \right)$$
+                <strong>为了让展开式 $\det(A) = \mathbf{v}_1 \cdot \mathbf{n} = a_{11}C_{11} + a_{12}C_{12} + a_{13}C_{13}$ 能够直接成立，系数必须满足 $\frac{S_{\text{base}}}{\|\mathbf{n}\|} = 1$，即 $\|\mathbf{n}\| \equiv S_{\text{base}}$！</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 5: The Mystery of n3 = x2y3 - x3y2 and De Gua Theorem -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">高维几何</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 选取 $n_3 = x_2 y_3 - x_3 y_2$ 的深层玄机与德古阿定理</h2>
+          </div>
+          <div class="card-body">
+            <p>看似消元时挑选 $n_3 = x_2 y_3 - x_3 y_2$ 只是为了去分母，但实际上它在背后触发并锁定了三大深层几何法则：</p>
+
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-blue);">1️⃣ 边界条件锚定（平躺真实面积）：</strong><br>
+                当底面平躺在 X-Y 面上时（$z_2=0, z_3=0$），底面实际总面积就是 $S_{xy} = x_2 y_3 - x_3 y_2$。此时法向量只能垂直沿 Z 轴朝上 $(0, 0, n_3)$。为了满足 $\|\mathbf{n}\| = S_{\text{base}}$，$n_3$ 必须且只能等于 $x_2 y_3 - x_3 y_2$！
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-green);">2️⃣ 空间手性（定向）绑定：</strong><br>
+                $x_2 y_3 - x_3 y_2 > 0$ 严格对应从 $\mathbf{v}_2$ 到 $\mathbf{v}_3$ 的逆时针旋转，计算出的 $n_3 > 0$ 严格保证了法向量指向 Z 轴正方向，自然绑定了右手定则。
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-amber);">3️⃣ 德古阿定理（三维空间勾股定理）：</strong><br>
+                $C_{11}, C_{12}, C_{13}$ 的真实几何身份正是底面在 Y-Z、X-Z、X-Y 坐标面上的<strong>投影面积</strong> $S_{yz}, S_{xz}, S_{xy}$。<br>
+                由空间勾股定理：倾斜底面的总面积平方等于三个正交投影面积的平方和：
+                $$S_{\text{base}}^2 = S_{yz}^2 + S_{xz}^2 + S_{xy}^2 = C_{11}^2 + C_{12}^2 + C_{13}^2 = \|\mathbf{n}\|^2$$
+                两边开方即可严格证明：$\|\mathbf{n}\| = S_{\text{base}}$！
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch3_1_determinant.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">返回主课</div>
+                <div style="font-weight: 600;">Ch 3.1: 行列式几何体积与余子式展开</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回目录
+            </a>
+          </div>
+          <div>
+            <a href="ch3_2_cramer_applications.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 3.2: 伴随矩阵求逆与克莱姆法则</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>
