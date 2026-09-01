@@ -266,13 +266,13 @@
   </div>
   <div class="card-body">
     <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 基底 (Basis) 的双重定义</h4>
+      <h4 style="color: var(--accent-blue);">📐 基底 (Basis) 的两大黄金条件与唯一坐标定理</h4>
       <p>子空间 $V$ 的一组向量集合 $\mathcal{B} = \{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 称为 $V$ 的一组<strong>基底 (Basis)</strong>，当且仅当它同时满足：</p>
       <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li>$\mathcal{B}$ 是<strong>线性无关</strong>的。</li>
-        <li>$\mathcal{B}$ 能够<strong>张成整个空间</strong>：$\text{Span}(\mathcal{B}) = V$。</li>
+        <li><strong>高效性（无冗余）</strong>：$\mathcal{B}$ 是<strong>线性无关</strong>的。</li>
+        <li><strong>完备性（全覆盖）</strong>：$\mathcal{B}$ 能够<strong>张成整个空间</strong>：$\text{Span}(\mathcal{B}) = V$。</li>
       </ol>
-      <p style="margin-top: 0.5rem;">基底中向量的个数 $k$ 称为子空间的<strong>维数 (Dimension)</strong>，记作 $\dim(V) = k$。</p>
+      <p style="margin-top: 0.5rem;"><strong>唯一坐标定理：</strong> $\mathcal{B}$ 是基底，当且仅当对于 $V$ 中任意向量 $\mathbf{v}$，存在<strong>唯一一组</strong>标量系数使得 $\mathbf{v} = \sum c_i \mathbf{v}_i$。基底中向量的个数 $k$ 恒定不变，称为<strong>维数 (Dimension)</strong>，记作 $\dim(V) = k$。</p>
     </div>
   </div>
 </div>
@@ -284,15 +284,20 @@
   </div>
   <div class="card-body">
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 秩-零度定理 (Rank-Nullity Theorem)</h4>
-      <p>对于任意 $m \times n$ 矩阵 $A$：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$\text{Rank}(A) + \text{Nullity}(A) = n \quad (\text{矩阵总列数})$$
-      </div>
-      <p><strong>直观理解：</strong> 矩阵输入的 $n$ 维自由度被完全拆分成两部分：一部分坍缩在零空间中（$\text{Nullity}(A)$），另一部分成功输出到列空间中（$\text{Rank}(A)$），能量守恒！</p>
+      <h4 style="color: var(--accent-purple);">👑 基定理 (Basis Theorem) 与基扩展定理</h4>
+      <ul style="margin-left: 1.5rem; line-height: 1.8;">
+        <li><strong>基定理：</strong> 设 $\dim(V) = n$。在 $V$ 中取任意 $n$ 个向量：若它们<strong>线性无关</strong>，则它们<strong>自动张成 $V$</strong>（必为基）；反之，若它们<strong>张成 $V$</strong>，则它们<strong>自动线性无关</strong>（必为基）！只需检验其中一个条件！</li>
+        <li><strong>基扩展定理 (Basis Extension)：</strong> $V$ 中的任意线性无关向量组都可以通过添加新向量扩充为 $V$ 的一组完整基底。</li>
+      </ul>
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>对称性神设定理：</strong>$$\text{Rank}(A) = \text{Rank}(A^T)$$</p>
-      <p>矩阵的行秩恒等于列秩！无论矩阵如何不对称，行空间与列空间的维度永远奇迹般地完全相等！</p>
+      <h4 style="color: var(--accent-purple);">👑 秩-零度定理 (Rank-Nullity Theorem)</h4>
+      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
+        $$\text{Rank}(A) + \text{Nullity}(A) = n \quad (\text{矩阵总列数 / 输入空间维度})$$
+      </div>
+      <p><strong>能量守恒视角：</strong> 矩阵输入的 $n$ 维自由度被完全拆分成两部分：一部分坍缩在零空间中（$\text{Nullity}(A)$），另一部分成功输出到列空间中（$\text{Rank}(A)$）！</p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+      <p><strong>行秩等于列秩定理：</strong>$$\text{Rank}(A) = \text{Rank}(A^T)$$</p>
+      <p>不论长瘦还是扁胖矩阵，行空间与列空间的维度永远奇迹般地完全相等！</p>
     </div>
   </div>
 </div>
@@ -307,7 +312,7 @@
       <h4 style="color: var(--accent-green);">判定 $\mathbf{v}_1 = \begin{bmatrix}1\\1\\0\end{bmatrix}, \mathbf{v}_2 = \begin{bmatrix}0\\1\\1\end{bmatrix}, \mathbf{v}_3 = \begin{bmatrix}1\\0\\1\end{bmatrix}$ 是否为 $\mathbb{R}^3$ 的一组基</h4>
       <p>计算由这 3 个向量构成的矩阵行列式：</p>
       $$\det \begin{bmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{bmatrix} = 1(1 - 0) + 1(1 - 0) = 2 \neq 0$$
-      <p>行列式不为 0 $\implies$ 3 个向量线性无关 $\implies$ 构成 $\mathbb{R}^3$ 的一组基底！</p>
+      <p>行列式不为 0 $\implies$ 3 个向量线性无关 $\implies$ 由基定理，它们构成 $\mathbb{R}^3$ 的一组基底！</p>
     </div>
   </div>
 </div>
@@ -315,7 +320,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 验证基底与秩定理</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 验证基底与秩-零度定理</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np

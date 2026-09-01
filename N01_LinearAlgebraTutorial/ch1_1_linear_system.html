@@ -312,8 +312,63 @@
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
+    <span class="badge" style="background: var(--accent-rose); color: #fff;">对比与鉴别</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. 非线性典型反例深度辨析 (Non-linear Counterexamples)</h2>
+  </div>
+  <div class="card-body">
+    <p>理解一个概念的最佳方式就是观察它的<strong>反面</strong>。以下是初学者最容易混淆的经典非线性反例：</p>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
+        <h4 style="color: var(--accent-rose);">❌ 反例 1：一次函数 $f(x) = ax + b \ (b \neq 0)$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          初中称之为线性函数，但它<strong>破坏齐次性与可加性</strong>：$f(0) = b \neq 0$。$f(x_1 + x_2) = a(x_1+x_2)+b \neq f(x_1)+f(x_2) = a(x_1+x_2)+2b$。它是<strong>仿射变换</strong>。
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
+        <h4 style="color: var(--accent-rose);">❌ 反例 2：二次及高次幂 $f(x) = x^2$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $(u+v)^2 = u^2 + 2uv + v^2 \neq u^2 + v^2$（产生了交叉项 $2uv$），且 $(cu)^2 = c^2 u^2 \neq c u^2$。空间网格发生弯曲！
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
+        <h4 style="color: var(--accent-rose);">❌ 反例 3：三角函数 $f(x) = \sin(x)$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $\sin(u+v) = \sin u \cos v + \cos u \sin v \neq \sin u + \sin v$。例如 $\sin(\pi/2 + \pi/2) = \sin(\pi) = 0 \neq 1 + 1 = 2$。
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
+        <h4 style="color: var(--accent-rose);">❌ 反例 4：指数函数 $f(x) = e^x$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $e^{u+v} = e^u \cdot e^v \neq e^u + e^v$。输入相加变成了输出相乘，完全破坏了叠加原理。
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-cyan); color: #000;">工程应用</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 现实工程中的线性系统应用图景</h2>
+  </div>
+  <div class="card-body">
+    <p>为什么整个现代工程界（电气、机械、控制、通信、AI）都在极力把问题建模为<strong>线性系统</strong>？因为线性系统拥有巨大的计算便利性：输入分解为基底分量，各自响应后直接加权求和！</p>
+    <ul style="margin-left: 1.5rem; line-height: 1.8; margin-top: 0.75rem;">
+      <li><strong>电路系统 (Circuit Analysis)</strong>：基尔霍夫定律与欧姆定律 $V = IR$ 是线性的；RLC 电路的微分方程是线性时不变 (LTI) 系统。</li>
+      <li><strong>机械振动 (Mechanical Vibration)</strong>：胡克定律 $F = -kx$ 与牛顿第二定律 $m\ddot{x} + c\dot{x} + kx = F(t)$ 构成了多自由度线性振动模型。</li>
+      <li><strong>信号处理 (DSP)</strong>：卷积定理与傅里叶变换之所以能成立，根基就在于线性系统的叠加原理。</li>
+    </ul>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算与实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 手把手手算例题与自测题</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 手把手手算例题与自测题</h2>
   </div>
   <div class="card-body">
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
@@ -335,7 +390,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 Python / SymPy 符号化验证线性性</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python / SymPy 符号化验证线性性</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp

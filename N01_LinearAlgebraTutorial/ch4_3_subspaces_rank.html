@@ -262,18 +262,54 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 什么是子空间？三大检验公理</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 什么是子空间？三大检验公理与几何本质</h2>
   </div>
   <div class="card-body">
     <p>设 $V$ 是 $\mathbb{R}^n$ 的子集，若 $V$ 在向量加法与标量乘法下依然保持封闭，则 $V$ 称为 $\mathbb{R}^n$ 的一个<strong>子空间 (Subspace)</strong>：</p>
     
-    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 子空间 3 大检验公理</h4>
-      <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li><strong>包含零向量</strong>：$\mathbf{0} \in V$（必须穿过原点！）。</li>
-        <li><strong>对向量加法封闭</strong>：$\forall \mathbf{u}, \mathbf{v} \in V \implies \mathbf{u} + \mathbf{v} \in V$。</li>
-        <li><strong>对标量数乘封闭</strong>：$\forall \mathbf{u} \in V, c \in \mathbb{R} \implies c \mathbf{u} \in V$。</li>
-      </ol>
+    <!-- SVG Graphic 4.1: Subspace Axioms vs Non-Subspaces -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <!-- Left: Valid Subspace (Line through Origin) -->
+        <g>
+          <line x1="20" y1="180" x2="200" y2="20" stroke="#4ade80" stroke-width="3"/>
+          <circle cx="110" cy="100" r="5" fill="#4ade80"/>
+          <text x="110" y="125" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">原点 (0,0)</text>
+          <text x="110" y="190" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">✅ 合法子空间: 过原点直线</text>
+        </g>
+
+        <line x1="240" y1="20" x2="240" y2="180" stroke="#334155" stroke-dasharray="3"/>
+
+        <!-- Right: Invalid Subspace (Line NOT through Origin) -->
+        <g>
+          <line x1="280" y1="140" x2="460" y2="40" stroke="#ef4444" stroke-width="3"/>
+          <circle cx="370" cy="120" r="4" fill="#94a3b8"/>
+          <text x="370" y="140" fill="#94a3b8" font-size="11" text-anchor="middle">原点 (0,0)</text>
+          <text x="370" y="190" fill="#ef4444" font-size="13" font-weight="bold" text-anchor="middle">❌ 非法子空间: 不过原点!</text>
+        </g>
+      </svg>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+        <h4 style="color: var(--accent-blue);">公理 1：包含零向量</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">$\mathbf{0} \in V$。任何脱离原点锚定的几何体都绝不是向量子空间！</p>
+      </div>
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+        <h4 style="color: var(--accent-green);">公理 2：加法封闭性</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">$\forall \mathbf{u}, \mathbf{v} \in V \implies \mathbf{u} + \mathbf{v} \in V$。平行四边形对角线不逃逸。</p>
+      </div>
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+        <h4 style="color: var(--accent-purple);">公理 3：数乘封闭性</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">$\forall \mathbf{u} \in V, c \in \mathbb{R} \implies c\mathbf{u} \in V$。射线双向无限伸缩依然在集合内。</p>
+      </div>
+    </div>
+
+    <div class="intuition-box" style="padding: 1rem; background: rgba(239, 68, 68, 0.05); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
+      <h4 style="color:var(--accent-rose); margin-bottom:0.4rem;">🧪 典型反例：为什么直线 $x + y = 1$ 不是子空间？</h4>
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+        取 $\mathbf{u} = \begin{bmatrix} 1 \\ 0 \end{bmatrix} \in L$ 和 $\mathbf{v} = \begin{bmatrix} 0 \\ 1 \end{bmatrix} \in L$，相加得 $\mathbf{u} + \mathbf{v} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。代入方程 $1 + 1 = 2 \neq 1$，逃出直线！取 $c=0$ 得 $0\mathbf{u} = \mathbf{0} \notin L$。不过原点的平面/直线称为<strong>仿射子空间 (Affine Subspace)</strong>，而非向量子空间。
+      </p>
     </div>
   </div>
 </div>
@@ -284,30 +320,30 @@
     <h2 class="card-title" style="margin-top: 0.5rem;">2. 矩阵四大基本子空间 (Four Fundamental Subspaces)</h2>
   </div>
   <div class="card-body">
-    <p>对于任意 $m \times n$ 矩阵 $A$，存在 4 个天然相伴的子空间：</p>
+    <p>对于任意 $m \times n$ 矩阵 $A$（秩为 $r$），Gilbert Strang 提出的四大基本子空间勾勒出线性映射的完整几何蓝图：</p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
         <h4 style="color: var(--accent-blue);">1. 列空间 $\text{Col}(A)$</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">位于 $\mathbb{R}^m$ 中，维度为 $r = \text{Rank}(A)$。由 $A$ 的所有列向量张成。</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">位于 $\mathbb{R}^m$ 中，维度为 $r = \text{Rank}(A)$。包含所有可能的输出向量 $A\mathbf{x}$。</p>
       </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-purple);">
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-purple);">
         <h4 style="color: var(--accent-purple);">2. 零空间 $\text{Null}(A)$</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">位于 $\mathbb{R}^n$ 中，维度为 $n - r$。方程 $A\mathbf{x} = \mathbf{0}$ 的所有解的集合。</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">位于 $\mathbb{R}^n$ 中，维度为 $n - r$。被 $A$ 压缩坍塌到零向量的所有输入解集。</p>
       </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-green);">
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-green);">
         <h4 style="color: var(--accent-green);">3. 行空间 $\text{Row}(A) = \text{Col}(A^T)$</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">位于 $\mathbb{R}^n$ 中，维度为 $r$。由 $A$ 的所有行向量转置张成。</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">位于 $\mathbb{R}^n$ 中，维度为 $r$。由 $A$ 的所有行向量转置张成。</p>
       </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-rose);">
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-rose);">
         <h4 style="color: var(--accent-rose);">4. 左零空间 $\text{Null}(A^T)$</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">位于 $\mathbb{R}^m$ 中，维度为 $m - r$。方程 $A^T \mathbf{y} = \mathbf{0}$ 的所有解的集合。</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem;">位于 $\mathbb{R}^m$ 中，维度为 $m - r$。方程 $A^T \mathbf{y} = \mathbf{0}$ 的所有解的集合。</p>
       </div>
     </div>
 
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 正交补关系 (Orthogonal Complements)</h4>
-      $$\text{Row}(A) \perp \text{Null}(A) \quad \text{在 } \mathbb{R}^n \text{ 中互为正交补}$$
-      $$\text{Col}(A) \perp \text{Null}(A^T) \quad \text{在 } \mathbb{R}^m \text{ 中互为正交补}$$
+      <h4 style="color: var(--accent-blue);">📐 正交补大定理 (Orthogonal Complements)</h4>
+      $$\text{Row}(A) \perp \text{Null}(A) \quad \text{在输入空间 } \mathbb{R}^n \text{ 中构成正交直和分解: } \mathbb{R}^n = \text{Row}(A) \oplus \text{Null}(A)$$
+      $$\text{Col}(A) \perp \text{Null}(A^T) \quad \text{在输出空间 } \mathbb{R}^m \text{ 中构成正交直和分解: } \mathbb{R}^m = \text{Col}(A) \oplus \text{Null}(A^T)$$
     </div>
   </div>
 </div>

@@ -262,46 +262,47 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 特征多项式与代数/几何重数</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 特征多项式与代数/几何重数 (AM vs GM)</h2>
   </div>
   <div class="card-body">
-    <p>多项式 $p(\lambda) = \det(A - \lambda I)$ 称为 $A$ 的<strong>特征多项式 (Characteristic Polynomial)</strong>。</p>
+    <p>多项式 $p(\lambda) = \det(A - \lambda I) = (-1)^n \lambda^n + (-1)^{n-1}\text{tr}(A)\lambda^{n-1} + \dots + \det(A)$ 称为 $A$ 的<strong>特征多项式</strong>。</p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
       <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
         <h4 style="color: var(--accent-blue);">代数重数 (Algebraic Multiplicity, AM)</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征多项式中根 $\lambda$ 的重数（代数方程的重根次数）。</p>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征多项式根 $(\lambda - \lambda_i)^{\text{AM}}$ 的代数次数（纯代数根的重数）。</p>
       </div>
       <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-purple);">
         <h4 style="color: var(--accent-purple);">几何重数 (Geometric Multiplicity, GM)</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征空间 $E_\lambda = \text{Null}(A - \lambda I)$ 的维数（线性无关特征向量的个数）。</p>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征空间 $E_\lambda = \text{Null}(A - \lambda I)$ 的维数（实际能贡献的线性无关特征向量个数）。</p>
       </div>
     </div>
-    <div class="theorem-box" style="padding: 1rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <strong>铁律定理：</strong>$$1 \le \text{GM}(\lambda) \le \text{AM}(\lambda)$$
-      <p style="margin-top: 0.5rem;">几何重数永远不会超过代数重数！当且仅当所有特征值的 $\text{GM} = \text{AM}$ 时，矩阵才可对角化。</p>
+    
+    <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color: var(--accent-blue);">📐 重数不等式与亏损矩阵 (Defective Matrix)</h4>
+      $$1 \le \text{GM}(\lambda) \le \text{AM}(\lambda)$$
+      <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
+        若存在某个特征值使得 $\text{GM}(\lambda) < \text{AM}(\lambda)$，则该矩阵缺少足够的线性无关特征向量，称为<strong>亏损矩阵 (Defective Matrix)</strong>，此时矩阵<strong>绝对不可对角化</strong>！<br>
+        <strong>典型亏损剪切矩阵：</strong> $S = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$，特征方程 $(\lambda-1)^2 = 0 \implies \text{AM}=2$。但 $(S-I)\mathbf{v} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}\mathbf{v}=\mathbf{0} \implies v_2=0$，特征空间只有 1 维 $\text{GM}=1 < 2$，因而不可对角化！
+      </p>
     </div>
   </div>
 </div>
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">黄金验算</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 👑 两大黄金验算定理：迹与行列式</h2>
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">黄金定理</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 👑 迹、行列式与凯莱-哈密顿定理 (Cayley-Hamilton)</h2>
   </div>
   <div class="card-body">
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 迹与行列式特征值恒等式</h4>
-      <p>设 $n \times n$ 矩阵 $A$ 的 $n$ 个特征值（计入代数重数）为 $\lambda_1, \lambda_2, \dots, \lambda_n$：</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center; margin: 1rem 0;">
-        <div style="padding: 1rem; background: var(--bg-card); border-radius: 6px;">
-          <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent-green);">$$\sum_{i=1}^n \lambda_i = \text{Tr}(A)$$</div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">特征值之和等于主对角线元素之和（迹 Trace）</div>
-        </div>
-        <div style="padding: 1rem; background: var(--bg-card); border-radius: 6px;">
-          <div style="font-size: 1.25rem; font-weight: bold; color: var(--accent-amber);">$$\prod_{i=1}^n \lambda_i = \det(A)$$</div>
-          <div style="font-size: 0.85rem; color: var(--text-muted);">特征值之积等于矩阵的行列式</div>
-        </div>
+      <h4 style="color: var(--accent-purple);">👑 凯莱-哈密顿定理 (Cayley-Hamilton Theorem)</h4>
+      <p>每个方阵 $A$ 都是其自身特征多项式的零点：</p>
+      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
+        $$p(A) = O$$
       </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">
+        若 $p(\lambda) = \lambda^2 - 7\lambda + 10 = 0$，则必定有 $A^2 - 7A + 10I = O$！两边同乘 $A^{-1}$ 即可快速求逆：$A^{-1} = \frac{1}{10}(7I - A)$。
+      </p>
     </div>
   </div>
 </div>
@@ -316,6 +317,7 @@
       <h4 style="color: var(--accent-green);">检验矩阵 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$（求得特征值 $\lambda_1=5, \lambda_2=2$）</h4>
       <p><strong>1. 迹验算：</strong> $\lambda_1 + \lambda_2 = 5 + 2 = 7$；$\text{Tr}(A) = 4 + 3 = 7$。吻合！</p>
       <p><strong>2. 行列式验算：</strong> $\lambda_1 \cdot \lambda_2 = 5 \cdot 2 = 10$；$\det(A) = 4 \cdot 3 - 1 \cdot 2 = 10$。吻合！</p>
+      <p><strong>3. 凯莱-哈密顿验算：</strong> $A^2 - 7A + 10I = \begin{bmatrix} 18 & 7 \\ 14 & 11 \end{bmatrix} - \begin{bmatrix} 28 & 7 \\ 14 & 21 \end{bmatrix} + \begin{bmatrix} 10 & 0 \\ 0 & 10 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$，完全成立！</p>
     </div>
   </div>
 </div>
@@ -323,16 +325,21 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 验证迹与行列式定理</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 SymPy 验证特征多项式与凯莱-哈密顿定理</h2>
   </div>
   <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp
 
-A = np.array([[4, 1], [2, 3]], dtype=float)
-eigs = np.linalg.eigvals(A)
+A = sp.Matrix([[4, 1], [2, 3]])
+lam = sp.symbols('lambda')
 
-print("特征值之和:", np.sum(eigs), "== 迹 Trace(A):", np.trace(A))
-print("特征值之积:", np.prod(eigs), "== 行列式 det(A):", np.linalg.det(A))</code></pre>
+# 计算特征多项式
+char_poly = A.charpoly(lam)
+print("特征多项式:", char_poly.as_expr()) # lambda**2 - 7*lambda + 10
+
+# 验证 Cayley-Hamilton
+A_poly = A**2 - 7*A + 10*sp.eye(2)
+print("A^2 - 7A + 10I = \n", A_poly) # 零矩阵</code></pre>
   </div>
 </div>
 

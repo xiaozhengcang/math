@@ -265,16 +265,41 @@
     <h2 class="card-title" style="margin-top: 0.5rem;">1. 特征值与特征向量的几何直觉：变换中不偏转的固有主轴</h2>
   </div>
   <div class="card-body">
-    <p>当一个矩阵 $A$ 作用于空间中的绝大多数向量 $\mathbf{v}$ 时，向量既会发生<strong>长度伸缩</strong>，又会发生<strong>方向偏转</strong>。然而，空间中总存在极其特殊的方向：在变换后，向量<strong>完全不发生旋转，仅在自身所在直线上纯粹拉伸或压缩</strong>！</p>
+    <p>当一个矩阵 $A$ 作用于空间中的绝大多数向量 $\mathbf{x}$ 时，向量既会发生<strong>长度伸缩</strong>，又会发生<strong>方向偏转（旋转）</strong>。然而，空间中隐藏着极其特殊的方向：在变换后，向量<strong>完全不发生旋转，仅在自身所在直线上纯粹拉伸或压缩</strong>！</p>
     
+    <!-- SVG Graphic 7.1: Ordinary Rotating Vector vs Eigenvector -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="520" height="200" viewBox="0 0 520 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width:100%;">
+        <!-- Left: Ordinary Vector (Rotated and Scaled) -->
+        <g>
+          <line x1="80" y1="120" x2="150" y2="120" stroke="#38bdf8" stroke-width="3"/>
+          <text x="115" y="110" fill="#38bdf8" font-size="12" text-anchor="middle">原向量 x</text>
+          <line x1="80" y1="120" x2="160" y2="50" stroke="#ef4444" stroke-width="3.5"/>
+          <text x="160" y="42" fill="#ef4444" font-size="12" font-weight="bold">Ax 偏离了原本直线</text>
+          <text x="130" y="165" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">❌ 普通向量：方向发生偏转</text>
+        </g>
+
+        <line x1="260" y1="20" x2="260" y2="180" stroke="#334155" stroke-dasharray="4"/>
+
+        <!-- Right: Eigenvector (Only Scaled along line) -->
+        <g>
+          <line x1="290" y1="160" x2="490" y2="40" stroke="#334155" stroke-dasharray="2" stroke-width="1.5"/>
+          <line x1="330" y1="135" x2="380" y2="105" stroke="#38bdf8" stroke-width="3"/>
+          <text x="350" y="145" fill="#38bdf8" font-size="12" font-weight="bold">原特征向量 v</text>
+          <line x1="330" y1="135" x2="455" y2="60" stroke="#4ade80" stroke-width="3.5"/>
+          <text x="430" y="50" fill="#4ade80" font-size="13" font-weight="bold">Av = λv (落在同一直线上)</text>
+          <text x="390" y="165" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">✅ 特征向量：方向完全同轴 (仅 λ 倍缩放)</text>
+        </g>
+      </svg>
+    </div>
+
     <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
       <h4 style="color: var(--accent-blue);">📐 特征值与特征向量定义</h4>
       <p>设 $A$ 为 $n \times n$ 实方阵。若存在标量 $\lambda \in \mathbb{C}$ 和<strong>非零向量 $\mathbf{v} \neq \mathbf{0}$</strong> 使得：</p>
       <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
         $$A\mathbf{v} = \lambda \mathbf{v}$$
       </div>
-      <p>则称 $\lambda$ 为 $A$ 的<strong>特征值 (Eigenvalue)</strong>，$\mathbf{v}$ 为对应于 $\lambda$ 的<strong>特征向量 (Eigenvector)</strong>。</p>
-      <p>对应于 $\lambda$ 的所有特征向量及其零向量构成了<strong>特征空间 (Eigenspace)</strong>：$E_\lambda = \text{Null}(A - \lambda I)$。</p>
+      <p>则称 $\lambda$ 为 $A$ 的<strong>特征值 (Eigenvalue)</strong>，$\mathbf{v}$ 为对应于 $\lambda$ 的<strong>特征向量 (Eigenvector)</strong>。特征空间定义为 $E_\lambda = \text{Null}(A - \lambda I)$。</p>
     </div>
   </div>
 </div>
@@ -282,14 +307,26 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">代数求解</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 特征方程与求解机理</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 特征方程与迹-行列式验算黄金法则</h2>
   </div>
   <div class="card-body">
-    <p>将定义方程移项整理：</p>
-    $$(A - \lambda I)\mathbf{v} = \mathbf{0}$$
-    <p>由于特征向量 $\mathbf{v} \neq \mathbf{0}$，齐次方程存在非零解的充要条件是矩阵 $(A - \lambda I)$ 不可逆，即<strong>特征方程 (Characteristic Equation)</strong>：</p>
+    <p>求解齐次方程 $(A - \lambda I)\mathbf{v} = \mathbf{0}$ 存在非零解的充要条件是<strong>特征方程 (Characteristic Equation)</strong>：</p>
     <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
       $$\det(A - \lambda I) = 0$$
+    </div>
+
+    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px; margin-top: 1rem;">
+      <h4 style="color: var(--accent-purple);">👑 两大黄金验算定理</h4>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+        <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 6px;">
+          <strong style="color: var(--accent-blue);">① 迹等于特征值之和：</strong>
+          $$\text{tr}(A) = \sum_{i=1}^n a_{ii} = \sum_{i=1}^n \lambda_i$$
+        </div>
+        <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 6px;">
+          <strong style="color: var(--accent-green);">② 行列式等于特征值之积：</strong>
+          $$\det(A) = \prod_{i=1}^n \lambda_i = \lambda_1 \lambda_2 \cdots \lambda_n$$
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -304,7 +341,7 @@
       <h4 style="color: var(--accent-green);">求 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$ 的特征值与特征向量</h4>
       <p><strong>步骤 1：求解特征方程</strong></p>
       $$\det(A - \lambda I) = \det \begin{bmatrix} 4 - \lambda & 1 \\ 2 & 3 - \lambda \end{bmatrix} = (4 - \lambda)(3 - \lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$$
-      <p>解得两实特征值：$\lambda_1 = 5, \lambda_2 = 2$。</p>
+      <p>解得两实特征值：$\lambda_1 = 5, \lambda_2 = 2$。验算：$\lambda_1+\lambda_2 = 7 = \text{tr}(A)$，$\lambda_1\lambda_2 = 10 = \det(A)$，完全吻合！</p>
       <p><strong>步骤 2：求 $\lambda_1 = 5$ 对应的特征向量</strong></p>
       $$(A - 5I)\mathbf{v} = \begin{bmatrix} -1 & 1 \\ 2 & -2 \end{bmatrix}\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \mathbf{0} \implies -v_1 + v_2 = 0 \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
       <p><strong>步骤 3：求 $\lambda_2 = 2$ 对应的特征向量</strong></p>
@@ -326,7 +363,11 @@ A = np.array([[4, 1],
 
 eigenvalues, eigenvectors = np.linalg.eig(A)
 print("特征值 eigenvalues:", eigenvalues) # [5. 2.]
-print("归一化特征向量列矩阵:\n", eigenvectors)</code></pre>
+print("归一化特征向量列矩阵:\n", eigenvectors)
+
+# 验证迹与行列式
+print("迹之和验证:", np.isclose(np.sum(eigenvalues), np.trace(A)))
+print("行列式乘积验证:", np.isclose(np.prod(eigenvalues), np.linalg.det(A)))</code></pre>
   </div>
 </div>
 

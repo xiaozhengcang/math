@@ -262,29 +262,64 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 坐标系 (Coordinate System) 与坐标表示</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 坐标系 (Coordinate System) 的几何本质：基即观察网格</h2>
   </div>
   <div class="card-body">
-    <p>空间中的几何点是客观存在的，但<strong>坐标数字取决于观察者选取的基底</strong>。设 $\mathcal{B} = \{\mathbf{b}_1, \dots, \mathbf{b}_n\}$ 是空间的一组基底，任意向量 $\mathbf{x}$ 都可以唯一表示为：</p>
+    <p>空间中的几何箭头 $\mathbf{x}$ 是客观绝对存在的，但<strong>坐标数组数值取决于观察者选取的度量网格（基底眼镜）</strong>。设 $\mathcal{B} = \{\mathbf{b}_1, \dots, \mathbf{b}_n\}$ 是空间的一组基底，任意向量 $\mathbf{x}$ 都可以唯一表示为：</p>
     $$\mathbf{x} = c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2 + \dots + c_n \mathbf{b}_n$$
     <p>标量列表 $[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} c_1 \\ \vdots \\ c_n \end{bmatrix}$ 即为向量 $\mathbf{x}$ 在基底 $\mathcal{B}$ 下的<strong>坐标向量 (Coordinate Vector)</strong>。</p>
+
+    <!-- SVG Graphic 6.1: Cartesian vs Oblique Grid Breakdown -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="600" height="240" viewBox="0 0 600 240" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+        <!-- Left: Standard Cartesian Grid -->
+        <g transform="translate(10, 10)">
+          <rect x="0" y="0" width="280" height="220" fill="rgba(15, 23, 42, 0.4)" rx="6" stroke="#334155"/>
+          <text x="140" y="24" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">标准笛卡尔网格 ℰ: [x]ℰ = [4, 5]ᵀ</text>
+          <line x1="40" y1="180" x2="240" y2="180" stroke="#475569" stroke-width="1.5"/>
+          <line x1="60" y1="30" x2="60" y2="200" stroke="#475569" stroke-width="1.5"/>
+          <!-- Path -->
+          <line x1="60" y1="180" x2="200" y2="180" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
+          <line x1="200" y1="180" x2="200" y2="50" stroke="#a855f7" stroke-width="2" stroke-dasharray="3"/>
+          <line x1="60" y1="180" x2="200" y2="50" stroke="#38bdf8" stroke-width="3"/>
+          <circle cx="200" cy="50" r="4" fill="#38bdf8"/>
+          <text x="130" y="195" fill="#fbbf24" font-size="10">4e₁ (4步)</text>
+          <text x="210" y="120" fill="#a855f7" font-size="10">5e₂ (5步)</text>
+        </g>
+
+        <!-- Right: Oblique Tilted Grid -->
+        <g transform="translate(310, 10)">
+          <rect x="0" y="0" width="280" height="220" fill="rgba(15, 23, 42, 0.4)" rx="6" stroke="#334155"/>
+          <text x="140" y="24" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle">倾斜网格 ℬ: [x]ℬ = [2, 3]ᵀ</text>
+          <!-- Vector 1: 2*b1 = [4, 2] -->
+          <line x1="60" y1="180" x2="200" y2="120" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3"/>
+          <!-- Vector 2: 3*b2 = [0, 3] -->
+          <line x1="200" y1="120" x2="200" y2="50" stroke="#4ade80" stroke-width="2" stroke-dasharray="3"/>
+          <line x1="60" y1="180" x2="200" y2="50" stroke="#38bdf8" stroke-width="3"/>
+          <circle cx="200" cy="50" r="4" fill="#38bdf8"/>
+          <text x="115" y="145" fill="#fbbf24" font-size="10">2b₁ (2步)</text>
+          <text x="210" y="85" fill="#4ade80" font-size="10">3b₂ (3步)</text>
+        </g>
+      </svg>
+    </div>
   </div>
 </div>
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">基变换公式</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 坐标变换矩阵 (Change of Basis Matrix)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 坐标变换矩阵 (Change of Basis Matrix: $P_{\mathcal{C} \leftarrow \mathcal{B}} = C^{-1}B$)</h2>
   </div>
   <div class="card-body">
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">📐 基变换矩阵公式</h4>
-      <p>设 $\mathcal{B}$ 与 $\mathcal{C}$ 是同一向量空间的两个不同基底。从 $\mathcal{B}$ 坐标转换到 $\mathcal{C}$ 坐标的转移矩阵 $P_{\mathcal{C} \leftarrow \mathcal{B}}$ 满足：</p>
+      <h4 style="color: var(--accent-purple);">📐 基变换矩阵黄金公式</h4>
+      <p>设 $\mathcal{B} = \{\mathbf{b}_1, \dots, \mathbf{b}_n\}$ 与 $\mathcal{C} = \{\mathbf{c}_1, \dots, \mathbf{c}_n\}$ 是同一空间的两个不同基底。从 $\mathcal{B}$ 坐标转换到 $\mathcal{C}$ 坐标的转移矩阵满足：</p>
       $$[\mathbf{x}]_\mathcal{C} = P_{\mathcal{C} \leftarrow \mathcal{B}} [\mathbf{x}]_\mathcal{B}$$
-      <p>其中转移矩阵的各列是基底 $\mathcal{B}$ 的向量在基底 $\mathcal{C}$ 下的坐标：</p>
-      $$P_{\mathcal{C} \leftarrow \mathcal{B}} = \begin{bmatrix} [\mathbf{b}_1]_\mathcal{C} & [\mathbf{b}_2]_\mathcal{C} & \dots & [\mathbf{b}_n]_\mathcal{C} \end{bmatrix}$$
-      <p>特别地，若 $\mathcal{C}$ 是标准笛卡尔基 $\mathcal{E}$，则 $P_{\mathcal{E} \leftarrow \mathcal{B}} = [\mathbf{b}_1 \dots \mathbf{b}_n]$，且：</p>
-      $$[\mathbf{x}]_\mathcal{B} = P_{\mathcal{E} \leftarrow \mathcal{B}}^{-1} \mathbf{x}$$
+      <p>其中转移矩阵可直接通过基矩阵求逆乘积计算：</p>
+      <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
+        $$P_{\mathcal{C} \leftarrow \mathcal{B}} = C^{-1} B = \begin{bmatrix} [\mathbf{b}_1]_\mathcal{C} & [\mathbf{b}_2]_\mathcal{C} & \dots & [\mathbf{b}_n]_\mathcal{C} \end{bmatrix}$$
+      </div>
+      <p><strong>推导：</strong> 客观向量 $\mathbf{x} = B [\mathbf{x}]_\mathcal{B} = C [\mathbf{x}]_\mathcal{C}$。两边左乘 $C^{-1}$ 即得 $[\mathbf{x}]_\mathcal{C} = C^{-1} B [\mathbf{x}]_\mathcal{B}$！ $\blacksquare$</p>
     </div>
   </div>
 </div>
@@ -307,7 +342,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 求解基变换</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 求解基变换矩阵与坐标</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
@@ -317,7 +352,12 @@ x = np.array([4, 2], dtype=float)
 
 # 求解 B @ x_B = x
 x_B = np.linalg.solve(B, x)
-print("[x]_B 坐标向量:", x_B) # [3. 1.]</code></pre>
+print("[x]_B 坐标向量:", x_B) # [3. 1.]
+
+# 基变换矩阵 P_{C <- B} = C^-1 @ B
+C = np.array([[2, 0], [1, 1]], dtype=float)
+P_C_B = np.linalg.inv(C) @ B
+print("P_{C <- B} 矩阵:\n", P_C_B)</code></pre>
   </div>
 </div>
 

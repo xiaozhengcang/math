@@ -265,12 +265,19 @@
     <h2 class="card-title" style="margin-top: 0.5rem;">1. 逆矩阵定义与初等矩阵消元求逆</h2>
   </div>
   <div class="card-body">
-    <p>对于 $n \times n$ 方阵 $A$，若存在方阵 $B$ 使得 $AB = BA = I$，则称 $A$ 是<strong>可逆矩阵 (Invertible / Non-singular)</strong>，并记 $B = A^{-1}$。</p>
+    <p>对于 $n \times n$ 方阵 $A$，若存在方阵 $B$ 使得 $AB = BA = I$，则称 $A$ 是<strong>可逆矩阵 (Invertible / Non-singular)</strong>，并记 $B = A^{-1}$。在几何上，逆矩阵代表将 $A$ 所造成的空间网格扭曲<strong>原样完全撤销并还原</strong>的逆向变换！</p>
     
     <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 初等矩阵与高斯-若尔当加边求逆算法 $[A \mid I] \to [I \mid A^{-1}]$</h4>
-      <p>初等行变换等价于在左侧乘以初等矩阵 $E_k \cdots E_1 A = I$。将两端同时右乘 $A^{-1}$，可得 $E_k \cdots E_1 = A^{-1}$。</p>
-      <p>因此构造增广矩阵 $[A \mid I]$，当左侧通过行变换化为 $I$ 时，右侧自然同步演化为 $A^{-1}$：</p>
+      <h4 style="color: var(--accent-blue);">📐 初等矩阵 (Elementary Matrices) 与初等行变换代数化</h4>
+      <p>每一个初等行变换都可以用一个初等矩阵 $E$ 的左乘来精确表示：</p>
+      <ul style="margin-left: 1.5rem; line-height: 1.8; margin-top: 0.5rem;">
+        <li><strong>行倍加矩阵</strong>：将第 1 行的 $-2$ 倍加到第 2 行 $\implies E = \begin{bmatrix} 1 & 0 \\ -2 & 1 \end{bmatrix}$，其逆为 $E^{-1} = \begin{bmatrix} 1 & 0 \\ 2 & 1 \end{bmatrix}$。</li>
+        <li><strong>行交换矩阵</strong>：交换第 1、2 行 $\implies P = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$，其逆为 $P^{-1} = P$。</li>
+        <li><strong>行倍乘矩阵</strong>：第 1 行缩放 $k$ 倍 $\implies S = \begin{bmatrix} k & 0 \\ 0 & 1 \end{bmatrix}$，其逆为 $S^{-1} = \begin{bmatrix} 1/k & 0 \\ 0 & 1 \end{bmatrix}$。</li>
+      </ul>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p><strong>高斯-若尔当加边求逆算法原理：</strong></p>
+      $$E_k \cdots E_1 A = I \implies (E_k \cdots E_1) I = A^{-1}$$
       $$\begin{bmatrix} A & \mid & I \end{bmatrix} \xrightarrow{\text{Gauss-Jordan}} \begin{bmatrix} I & \mid & A^{-1} \end{bmatrix}$$
     </div>
   </div>
@@ -283,18 +290,18 @@
   </div>
   <div class="card-body">
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 Invertible Matrix Equivalence Theorem</h4>
-      <p>对于任意 $n \times n$ 阶实方阵 $A$，以下 10 个命题<strong>完全等价</strong>：</p>
+      <h4 style="color: var(--accent-purple);">👑 Invertible Matrix Equivalence Theorem (10 大等价条件)</h4>
+      <p>对于任意 $n \times n$ 阶实方阵 $A$，以下 10 个命题<strong>互为充要条件（一个成立则其余全部成立）</strong>：</p>
       <ol style="margin-left: 1.5rem; line-height: 1.8;">
         <li>$A$ 是可逆矩阵 ($A^{-1}$ 存在)。</li>
         <li>$\text{RREF}(A) = I_n$ (简化行阶梯形为单位矩阵)。</li>
-        <li>$A$ 拥有 $n$ 个主元位置 (全主元)。</li>
+        <li>$A$ 拥有 $n$ 个主元位置 (主元数满秩)。</li>
         <li>齐次方程 $A\mathbf{x} = \mathbf{0}$ 只有唯一零解 $\mathbf{x} = \mathbf{0}$。</li>
         <li>零空间 $\text{Null}(A) = \{\mathbf{0}\}$ (零化度 $\text{Nullity}(A) = 0$)。</li>
-        <li>$A$ 的列向量线性无关。</li>
-        <li>$A$ 的列向量张成整个 $\mathbb{R}^n$ ($\text{Col}(A) = \mathbb{R}^n$)。</li>
-        <li>对任意向量 $\mathbf{b}$，$A\mathbf{x} = \mathbf{b}$ 恒有唯一解。</li>
-        <li>行列式 $\det(A) \neq 0$。</li>
+        <li>$A$ 的所有列向量线性无关。</li>
+        <li>$A$ 的所有列向量张成整个 $\mathbb{R}^n$ ($\text{Col}(A) = \mathbb{R}^n$)。</li>
+        <li>对任意目标向量 $\mathbf{b}$，$A\mathbf{x} = \mathbf{b}$ 恒有唯一解。</li>
+        <li>行列式 $\det(A) \neq 0$（体积未被压缩坍塌为零）。</li>
         <li>矩阵的秩 $\text{Rank}(A) = n$ (满秩 Full Rank)。</li>
       </ol>
     </div>
@@ -303,19 +310,46 @@
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
+    <span class="badge" style="background: var(--accent-cyan); color: #000;">高阶拓展</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. 左逆 (Left Inverse) 与右逆 (Right Inverse)</h2>
+  </div>
+  <div class="card-body">
+    <p>对于非方阵 $A \in \mathbb{R}^{m \times n}$：</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+        <h4 style="color: var(--accent-blue);">长瘦矩阵 ($m > n$, 满列秩) $\implies$ 存在左逆</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$A_{\text{left}}^{-1} = (A^T A)^{-1} A^T, \quad A_{\text{left}}^{-1} A = I_n$$
+          这是最小二乘法 (Least Squares) 的核心运算！
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+        <h4 style="color: var(--accent-purple);">扁胖矩阵 ($m < n$, 满行秩) $\implies$ 存在右逆</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$A_{\text{right}}^{-1} = A^T (A A^T)^{-1}, \quad A A_{\text{right}}^{-1} = I_m$$
+          这是欠定系统最小范数解的核心运算！
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 加边消元求逆手算</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. ✍️ 加边消元求逆手算</h2>
   </div>
   <div class="card-body">
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
       <h4 style="color: var(--accent-green);">求 $A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$ 的逆矩阵</h4>
-      <p>构造增广矩阵：</p>
+      <p><strong>Step 1: 构造增广矩阵 $[A \mid I]$</strong></p>
       $$\left[\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\ 3 & 4 & 0 & 1 \end{array}\right]$$
-      <p>$R_2 - 3R_1 \to R_2$：</p>
+      <p><strong>Step 2: $R_2 - 3R_1 \to R_2$</strong></p>
       $$\left[\begin{array}{cc|cc} 1 & 2 & 1 & 0 \\ 0 & -2 & -3 & 1 \end{array}\right]$$
-      <p>$R_1 + R_2 \to R_1$：</p>
+      <p><strong>Step 3: $R_1 + R_2 \to R_1$</strong></p>
       $$\left[\begin{array}{cc|cc} 1 & 0 & -2 & 1 \\ 0 & -2 & -3 & 1 \end{array}\right]$$
-      <p>$-\frac{1}{2} R_2 \to R_2$：</p>
+      <p><strong>Step 4: $-\frac{1}{2} R_2 \to R_2$</strong></p>
       $$\left[\begin{array}{cc|cc} 1 & 0 & -2 & 1 \\ 0 & 1 & 1.5 & -0.5 \end{array}\right] \implies A^{-1} = \begin{bmatrix} -2 & 1 \\ 1.5 & -0.5 \end{bmatrix} = \frac{1}{-2} \begin{bmatrix} 4 & -2 \\ -3 & 1 \end{bmatrix}$$
     </div>
   </div>
@@ -324,20 +358,25 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 求解逆矩阵</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 💻 NumPy 求解逆矩阵与左逆</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
 
 A = np.array([[1, 2], [3, 4]], dtype=float)
 
-# 求逆
+# 方阵求逆
 A_inv = np.linalg.inv(A)
 print("A 的逆矩阵 A^-1:\n", A_inv)
 
 # 验证 A @ A^-1 = I
 I = A @ A_inv
-print("A @ A^-1 验证:\n", np.round(I, 5))</code></pre>
+print("A @ A^-1 验证:\n", np.round(I, 5))
+
+# 长瘦矩阵的左逆
+A_tall = np.array([[1, 0], [0, 1], [1, 1]], dtype=float)
+A_left_inv = np.linalg.inv(A_tall.T @ A_tall) @ A_tall.T
+print("长瘦矩阵的左逆验证 (A_left_inv @ A_tall):\n", np.round(A_left_inv @ A_tall, 5))</code></pre>
   </div>
 </div>
 

@@ -262,16 +262,21 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 伴随矩阵 $\text{adj}(A)$ 与逆矩阵解析公式</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 伴随矩阵 $\text{adj}(A)$、错行展开与逆矩阵解析公式</h2>
   </div>
   <div class="card-body">
     <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 伴随矩阵与逆矩阵公式</h4>
-      <p>伴随矩阵 $\text{adj}(A)$ 是由所有代数余子式构成的矩阵的<strong>转置</strong>：</p>
+      <h4 style="color: var(--accent-blue);">📐 伴随矩阵 (Adjugate Matrix) 定义与核心恒等式</h4>
+      <p>伴随矩阵 $\text{adj}(A)$ 是由所有代数余子式 $C_{ij} = (-1)^{i+j} \det(M_{ij})$ 构成的矩阵的<strong>转置 (Transpose)</strong>：</p>
       $$\text{adj}(A) = C^T = \begin{bmatrix} C_{11} & C_{21} & \dots & C_{n1} \\ C_{12} & C_{22} & \dots & C_{n2} \\ \vdots & \vdots & \ddots & \vdots \\ C_{1n} & C_{2n} & \dots & C_{nn} \end{bmatrix}$$
-      <p>核心恒等式：$$A \cdot \text{adj}(A) = \det(A) \cdot I$$</p>
-      <p>因此当 $\det(A) \neq 0$ 时，逆矩阵的封闭解析表达式为：</p>
-      $$A^{-1} = \frac{1}{\det(A)} \text{adj}(A)$$
+      <p><strong>👑 黄金恒等式：</strong> $$A \cdot \text{adj}(A) = \det(A) \cdot I_n$$</p>
+      <p><strong>严密证明（错行展开定理）：</strong></p>
+      <ul style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.9rem; color: var(--text-muted);">
+        <li>乘积矩阵的对角线元素：第 $i$ 行与 $\text{adj}(A)$ 的第 $i$ 列（即 $C$ 的第 $i$ 行）做点积：$\sum_{k=1}^n a_{ik} C_{ik} = \det(A)$（正是拉普拉斯行展开）。</li>
+        <li>乘积矩阵的非对角线元素 ($i \neq j$)：第 $i$ 行与第 $j$ 列点积：$\sum_{k=1}^n a_{ik} C_{jk} = 0$。几何上，这相当于计算一个“第 $j$ 行被替换为第 $i$ 行”的矩阵的行列式，由于该矩阵拥有两行完全相同，其体积必定坍塌为 0！ $\blacksquare$</li>
+      </ul>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p><strong>逆矩阵封闭解析公式：</strong> 当 $\det(A) \neq 0$ 时，$$A^{-1} = \frac{1}{\det(A)} \text{adj}(A)$$</p>
     </div>
   </div>
 </div>
@@ -279,26 +284,49 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">经典法则</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌟 克莱姆法则 (Cramer's Rule)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌟 克莱姆法则 (Cramer's Rule) 的几何体积比率推导</h2>
   </div>
   <div class="card-body">
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
       <h4 style="color: var(--accent-purple);">👑 克莱姆法则 (Cramer's Rule)</h4>
-      <p>对于非奇异可逆线性方程组 $A\mathbf{x} = \mathbf{b}$（$\det(A) \neq 0$），解向量 $\mathbf{x} = [x_1, x_2, \dots, x_n]^T$ 的每一个分量可以直接由行列式商给出：</p>
-      <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
+      <p>对于非奇异可逆线性方程组 $A\mathbf{x} = \mathbf{b}$（$\det(A) \neq 0$），解向量的每一个分量为两个超体积的比率：</p>
+      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
         $$x_i = \frac{\det(A_i(\mathbf{b}))}{\det(A)}$$
       </div>
       <p>其中 $A_i(\mathbf{b})$ 表示将矩阵 $A$ 的第 $i$ 列替换为常数向量 $\mathbf{b}$ 所得到的新矩阵。</p>
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>几何体积推导：</strong> $A I_i(\mathbf{x}) = A_i(\mathbf{b})$。因为矩阵 $I_i(\mathbf{x})$ 的行列式正好是 $x_i$，对两边取行列式即得 $\det(A) \cdot x_i = \det(A_i(\mathbf{b}))$！</p>
+      <p><strong>几何体积证明（矩阵乘法视角）：</strong></p>
+      <p style="font-size:0.9rem; line-height:1.7; color:var(--text-muted);">
+        构造将单位矩阵 $I$ 的第 $i$ 列替换为解向量 $\mathbf{x}$ 的矩阵 $I_i(\mathbf{x}) = [\mathbf{e}_1 \dots \mathbf{x} \dots \mathbf{e}_n]$。根据行列式性质，$\det(I_i(\mathbf{x})) = x_i$。<br>
+        计算矩阵乘积：
+        $$A \cdot I_i(\mathbf{x}) = [A\mathbf{e}_1 \dots A\mathbf{x} \dots A\mathbf{e}_n] = [\mathbf{a}_1 \dots \mathbf{b} \dots \mathbf{a}_n] = A_i(\mathbf{b})$$
+        两边同时取行列式：
+        $$\det(A) \cdot \det(I_i(\mathbf{x})) = \det(A_i(\mathbf{b})) \implies \det(A) \cdot x_i = \det(A_i(\mathbf{b})) \implies x_i = \frac{\det(A_i(\mathbf{b}))}{\det(A)} \quad \blacksquare$$
+      </p>
     </div>
   </div>
 </div>
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
+    <span class="badge" style="background: var(--accent-cyan); color: #000;">微积分前沿</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. 🚀 雅可比行列式 (Jacobian) 与多元微积分换元</h2>
+  </div>
+  <div class="card-body">
+    <p>行列式的几何体积放缩性质是多元微积分中<strong>重积分变量替换定理</strong>的绝对核心：</p>
+    <div class="math-block" style="text-align:center; padding:1rem; font-size:1.05rem;">
+      $$\iint_D f(x, y) \, dx dy = \iint_{D^*} f(x(u,v), y(u,v)) \, \left| \det \begin{bmatrix} \frac{\partial x}{\partial u} & \frac{\partial x}{\partial v} \\ \frac{\partial y}{\partial u} & \frac{\partial y}{\partial v} \end{bmatrix} \right| \, du dv$$
+    </div>
+    <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7; margin-top:0.5rem;">
+      <strong>直观极坐标例子：</strong> $x = r\cos\theta, y = r\sin\theta$。雅可比矩阵 $J = \begin{bmatrix} \cos\theta & -r\sin\theta \\ \sin\theta & r\cos\theta \end{bmatrix}$，其行列式 $\det(J) = r\cos^2\theta + r\sin^2\theta = r$！这就是为什么极坐标积分微元必带 $r\,dr d\theta$ 的线性代数终极起源！
+    </p>
+  </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 克莱姆法则求解手算演练</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. ✍️ 克莱姆法则求解手算演练</h2>
   </div>
   <div class="card-body">
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
@@ -316,7 +344,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 Python 实现克莱姆法则求解器</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 💻 Python 实现克莱姆法则求解器</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np

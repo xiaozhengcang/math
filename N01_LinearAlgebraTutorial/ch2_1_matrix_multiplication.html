@@ -265,38 +265,64 @@
     <h2 class="card-title" style="margin-top: 0.5rem;">1. 矩阵乘法 $AB = C$ 的 4 大观察视角</h2>
   </div>
   <div class="card-body">
-    <p>假设 $A$ 是 $m \times k$ 矩阵，$B$ 是 $k \times n$ 矩阵，乘积 $C = AB$ 是 $m \times n$ 矩阵。李宏毅老师在课程中强调，掌握这 4 大视角是学好高阶线性代数的钥匙：</p>
+    <p>假设 $A$ 是 $m \times k$ 矩阵，$B$ 是 $k \times n$ 矩阵，乘积 $C = AB$ 是 $m \times n$ 矩阵。针对同一个乘积 $C = AB$，线性代数提供了 4 种截然不同的看问题的镜头：</p>
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
-        <h4 style="color: var(--accent-blue);">1. 列组合视角 (Columns of A)</h4>
-        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-          $$C = [A\mathbf{b}_1, A\mathbf{b}_2, \dots, A\mathbf{b}_n]$$
-          $C$ 的每一列都是 $A$ 的所有列以 $B$ 的对应列为权重的线性组合。
+    <!-- SVG Graphic 3.1: 4 Perspectives of Matrix Multiplication -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="520" height="240" viewBox="0 0 520 240" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <!-- Perspective 1: Inner Product -->
+        <rect x="20" y="20" width="220" height="90" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" rx="6"/>
+        <text x="130" y="45" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">1. 点积视角 (Entry-wise)</text>
+        <text x="130" y="75" fill="var(--text-main)" font-size="12" text-anchor="middle">Cij = Row_i(A) · Col_j(B)</text>
+
+        <!-- Perspective 2: Column Combo -->
+        <rect x="270" y="20" width="230" height="90" fill="rgba(168, 85, 247, 0.08)" stroke="#a855f7" rx="6"/>
+        <text x="385" y="45" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle">2. 列组合视角 (Column Combo)</text>
+        <text x="385" y="75" fill="var(--text-main)" font-size="12" text-anchor="middle">Col_j(C) = A · Col_j(B)</text>
+
+        <!-- Perspective 3: Row Combo -->
+        <rect x="20" y="130" width="220" height="90" fill="rgba(74, 222, 128, 0.08)" stroke="#4ade80" rx="6"/>
+        <text x="130" y="155" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">3. 行组合视角 (Row Combo)</text>
+        <text x="130" y="185" fill="var(--text-main)" font-size="12" text-anchor="middle">Row_i(C) = Row_i(A) · B</text>
+
+        <!-- Perspective 4: Outer Product -->
+        <rect x="270" y="130" width="230" height="90" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" rx="6"/>
+        <text x="385" y="155" fill="#fbbf24" font-size="13" font-weight="bold" text-anchor="middle">4. 外积和视角 (Outer Product)</text>
+        <text x="385" y="185" fill="var(--text-main)" font-size="12" text-anchor="middle">C = ∑ Col_k(A) · Row_k(B)</text>
+      </svg>
+    </div>
+
+    <!-- 4 Perspectives Breakdown -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+        <h4 style="color: var(--accent-blue);">1️⃣ 点积视角 (Entry-wise)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$c_{ij} = \text{Row}_i(A) \cdot \text{Col}_j(B) = \sum_{k=1}^p a_{ik} b_{kj}$$
+          适合计算结果矩阵中的某一个特定标量值。
         </p>
       </div>
 
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-purple);">
-        <h4 style="color: var(--accent-purple);">2. 行组合视角 (Rows of B)</h4>
-        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-          $$C = \begin{bmatrix} \mathbf{a}_1^T B \\ \mathbf{a}_2^T B \\ \vdots \\ \mathbf{a}_m^T B \end{bmatrix}$$
-          $C$ 的每一行都是 $B$ 的所有行以 $A$ 的对应行为权重的线性组合。
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+        <h4 style="color: var(--accent-purple);">2️⃣ 列组合视角 (Column Combo)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$\text{Col}_j(C) = A \cdot \text{Col}_j(B)$$
+          $C$ 的第 $j$ 列是 $A$ 各列向量以 $B$ 的第 $j$ 列为权重的线性组合。<strong>列空间的几何本质！</strong>
         </p>
       </div>
 
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-green);">
-        <h4 style="color: var(--accent-green);">3. 外积求和视角 (Sum of Outer Products)</h4>
-        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-          $$C = \sum_{i=1}^k \mathbf{a}_{*i} \mathbf{b}_{i*}^T$$
-          $C$ 是 $k$ 个秩为 1 的矩阵之和（SVD 与主成分分析 PCA 的核心思想基石）。
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+        <h4 style="color: var(--accent-green);">3️⃣ 行组合视角 (Row Combo)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$\text{Row}_i(C) = \text{Row}_i(A) \cdot B$$
+          $C$ 的第 $i$ 行是 $B$ 各行向量以 $A$ 的第 $i$ 行为权重的线性组合。<strong>高斯消元与初等矩阵的基石！</strong>
         </p>
       </div>
 
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-amber);">
-        <h4 style="color: var(--accent-amber);">4. 元素点积视角 (Entry-wise Dot Product)</h4>
-        <p style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">
-          $$c_{ij} = \text{row}_i(A) \cdot \text{col}_j(B) = \sum_{p=1}^k a_{ip} b_{pj}$$
-          传统算术逐项点积法则。
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+        <h4 style="color: var(--accent-amber);">4️⃣ 外积和视角 (Outer Product)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+          $$C = \sum_{k=1}^p \text{Col}_k(A) \cdot \text{Row}_k(B)$$
+          将复杂矩阵拆解为 $p$ 个“秩为 1 的外积积木”求和。<strong>SVD 与 PCA 图像压缩的核心灵魂！</strong>
         </p>
       </div>
     </div>
@@ -305,17 +331,35 @@
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
-    <span class="badge" style="background: var(--accent-rose); color: #fff;">几何直觉</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 矩阵作为空间变换：复合与非交换性</h2>
+    <span class="badge" style="background: var(--accent-rose); color: #fff;">几何变换</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 经典几何变换矩阵与网格扭曲</h2>
   </div>
   <div class="card-body">
-    <p>矩阵乘法 $AB$ 在几何上对应**变换的复合 (Composition of Transformations)**：先应用变换 $B$，再应用变换 $A$：</p>
-    <div style="text-align: center; margin: 1rem 0; font-size: 1.15rem;">$$(AB)\mathbf{x} = A(B\mathbf{x})$$</div>
-    
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
-      <h4 style="color: var(--accent-rose);">⚠️ 矩阵乘法的非交换性 (Non-commutativity)</h4>
-      <p>一般情况下，<strong>$AB \neq BA$</strong>！</p>
-      <p><strong>几何直观：</strong> 在三维空间中，先绕 X 轴旋转 $90^\circ$ 再绕 Y 轴旋转 $90^\circ$，与先绕 Y 轴旋转 $90^\circ$ 再绕 X 轴旋转 $90^\circ$，最终茶壶所朝的方向完全不同！操作的先后顺序不可随意调换。</p>
+    <p>矩阵本质上就是对空间网格进行线性扭曲的机器：</p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+        <h4 style="color: var(--accent-blue);">🔄 2D 旋转矩阵 (Rotation)</h4>
+        <div style="font-size:0.95rem; margin: 0.5rem 0;">$$R_\theta = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$$</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">逆时针旋转 $\theta$ 角度，保持向量长度与夹角不变（正交矩阵）。</p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+        <h4 style="color: var(--accent-purple);">🪞 反射矩阵 (Reflection)</h4>
+        <div style="font-size:0.95rem; margin: 0.5rem 0;">$$H = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">关于 X 轴反射翻转，行列式 $\det(H) = -1$（手性反转）。</p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+        <h4 style="color: var(--accent-green);">📐 剪切矩阵 (Shear)</h4>
+        <div style="font-size:0.95rem; margin: 0.5rem 0;">$$S_k = \begin{bmatrix} 1 & k \\ 0 & 1 \end{bmatrix}$$</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">水平剪切，保持面积不变（$\det = 1$），方形变成平行四边形。</p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+        <h4 style="color: var(--accent-amber);">☀️ 投影矩阵 (Projection)</h4>
+        <div style="font-size:0.95rem; margin: 0.5rem 0;">$$P_x = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$$</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">向 X 轴正交投影，降维不可逆（$\det = 0, P^2 = P$）。</p>
+      </div>
     </div>
   </div>
 </div>
@@ -338,7 +382,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 矩阵乘法多角度运算</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 矩阵乘法多角度运算与几何旋转</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
@@ -353,7 +397,15 @@ print("A @ B 结果:\n", C)
 # 2. 外积求和验证
 outer_sum = np.outer(A[:, 0], B[0, :]) + np.outer(A[:, 1], B[1, :])
 print("外积之和:\n", outer_sum)
-print("两者完全一致:", np.allclose(C, outer_sum))</code></pre>
+print("两者完全一致:", np.allclose(C, outer_sum))
+
+# 3. 2D 旋转 90 度矩阵变换
+theta = np.radians(90)
+R = np.array([[np.cos(theta), -np.sin(theta)],
+              [np.sin(theta),  np.cos(theta)]])
+v = np.array([1.0, 0.0])
+v_rot = R @ v
+print("向量 [1, 0] 逆时针旋转 90 度:", np.round(v_rot, 4)) # [0, 1]</code></pre>
   </div>
 </div>
 

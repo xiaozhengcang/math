@@ -272,53 +272,173 @@
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
           向量是空间中有大小 (Magnitude) 和方向 (Direction) 的有向线段。自由向量可以任意平移，只要长度与朝向不变，它就是同一个向量。
         </p>
+        <p style="color:var(--accent-blue); font-size:0.85rem; margin-top:0.4rem;">🔢 例子：2D 速度向量 $\mathbf{u} = \begin{bmatrix} 4 \\ 3 \end{bmatrix}$，模长为 $\sqrt{4^2+3^2}=5$。</p>
       </div>
       <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-top: 3px solid var(--accent-purple);">
         <h4 style="color: var(--accent-purple);">💻 计算机科学视角 (CS)</h4>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
-          向量是有序的数字列表 (Ordered List of Numbers)。例如用户画像向量 <code>[年龄, 收入, 活跃度]</code>，维度 $n$ 即列表中元素的个数。
+          向量是有序的数字列表 (Ordered List of Numbers)。例如用户画像特征 <code>[年龄, 收入, 活跃度]</code>，维度 $n$ 即列表中元素的个数。
         </p>
+        <p style="color:var(--accent-purple); font-size:0.85rem; margin-top:0.4rem;">🔢 例子：特征列向量 $\mathbf{x} = [28, 15000, 0.92]^T$。</p>
       </div>
       <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border-top: 3px solid var(--accent-green);">
         <h4 style="color: var(--accent-green);">📐 数学家视角 (Math)</h4>
         <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
-          向量是满足“向量加法”和“标量乘法”公理体系的任意对象。多项式、函数、音频信号、图像都可以是向量（见 Chapter 6）。
+          向量是满足“向量加法”和“标量乘法”公理体系的任意抽象对象。多项式、函数、音频信号、图像都可以是向量（见 Chapter 6）。
         </p>
+        <p style="color:var(--accent-green); font-size:0.85rem; margin-top:0.4rem;">🔢 例子：二次多项式 $p(t) = 3t^2 - 2t + 5$。</p>
       </div>
     </div>
 
-    <h3>📐 向量加减法的几何法则</h3>
-    <ul style="margin-left: 1.5rem; line-height: 1.8;">
-      <li><strong>加法（首尾相接 / 平行四边形法则）</strong>：从原点出发沿着 $\mathbf{u}$ 走到终点，再沿着 $\mathbf{v}$ 走，最终到达的位置就是 $\mathbf{u} + \mathbf{v}$。</li>
-      <li><strong>减法（指向被减数）</strong>：$\mathbf{u} - \mathbf{v}$ 是连接 $\mathbf{v}$ 终点并指向 $\mathbf{u}$ 终点的位移向量。</li>
-      <li><strong>标量数乘</strong>：$c \mathbf{u}$ 表示沿着原有方向拉伸/压缩 $|c|$ 倍；若 $c < 0$ 则反转 $180^\circ$。</li>
-    </ul>
+    <!-- SVG Graphic 1.1: Vector Addition -->
+    <div class="intuition-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">💡 向量加法法则 (Vector Addition) 与平行四边形法则</h3>
+      <p>向量加法在几何上代表<strong>“连续位移的复合轨迹”</strong>：从原点出发沿着 $\mathbf{u}$ 走到终点，再从 $\mathbf{u}$ 终点沿着 $\mathbf{v}$ 的方向继续走，到达的终点恰好就是平行四边形的对角线顶点！</p>
+      
+      <div style="text-align:center; margin: 1.5rem 0;">
+        <svg width="360" height="200" viewBox="0 0 360 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+          <defs>
+            <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="arrow-purple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#a855f7"/>
+            </marker>
+            <marker id="arrow-green" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+            </marker>
+          </defs>
+
+          <line x1="40" y1="160" x2="320" y2="160" stroke="#334155" stroke-width="1"/>
+          <line x1="40" y1="20" x2="40" y2="180" stroke="#334155" stroke-width="1"/>
+
+          <!-- Vector u (Blue) -->
+          <line x1="40" y1="160" x2="180" y2="160" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+          <text x="100" y="180" fill="#38bdf8" font-size="13" font-weight="bold">u = [4, 0]</text>
+
+          <!-- Vector v (Purple) -->
+          <line x1="40" y1="160" x2="120" y2="60" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+          <text x="55" y="105" fill="#a855f7" font-size="13" font-weight="bold">v = [2, 3]</text>
+
+          <!-- Parallelogram dashed lines -->
+          <line x1="180" y1="160" x2="260" y2="60" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
+          <line x1="120" y1="60" x2="260" y2="60" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
+
+          <!-- Resultant u+v (Green) -->
+          <line x1="40" y1="160" x2="260" y2="60" stroke="#4ade80" stroke-width="3.5" marker-end="url(#arrow-green)"/>
+          <text x="170" y="95" fill="#4ade80" font-size="14" font-weight="bold">u + v = [6, 3]</text>
+        </svg>
+      </div>
+
+      <div style="font-size:0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <strong>代数映射：</strong> $\mathbf{u} + \mathbf{v} = \begin{bmatrix} 4 \\ 0 \end{bmatrix} + \begin{bmatrix} 2 \\ 3 \end{bmatrix} = \begin{bmatrix} 4+2 \\ 0+3 \end{bmatrix} = \begin{bmatrix} 6 \\ 3 \end{bmatrix}$。无论维度多高，向量加法本质都是各个维度独立分量求和的总叠加。
+      </div>
+    </div>
+
+    <!-- SVG Graphic 1.7: Vector Subtraction -->
+    <div class="intuition-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border-left: 4px solid var(--accent-rose); border-radius: 6px;">
+      <h3 style="color: var(--accent-rose); margin-bottom: 0.5rem;">💡 向量减法法则 (Vector Subtraction) 与差值位移矢量</h3>
+      <p>向量减法 $\mathbf{u} - \mathbf{v}$ 代表从被减向量 $\mathbf{v}$ 终点指向目标向量 $\mathbf{u}$ 终点的<strong>“相对位移与追踪矢量”</strong>（牢记口诀：<strong>指向被减数</strong>）：</p>
+
+      <div style="text-align:center; margin: 1.5rem 0;">
+        <svg width="400" height="200" viewBox="0 0 400 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+          <defs>
+            <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ef4444"/>
+            </marker>
+          </defs>
+          <line x1="40" y1="160" x2="160" y2="160" stroke="#a855f7" stroke-width="3" marker-end="url(#arrow-purple)"/>
+          <text x="95" y="180" fill="#a855f7" font-size="12" font-weight="bold">起点: v = [3, 0]</text>
+
+          <line x1="40" y1="160" x2="280" y2="60" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrow-blue)"/>
+          <text x="140" y="100" fill="#38bdf8" font-size="12" font-weight="bold">终点: u = [6, 2.5]</text>
+
+          <line x1="160" y1="160" x2="280" y2="60" stroke="#ef4444" stroke-width="3.5" marker-end="url(#arrow-red)"/>
+          <text x="240" y="130" fill="#ef4444" font-size="13" font-weight="bold">u - v = [3, 2.5]</text>
+        </svg>
+      </div>
+
+      <div style="font-size:0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <strong>代数映射：</strong> $\mathbf{u} - \mathbf{v} = \begin{bmatrix} 6 \\ 2.5 \end{bmatrix} - \begin{bmatrix} 3 \\ 0 \end{bmatrix} = \begin{bmatrix} 3 \\ 2.5 \end{bmatrix}$，满足 $\mathbf{v} + (\mathbf{u} - \mathbf{v}) = \mathbf{u}$。
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">度量与内积</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 范数 (Norm) 与点积 (Dot Product)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 范数 (Norm)、单位圆与点积 (Dot Product) 几何投影</h2>
   </div>
   <div class="card-body">
     <div class="definition-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">📏 欧几里得范数与点积公式</h4>
-      <p>对于向量 $\mathbf{u} = [u_1, \dots, u_n]^T, \mathbf{v} = [v_1, \dots, v_n]^T \in \mathbb{R}^n$：</p>
+      <h4 style="color: var(--accent-purple);">📏 欧几里得范数与单位化 (Unit Vector)</h4>
+      <p>对于向量 $\mathbf{u} = [u_1, \dots, u_n]^T \in \mathbb{R}^n$：</p>
       <ul style="margin-left: 1.5rem; line-height: 1.8;">
         <li><strong>欧氏长度（$L_2$ 范数）</strong>：$$\|\mathbf{u}\| = \sqrt{u_1^2 + u_2^2 + \dots + u_n^2} = \sqrt{\mathbf{u}^T \mathbf{u}}$$</li>
-        <li><strong>代数点积</strong>：$$\mathbf{u} \cdot \mathbf{v} = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^n u_i v_i$$</li>
-        <li><strong>几何点积公式</strong>：$$\mathbf{u} \cdot \mathbf{v} = \|\mathbf{u}\| \|\mathbf{v}\| \cos \theta$$</li>
-        <li><strong>夹角余弦</strong>：$$\cos \theta = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$$</li>
+        <li><strong>单位化公式</strong>：$$\mathbf{\hat{u}} = \frac{\mathbf{u}}{\|\mathbf{u}\|}, \quad (\|\mathbf{\hat{u}}\| = 1)$$</li>
       </ul>
-      <p><strong>正交性 (Orthogonality) 判据：</strong> $\mathbf{u} \perp \mathbf{v} \iff \mathbf{u} \cdot \mathbf{v} = 0$。</p>
     </div>
 
-    <h3 style="margin-top: 1.5rem;">👑 黄金不等式</h3>
+    <!-- SVG Graphic 1.6: Vector Norm & Unit Circle -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="420" height="200" viewBox="0 0 420 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <line x1="40" y1="100" x2="380" y2="100" stroke="#334155" stroke-width="1"/>
+        <line x1="210" y1="20" x2="210" y2="180" stroke="#334155" stroke-width="1"/>
+
+        <circle cx="210" cy="100" r="60" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="2"/>
+        <text x="210" y="175" fill="#38bdf8" font-size="12" text-anchor="middle">单位圆: ||u|| = 1</text>
+
+        <line x1="210" y1="100" x2="260" y2="60" stroke="#4ade80" stroke-width="3" marker-end="url(#arrow-green)"/>
+        <text x="250" y="50" fill="#4ade80" font-size="13" font-weight="bold">u = [0.8, 0.6]ᵀ</text>
+
+        <line x1="210" y1="100" x2="260" y2="100" stroke="#fbbf24" stroke-dasharray="3" stroke-width="1.5"/>
+        <line x1="260" y1="100" x2="260" y2="60" stroke="#fbbf24" stroke-dasharray="3" stroke-width="1.5"/>
+        <text x="235" y="115" fill="#fbbf24" font-size="11">u₁ = 0.8</text>
+        <text x="265" y="85" fill="#fbbf24" font-size="11">u₂ = 0.6</text>
+      </svg>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">📐 点积的代数与几何双重定义</h3>
+    <ul style="margin-left: 1.5rem; line-height: 1.8;">
+      <li><strong>代数点积</strong>：$$\mathbf{u} \cdot \mathbf{v} = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^n u_i v_i$$</li>
+      <li><strong>几何投影公式</strong>：$$\mathbf{u} \cdot \mathbf{v} = \|\mathbf{u}\| \|\mathbf{v}\| \cos \theta$$</li>
+      <li><strong>夹角余弦</strong>：$$\cos \theta = \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$$</li>
+      <li><strong>正交性 (Orthogonality)</strong>：$\mathbf{u} \perp \mathbf{v} \iff \mathbf{u} \cdot \mathbf{v} = 0$。</li>
+    </ul>
+
+    <!-- Graphic 1.5: Dot Product Projection Angle -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <line x1="30" y1="140" x2="130" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+        <line x1="30" y1="140" x2="110" y2="50" stroke="#a855f7" stroke-width="2.5"/>
+        <line x1="110" y1="50" x2="110" y2="140" stroke="#fbbf24" stroke-dasharray="3" stroke-width="1.5"/>
+        <text x="80" y="165" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">u·v = 10 > 0 (锐角同向)</text>
+
+        <line x1="160" y1="20" x2="160" y2="150" stroke="#334155" stroke-dasharray="3"/>
+
+        <line x1="180" y1="140" x2="280" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+        <line x1="180" y1="140" x2="180" y2="50" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="230" y="165" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">u·v = 0 (直角垂直正交)</text>
+
+        <line x1="310" y1="20" x2="310" y2="150" stroke="#334155" stroke-dasharray="3"/>
+
+        <line x1="410" y1="140" x2="470" y2="140" stroke="#38bdf8" stroke-width="2.5"/>
+        <line x1="410" y1="140" x2="330" y2="50" stroke="#a855f7" stroke-width="2.5"/>
+        <line x1="330" y1="50" x2="330" y2="140" stroke="#ef4444" stroke-dasharray="3" stroke-width="1.5"/>
+        <text x="400" y="165" fill="#ef4444" font-size="12" font-weight="bold" text-anchor="middle">u·v = -6 < 0 (钝角反向)</text>
+      </svg>
+    </div>
+
+    <h3 style="margin-top: 1.5rem;">👑 核心不等式</h3>
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px; margin-top: 0.75rem;">
-      <p><strong>柯西-施瓦茨不等式 (Cauchy-Schwarz Inequality)：</strong></p>
+      <p><strong>1. 柯西-施瓦茨不等式 (Cauchy-Schwarz Inequality)：</strong></p>
       $$|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$$
       <p>等号成立当且仅当 $\mathbf{u}$ 与 $\mathbf{v}$ 共线（线性相关）。</p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p><strong>2. 三角不等式 (Triangle Inequality)：</strong></p>
+      $$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$$
+      <p>几何意义：两点之间线段最短，三角形任意两边之和大于等于第三边。</p>
     </div>
   </div>
 </div>
@@ -326,7 +446,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 点积与夹角手算演练</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 点积、范数与夹角手算演练</h2>
   </div>
   <div class="card-body">
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">

@@ -265,6 +265,27 @@
     <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交投影 (Orthogonal Projection) 与投影矩阵</h2>
   </div>
   <div class="card-body">
+    <!-- SVG Graphic 8.2: Orthogonal Projection Residual -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <!-- Subspace Plane W -->
+        <polygon points="40,160 260,160 380,120 160,120" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
+        <text x="310" y="145" fill="#38bdf8" font-size="13" font-weight="bold">列空间 Col(A)</text>
+
+        <!-- Vector b -->
+        <line x1="160" y1="140" x2="300" y2="40" stroke="#ef4444" stroke-width="3"/>
+        <text x="210" y="80" fill="#ef4444" font-size="13" font-weight="bold">目标向量 b</text>
+
+        <!-- Projection Pb -->
+        <line x1="160" y1="140" x2="300" y2="140" stroke="#4ade80" stroke-width="3"/>
+        <text x="230" y="155" fill="#4ade80" font-size="13" font-weight="bold">影子 ɓ = Pb</text>
+
+        <!-- Residual Line e -->
+        <line x1="300" y1="140" x2="300" y2="40" stroke="#fbbf24" stroke-dasharray="4" stroke-width="2"/>
+        <text x="315" y="90" fill="#fbbf24" font-size="13" font-weight="bold">误差 e ⊥ Col(A)</text>
+      </svg>
+    </div>
+
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
       <h4 style="color: var(--accent-blue);">📐 正交投影矩阵推导</h4>
       <p>设子空间 $W = \text{Col}(A)$（$A$ 各列线性无关）。将任意向量 $\mathbf{b}$ 投影到 $W$ 上的投影向量为 $\mathbf{p} = A \hat{\mathbf{x}}$。</p>
@@ -286,13 +307,20 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">机器学习基石</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 📊 最小二乘法 (Least Squares Approximation) 与线性回归</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 📊 最小二乘法 (Least Squares) 与 QR 分解加速</h2>
   </div>
   <div class="card-body">
     <p>在数据拟合中，方程 $A\mathbf{x} = \mathbf{b}$ 通常是超定矛盾的（无解）。<strong>最小二乘法寻找最优近似解 $\hat{\mathbf{x}}$，使得残差平方和 $\|\mathbf{b} - A\mathbf{x}\|^2$ 达到全局最小</strong>。</p>
     <p>正规方程组 (Normal Equations)：</p>
     <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
       $$A^T A \hat{\mathbf{x}} = A^T \mathbf{b} \implies \hat{\mathbf{x}} = (A^T A)^{-1} A^T \mathbf{b}$$
+    </div>
+    <div class="intuition-box" style="padding: 1rem; background: rgba(168, 85, 247, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 4px; margin-top: 1rem;">
+      <h4 style="color:var(--accent-purple); margin-bottom:0.4rem;">🚀 QR 分解极速求解最小二乘</h4>
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+        将 $A = QR$ 代入正规方程：$(QR)^T (QR) \hat{\mathbf{x}} = (QR)^T \mathbf{b} \implies R^T Q^T Q R \hat{\mathbf{x}} = R^T Q^T \mathbf{b} \implies R \hat{\mathbf{x}} = Q^T \mathbf{b}$！<br>
+        只需通过上三角回代即可解出 $\hat{\mathbf{x}} = R^{-1} Q^T \mathbf{b}$，彻底避免了计算条件数极差的矩阵乘积 $A^T A$！
+      </p>
     </div>
   </div>
 </div>
@@ -307,8 +335,7 @@
       <h4 style="color: var(--accent-green);">拟合经过点 $(1, 1), (2, 2), (3, 2)$ 的最佳直线 $y = c + d x$</h4>
       <p>构造超定方程组：</p>
       $$\begin{cases} c + 1d = 1 \\ c + 2d = 2 \\ c + 3d = 2 \end{cases} \implies A = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}$$
-      $$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}$$
-      $$A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
+      $$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}, \quad A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
       <p>求解正规方程：$\begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix} \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix} \implies \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 2/3 \\ 1/2 \end{bmatrix}$。</p>
       <p>最佳拟合直线为：$y = \frac{2}{3} + \frac{1}{2} x$。</p>
     </div>
@@ -318,7 +345,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 最小二乘求解</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 最小二乘与 QR 加速对比</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
@@ -326,9 +353,14 @@
 A = np.array([[1, 1], [1, 2], [1, 3]], dtype=float)
 b = np.array([1, 2, 2], dtype=float)
 
-# 最小二乘求解
+# 1. 最小二乘求解
 res, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
-print("最优拟合参数 (c, d):", np.round(res, 4)) # [0.6667, 0.5]</code></pre>
+print("最优拟合参数 (c, d):", np.round(res, 4)) # [0.6667, 0.5]
+
+# 2. QR 分解求解验证
+Q, R = np.linalg.qr(A)
+x_qr = np.linalg.solve(R, Q.T @ b)
+print("QR 求解结果:", np.round(x_qr, 4))</code></pre>
   </div>
 </div>
 

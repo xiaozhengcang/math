@@ -262,15 +262,44 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交基与标准正交基 (Orthonormal Basis)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交基、几何三大不等式与坐标免逆求解</h2>
   </div>
   <div class="card-body">
+    <!-- SVG Graphic 8.1: 3 Geometric Inequalities -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <line x1="40" y1="140" x2="240" y2="140" stroke="#38bdf8" stroke-width="3"/>
+        <text x="140" y="165" fill="#38bdf8" font-size="13" font-weight="bold">向量 u</text>
+
+        <line x1="240" y1="140" x2="240" y2="40" stroke="#a855f7" stroke-width="3"/>
+        <text x="255" y="90" fill="#a855f7" font-size="13" font-weight="bold">向量 v (垂直)</text>
+
+        <line x1="40" y1="140" x2="240" y2="40" stroke="#4ade80" stroke-width="3.5"/>
+        <text x="120" y="75" fill="#4ade80" font-size="14" font-weight="bold">斜边 u+v: ||u+v||² = ||u||² + ||v||²</text>
+      </svg>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+        <h4 style="color: var(--accent-blue);">① 勾股定理 (Pythagorean)</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$\mathbf{u} \perp \mathbf{v} \iff \|\mathbf{u} + \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2$</p>
+      </div>
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+        <h4 style="color: var(--accent-purple);">② 柯西-施瓦茨不等式</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$（共线时取等号）</p>
+      </div>
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+        <h4 style="color: var(--accent-green);">③ 三角不等式</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$（两点间线段最短）</p>
+      </div>
+    </div>
+
     <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 标准正交基 (Orthonormal Basis)</h4>
-      <p>向量集合 $\{\mathbf{q}_1, \dots, \mathbf{q}_k\}$ 称为<strong>标准正交基</strong>，当且仅当：</p>
-      $$\mathbf{q}_i^T \mathbf{q}_j = \begin{cases} 1, & i = j \\ 0, & i \neq j \end{cases} = \delta_{ij}$$
-      <p><strong>惊人特权：</strong> 任意向量 $\mathbf{v}$ 在标准正交基下的坐标分解无需解任何方程组，直接通过点积求得：</p>
-      $$\mathbf{v} = (\mathbf{v} \cdot \mathbf{q}_1)\mathbf{q}_1 + (\mathbf{v} \cdot \mathbf{q}_2)\mathbf{q}_2 + \dots + (\mathbf{v} \cdot \mathbf{q}_k)\mathbf{q}_k$$
+      <h4 style="color: var(--accent-blue);">📐 标准正交基免求逆分解特权</h4>
+      <p>若 $\{\mathbf{q}_1, \dots, \mathbf{q}_k\}$ 为标准正交基（$\mathbf{q}_i^T \mathbf{q}_j = \delta_{ij}$），则任意向量 $\mathbf{v}$ 的坐标分解<strong>无需任何矩阵求逆，直接通过点积一步求得</strong>：</p>
+      <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0;">
+        $$\mathbf{v} = (\mathbf{v} \cdot \mathbf{q}_1)\mathbf{q}_1 + (\mathbf{v} \cdot \mathbf{q}_2)\mathbf{q}_2 + \dots + (\mathbf{v} \cdot \mathbf{q}_k)\mathbf{q}_k$$
+      </div>
     </div>
   </div>
 </div>

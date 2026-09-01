@@ -262,21 +262,22 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 抽象内积空间 (Inner Product Space)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 抽象内积空间 (Inner Product Space) 与连续函数内积</h2>
   </div>
   <div class="card-body">
     <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 抽象内积公理</h4>
-      <p>向量空间 $V$ 上的<strong>内积 (Inner Product)</strong> $\langle \mathbf{u}, \mathbf{v} \rangle$ 满足：</p>
+      <h4 style="color: var(--accent-blue);">📐 抽象内积公理 (Inner Product Axioms)</h4>
+      <p>向量空间 $V$ 上的<strong>内积 (Inner Product)</strong> $\langle \mathbf{u}, \mathbf{v} \rangle$ 是赋予空间“长度与角度度量”的映射，严格满足：</p>
       <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li><strong>对称性</strong>：$\langle \mathbf{u}, \mathbf{v} \rangle = \langle \mathbf{v}, \mathbf{u} \rangle$。</li>
-        <li><strong>双线性</strong>：$\langle c\mathbf{u}_1 + d\mathbf{u}_2, \mathbf{v} \rangle = c\langle \mathbf{u}_1, \mathbf{v} \rangle + d\langle \mathbf{u}_2, \mathbf{v} \rangle$。</li>
-        <li><strong>正定性</strong>：$\langle \mathbf{u}, \mathbf{u} \rangle \ge 0$，等号成立当且仅当 $\mathbf{u} = \mathbf{0}$。</li>
+        <li><strong>对称性 (Symmetry)</strong>：$\langle \mathbf{u}, \mathbf{v} \rangle = \langle \mathbf{v}, \mathbf{u} \rangle$。</li>
+        <li><strong>双线性 (Bilinearity)</strong>：$\langle c\mathbf{u}_1 + d\mathbf{u}_2, \mathbf{v} \rangle = c\langle \mathbf{u}_1, \mathbf{v} \rangle + d\langle \mathbf{u}_2, \mathbf{v} \rangle$。</li>
+        <li><strong>正定性 (Positive Definiteness)</strong>：$\langle \mathbf{u}, \mathbf{u} \rangle \ge 0$，等号成立当且仅当 $\mathbf{u} = \mathbf{0}$。</li>
       </ol>
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>连续函数空间 $C[a, b]$ 上的内积定义：</strong></p>
+      <p><strong>连续函数空间 $C[a, b]$ 上的 $L^2$ 积分内积：</strong></p>
       $$\langle f, g \rangle = \int_a^b f(x) g(x) dx$$
-      <p>函数的范数长度为 $\|f\| = \sqrt{\langle f, f \rangle} = \sqrt{\int_a^b f(x)^2 dx}$。</p>
+      <p>函数的范数长度为 $\|f\| = \sqrt{\langle f, f \rangle} = \sqrt{\int_a^b f(x)^2 dx}$。连续函数版柯西-施瓦茨不等式：</p>
+      $$\left( \int_a^b f(x) g(x) dx \right)^2 \le \left( \int_a^b f(x)^2 dx \right) \left( \int_a^b g(x)^2 dx \right)$$
     </div>
   </div>
 </div>
@@ -284,13 +285,20 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">傅里叶级数</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🎵 傅里叶级数：函数空间上的正交投影</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🎵 傅里叶级数：无穷维函数空间上的正交投影</h2>
   </div>
   <div class="card-body">
     <p>三角函数系 $\{1, \cos(x), \sin(x), \cos(2x), \sin(2x), \dots\}$ 在区间 $[-\pi, \pi]$ 上构成正交基：</p>
-    $$\int_{-\pi}^\pi \cos(nx) \sin(mx) dx = 0, \quad \int_{-\pi}^\pi \cos(nx) \cos(mx) dx = \pi \delta_{nm} \ (n \ge 1)$$
-    <p>任意函数 $f(x)$ 展开为<strong>傅里叶级数 (Fourier Series)</strong>，在几何上就是<strong>将无穷维向量 $f(x)$ 正交投影到三角函数基底上</strong>：</p>
-    $$a_n = \frac{\langle f, \cos(nx) \rangle}{\|\cos(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(nx) dx$$
+    $$\int_{-\pi}^\pi \cos(nx) \sin(mx) dx = 0, \quad \int_{-\pi}^\pi \cos(nx) \cos(mx) dx = \pi \delta_{nm} \ (n \ge 1), \quad \int_{-\pi}^\pi 1^2 dx = 2\pi$$
+    <p>任意周期信号 $f(x)$ 展开为<strong>傅里叶级数 (Fourier Series)</strong>，在几何上就是<strong>将无穷维向量 $f(x)$ 正交投影到各个频率的正交三角基底上</strong>：</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+      <div style="padding: 0.8rem; background: var(--bg-secondary); border-radius: 6px;">
+        $$a_n = \frac{\langle f, \cos(nx) \rangle}{\|\cos(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(nx) dx$$
+      </div>
+      <div style="padding: 0.8rem; background: var(--bg-secondary); border-radius: 6px;">
+        $$b_n = \frac{\langle f, \sin(nx) \rangle}{\|\sin(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(nx) dx$$
+      </div>
+    </div>
   </div>
 </div>
 
@@ -303,7 +311,7 @@
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
       <h4 style="color: var(--accent-green);">验证 $f(x) = x$ 与 $g(x) = x^2$ 在 $[-1, 1]$ 上关于内积 $\langle f, g \rangle = \int_{-1}^1 f(x)g(x)dx$ 是否正交</h4>
       $$\langle f, g \rangle = \int_{-1}^1 x \cdot x^2 dx = \int_{-1}^1 x^3 dx = \left[ \frac{x^4}{4} \right]_{-1}^1 = \frac{1}{4} - \frac{1}{4} = 0$$
-      <p>内积为 0 $\implies$ 函数 $x$ 与 $x^2$ 在区间 $[-1, 1]$ 上严格正交！</p>
+      <p>内积为 0 $\implies$ 奇函数与偶函数的乘积为奇函数，在对称区间积分恒为 0，两者严格正交！</p>
     </div>
   </div>
 </div>

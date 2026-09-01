@@ -262,29 +262,36 @@
 <div class="card">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 张成空间 (Span) 与维度阶梯</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 张成空间 (Span) 的几何图景与维度阶梯</h2>
   </div>
   <div class="card-body">
-    <p>设 $S = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$ 是 $\mathbb{R}^n$ 中的向量集合。由这些向量的所有可能线性组合所构成的集合称为 $S$ 的<strong>张成空间 (Span)</strong>：</p>
+    <p>设 $S = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$ 是 $\mathbb{R}^n$ 中的向量集合。由这些向量的所有可能线性组合所构成的几何势力范围称为 $S$ 的<strong>张成空间 (Span)</strong>：</p>
     $$\text{Span}\{\mathbf{v}_1, \dots, \mathbf{v}_k\} = \left\{ \sum_{i=1}^k c_i \mathbf{v}_i \;\middle|\; c_i \in \mathbb{R} \right\}$$
     
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-top: 3px solid var(--accent-blue);">
-        <h4 style="color: var(--accent-blue);">0 个非零向量 (0D)</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">仅包含原点单点 $\{\mathbf{0}\}$。</p>
-      </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-top: 3px solid var(--accent-green);">
-        <h4 style="color: var(--accent-green);">1 个非零向量 (1D)</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">张成穿过原点的一条无限延伸直线 $c \mathbf{v}_1$。</p>
-      </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-top: 3px solid var(--accent-purple);">
-        <h4 style="color: var(--accent-purple);">2 个不共线向量 (2D)</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">张成穿过原点的一个平坦二维平面 $c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2$。</p>
-      </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-top: 3px solid var(--accent-amber);">
-        <h4 style="color: var(--accent-amber);">$k$ 个线性无关向量 ($k$D)</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">张成穿过原点的 $k$ 维超平面子空间。</p>
-      </div>
+    <!-- SVG Graphic 1.3: Span Hierarchy -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="500" height="180" viewBox="0 0 500 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <circle cx="60" cy="90" r="6" fill="#ef4444"/>
+        <text x="60" y="130" fill="var(--text-main)" font-size="12" text-anchor="middle">0维：零点 {0}</text>
+
+        <line x1="120" y1="40" x2="120" y2="140" stroke="#334155" stroke-dasharray="2"/>
+
+        <line x1="150" y1="140" x2="230" y2="40" stroke="#38bdf8" stroke-width="3"/>
+        <circle cx="190" cy="90" r="4" fill="#38bdf8"/>
+        <text x="190" y="130" fill="var(--text-main)" font-size="12" text-anchor="middle">1维：直线 y = 0.5x</text>
+
+        <line x1="260" y1="40" x2="260" y2="140" stroke="#334155" stroke-dasharray="2"/>
+
+        <polygon points="290,120 370,140 430,60 350,40" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2"/>
+        <text x="360" y="130" fill="var(--text-main)" font-size="12" text-anchor="middle">2维：全平面 R²</text>
+      </svg>
+    </div>
+
+    <div class="intuition-box" style="padding: 1rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color:var(--accent-blue); margin-bottom:0.4rem;">💡 几何与物理直觉本质</h4>
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+        从原点出发，只给一个方向只能画出一条直线；给两个不平行的方向就能铺满一个平面；给三个不共面的方向就能充填整个 3D 空间。所有 Span 构成的子空间都<strong>必须包含原点 $(0,0)$</strong>！
+      </p>
     </div>
   </div>
 </div>
@@ -292,18 +299,37 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">判定准则</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 线性相关与线性无关：“耍废向量”的判定</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 线性相关与线性无关：“耍废向量”的几何判定</h2>
   </div>
   <div class="card-body">
     <div class="definition-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
       <h4 style="color: var(--accent-purple);">📐 线性无关定义 (Linear Independence)</h4>
       <p>向量集合 $\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 被称为<strong>线性无关 (Linearly Independent)</strong>，当且仅当方程：</p>
       $$c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_k \mathbf{v}_k = \mathbf{0}$$
-      <p><strong>只有唯一平凡解 (Trivial Solution)</strong>：$c_1 = c_2 = \dots = c_k = 0$。</p>
-      <p>若存在不全为 0 的标量使等式成立，则称其为<strong>线性相关 (Linearly Dependent)</strong>。</p>
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>李宏毅老师的比喻：“在 Span 耍废的 Vector”</strong></p>
-      <p>线性相关意味着集合中至少存在一个向量是<strong>冗余的（耍废向量）</strong>：即使把这个向量踢出集合，剩余向量张成的空间大小和维度完全保持不变！</p>
+      <p><strong>只有唯一平凡解 (Trivial Solution)</strong>：$c_1 = c_2 = \dots = c_k = 0$。若存在非零解，则称其<strong>线性相关 (Linearly Dependent)</strong>。</p>
+    </div>
+
+    <!-- SVG Graphic 1.4: Slacker Vector -->
+    <div style="text-align:center; margin: 1.5rem 0;">
+      <svg width="400" height="200" viewBox="0 0 400 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
+        <polygon points="40,160 200,180 360,90 200,70" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3"/>
+        
+        <line x1="120" y1="140" x2="200" y2="120" stroke="#38bdf8" stroke-width="2.5"/>
+        <text x="150" y="155" fill="#38bdf8" font-size="12">u₁ = [1,0]ᵀ</text>
+
+        <line x1="120" y1="140" x2="280" y2="110" stroke="#a855f7" stroke-width="2.5"/>
+        <text x="220" y="140" fill="#a855f7" font-size="12">u₂ = [0,1]ᵀ</text>
+
+        <line x1="120" y1="140" x2="240" y2="95" stroke="#ef4444" stroke-width="2.5" stroke-dasharray="4"/>
+        <text x="210" y="85" fill="#ef4444" font-size="13" font-weight="bold">u₃ = [3,2]ᵀ (耍废向量: 躺在平面内!)</text>
+      </svg>
+    </div>
+
+    <div class="intuition-box" style="padding: 1rem; background: rgba(239, 68, 68, 0.05); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
+      <h4 style="color:var(--accent-rose); margin-bottom:0.4rem;">💡 李宏毅老师的经典比喻：“耍废向量”</h4>
+      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
+        在 $\mathbf{u}_1, \mathbf{u}_2, \mathbf{u}_3$ 中，$\mathbf{u}_3 = 3\mathbf{u}_1 + 2\mathbf{u}_2$ 完全躺在别人张开的平面内部，没有向 3D 空间开辟任何新维度！即使把它踢掉，$\text{Span}(\{\mathbf{u}_1, \mathbf{u}_2, \mathbf{u}_3\}) = \text{Span}(\{\mathbf{u}_1, \mathbf{u}_2\})$ 依然是同一个平面。
+      </p>
     </div>
   </div>
 </div>

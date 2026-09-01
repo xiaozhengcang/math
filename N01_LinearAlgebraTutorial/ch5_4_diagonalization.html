@@ -269,23 +269,39 @@
     
     <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
       <h4 style="color: var(--accent-blue);">📐 对角化充要条件定理</h4>
-      <p>$n \times n$ 矩阵 $A$ <strong>可对角化 (Diagonalizable)</strong> 的充要条件是：<strong>$A$ 拥有 $n$ 个线性无关的特征向量</strong> $\mathbf{v}_1, \dots, \mathbf{v}_n$。</p>
+      <p>$n \times n$ 矩阵 $A$ <strong>可对角化 (Diagonalizable)</strong> 的充要条件是：<strong>$A$ 拥有 $n$ 个线性无关的特征向量</strong> $\mathbf{v}_1, \dots, \mathbf{v}_n$（即所有特征值的代数重数等于几何重数 $\text{AM}=\text{GM}$）。</p>
       <p>此时令特征向量矩阵 $P = [\mathbf{v}_1 \dots \mathbf{v}_n]$，特征值对角矩阵 $D = \text{diag}(\lambda_1, \dots, \lambda_n)$，则：</p>
       <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
         $$A = P D P^{-1} \iff D = P^{-1} A P$$
       </div>
+      <p><strong>矩阵高阶幂 $A^k$ 极速计算：</strong> $$A^k = (P D P^{-1})^k = P D^k P^{-1} = P \begin{bmatrix} \lambda_1^k & & \\ & \ddots & \\ & & \lambda_n^k \end{bmatrix} P^{-1}$$</p>
     </div>
+  </div>
+</div>
 
-    <h3>🚀 对角化的杀手级应用：矩阵高阶幂 $A^k$ 极速计算</h3>
-    $$A^k = (P D P^{-1})(P D P^{-1}) \cdots (P D P^{-1}) = P D^k P^{-1}$$
-    <p>计算复杂度从直接连乘的 $O(k n^3)$ 瞬间降为 $O(n^3)$！</p>
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">经典应用</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🐰 斐波那契数列动力系统与通项公式推导</h2>
+  </div>
+  <div class="card-body">
+    <p>斐波那契递推关系 $F_{k+2} = F_{k+1} + F_k$ 可以写为二维离散动力系统：</p>
+    <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem;">
+      $$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \mathbf{u}_k = A^k \mathbf{u}_0$$
+    </div>
+    <p>转移矩阵 $A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ 的特征方程为 $\lambda^2 - \lambda - 1 = 0$，解得黄金分割特征值：</p>
+    $$\lambda_1 = \frac{1+\sqrt{5}}{2} \approx 1.618 \quad (\text{黄金比例}), \quad \lambda_2 = \frac{1-\sqrt{5}}{2} \approx -0.618$$
+    <p>通过对角化 $A^k = P D^k P^{-1}$，立即推导出著名的<strong>比奈通项公式 (Binet's Formula)</strong>：</p>
+    <div class="math-block" style="text-align:center; font-size:1.2rem; padding:1rem; color:var(--accent-amber);">
+      $$F_n = \frac{1}{\sqrt{5}} \left[ \left( \frac{1+\sqrt{5}}{2} \right)^n - \left( \frac{1-\sqrt{5}}{2} \right)^n \right]$$
+    </div>
   </div>
 </div>
 
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. ✍️ 矩阵对角化与 $A^{10}$ 手算</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 矩阵对角化与 $A^{10}$ 手算</h2>
   </div>
   <div class="card-body">
     <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
@@ -300,7 +316,7 @@
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. 💻 NumPy 验证矩阵对角化与高阶幂</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 验证矩阵对角化与高阶幂</h2>
   </div>
   <div class="card-body">
     <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
