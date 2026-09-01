@@ -259,37 +259,279 @@
         </div>
 
         
+<!-- Section 1: Markov Steady State Foundation -->
 <div class="card">
   <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. Google PageRank 算法：网页排名与马尔可夫链</h2>
+    <span class="badge" style="background: var(--accent-blue); color: #000;">基础理论</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">1. 什么是马尔可夫链与马尔可夫稳态 (Markov Steady State)？</h2>
   </div>
   <div class="card-body">
-    <p>1998 年，Larry Page 与 Sergey Brin 创造了改变互联网历史的 <strong>PageRank</strong> 算法。其核心洞察是：<strong>一个网页的重要性由链接指向它的其他网页的重要性加权决定</strong>！</p>
+    <p><strong>马尔可夫稳态</strong>（Markov Steady State，亦称<strong>平稳分布</strong> Stationary Distribution 或<strong>极限平衡态</strong>），是指在一个马尔可夫链（无后效性随机系统）中，经过足够多次的状态转移后，系统处于各个状态的概率分布<strong>趋于稳定、不再随时间推移而发生改变</strong>的状态。</p>
     
-    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 转移概率矩阵 $M$ 与特征方程</h4>
-      <p>构建随机游走转移矩阵 $M$，其中 $M_{ij}$ 表示从网页 $j$ 点击跳转到网页 $i$ 的转移概率。因为每个网页的外链概率之和为 1，所以 $M$ 是<strong>列随机矩阵 (Column-Stochastic Matrix)</strong>（每列和为 1）。</p>
-      <p>长期稳态重要性向量 $\mathbf{p}^*$ 满足：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$M \mathbf{p}^* = \mathbf{p}^* \iff (M - 1 \cdot I)\mathbf{p}^* = \mathbf{0}$$
+    <!-- Intuitive Example Box -->
+    <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🏙️ 直观案例：城市与郊区的人口动态流动模型</h4>
+      <p>假设某地区总人口固定，每年城市与郊区之间的人口迁移遵循固定比例：</p>
+      <ul style="margin: 0.5rem 0 0.75rem 1.25rem; line-height: 1.7;">
+        <li>城市居民：每年有 <strong>10%</strong> 搬迁到郊区，<strong>90%</strong> 留在城市；</li>
+        <li>郊区居民：每年有 <strong>20%</strong> 搬迁到城市，<strong>80%</strong> 留在郊区。</li>
+      </ul>
+      <p>设第 $k$ 年城市和郊区的人口比例向量为 $\mathbf{x}_k = \begin{bmatrix} c_k \\ s_k \end{bmatrix}$，转移方程为：</p>
+      <div style="font-size: 1.1rem; text-align: center; margin: 0.75rem 0;">
+        $$\begin{bmatrix} c_{k+1} \\ s_{k+1} \end{bmatrix} = \begin{bmatrix} 0.90 & 0.20 \\ 0.10 & 0.80 \end{bmatrix} \begin{bmatrix} c_k \\ s_k \end{bmatrix}$$
       </div>
-      <p><strong>数学本质：</strong> PageRank 向量 $\mathbf{p}^*$ 就是<strong>转移矩阵 $M$ 对应于主特征值 $\lambda = 1$ 的稳态特征向量！</strong></p>
+      <p><strong>神奇的稳态现象：</strong> 无论初始时所有人都在城市（$\mathbf{x}_0 = [1, 0]^T$）还是所有人都在郊区（$\mathbf{x}_0 = [0, 1]^T$），随着年数 $k \to \infty$，人口分布都会严格收敛到：</p>
+      <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0; color: var(--accent-green); font-weight: 700;">
+        $$\mathbf{x}^* = \begin{bmatrix} 2/3 \\ 1/3 \end{bmatrix} \approx \begin{bmatrix} 66.7\% \\ 33.3\% \end{bmatrix}$$
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+        在此平衡点上：城市流向郊区的人数（$66.7\% \times 10\% = 6.67\%$）恰好等于郊区流向城市的人数（$33.3\% \times 20\% = 6.67\%$），动态流量完全抵消，系统进入<strong>马尔可夫稳态</strong>！
+      </p>
+    </div>
+
+    <!-- Mathematical Formulation -->
+    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📐 严格数学定义与两大视角</h4>
+      <p>设系统共有 $n$ 个离散状态，状态转移由<strong>随机矩阵 (Stochastic Matrix)</strong> 决定：</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+        <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+          <h5 style="color: var(--accent-cyan); margin-bottom: 0.35rem;">列随机矩阵视角 (Column-Stochastic)</h5>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">矩阵 $M$ 每列元素非负且列和为 1（多用于 PageRank）：</p>
+          <div style="text-align: center; font-size: 1.05rem; margin: 0.5rem 0;">
+            $$M \mathbf{x}^* = 1 \cdot \mathbf{x}^*$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">稳态分布是矩阵 $M$ 对应<strong>特征值 $\lambda = 1$ 的右特征向量</strong>，满足 $\sum x_i^* = 1, x_i^* \ge 0$。</p>
+        </div>
+        <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
+          <h5 style="color: var(--accent-pink); margin-bottom: 0.35rem;">行随机矩阵视角 (Row-Stochastic)</h5>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.5rem;">矩阵 $P$ 每行元素非负且行和为 1（概率论经典记法）：</p>
+          <div style="text-align: center; font-size: 1.05rem; margin: 0.5rem 0;">
+            $$\mathbf{\pi}^* P = 1 \cdot \mathbf{\pi}^*$$
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">稳态分布是矩阵 $P$ 对应<strong>特征值 $\lambda = 1$ 的左特征向量</strong>，满足 $\sum \pi_i^* = 1, \pi_i^* \ge 0$。</p>
+        </div>
+      </div>
+      <p style="font-size: 0.92rem; line-height: 1.7;">
+        <strong>为什么主特征值必有 $\lambda = 1$？</strong><br>
+        因为行随机矩阵每行元素之和为 1，即 $P \mathbf{1} = \mathbf{1}$（全 1 列向量是 $P$ 对应 $\lambda = 1$ 的右特征向量）。由于矩阵与其转置矩阵 $P^T$ 具有完全相同的特征多项式，故 $P$ 必然也存在对应 $\lambda = 1$ 的左特征向量（即稳态概率向量 $\mathbf{\pi}^*$）。
+      </p>
+    </div>
+
+    <!-- Ergodicity and Convergence Conditions -->
+    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">⚡ 稳态唯一收敛条件：遍历性 (Ergodicity)</h4>
+      <p>马尔可夫链能够<strong>从任意初始状态无条件收敛到唯一稳态</strong>的充要条件是满足<strong>遍历性</strong>（不可约 + 非周期）：</p>
+      <ol style="margin: 0.5rem 0 0.75rem 1.25rem; line-height: 1.7;">
+        <li><strong>不可约性 (Irreducible)：</strong> 系统状态转移图是强连通的，即任意状态 $i$ 均可通过有限步转移到达任意状态 $j$（不存在孤立死循环）。</li>
+        <li><strong>非周期性 (Aperiodic)：</strong> 状态转移不会陷入固定的周期循环（例如状态 1 和状态 2 只能交替跳动）。</li>
+      </ol>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">
+        当满足这两个条件时，根据<strong>佩隆-弗罗贝尼乌斯定理 (Perron-Frobenius Theorem)</strong>，转移矩阵的最大特征值 $\lambda_1 = 1$ 是单重根，且其余所有特征值的模长严格小于 1（$|\lambda_i| < 1$），保证了系统长程演化 $\lim_{k \to \infty} M^k \mathbf{x}_0 = \mathbf{x}^*$ 必然存在且唯一。
+      </p>
     </div>
   </div>
 </div>
 
+<!-- Section 2: Rigorous Mathematical Proof of Markov Steady State -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-rose); color: #fff;">严谨证明</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🔬 马尔可夫稳态三大核心定理深度数学证明</h2>
+  </div>
+  <div class="card-body">
+    <p>马尔可夫链稳态体系的严密性建立在三个递进的线性代数证明之上：<strong>存在性</strong>（为什么必有 $\lambda = 1$？）、<strong>界限性</strong>（为什么特征值模长不超过 1？）以及<strong>唯一收敛性</strong>（为什么任意初值都能收敛？）。</p>
+
+    <!-- Proof 1: Existence -->
+    <div class="proof-box" style="padding: 1.25rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 6px; margin: 1.25rem 0;">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">一、 存在性证明：为什么任何随机矩阵必有特征值 $\lambda = 1$？</h4>
+      <p>设 $P$ 为 $n \times n$ 阶行随机矩阵（每行元素非负且每行之和 $\sum_j P_{ij} = 1$）。</p>
+      <p><strong>Step 1：构造全 1 列向量验证右特征向量</strong><br>
+      构造全 1 列向量 $\mathbf{e} = [1, 1, \dots, 1]^T$。计算矩阵与向量乘积的第 $i$ 个分量：</p>
+      $$(P \mathbf{e})_i = \sum_{j=1}^n P_{ij} \cdot 1 = \sum_{j=1}^n P_{ij} = 1$$
+      <p>因此恒有 $P \mathbf{e} = 1 \cdot \mathbf{e}$，这直接证明了：<strong>$\lambda = 1$ 必定是矩阵 $P$ 的一个特征值</strong>，且 $\mathbf{e}$ 为其对应的右特征向量。</p>
+      
+      <p><strong>Step 2：利用转置矩阵谱等价性导出稳态行向量</strong><br>
+      根据行列式性质，方阵与其转置具有完全相同的特征多项式：</p>
+      $$\det(P - \lambda I) = \det((P - \lambda I)^T) = \det(P^T - \lambda I)$$
+      <p>因此 $P^T$ 也必然拥有特征值 $\lambda = 1$。由特征向量定义，必存在非零列向量 $\mathbf{x}$ 使得 $P^T \mathbf{x} = 1 \cdot \mathbf{x}$。两边同时取转置，记行向量 $\mathbf{\pi} = \mathbf{x}^T$，即得：</p>
+      <div style="text-align: center; font-size: 1.15rem; margin: 0.5rem 0; color: var(--accent-green); font-weight: 700;">
+        $$\mathbf{\pi} P = \mathbf{\pi}$$
+      </div>
+      <p>结合 Perron-Frobenius 定理可保证存在非负实解 $\mathbf{\pi} \ge \mathbf{0}$，将其按总和归一化（$\sum \pi_i = 1$），即<strong>严格证明了稳态分布向量 $\mathbf{\pi}$ 必然存在</strong>。$\blacksquare$</p>
+    </div>
+
+    <!-- Proof 2: Spectral Radius Bound -->
+    <div class="proof-box" style="padding: 1.25rem; background: rgba(251, 146, 60, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 6px; margin: 1.25rem 0;">
+      <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">二、 界限性证明：为什么所有特征值满足 $|\lambda| \le 1$？</h4>
+      <p><strong>定理：</strong> 任意行随机矩阵 $P$ 的谱半径 $\rho(P) \le 1$，即对任意复特征值 $\lambda$，均有 $|\lambda| \le 1$。</p>
+      <p><strong>证明（最大分量法）：</strong><br>
+      设 $\lambda$ 为 $P$ 的任一特征值，$\mathbf{v} = [v_1, v_2, \dots, v_n]^T$ 为对应的非零特征向量，满足 $P \mathbf{v} = \lambda \mathbf{v}$。</p>
+      <ol style="margin-left: 1.25rem; line-height: 1.8;">
+        <li>在向量 $\mathbf{v}$ 的所有分量中，选取绝对值最大的分量下标 $k$，即 $|v_k| = \max_i |v_i| > 0$；</li>
+        <li>展开特征方程组的第 $k$ 行：$\lambda v_k = \sum_{j=1}^n P_{kj} v_j$；</li>
+        <li>两边同时取复数模长，并应用三角不等式及非负性 $P_{kj} \ge 0$：
+          $$|\lambda| \cdot |v_k| = \left| \sum_{j=1}^n P_{kj} v_j \right| \le \sum_{j=1}^n P_{kj} |v_j|$$
+        </li>
+        <li>因为对所有 $j$ 均有 $|v_j| \le |v_k|$，所以：
+          $$|\lambda| \cdot |v_k| \le \sum_{j=1}^n P_{kj} |v_k| = |v_k| \cdot \left(\sum_{j=1}^n P_{kj}\right) = |v_k| \cdot 1$$
+        </li>
+        <li>两边同除以正数 $|v_k|$，即证得：<strong>$|\lambda| \le 1$</strong>。$\blacksquare$</li>
+      </ol>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">这保证了系统在时间演化中绝对不会发生几何级数式的发散与能量爆炸。</p>
+    </div>
+
+    <!-- Proof 3: Convergence & Uniqueness -->
+    <div class="proof-box" style="padding: 1.25rem; background: rgba(168, 85, 247, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px; margin: 1.25rem 0;">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">三、 唯一性与收敛性证明：为什么任意初始分布都会收敛到 $\mathbf{\pi}^*$？</h4>
+      <p>当系统满足<strong>遍历性（不可约且非周期，即存在正整数 $m$ 使得 $P^m > 0$）</strong>时：</p>
+      <p>根据 <strong>Perron-Frobenius 强定理</strong>，主特征值 $\lambda_1 = 1$ 是<strong>严格简单的单根</strong>（代数与几何重数均为 1），且其余所有特征值严格落在单位圆内：</p>
+      <div style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0;">
+        $$1 = \lambda_1 > |\lambda_2| \ge |\lambda_3| \ge \dots \ge |\lambda_n|$$
+      </div>
+      <p><strong>谱分解与高阶幂演化极限：</strong><br>
+      将转移矩阵 $P$ 进行谱分解（若不可对角化采用 Jordan 标准型极限同理）：</p>
+      $$P = \mathbf{e} \mathbf{\pi}^* + \sum_{i=2}^n \lambda_i \mathbf{v}_i \mathbf{u}_i^T$$
+      <p>计算状态经过 $k$ 步转移的高阶幂矩阵 $P^k$：</p>
+      $$P^k = \mathbf{e} \mathbf{\pi}^* + \sum_{i=2}^n (\lambda_i)^k \mathbf{v}_i \mathbf{u}_i^T$$
+      <p>当转移步数 $k \to \infty$ 时，因为对任意 $i \ge 2$ 均有 $|\lambda_i| < 1$，故高阶指数项 $\lim_{k \to \infty} (\lambda_i)^k = 0$，次主特征成分全部衰减归零：</p>
+      <div style="text-align: center; font-size: 1.15rem; margin: 0.75rem 0;">
+        $$\lim_{k \to \infty} P^k = \mathbf{e} \mathbf{\pi}^* = \begin{bmatrix} \mathbf{\pi}^* \\ \mathbf{\pi}^* \\ \vdots \\ \mathbf{\pi}^* \end{bmatrix}$$
+      </div>
+      <p><strong>任意初值收敛性验证：</strong><br>
+      设系统从任意合法初始概率分布 $\mathbf{\pi}^{(0)}$ 出发（满足 $\sum \pi_i^{(0)} = 1 \iff \mathbf{\pi}^{(0)} \mathbf{e} = 1$）：</p>
+      $$\lim_{k \to \infty} \mathbf{\pi}^{(k)} = \lim_{k \to \infty} (\mathbf{\pi}^{(0)} P^k) = \mathbf{\pi}^{(0)} (\mathbf{e} \mathbf{\pi}^*) = (\mathbf{\pi}^{(0)} \mathbf{e}) \mathbf{\pi}^* = 1 \cdot \mathbf{\pi}^* = \mathbf{\pi}^*$$
+      <p><strong>结论：</strong> 历史初始状态在演化过程中被完全消除，系统<strong>无条件且以指数速度收敛至唯一的稳态分布 $\mathbf{\pi}^*$</strong>！$\blacksquare$</p>
+    </div>
+  </div>
+</div>
+
+<!-- Section 3: Google PageRank and Markov Abstraction -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">工业前沿</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">3. 🌐 核心解构：为什么 PageRank 可以完美抽象为马尔可夫稳态求解？</h2>
+  </div>
+  <div class="card-body">
+    <p>1998 年，Larry Page 与 Sergey Brin 创造了改变互联网历史的 <strong>PageRank</strong> 算法。将庞大互联网络的权威度排序问题抽象为<strong>马尔可夫链稳态求解</strong>，是计算机科学史上最精妙的数学建模之一。其深层逻辑建立在以下 5 个维度的完美契合上：</p>
+    
+    <!-- 1. Physical Mapping -->
+    <div style="margin: 1.25rem 0; padding: 1.15rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.35rem;">1️⃣ 物理行为映射：“随机冲浪者假说”天然具备马尔可夫性</h4>
+      <p style="font-size: 0.92rem; line-height: 1.7; color: var(--text-color);">
+        PageRank 假设了一个假想的互联网用户——<strong>随机冲浪者 (Random Surfer)</strong>：
+      </p>
+      <ul style="margin: 0.35rem 0 0.5rem 1.25rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <li><strong>离散状态映射</strong>：全网数十亿个网页，就是马尔可夫链中的<strong>离散状态集合</strong>（$S_1, S_2, \dots, S_N$）；</li>
+        <li><strong>转移路径映射</strong>：网页上的超链接就是<strong>状态转移通道</strong>。若网页 $j$ 含有 $c_j$ 个外链，冲浪者以等概率 $\frac{1}{c_j}$ 点击其中一个跳往下一页；</li>
+        <li><strong>无后效性（马尔可夫性）</strong>：冲浪者下一步跳转到哪个网页，<strong>仅仅取决于当前所在的网页</strong>，与他此前浏览过的历史路径毫无关系。</li>
+      </ul>
+    </div>
+
+    <!-- 2. Law of Total Probability -->
+    <div style="margin: 1.25rem 0; padding: 1.15rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.35rem;">2️⃣ 权威度分配逻辑 ＝ 概率论全概率公式</h4>
+      <p style="font-size: 0.92rem; line-height: 1.7; color: var(--text-color);">
+        PageRank 的核心公理是：<strong>一个网页的重要性，由所有链接指向它的外部网页的重要性加权决定</strong>。
+      </p>
+      <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+        设网页 $j$ 的权威度分值为 $p_j$，其出链数为 $c_j$。若 $j$ 链接到了网页 $i$，则 $j$ 将自身权威度的 $\frac{1}{c_j}$ 贡献给 $i$。网页 $i$ 汇总所有入链网页的加权贡献：
+      </p>
+      <div style="text-align: center; font-size: 1.1rem; margin: 0.5rem 0;">
+        $$p_i = \sum_{j \to i} \frac{p_j}{c_j}$$
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">
+        若将所有网页的权重组成列向量 $\mathbf{p} = [p_1, p_2, \dots, p_N]^T$，定义列随机转移矩阵 $M$（其中 $M_{ij} = \frac{1}{c_j}$ 当 $j \to i$ 时），上述全概率累加写成矩阵形式就是：
+      </p>
+      <div style="text-align: center; font-size: 1.15rem; margin: 0.5rem 0; color: var(--accent-cyan); font-weight: 700;">
+        $$\mathbf{p} = M \mathbf{p}$$
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-muted);">这在数学上完全等同于：状态概率分布在经历一步随机转移后保持恒定不变！</p>
+    </div>
+
+    <!-- 3. Physical Meaning of Steady State -->
+    <div style="margin: 1.25rem 0; padding: 1.15rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.35rem;">3️⃣ 稳态概率的物理含义 ＝ 拓扑网络中的终极权威度</h4>
+      <p style="font-size: 0.92rem; line-height: 1.7; color: var(--text-color);">
+        想象在互联网中放入上亿个冲浪者，让他们按照上述规则随机点击游走：
+      </p>
+      <ul style="margin: 0.35rem 0 0.5rem 1.25rem; font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
+        <li>随着点击步数越来越多，容易被大量高质量链接引导进去的网页（如维基百科、权威论文网），聚集的冲浪者比例就会越来越高；</li>
+        <li>最终，整个网络中人群在各个网页上的分布比例会达到<strong>动态平衡（流入量完全抵消流出量）</strong>；</li>
+        <li>冲浪者在网页 $i$ 上的<strong>长期停留概率 $p_i^*$ 越大</strong>，说明该网页在拓扑结构中的中心度与权威度越高——因此，<strong>稳态概率值直接被定义为 PageRank 排名分值</strong>！</li>
+      </ul>
+    </div>
+
+    <!-- 4. Eigenvalue Viewpoint -->
+    <div style="margin: 1.25rem 0; padding: 1.15rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+      <h4 style="color: var(--accent-amber); margin-bottom: 0.35rem;">4️⃣ 线性代数特征方程的完全统一</h4>
+      <p style="font-size: 0.92rem; line-height: 1.7;">
+        由于每个网页的外链跳转概率和为 1，转移矩阵 $M$ 的每一列元素之和等于 1（标准的<strong>列随机矩阵</strong>）。求解排名方程：
+      </p>
+      <div style="text-align: center; font-size: 1.15rem; margin: 0.5rem 0;">
+        $$M \mathbf{p}^* = 1 \cdot \mathbf{p}^* \iff (M - I)\mathbf{p}^* = \mathbf{0}$$
+      </div>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">
+        <strong>数学本质：</strong> 全网网页的 PageRank 权威度向量 $\mathbf{p}^*$，严格对应于<strong>转移矩阵 $M$ 关于主特征值 $\lambda = 1$ 的稳态特征向量</strong>（且满足归一化 $\sum p_i^* = 1$）。
+      </p>
+    </div>
+
+    <!-- 5. Comparison Table -->
+    <div class="definition-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">📊 PageRank 概念与马尔可夫链 / 线性代数映射全览</h4>
+      <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+          <thead>
+            <tr style="border-bottom: 2px solid var(--border-color); color: var(--accent-cyan);">
+              <th style="padding: 0.5rem 0.75rem;">互联网与 PageRank 实体</th>
+              <th style="padding: 0.5rem 0.75rem;">马尔可夫链概念</th>
+              <th style="padding: 0.5rem 0.75rem;">线性代数数学表征</th>
+            </tr>
+          </thead>
+          <tbody style="line-height: 1.7; color: var(--text-muted);">
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem 0.75rem; color: var(--text-color); font-weight: 600;">单个网页 Webpage</td>
+              <td style="padding: 0.5rem 0.75rem;">离散状态 State $i$</td>
+              <td style="padding: 0.5rem 0.75rem;">状态空间维度 / 基向量 $\mathbf{e}_i$</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem 0.75rem; color: var(--text-color); font-weight: 600;">网页间超链接 Hyperlink</td>
+              <td style="padding: 0.5rem 0.75rem;">一步状态转移概率 $P(j \to i)$</td>
+              <td style="padding: 0.5rem 0.75rem;">列随机矩阵元素 $M_{ij} = 1 / c_j$</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem 0.75rem; color: var(--text-color); font-weight: 600;">随机冲浪者的点击轨迹</td>
+              <td style="padding: 0.5rem 0.75rem;">马尔可夫随机游走 (Random Walk)</td>
+              <td style="padding: 0.5rem 0.75rem;">状态向量迭代 $\mathbf{x}_{k+1} = M \mathbf{x}_k$</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+              <td style="padding: 0.5rem 0.75rem; color: var(--text-color); font-weight: 600;">网页最终权威度排名</td>
+              <td style="padding: 0.5rem 0.75rem;">极限平衡平稳分布 $\mathbf{\pi}^*$</td>
+              <td style="padding: 0.5rem 0.75rem; color: var(--accent-green); font-weight: 600;">主特征值 $\lambda = 1$ 的归一化特征向量 $\mathbf{p}^*$</td>
+            </tr>
+            <tr>
+              <td style="padding: 0.5rem 0.75rem; color: var(--text-color); font-weight: 600;">85% 点链接 + 15% 随机传送</td>
+              <td style="padding: 0.5rem 0.75rem;">遍历性正则化（不可约 + 非周期）</td>
+              <td style="padding: 0.5rem 0.75rem;">构造严格正矩阵 $G$，满足 Perron-Frobenius 定理</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Section 4: Traps and Google Matrix -->
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-purple); color: #fff;">算法破解</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 悬挂陷阱与 Google 矩阵修正 ($G = d M + \frac{1-d}{n} E$)</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">4. 悬挂陷阱与 Google 矩阵修正 ($G = d M + \frac{1-d}{n} E$)</h2>
   </div>
   <div class="card-body">
-    <p>真实网络中存在两大退化陷阱：</p>
+    <p>真实互联网络并不满足天然的遍历性（可能存在死循环或无出链页面），导致两大退化陷阱：</p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0;">
       <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
         <h4 style="color: var(--accent-rose);">🪤 蜘蛛陷阱 (Spider Trap)</h4>
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">内部循环引流（如两个页面互相指向），会把全网所有的 PR 权重吸光并据为己有。</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">内部循环引流（如两个页面互相指向），破坏了不可约性，会把全网所有的 PR 权重吸光并据为己有。</p>
       </div>
       <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-amber);">
         <h4 style="color: var(--accent-amber);">🕳️ 死胡同 / 悬挂节点 (Dead End)</h4>
@@ -299,56 +541,83 @@
 
     <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
       <h4 style="color: var(--accent-purple);">👑 阻尼因子 (Damping Factor) 与 Google 矩阵</h4>
-      <p>引入<strong>随机传送机制（以 $1-d$ 概率随机跳往全网任意页面，工业标准 $d = 0.85$）</strong>：</p>
+      <p>引入<strong>随机传送机制（以 $d \approx 0.85$ 概率沿链接跳转，以 $1-d$ 概率随机传送至全网任意网页）</strong>：</p>
       <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
         $$G = d M + \frac{1-d}{n} \mathbf{e} \mathbf{e}^T$$
       </div>
       <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
-        <strong>佩隆-弗罗贝尼乌斯定理 (Perron-Frobenius Theorem)：</strong> 修正后的 Google 矩阵 $G$ 严格正值（所有元素 $>0$），保证了主特征值 $\lambda_1 = 1$ 严格大于所有其余特征值的模长（$1 > |\lambda_2|$），从而保证幂法迭代<strong>无条件、指数级极速收敛到唯一严格正的稳态分布</strong>！
+        <strong>完美满足 Perron-Frobenius 定理：</strong> 修正后的 Google 矩阵 $G$ 变为<strong>严格正值矩阵</strong>（所有元素 $G_{ij} > 0$），天然满足不可约性和非周期性！这使得主特征值 $\lambda_1 = 1$ 严格孤立且大于次特征值模长（$1 > |\lambda_2|$），保证了幂法迭代（Power Method）<strong>在数十亿网页规模下无条件、指数级极速收敛到唯一的马尔可夫稳态分布</strong>！
       </p>
     </div>
   </div>
 </div>
 
+<!-- Section 5: Hand Calculation Examples -->
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 3 节点网络 PageRank 手算</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 马尔可夫稳态与 PageRank 手算演练</h2>
   </div>
   <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">计算转移矩阵 $M = \begin{bmatrix} 0 & 0 & 1 \\ 0.5 & 0 & 0 \\ 0.5 & 1 & 0 \end{bmatrix}$ 的稳态排名</h4>
-      <p>解方程 $(M - I)\mathbf{p} = \mathbf{0}$：</p>
-      $$\begin{bmatrix} -1 & 0 & 1 \\ 0.5 & -1 & 0 \\ 0.5 & 1 & -1 \end{bmatrix} \begin{bmatrix} p_1 \\ p_2 \\ p_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \implies p_1 = p_3, \quad p_2 = 0.5 p_1$$
-      <p>归一化满足 $p_1 + p_2 + p_3 = 1$：$p_1 + 0.5p_1 + p_1 = 2.5p_1 = 1 \implies p_1 = 0.4, p_2 = 0.2, p_3 = 0.4$。</p>
+    <!-- Example 1 -->
+    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px; margin-bottom: 1.5rem;">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">例题 1：人口流动模型的马尔可夫稳态精确手算</h4>
+      <p>求解转移矩阵 $P = \begin{bmatrix} 0.9 & 0.2 \\ 0.1 & 0.8 \end{bmatrix}$ 的稳态分布向量 $\mathbf{x} = \begin{bmatrix} c \\ s \end{bmatrix}$。</p>
+      <p><strong>步骤 1：列出特征方程 $(P - 1 \cdot I)\mathbf{x} = \mathbf{0}$</strong></p>
+      $$\begin{bmatrix} 0.9 - 1 & 0.2 \\ 0.1 & 0.8 - 1 \end{bmatrix} \begin{bmatrix} c \\ s \end{bmatrix} = \begin{bmatrix} -0.1 & 0.2 \\ 0.1 & -0.2 \end{bmatrix} \begin{bmatrix} c \\ s \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+      <p>两行方程等价于：$-0.1 c + 0.2 s = 0 \implies c = 2 s$。</p>
+      <p><strong>步骤 2：应用概率归一化条件 $c + s = 1$</strong></p>
+      $$2s + s = 3s = 1 \implies s = \frac{1}{3} \approx 33.3\%, \quad c = \frac{2}{3} \approx 66.7\%$$
+      <p><strong>结论：</strong> 稳态向量为 $\mathbf{x}^* = \begin{bmatrix} 2/3 \\ 1/3 \end{bmatrix}$，直观印证了长期城市人口稳定为郊区的 2 倍。</p>
+    </div>
+
+    <!-- Example 2 -->
+    <div class="example-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">例题 2：3 节点互联网络 PageRank 排名手算</h4>
+      <p>已知 3 个网页的链接关系构建的列随机矩阵为 $M = \begin{bmatrix} 0 & 0 & 1 \\ 0.5 & 0 & 0 \\ 0.5 & 1 & 0 \end{bmatrix}$，求无阻尼稳态排名。</p>
+      <p>解特征方程 $(M - I)\mathbf{p} = \mathbf{0}$：</p>
+      $$\begin{bmatrix} -1 & 0 & 1 \\ 0.5 & -1 & 0 \\ 0.5 & 1 & -1 \end{bmatrix} \begin{bmatrix} p_1 \\ p_2 \\ p_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix} \implies \begin{cases} p_1 = p_3 \\ p_2 = 0.5 p_1 \end{cases}$$
+      <p>归一化条件 $p_1 + p_2 + p_3 = 1$：</p>
+      $$p_1 + 0.5p_1 + p_1 = 2.5p_1 = 1 \implies p_1 = 0.4, \quad p_2 = 0.2, \quad p_3 = 0.4$$
       <p><strong>排名结果：</strong> 网页 1 与网页 3 并列第 1（权重各 40%），网页 2 排名第 3（权重 20%）。</p>
     </div>
   </div>
 </div>
 
+<!-- Section 6: Python Simulation -->
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
     <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 Python 幂法迭代含阻尼系数 PageRank</h2>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python 幂法迭代模拟马尔可夫稳态收敛</h2>
   </div>
   <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+    <p>以下脚本演示了如何使用幂法迭代（Power Iteration）从任意随机初始分布快速收敛到 Google PageRank 稳态分布：</p>
+    <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;"><code>import numpy as np
 
+# 1. 原始转移矩阵 M (列随机矩阵)
 M = np.array([[0.0, 0.0, 1.0],
               [0.5, 0.0, 0.0],
               [0.5, 1.0, 0.0]])
 n = 3
-d = 0.85
+d = 0.85 # 阻尼系数
 
-# Google 矩阵 G
+# 2. 构造严格满足 Perron-Frobenius 条件的 Google 矩阵 G
 G = d * M + (1 - d) / n * np.ones((n, n))
 
-# 幂法迭代
-p = np.ones(n) / n
-for step in range(50):
-    p = G @ p
+# 3. 随机选取一个非均匀初始概率向量 x0
+p = np.array([0.8, 0.1, 0.1])
+print("初始分布:", p)
 
-print("含阻尼系数稳态 PageRank 向量:", np.round(p, 4)) # [0.3878 0.2148 0.3974]</code></pre>
+# 4. 幂法迭代 (Power Method Iteration)
+for step in range(1, 31):
+    p_next = G @ p
+    diff = np.linalg.norm(p_next - p, ord=1)
+    p = p_next
+    if step in [1, 3, 5, 10, 25]:
+        print(f"Step {step:2d} -> PR 分布: {np.round(p, 4)}, L1 变化量: {diff:.6f}")
+
+print("\n最终收敛的马尔可夫稳态 PageRank 向量:", np.round(p, 4))
+# 输出结果：[0.3878, 0.2148, 0.3974]</code></pre>
   </div>
 </div>
 
