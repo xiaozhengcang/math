@@ -256,93 +256,541 @@
         <div class="module-hero">
           <div class="module-badge">Chapter 4: 空间、基底与坐标系</div>
           <h1 class="module-title">Ch 4.6: 算子矩阵化、相似变换与微积分算子</h1>
+          <p class="module-subtitle">深刻理解“算子即灵魂，矩阵即面具”：从三步翻译闭环、相似不变量全景证明，到微积分算子的代数统一</p>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 算子矩阵化与相似变换 ($B = P^{-1} A P$)</h2>
-  </div>
-  <div class="card-body">
-    <p>同一个线性算子 $T$，在不同的观察坐标系下，对应的变换矩阵不同。设算子在标准基下的矩阵为 $A$，在基底 $\mathcal{B}$ 下的矩阵为 $B$，基变换矩阵为 $P$。则：</p>
-    
-    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">👑 相似矩阵公式 (Similar Matrices) 与三步翻译图景</h4>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$B = P^{-1} A P$$
-      </div>
-      <p><strong>三步翻译闭环：</strong></p>
-      <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li>$P$：将 $\mathcal{B}$ 观察坐标系下的向量“翻译”回标准笛卡尔坐标 $\mathbf{x} = P [\mathbf{x}]_\mathcal{B}$。</li>
-        <li>$A$：在标准笛卡尔坐标系下执行真实的物理变换 $\mathbf{y} = A\mathbf{x}$。</li>
-        <li>$P^{-1}$：将变换后的结果翻译回 $\mathcal{B}$ 观察坐标系 $[\mathbf{y}]_\mathcal{B} = P^{-1}\mathbf{y}$。</li>
-      </ol>
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
-      <p><strong>相似不变量 (Similarity Invariants)：</strong> 相似矩阵拥有完全相同的代数本质特征：</p>
-      <ul style="margin-left: 1.5rem; line-height: 1.8; color: var(--text-muted); font-size: 0.9rem;">
-        <li>相同特征多项式：$\det(\lambda I - B) = \det(\lambda I - P^{-1}AP) = \det(P^{-1}(\lambda I - A)P) = \det(\lambda I - A)$</li>
-        <li>相同特征值 (Eigenvalues) 与代数重数</li>
-        <li>相同行列式：$\det(B) = \det(A)$</li>
-        <li>相同矩阵迹 (Trace)：$\text{tr}(B) = \text{tr}(A)$</li>
-        <li>相同矩阵秩 (Rank)：$\text{Rank}(B) = \text{Rank}(A)$</li>
-      </ul>
-    </div>
-  </div>
-</div>
+        <!-- 导言卡片 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 本节核心思想：线性代数的“换位思考”哲学</div>
+          <p>在空间中，一个线性变换（比如空间的旋转、关于某个平面的镜像、沿着特定方向的拉伸）是<strong>客观独立存在</strong>的几何物理事实。然而，当我们用一组基底去量化它时，它就体现为一个数字方阵。</p>
+          <p>换一组基底（换一双眼睛观察），同一个变换就会呈现出完全不同的矩阵形式。这些描述同一个客观算子的不同矩阵，彼此之间称为<strong>相似矩阵 (Similar Matrices)</strong>。<strong>掌握相似变换，是通往第 5 章特征值、特征向量与矩阵对角化的核心桥梁！</strong></p>
+        </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">微积分震撼应用</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🚀 微积分求导与积分算子的矩阵化表示</h2>
-  </div>
-  <div class="card-body">
-    <p>在三次及以下多项式空间 $\mathcal{P}_3$ 中，选取基底 $\mathcal{B} = \{1, x, x^2, x^3\}$。任意多项式 $p(x) = a_0 + a_1 x + a_2 x^2 + a_3 x^3$ 对应坐标向量 $[a_0, a_1, a_2, a_3]^T$。</p>
-    <p>求导算子 $D = \frac{d}{dx}$ 作用在各基底上：$D(1) = 0, D(x) = 1, D(x^2) = 2x, D(x^3) = 3x^2$。</p>
-    <p>将输出写为列向量，立即获得<strong>求导算子矩阵 $[D]$</strong>：</p>
-    $$[D] = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 2 & 0 \\ 0 & 0 & 0 & 3 \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
-    <p><strong>微分变成了纯粹的矩阵乘法！</strong> 连续求导 4 次 $[D]^4 = 0$（幂零矩阵 Nilpotent Matrix）。</p>
-  </div>
-</div>
+        <!-- 1. 相似矩阵定义与三步翻译闭环 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">核心定义</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 线性算子矩阵化与相似矩阵的数学严密定义</h2>
+          </div>
+          <div class="card-body">
+            <p>设 $V$ 是 $n$ 维实向量空间，$T: V \to V$ 是定义在 $V$ 上的线性算子 (Linear Operator)。</p>
+            <ul>
+              <li>选定原基底 $\mathcal{E} = \{\mathbf{e}_1, \dots, \mathbf{e}_n\}$（例如标准笛卡尔基），算子 $T$ 对应的矩阵表示为 $A = [T]_\mathcal{E}$。</li>
+              <li>选定新基底 $\mathcal{B} = \{\mathbf{b}_1, \dots, \mathbf{b}_n\}$，算子 $T$ 对应的矩阵表示为 $B = [T]_\mathcal{B}$。</li>
+              <li>设由基底 $\mathcal{B}$ 转换到基底 $\mathcal{E}$ 的过渡矩阵为 $P = \begin{bmatrix} \mathbf{b}_1 & \mathbf{b}_2 & \dots & \mathbf{b}_n \end{bmatrix}$（即满足 $\mathbf{x} = P [\mathbf{x}]_\mathcal{B}$）。</li>
+            </ul>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 矩阵乘法求导手算验证</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">用矩阵乘法求多项式 $p(x) = 5 - 2x + 4x^2 + 7x^3$ 的导数</h4>
-      <p>坐标向量为 $\mathbf{p} = [5, -2, 4, 7]^T$：</p>
-      $$[D] \mathbf{p} = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 2 & 0 \\ 0 & 0 & 0 & 3 \\ 0 & 0 & 0 & 0 \end{bmatrix} \begin{bmatrix} 5 \\ -2 \\ 4 \\ 7 \end{bmatrix} = \begin{bmatrix} -2 \\ 8 \\ 21 \\ 0 \end{bmatrix}$$
-      <p>还原为多项式：$-2 + 8x + 21x^2$，与微积分常规求导完全一致！</p>
-    </div>
-  </div>
-</div>
+            <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 相似矩阵黄金公式 (Similarity Transformation)</h4>
+              <div style="font-size: 1.4rem; text-align: center; margin: 1rem 0; font-weight: bold; color: var(--accent-blue);">
+                $$B = P^{-1} A P \quad \Longleftrightarrow \quad A = P B P^{-1}$$
+              </div>
+              <p>若存在可逆矩阵 $P$ 使得上式成立，则称矩阵 $A$ 与矩阵 $B$ <strong>相似 (Similar)</strong>，记作 <strong>$A \sim B$</strong>。</p>
+            </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 矩阵化多项式求导与相似变换</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+            <!-- SVG 交换图与三步翻译 -->
+            <div style="text-align: center; margin: 2rem 0;">
+              <svg width="620" height="260" viewBox="0 0 620 260" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+                <defs>
+                  <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                  <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+                  </marker>
+                  <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+                  </marker>
+                </defs>
 
-# 构造求导矩阵 D (4x4)
-D = np.array([[0, 1, 0, 0],
-              [0, 0, 2, 0],
-              [0, 0, 0, 3],
-              [0, 0, 0, 0]], dtype=float)
+                <!-- Top Tier: Standard Basis (E) -->
+                <rect x="70" y="30" width="160" height="50" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="150" y="60" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">标准坐标 x ∈ ℝⁿ</text>
 
-p = np.array([5, -2, 4, 7], dtype=float) # 5 - 2x + 4x^2 + 7x^3
-dp = D @ p
-print("多项式导数坐标向量:", dp) # [-2.  8. 21.  0.]
+                <rect x="390" y="30" width="160" height="50" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="470" y="60" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">变换结果 y = Ax</text>
 
-# 幂零验证
-print("D^4 是否为零矩阵:", np.allclose(np.linalg.matrix_power(D, 4), 0))</code></pre>
-  </div>
-</div>
+                <path d="M 235 55 L 385 55" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+                <text x="310" y="45" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">A (标准基算子)</text>
 
+                <!-- Bottom Tier: New Basis (B) -->
+                <rect x="70" y="175" width="160" height="50" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="#c084fc" stroke-width="1.5"/>
+                <text x="150" y="205" fill="#c084fc" font-size="14" font-weight="bold" text-anchor="middle">新基坐标 [x]ᵦ</text>
+
+                <rect x="390" y="175" width="160" height="50" rx="8" fill="rgba(192, 132, 252, 0.12)" stroke="#c084fc" stroke-width="1.5"/>
+                <text x="470" y="205" fill="#c084fc" font-size="14" font-weight="bold" text-anchor="middle">新基结果 [y]ᵦ = B[x]ᵦ</text>
+
+                <path d="M 235 200 L 385 200" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arrow-purple)"/>
+                <text x="310" y="222" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">B = P⁻¹AP (新基算子)</text>
+
+                <!-- Vertical Transitions -->
+                <!-- Left: B to E (P) and E to B (P^-1) -->
+                <path d="M 130 170 L 130 85" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+                <text x="105" y="130" fill="#34d399" font-size="12" font-weight="bold">① P</text>
+
+                <path d="M 170 85 L 170 170" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-blue)"/>
+                <text x="178" y="130" fill="#fbbf24" font-size="11">P⁻¹</text>
+
+                <!-- Right: E to B (P^-1) -->
+                <path d="M 470 85 L 470 170" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+                <text x="495" y="130" fill="#34d399" font-size="12" font-weight="bold">③ P⁻¹</text>
+
+                <text x="310" y="135" fill="#94a3b8" font-size="11" font-weight="bold" text-anchor="middle">交换图 (Commutative Diagram): B = P⁻¹ ∘ A ∘ P</text>
+              </svg>
+            </div>
+
+            <div class="step-container">
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-green); color:#000;">1</div>
+                <div class="step-content">
+                  <div class="step-title">第一步：$P$ 切换观察视角（翻译到标准基）</div>
+                  <p>输入向量以新基坐标 $[\mathbf{x}]_\mathcal{B}$ 给出。乘以过渡矩阵 $P$，将其还原为标准笛卡尔坐标：$\mathbf{x} = P [\mathbf{x}]_\mathcal{B}$。</p>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-blue); color:#000;">2</div>
+                <div class="step-content">
+                  <div class="step-title">第二步：$A$ 执行客观物理变换</div>
+                  <p>在标准坐标系下，让矩阵 $A$ 作用于向量 $\mathbf{x}$，完成真正的几何变换：$\mathbf{y} = A \mathbf{x} = A P [\mathbf{x}]_\mathcal{B}$。</p>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-purple); color:#fff;">3</div>
+                <div class="step-content">
+                  <div class="step-title">第三步：$P^{-1}$ 逆变换折算回新坐标系</div>
+                  <p>最后乘以 $P^{-1}$，把变换后的结果 $\mathbf{y}$ 折算回新基底 $\mathcal{B}$ 下的度量刻度：$[\mathbf{y}]_\mathcal{B} = P^{-1} \mathbf{y} = P^{-1} A P [\mathbf{x}]_\mathcal{B}$。因此 $[T]_\mathcal{B} = P^{-1} A P$！</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 相似关系的等价性质 -->
+            <div class="proof-box" style="margin-top: 1.5rem;">
+              <div class="box-title">📐 相似关系是一种严格的“等价关系 (Equivalence Relation)”</div>
+              <p>相似关系具有以下三大数学性质：</p>
+              <ol style="margin-left: 1.2rem; line-height: 1.8;">
+                <li><strong>自反性 (Reflexivity)</strong>：任意矩阵 $A \sim A$（取可逆矩阵 $P = I$，则 $I^{-1}AI = A$）。</li>
+                <li><strong>对称性 (Symmetry)</strong>：若 $A \sim B$，则必有 $B \sim A$（由 $B = P^{-1}AP$ 可得 $A = PBP^{-1} = (P^{-1})^{-1} B (P^{-1})$，取 $Q = P^{-1}$ 即可）。</li>
+                <li><strong>传递性 (Transitivity)</strong>：若 $A \sim B$ 且 $B \sim C$，则必有 $A \sim C$（设 $B = P^{-1}AP, C = Q^{-1}BQ$，代入得 $C = Q^{-1}(P^{-1}AP)Q = (PQ)^{-1} A (PQ)$，由于可逆矩阵之积 $PQ$ 仍可逆，故 $A \sim C$）。</li>
+              </ol>
+              <p style="margin-top: 0.5rem; font-size: 0.92rem; color: var(--text-dim);">这意味着：相似关系将所有 $n \times n$ 方阵集合划分成互不相交的<strong>相似等价类 (Similarity Equivalence Classes)</strong>。同一个等价类中的所有矩阵，本质上是同一个抽象线性算子在不同基底下的投影！</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 几何直觉与实战案例 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">几何威力</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 🎬 相似变换的实战威力：化繁为简的“主轴视角”</h2>
+          </div>
+          <div class="card-body">
+            <p>直接在标准笛卡尔坐标系下求解复杂几何变换的矩阵通常非常繁琐。而<strong>相似变换的核心思想是：先找到让问题变得极其简单的“特选基底”，写出简单的对角/分块矩阵，再通过基变换公式一键反解出标准矩阵！</strong></p>
+
+            <!-- 案例 1: 斜向直线反射 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">🌟 案例 1：求二维平面关于斜直线 $y = 2x$ 镜像反射的标准矩阵 $A$</h4>
+              <p><strong>痛点：</strong> 如果直接在标准基 $\mathbf{e}_1 = [1, 0]^T, \mathbf{e}_2 = [0, 1]^T$ 下硬算反射后的坐标，需要用到复杂的夹角与三角投影公式，极易出错。</p>
+              
+              <p><strong>妙解（相似变换思路）：</strong></p>
+              <ol style="margin-left: 1.5rem; line-height: 1.8;">
+                <li><strong>选取直觉基底 $\mathcal{B}$：</strong>
+                  <ul>
+                    <li>沿着反射轴 $y = 2x$ 方向选取向量 $\mathbf{b}_1 = \begin{bmatrix} 1 \\ 2 \end{bmatrix}$。显然反射后保持不变：$T(\mathbf{b}_1) = 1 \cdot \mathbf{b}_1$。</li>
+                    <li>垂直于反射轴选取法向量 $\mathbf{b}_2 = \begin{bmatrix} -2 \\ 1 \end{bmatrix}$。显然反射后反向：$T(\mathbf{b}_2) = -1 \cdot \mathbf{b}_2$。</li>
+                  </ul>
+                </li>
+                <li><strong>在新基底 $\mathcal{B}$ 下写出矩阵 $B$（极其优美且直观）：</strong>
+                  $$B = [T]_\mathcal{B} = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$$
+                </li>
+                <li><strong>构造基变换矩阵 $P$ 及其逆 $P^{-1}$：</strong>
+                  $$P = \begin{bmatrix} \mathbf{b}_1 & \mathbf{b}_2 \end{bmatrix} = \begin{bmatrix} 1 & -2 \\ 2 & 1 \end{bmatrix}, \quad \det(P) = 1 - (-4) = 5$$
+                  $$P^{-1} = \frac{1}{5} \begin{bmatrix} 1 & 2 \\ -2 & 1 \end{bmatrix} = \begin{bmatrix} 0.2 & 0.4 \\ -0.4 & 0.2 \end{bmatrix}$$
+                </li>
+                <li><strong>利用公式 $A = P B P^{-1}$ 反解出标准矩阵：</strong>
+                  $$A = \begin{bmatrix} 1 & -2 \\ 2 & 1 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix} \begin{bmatrix} 0.2 & 0.4 \\ -0.4 & 0.2 \end{bmatrix} = \begin{bmatrix} 1 & 2 \\ 2 & -1 \end{bmatrix} \begin{bmatrix} 0.2 & 0.4 \\ -0.4 & 0.2 \end{bmatrix} = \begin{bmatrix} -0.6 & 0.8 \\ 0.8 & 0.6 \end{bmatrix}$$
+                </li>
+              </ol>
+              <p style="margin-top: 0.5rem;"><strong>验算：</strong> $\det(A) = -0.36 - 0.64 = -1$（符合反射变换行列式为 $-1$ 的物理特性）；$\operatorname{tr}(A) = -0.6 + 0.6 = 0 = \operatorname{tr}(B)$，完全一致！</p>
+            </div>
+
+            <!-- 案例 2: 沿斜轴各向异性伸缩 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🌟 案例 2：沿方向 $\mathbf{v}_1 = [1, 1]^T$ 伸长 3 倍，沿 $\mathbf{v}_2 = [1, -1]^T$ 压缩为 0.5 倍</h4>
+              <p>在新基底 $\mathcal{B} = \{\mathbf{v}_1, \mathbf{v}_2\}$ 下，变换矩阵为纯对角阵 $B = \begin{bmatrix} 3 & 0 \\ 0 & 0.5 \end{bmatrix}$。</p>
+              <p>过渡矩阵 $P = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}, P^{-1} = \begin{bmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{bmatrix}$。</p>
+              <p>标准坐标系下的矩阵为：</p>
+              $$A = P B P^{-1} = \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix} \begin{bmatrix} 3 & 0 \\ 0 & 0.5 \end{bmatrix} \begin{bmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{bmatrix} = \begin{bmatrix} 3 & 0.5 \\ 3 & -0.5 \end{bmatrix} \begin{bmatrix} 0.5 & 0.5 \\ 0.5 & -0.5 \end{bmatrix} = \begin{bmatrix} 1.75 & 1.25 \\ 1.25 & 1.75 \end{bmatrix}$$
+              <p><strong>核心启发：</strong> 复杂的稠密对称矩阵 $A$，背后不过是沿两个斜交方向分别进行缩放的简单算子！</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 相似不变量全景图谱与严格证明 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">数学核心定理</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 👑 相似不变量全景图谱与严格证明 (Similarity Invariants)</h2>
+          </div>
+          <div class="card-body">
+            <p>当坐标系自由切换时，矩阵中的具体数值千变万化，但<strong>刻画该线性算子内在本质的几何与代数属性始终保持恒定</strong>。这些不随基底改变而改变的性质，称为<strong>相似不变量</strong>。</p>
+
+            <!-- 不变量对比表格 -->
+            <div style="overflow-x: auto; margin: 1.5rem 0;">
+              <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-highlight); background: rgba(255,255,255,0.03);">
+                    <th style="padding: 12px; color: var(--accent-blue);">相似不变量</th>
+                    <th style="padding: 12px; color: var(--accent-blue);">数学恒等式 ($B = P^{-1}AP$)</th>
+                    <th style="padding: 12px; color: var(--accent-blue);">几何 / 物理直觉意义</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">1. 特征多项式</td>
+                    <td style="padding: 10px;">$\det(\lambda I - B) = \det(\lambda I - A)$</td>
+                    <td>算子的本质代数方程不依赖度量坐标</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">2. 特征值及代数重数</td>
+                    <td style="padding: 10px;">$\sigma(B) = \sigma(A)$</td>
+                    <td>算子在主方向上的固有缩放倍率是绝对的</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">3. 几何重数 (特分子空间维数)</td>
+                    <td style="padding: 10px;">$\dim(\operatorname{Null}(B - \lambda I)) = \dim(\operatorname{Null}(A - \lambda I))$</td>
+                    <td>每个特征值所拥有的线性无关特征方向数量守恒</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">4. 行列式 (Determinant)</td>
+                    <td style="padding: 10px;">$\det(B) = \det(A)$</td>
+                    <td>算子对空间超体积的有向缩放因子是客观的</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">5. 矩阵的迹 (Trace)</td>
+                    <td style="padding: 10px;">$\operatorname{tr}(B) = \operatorname{tr}(A) = \sum \lambda_i$</td>
+                    <td>所有特征值之和，反映局部散度/体积变化率</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">6. 矩阵的秩与零度</td>
+                    <td style="padding: 10px;">$\operatorname{Rank}(B) = \operatorname{Rank}(A), \operatorname{Nullity}(B) = \operatorname{Nullity}(A)$</td>
+                    <td>变换后象空间的维数与压缩损失的自由度不变</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">7. 矩阵多项式与高阶幂</td>
+                    <td style="padding: 10px;">$B^k = P^{-1} A^k P, \quad f(B) = P^{-1} f(A) P$</td>
+                    <td>算子的重复复合变换在各坐标系下保持同构</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 10px; font-weight: bold;">8. 可逆性与逆矩阵</td>
+                    <td style="padding: 10px;">$A \text{ 可逆} \iff B \text{ 可逆}, \quad B^{-1} = P^{-1} A^{-1} P$</td>
+                    <td>变换是否可逆是算子的绝对本质属性</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 深度证明 -->
+            <div class="proof-box">
+              <div class="box-title">🔍 相似不变量的严密数学证明</div>
+              
+              <p><strong>【证明 1】特征多项式与行列式不变性：</strong></p>
+              $$\begin{aligned}
+              \det(\lambda I - B) &= \det(\lambda I - P^{-1} A P) = \det(\lambda P^{-1} I P - P^{-1} A P) \\
+              &= \det(P^{-1} (\lambda I - A) P) = \det(P^{-1}) \cdot \det(\lambda I - A) \cdot \det(P) \\
+              &= \frac{1}{\det(P)} \cdot \det(\lambda I - A) \cdot \det(P) = \det(\lambda I - A) \quad \blacksquare
+              \end{aligned}$$
+              <p>令 $\lambda = 0$，由 $\det(-B) = (-1)^n \det(B) = (-1)^n \det(A)$ 立即得到 $\det(B) = \det(A)$。</p>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+              <p><strong>【证明 2】矩阵的迹 (Trace) 不变性：</strong></p>
+              <p>利用矩阵迹的轮换性质 $\operatorname{tr}(X Y) = \operatorname{tr}(Y X)$，令 $X = P^{-1}, Y = AP$：</p>
+              $$\operatorname{tr}(B) = \operatorname{tr}(P^{-1} A P) = \operatorname{tr}\big((P^{-1}) (AP)\big) = \operatorname{tr}\big((AP) (P^{-1})\big) = \operatorname{tr}(A I) = \operatorname{tr}(A) \quad \blacksquare$$
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+              <p><strong>【证明 3】特征向量的对应映射关系：</strong></p>
+              <p>若 $\mathbf{v}$ 是矩阵 $A$ 属于特征值 $\lambda$ 的特征向量，即 $A \mathbf{v} = \lambda \mathbf{v}$：</p>
+              $$B (P^{-1} \mathbf{v}) = (P^{-1} A P) (P^{-1} \mathbf{v}) = P^{-1} A (P P^{-1}) \mathbf{v} = P^{-1} (A \mathbf{v}) = P^{-1} (\lambda \mathbf{v}) = \lambda (P^{-1} \mathbf{v})$$
+              <p>这表明：<strong>$\mathbf{u} = P^{-1} \mathbf{v}$ 正好是矩阵 $B$ 属于相同特征值 $\lambda$ 的特征向量！</strong></p>
+              <p>由于 $P^{-1}$ 是满秩可逆映射，它把 $A$ 的特征子空间单射且满射到 $B$ 的特征子空间，故两者的几何重数（特征子空间维数）严格相等：$\dim(\operatorname{Null}(B - \lambda I)) = \dim(\operatorname{Null}(A - \lambda I))$。 $\blacksquare$</p>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+              <p><strong>【证明 4】高阶矩阵幂相似性与“望远镜相消”：</strong></p>
+              $$B^k = (P^{-1} A P)(P^{-1} A P) \cdots (P^{-1} A P) = P^{-1} A (P P^{-1}) A (P P^{-1}) \cdots A P = P^{-1} A^k P \quad \blacksquare$$
+              <p>这为第 5 章利用对角化计算 $A^k = P \Lambda^k P^{-1}$ 奠定了代数基石！</p>
+            </div>
+
+            <!-- 陷阱与反例辨析 -->
+            <div class="intuition-box" style="background: rgba(244, 63, 94, 0.06); border-color: rgba(244, 63, 94, 0.3); border-left-color: var(--accent-rose); margin-top: 1.5rem;">
+              <div class="box-title" style="color: var(--accent-rose);">⚠️ 致命误区与反例辨析：特征多项式/特征值相同，矩阵一定相似吗？</div>
+              <p><strong>答案是：绝对不一定！</strong>“特征多项式/特征值相同”只是相似的<strong>必要条件</strong>，绝对不是<strong>充分条件</strong>！</p>
+              
+              <p><strong>经典反例：若尔当块 vs 对角阵</strong></p>
+              <div style="font-size: 1.05rem; text-align: center; margin: 0.75rem 0;">
+                $$A = \begin{bmatrix} 2 & 1 \\ 0 & 2 \end{bmatrix}, \quad B = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} = 2I$$
+              </div>
+              <ul>
+                <li><strong>相同点：</strong> 两者特征值都是 $\lambda_1 = \lambda_2 = 2$；特征多项式都是 $(\lambda - 2)^2$；$\det(A) = \det(B) = 4$；$\operatorname{tr}(A) = \operatorname{tr}(B) = 4$。</li>
+                <li><strong>不同点（不相似）：</strong> 矩阵 $B = 2I$ 只能与自身相似，因为对任意可逆矩阵 $P$，$P^{-1} B P = P^{-1} (2I) P = 2 P^{-1} P = 2I \neq A$！</li>
+                <li><strong>本质几何原因：</strong> 它们的<strong>几何重数不同</strong>！$B$ 的特征值 $\lambda=2$ 拥有 2 个线性无关的特征向量（整个空间 $\mathbb{R}^2$ 都保持方向不变）；而 $A$ 发生剪切变形，特征值 $\lambda=2$ 只有一个特征向量方向 $[1, 0]^T$（几何重数为 1）。</li>
+              </ul>
+            </div>
+
+            <!-- 等价 vs 相似 vs 合同 对比 -->
+            <div class="proof-box" style="background: rgba(56, 189, 248, 0.04); border-color: rgba(56, 189, 248, 0.2); margin-top: 1.5rem;">
+              <div class="box-title" style="color: var(--accent-blue);">📚 拓展：矩阵三大等价关系（等价、相似、合同）对比</div>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid var(--border-highlight);">
+                      <th style="padding: 8px;">关系名称</th>
+                      <th style="padding: 8px;">代数定义</th>
+                      <th style="padding: 8px;">变换几何背景</th>
+                      <th style="padding: 8px;">保持的核心不变量</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: bold;">等价 (Equivalence)</td>
+                      <td style="padding: 8px;">$B = Q A P$ ($P, Q$ 均可逆)</td>
+                      <td>定义域和到达域<strong>各自独立选择不同基底</strong></td>
+                      <td>仅保持<strong>矩阵的秩 $\operatorname{Rank}(A)$</strong></td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: bold; color: var(--accent-purple);">相似 (Similarity)</td>
+                      <td style="padding: 8px; color: var(--accent-purple);">$B = P^{-1} A P$ ($P$ 可逆)</td>
+                      <td>自身空间上的线性算子<strong>选用同一种基底</strong></td>
+                      <td><strong>特征值、特征多项式、迹、行列式、秩</strong></td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; font-weight: bold;">合同 (Congruence)</td>
+                      <td style="padding: 8px;">$B = P^T A P$ ($P$ 可逆)</td>
+                      <td>二次型 (Quadratic Form) 在基变换下的度规变化</td>
+                      <td><strong>正负惯性指数 (Inertia Index)、秩、对称性</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 震撼应用：微积分求导与积分算子矩阵化 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">跨学科应用</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🚀 震撼应用：微积分求导与积分算子的矩阵化代数</h2>
+          </div>
+          <div class="card-body">
+            <p>线性代数的普适性不仅局限于几何空间 $\mathbb{R}^n$。在函数分析中，最高次数不超过 3 次的多项式空间 $\mathcal{P}_3 = \{a_0 + a_1 x + a_2 x^2 + a_3 x^3\}$ 也是一个标准的 4 维实向量空间！</p>
+            <p>在这个空间中，选取单项式基底 $\mathcal{B} = \{1, x, x^2, x^3\}$。微积分中的微分算子 $D = \frac{d}{dx}$ 是一个天然的<strong>线性算子</strong>。</p>
+
+            <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green);">📐 求导算子矩阵 $[D]_\mathcal{B}$ 的构造</h4>
+              <p>分别对 4 个基底函数求导，并将其写成 $\mathcal{B}$ 下的坐标列向量：</p>
+              <ul>
+                <li>$D(1) = 0 = [0, 0, 0, 0]^T$</li>
+                <li>$D(x) = 1 = [1, 0, 0, 0]^T$</li>
+                <li>$D(x^2) = 2x = [0, 2, 0, 0]^T$</li>
+                <li>$D(x^3) = 3x^2 = [0, 0, 3, 0]^T$</li>
+              </ul>
+              <div style="font-size: 1.2rem; text-align: center; margin: 1rem 0;">
+                $$[D]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 2 & 0 \\ 0 & 0 & 0 & 3 \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
+              </div>
+              <p>这是一个典型的<strong>严格上超对角矩阵 (Strictly Upper-Shift Matrix)</strong>！</p>
+            </div>
+
+            <div class="step-container">
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-blue); color:#000;">A</div>
+                <div class="step-content">
+                  <div class="step-title">幂零性 (Nilpotence) 与多项式求导终结</div>
+                  <p>在微积分中，任何不超过 3 次的多项式连续求导 4 次必恒为 0。代数上体现为求导矩阵的 4 次方为零矩阵：$[D]^4 = \mathbf{0}$！</p>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-purple); color:#fff;">B</div>
+                <div class="step-content">
+                  <div class="step-title">求导算子在泰勒移位基底下的相似变换</div>
+                  <p>若将基底换为以 $x=1$ 为中心的泰勒多项式基底 $\mathcal{C} = \{1, (x-1), (x-1)^2, (x-1)^3\}$，求导算子在新基底下的矩阵满足相似关系：$[D]_\mathcal{C} = P^{-1} [D]_\mathcal{B} P$。</p>
+                </div>
+              </div>
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-green); color:#000;">C</div>
+                <div class="step-content">
+                  <div class="step-title">不定积分算子与微积分基本定理</div>
+                  <p>定义不定积分算子 $J: \mathcal{P}_2 \to \mathcal{P}_3$（常数项设为 0）。则 $D \circ J = I$（先积后导还原），但 $J \circ D \neq I$（先导后积丢失常数项），体现了求导矩阵具有 1 维零空间（常数项组成的核空间 $\operatorname{Ker}(D)$）！</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 交互式矩阵相似变换实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">动态实验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🧪 交互实验：实时验证相似变换 $B = P^{-1} A P$ 与相似不变量</h2>
+          </div>
+          <div class="card-body">
+            <p>在下方输入或选择 $2 \times 2$ 矩阵 $A$ 与过渡基矩阵 $P$，系统将实时动态计算逆矩阵 $P^{-1}$、相似矩阵 $B = P^{-1}AP$ 并验证各项相似不变量！</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Input Matrix A -->
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: bold; color: var(--accent-blue); margin-bottom: 0.8rem;">原矩阵 A (标准基视角):</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; max-width: 180px;">
+                  <input type="number" id="matA-00" value="1.75" step="0.25" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matA-01" value="1.25" step="0.25" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matA-10" value="1.25" step="0.25" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matA-11" value="1.75" step="0.25" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                </div>
+                <div style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted);">
+                  预设样例：
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem; margin-right: 4px;" onclick="loadPreset('stretch')">斜轴伸缩</button>
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem; margin-right: 4px;" onclick="loadPreset('reflect')">斜线反射</button>
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem;" onclick="loadPreset('random')">随机矩阵</button>
+                </div>
+              </div>
+
+              <!-- Input Matrix P -->
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: bold; color: var(--accent-purple); margin-bottom: 0.8rem;">过渡基矩阵 P (基底列向量):</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; max-width: 180px;">
+                  <input type="number" id="matP-00" value="1" step="1" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matP-01" value="1" step="1" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matP-10" value="1" step="1" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                  <input type="number" id="matP-11" value="-1" step="1" style="background:#1e293b; color:#fff; border:1px solid #475569; padding:6px; border-radius:4px; text-align:center;">
+                </div>
+                <div style="margin-top: 0.8rem; font-size: 0.85rem; color: var(--text-muted);">
+                  提示：$P$ 的列向量必须线性无关（$\det(P) \neq 0$）。
+                </div>
+              </div>
+            </div>
+
+            <!-- Output Dashboard -->
+            <div style="background: rgba(15, 23, 42, 0.8); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-highlight); margin-top: 1rem;">
+              <h4 style="color: var(--accent-green); margin-bottom: 1rem;">📊 相似变换实时运算结果：</h4>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; font-family: var(--font-mono); font-size: 0.95rem;">
+                <div style="background: #0f172a; padding: 1rem; border-radius: 6px;">
+                  <div style="color: var(--accent-purple); font-weight: bold; margin-bottom: 4px;">相似矩阵 B = P⁻¹AP:</div>
+                  <div id="result-matB" style="color: #f8fafc; line-height: 1.6;">[ 3.00,  0.00 ]<br>[ 0.00,  0.50 ]</div>
+                </div>
+
+                <div style="background: #0f172a; padding: 1rem; border-radius: 6px;">
+                  <div style="color: var(--accent-amber); font-weight: bold; margin-bottom: 4px;">行列式 det 比较:</div>
+                  <div id="result-det" style="color: #f8fafc; line-height: 1.6;">det(A) = 1.50<br>det(B) = 1.50 (恒等 ✓)</div>
+                </div>
+
+                <div style="background: #0f172a; padding: 1rem; border-radius: 6px;">
+                  <div style="color: var(--accent-blue); font-weight: bold; margin-bottom: 4px;">矩阵迹 tr 比较:</div>
+                  <div id="result-tr" style="color: #f8fafc; line-height: 1.6;">tr(A) = 3.50<br>tr(B) = 3.50 (恒等 ✓)</div>
+                </div>
+
+                <div style="background: #0f172a; padding: 1rem; border-radius: 6px;">
+                  <div style="color: var(--accent-green); font-weight: bold; margin-bottom: 4px;">特征值 λ 比较:</div>
+                  <div id="result-eig" style="color: #f8fafc; line-height: 1.6;">λ(A) = { 3.00, 0.50 }<br>λ(B) = { 3.00, 0.50 } (恒等 ✓)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python 实战与 NumPy 验证 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python / NumPy 矩阵相似变换与高阶幂</h2>
+          </div>
+          <div class="card-body">
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.7;"><code>import numpy as np
+
+# 1. 构造标准基矩阵 A (斜轴伸缩变换)
+A = np.array([[1.75, 1.25],
+              [1.25, 1.75]])
+
+# 2. 构造特征基变换矩阵 P
+P = np.array([[1.0, 1.0],
+              [1.0, -1.0]])
+P_inv = np.linalg.inv(P)
+
+# 3. 相似变换 B = P^-1 @ A @ P
+B = P_inv @ A @ P
+print("相似矩阵 B (已完美化为对角矩阵):\n", np.round(B, 4))
+
+# 4. 验证相似不变量
+det_A, det_B = np.linalg.det(A), np.linalg.det(B)
+tr_A, tr_B = np.trace(A), np.trace(B)
+eig_A = np.sort(np.linalg.eigvals(A))
+eig_B = np.sort(np.linalg.eigvals(B))
+
+print(f"行列式一致性: det(A)={det_A:.4f}, det(B)={det_B:.4f} -> {np.isclose(det_A, det_B)}")
+print(f"矩阵迹一致性: tr(A)={tr_A:.4f}, tr(B)={tr_B:.4f} -> {np.isclose(tr_A, tr_B)}")
+print(f"特征值一致性: {np.allclose(eig_A, eig_B)}")
+
+# 5. 超高速矩阵高阶幂计算 A^50 = P @ (B^50) @ P^-1
+B_50 = np.diag(np.diag(B) ** 50)  # 对角矩阵的高阶幂只需对角元直接求幂！
+A_50_fast = P @ B_50 @ P_inv
+A_50_direct = np.linalg.matrix_power(A, 50)
+print(f"矩阵幂 A^50 快速算法精度误差: {np.max(np.abs(A_50_fast - A_50_direct)):.2e}")</code></pre>
+          </div>
+        </div>
+
+        <!-- 7. 核心总结与自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自测与总结</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 本节核心总结与自测思考题</h2>
+          </div>
+          <div class="card-body">
+            <div class="intuition-box" style="margin-bottom: 1.5rem;">
+              <div class="box-title">📝 章节速记口诀</div>
+              <ul style="margin-left: 1.2rem; line-height: 1.8;">
+                <li><strong>变换客观基主观，换基相似紧相连：</strong> $B = P^{-1} A P$。</li>
+                <li><strong>骨相守恒面具换：</strong> 相似矩阵拥有完全相同的特征多项式、特征值、代数/几何重数、迹、行列式与秩。</li>
+                <li><strong>充分必要辨分明：</strong> 相同特征多项式是相似的必要非充分条件（谨防若尔当块陷阱）。</li>
+                <li><strong>对角化之终极目标：</strong> 寻找一组特征基 $P$，使得相似矩阵 $B = \Lambda$ 为极简对角阵！</li>
+              </ul>
+            </div>
+
+            <!-- Quiz 1 -->
+            <details style="background: rgba(15, 23, 42, 0.4); padding: 1rem 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+              <summary style="font-weight: bold; cursor: pointer; color: var(--accent-blue);">
+                ❓ 思考题 1：如果 $A \sim B$，且 $A$ 是可逆矩阵，那么 $B$ 是否一定可逆？$B^{-1}$ 与 $A^{-1}$ 是否相似？
+              </summary>
+              <div style="margin-top: 0.8rem; padding-left: 1rem; border-left: 2px solid var(--accent-blue); line-height: 1.7; color: var(--text-muted);">
+                <p><strong>解答：</strong> 是的，完全成立！</p>
+                <p>① 因为 $\det(B) = \det(A) \neq 0$，所以 $B$ 必然可逆。</p>
+                <p>② 由 $B = P^{-1} A P$，两边同时求逆得：$B^{-1} = (P^{-1} A P)^{-1} = P^{-1} A^{-1} (P^{-1})^{-1} = P^{-1} A^{-1} P$。这严格满足相似定义，故 $B^{-1} \sim A^{-1}$。</p>
+              </div>
+            </details>
+
+            <!-- Quiz 2 -->
+            <details style="background: rgba(15, 23, 42, 0.4); padding: 1rem 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+              <summary style="font-weight: bold; cursor: pointer; color: var(--accent-purple);">
+                ❓ 思考题 2：单位矩阵的 3 倍 $3I$ 可以与哪些矩阵相似？
+              </summary>
+              <div style="margin-top: 0.8rem; padding-left: 1rem; border-left: 2px solid var(--accent-purple); line-height: 1.7; color: var(--text-muted);">
+                <p><strong>解答：</strong> $3I$ <strong>只能与它自己相似</strong>！</p>
+                <p>因为对任意可逆矩阵 $P$，都有 $P^{-1} (3I) P = 3 P^{-1} I P = 3 P^{-1} P = 3I$。数乘单位矩阵在任意坐标系下的矩阵表示永远不变（标量算子对所有方向一视同仁）。</p>
+              </div>
+            </details>
+
+            <!-- Quiz 3 -->
+            <details style="background: rgba(15, 23, 42, 0.4); padding: 1rem 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+              <summary style="font-weight: bold; cursor: pointer; color: var(--accent-green);">
+                ❓ 思考题 3：为什么相似变换公式是 $B = P^{-1} A P$ 而不是 $P A P^{-1}$？
+              </summary>
+              <div style="margin-top: 0.8rem; padding-left: 1rem; border-left: 2px solid var(--accent-green); line-height: 1.7; color: var(--text-muted);">
+                <p><strong>解答：</strong> 关键在于向量的流动顺序与坐标翻译方向：</p>
+                <p>当我们要计算新基下的输出 $[T(\mathbf{x})]_\mathcal{B}$ 时，我们先接收新基坐标 $[\mathbf{x}]_\mathcal{B}$。由于 $A$ 只认标准坐标，我们必须<strong>最先</strong>乘以 $P$（右乘到最内层）把坐标翻译为标准坐标 $\mathbf{x} = P [\mathbf{x}]_\mathcal{B}$；然后再乘 $A$ 执行算子；<strong>最后</strong>再在最左侧乘 $P^{-1}$ 将标准结果折算回新基坐标。因此复合顺序必须是从右向左：$P^{-1} \circ A \circ P$！</p>
+              </div>
+            </details>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -373,6 +821,120 @@ print("D^4 是否为零矩阵:", np.allclose(np.linalg.matrix_power(D, 4), 0))</
       </main>
     </div>
   </div>
+
+  <!-- Inline Script for Interactive Similarity Experiment -->
+  <script>
+    function getMat(idPrefix) {
+      return [
+        [parseFloat(document.getElementById(idPrefix + '-00').value) || 0, parseFloat(document.getElementById(idPrefix + '-01').value) || 0],
+        [parseFloat(document.getElementById(idPrefix + '-10').value) || 0, parseFloat(document.getElementById(idPrefix + '-11').value) || 0]
+      ];
+    }
+
+    function setMat(idPrefix, m) {
+      document.getElementById(idPrefix + '-00').value = m[0][0];
+      document.getElementById(idPrefix + '-01').value = m[0][1];
+      document.getElementById(idPrefix + '-10').value = m[1][0];
+      document.getElementById(idPrefix + '-11').value = m[1][1];
+    }
+
+    function matMul(A, B) {
+      return [
+        [A[0][0]*B[0][0] + A[0][1]*B[1][0], A[0][0]*B[0][1] + A[0][1]*B[1][1]],
+        [A[1][0]*B[0][0] + A[1][1]*B[1][0], A[1][0]*B[0][1] + A[1][1]*B[1][1]]
+      ];
+    }
+
+    function matInv(P) {
+      const det = P[0][0]*P[1][1] - P[0][1]*P[1][0];
+      if (Math.abs(det) < 1e-7) return null;
+      return [
+        [ P[1][1]/det, -P[0][1]/det],
+        [-P[1][0]/det,  P[0][0]/det]
+      ];
+    }
+
+    function matDet(M) {
+      return M[0][0]*M[1][1] - M[0][1]*M[1][0];
+    }
+
+    function matTrace(M) {
+      return M[0][0] + M[1][1];
+    }
+
+    function matEig(M) {
+      const tr = matTrace(M);
+      const det = matDet(M);
+      const disc = tr*tr - 4*det;
+      if (disc >= 0) {
+        const sq = Math.sqrt(disc);
+        return [((tr + sq)/2).toFixed(2), ((tr - sq)/2).toFixed(2)];
+      } else {
+        const real = (tr/2).toFixed(2);
+        const imag = (Math.sqrt(-disc)/2).toFixed(2);
+        return [`${real}±${imag}i`];
+      }
+    }
+
+    function updateSimilarityLab() {
+      const A = getMat('matA');
+      const P = getMat('matP');
+      const P_inv = matInv(P);
+
+      const resMatB = document.getElementById('result-matB');
+      const resDet = document.getElementById('result-det');
+      const resTr = document.getElementById('result-tr');
+      const resEig = document.getElementById('result-eig');
+
+      if (!P_inv) {
+        resMatB.innerHTML = '<span style="color:var(--accent-rose);">错误：P 不可逆 (det(P) = 0)</span>';
+        resDet.innerHTML = '-';
+        resTr.innerHTML = '-';
+        resEig.innerHTML = '-';
+        return;
+      }
+
+      const AP = matMul(A, P);
+      const B = matMul(P_inv, AP);
+
+      const detA = matDet(A);
+      const detB = matDet(B);
+      const trA = matTrace(A);
+      const trB = matTrace(B);
+      const eigA = matEig(A);
+      const eigB = matEig(B);
+
+      resMatB.innerHTML = `[ ${B[0][0].toFixed(2)}, ${B[0][1].toFixed(2)} ]<br>[ ${B[1][0].toFixed(2)}, ${B[1][1].toFixed(2)} ]`;
+      resDet.innerHTML = `det(A) = ${detA.toFixed(2)}<br>det(B) = ${detB.toFixed(2)} (${Math.abs(detA-detB)<1e-4 ? '恒等 ✓' : '≠'})`;
+      resTr.innerHTML = `tr(A) = ${trA.toFixed(2)}<br>tr(B) = ${trB.toFixed(2)} (${Math.abs(trA-trB)<1e-4 ? '恒等 ✓' : '≠'})`;
+      resEig.innerHTML = `λ(A) = { ${eigA.join(', ')} }<br>λ(B) = { ${eigB.join(', ')} } (${JSON.stringify(eigA) === JSON.stringify(eigB) ? '恒等 ✓' : '近似'})`;
+    }
+
+    function loadPreset(type) {
+      if (type === 'stretch') {
+        setMat('matA', [[1.75, 1.25], [1.25, 1.75]]);
+        setMat('matP', [[1, 1], [1, -1]]);
+      } else if (type === 'reflect') {
+        setMat('matA', [[-0.6, 0.8], [0.8, 0.6]]);
+        setMat('matP', [[1, -2], [2, 1]]);
+      } else if (type === 'random') {
+        const randVal = () => Math.floor((Math.random() * 8 - 4));
+        setMat('matA', [[randVal(), randVal()], [randVal(), randVal()]]);
+        let p;
+        do {
+          p = [[randVal() || 1, randVal()], [randVal(), randVal() || 1]];
+        } while (Math.abs(p[0][0]*p[1][1] - p[0][1]*p[1][0]) < 1);
+        setMat('matP', p);
+      }
+      updateSimilarityLab();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputs = document.querySelectorAll('#matA-00, #matA-01, #matA-10, #matA-11, #matP-00, #matP-01, #matP-10, #matP-11');
+      inputs.forEach(input => input.addEventListener('input', updateSimilarityLab));
+      updateSimilarityLab();
+    });
+  </script>
 
 </body>
 </html>

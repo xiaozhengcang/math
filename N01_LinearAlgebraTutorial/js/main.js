@@ -3,19 +3,20 @@
    LA2022Fall (Prof. Hung-yi Lee)
    ========================================================================== */
 
-// MathJax Configuration
-window.MathJax = {
-  tex: {
+// MathJax Configuration (only set if MathJax is not yet initialized)
+if (!window.MathJax || !window.MathJax.version) {
+  window.MathJax = window.MathJax || {};
+  window.MathJax.tex = window.MathJax.tex || {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
     displayMath: [['$$', '$$'], ['\\[', '\\]']],
     processEscapes: true,
     processEnvironments: true
-  },
-  options: {
+  };
+  window.MathJax.options = window.MathJax.options || {
     ignoreHtmlClass: 'tex2jax_ignore',
     processHtmlClass: 'tex2jax_process'
-  }
-};
+  };
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   initTheme();

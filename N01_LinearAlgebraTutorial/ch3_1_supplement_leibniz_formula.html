@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 3.1 专题拓展: 行列式莱布尼茨公式、几何体积与本质意义 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <style>
+    /* 页面专用定制美化样式 */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(192, 132, 252, 0.15);
+      border: 1px solid rgba(192, 132, 252, 0.35);
+      color: var(--accent-purple);
+      margin-bottom: 1rem;
+    }
+
+    .math-card {
+      background: radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 70%), var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .formula-display {
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(129, 140, 248, 0.3);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.25rem 0;
+      text-align: center;
+      font-size: 1.25rem;
+      color: #38bdf8;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+      overflow-x: auto;
+    }
+
+    .grid-chess {
+      display: inline-grid;
+      grid-template-columns: repeat(3, 52px);
+      grid-template-rows: repeat(3, 52px);
+      gap: 6px;
+      padding: 8px;
+      background: #0f172a;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .chess-cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      border-radius: 4px;
+      background: #1e293b;
+      color: var(--text-muted);
+      transition: all 0.2s ease;
+    }
+
+    .chess-cell.selected-pos {
+      background: rgba(52, 211, 153, 0.25);
+      border: 1px solid var(--accent-green);
+      color: #34d399;
+      font-weight: bold;
+      transform: scale(1.05);
+    }
+
+    .chess-cell.selected-neg {
+      background: rgba(244, 63, 94, 0.25);
+      border: 1px solid var(--accent-rose);
+      color: #f43f5e;
+      font-weight: bold;
+      transform: scale(1.05);
+    }
+
+    .term-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .term-pos { background: rgba(52, 211, 153, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.35); }
+    .term-neg { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.35); }
+
+    .matrix-input-table {
+      border-collapse: separate;
+      border-spacing: 6px;
+      margin: 0 auto;
+    }
+    .matrix-input-table input {
+      width: 56px;
+      height: 40px;
+      text-align: center;
+      background: #0f172a;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 1.05rem;
+      transition: border-color 0.2s;
+    }
+    .matrix-input-table input:focus {
+      outline: none;
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+    }
+
+    .perm-interactive-card {
+      background: #1e293b;
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .concept-pillar {
+      background: rgba(30, 41, 59, 0.6);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-indigo);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .concept-pillar:hover {
+      transform: translateX(4px);
+      border-color: var(--accent-purple);
+    }
+
+    /* 几何可视化控制面板 */
+    .canvas-container {
+      background: #0a0f1d;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.6);
+    }
+
+    .slider-control {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 0.6rem 0;
+    }
+    .slider-control label {
+      min-width: 140px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+    .slider-control input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent-blue);
+      cursor: pointer;
+    }
+    .slider-val {
+      min-width: 45px;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      color: var(--accent-blue);
+      text-align: right;
+    }
+
+    .mode-tab-btn {
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #1e293b;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .mode-tab-btn.active {
+      background: var(--accent-indigo);
+      color: #fff;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 12px rgba(129, 140, 248, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">Chapter 3 专题精讲</div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 1</span>
+          <span>二维面积推导与法向量底蕴</span>
+        </a>
+
+        <a href="ch3_1_supplement_leibniz_formula.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
+          <span>莱布尼茨公式与全景本质意义</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div class="nav-section-title">快速跳转</div>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式大模块综合</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <main class="main-content">
+
+        <!-- Header Title Banner -->
+        <div class="content-header" style="margin-bottom: 2rem;">
+          <div class="hero-badge">🌟 理论基石 · 深度专题</div>
+          <h1 style="font-size: 2.2rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.75rem;">
+            行列式莱布尼茨公式、几何体积与本质意义
+          </h1>
+          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.7;">
+            从全排列逆序数机制，到几何参数扫描（滚筒刷视角）、为什么围成平行四边形、有向体积严格推导，再到微积分求导法则的跨学科统一思想。
+          </p>
+        </div>
+
+        <!-- 0. 核心洞察卡片 -->
+        <div class="math-card" style="border-left: 5px solid var(--accent-purple);">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+            <span style="font-size: 1.5rem;">💡</span>
+            <h3 style="margin: 0; font-size: 1.2rem; color: var(--accent-purple);">一句话直击本质</h3>
+          </div>
+          <p style="font-size: 1.05rem; line-height: 1.8; color: var(--text-main);">
+            <strong>莱布尼茨公式不是人为构造的繁杂算式</strong>：在代数上，它是<strong>反对称多重线性形式在标准正交基底展开下唯一必然幸存的数学解</strong>；在几何上，它是<strong>两个或多个独立变量各自从 0 走到 1 所张成平行多面体的有向体积度量</strong>；在微积分中，它揭示了<strong>乘积高阶导数与离散微元累积的对称性法则</strong>。
+          </p>
+        </div>
+
+        <!-- 1. 莱布尼茨公式的标准代数定义 -->
+        <section class="content-section" style="margin-top: 2.5rem;">
+          <div class="section-header">
+            <h2>一、 莱布尼茨公式的代数定义与符号拆解</h2>
+          </div>
+
+          <p>
+            对于任意 $n \times n$ 方阵 $A = [a_{ij}]$，其行列式的全排列定义（Leibniz Formula）表达如下：
+          </p>
+
+          <div class="formula-display">
+            $$\det(A) = \sum_{\sigma \in S_n} \operatorname{sgn}(\sigma) \cdot a_{1, \sigma(1)} \, a_{2, \sigma(2)} \cdots a_{n, \sigma(n)}$$
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+            <div class="concept-pillar" style="border-left-color: var(--accent-blue);">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">1. $S_n$（全排列集合）</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                包含集合 $\{1, 2, \dots, n\}$ 的所有可能排列，项数共有 $n!$（阶乘）种。它规定了每一行分别挑取哪一列的元素。
+              </p>
+            </div>
+
+            <div class="concept-pillar" style="border-left-color: var(--accent-green);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">2. 乘积项 $a_{1, \sigma(1)} \cdots a_{n, \sigma(n)}$</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                <strong>不同行、不同列各取一个元素相乘</strong>（每行每列恰好挑 1 个）。就像在 $n \times n$ 棋盘上放置 $n$ 个互不攻击的国际象棋“车”。
+              </p>
+            </div>
+
+            <div class="concept-pillar" style="border-left-color: var(--accent-rose);">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">3. $\operatorname{sgn}(\sigma)$（排列符号）</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                由该排列的<strong>逆序数 $\tau(\sigma)$</strong> 决定：$$\operatorname{sgn}(\sigma) = (-1)^{\tau(\sigma)}$$
+                逆序数为偶数取 $+1$（偶排列），逆序数为奇数取 $-1$（奇排列）。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. 交互式排列与逆序数计算器 -->
+        <section class="content-section" style="margin-top: 3rem;">
+          <div class="section-header">
+            <h2>二、 逆序数 $\tau(\sigma)$ 与排列奇偶性交互探究</h2>
+          </div>
+          <p>
+            输入任意全排列数字（用逗号或空格隔开），实时观察逆序对寻找过程与正负符号判定：
+          </p>
+
+          <div class="perm-interactive-card" style="margin-top: 1rem;">
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+              <label style="font-weight: 600; font-size: 0.95rem;">输入排列 $\sigma$：</label>
+              <input type="text" id="permInput" value="3, 1, 4, 2" style="background: #0f172a; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.5rem 0.75rem; color: #fff; font-family: var(--font-mono); font-size: 1rem; width: 220px;">
+              <button onclick="calculatePermutation()" class="btn btn-primary" style="padding: 0.5rem 1.25rem;">🔍 分析排列</button>
+              <div style="font-size: 0.85rem; color: var(--text-dim);">示例: <code>2, 3, 1</code> 或 <code>3, 2, 1</code> 或 <code>3, 1, 4, 2</code></div>
+            </div>
+
+            <div id="permResult" style="margin-top: 1.25rem; padding: 1.25rem; background: #0f172a; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.95rem;">
+              <!-- 动态计算结果注入 -->
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. 2阶与3阶矩阵的逐项图解与交互展开器 -->
+        <section class="content-section" style="margin-top: 3rem;">
+          <div class="section-header">
+            <h2>三、 $2 \times 2$ 与 $3 \times 3$ 矩阵逐项剖析与交互展开器</h2>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.25rem;">
+            <!-- 2x2 展开 -->
+            <div class="math-card">
+              <h3 style="color: var(--accent-blue); margin-bottom: 0.75rem;">🔹 $2 \times 2$ 矩阵（$2! = 2$ 项）</h3>
+              <div style="background: #0f172a; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 1rem; text-align: center;">
+                $$\det(A) = \begin{vmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{vmatrix} = (+1) a_{11} a_{22} + (-1) a_{12} a_{21} = a_{11} a_{22} - a_{12} a_{21}$$
+              </div>
+              <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; padding-left: 1.25rem;">
+                <li>排列 $(1, 2)$：$\tau = 0$（偶排列）$\to$ <span class="term-badge term-pos">$+ a_{11}a_{22}$</span></li>
+                <li>排列 $(2, 1)$：$\tau = 1$（奇排列）$\to$ <span class="term-badge term-neg">$- a_{12}a_{21}$</span></li>
+              </ul>
+            </div>
+
+            <!-- 3x3 展开 -->
+            <div class="math-card">
+              <h3 style="color: var(--accent-amber); margin-bottom: 0.75rem;">🔸 $3 \times 3$ 矩阵（$3! = 6$ 项，沙路斯法则）</h3>
+              <div style="background: #0f172a; padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 0.75rem; font-size: 0.9rem;">
+                $$\begin{aligned}
+                \det(A) = & + a_{11}a_{22}a_{33} + a_{12}a_{23}a_{31} + a_{13}a_{21}a_{32} \\
+                          & - a_{11}a_{23}a_{32} - a_{12}a_{21}a_{33} - a_{13}a_{22}a_{31}
+                \end{aligned}$$
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; font-size: 0.85rem;">
+                <span class="term-badge term-pos">$+ a_{11}a_{22}a_{33}$ ($\tau=0$)</span>
+                <span class="term-badge term-pos">$+ a_{12}a_{23}a_{31}$ ($\tau=2$)</span>
+                <span class="term-badge term-pos">$+ a_{13}a_{21}a_{32}$ ($\tau=2$)</span>
+                <span class="term-badge term-neg">$- a_{11}a_{23}a_{32}$ ($\tau=1$)</span>
+                <span class="term-badge term-neg">$- a_{12}a_{21}a_{33}$ ($\tau=1$)</span>
+                <span class="term-badge term-neg">$- a_{13}a_{22}a_{31}$ ($\tau=3$)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3x3 交互矩阵计算器与棋盘高亮 -->
+          <div class="math-card" style="margin-top: 1.5rem;">
+            <h3 style="color: var(--accent-green); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🎮</span> $3 \times 3$ 莱布尼茨公式实时交互求解器
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              修改下方矩阵数值，点击任意展开项，可以在右侧棋盘上实时查看该项在矩阵中的“车落子”选点及其实际数值贡献：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; align-items: center;">
+              <!-- 矩阵输入 -->
+              <div style="text-align: center;">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: var(--text-main);">输入 $3 \times 3$ 矩阵 $A$：</div>
+                <table class="matrix-input-table">
+                  <tr>
+                    <td><input type="number" id="m11" value="2" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m12" value="1" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m13" value="3" oninput="updateMatrixLeibniz()"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="number" id="m21" value="0" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m22" value="4" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m23" value="5" oninput="updateMatrixLeibniz()"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="number" id="m31" value="1" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m32" value="2" oninput="updateMatrixLeibniz()"></td>
+                    <td><input type="number" id="m33" value="1" oninput="updateMatrixLeibniz()"></td>
+                  </tr>
+                </table>
+
+                <div style="margin-top: 1.25rem; font-size: 1.25rem; font-weight: 700; color: #38bdf8;" id="totalDetDisplay">
+                  $\det(A) = 0$
+                </div>
+              </div>
+
+              <!-- 6项分解列表与棋盘联动 -->
+              <div>
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: var(--text-main);">全部 6 项展开拆解（点击高亮）：</div>
+                <div id="termsList" style="display: flex; flex-direction: column; gap: 0.45rem;">
+                  <!-- JS 生成 6 项 -->
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding: 0.75rem; background: #0f172a; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div class="grid-chess" id="chessBoard">
+                    <div class="chess-cell" id="c11">a<sub>11</sub></div>
+                    <div class="chess-cell" id="c12">a<sub>12</sub></div>
+                    <div class="chess-cell" id="c13">a<sub>13</sub></div>
+                    <div class="chess-cell" id="c21">a<sub>21</sub></div>
+                    <div class="chess-cell" id="c22">a<sub>22</sub></div>
+                    <div class="chess-cell" id="c23">a<sub>23</sub></div>
+                    <div class="chess-cell" id="c31">a<sub>31</sub></div>
+                    <div class="chess-cell" id="c32">a<sub>32</sub></div>
+                    <div class="chess-cell" id="c33">a<sub>33</sub></div>
+                  </div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;" id="chessTip">
+                    👈 点击上方任意项，查看对应的行列选择。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. 核心几何专题：为什么二维向量围成平行四边形？为什么行列式等于体积？ -->
+        <section class="content-section" style="margin-top: 3.5rem;">
+          <div class="section-header">
+            <h2>四、 几何核心专题：为什么围成平行四边形？为什么等于体积？</h2>
+          </div>
+
+          <!-- 4.1 为什么围成平行四边形？ -->
+          <div class="math-card" style="border-left: 5px solid var(--accent-amber);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.4rem;">📐</span>
+              <h3 style="margin: 0; color: var(--accent-amber);">深度剖析：为什么二维两个向量看成围成「平行四边形」？</h3>
+            </div>
+            
+            <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 1.25rem;">
+              许多初学者会好奇：平面上有两个从原点出发的向量 $\mathbf{v}_1, \mathbf{v}_2$，为什么天然被看作张成一个<strong>平行四边形</strong>，而不是三角形或其他多边形？
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+              <div class="concept-pillar" style="border-left-color: var(--accent-blue);">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">视角 1：滚筒刷动态扫描（线段平推）</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  固定 $t=0$，让 $s$ 从 $0 \to 1$，点 $P = s\mathbf{v}_1$ 划出了底边线段。接着让 $t$ 从 $0 \to 1$ 连续变化，整条底边线段沿着 $\mathbf{v}_2$ 方向<strong>像刷子一样匀速平推过去</strong>，刷过的完整轨迹恰好就是平行四边形！
+                </p>
+              </div>
+
+              <div class="concept-pillar" style="border-left-color: var(--accent-purple);">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">视角 2：歪斜坐标纸上的单位方格</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  标准基 $\mathbf{e}_1, \mathbf{e}_2$ 围成单位正方形（$[0,1] \times [0,1]$）。矩阵变换将单位正方形映射到新坐标系，因线性变换保持“平行性”，<strong>原来的单位正方形必然变成平行四边形</strong>。
+                </p>
+              </div>
+
+              <div class="concept-pillar" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">视角 3：两个独立滑块与第四个角</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  参数 $s \in [0,1]$ 与 $t \in [0,1]$ <strong>互不限制</strong>。你可以同时把两个滑块拉满（$s=1, t=1$），到达顶点 $\mathbf{v}_1 + \mathbf{v}_2$（向量加法平行四边形法则），填满整个区域！
+                </p>
+              </div>
+            </div>
+
+            <!-- 独立 vs 受限 对比卡片 -->
+            <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; margin-top: 1.25rem;">
+              <h4 style="color: #38bdf8; margin-bottom: 0.5rem;">⚡ 关键对比：独立参数（平行四边形） vs 受限参数（三角形）</h4>
+              <ul style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted); padding-left: 1.25rem;">
+                <li><strong>独立参数</strong>（$0 \le s \le 1, 0 \le t \le 1$）：两方向各自独立拉满，围成<strong>平行四边形</strong>，其面积等于行列式绝对值 $|\det(A)|$。</li>
+                <li><strong>受限参数</strong>（$s \ge 0, t \ge 0$ 且 $s + t \le 1$）：步长预算受限，无法同时到达 $\mathbf{v}_1 + \mathbf{v}_2$，右上半区被裁掉，围成<strong>三角形</strong>，其面积等于 $\frac{1}{2}|\det(A)|$。</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- 4.2 交互式 Canvas：滚筒刷扫描与参数生成器 -->
+          <div class="math-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+              <h3 style="color: var(--accent-blue); margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🕹️</span> 几何生成器：参数独立扫描与区域形状可视化
+              </h3>
+              <div style="display: flex; gap: 0.5rem;">
+                <button class="mode-tab-btn active" id="btnModeParallelogram" onclick="setRegionMode('parallelogram')">🔷 独立参数：平行四边形 ($s, t \in [0, 1]$)</button>
+                <button class="mode-tab-btn" id="btnModeTriangle" onclick="setRegionMode('triangle')">🔺 受限参数：三角形 ($s + t \le 1$)</button>
+              </div>
+            </div>
+
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+              拖动下方滑块调节扫描参数 $s$ 与 $t$，或点击“播放平推扫描动画”，观察点集 $P(s, t) = s\mathbf{v}_1 + t\mathbf{v}_2$ 如何从线段刷满整个几何区域：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: center;">
+              <!-- Canvas 画布 -->
+              <div class="canvas-container" style="height: 380px;">
+                <canvas id="geoCanvas" width="560" height="380" style="width: 100%; height: 100%; display: block;"></canvas>
+              </div>
+
+              <!-- 控制台 -->
+              <div style="background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                  <strong style="color: var(--text-main);">🎮 扫描动态控制</strong>
+                  <button class="btn btn-primary" id="btnAnimScan" onclick="toggleScanAnimation()" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
+                    ▶️ 播放滚筒刷平推动画
+                  </button>
+                </div>
+
+                <div class="slider-control">
+                  <label>滑块 $s$ (沿 $\mathbf{v}_1$ 伸展):</label>
+                  <input type="range" id="sliderS" min="0" max="1" step="0.01" value="1.0" oninput="updateGeoCanvas()">
+                  <span class="slider-val" id="valS">1.00</span>
+                </div>
+
+                <div class="slider-control">
+                  <label>滑块 $t$ (沿 $\mathbf{v}_2$ 平推):</label>
+                  <input type="range" id="sliderT" min="0" max="1" step="0.01" value="1.0" oninput="updateGeoCanvas()">
+                  <span class="slider-val" id="valT">1.00</span>
+                </div>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+                <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                    <span>底边向量 $\mathbf{v}_1$：</span>
+                    <strong style="color: #38bdf8; font-family: var(--font-mono);">(4.0, 1.0)</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                    <span>侧边向量 $\mathbf{v}_2$：</span>
+                    <strong style="color: #c084fc; font-family: var(--font-mono);">(1.5, 3.5)</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                    <span>对角顶点 $\mathbf{v}_1 + \mathbf{v}_2$：</span>
+                    <strong style="color: #34d399; font-family: var(--font-mono);">(5.5, 4.5)</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed var(--border-color);">
+                    <span style="font-weight: bold; color: var(--text-main);">当前所围区域面积：</span>
+                    <strong style="color: #fbbf24; font-size: 1.1rem; font-family: var(--font-mono);" id="currentAreaDisplay">12.50</strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.3 为什么行列式等于体积（2D割补、3D混合积与n维公理） -->
+          <div class="math-card" style="border-left: 5px solid var(--accent-green);">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.4rem;">📦</span>
+              <h3 style="margin: 0; color: var(--accent-green);">为什么行列式严格等于「有向体积」？（3 个数学层次）</h3>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1rem;">
+              <!-- 2D 割补法与三角高 -->
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">层次 1：2 维坐标割补法与高底相乘</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  设 $\mathbf{v}_1 = (a, b)$，$\mathbf{v}_2 = (c, d)$。将平行四边形放入外接大矩形 $(a+c) \times (b+d)$ 中：<br>
+                  • 大矩形总面积 = $(a+c)(b+d) = ab + ad + bc + cd$<br>
+                  • 扣除四周 2 个矩形（$2bc$）与 4 个直角三角形（$ab + cd$）<br>
+                  • <strong>净面积</strong> $= (ab + ad + bc + cd) - 2bc - (ab + cd) = ad - bc = \det(A)$。<br>
+                  利用三角函数：$\text{面积} = \|\mathbf{v}_1\| \|\mathbf{v}_2\| \sin(\beta - \alpha) = ad - bc$。
+                </p>
+              </div>
+
+              <!-- 3D 标量三重积 -->
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">层次 2：3 维平行六面体与标量三重积（混合积）</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  三维空间中向量 $\mathbf{u}, \mathbf{v}, \mathbf{w}$ 张成的六面体：<br>
+                  • 底面平行四边形面积与法向量由叉积给出：$\mathbf{u} \times \mathbf{v}$<br>
+                  • 高为 $\mathbf{w}$ 在法向量上的投影：$h = \|\mathbf{w}\|\cos\phi$<br>
+                  • 体积 $V = |(\mathbf{u} \times \mathbf{v}) \cdot \mathbf{w}|$，按坐标展开恰好就是 <strong>3 阶行列式的 6 项莱布尼茨展开式</strong>！
+                </p>
+              </div>
+
+              <!-- n 维三条几何公理 -->
+              <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">层次 3：$n$ 维体积的公理化唯一性</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  任何合理的体积度量函数 $V(\mathbf{v}_1, \dots, \mathbf{v}_n)$ 必须满足三条几何直觉：<br>
+                  1. <strong>规范性</strong>：单位超立方体体积 $V(\mathbf{e}_1, \dots, \mathbf{e}_n) = 1$（$\det(I) = 1$）；<br>
+                  2. <strong>多重线性</strong>：单边拉长 $k$ 倍体积放大 $k$ 倍，切拼加和可分配；<br>
+                  3. <strong>剪切不变与压扁归零</strong>：$\mathbf{v}_i + c\mathbf{v}_j$ 不变高，体积不变（祖暅原理）；两向量重合时降维体积为 $0$（交错反对称性）。<br>
+                  数学上已严格证明：<strong>满足这三条几何公理的函数是唯一的，这就是行列式</strong>。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4.4 剪切不变性专题解析：为什么 vi + c*vj 不变高？ -->
+          <div class="math-card" style="border-left: 5px solid var(--accent-rose); margin-top: 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.4rem;">🃏</span>
+              <h3 style="margin: 0; color: var(--accent-rose);">核心定理：剪切不变性（$\mathbf{v}_i + c\mathbf{v}_j$ 不变高）的几何解释</h3>
+            </div>
+
+            <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 1.25rem;">
+              线性代数中最核心的性质是：<strong>“矩阵的一行加上另一行的常数倍，行列式保持不变”</strong>（高斯消元的基石）。其几何本质正是<strong>剪切变形（Shear Transformation）下的空间体积守恒</strong>。
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem;">
+              <!-- 维度 1：平行线滑动 -->
+              <div class="concept-pillar" style="border-left-color: var(--accent-blue);">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">1. 几何直观：顶点在平行线上滑动（同底等高）</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  以 $\mathbf{v}_2$ 为底边，$\mathbf{v}_1$ 的顶点到底边的垂直距离为高 $h$。当对 $\mathbf{v}_1$ 加上 $c\mathbf{v}_2$ 时：<br>
+                  • 附加项 $c\mathbf{v}_2$ 的方向与底边 $\mathbf{v}_2$ <strong>严格平行</strong>；<br>
+                  • 几何上相当于<strong>将 $\mathbf{v}_1$ 的顶点沿着与底边平行的直线上平移</strong>；<br>
+                  • 平行线间距处处相等，因此<strong>垂直高度 $h$ 毫厘未变</strong>。底不变、高不变，面积 $S = \text{底} \times h$ 绝对恒定！
+                </p>
+              </div>
+
+              <!-- 维度 2：正交投影分解 -->
+              <div class="concept-pillar" style="border-left-color: var(--accent-purple);">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">2. 代数证明：向量正交投影分解</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                  将侧边向量分解为垂直和平行分量：$$\mathbf{v}_1 = \mathbf{v}_{1\perp} + \mathbf{v}_{1\parallel}$$
+                  其中高度严格由垂直分量决定：$h = \|\mathbf{v}_{1\perp}\|$。<br>
+                  施加变换后：$$\mathbf{v}_1' = \mathbf{v}_1 + c\mathbf{v}_2 = \mathbf{v}_{1\perp} + (\mathbf{v}_{1\parallel} + c\mathbf{v}_2)$$
+                  改变的仅仅是平行分量，<strong>决定高度的垂直分量 $\mathbf{v}_{1\perp}$ 丝毫无损</strong>，故 $h' = h$。
+                </p>
+              </div>
+            </div>
+
+            <!-- 交互式 Canvas：剪切变形动态滑动与等高守恒可视化 -->
+            <div style="margin-top: 1.5rem; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
+                <h4 style="color: #38bdf8; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🎮</span> 实时交互演示：剪切变形（Shear）与面积/高度守恒
+                </h4>
+                <div style="display: flex; gap: 0.75rem; align-items: center;">
+                  <label style="font-size: 0.85rem; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; gap: 0.35rem;">
+                    <input type="checkbox" id="checkPokerLayers" onchange="updateShearCanvas()" checked> 显示扑克牌薄片层
+                  </label>
+                  <button class="btn btn-primary" id="btnAnimShear" onclick="toggleShearAnimation()" style="padding: 0.35rem 0.85rem; font-size: 0.85rem;">
+                    ▶️ 播放剪切摇摆动画
+                  </button>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: center;">
+                <!-- 剪切 Canvas 画布 -->
+                <div class="canvas-container" style="height: 340px;">
+                  <canvas id="shearCanvas" width="560" height="340" style="width: 100%; height: 100%; display: block;"></canvas>
+                </div>
+
+                <!-- 控制与实时数值面板 -->
+                <div style="background: rgba(30, 41, 59, 0.7); border: 1px solid var(--border-color); border-radius: 6px; padding: 1.25rem;">
+                  <div class="slider-control" style="margin-bottom: 1rem;">
+                    <label>剪切系数 $c$ ($\mathbf{v}_1 + c\mathbf{v}_2$):</label>
+                    <input type="range" id="sliderShearC" min="-1.5" max="1.5" step="0.02" value="0.5" oninput="updateShearCanvas()">
+                    <span class="slider-val" id="valShearC">+0.50</span>
+                  </div>
+
+                  <div style="background: #0a0f1d; padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); font-size: 0.88rem; line-height: 1.8;">
+                    <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                      <span>固定底边 $\mathbf{v}_2$ 长度：</span>
+                      <strong style="color: #34d399; font-family: var(--font-mono);">\|\mathbf{v}_2\| = 4.00 (固定)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                      <span>顶点到底边垂直高 $h$：</span>
+                      <strong style="color: #34d399; font-family: var(--font-mono); font-size: 1.05rem;">h = 3.00 (绝对锁定不变!)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; color: var(--text-muted);">
+                      <span>平行滑动量 $c \cdot \mathbf{v}_2$：</span>
+                      <strong style="color: var(--accent-purple); font-family: var(--font-mono);" id="displayShearShift">+2.00</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed var(--border-color);">
+                      <span style="font-weight: bold; color: var(--text-main);">几何面积 $S = \text{底} \times h$：</span>
+                      <strong style="color: #fbbf24; font-size: 1.15rem; font-family: var(--font-mono);">12.00 (恒定守恒)</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                      <span style="font-weight: bold; color: var(--text-main);">行列式 $\det([\mathbf{v}_1+c\mathbf{v}_2, \mathbf{v}_2])$：</span>
+                      <strong style="color: #38bdf8; font-size: 1.15rem; font-family: var(--font-mono);">12.00 (完全不变)</strong>
+                    </div>
+                  </div>
+
+                  <div style="margin-top: 0.75rem; font-size: 0.8rem; color: var(--text-dim); line-height: 1.5;">
+                    💡 <strong>观察提示</strong>：无论怎么左右拖动滑块 $c$，新顶点 $\mathbf{v}_1'$ 始终在黄色虚线平行滑轨上水平滑动。因为垂直于底边的间距 $h$ 始终为 $3.00$，所以图形面积与行列式严格守恒。
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. 跨学科统一：微积分中的高阶导数莱布尼茨公式与推导 -->
+        <section class="content-section" style="margin-top: 3.5rem;">
+          <div class="section-header">
+            <h2>五、 跨学科统一：微积分中的乘积高阶导数「莱布尼茨公式」</h2>
+          </div>
+
+          <p>
+            在微积分中，也有一个著名的“莱布尼茨公式”，用于计算两个函数乘积的 $n$ 阶导数。它与二项式定理、行列式展开有着深厚的数学对偶思想：
+          </p>
+
+          <div class="math-card" style="border-left: 5px solid var(--accent-indigo);">
+            <h3 style="color: var(--accent-indigo); margin-bottom: 0.75rem;">🔹 乘积的高阶求导法则（Leibniz Rule for Derivatives）</h3>
+            <div class="formula-display">
+              $$(uv)^{(n)} = \sum_{k=0}^{n} C_n^k \, u^{(n-k)} \, v^{(k)}$$
+            </div>
+
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; font-size: 0.95rem; line-height: 1.8;">
+              <strong style="color: #38bdf8;">数学归纳法严格推导过程：</strong><br>
+              1. <strong>基础步（$n=1$）</strong>：$(uv)' = u'v + uv' = C_1^0 u'v + C_1^1 uv'$，一阶乘积法则成立。<br>
+              2. <strong>归纳假设</strong>：设 $n=m$ 时成立，即 $(uv)^{(m)} = \sum_{k=0}^m C_m^k u^{(m-k)} v^{(k)}$。<br>
+              3. <strong>递推求导（$n=m+1$）</strong>：<br>
+              $$(uv)^{(m+1)} = [(uv)^{(m)}]' = \sum_{k=0}^m C_m^k \left( u^{(m+1-k)}v^{(k)} + u^{(m-k)}v^{(k+1)} \right)$$
+              将第二项指标平移 $j = k+1$，合并同类项提取系数：$[C_m^k + C_m^{k-1}] = C_{m+1}^k$（杨辉三角/帕斯卡恒等式）。<br>
+              因此：$$(uv)^{(m+1)} = \sum_{k=0}^{m+1} C_{m+1}^k u^{(m+1-k)} v^{(k)}$$
+              归纳证明完毕！
+            </div>
+
+            <div style="margin-top: 1rem; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: 8px; padding: 1rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+              <strong style="color: var(--accent-purple);">💡 为什么都叫莱布尼茨公式？</strong><br>
+              戈特弗里德·莱布尼茨（Gottfried Wilhelm Leibniz）是符号化数学大师。无论是微积分中的乘积高阶导数 $(uv)^{(n)}$、定积分基本定理 $\int_a^b f(x)dx = F(b)-F(a)$，还是线性代数中的全排列行列式 $\det(A)$，其核心都是<strong>用优美的代数对称符号，解决离散组合与连续微元的累加守恒问题</strong>。
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. 算法对比：莱布尼茨公式 vs 高斯消元 -->
+        <section class="content-section" style="margin-top: 3.5rem;">
+          <div class="section-header">
+            <h2>六、 计算复杂度对比：理论之锚 vs 工程之王</h2>
+          </div>
+          <p>
+            为什么在实际计算机程序和工程求解中，我们从不用莱布尼茨公式直接计算大矩阵的行列式？
+          </p>
+
+          <div style="overflow-x: auto; margin-top: 1.25rem;">
+            <table class="table" style="width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 8px; overflow: hidden;">
+              <thead>
+                <tr style="background: rgba(15, 23, 42, 0.9); text-align: left;">
+                  <th style="padding: 0.85rem; border-bottom: 1px solid var(--border-color);">矩阵阶数 $n$</th>
+                  <th style="padding: 0.85rem; border-bottom: 1px solid var(--border-color);">莱布尼茨项数 ($n!$)</th>
+                  <th style="padding: 0.85rem; border-bottom: 1px solid var(--border-color);">高斯消元操作数 $\approx \frac{2}{3}n^3$</th>
+                  <th style="padding: 0.85rem; border-bottom: 1px solid var(--border-color);">评价</th>
+                </tr>
+              </thead>
+              <tbody style="font-size: 0.9rem;">
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); font-weight: bold;">$3 \times 3$</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: #34d399;">$6$ 项</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono);">约 18 次</td>
+                  <td style="padding: 0.85rem; color: var(--text-muted);">手算均可轻松完成</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); font-weight: bold;">$5 \times 5$</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: var(--accent-amber);">$120$ 项</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono);">约 83 次</td>
+                  <td style="padding: 0.85rem; color: var(--text-muted);">莱布尼茨手算已极度繁琐</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); font-weight: bold;">$10 \times 10$</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: #f43f5e; font-weight: bold;">$3,628,800$ 项 (360万)</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: #34d399;">约 660 次</td>
+                  <td style="padding: 0.85rem; color: var(--text-muted);">计算机消元毫秒级完成</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); font-weight: bold;">$20 \times 20$</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: #f43f5e; font-weight: bold;">$\approx 2.43 \times 10^{18}$ 项</td>
+                  <td style="padding: 0.85rem; font-family: var(--font-mono); color: #34d399;">约 5,300 次</td>
+                  <td style="padding: 0.85rem; color: #f43f5e;">莱布尼茨公式在超级计算机上需算上百年！</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(14, 165, 233, 0.3); border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem; font-size: 0.95rem; line-height: 1.7;">
+            <strong style="color: var(--accent-blue);">💡 分工与定位：</strong><br>
+            • <strong>莱布尼茨公式</strong>：是行列式的<strong>理论基石与定义之锚</strong>，用于证明 $\det(A^T) = \det(A)$、$\det(AB) = \det(A)\det(B)$、代数余子式理论及推导克莱姆法则。<br>
+            • <strong>高斯消元法</strong>：是<strong>实际工程计算的唯一利器</strong>（$\mathcal{O}(n^3)$ 多项式复杂度），化为上三角矩阵提取对角线乘积。
+          </div>
+        </section>
+
+        <!-- Navigation Footer -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch3_1_supplement_geometric_foundations.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一篇专题</div>
+                <div style="font-weight: 600;">二维面积推导与法向量底蕴</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="ch3_1_determinant.html" class="btn btn-secondary">
+              📖 返回 Ch 3.1 主课
+            </a>
+          </div>
+          <div>
+            <a href="ch3_2_cramer_applications.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 3.2: 伴随矩阵与克莱姆法则</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- JavaScript 交互脚本 -->
+  <script>
+    // 1. 安全 MathJax 重新渲染队列
+    let isTypesetting = false;
+    let pendingNodes = [];
+
+    function queueMathTypeset(nodes) {
+      if (!nodes || nodes.length === 0) return;
+      nodes.forEach(n => {
+        if (n && !pendingNodes.includes(n)) {
+          pendingNodes.push(n);
+        }
+      });
+      if (isTypesetting) return;
+
+      const runTypeset = () => {
+        if (!window.MathJax || typeof window.MathJax.typesetPromise !== 'function') {
+          setTimeout(runTypeset, 60);
+          return;
+        }
+        if (pendingNodes.length === 0) {
+          isTypesetting = false;
+          return;
+        }
+
+        isTypesetting = true;
+        const currentNodes = [...pendingNodes];
+        pendingNodes = [];
+
+        if (window.MathJax.typesetClear) {
+          try {
+            window.MathJax.typesetClear(currentNodes);
+          } catch (e) {}
+        }
+
+        window.MathJax.typesetPromise(currentNodes)
+          .catch(err => console.warn('MathJax error:', err))
+          .finally(() => {
+            isTypesetting = false;
+            if (pendingNodes.length > 0) {
+              runTypeset();
+            }
+          });
+      };
+
+      runTypeset();
+    }
+
+    // 2. 逆序数分析器
+    function calculatePermutation() {
+      const raw = document.getElementById('permInput').value;
+      const arr = raw.split(/[\s,，]+/).map(Number).filter(n => !isNaN(n) && n > 0);
+      const resDiv = document.getElementById('permResult');
+      
+      if (arr.length === 0) {
+        resDiv.innerHTML = '<span style="color:#f43f5e;">请输入有效的正整数排列！</span>';
+        return;
+      }
+
+      // 检查是否为标准排列
+      const sorted = [...arr].sort((a,b) => a - b);
+      let isStrict = true;
+      for(let i=0; i<sorted.length; i++) {
+        if(sorted[i] !== i+1) { isStrict = false; break; }
+      }
+
+      // 计算逆序对
+      const invPairs = [];
+      for(let i = 0; i < arr.length; i++) {
+        for(let j = i + 1; j < arr.length; j++) {
+          if(arr[i] > arr[j]) {
+            invPairs.push(`(${arr[i]}, ${arr[j]})`);
+          }
+        }
+      }
+
+      const tau = invPairs.length;
+      const isEven = tau % 2 === 0;
+      const sgn = isEven ? '+1' : '-1';
+      const sgnColor = isEven ? '#34d399' : '#f43f5e';
+
+      let html = `<div style="margin-bottom:0.6rem;"><strong>排列序列：</strong> $[ ${arr.join(', ')} ]$ (阶数 $n = ${arr.length}$)</div>`;
+      if (!isStrict) {
+        html += `<div style="color:var(--accent-amber); font-size:0.85rem; margin-bottom:0.6rem;">⚠️ 提示: 输入包含非标准 $1 \\dots ${arr.length}$ 序列，按广义逆序数计算。</div>`;
+      }
+      html += `<div style="margin-bottom:0.6rem;"><strong>所有逆序对 (前 > 后)：</strong> ${invPairs.length > 0 ? invPairs.join(', ') : '无'}</div>`;
+      html += `<div style="margin-bottom:0.6rem;"><strong>逆序数总计 $\\tau(\\sigma)$：</strong> <span style="color:#38bdf8; font-weight:bold; font-size:1.15rem;">${tau}</span></div>`;
+      html += `<div><strong>排列奇偶性与符号：</strong> <span style="color:${sgnColor}; font-weight:bold; font-size:1.05rem;">${isEven ? '偶排列 (Even)' : '奇排列 (Odd)'} $\\implies \\operatorname{sgn}(\\sigma) = ${sgn}$</span></div>`;
+
+      resDiv.innerHTML = html;
+      queueMathTypeset([resDiv]);
+    }
+
+    // 3. 3x3 莱布尼茨展开器
+    const perms3 = [
+      { p: [1,2,3], sign: 1, tau: 0, formula: "a_{11} a_{22} a_{33}" },
+      { p: [2,3,1], sign: 1, tau: 2, formula: "a_{12} a_{23} a_{31}" },
+      { p: [3,1,2], sign: 1, tau: 2, formula: "a_{13} a_{21} a_{32}" },
+      { p: [1,3,2], sign: -1, tau: 1, formula: "a_{11} a_{23} a_{32}" },
+      { p: [2,1,3], sign: -1, tau: 1, formula: "a_{12} a_{21} a_{33}" },
+      { p: [3,2,1], sign: -1, tau: 3, formula: "a_{13} a_{22} a_{31}" }
+    ];
+
+    function updateMatrixLeibniz() {
+      const a = [
+        [parseFloat(document.getElementById('m11').value) || 0, parseFloat(document.getElementById('m12').value) || 0, parseFloat(document.getElementById('m13').value) || 0],
+        [parseFloat(document.getElementById('m21').value) || 0, parseFloat(document.getElementById('m22').value) || 0, parseFloat(document.getElementById('m23').value) || 0],
+        [parseFloat(document.getElementById('m31').value) || 0, parseFloat(document.getElementById('m32').value) || 0, parseFloat(document.getElementById('m33').value) || 0]
+      ];
+
+      let totalDet = 0;
+      const termsListDiv = document.getElementById('termsList');
+      termsListDiv.innerHTML = '';
+
+      perms3.forEach((item) => {
+        const v1 = a[0][item.p[0] - 1];
+        const v2 = a[1][item.p[1] - 1];
+        const v3 = a[2][item.p[2] - 1];
+        const prod = v1 * v2 * v3;
+        const termVal = item.sign * prod;
+        totalDet += termVal;
+
+        const isPos = item.sign === 1;
+        const itemDiv = document.createElement('div');
+        itemDiv.style.cursor = 'pointer';
+        itemDiv.style.padding = '0.45rem 0.75rem';
+        itemDiv.style.borderRadius = '6px';
+        itemDiv.style.fontSize = '0.9rem';
+        itemDiv.style.background = isPos ? 'rgba(52, 211, 153, 0.08)' : 'rgba(244, 63, 94, 0.08)';
+        itemDiv.style.border = `1px solid ${isPos ? 'rgba(52, 211, 153, 0.25)' : 'rgba(244, 63, 94, 0.25)'}`;
+        itemDiv.style.display = 'flex';
+        itemDiv.style.justifyContent = 'space-between';
+        itemDiv.style.alignItems = 'center';
+
+        const signSymbol = isPos ? '+' : '-';
+        itemDiv.innerHTML = `
+          <span>${isPos ? '➕' : '➖'} <b>[${item.p.join(', ')}]</b> &nbsp; $${signSymbol} ${item.formula}$: (${v1} &times; ${v2} &times; ${v3})</span>
+          <strong style="color:${isPos ? '#34d399' : '#f43f5e'}; font-family: var(--font-mono); font-size:1rem;">${item.sign > 0 ? '+' : ''}${termVal}</strong>
+        `;
+
+        itemDiv.onclick = () => highlightTerm(item, a);
+        termsListDiv.appendChild(itemDiv);
+      });
+
+      const totalDisplay = document.getElementById('totalDetDisplay');
+      totalDisplay.innerHTML = `$$\\det(A) = ${totalDet}$$`;
+      queueMathTypeset([termsListDiv, totalDisplay]);
+    }
+
+    function highlightTerm(item, a) {
+      for(let r=1; r<=3; r++) {
+        for(let c=1; c<=3; c++) {
+          const cell = document.getElementById(`c${r}${c}`);
+          cell.className = 'chess-cell';
+          cell.innerHTML = `a<sub>${r}${c}</sub>`;
+        }
+      }
+
+      const className = item.sign === 1 ? 'chess-cell selected-pos' : 'chess-cell selected-neg';
+      for(let r=1; r<=3; r++) {
+        const col = item.p[r-1];
+        const cell = document.getElementById(`c${r}${col}`);
+        cell.className = className;
+        const val = a[r-1][col-1];
+        cell.innerText = `${val}`;
+      }
+
+      const isPos = item.sign === 1;
+      const tipDiv = document.getElementById('chessTip');
+      tipDiv.innerHTML = `
+        <strong style="color:${isPos ? '#34d399' : '#f43f5e'}">当前选中项：${isPos ? '+ 正项' : '- 负项'} [${item.p.join(', ')}]</strong><br>
+        取点乘积: $a_{1${item.p[0]}} \\cdot a_{2${item.p[1]}} \\cdot a_{3${item.p[2]}} = (${a[0][item.p[0]-1]}) \\times (${a[1][item.p[1]-1]}) \\times (${a[2][item.p[2]-1]})$<br>
+        棋盘上已填入各位置实际数值，高亮选点在行与列上均互不冲突（各行各列恰好选择一个元素，车互不攻击）。
+      `;
+
+      queueMathTypeset([tipDiv]);
+    }
+
+    // 4. 几何可视化 Canvas：滚筒刷平推与参数独立/受限生成器
+    let regionMode = 'parallelogram'; // 'parallelogram' or 'triangle'
+    let isScanningAnim = false;
+    let animId = null;
+    const v1 = { x: 4.0, y: 1.0 };
+    const v2 = { x: 1.5, y: 3.5 };
+
+    function setRegionMode(mode) {
+      regionMode = mode;
+      document.getElementById('btnModeParallelogram').className = `mode-tab-btn ${mode === 'parallelogram' ? 'active' : ''}`;
+      document.getElementById('btnModeTriangle').className = `mode-tab-btn ${mode === 'triangle' ? 'active' : ''}`;
+      updateGeoCanvas();
+    }
+
+    function toggleScanAnimation() {
+      const btn = document.getElementById('btnAnimScan');
+      if (isScanningAnim) {
+        isScanningAnim = false;
+        if (animId) cancelAnimationFrame(animId);
+        btn.innerText = '▶️ 播放滚筒刷平推动画';
+      } else {
+        isScanningAnim = true;
+        btn.innerText = '⏸️ 暂停动画';
+        document.getElementById('sliderT').value = 0;
+        let curT = 0;
+
+        const loop = () => {
+          if (!isScanningAnim) return;
+          curT += 0.012;
+          if (curT > 1.0) {
+            curT = 1.0;
+            document.getElementById('sliderT').value = curT;
+            updateGeoCanvas();
+            isScanningAnim = false;
+            btn.innerText = '🔄 重放动画';
+            return;
+          }
+          document.getElementById('sliderT').value = curT.toFixed(2);
+          updateGeoCanvas();
+          animId = requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    }
+
+    function updateGeoCanvas() {
+      const canvas = document.getElementById('geoCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const s = parseFloat(document.getElementById('sliderS').value);
+      const t = parseFloat(document.getElementById('sliderT').value);
+
+      document.getElementById('valS').innerText = s.toFixed(2);
+      document.getElementById('valT').innerText = t.toFixed(2);
+
+      // 计算当前几何面积
+      const fullDet = Math.abs(v1.x * v2.y - v1.y * v2.x);
+      let curArea = 0;
+      if (regionMode === 'parallelogram') {
+        curArea = fullDet * (s * t);
+      } else {
+        // 三角形受限模式
+        curArea = fullDet * 0.5 * Math.min(1.0, (s * t));
+      }
+      document.getElementById('currentAreaDisplay').innerText = curArea.toFixed(2);
+
+      // 坐标系转换 (原点在左下偏中位置)
+      const originX = 60;
+      const originY = h - 60;
+      const scale = 55; // 像素/单位
+
+      const toScreen = (x, y) => ({
+        x: originX + x * scale,
+        y: originY - y * scale
+      });
+
+      // 清屏
+      ctx.clearRect(0, 0, w, h);
+
+      // 绘制背景网格
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.3)';
+      ctx.lineWidth = 1;
+      for (let x = 0; x <= 9; x++) {
+        const p1 = toScreen(x, 0);
+        const p2 = toScreen(x, 6);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= 6; y++) {
+        const p1 = toScreen(0, y);
+        const p2 = toScreen(9, y);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      // 绘制坐标轴
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      const o = toScreen(0, 0);
+      const xAxisEnd = toScreen(8.5, 0);
+      const yAxisEnd = toScreen(0, 5.5);
+
+      ctx.beginPath();
+      ctx.moveTo(o.x - 20, o.y);
+      ctx.lineTo(xAxisEnd.x, xAxisEnd.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(o.x, o.y + 20);
+      ctx.lineTo(yAxisEnd.x, yAxisEnd.y);
+      ctx.stroke();
+
+      // 轴文字
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '12px var(--font-mono)';
+      ctx.fillText('X', xAxisEnd.x + 5, xAxisEnd.y + 4);
+      ctx.fillText('Y', yAxisEnd.x - 4, yAxisEnd.y - 10);
+      ctx.fillText('O(0,0)', o.x - 38, o.y + 16);
+
+      // 顶点坐标计算
+      const pO = toScreen(0, 0);
+      const pV1 = toScreen(v1.x, v1.y);
+      const pV2 = toScreen(v2.x, v2.y);
+      const pV12 = toScreen(v1.x + v2.x, v1.y + v2.y);
+
+      // 1. 绘制完整目标虚线外框
+      ctx.setLineDash([4, 4]);
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      if (regionMode === 'parallelogram') {
+        ctx.moveTo(pO.x, pO.y);
+        ctx.lineTo(pV1.x, pV1.y);
+        ctx.lineTo(pV12.x, pV12.y);
+        ctx.lineTo(pV2.x, pV2.y);
+        ctx.closePath();
+      } else {
+        ctx.moveTo(pO.x, pO.y);
+        ctx.lineTo(pV1.x, pV1.y);
+        ctx.lineTo(pV2.x, pV2.y);
+        ctx.closePath();
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 2. 绘制当前参数扫过的填充区域 (滚筒刷轨迹)
+      if (s > 0 && t > 0) {
+        ctx.save();
+        if (regionMode === 'parallelogram') {
+          // 独立参数扫过区域
+          const pCurV1 = toScreen(s * v1.x, s * v1.y);
+          const pCurV2 = toScreen(t * v2.x, t * v2.y);
+          const pCurDiag = toScreen(s * v1.x + t * v2.x, s * v1.y + t * v2.y);
+
+          ctx.fillStyle = 'rgba(56, 189, 248, 0.25)';
+          ctx.beginPath();
+          ctx.moveTo(pO.x, pO.y);
+          ctx.lineTo(pCurV1.x, pCurV1.y);
+          ctx.lineTo(pCurDiag.x, pCurDiag.y);
+          ctx.lineTo(pCurV2.x, pCurV2.y);
+          ctx.closePath();
+          ctx.fill();
+
+          // 绘制平推过程中的“扫刷线段”
+          for (let step = 0; step <= t; step += 0.2) {
+            const startP = toScreen(step * v2.x, step * v2.y);
+            const endP = toScreen(s * v1.x + step * v2.x, s * v1.y + step * v2.y);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(startP.x, startP.y);
+            ctx.lineTo(endP.x, endP.y);
+            ctx.stroke();
+          }
+
+          // 当前平推最前沿刷子（高亮线段）
+          const topStart = toScreen(t * v2.x, t * v2.y);
+          const topEnd = toScreen(s * v1.x + t * v2.x, s * v1.y + t * v2.y);
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(topStart.x, topStart.y);
+          ctx.lineTo(topEnd.x, topEnd.y);
+          ctx.stroke();
+
+        } else {
+          // 受限参数三角形区域 (s + t <= 1)
+          const pCurV1 = toScreen(s * v1.x, s * v1.y);
+          const pCurV2 = toScreen(t * v2.x, t * v2.y);
+
+          ctx.fillStyle = 'rgba(244, 63, 94, 0.25)';
+          ctx.beginPath();
+          ctx.moveTo(pO.x, pO.y);
+          ctx.lineTo(pCurV1.x, pCurV1.y);
+          ctx.lineTo(pCurV2.x, pCurV2.y);
+          ctx.closePath();
+          ctx.fill();
+
+          // 斜对角切断线
+          ctx.strokeStyle = '#f43f5e';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(pCurV1.x, pCurV1.y);
+          ctx.lineTo(pCurV2.x, pCurV2.y);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      // 3. 绘制主向量箭头 v1 和 v2
+      drawArrow(ctx, pO, pV1, '#38bdf8', 'v₁ (4.0, 1.0)');
+      drawArrow(ctx, pO, pV2, '#c084fc', 'v₂ (1.5, 3.5)');
+
+      // 4. 绘制对角点标志
+      if (regionMode === 'parallelogram') {
+        ctx.fillStyle = '#34d399';
+        ctx.beginPath();
+        ctx.arc(pV12.x, pV12.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#34d399';
+        ctx.font = '12px var(--font-mono)';
+        ctx.fillText('v₁+v₂ (5.5, 4.5)', pV12.x + 8, pV12.y - 4);
+      }
+    }
+
+    function drawArrow(ctx, from, to, color, label) {
+      const headlen = 10;
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const angle = Math.atan2(dy, dx);
+
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(to.x, to.y);
+      ctx.lineTo(to.x - headlen * Math.cos(angle - Math.PI / 6), to.y - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(to.x - headlen * Math.cos(angle + Math.PI / 6), to.y - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      // 标签
+      ctx.font = 'bold 12px var(--font-sans)';
+      ctx.fillText(label, to.x + 8, to.y + 4);
+    }
+
+    // 5. 剪切变换（Shear）交互式 Canvas 逻辑
+    let isShearAnim = false;
+    let shearAnimId = null;
+    let shearAngle = 0;
+
+    function toggleShearAnimation() {
+      const btn = document.getElementById('btnAnimShear');
+      if (isShearAnim) {
+        isShearAnim = false;
+        if (shearAnimId) cancelAnimationFrame(shearAnimId);
+        btn.innerText = '▶️ 播放剪切摇摆动画';
+      } else {
+        isShearAnim = true;
+        btn.innerText = '⏸️ 暂停动画';
+        const loop = () => {
+          if (!isShearAnim) return;
+          shearAngle += 0.03;
+          const cVal = 1.0 * Math.sin(shearAngle);
+          document.getElementById('sliderShearC').value = cVal.toFixed(2);
+          updateShearCanvas();
+          shearAnimId = requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    }
+
+    function updateShearCanvas() {
+      const canvas = document.getElementById('shearCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      const c = parseFloat(document.getElementById('sliderShearC').value);
+      const signPrefix = c >= 0 ? '+' : '';
+      document.getElementById('valShearC').innerText = `${signPrefix}${c.toFixed(2)}`;
+      document.getElementById('displayShearShift').innerText = `${signPrefix}${(c * 4.0).toFixed(2)}`;
+
+      const showPoker = document.getElementById('checkPokerLayers').checked;
+
+      // 设定几何参数：
+      // 底边 v2 = (4.0, 0) 水平放置，侧边 v1 = (1.0, 3.0)，剪切后 v1' = (1.0 + 4.0*c, 3.0)
+      const baseV2 = { x: 4.0, y: 0.0 };
+      const origV1 = { x: 1.0, y: 3.0 };
+      const curV1 = { x: origV1.x + c * baseV2.x, y: origV1.y };
+      const curDiag = { x: curV1.x + baseV2.x, y: curV1.y };
+
+      // 坐标系转换
+      const originX = 140;
+      const originY = h - 60;
+      const scale = 48; // 像素/单位
+
+      const toScreen = (x, y) => ({
+        x: originX + x * scale,
+        y: originY - y * scale
+      });
+
+      // 清屏
+      ctx.clearRect(0, 0, w, h);
+
+      // 绘制背景网格
+      ctx.strokeStyle = 'rgba(51, 65, 85, 0.25)';
+      ctx.lineWidth = 1;
+      for (let x = -3; x <= 8; x++) {
+        const p1 = toScreen(x, -0.5);
+        const p2 = toScreen(x, 4.5);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+      for (let y = 0; y <= 4; y++) {
+        const p1 = toScreen(-3, y);
+        const p2 = toScreen(8, y);
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      // 绘制底线水平延长轴
+      const pO = toScreen(0, 0);
+      const pV2 = toScreen(baseV2.x, baseV2.y);
+      const pCurV1 = toScreen(curV1.x, curV1.y);
+      const pCurDiag = toScreen(curDiag.x, curDiag.y);
+      const pOrigV1 = toScreen(origV1.x, origV1.y);
+
+      // 1. 绘制贯穿顶部的黄色滑轨虚线 (平行于底边 y = 3.0)
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+      ctx.lineWidth = 1.5;
+      const railStart = toScreen(-2.5, 3.0);
+      const railEnd = toScreen(7.5, 3.0);
+      ctx.beginPath();
+      ctx.moveTo(railStart.x, railStart.y);
+      ctx.lineTo(railEnd.x, railEnd.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '11px var(--font-sans)';
+      ctx.fillText('顶点水平滑动导轨 (高度恒定 y = 3.0)', railEnd.x - 190, railEnd.y - 8);
+
+      // 2. 绘制平行四边形主填充
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+      ctx.beginPath();
+      ctx.moveTo(pO.x, pO.y);
+      ctx.lineTo(pV2.x, pV2.y);
+      ctx.lineTo(pCurDiag.x, pCurDiag.y);
+      ctx.lineTo(pCurV1.x, pCurV1.y);
+      ctx.closePath();
+      ctx.fill();
+
+      // 3. 扑克牌等厚薄片层（祖暅原理模拟）
+      if (showPoker) {
+        const numLayers = 7;
+        const layerH = 3.0 / numLayers;
+        ctx.strokeStyle = 'rgba(129, 140, 248, 0.4)';
+        ctx.lineWidth = 1;
+        for (let i = 1; i < numLayers; i++) {
+          const ly = i * layerH;
+          const lx1 = curV1.x * (ly / 3.0);
+          const lx2 = lx1 + baseV2.x;
+          const pLayerStart = toScreen(lx1, ly);
+          const pLayerEnd = toScreen(lx2, ly);
+          ctx.beginPath();
+          ctx.moveTo(pLayerStart.x, pLayerStart.y);
+          ctx.lineTo(pLayerEnd.x, pLayerEnd.y);
+          ctx.stroke();
+        }
+      }
+
+      // 4. 绘制原始 v1 虚线轮廓参考（当 c != 0 时对比）
+      if (Math.abs(c) > 0.05) {
+        ctx.setLineDash([3, 3]);
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.45)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(pO.x, pO.y);
+        ctx.lineTo(pOrigV1.x, pOrigV1.y);
+        ctx.lineTo(toScreen(origV1.x + baseV2.x, origV1.y).x, toScreen(origV1.x + baseV2.x, origV1.y).y);
+        ctx.lineTo(pV2.x, pV2.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // 5. 绘制垂直高度标尺 (垂直虚线与直角)
+      const pFoot = toScreen(curV1.x, 0);
+      ctx.setLineDash([4, 3]);
+      ctx.strokeStyle = '#34d399';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(pCurV1.x, pCurV1.y);
+      ctx.lineTo(pFoot.x, pFoot.y);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 直角标记
+      const rSize = 10;
+      ctx.strokeStyle = '#34d399';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pFoot.x, pFoot.y - rSize);
+      ctx.lineTo(pFoot.x + (curV1.x >= 0 ? rSize : -rSize), pFoot.y - rSize);
+      ctx.lineTo(pFoot.x + (curV1.x >= 0 ? rSize : -rSize), pFoot.y);
+      ctx.stroke();
+
+      // 高度文字
+      ctx.fillStyle = '#34d399';
+      ctx.font = 'bold 12px var(--font-mono)';
+      ctx.fillText('高 h = 3.00 (不变)', pFoot.x + 8, pFoot.y - (pFoot.y - pCurV1.y) / 2);
+
+      // 6. 绘制向量边框与箭头
+      drawArrow(ctx, pO, pV2, '#34d399', '底边 v₂ (长 4.0)');
+      drawArrow(ctx, pO, pCurV1, '#38bdf8', `v₁' = v₁ + ${signPrefix}${c.toFixed(1)}v₂`);
+
+      // 顶边与对边封闭
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pCurV1.x, pCurV1.y);
+      ctx.lineTo(pCurDiag.x, pCurDiag.y);
+      ctx.lineTo(pV2.x, pV2.y);
+      ctx.stroke();
+
+      // 7. 标注原点与顶点
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '12px var(--font-mono)';
+      ctx.fillText('O(0,0)', pO.x - 36, pO.y + 16);
+      
+      // 顶点红点
+      ctx.fillStyle = '#f43f5e';
+      ctx.beginPath();
+      ctx.arc(pCurV1.x, pCurV1.y, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function initDynamicMath() {
+      calculatePermutation();
+      updateMatrixLeibniz();
+      updateGeoCanvas();
+      updateShearCanvas();
+    }
+
+    // 页面兜底与初始化
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        initDynamicMath();
+      });
+    } else {
+      initDynamicMath();
+    }
+  </script>
+</body>
+</html>
