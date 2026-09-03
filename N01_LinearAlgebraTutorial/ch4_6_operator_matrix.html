@@ -444,6 +444,95 @@
           <div class="card-body">
             <p>当坐标系自由切换时，矩阵中的具体数值千变万化，但<strong>刻画该线性算子内在本质的几何与代数属性始终保持恒定</strong>。这些不随基底改变而改变的性质，称为<strong>相似不变量</strong>。</p>
 
+            <!-- 前置背景衔接卡片：什么是 λ 与 (λI - A)？ -->
+            <div class="intuition-box" style="margin: 1.5rem 0; border-left-color: var(--accent-amber); background: rgba(251, 191, 36, 0.05); border-color: rgba(251, 191, 36, 0.25);">
+              <div class="box-title" style="color: var(--accent-amber); font-size: 1.1rem;">
+                <span>💡</span> 前置概念通俗衔接：为什么突然出现了 $\lambda$ 与矩阵 $(\lambda I - A)$？
+              </div>
+              <p style="margin-top: 0.5rem;">
+                在进入相似不变量之前，初学者常会困惑：<strong>“为什么突然出现了一个未知数标量 $\lambda$？为什么要在它后面乘一个单位矩阵 $I$ 并减去 $A$？”</strong> 这是从第 4 章（坐标基底）跨入第 5 章（特征理论）最核心的数学桥梁，只需理清以下 4 个渐进问题：
+              </p>
+
+              <div class="step-container" style="margin-top: 1rem;">
+                <div class="step-card" style="background: rgba(15, 23, 42, 0.5);">
+                  <div class="step-number" style="background: var(--accent-amber); color: #000;">1</div>
+                  <div class="step-content">
+                    <div class="step-title" style="color: var(--accent-amber);">寻找客观的“纯缩放不变方向”：$A\mathbf{v} = \lambda \mathbf{v}$</div>
+                    <p>
+                      在几何变换中，绝大多数向量 $\mathbf{x}$ 经过矩阵 $A$ 变换后，既会改变长短，又会偏转方向。但通常存在某些极其特殊的“主轴方向” $\mathbf{v} \neq \mathbf{0}$，在 $A$ 作用下<strong>不发生旋转偏转，仅发生纯粹的同向或反向拉伸缩放</strong>：
+                    </p>
+                    <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0;">
+                      $$A \mathbf{v} = \lambda \mathbf{v}$$
+                    </div>
+                    <p>
+                      这里的纯标量 $\lambda \in \mathbb{R}$（或 $\mathbb{C}$）称为矩阵 $A$ 的<strong>特征值 (Eigenvalue)</strong>，代表该特殊方向上的固有缩放倍率；非零向量 $\mathbf{v}$ 称为<strong>特征向量 (Eigenvector)</strong>。<br>
+                      <em>（例如在前面 4.6 节案例 1 的“斜线反射”中，反射轴上的基向量 $\mathbf{b}_1$ 满足 $A\mathbf{b}_1 = 1\cdot\mathbf{b}_1 \implies \lambda=1$；垂直轴的法向量 $\mathbf{b}_2$ 满足 $A\mathbf{b}_2 = -1\cdot\mathbf{b}_2 \implies \lambda=-1$。它们正是该几何算子固有的特征向量！）</em>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="step-card" style="background: rgba(15, 23, 42, 0.5);">
+                  <div class="step-number" style="background: var(--accent-blue); color: #000;">2</div>
+                  <div class="step-content">
+                    <div class="step-title" style="color: var(--accent-blue);">为什么需要单位矩阵 $I$？矩阵与标量的“维度对齐”法则</div>
+                    <p>
+                      我们希望将方程 $A\mathbf{v} = \lambda \mathbf{v}$ 移项整理为一个齐次线性方程组。但是：
+                    </p>
+                    <ul style="margin: 0.4rem 0 0.4rem 1.2rem; line-height: 1.7;">
+                      <li>$A$ 是 $n \times n$ 矩阵，$\lambda$ 是一个纯标量数字。<strong>在矩阵代数中，“$A - \lambda$”是未定义的非法操作（矩阵不能直接减去标量，维度冲突）</strong>。</li>
+                      <li>由于任意向量满足 $\mathbf{v} = I \mathbf{v}$，标量数乘可以严格转化为矩阵乘法：$\lambda \mathbf{v} = \lambda (I \mathbf{v}) = (\lambda I) \mathbf{v}$。</li>
+                    </ul>
+                    <p>
+                      于是移项可得完全等价的齐次方程形式：
+                    </p>
+                    <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0;">
+                      $$(\lambda I - A) \mathbf{v} = \mathbf{0} \quad \Longleftrightarrow \quad (A - \lambda I) \mathbf{v} = \mathbf{0}$$
+                    </div>
+                    <p>
+                      这里的 $\lambda I = \begin{bmatrix} \lambda & 0 & \cdots \\ 0 & \lambda & \cdots \\ \vdots & \vdots & \ddots \end{bmatrix}$ 是一个主对角线全为 $\lambda$ 的对角方阵。<strong>因此，$(\lambda I - A)$ 的几何与代数实质就是：在矩阵 $-A$ 的主对角线上全部加上未知数 $\lambda$（或者说把 $A$ 的主对角线元素都减去 $\lambda$）！</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="step-card" style="background: rgba(15, 23, 42, 0.5);">
+                  <div class="step-number" style="background: var(--accent-purple); color: #fff;">3</div>
+                  <div class="step-content">
+                    <div class="step-title" style="color: var(--accent-purple);">为什么会出现行列式 $\det(\lambda I - A) = 0$？特征多项式的诞生</div>
+                    <p>
+                      方程 $(\lambda I - A)\mathbf{v} = \mathbf{0}$ 是一个标准的齐次线性方程组，我们寻找的是非平凡的<strong>非零特征向量 ($\mathbf{v} \neq \mathbf{0}$)</strong>。
+                    </p>
+                    <p>
+                      根据我们在 Chapter 2 可逆等价定理与 Chapter 3.2 克莱姆法则推论中的核心结论：<strong>齐次线性方程组拥有非零解 $\iff$ 系数矩阵不可逆 $\iff$ 矩阵行列式必为 0</strong>：
+                    </p>
+                    <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0;">
+                      $$\det(\lambda I - A) = 0 \quad \text{或} \quad \det(A - \lambda I) = 0 \quad (\text{特征方程 Characteristic Equation})$$
+                    </div>
+                    <p>
+                      展开行列式 $\det(\lambda I - A)$，会得到一个关于未知数 $\lambda$ 的 $n$ 次代数多项式 $p(\lambda)$，这正是 <strong>特征多项式 (Characteristic Polynomial)</strong>！它的所有根 $\lambda_1, \dots, \lambda_n$ 就是算子具有的所有固有特征值。
+                    </p>
+                  </div>
+                </div>
+
+                <div class="step-card" style="background: rgba(15, 23, 42, 0.5);">
+                  <div class="step-number" style="background: var(--accent-green); color: #000;">4</div>
+                  <div class="step-content">
+                    <div class="step-title" style="color: var(--accent-green);">特征子空间维数：$\dim(\operatorname{Null}(A - \lambda I))$ 的几何含义</div>
+                    <p>
+                      满足 $(A - \lambda I)\mathbf{v} = \mathbf{0}$ 的所有解向量 $\mathbf{v}$，在代数上正是矩阵 $(A - \lambda I)$ 的<strong>零空间（核空间）$\operatorname{Null}(A - \lambda I)$</strong>（定义为特征子空间 $E_\lambda$）。
+                    </p>
+                    <p>
+                      该子空间的维数 $\dim(\operatorname{Null}(A - \lambda I))$，代表对应于特征值 $\lambda$ 到底能够提供多少个<strong>线性无关的纯缩放特征方向</strong>（称为<strong>几何重数 Geometric Multiplicity</strong>）。
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border-left: 3px solid var(--accent-blue); font-size: 0.92rem;">
+                📌 <strong>为什么在 4.6 节讨论相似性时必须引入它？</strong><br>
+                因为特征方向和特征值是线性算子本身的<strong>客观固有属性</strong>（不随人类选择何种基底坐标系而改变）。换用新基底后得到的矩阵 $B = P^{-1}AP$ 虽然数字外观变了，但其内在特征方程 $\det(\lambda I - B)$ 必然与 $\det(\lambda I - A)$ 完全恒等！
+              </div>
+            </div>
+
             <!-- 不变量对比表格 -->
             <div style="overflow-x: auto; margin: 1.5rem 0;">
               <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem;">
@@ -458,15 +547,15 @@
                   <tr style="border-bottom: 1px solid var(--border-color);">
                     <td style="padding: 10px; font-weight: bold;">1. 特征多项式</td>
                     <td style="padding: 10px;">$\det(\lambda I - B) = \det(\lambda I - A)$</td>
-                    <td>算子的本质代数方程不依赖度量坐标</td>
+                    <td>算子的本质代数方程不依赖度量坐标（根完全一致）</td>
                   </tr>
                   <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 10px; font-weight: bold;">2. 特征值及代数重数</td>
+                    <td style="padding: 10px; font-weight: bold;">2. 特征值谱及代数重数</td>
                     <td style="padding: 10px;">$\sigma(B) = \sigma(A)$</td>
-                    <td>算子在主方向上的固有缩放倍率是绝对的</td>
+                    <td>算子在主方向上的固有缩放倍率集合（谱 Spectrum）守恒</td>
                   </tr>
                   <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 10px; font-weight: bold;">3. 几何重数 (特分子空间维数)</td>
+                    <td style="padding: 10px; font-weight: bold;">3. 几何重数 (特征子空间维数)</td>
                     <td style="padding: 10px;">$\dim(\operatorname{Null}(B - \lambda I)) = \dim(\operatorname{Null}(A - \lambda I))$</td>
                     <td>每个特征值所拥有的线性无关特征方向数量守恒</td>
                   </tr>
@@ -505,8 +594,10 @@
               
               <p><strong>【证明 1】特征多项式与行列式不变性：</strong></p>
               $$\begin{aligned}
-              \det(\lambda I - B) &= \det(\lambda I - P^{-1} A P) = \det(\lambda P^{-1} I P - P^{-1} A P) \\
-              &= \det(P^{-1} (\lambda I - A) P) = \det(P^{-1}) \cdot \det(\lambda I - A) \cdot \det(P) \\
+              \det(\lambda I - B) &= \det(\lambda I - P^{-1} A P) \\
+              &= \det(\lambda P^{-1} I P - P^{-1} A P) \quad (\text{因 } P^{-1} I P = I) \\
+              &= \det\big(P^{-1} (\lambda I - A) P\big) \quad (\text{提出左公共因子 } P^{-1} \text{ 与右公共因子 } P) \\
+              &= \det(P^{-1}) \cdot \det(\lambda I - A) \cdot \det(P) \quad (\text{乘积行列式性质 } \det(XY)=\det(X)\det(Y)) \\
               &= \frac{1}{\det(P)} \cdot \det(\lambda I - A) \cdot \det(P) = \det(\lambda I - A) \quad \blacksquare
               \end{aligned}$$
               <p>令 $\lambda = 0$，由 $\det(-B) = (-1)^n \det(B) = (-1)^n \det(A)$ 立即得到 $\det(B) = \det(A)$。</p>
