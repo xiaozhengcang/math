@@ -158,8 +158,13 @@
           <span>特征值与特征向量几何直觉与求解</span>
         </a>
 
+        <a href="ch5_1_supplement_complex_numbers_foundation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 1</span>
+          <span>高中数学复数完全基石指南</span>
+        </a>
+
         <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
-          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展</span>
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 2</span>
           <span>代数基本定理与特征值存在性</span>
         </a>
         
@@ -301,8 +306,8 @@
               <strong style="color: var(--accent-amber);">🗺️ 本专题自学阶梯（从初中方程到现代数学）：</strong>
               <ol style="margin: 0.5rem 0 0 1.25rem; line-height: 1.8; font-size: 0.9rem; color: var(--text-muted);">
                 <li><strong>第 1 阶（数系觉醒）</strong>：从数数到负数、分数、无理数，为什么人类每一次扩张数系都是为了“解方程”？代数闭域的终极饱和。</li>
-                <li><strong>第 2 阶（视觉奇迹）</strong>：高中抛物线 $y = x^2 + 1$ 在实数轴上明明“浮在半空”，它在复数空间到底藏在哪里？三维马鞍面破壁。</li>
-                <li><strong>第 3 阶（虚数本质）</strong>：虚数单位 $i$ 绝对不是虚构的！从 90° 旋转到实数 2×2 矩阵与正交相位的四大硬核实体。</li>
+                <li><strong>第 2 阶（虚数与极坐标基石）</strong>：虚数单位 $i$ 的四大硬核实体、复数极坐标欧拉法则与二次幂“辐角翻倍”几何跃迁。</li>
+                <li><strong>第 3 阶（视觉奇迹）</strong>：三维马鞍面旋转切片实景破壁，悬空的抛物线如何倒扣扎穿海平面。</li>
                 <li><strong>第 4 阶（定理真容）</strong>：代数基本定理在说什么？为什么“有 1 个根”就能推翻整个多项式，剥洋葱般得到恰好 $n$ 个根？</li>
                 <li><strong>第 5 阶（破解大坑）</strong>：“五次方程无根式解”和“五次方程必有 5 个根”矛盾吗？五大数系闭包能力全景对比表。</li>
                 <li><strong>第 6 阶（严密证明）</strong>：三大经典证明零黑盒拆解——高斯拓扑遛狗原理、复分析刘维尔 5 行推导、达朗贝尔微积分微扰对冲。</li>
@@ -382,88 +387,11 @@
           </div>
         </div>
 
-        <!-- 2. 视觉奇迹：悬空的抛物线在复空间藏在哪里？ -->
+        <!-- 2. 虚数本质、极坐标与几何跃迁 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-green); color: #000;">第 2 阶 · 视觉破壁</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">2. 🎢 视觉奇迹：实数轴上“浮在空中”的抛物线，根到底藏在哪？</h2>
-          </div>
-          <div class="card-body">
-            <p>每个自学初学者都曾在笛卡尔坐标系中画过函数 $f(x) = x^2 + 1$ 的图像：</p>
-            <p style="color: var(--text-muted); line-height: 1.8;">
-              一条开口向上的抛物线，顶点在 $(0, 1)$。整条曲线高高浮在横轴上方，跟 $x$ 轴<strong>根本没有任何交点</strong>！
-              <br>老师告诉你：“这个方程无实数解，但在复数里有两个解 $x = \pm i$。”
-              <br>初学者心里难免会嘀咕：“这难道不是自欺欺人吗？交点明明不存在，凭空造一个 $i$ 算怎么回事？”
-            </p>
-
-            <div class="intuition-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1.25rem 0;">
-              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">💡 维度跃迁：你看到的只是马鞍面的“一根侧影切片”！</h4>
-              <p style="line-height: 1.8; font-size: 0.95rem;">
-                在实数世界里，你的输入只有一个自由度（一维实轴上的点 $x$）。
-                <br>但一旦你允许输入跨入复平面 $z = x + iy$，函数的输入就变成了<strong>一个二维地面 $(x, y)$</strong>，输出的高度就是函数的模长或实部！
-              </p>
-              <div style="margin: 0.75rem 0; padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px; font-size: 0.92rem;">
-                • <strong>沿实轴看（$y = 0$）</strong>：$f(x) = x^2 + 1$。随着 $x$ 变大，数值越来越大，向上翘起成抛物线；
-                <br>• <strong>沿虚轴看（$x = 0$）</strong>：$z = iy$，带入函数计算：
-                $$f(iy) = (iy)^2 + 1 = i^2 y^2 + 1 = \mathbf{-y^2 + 1}$$
-                注意看这个式子！<strong>沿着虚数轴走，二次项系数变成了负数，曲线竟然是开口向下的！</strong>
-              </div>
-              <p style="line-height: 1.8; font-size: 0.95rem;">
-                当 $y = 1$ 时：$f(i) = -1^2 + 1 = \mathbf{0}$；
-                <br>当 $y = -1$ 时：$f(-i) = -(-1)^2 + 1 = \mathbf{0}$！
-              </p>
-            </div>
-
-            <!-- SVG 示意图：三维马鞍面与零点剖面 -->
-            <div style="text-align:center; margin: 1.5rem 0;">
-              <svg width="560" height="260" viewBox="0 0 560 260" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width:100%;">
-                <!-- Coordinate system (Isometric projection) -->
-                <!-- Center origin -->
-                <g transform="translate(280, 150)">
-                  <!-- Axes -->
-                  <line x1="-220" y1="50" x2="220" y2="-50" stroke="#475569" stroke-width="1.5" stroke-dasharray="3"/>
-                  <text x="230" y="-55" fill="#94a3b8" font-size="11">实轴 x</text>
-                  
-                  <line x1="-160" y1="-50" x2="160" y2="50" stroke="#475569" stroke-width="1.5" stroke-dasharray="3"/>
-                  <text x="170" y="55" fill="#94a3b8" font-size="11">虚轴 y</text>
-
-                  <line x1="0" y1="90" x2="0" y2="-130" stroke="#64748b" stroke-width="1.5"/>
-                  <text x="5" y="-120" fill="#cbd5e1" font-size="11">函数值高度 f(z)</text>
-
-                  <!-- Real axis parabola (opening upward, floating above 0) -->
-                  <path d="M -160 0 Q 0 -60 160 -120" fill="none" stroke="#38bdf8" stroke-width="3"/>
-                  <!-- Floating apex at (0,0) with height +1 -->
-                  <circle cx="0" cy="-35" r="4" fill="#38bdf8"/>
-                  <text x="15" y="-35" fill="#38bdf8" font-size="11">实轴浮空顶点 (0, +1)</text>
-
-                  <!-- Imaginary axis downward parabola (opening downward, cuts zero plane) -->
-                  <path d="M -110 20 Q 0 -35 110 -90" fill="none" stroke="#f43f5e" stroke-width="3"/>
-                  
-                  <!-- Zero intersections at y = +1 (i) and y = -1 (-i) -->
-                  <circle cx="55" cy="-7" r="5" fill="#34d399"/>
-                  <text x="70" y="-5" fill="#34d399" font-size="12" font-weight="bold">z = +i (高度降为 0)</text>
-
-                  <circle cx="-55" cy="7" r="5" fill="#34d399"/>
-                  <text x="-145" y="25" fill="#34d399" font-size="12" font-weight="bold">z = -i (高度降为 0)</text>
-
-                  <!-- Ground sea level 0 plane indicator -->
-                  <ellipse cx="0" cy="0" rx="140" ry="35" fill="none" stroke="#334155" stroke-width="1" stroke-dasharray="4"/>
-                  <text x="110" y="25" fill="#64748b" font-size="10">海平面零高度 (f = 0)</text>
-                </g>
-              </svg>
-            </div>
-
-            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.7;">
-              <strong>自学启示</strong>：原本悬空的抛物线，其实是一个<strong>三维双曲抛物面（马鞍面）</strong>！在实数轴上它往上翘，看起来远离地面；但垂直的虚数方向却像滑滑梯一样一路俯冲向下，精准地扎穿了“高度为 0 的海平面”！那两个真实的扎穿点，正是 $z = +i$ 和 $z = -i$。
-            </p>
-          </div>
-        </div>
-
-        <!-- 3. 虚数单位 i 的四大本质 -->
-        <div class="card" style="margin-top: 2rem;">
-          <div class="card-header">
-            <span class="badge" style="background: var(--accent-purple); color: #fff;">第 3 阶 · 本质认知</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">3. 🌀 虚数单位 $i$ 的四大本质：扫清“虚幻”的历史阴霾</h2>
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">第 2 阶 · 本质与极坐标基石</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌀 虚数本质、极坐标与几何跃迁：看懂马鞍面切片的前置基石</h2>
           </div>
           <div class="card-body">
             <p>笛卡尔当年带着轻蔑的语气创造了“虚数 (Imaginary)”这个词，误导了后世几个世纪。其实 $i$ 绝非凭空捏造，它在几何和代数中是一个有着钢铁般硬核实体的客观结构：</p>
@@ -626,6 +554,1210 @@
                     <td style="padding: 0.6rem 0.85rem; font-weight: bold; color: var(--accent-amber);">物理与工程视角</td>
                     <td style="padding: 0.6rem 0.85rem; font-weight: bold;">$90^\circ$ 正交相位 / 酉演化</td>
                     <td style="padding: 0.6rem 0.85rem;">描述波动振动正交通道，薛定谔方程中守卫宇宙量子概率守恒</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            <!-- 2.5 极坐标几何、欧拉公式与“二次幂辐角翻倍”法则 -->
+            <div style="margin: 2rem 0 1rem; padding: 1.35rem; background: rgba(251, 191, 36, 0.05); border-left: 4px solid var(--accent-amber); border-radius: 8px; border: 1px solid rgba(251, 191, 36, 0.2);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>📐</span> ⑤ 极坐标表征与二次幂“辐角翻倍”法则：揭开马鞍面旋转切片的真正密码
+                </h3>
+                <span style="font-size: 0.75rem; color: #000; background: var(--accent-amber); font-weight: 700; padding: 2px 8px; border-radius: 4px;">
+                  核心前置认知
+                </span>
+              </div>
+
+              <p style="font-size: 0.93rem; line-height: 1.8; color: var(--text-main);">
+                为什么单单知道 $i^2 = -1$ 还不足以完全解释 3D 马鞍面的动态变形？
+                <br>因为在下一阶的交互画板中，<strong>切片不是在 0° 和 90° 之间机械跳跃，而是平滑连续旋转的！</strong>
+                要透彻看懂切片旋转角度 $\theta$ 为何能让抛物线<strong>“从向上翘 ➔ 逐渐变平 ➔ 翻转倒扣”</strong>，我们必须掌握复平面的<strong>极坐标系统 (Polar Coordinates)</strong> 与欧拉公式的倍角几何特性。
+              </p>
+
+              <!-- 直角坐标 vs 极坐标 -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+                <div style="padding: 0.9rem; background: #090d16; border-radius: 6px; border-left: 3px solid #38bdf8;">
+                  <strong style="color: #38bdf8; font-size: 0.9rem;">📍 直角坐标形式（静态分量）</strong>
+                  <div style="font-family: var(--font-mono); color: #f8fafc; font-size: 1rem; margin: 0.4rem 0;">
+                    $$z = x + iy$$
+                  </div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                    把复数看成地面上的一个向量：横向为实部 $x = \operatorname{Re}(z)$，纵向为虚部 $y = \operatorname{Im}(z)$。适合处理加减法，但在旋转与乘幂问题中极不直观。
+                  </p>
+                </div>
+
+                <div style="padding: 0.9rem; background: #090d16; border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+                  <strong style="color: var(--accent-amber); font-size: 0.9rem;">🌀 极坐标与欧拉形式（动态旋转）</strong>
+                  <div style="font-family: var(--font-mono); color: #f8fafc; font-size: 1rem; margin: 0.4rem 0;">
+                    $$z = r(\cos\theta + i\sin\theta) = r e^{i\theta}$$
+                  </div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                    $r = |z| = \sqrt{x^2+y^2}$ 为点到原点的<strong>欧氏距离（模长）</strong>；$\theta = \operatorname{Arg}(z)$ 为自正实轴逆时针旋转的<strong>方位角（辐角）</strong>。旋转切片刀刃对准的正是这个角度 $\theta$！
+                  </p>
+                </div>
+              </div>
+
+              <!-- 矢量 SVG 图解 1：复平面极坐标与切片刀位 -->
+              <div style="text-align: center; margin: 1.5rem 0;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 0.5rem; text-align: left;">
+                  📊 图解 A：复平面极坐标网格与 3D 切片旋转刀位空间映射
+                </div>
+                <svg width="100%" height="260" viewBox="0 0 680 260" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                  <defs>
+                    <marker id="arrow-axis-real" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                    </marker>
+                    <marker id="arrow-axis-imag" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                    </marker>
+                    <marker id="arrow-slice-dir" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                      <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+                    </marker>
+                    <linearGradient id="sliceGlow" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.2"/>
+                      <stop offset="100%" stop-color="#fbbf24" stop-opacity="0.02"/>
+                    </linearGradient>
+                  </defs>
+
+                  <!-- Left: Polar Grid Canvas (center at 190, 130) -->
+                  <!-- Concentric circles for r -->
+                  <circle cx="190" cy="130" r="40" fill="none" stroke="rgba(100, 116, 139, 0.25)" stroke-dasharray="3,3" stroke-width="1"/>
+                  <circle cx="190" cy="130" r="80" fill="none" stroke="rgba(100, 116, 139, 0.25)" stroke-dasharray="3,3" stroke-width="1"/>
+                  <circle cx="190" cy="130" r="115" fill="none" stroke="rgba(100, 116, 139, 0.2)" stroke-dasharray="3,3" stroke-width="1"/>
+
+                  <!-- Polar radial ray guides (30, 45, 60 deg) -->
+                  <line x1="190" y1="130" x2="285" y2="75" stroke="rgba(148, 163, 184, 0.2)" stroke-dasharray="2,2"/>
+                  <line x1="190" y1="130" x2="271" y2="49" stroke="rgba(251, 191, 36, 0.4)" stroke-dasharray="3,3"/>
+                  <line x1="190" y1="130" x2="247" y2="31" stroke="rgba(148, 163, 184, 0.2)" stroke-dasharray="2,2"/>
+
+                  <!-- Real and Imaginary Axes -->
+                  <line x1="30" y1="130" x2="350" y2="130" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-axis-real)"/>
+                  <line x1="190" y1="240" x2="190" y2="20" stroke="#f43f5e" stroke-width="1.8" marker-end="url(#arrow-axis-imag)"/>
+                  <text x="345" y="148" fill="#38bdf8" font-size="11" font-weight="bold">+Re(z) [实轴 x]</text>
+                  <text x="198" y="28" fill="#f43f5e" font-size="11" font-weight="bold">+Im(z) [虚轴 y]</text>
+
+                  <!-- Rotating Slice Line (cutting plane on ground) at theta = 38 deg -->
+                  <!-- Line passes through origin from r = -115 to +115 -->
+                  <!-- 38 deg: cos(38) = 0.788, sin(38) = 0.615 -->
+                  <line x1="100" y1="200" x2="280" y2="60" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+                  <line x1="190" y1="130" x2="282" y2="58" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrow-slice-dir)"/>
+
+                  <!-- Sector glow under angle theta -->
+                  <path d="M 190 130 L 250 130 A 60 60 0 0 0 237 93 Z" fill="url(#sliceGlow)"/>
+
+                  <!-- Angle theta arc -->
+                  <path d="M 245 130 A 55 55 0 0 0 233 96" fill="none" stroke="#fbbf24" stroke-width="2"/>
+                  <text x="252" y="112" fill="#fbbf24" font-size="12" font-weight="bold">θ (切片角)</text>
+
+                  <!-- Sample point z on slice -->
+                  <line x1="260" y1="75" x2="260" y2="130" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1"/>
+                  <line x1="260" y1="75" x2="190" y2="75" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1"/>
+                  <circle cx="260" cy="75" r="5" fill="#fbbf24" stroke="#ffffff" stroke-width="1.5"/>
+                  <text x="270" y="73" fill="#fbbf24" font-size="11" font-weight="bold">z = r·e^(iθ)</text>
+                  <text x="260" y="145" fill="#7dd3fc" font-size="10" text-anchor="middle">x = r·cosθ</text>
+                  <text x="180" y="78" fill="#fda4af" font-size="10" text-anchor="end">y = r·sinθ</text>
+
+                  <!-- Right side: Mathematical Insights Panel -->
+                  <rect x="380" y="22" width="280" height="216" rx="6" fill="rgba(15, 23, 42, 0.75)" stroke="rgba(148, 163, 184, 0.25)" stroke-width="1"/>
+                  <text x="395" y="48" fill="#fbbf24" font-size="12" font-weight="bold">🔑 极坐标下的核心几何结论</text>
+
+                  <text x="395" y="76" fill="#cbd5e1" font-size="11.5" font-weight="600">1. 切片刀位本质：</text>
+                  <text x="408" y="96" fill="#94a3b8" font-size="10.5">垂直立在复平面上、过原点且与实轴夹角为 θ 的垂直平面。</text>
+
+                  <text x="395" y="124" fill="#cbd5e1" font-size="11.5" font-weight="600">2. 任意点坐标化：</text>
+                  <text x="408" y="144" fill="#38bdf8" font-size="10.5" font-family="monospace">x = r·cos(θ),  y = r·sin(θ)</text>
+
+                  <text x="395" y="172" fill="#cbd5e1" font-size="11.5" font-weight="600">3. 为什么输入平方后角速度翻倍？</text>
+                  <text x="408" y="192" fill="#c084fc" font-size="10.5">根据复数乘法法则，(e^(iθ))² = e^(i·2θ)！</text>
+                  <text x="408" y="210" fill="#34d399" font-size="10.5" font-weight="bold">输入旋转 θ ➔ 空间二次项以 2θ 剧烈倍速旋转！</text>
+                </svg>
+              </div>
+
+              <!-- 核心推导：二次幂辐角翻倍与高度公式 -->
+              <div style="margin: 1.25rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 6px;">
+                <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.6rem;">
+                  🧮 严格推导：为什么黄色切片抛物线的高度公式由 $\cos(2\theta)$ 全权掌管？
+                </h4>
+                <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                  在复数乘法中，几何法则为<strong>“模长相乘，辐角相加”</strong>：
+                  $$(r_1 e^{i\theta_1}) \cdot (r_2 e^{i\theta_2}) = (r_1 r_2) e^{i(\theta_1 + \theta_2)}$$
+                  当一个复数自乘平方时，其辐角直接<strong>增加一倍</strong>：
+                  $$z^2 = (r e^{i\theta})^2 = r^2 e^{i(2\theta)} = r^2 [\cos(2\theta) + i\sin(2\theta)]$$
+                  在三维马鞍面空间中，竖直方向的高度轴 $w$ 代表函数输出的实部 $\operatorname{Re}(f(z))$。考虑二次方程 $f(z) = z^2 + c$（其中 $c \in \mathbb{R}$ 为常数），将其带入：
+                  $$w = \operatorname{Re}(z^2 + c) = \operatorname{Re}\Big(r^2\cos(2\theta) + i r^2\sin(2\theta) + c\Big) = \mathbf{r^2 \cos(2\theta) + c}$$
+                  请盯紧这行结果！<strong>这正是你在 3D 交互画板中看到的黄色抛物线解析式：</strong>
+                  <br>• 自变量是切片平面内的径向距离 $r$；
+                  <br>• 常数项是顶点高度 $c$；
+                  <br>• <strong>二次项系数是 $\mathbf{\cos(2\theta)}$——它的符号和数值直接决定了抛物线的弯曲方向与开口大小！</strong>
+                </p>
+              </div>
+
+              <!-- 矢量 SVG 图解 2：三态相变全景图 -->
+              <div style="text-align: center; margin: 1.5rem 0;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 0.5rem; text-align: left;">
+                  📊 图解 B：输入角 θ ➔ 输出倍角 2θ 驱动的抛物线“上翘 ➔ 扁平 ➔ 倒扣”三态相变全景对比
+                </div>
+                <svg width="100%" height="280" viewBox="0 0 740 280" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                  
+                  <!-- Panel 1: theta = 0 deg -->
+                  <g transform="translate(15, 15)">
+                    <rect width="220" height="250" rx="6" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(56, 189, 248, 0.3)" stroke-width="1.2"/>
+                    <text x="110" y="24" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">① θ = 0° (纯实数轴)</text>
+                    <text x="110" y="42" fill="#94a3b8" font-size="10" text-anchor="middle">倍角 2θ = 0° ➔ cos(0°) = +1</text>
+                    
+                    <!-- Coordinate frame: center x=110, y=140 -->
+                    <!-- Sea level w=0 line at y=170 -->
+                    <line x1="20" y1="170" x2="200" y2="170" stroke="#34d399" stroke-width="1.2" stroke-dasharray="3,3"/>
+                    <text x="195" y="165" fill="#34d399" font-size="9" text-anchor="end">海平面 w=0</text>
+                    <line x1="110" y1="210" x2="110" y2="60" stroke="#64748b" stroke-width="1"/>
+                    
+                    <!-- Parabola w = +r^2 + 1 (vertex at (110, 130), opens UP) -->
+                    <path d="M 40 70 Q 110 190 180 70" fill="none" stroke="#38bdf8" stroke-width="2.8"/>
+                    <circle cx="110" cy="130" r="4.5" fill="#38bdf8" stroke="#ffffff" stroke-width="1.2"/>
+                    <text x="118" y="128" fill="#7dd3fc" font-size="10" font-weight="bold">顶点 +1</text>
+
+                    <!-- Status description -->
+                    <rect x="25" y="185" width="170" height="48" rx="4" fill="rgba(56, 189, 248, 0.1)"/>
+                    <text x="110" y="202" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">w(r) = (+1)·r² + 1</text>
+                    <text x="110" y="218" fill="#94a3b8" font-size="9" text-anchor="middle">开口向上，全线浮空无交点</text>
+                    <text x="110" y="228" fill="#f87171" font-size="8.5" text-anchor="middle">【中学课本视界：无实数解】</text>
+                  </g>
+
+                  <!-- Panel 2: theta = 45 deg -->
+                  <g transform="translate(260, 15)">
+                    <rect width="220" height="250" rx="6" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(251, 191, 36, 0.3)" stroke-width="1.2"/>
+                    <text x="110" y="24" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">② θ = 45° (中立临界角)</text>
+                    <text x="110" y="42" fill="#94a3b8" font-size="10" text-anchor="middle">倍角 2θ = 90° ➔ cos(90°) = 0</text>
+                    
+                    <!-- Sea level w=0 line at y=170 -->
+                    <line x1="20" y1="170" x2="200" y2="170" stroke="#34d399" stroke-width="1.2" stroke-dasharray="3,3"/>
+                    <text x="195" y="165" fill="#34d399" font-size="9" text-anchor="end">海平面 w=0</text>
+                    <line x1="110" y1="210" x2="110" y2="60" stroke="#64748b" stroke-width="1"/>
+                    
+                    <!-- Flat line w = 0·r^2 + 1 = 1 (horizontal at y=130) -->
+                    <line x1="30" y1="130" x2="190" y2="130" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="110" cy="130" r="4.5" fill="#fbbf24" stroke="#ffffff" stroke-width="1.2"/>
+                    <text x="118" y="124" fill="#fde68a" font-size="10" font-weight="bold">水平线高度 +1</text>
+
+                    <!-- Status description -->
+                    <rect x="25" y="185" width="170" height="48" rx="4" fill="rgba(251, 191, 36, 0.1)"/>
+                    <text x="110" y="202" fill="#fbbf24" font-size="10" font-weight="bold" text-anchor="middle">w(r) = (0)·r² + 1 ≡ 1</text>
+                    <text x="110" y="218" fill="#94a3b8" font-size="9" text-anchor="middle">二次项完全归零，拉成平线</text>
+                    <text x="110" y="228" fill="#fbbf24" font-size="8.5" text-anchor="middle">【曲率相变：准备翻转倒扣】</text>
+                  </g>
+
+                  <!-- Panel 3: theta = 90 deg -->
+                  <g transform="translate(505, 15)">
+                    <rect width="220" height="250" rx="6" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(244, 63, 94, 0.3)" stroke-width="1.2"/>
+                    <text x="110" y="24" fill="#f43f5e" font-size="12" font-weight="bold" text-anchor="middle">③ θ = 90° (纯虚数轴)</text>
+                    <text x="110" y="42" fill="#94a3b8" font-size="10" text-anchor="middle">倍角 2θ = 180° ➔ cos(180°) = -1</text>
+                    
+                    <!-- Sea level w=0 line at y=170 -->
+                    <line x1="20" y1="170" x2="200" y2="170" stroke="#34d399" stroke-width="1.2" stroke-dasharray="3,3"/>
+                    <text x="195" y="165" fill="#34d399" font-size="9" text-anchor="end">海平面 w=0</text>
+                    <line x1="110" y1="210" x2="110" y2="60" stroke="#64748b" stroke-width="1"/>
+                    
+                    <!-- Parabola w = -r^2 + 1 (vertex at (110, 130), opens DOWN, crosses y=170 at x=65 and x=155) -->
+                    <path d="M 40 215 Q 110 45 180 215" fill="none" stroke="#f43f5e" stroke-width="2.8"/>
+                    <circle cx="110" cy="130" r="4.5" fill="#f43f5e" stroke="#ffffff" stroke-width="1.2"/>
+                    <text x="118" y="124" fill="#fda4af" font-size="10" font-weight="bold">顶点 +1</text>
+
+                    <!-- Piercing roots at sea level -->
+                    <circle cx="70" cy="170" r="5" fill="#34d399" stroke="#ffffff" stroke-width="1.5"/>
+                    <text x="56" y="163" fill="#34d399" font-size="10" font-weight="bold">z = -i</text>
+                    <circle cx="150" cy="170" r="5" fill="#34d399" stroke="#ffffff" stroke-width="1.5"/>
+                    <text x="156" y="163" fill="#34d399" font-size="10" font-weight="bold">z = +i</text>
+
+                    <!-- Status description -->
+                    <rect x="25" y="185" width="170" height="48" rx="4" fill="rgba(52, 211, 153, 0.12)"/>
+                    <text x="110" y="202" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">w(r) = (-1)·r² + 1</text>
+                    <text x="110" y="218" fill="#34d399" font-size="9" text-anchor="middle">开口翻转向下，精准砸穿海面！</text>
+                    <text x="110" y="228" fill="#34d399" font-size="8.5" text-anchor="middle">【复数根显形：z = ±i 入水孔洞】</text>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- 总结与下阶预告 -->
+              <div style="padding: 0.85rem 1rem; background: rgba(52, 211, 153, 0.08); border-radius: 6px; border-left: 3px solid #34d399; margin-top: 1rem;">
+                <strong style="color: #34d399; font-size: 0.92rem;">💡 前往第 3 阶的通关密匙：</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  旋转角度之所以能让黄色曲线变形翻转，根源于<strong>欧拉公式中二次幂对角度的 2 倍放大效应</strong>！
+                  当方位角 $\theta$ 从 $0^\circ$ 旋转到 $90^\circ$ 时，二次项系数 $\cos(2\theta)$ 从 $+1$ 连续跌落至 $-1$。
+                  现在，理论拼图已经严丝合缝，让我们立刻跨入<strong>第 3 阶的三维马鞍面 3D 实验室</strong>，亲手拨动滑块，观看这一数学蜕变！
+                </p>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 视觉奇迹：三维马鞍面旋转切片与复数根实景探索器 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第 3 阶 · 视觉破壁</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 🎢 视觉奇迹：三维马鞍面旋转切片与复数根实景探索器</h2>
+          </div>
+          <div class="card-body">
+            <p>每个自学初学者都曾在笛卡尔坐标系中画过函数 $f(x) = x^2 + 1$ 的图像：</p>
+            <p style="color: var(--text-muted); line-height: 1.8;">
+              一条开口向上的抛物线，顶点在 $(0, 1)$。整条曲线高高浮在横轴上方，跟 $x$ 轴<strong>根本没有任何交点</strong>！
+              <br>老师告诉你：“这个方程无实数解，但在复数里有两个解 $x = \pm i$。”
+              <br>初学者心里难免会嘀咕：“这难道不是自欺欺人吗？交点明明不存在，凭空造一个 $i$ 算怎么回事？”
+            </p>
+
+            <div class="intuition-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1.25rem 0;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">💡 维度跃迁：实数曲线只是三维马鞍面在实轴方向（θ=0°）的一根侧影！</h4>
+              <p style="line-height: 1.8; font-size: 0.95rem;">
+                在实数世界里，你的输入只有一个自由度（一维实轴横坐标 $x$）。
+                <br>但在第 2 阶中我们已经揭示：复数输入是一个<strong>二维复平面地面 $(x, y) = (r\cos\theta, r\sin\theta)$</strong>，在函数输出的实部高度轴 $w$ 上，任意切片方向的曲线严格遵循我们在上一步推导的倍角方程：
+                $$\mathbf{w(r) = r^2 \cos(2\theta) + c}$$
+                当你在实数轴上看（$\theta = 0^\circ$）时，$\cos(0^\circ) = +1$，曲线向上翘起，高高悬空；但只要将切片旋转到虚轴（$\theta = 90^\circ$），$\cos(180^\circ) = -1$，曲线就会<strong>彻底翻转倒扣，迎面扎穿高度为 0 的海平面</strong>！
+              </p>
+              <div style="margin: 0.75rem 0; padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px; font-size: 0.92rem;">
+                • <strong>沿实轴看（$y = 0$）</strong>：$f(x) = x^2 + 1$。随着 $x$ 变大，数值越来越大，向上翘起成抛物线；
+                <br>• <strong>沿虚轴看（$x = 0$）</strong>：$z = iy$，带入函数计算：
+                $$f(iy) = (iy)^2 + 1 = i^2 y^2 + 1 = \mathbf{-y^2 + 1}$$
+                注意看这个式子！<strong>沿着虚数轴走，二次项系数变成了负数，曲线竟然是开口向下的！</strong>
+              </div>
+              <p style="line-height: 1.8; font-size: 0.95rem;">
+                当 $y = 1$ 时：$f(i) = -1^2 + 1 = \mathbf{0}$；
+                <br>当 $y = -1$ 时：$f(-i) = -(-1)^2 + 1 = \mathbf{0}$！
+              </p>
+            </div>
+
+            <!-- 动态可交互 3D 马鞍面与复数根探索画板 -->
+            <div class="visualizer-wrapper" style="margin: 1.75rem 0; padding: 1.25rem; background: #090d16; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);">
+              
+              <!-- 顶部标题与控制栏 -->
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; border-bottom: 1px solid rgba(148, 163, 184, 0.15); padding-bottom: 0.85rem; margin-bottom: 1rem;">
+                <div>
+                  <div style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.2rem 0.65rem; background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 16px; color: var(--accent-green); font-size: 0.8rem; font-weight: 600;">
+                    <span>🎮 3D 动态交互实验室</span>
+                  </div>
+                  <h3 style="margin: 0.35rem 0 0; font-size: 1.15rem; color: var(--text-main);">
+                    三维马鞍面旋转切片与复数根实景探索器
+                  </h3>
+                </div>
+
+                <!-- 快捷视角切换按钮组 -->
+                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center;">
+                  <button id="btn-view-real" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.78rem; border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+                    👁️ 正面实轴 (悬空无解)
+                  </button>
+                  <button id="btn-view-imag" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.78rem; border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">
+                    👁️ 侧面虚轴 (倒扣扎根)
+                  </button>
+                  <button id="btn-view-3d" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.78rem; border-color: rgba(52, 211, 153, 0.4); color: #34d399;">
+                    🪐 经典 3D 透视
+                  </button>
+                  <button id="btn-view-top" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.78rem;">
+                    🎯 俯视复平面
+                  </button>
+                  <button id="btn-toggle-slice-anim" class="btn btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.78rem; background: var(--accent-amber); color: #000; font-weight: bold; border: none; cursor: pointer; border-radius: 4px;">
+                    ▶ 自动演示切片旋转
+                  </button>
+                </div>
+              </div>
+
+              <!-- 顶部快捷滑块控制调节栏（紧贴图形上方，即调即看） -->
+              <div style="margin-bottom: 1rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                
+                <!-- 滑块 1：切片方向角 theta -->
+                <div style="background: rgba(251, 191, 36, 0.06); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: 8px; padding: 0.75rem 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                    <label for="slider-theta" style="font-size: 0.85rem; font-weight: 700; color: #fbbf24; display: flex; align-items: center; gap: 0.35rem;">
+                      <span>🌀</span> 切片旋转方位角 θ (0° 实轴 ↔ 90° 虚轴)
+                    </label>
+                    <span id="slider-theta-val" style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; color: #fbbf24; background: rgba(0, 0, 0, 0.3); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(251, 191, 36, 0.3);">0.0°</span>
+                  </div>
+                  <input type="range" id="slider-theta" min="0" max="90" step="0.5" value="0" style="width: 100%; accent-color: #fbbf24; cursor: pointer;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-top: 0.25rem;">
+                    <span>0° (纯实轴向上浮空)</span>
+                    <span>45° (临界拉平成水平线)</span>
+                    <span>90° (纯虚轴倒扣俯冲扎根)</span>
+                  </div>
+                </div>
+
+                <!-- 滑块 2：常数项 c -->
+                <div style="background: rgba(56, 189, 248, 0.06); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 0.75rem 1rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+                    <label for="slider-const-c" style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 0.35rem;">
+                      <span>🎚️</span> 方程常数项 c：f(z) = z² + c
+                    </label>
+                    <span id="slider-c-val" style="font-family: var(--font-mono); font-size: 0.9rem; font-weight: bold; color: #38bdf8; background: rgba(0, 0, 0, 0.3); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.3);">+1.00</span>
+                  </div>
+                  <input type="range" id="slider-const-c" min="-1.5" max="1.5" step="0.05" value="1.0" style="width: 100%; accent-color: #38bdf8; cursor: pointer;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-top: 0.25rem;">
+                    <span>c = -1.5 (2 个实数根)</span>
+                    <span>c = 0 (重根接触原点)</span>
+                    <span>c = +1.5 (2 个纯虚数根)</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 主工作区：Canvas 画板 + 实时数学仪表盘 -->
+              <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: stretch;">
+                
+                <!-- 左侧：3D Canvas 舞台 -->
+                <div style="flex: 1 1 500px; min-width: 320px; position: relative; background: #050811; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.12); overflow: hidden; display: flex; flex-direction: column;">
+                  <canvas id="canvas-saddle-roots" style="width: 100%; height: 420px; display: block; cursor: grab; touch-action: none;"></canvas>
+                  
+                  <!-- 画布覆盖浮层提示 -->
+                  <div style="position: absolute; bottom: 8px; left: 12px; right: 12px; display: flex; justify-content: space-between; pointer-events: none; font-size: 0.75rem; color: rgba(148, 163, 184, 0.7);">
+                    <span>🖱️ 按住鼠标左键 / 触屏拖拽自由旋转 3D 视角 | 滚轮缩放</span>
+                    <span id="canvas-cam-readout">视角方位角: 37° | 仰角: 26°</span>
+                  </div>
+                </div>
+
+                <!-- 右侧：实时数学状态与物理直觉仪表盘 -->
+                <div style="flex: 1 1 320px; min-width: 280px; background: rgba(15, 23, 42, 0.7); border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <h4 style="color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                      <span>📐</span> 实时切片方程与根的几何状态
+                    </h4>
+
+                    <!-- 动态状态 1：当前切片角度与方程 -->
+                    <div style="margin-bottom: 0.85rem; padding: 0.75rem; background: #090d16; border-radius: 6px; border-left: 3px solid #fbbf24;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+                        <span>旋转切片方位角 θ</span>
+                        <strong id="disp-theta-deg" style="color: #fbbf24; font-family: var(--font-mono);">0.0° (纯实数轴切片)</strong>
+                      </div>
+                      <div id="disp-slice-equation" style="font-family: var(--font-mono); color: #f8fafc; font-size: 0.95rem; font-weight: bold;">
+                        w(r) = (+1.00)·r² + 1.00
+                      </div>
+                      <div id="disp-slice-behavior" style="font-size: 0.8rem; color: #38bdf8; margin-top: 0.35rem; line-height: 1.4;">
+                        🔵 开口向上：二次项系数为正 (+1.00)。顶点浮空高度 +1.00，在实数轴上永无触地交点！
+                      </div>
+                    </div>
+
+                    <!-- 动态状态 2：海平面穿透与根的位置 -->
+                    <div style="margin-bottom: 0.85rem; padding: 0.75rem; background: #090d16; border-radius: 6px; border-left: 3px solid #34d399;">
+                      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+                        🌊 海平面穿透状态 (w = 0 零点)
+                      </div>
+                      <div id="disp-root-status" style="font-family: var(--font-mono); color: #34d399; font-size: 0.9rem; font-weight: bold;">
+                        z = ± 1.00 i <span style="color:var(--text-muted);font-weight:normal;">(纯虚数根)</span>
+                      </div>
+                      <div id="disp-root-desc" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.4;">
+                        方程在实数轴（θ=0°）悬空无解，但升维到复数平面后，在虚数轴两侧存在 2 个物理交点。试着把切片转到 90°！
+                      </div>
+                    </div>
+
+                    <!-- 动态状态 3：代数封闭性本质直觉 -->
+                    <div style="padding: 0.75rem; background: rgba(192, 132, 252, 0.08); border-radius: 6px; border-left: 3px solid #c084fc;">
+                      <div style="font-size: 0.8rem; color: #c084fc; font-weight: 600; margin-bottom: 0.25rem;">
+                        💡 核心直觉：为什么抛物线会翻转？
+                      </div>
+                      <p style="margin: 0; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;">
+                        在复数域中，$z = r e^{i\theta} \implies z^2 = r^2 e^{i 2\theta}$。角度 $\theta$ 加倍导致实部系数以 $\cos(2\theta)$ 变化：
+                        <br>• $\theta = 0^\circ \to \cos(0^\circ) = +1$ (开口向上)
+                        <br>• $\theta = 45^\circ \to \cos(90^\circ) = 0$ (完全拉平成水平直线)
+                        <br>• $\theta = 90^\circ \to \cos(180^\circ) = -1$ (负号倒扣，俯冲扎穿海平面！)
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 🧭 空间坐标系与 3 轴 1 面深度剖析 -->
+              <div style="margin-top: 1.25rem; padding: 1.15rem; background: rgba(15, 23, 42, 0.85); border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.2);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.85rem; border-bottom: 1px solid rgba(148, 163, 184, 0.15); padding-bottom: 0.5rem;">
+                  <h4 style="margin: 0; font-size: 0.98rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🧭</span> 坐标系重构：彻底搞懂 3 根轴与 1 个海平面的真实物理意义
+                  </h4>
+                  <span style="font-size: 0.75rem; color: var(--accent-amber); background: rgba(251, 191, 36, 0.12); border: 1px solid rgba(251, 191, 36, 0.3); padding: 2px 8px; border-radius: 4px;">
+                    破除初学者混淆核心
+                  </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem;">
+                  
+                  <!-- 轴 1：实轴 -->
+                  <div style="padding: 0.85rem; background: #090d16; border-radius: 6px; border-left: 4px solid #38bdf8;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                      <strong style="color: #38bdf8; font-size: 0.9rem;">🔵 轴 ①：实数输入轴 $x = \operatorname{Re}(z)$</strong>
+                      <span style="font-size: 0.72rem; color: #38bdf8; background: rgba(56, 189, 248, 0.12); padding: 1px 6px; border-radius: 3px;">地面横轴</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.1rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                      <li><strong>角色定位</strong>：复数输入 $z = x + iy$ 的实部数值 $x$。</li>
+                      <li><strong>中学旧视角</strong>：初高中直角坐标系中，你的视线被完全局限在这根轴上（此时虚部被强制锁死为 $y=0$）。</li>
+                      <li><strong>为什么悬空</strong>：在实轴上 $x^2 \ge 0 \implies w = x^2 + 1 \ge 1$。最低点仍在海面上方 $+1$ 米，整条蓝色抛物线浮空，无法触碰海平面，所以中学课本断言“无解”。</li>
+                    </ul>
+                  </div>
+
+                  <!-- 轴 2：虚轴 -->
+                  <div style="padding: 0.85rem; background: #090d16; border-radius: 6px; border-left: 4px solid #f43f5e;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                      <strong style="color: #f43f5e; font-size: 0.9rem;">🔴 轴 ②：虚数输入轴 $y = \operatorname{Im}(z)$</strong>
+                      <span style="font-size: 0.72rem; color: #f43f5e; background: rgba(244, 63, 94, 0.12); padding: 1px 6px; border-radius: 3px;">地面纵深轴</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.1rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                      <li><strong>角色定位</strong>：复数输入 $z = x + iy$ 的虚部分量（代表输入纯虚数 $iy$）。</li>
+                      <li><strong>⚠️ 最大混淆点</strong>：高中课本常把纵轴称为 $y$；<strong>但在复空间中，$y$ 绝不是纵轴，而是水平地面上的第二输入维度！</strong></li>
+                      <li><strong>为什么倒扣俯冲</strong>：因为虚数定义 $i^2 = -1$，输入纯虚数 $z = iy$ 时，$f(iy) = (iy)^2 + 1 = \mathbf{-y^2 + 1}$。二次项符号被物理反转为负，抛物线翻转为开口向下！</li>
+                    </ul>
+                  </div>
+
+                  <!-- 轴 3：高度轴 -->
+                  <div style="padding: 0.85rem; background: #090d16; border-radius: 6px; border-left: 4px solid #cbd5e1;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                      <strong style="color: #cbd5e1; font-size: 0.9rem;">⚪ 轴 ③：函数高度轴 $w = \operatorname{Re}(f(z))$</strong>
+                      <span style="font-size: 0.72rem; color: #cbd5e1; background: rgba(203, 213, 225, 0.12); padding: 1px 6px; border-radius: 3px;">竖直天际轴</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.1rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                      <li><strong>角色定位</strong>：函数的实际输出值（真正对应中学纵轴 $y = f(x)$ 扮演的角色）。</li>
+                      <li><strong>空间方向</strong>：垂直于水平复平面地面，直插天际。向上 $w > 0$，向下 $w < 0$。</li>
+                      <li><strong>切片高度判读</strong>：在任意切片角度 $\theta$ 下，该轴的高度曲线严格遵循公式 $w(r) = r^2\cos(2\theta) + c$。</li>
+                    </ul>
+                  </div>
+
+                  <!-- 基准面：海平面 -->
+                  <div style="padding: 0.85rem; background: #090d16; border-radius: 6px; border-left: 4px solid #34d399;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.35rem;">
+                      <strong style="color: #34d399; font-size: 0.9rem;">🌊 基准面：零势海平面 $w = 0$</strong>
+                      <span style="font-size: 0.72rem; color: #34d399; background: rgba(52, 211, 153, 0.12); padding: 1px 6px; border-radius: 3px;">复平面地面 ℂ</span>
+                    </div>
+                    <ul style="margin: 0; padding-left: 1.1rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;">
+                      <li><strong>角色定位</strong>：整个水平复平面网格地面，对应方程 $f(z) = 0$ 的物理判决基准。</li>
+                      <li><strong>求根的物理本质</strong>：求解方程 $z^2 + 1 = 0$，本质就是寻找曲面**砸穿海平面的“物理入水孔洞”**！</li>
+                      <li><strong>两根真实位置</strong>：实轴切片离地漂浮碰不到水，但倒扣曲线在 $y = \pm 1$ 处精准砸出两个入水孔洞，这就是真解 $\mathbf{z = \pm i}$！</li>
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- 核心直觉 3 栏对照卡片 -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.85rem; margin-top: 1.25rem;">
+                <div style="padding: 0.85rem 1rem; background: rgba(56, 189, 248, 0.06); border-radius: 6px; border-left: 3px solid #38bdf8;">
+                  <strong style="color: #38bdf8; font-size: 0.88rem; display: block; margin-bottom: 0.25rem;">
+                    ① 实轴为什么全线悬空？
+                  </strong>
+                  <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                    在实轴上（虚部 $y=0$），实数的平方恒非负 $x^2 \ge 0$。函数 $f(x) = x^2 + 1 \ge 1$，最低点仍悬浮在海平面上方 $+1$ 处，永远碰不到零基准面。
+                  </p>
+                </div>
+
+                <div style="padding: 0.85rem 1rem; background: rgba(244, 63, 94, 0.06); border-radius: 6px; border-left: 3px solid #f43f5e;">
+                  <strong style="color: #f43f5e; font-size: 0.88rem; display: block; margin-bottom: 0.25rem;">
+                    ② 虚轴为什么倒扣向下？
+                  </strong>
+                  <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                    沿虚轴输入 $z = iy$，根据虚数定义 $i^2 = -1$！平方项的符号被<strong>物理反转</strong>为负数：$f(iy) = -y^2 + 1$。抛物线瞬间<strong>翻转开口向下</strong>！
+                  </p>
+                </div>
+
+                <div style="padding: 0.85rem 1rem; background: rgba(52, 211, 153, 0.06); border-radius: 6px; border-left: 3px solid #34d399;">
+                  <strong style="color: #34d399; font-size: 0.88rem; display: block; margin-bottom: 0.25rem;">
+                    ③ 零点到底扎在哪里？
+                  </strong>
+                  <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                    倒扣抛物线从最高点 $+1$ 像过山车一样向两侧俯冲，在 $y = \pm 1$ 处<strong>真实切穿海平面</strong>（高度降为 0），完美显形复根 $z = \pm i$！
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <script>
+            // ==========================================================================
+            // Interactive 3D Saddle Surface & Complex Roots Visualizer
+            // f(z) = z^2 + c, showing slice rotation theta and roots piercing w = 0
+            // ==========================================================================
+            (function() {
+              const canvas = document.getElementById('canvas-saddle-roots');
+              if (!canvas) return;
+              const ctx = canvas.getContext('2d');
+
+              // Parameters
+              let thetaDeg = 0; // 0 to 90 degrees
+              let constC = 1.0;  // polynomial constant
+
+              // 3D Camera Angles
+              let yaw = 0.65;    // rotation around w-axis (approx 37 deg)
+              let pitch = 0.45;  // elevation angle (approx 26 deg)
+              let zoom = 1.0;
+
+              // Animation State
+              let isAnimatingSlice = false;
+              let animDirection = 1;
+              let animReqId = null;
+
+              // Mouse / Touch Drag State
+              let isDragging = false;
+              let startX = 0, startY = 0;
+              let lastYaw = yaw, lastPitch = pitch;
+
+              // DOM Elements
+              const sliderTheta = document.getElementById('slider-theta');
+              const sliderC = document.getElementById('slider-const-c');
+              const dispThetaVal = document.getElementById('slider-theta-val');
+              const dispCVal = document.getElementById('slider-c-val');
+              const dispThetaDeg = document.getElementById('disp-theta-deg');
+              const dispSliceEq = document.getElementById('disp-slice-equation');
+              const dispSliceBehavior = document.getElementById('disp-slice-behavior');
+              const dispRootStatus = document.getElementById('disp-root-status');
+              const dispRootDesc = document.getElementById('disp-root-desc');
+              const camReadout = document.getElementById('canvas-cam-readout');
+
+              const btnReal = document.getElementById('btn-view-real');
+              const btnImag = document.getElementById('btn-view-imag');
+              const btn3D = document.getElementById('btn-view-3d');
+              const btnTop = document.getElementById('btn-view-top');
+              const btnToggleAnim = document.getElementById('btn-toggle-slice-anim');
+
+              // 3D Projection Engine
+              function project(x, y, w, width, height) {
+                // 1. Rotate around vertical w-axis by yaw
+                const cosY = Math.cos(yaw);
+                const sinY = Math.sin(yaw);
+                const x1 = x * cosY - y * sinY;
+                const y1 = x * sinY + y * cosY;
+                const w1 = w;
+
+                // 2. Rotate by pitch around horizontal camera axis
+                const cosP = Math.cos(pitch);
+                const sinP = Math.sin(pitch);
+                const x2 = x1;
+                const y2 = y1 * cosP - w1 * sinP;
+                const w2 = y1 * sinP + w1 * cosP;
+
+                // 3. Perspective projection
+                const dist = 7.5;
+                const scale = (Math.min(width, height) / 4.4) * zoom;
+                const depthFactor = dist / (dist + y2);
+
+                return {
+                  x: width / 2 + x2 * scale * depthFactor,
+                  y: height / 2 - w2 * scale * depthFactor,
+                  depth: y2
+                };
+              }
+
+              // Draw loop
+              function render() {
+                const width = canvas.clientWidth || 500;
+                const height = canvas.clientHeight || 420;
+                const dpr = window.devicePixelRatio || 1;
+
+                if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
+                  canvas.width = Math.floor(width * dpr);
+                  canvas.height = Math.floor(height * dpr);
+                }
+
+                ctx.save();
+                ctx.scale(dpr, dpr);
+                ctx.clearRect(0, 0, width, height);
+
+                const rad = (thetaDeg * Math.PI) / 180;
+                const cos2Theta = Math.cos(2 * rad);
+
+                // --- 1. Draw Ground Reference Plane (Sea level w = 0, Complex Plane C) ---
+                const groundCorners = [
+                  project(-2.4, -2.4, 0, width, height),
+                  project(2.4, -2.4, 0, width, height),
+                  project(2.4, 2.4, 0, width, height),
+                  project(-2.4, 2.4, 0, width, height)
+                ];
+
+                ctx.beginPath();
+                ctx.moveTo(groundCorners[0].x, groundCorners[0].y);
+                for (let i = 1; i < 4; i++) ctx.lineTo(groundCorners[i].x, groundCorners[i].y);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(15, 23, 42, 0.45)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(71, 85, 105, 0.35)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // Ground Grid Lines
+                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = 'rgba(71, 85, 105, 0.2)';
+                for (let g = -2.0; g <= 2.05; g += 1.0) {
+                  // Parallel to Real axis (x)
+                  let pA = project(-2.4, g, 0, width, height);
+                  let pB = project(2.4, g, 0, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pA.x, pA.y);
+                  ctx.lineTo(pB.x, pB.y);
+                  ctx.stroke();
+
+                  // Parallel to Imaginary axis (y)
+                  pA = project(g, -2.4, 0, width, height);
+                  pB = project(g, 2.4, 0, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pA.x, pA.y);
+                  ctx.lineTo(pB.x, pB.y);
+                  ctx.stroke();
+                }
+
+                // --- 2. Draw Ground Sea-Level Contour (Hyperbola: y^2 - x^2 = constC) ---
+                ctx.lineWidth = 1.6;
+                ctx.setLineDash([4, 4]);
+                ctx.strokeStyle = 'rgba(52, 211, 153, 0.6)';
+
+                if (constC > 0.05) {
+                  // Branches opening along imaginary axis y
+                  for (let sign of [-1, 1]) {
+                    ctx.beginPath();
+                    let first = true;
+                    for (let x = -2.2; x <= 2.2; x += 0.1) {
+                      const ySq = x * x + constC;
+                      const y = sign * Math.sqrt(ySq);
+                      if (Math.abs(y) <= 2.4) {
+                        const pt = project(x, y, 0, width, height);
+                        if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                        else ctx.lineTo(pt.x, pt.y);
+                      }
+                    }
+                    ctx.stroke();
+                  }
+                } else if (constC < -0.05) {
+                  // Branches opening along real axis x
+                  for (let sign of [-1, 1]) {
+                    ctx.beginPath();
+                    let first = true;
+                    for (let y = -2.2; y <= 2.2; y += 0.1) {
+                      const xSq = y * y - constC;
+                      const x = sign * Math.sqrt(xSq);
+                      if (Math.abs(x) <= 2.4) {
+                        const pt = project(x, y, 0, width, height);
+                        if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                        else ctx.lineTo(pt.x, pt.y);
+                      }
+                    }
+                    ctx.stroke();
+                  }
+                }
+                ctx.setLineDash([]);
+
+                // --- 3. Draw 3D Axes ---
+                // Real Axis (x) - Cyan/Blue
+                const realNeg = project(-2.5, 0, 0, width, height);
+                const realPos = project(2.5, 0, 0, width, height);
+                ctx.beginPath();
+                ctx.moveTo(realNeg.x, realNeg.y);
+                ctx.lineTo(realPos.x, realPos.y);
+                ctx.strokeStyle = '#38bdf8';
+                ctx.lineWidth = 2.2;
+                ctx.stroke();
+                ctx.fillStyle = '#38bdf8';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText('+Re(z) [实数输入轴 x]', realPos.x + 6, realPos.y + 4);
+
+                // Real Axis Tick Marks & Numbers
+                [-2, -1, 1, 2].forEach(xVal => {
+                  const pT1 = project(xVal, -0.07, 0, width, height);
+                  const pT2 = project(xVal, 0.07, 0, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pT1.x, pT1.y);
+                  ctx.lineTo(pT2.x, pT2.y);
+                  ctx.strokeStyle = '#38bdf8';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  const pTxt = project(xVal, -0.22, 0, width, height);
+                  ctx.fillStyle = '#7dd3fc';
+                  ctx.font = '10px monospace';
+                  ctx.textAlign = 'center';
+                  ctx.fillText((xVal > 0 ? '+' : '') + xVal, pTxt.x, pTxt.y);
+                });
+
+                // Imaginary Axis (y) - Rose/Pink
+                const imagNeg = project(0, -2.5, 0, width, height);
+                const imagPos = project(0, 2.5, 0, width, height);
+                ctx.beginPath();
+                ctx.moveTo(imagNeg.x, imagNeg.y);
+                ctx.lineTo(imagPos.x, imagPos.y);
+                ctx.strokeStyle = '#f43f5e';
+                ctx.lineWidth = 2.2;
+                ctx.stroke();
+                ctx.fillStyle = '#f43f5e';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText('+Im(z) [虚数输入轴 y]', imagPos.x + 6, imagPos.y + 4);
+
+                // Imaginary Axis Tick Marks & Numbers
+                [-2, -1, 1, 2].forEach(yVal => {
+                  const pT1 = project(-0.07, yVal, 0, width, height);
+                  const pT2 = project(0.07, yVal, 0, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pT1.x, pT1.y);
+                  ctx.lineTo(pT2.x, pT2.y);
+                  ctx.strokeStyle = '#f43f5e';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  const pTxt = project(-0.25, yVal, 0, width, height);
+                  ctx.fillStyle = '#fda4af';
+                  ctx.font = '10px monospace';
+                  ctx.textAlign = 'end';
+                  ctx.fillText((yVal > 0 ? '+' : '') + yVal + 'i', pTxt.x, pTxt.y);
+                });
+
+                // Vertical Height Axis (w = Re(f(z))) - Silver
+                const vertBottom = project(0, 0, -2.5, width, height);
+                const vertTop = project(0, 0, 3.2, width, height);
+                ctx.beginPath();
+                ctx.moveTo(vertBottom.x, vertBottom.y);
+                ctx.lineTo(vertTop.x, vertTop.y);
+                ctx.strokeStyle = '#94a3b8';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                ctx.fillStyle = '#cbd5e1';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('高度 w = Re(f(z)) [输出轴]', vertTop.x, vertTop.y - 8);
+                ctx.textAlign = 'start';
+
+                // Height Axis Tick Marks & Numbers
+                [-2, -1, 1, 2].forEach(wVal => {
+                  const pT1 = project(-0.07, 0, wVal, width, height);
+                  const pT2 = project(0.07, 0, wVal, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pT1.x, pT1.y);
+                  ctx.lineTo(pT2.x, pT2.y);
+                  ctx.strokeStyle = '#94a3b8';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  const pTxt = project(0.2, 0, wVal, width, height);
+                  ctx.fillStyle = '#e2e8f0';
+                  ctx.font = '10px monospace';
+                  ctx.textAlign = 'start';
+                  ctx.fillText((wVal > 0 ? '+' : '') + wVal, pTxt.x, pTxt.y + 3);
+                });
+
+                // Ground Plane Tag
+                const gTag = project(1.7, 1.7, 0, width, height);
+                ctx.fillStyle = 'rgba(52, 211, 153, 0.45)';
+                ctx.font = 'bold 10px sans-serif';
+                ctx.fillText('🌊 复数地面 C (海平面 w = 0)', gTag.x, gTag.y);
+
+                // On-Canvas Top-Right HUD Legend
+                const legW = 168, legH = 112, legX = width - legW - 10, legY = 10;
+                ctx.fillStyle = 'rgba(9, 13, 22, 0.82)';
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.25)';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                if (ctx.roundRect) ctx.roundRect(legX, legY, legW, legH, 6);
+                else ctx.rect(legX, legY, legW, legH);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.font = '10.5px sans-serif';
+                ctx.textAlign = 'left';
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText('🔵 实轴 x: Re(z) 输入', legX + 10, legY + 22);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText('🔴 虚轴 y: Im(z) 输入', legX + 10, legY + 44);
+                ctx.fillStyle = '#cbd5e1';
+                ctx.fillText('⚪ 竖轴 w: Re(f) 输出', legX + 10, legY + 66);
+                ctx.fillStyle = '#34d399';
+                ctx.fillText('🌊 地面 w=0: 海平面', legX + 10, legY + 86);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fillText('🟡 金线: 当前旋转切片', legX + 10, legY + 104);
+
+                // --- 4. Draw 3D Saddle Surface Mesh (w = x^2 - y^2 + constC) ---
+                ctx.lineWidth = 1;
+                const meshStep = 0.45;
+
+                // A. Curves of constant y (opening upward parallel to real axis)
+                for (let y = -2.0; y <= 2.05; y += meshStep) {
+                  ctx.beginPath();
+                  let first = true;
+                  for (let x = -2.0; x <= 2.05; x += 0.15) {
+                    const w = x * x - y * y + constC;
+                    if (w >= -2.6 && w <= 3.2) {
+                      const pt = project(x, y, w, width, height);
+                      if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                      else ctx.lineTo(pt.x, pt.y);
+                    }
+                  }
+                  ctx.strokeStyle = Math.abs(y) < 0.15 ? 'rgba(56, 189, 248, 0.7)' : 'rgba(148, 163, 184, 0.16)';
+                  ctx.stroke();
+                }
+
+                // B. Curves of constant x (opening downward parallel to imaginary axis)
+                for (let x = -2.0; x <= 2.05; x += meshStep) {
+                  ctx.beginPath();
+                  let first = true;
+                  for (let y = -2.0; y <= 2.05; y += 0.15) {
+                    const w = x * x - y * y + constC;
+                    if (w >= -2.6 && w <= 3.2) {
+                      const pt = project(x, y, w, width, height);
+                      if (first) { ctx.moveTo(pt.x, pt.y); first = false; }
+                      else ctx.lineTo(pt.x, pt.y);
+                    }
+                  }
+                  ctx.strokeStyle = Math.abs(x) < 0.15 ? 'rgba(244, 63, 94, 0.7)' : 'rgba(148, 163, 184, 0.16)';
+                  ctx.stroke();
+                }
+
+                // --- 5. Draw Active Rotating Slice Plane & Parabola ---
+                const cosT = Math.cos(rad);
+                const sinT = Math.sin(rad);
+
+                // Slice Plane semi-transparent sheet
+                const p1 = project(-2.2 * cosT, -2.2 * sinT, -2.0, width, height);
+                const p2 = project(2.2 * cosT, 2.2 * sinT, -2.0, width, height);
+                const p3 = project(2.2 * cosT, 2.2 * sinT, 2.8, width, height);
+                const p4 = project(-2.2 * cosT, -2.2 * sinT, 2.8, width, height);
+
+                ctx.beginPath();
+                ctx.moveTo(p1.x, p1.y);
+                ctx.lineTo(p2.x, p2.y);
+                ctx.lineTo(p3.x, p3.y);
+                ctx.lineTo(p4.x, p4.y);
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(251, 191, 36, 0.08)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(251, 191, 36, 0.3)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+
+                // The Cutting Parabola Curve: w(r) = r^2 * cos(2*theta) + constC
+                ctx.beginPath();
+                let curveStarted = false;
+                for (let r = -2.3; r <= 2.3; r += 0.05) {
+                  const rx = r * cosT;
+                  const ry = r * sinT;
+                  const rw = r * r * cos2Theta + constC;
+                  if (rw >= -2.6 && rw <= 3.2) {
+                    const pt = project(rx, ry, rw, width, height);
+                    if (!curveStarted) { ctx.moveTo(pt.x, pt.y); curveStarted = true; }
+                    else ctx.lineTo(pt.x, pt.y);
+                  }
+                }
+                ctx.lineWidth = 3.8;
+                ctx.strokeStyle = '#fbbf24';
+                ctx.stroke();
+
+                // Apex point of the cutting curve (r = 0, at (0, 0, constC))
+                const apexPt = project(0, 0, constC, width, height);
+                ctx.beginPath();
+                ctx.arc(apexPt.x, apexPt.y, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#fbbf24';
+                ctx.fill();
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                ctx.fillStyle = '#fbbf24';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText(`顶点 (0, 0, ${constC.toFixed(2)})`, apexPt.x + 8, apexPt.y - 4);
+
+                // --- 6. Draw Equation Roots on Ground Level (w = 0) ---
+                if (constC > 0) {
+                  // Roots on Imaginary axis: z = +- i * sqrt(constC)
+                  const rootVal = Math.sqrt(constC);
+                  const rootPos = project(0, rootVal, 0, width, height);
+                  const rootNeg = project(0, -rootVal, 0, width, height);
+
+                  [rootPos, rootNeg].forEach((pt, idx) => {
+                    // Outer pulsing ring
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 9, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(52, 211, 153, 0.7)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Inner glowing core
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#34d399';
+                    ctx.fill();
+
+                    // Label
+                    ctx.fillStyle = '#a7f3d0';
+                    ctx.font = 'bold 11px sans-serif';
+                    const signStr = idx === 0 ? '+' : '-';
+                    const labelText = constC === 1.0 ? `根 z = ${signStr}i (w=0)` : `根 z = ${signStr}${rootVal.toFixed(2)}i (w=0)`;
+                    ctx.fillText(labelText, pt.x + 10, pt.y + 4);
+                  });
+                } else if (constC < 0) {
+                  // Real roots on Real axis: x = +- sqrt(-constC)
+                  const rootVal = Math.sqrt(-constC);
+                  const rootPos = project(rootVal, 0, 0, width, height);
+                  const rootNeg = project(-rootVal, 0, 0, width, height);
+
+                  [rootPos, rootNeg].forEach((pt, idx) => {
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 9, 0, Math.PI * 2);
+                    ctx.strokeStyle = 'rgba(56, 189, 248, 0.7)';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.fill();
+
+                    ctx.fillStyle = '#bae6fd';
+                    ctx.font = 'bold 11px sans-serif';
+                    const signStr = idx === 0 ? '+' : '-';
+                    ctx.fillText(`实根 x = ${signStr}${rootVal.toFixed(2)}`, pt.x + 10, pt.y + 4);
+                  });
+                } else {
+                  // Double root at origin (0, 0, 0)
+                  const pt = project(0, 0, 0, width, height);
+                  ctx.beginPath();
+                  ctx.arc(pt.x, pt.y, 7, 0, Math.PI * 2);
+                  ctx.fillStyle = '#fbbf24';
+                  ctx.fill();
+                  ctx.fillText('二重实根 z = 0', pt.x + 10, pt.y + 4);
+                }
+
+                ctx.restore();
+
+                // Update telemetry UI
+                updateUI();
+              }
+
+              function updateUI() {
+                const rad = (thetaDeg * Math.PI) / 180;
+                const cos2T = Math.cos(2 * rad);
+
+                if (dispThetaVal) dispThetaVal.textContent = `${thetaDeg.toFixed(1)}°`;
+                if (dispCVal) dispCVal.textContent = `${constC >= 0 ? '+' : ''}${constC.toFixed(2)}`;
+
+                let angleDesc = '';
+                if (thetaDeg < 1) angleDesc = '0.0° (纯实数轴切片)';
+                else if (Math.abs(thetaDeg - 45) < 1.5) angleDesc = '45.0° (临界平坦角)';
+                else if (thetaDeg > 89) angleDesc = '90.0° (纯虚数轴切片)';
+                else angleDesc = `${thetaDeg.toFixed(1)}° (旋转过渡)`;
+
+                if (dispThetaDeg) dispThetaDeg.textContent = angleDesc;
+
+                // Equation string
+                const coeffStr = cos2T >= 0 ? `+${cos2T.toFixed(2)}` : `${cos2T.toFixed(2)}`;
+                const cStr = constC >= 0 ? `+ ${constC.toFixed(2)}` : `- ${Math.abs(constC).toFixed(2)}`;
+                if (dispSliceEq) {
+                  dispSliceEq.textContent = `w(r) = (${coeffStr})·r² ${cStr}`;
+                }
+
+                // Slice behavior explanation
+                if (dispSliceBehavior) {
+                  if (cos2T > 0.1) {
+                    dispSliceBehavior.innerHTML = `<span style="color:#38bdf8;">🔵 开口向上</span>：二次项系数为正 (${coeffStr})。当 c > 0 时全线悬浮于海平面之上，无交点！`;
+                  } else if (Math.abs(cos2T) <= 0.1) {
+                    dispSliceBehavior.innerHTML = `<span style="color:#fbbf24;">🟡 临界拉平</span>：二次项系数衰减归零 (${coeffStr})！抛物线被完全拉平为一条常数线。`;
+                  } else {
+                    dispSliceBehavior.innerHTML = `<span style="color:#f43f5e;">🔴 开口向下倒扣</span>：二次项系数被反转为负 (${coeffStr})！曲线像滑梯一样俯冲切穿海平面！`;
+                  }
+                }
+
+                // Root status
+                if (dispRootStatus && dispRootDesc) {
+                  if (constC > 0) {
+                    const root = Math.sqrt(constC);
+                    dispRootStatus.innerHTML = `z = ± ${root.toFixed(2)} i <span style="color:var(--text-muted);font-weight:normal;">(纯虚数根)</span>`;
+                    if (thetaDeg > 85) {
+                      dispRootDesc.innerHTML = `🎯 <strong>切片精准命中！</strong> 虚轴切片此时完美与海平面在 $z = \\pm ${root.toFixed(2)}i$ 处相交，方程真实的根显形！`;
+                    } else {
+                      dispRootDesc.innerHTML = `方程在实数轴（θ=0°）悬空无解，但升维到复数平面后，在虚数轴两侧存在 2 个物理交点。试着把切片转到 90°！`;
+                    }
+                  } else if (constC < 0) {
+                    const root = Math.sqrt(-constC);
+                    dispRootStatus.innerHTML = `x = ± ${root.toFixed(2)} <span style="color:#38bdf8;font-weight:normal;">(实数双根)</span>`;
+                    dispRootDesc.innerHTML = `常数项为负，即使在一维实轴切片上，抛物线也已经下沉并切穿实轴海平面！`;
+                  } else {
+                    dispRootStatus.innerHTML = `z = 0 <span style="color:#fbbf24;font-weight:normal;">(二重实根)</span>`;
+                    dispRootDesc.innerHTML = `抛物线顶点恰好接触海平面，切点重合于原点。`;
+                  }
+                }
+
+                if (camReadout) {
+                  const yawDeg = Math.round((yaw * 180) / Math.PI) % 360;
+                  const pitchDeg = Math.round((pitch * 180) / Math.PI);
+                  camReadout.textContent = `视角方位角: ${yawDeg}° | 仰角: ${pitchDeg}°`;
+                }
+              }
+
+              // Event Listeners for Sliders
+              if (sliderTheta) {
+                sliderTheta.addEventListener('input', e => {
+                  thetaDeg = parseFloat(e.target.value);
+                  render();
+                });
+              }
+
+              if (sliderC) {
+                sliderC.addEventListener('input', e => {
+                  constC = parseFloat(e.target.value);
+                  render();
+                });
+              }
+
+              // Animation Toggle
+              if (btnToggleAnim) {
+                btnToggleAnim.addEventListener('click', () => {
+                  isAnimatingSlice = !isAnimatingSlice;
+                  if (isAnimatingSlice) {
+                    btnToggleAnim.textContent = '⏸ 暂停切片动画';
+                    btnToggleAnim.style.background = '#f87171';
+                    animateSlice();
+                  } else {
+                    btnToggleAnim.textContent = '▶ 自动演示切片旋转';
+                    btnToggleAnim.style.background = 'var(--accent-amber)';
+                    if (animReqId) cancelAnimationFrame(animReqId);
+                  }
+                });
+              }
+
+              function animateSlice() {
+                if (!isAnimatingSlice) return;
+                thetaDeg += 0.6 * animDirection;
+                if (thetaDeg >= 90) {
+                  thetaDeg = 90;
+                  animDirection = -1;
+                } else if (thetaDeg <= 0) {
+                  thetaDeg = 0;
+                  animDirection = 1;
+                }
+                if (sliderTheta) sliderTheta.value = thetaDeg;
+                render();
+                animReqId = requestAnimationFrame(animateSlice);
+              }
+
+              // Preset Buttons
+              if (btnReal) {
+                btnReal.addEventListener('click', () => {
+                  yaw = 0;
+                  pitch = 0;
+                  thetaDeg = 0;
+                  if (sliderTheta) sliderTheta.value = 0;
+                  render();
+                });
+              }
+
+              if (btnImag) {
+                btnImag.addEventListener('click', () => {
+                  yaw = Math.PI / 2;
+                  pitch = 0;
+                  thetaDeg = 90;
+                  if (sliderTheta) sliderTheta.value = 90;
+                  render();
+                });
+              }
+
+              if (btn3D) {
+                btn3D.addEventListener('click', () => {
+                  yaw = 0.65;
+                  pitch = 0.45;
+                  render();
+                });
+              }
+
+              if (btnTop) {
+                btnTop.addEventListener('click', () => {
+                  yaw = 0;
+                  pitch = 1.5;
+                  render();
+                });
+              }
+
+              // Mouse / Touch Dragging on Canvas
+              canvas.addEventListener('mousedown', e => {
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                lastYaw = yaw;
+                lastPitch = pitch;
+                canvas.style.cursor = 'grabbing';
+              });
+
+              window.addEventListener('mousemove', e => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                yaw = lastYaw + dx * 0.01;
+                pitch = Math.max(-1.5, Math.min(1.5, lastPitch + dy * 0.01));
+                render();
+              });
+
+              window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                  isDragging = false;
+                  canvas.style.cursor = 'grab';
+                }
+              });
+
+              // Touch Support
+              canvas.addEventListener('touchstart', e => {
+                if (e.touches.length === 1) {
+                  isDragging = true;
+                  startX = e.touches[0].clientX;
+                  startY = e.touches[0].clientY;
+                  lastYaw = yaw;
+                  lastPitch = pitch;
+                }
+              }, { passive: true });
+
+              window.addEventListener('touchmove', e => {
+                if (!isDragging || e.touches.length !== 1) return;
+                const dx = e.touches[0].clientX - startX;
+                const dy = e.touches[0].clientY - startY;
+                yaw = lastYaw + dx * 0.01;
+                pitch = Math.max(-1.5, Math.min(1.5, lastPitch + dy * 0.01));
+                render();
+              }, { passive: true });
+
+              window.addEventListener('touchend', () => {
+                isDragging = false;
+              });
+
+              // Mouse wheel zoom
+              canvas.addEventListener('wheel', e => {
+                e.preventDefault();
+                zoom = Math.max(0.6, Math.min(2.0, zoom - e.deltaY * 0.001));
+                render();
+              }, { passive: false });
+
+              // Initial draw & resize
+              window.addEventListener('resize', render);
+              setTimeout(render, 50);
+            })();
+            </script>
+
+            <p style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.7;">
+              <strong>自学启示</strong>：原本悬空的抛物线，其实是一个<strong>三维双曲抛物面（马鞍面）</strong>！在实数轴上它往上翘，看起来远离地面；但垂直的虚数方向却像滑滑梯一样一路俯冲向下，精准地扎穿了“高度为 0 的海平面”！那两个真实的扎穿点，正是 $z = +i$ 和 $z = -i$。
+            </p>
+
+            <!-- 坐标系认知升维对照表 -->
+            <div style="margin: 1.5rem 0; overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; background: var(--bg-card); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color);">
+                <thead>
+                  <tr style="background: rgba(30, 41, 59, 0.8); border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: var(--accent-amber); font-weight: 700; width: 22%;">坐标维度对比</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: #38bdf8; font-weight: 700; width: 38%;">初高中笛卡尔直角坐标系（二维平铺）</th>
+                    <th style="padding: 0.75rem 1rem; text-align: left; color: #34d399; font-weight: 700; width: 40%;">大学复变立体几何空间（三维马鞍）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: var(--text-main);">横轴 $x$ 的角色</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);">代表实数自变量输入 $x \in \mathbb{R}$</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);"><strong style="color: #38bdf8;">复数输入的实部 $x = \operatorname{Re}(z)$</strong>（水平地面上的第 1 输入自由度）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: var(--text-main);">字母 $y$ 的归属与本质</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);"><strong style="color: #f87171;">函数输出纵坐标</strong> $y = f(x)$（结果高度）</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);"><strong style="color: #f43f5e;">复数输入的虚部 $y = \operatorname{Im}(z)$</strong>（⚠️ 地面上的第 2 输入自由度，绝非纵轴！）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: var(--text-main);">函数输出值的呈现位置</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);">二维平面里的竖直方向 $y$ 轴</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);"><strong style="color: #cbd5e1;">全新开辟的竖直高度轴 $w = \operatorname{Re}(f(z))$</strong>（垂直于复平面地面直插天际）</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: var(--text-main);">“解方程 = 0”的物理判决</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);">曲线是否接触一维实数横轴（找一维交点）</td>
+                    <td style="padding: 0.75rem 1rem; color: var(--text-muted);"><strong style="color: #34d399;">曲面是否扎穿海平面 $w = 0$</strong>（在二维复数地面上砸出的入水孔洞）</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.75rem 1rem; font-weight: 600; color: var(--text-main);">$x^2 + 1 = 0$ 的判决真相</td>
+                    <td style="padding: 0.75rem 1rem; color: #f87171;">抛物线顶点在 $(0, 1)$，全线浮在横轴上方，断言“无解”</td>
+                    <td style="padding: 0.75rem 1rem; color: #34d399;">实轴切片确实悬空；但垂直的虚轴因 $i^2=-1$ 翻转为开口向下，在 $y = \pm 1$ 处切穿海平面，双根 $z = \pm i$ 显形！</td>
                   </tr>
                 </tbody>
               </table>

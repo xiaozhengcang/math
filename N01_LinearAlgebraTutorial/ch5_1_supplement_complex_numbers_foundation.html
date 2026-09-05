@@ -1,0 +1,1813 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 5.1 专题拓展 1: 高中数学复数完全基石指南：从代数运算到几何直观 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 1</span>
+          <span>二维面积推导、减法直觉与法向量底蕴</span>
+        </a>
+
+        <a href="ch3_1_supplement_leibniz_formula.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
+          <span>莱布尼茨公式与全景本质意义</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+
+        <a href="ch5_1_supplement_complex_numbers_foundation.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 1</span>
+          <span>高中数学复数完全基石指南</span>
+        </a>
+
+        <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 2</span>
+          <span>代数基本定理与三维马鞍面</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="ch5_1_eigenvalues_eigenvectors.html">Chapter 5: 特征值与对角化</a> / <span>Ch 5.1 专题拓展 1: 高中数学复数完全基石指南</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <div class="content-container">
+
+        <!-- Hero Section -->
+        <div class="hero-section" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.12) 0%, rgba(56, 189, 248, 0.08) 50%, rgba(139, 92, 246, 0.12) 100%); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);">
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-bottom: 0.75rem;">
+            <span class="badge" style="background: var(--accent-green); color: #000; font-weight: 700;">高中数学完全基石</span>
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4);">零基础到大学先修</span>
+            <span class="badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24; border: 1px solid rgba(251, 191, 36, 0.4);">几何直观强化篇</span>
+          </div>
+          <h1 style="font-size: 2.1rem; margin: 0 0 0.75rem; color: var(--text-main); line-height: 1.3;">
+            高中数学复数完全基石指南：从代数运算到几何直观
+          </h1>
+          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1.25rem;">
+            从初中一元二次方程判别式 $\Delta < 0$ 的“无解困惑”破壁，系统梳理虚数单位 $i$、代数形式 $z = a + bi$、高斯复平面、点-向量-复数三位一体、四则运算几何化、共轭与模长、极坐标欧拉法则，到一元二次方程根的虚实相变分岔，彻底扫清进入大学线性代数（复特征值、复对角化与三维马鞍面）的一切认知障碍！
+          </p>
+          <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; font-size: 0.85rem; color: var(--text-muted); border-top: 1px solid rgba(148, 163, 184, 0.2); padding-top: 1rem;">
+            <div>📖 <strong>建议阅读时长</strong>：30 分钟</div>
+            <div>🎯 <strong>先修要求</strong>：初中实数与二次方程、平面直角坐标系与平面向量初步</div>
+            <div>💡 <strong>核心直觉</strong>：实数不是终点，实数只是复数地面在虚部为 0 处的一条“地平线”</div>
+          </div>
+        </div>
+
+        <!-- 导读与九阶天梯路线图 -->
+        <div class="card" style="margin-bottom: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">学习地图</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">🗺️ 本专题循序渐进九阶自学天梯</h2>
+          </div>
+          <div class="card-body">
+            <p style="line-height: 1.8;">
+              很多同学在高中学复数时觉得它“割裂”、“抽象”——既不像函数那么直观，又不像几何那么形象，甚至怀疑虚数是数学家“凭空捏造”出来的符号游戏。
+              <br>本指南将打破传统的死记硬背模式，按照<strong>“困惑 ➔ 形式 ➔ 几何 ➔ 运算 ➔ 动态画板 ➔ 方程分岔 ➔ 极坐标 ➔ 轨迹 ➔ 大学桥梁”</strong>的自然认知流手把手推导：
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 0.85rem; margin-top: 1rem;">
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #38bdf8;">阶梯 1 · 引言与心智破壁</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">初中判别式 $\Delta < 0$ 的千年认知牢笼，人类数系为何必须从一维数轴跨入二维复平面？</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #c084fc;">
+                <strong style="color: #c084fc;">阶梯 2 · 核心概念与严格分类</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">虚数单位 $i$、代数形式 $z = a + bi$、实部虚部严密辨析、复数相等充要条件与大小比较禁区。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #34d399;">
+                <strong style="color: #34d399;">阶梯 3 · 高斯复平面与三位一体</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">复数 $\iff$ 平面点 $\iff$ 向量三位一体。模长 $|z|$ 的欧式距离几何本质与共轭复数实轴镜像。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #fbbf24;">
+                <strong style="color: #fbbf24;">阶梯 4 · 四则代数运算与几何法则</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">加减法（向量平行四边形）、乘法多项式展开、除法分母实数化、$i$ 的模 4 周期循环律。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #f43f5e;">
+                <strong style="color: #f43f5e;">阶梯 5 · 🎮 交互实验室 ①：复平面联动画板</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">可拖拽复数点，动态实时观测共轭镜像、平行四边形加法、模长伸缩与辐角相加的旋转乘法！</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #a855f7;">
+                <strong style="color: #a855f7;">阶梯 6 · 二次方程复数求解与虚实相变</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">实系数二次方程在 $\Delta < 0$ 时的共轭复根推导、韦达定理不变性，附【交互实验室 ②：根的虚实相变分岔器】。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #06b6d4;">
+                <strong style="color: #06b6d4;">阶梯 7 · 极坐标、欧拉公式与乘法真谛</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">$z = r(\cos\theta + i\sin\theta) = r e^{i\theta}$。乘以一个复数就是“伸缩模长+逆时针旋转”！棣莫弗定理与角度翻倍。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #10b981;">
+                <strong style="color: #10b981;">阶梯 8 · 典型几何轨迹方程全解析</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">圆周轨迹 $|z - z_0| = r$、垂直平分线 $|z - z_1| = |z - z_2|$、阿氏圆与高考几何大题剖析。</p>
+              </div>
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #e11d48;">
+                <strong style="color: #e11d48;">阶梯 9 · 避坑大全与通往大学线性代数</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">高中生最容易踩翻的 5 大雷区！复特征值为什么必定成对出现？二维实旋转矩阵与复数的完全同构。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 阶梯 1 · 引言与破壁 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">阶梯 1 · 引言破壁</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 🌌 从初中“判别式小于零无解”到人类数系的二维解放</h2>
+          </div>
+          <div class="card-body">
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              1.1 中学时代最大的认知谎言：“方程无解”
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              在初中数学中，解一元二次方程 $a x^2 + b x + c = 0$ 时，老师会教你计算判别式 $\Delta = b^2 - 4ac$。
+              <br>当 $\Delta < 0$ 时，课本给出的宣判只有四个冷冰冰的大字：<strong>“此方程无解”</strong>。
+            </p>
+            <p style="line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">
+              比如最简单的方程：
+              $$x^2 + 1 = 0 \iff x^2 = -1$$
+              初中老师会解释：“因为任何正数的平方是正数，负数的平方也是正数，0 的平方是 0，世界上绝对不存在一个数的平方会等于负数！所以根本不可能有解。”
+            </p>
+            
+            <div class="intuition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px; margin: 1.25rem 0;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">💡 破壁思考：真的是“不可能有解”，还是我们的“视野被画地为牢”？</h4>
+              <p style="margin: 0; line-height: 1.7; font-size: 0.92rem;">
+                回顾人类文明的数系发展史，每一次“无解”的危机，本质上都只是<strong>当前数系维度不足</strong>的抗议：
+                <br>• 在只有正整数的远古时代，$3 - 5$ 是“无解”的，于是人类引入了<strong>负数</strong>；
+                <br>• 在整数的世界里，$2 \div 3$ 是“无解”的，于是人类引入了<strong>分数（有理数）</strong>；
+                <br>• 在有理数的世界里，边长为 1 的正方形对角线长度 $x^2 = 2$ 是“无解”的，于是人类引入了<strong>无理数（实数）</strong>；
+                <br>• 那么凭什么遇到 $x^2 = -1$ 时，我们就要停下脚步认输？
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              1.2 历史的真实反转：复数不是为了二次方程，而是为了三次方程！
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">
+              鲜为人知的是，西方数学家最初也认为负数开平方是荒谬的。真正逼迫数学家必须接纳虚数的，是 16 世纪意大利数学家卡尔达诺 (Cardano) 发现的<strong>一元三次方程求根公式</strong>。
+              <br>考虑方程：
+              $$x^3 - 15x - 4 = 0$$
+              任何人都能一眼看出它有一个极其简单的<strong>真实整数实根：$x = 4$</strong>（因为 $4^3 - 15\times 4 - 4 = 64 - 60 - 4 = 0$）！
+              <br>然而，当你把这个方程套进卡尔达诺公式时，中间计算步骤却不可避免地跳出了：
+              $$x = \sqrt[3]{2 + \sqrt{-121}} + \sqrt[3]{2 - \sqrt{-121}}$$
+              公式内部赫然出现了 $\sqrt{-121}$ 这样带有负数开方的怪物！
+              <br>如果断然拒绝虚数，你就无法算出最终那个真实存在的实根 $4$；但如果你大胆假定 $(\sqrt{-1})^2 = -1$，硬着头皮把带有虚数的两项展开立方化简，就会奇迹般发现虚数部分<strong>完全对消</strong>，精准吐出实数答案 $4$！
+            </p>
+
+            <blockquote style="border-left: 3px solid var(--accent-amber); padding-left: 1rem; margin: 1rem 0; color: var(--accent-amber); font-size: 0.9rem; font-style: italic;">
+              “虚数就像一座架在悬崖两边的轻盈吊桥——我们从坚实的实数大地出发，踩着虚数搭成的栈道腾空跨越深渊，最终平稳地降落在另一座实数的坚实山峰上。”
+            </blockquote>
+
+            <!-- SVG 矢量图解 1：五层数系嵌套闭包 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-blue); margin-bottom: 0.5rem; text-align: left;">
+                📊 矢量图解 1：人类数系的五层嵌套扩张与代数封闭终极形态
+              </div>
+              <svg width="100%" height="220" viewBox="0 0 680 220" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                <!-- Nested rounded rectangles -->
+                <!-- C (Complex) -->
+                <rect x="20" y="20" width="640" height="180" rx="12" fill="rgba(192, 132, 252, 0.08)" stroke="#c084fc" stroke-width="2"/>
+                <text x="40" y="48" fill="#c084fc" font-size="14" font-weight="bold">复数域 ℂ (Complex: a + bi)</text>
+                <text x="640" y="48" fill="#c084fc" font-size="11" text-anchor="end">终极代数闭域 · 多项式求根通行无阻</text>
+
+                <!-- R (Real) -->
+                <rect x="40" y="60" width="480" height="125" rx="10" fill="rgba(52, 211, 153, 0.1)" stroke="#34d399" stroke-width="1.8"/>
+                <text x="60" y="85" fill="#34d399" font-size="13" font-weight="bold">实数域 ℝ (Real: 几何连续充满直线)</text>
+
+                <!-- Q (Rational) -->
+                <rect x="60" y="95" width="340" height="78" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="80" y="118" fill="#38bdf8" font-size="12" font-weight="bold">有理数域 ℚ (除法畅通 p/q)</text>
+
+                <!-- Z (Integer) -->
+                <rect x="80" y="125" width="220" height="40" rx="6" fill="rgba(251, 191, 36, 0.15)" stroke="#fbbf24" stroke-width="1.3"/>
+                <text x="100" y="148" fill="#fbbf24" font-size="11" font-weight="bold">整数 ℤ (减法畅通) ⊃ 自然数 ℕ</text>
+
+                <!-- Key elements text on right -->
+                <g transform="translate(540, 95)">
+                  <text x="0" y="0" fill="#cbd5e1" font-size="11" font-weight="bold">纯虚数专属领地：</text>
+                  <text x="0" y="22" fill="#c084fc" font-size="11" font-family="monospace">i = √(-1)</text>
+                  <text x="0" y="42" fill="#c084fc" font-size="11" font-family="monospace">2 + 3i, -5i</text>
+                  <text x="0" y="65" fill="#34d399" font-size="10">扎穿实数上方空间</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 阶梯 2 · 核心概念与严格分类 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">阶梯 2 · 代数基石</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 🧩 虚数单位 $i$、代数标准形式与复数相等的严格公理</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-purple); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              2.1 虚数单位 $i$ 的严格规定
+            </h3>
+            <div class="definition-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📜 虚数单位核心定义</h4>
+              <p style="margin: 0; font-size: 0.95rem; line-height: 1.7;">
+                1. 虚数单位记作 $\mathbf{i}$，其核心代数定义为：
+                $$\mathbf{i^2 = -1 \quad (\text{或 } i = \sqrt{-1})}$$
+                2. 实数可以与 $i$ 进行加法与乘法运算，且<strong>在实数范围内的所有交换律、结合律与分配律在复数中全部保持有效</strong>。
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-purple); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              2.2 复数的代数标准形式与严格分类
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              形如 $\mathbf{z = a + bi}$ 的数叫做<strong>复数 (Complex Number)</strong>，其中 $\mathbf{a, b \in \mathbb{R}}$（$a$ 和 $b$ 必须都是实数）：
+              <br>• $\mathbf{a}$ 称为复数 $z$ 的<strong>实部 (Real Part)</strong>，记作 $\operatorname{Re}(z) = a$；
+              <br>• $\mathbf{b}$ 称为复数 $z$ 的<strong>虚部 (Imaginary Part)</strong>，记作 $\operatorname{Im}(z) = b$。
+            </p>
+
+            <!-- 避坑高能预警 -->
+            <div style="padding: 1rem 1.25rem; background: rgba(239, 68, 68, 0.08); border-left: 4px solid #ef4444; border-radius: 6px; margin: 1rem 0;">
+              <strong style="color: #ef4444; font-size: 0.95rem;">🚨 高考与期末最高频陷阱：虚部到底带不带 $i$？</strong>
+              <p style="margin: 0.4rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                <strong>绝大多数初学者必踩的坑！</strong>
+                <br>题目：“复数 $z = 3 - 4i$ 的虚部是______？”
+                <br>❌ 错误答案：$-4i$（扣全分！）
+                <br>✅ 正确答案：$-4$
+                <br><strong>记住铁律</strong>：实部和虚部都是<strong>纯粹的实数</strong>！虚部是 $i$ 前面的系数数值，<strong>绝对不带字母 $i$</strong>！
+              </p>
+            </div>
+
+            <!-- 复数的严格分类表 -->
+            <h4 style="color: var(--text-main); font-size: 1rem; margin-top: 1.25rem; margin-bottom: 0.5rem;">
+              📋 复数集合的严格三分法对照表：
+            </h4>
+            <div style="overflow-x: auto; margin-bottom: 1.5rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; background: var(--bg-card); border-radius: 6px; overflow: hidden; border: 1px solid var(--border-color);">
+                <thead>
+                  <tr style="background: rgba(30, 41, 59, 0.8); border-bottom: 2px solid var(--border-color);">
+                    <th style="padding: 0.65rem 1rem; text-align: left; color: var(--accent-purple); width: 22%;">复数类别</th>
+                    <th style="padding: 0.65rem 1rem; text-align: left; color: #38bdf8; width: 25%;">条件特征</th>
+                    <th style="padding: 0.65rem 1rem; text-align: left; color: #34d399; width: 28%;">形式范例</th>
+                    <th style="padding: 0.65rem 1rem; text-align: left; color: var(--text-muted);">几何与代数特质</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.65rem 1rem; font-weight: bold; color: #34d399;">实数 (Real)</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">b = 0</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">z = a (如 5, -3.2, 0)</td>
+                    <td style="padding: 0.65rem 1rem; color: var(--text-muted);">虚部消失，全线坐落在实数横轴上</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.65rem 1rem; font-weight: bold; color: #fbbf24;">虚数 (Imaginary)</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">b ≠ 0</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">2 + 3i, 1 - √2i</td>
+                    <td style="padding: 0.65rem 1rem; color: var(--text-muted);">只要虚部不为 0，无论实部是不是 0 都是虚数</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.65rem 1rem; font-weight: bold; color: #f43f5e;">纯虚数 (Pure Imaginary)</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">a = 0 且 b ≠ 0</td>
+                    <td style="padding: 0.65rem 1rem; font-family: monospace;">z = bi (如 4i, -i)</td>
+                    <td style="padding: 0.65rem 1rem; color: var(--text-muted);">实部为 0，严格坐落在纵向虚轴上（原点 0 除外）</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 style="color: var(--accent-purple); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              2.3 复数相等的充要条件与“大小比较禁区”
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              设两个复数 $z_1 = a + bi, z_2 = c + di$（$a, b, c, d \in \mathbb{R}$）：
+              $$a + bi = c + di \iff \mathbf{a = c \quad \text{且} \quad b = d}$$
+              <strong>实部等于实部，虚部等于虚部</strong>。这意味着一个复数方程，本质上相当于<strong>两个独立的实数方程联立</strong>！
+            </p>
+            <div style="padding: 0.85rem 1.25rem; background: rgba(251, 191, 36, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 6px; margin: 1rem 0;">
+              <strong style="color: var(--accent-amber); font-size: 0.92rem;">⚠️ 铁律公理：虚数绝对不能比较大小！</strong>
+              <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                我们不能说 $2 + 3i > 1 + 2i$，也不能说 $i > 0$ 或 $i < 0$！
+                <br>为什么？因为若假设 $i > 0$，两边同乘正数 $i$ 得 $i^2 > 0 \implies -1 > 0$（荒谬！）；若假设 $i < 0$，两边乘负数 $i$ 变号得 $i^2 > 0 \implies -1 > 0$（同样荒谬！）。
+                <br><strong>结论：复数域不是有序域，虚数之间只有“相等”或“不相等”，绝无“大于”或“小于”之说！</strong>
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 3 · 高斯复平面与三位一体 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">阶梯 3 · 几何化</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 📐 高斯复平面：复数、平面点与向量的“三位一体”</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-green); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              3.1 什么是复平面 (Complex Plane)？
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              在复数发明后的两百年里，数学家一直把它当成虚无缥缈的幽灵。直到高斯 (Gauss) 和阿甘得 (Argand) 将复数画在二维平面上，复数才瞬间拥有了坚不可摧的几何实体：
+            </p>
+            <ul style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted); margin-left: 1.25rem;">
+              <li><strong>横轴（实轴 Re）</strong>：用来度量复数的实部 $a$，轴上的点全代表实数；</li>
+              <li><strong>纵轴（虚轴 Im）</strong>：用来度量复数的虚部 $b$，轴上的刻度是实数 $b$（除原点外，点对应纯虚数 $bi$）；</li>
+              <li>在这个平面中，任意复数 $z = a + bi$ 都可以与坐标点 $(a, b)$ 建立<strong>一一对应双射</strong>。</li>
+            </ul>
+
+            <!-- 核心三位一体公式卡片 -->
+            <div style="margin: 1.25rem 0; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25); text-align: center;">
+              <span style="color: var(--accent-green); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">核心数学直觉</span>
+              <div style="font-size: 1.3rem; font-weight: bold; margin: 0.5rem 0; color: #f8fafc; font-family: var(--font-mono);">
+                代数复数 $z = a + bi$ $\Longleftrightarrow$ 几何点 $Z(a, b)$ $\Longleftrightarrow$ 平面向量 $\overrightarrow{OZ} = (a, b)$
+              </div>
+              <p style="margin: 0; font-size: 0.85rem; color: var(--text-muted);">
+                这一对应关系是整个中学向量与解析几何工具全面注入复数域的“空间传送门”！
+              </p>
+            </div>
+
+            <!-- SVG 矢量图解 2：三位一体映射 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-green); margin-bottom: 0.5rem; text-align: left;">
+                📊 矢量图解 2：复数、复平面点与原点向量三位一体空间架构
+              </div>
+              <svg width="100%" height="260" viewBox="0 0 680 260" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                <defs>
+                  <marker id="arrow-re" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                  <marker id="arrow-im" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                  </marker>
+                  <marker id="arrow-vec" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+                  </marker>
+                </defs>
+
+                <!-- Grid lines -->
+                <line x1="40" y1="200" x2="340" y2="200" stroke="#38bdf8" stroke-width="1.8" marker-end="url(#arrow-re)"/>
+                <line x1="100" y1="230" x2="100" y2="30" stroke="#f43f5e" stroke-width="1.8" marker-end="url(#arrow-im)"/>
+                <text x="335" y="218" fill="#38bdf8" font-size="11" font-weight="bold">实轴 Re</text>
+                <text x="108" y="38" fill="#f43f5e" font-size="11" font-weight="bold">虚轴 Im</text>
+                <text x="85" y="215" fill="#94a3b8" font-size="11">O</text>
+
+                <!-- Point Z(a, b) at (240, 80) => a = 140, b = 120 -->
+                <line x1="240" y1="200" x2="240" y2="80" stroke="#94a3b8" stroke-dasharray="3,3"/>
+                <line x1="100" y1="80" x2="240" y2="80" stroke="#94a3b8" stroke-dasharray="3,3"/>
+                <text x="240" y="215" fill="#38bdf8" font-size="10.5" text-anchor="middle">a = Re(z)</text>
+                <text x="90" y="85" fill="#f43f5e" font-size="10.5" text-anchor="end">b = Im(z)</text>
+
+                <!-- Vector OZ -->
+                <line x1="100" y1="200" x2="238" y2="82" stroke="#34d399" stroke-width="3" marker-end="url(#arrow-vec)"/>
+                <circle cx="240" cy="80" r="5" fill="#34d399" stroke="#fff" stroke-width="1.5"/>
+                <text x="250" y="78" fill="#34d399" font-size="12" font-weight="bold">Z(a, b) ⟷ z = a + bi</text>
+
+                <!-- Right Side Summary -->
+                <g transform="translate(380, 40)">
+                  <rect width="280" height="180" rx="8" fill="rgba(15, 23, 42, 0.7)" stroke="rgba(148, 163, 184, 0.2)"/>
+                  <text x="15" y="30" fill="#34d399" font-size="12" font-weight="bold">💡 三位一体对应法则</text>
+                  <text x="15" y="60" fill="#cbd5e1" font-size="11.5">1. 代数形式：</text>
+                  <text x="30" y="80" fill="#c084fc" font-size="11" font-family="monospace">z = a + bi</text>
+                  <text x="15" y="108" fill="#cbd5e1" font-size="11.5">2. 几何点坐标：</text>
+                  <text x="30" y="128" fill="#38bdf8" font-size="11" font-family="monospace">Z(a, b) ∈ ℝ²</text>
+                  <text x="15" y="156" fill="#cbd5e1" font-size="11.5">3. 空间自由向量：</text>
+                  <text x="30" y="174" fill="#34d399" font-size="11" font-family="monospace">OZ = (a, b)ᵀ</text>
+                </g>
+              </svg>
+            </div>
+
+            <h3 style="color: var(--accent-green); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              3.2 复数的模 (Modulus)：欧几里得距离的物理化身
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              对于复数 $z = a + bi$，其向量 $\overrightarrow{OZ}$ 的长度叫做复数 $z$ 的<strong>模（或绝对值）</strong>，记作 $|z|$：
+              $$|z| = \sqrt{a^2 + b^2}$$
+            </p>
+            <ul style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted); margin-left: 1.25rem;">
+              <li><strong>几何意义</strong>：复平面上的点 $Z(a, b)$ 到原点 $(0, 0)$ 的<strong>直尺直线距离</strong>；</li>
+              <li><strong>两点间距离公式</strong>：设 $z_1 = a_1 + b_1 i, z_2 = a_2 + b_2 i$，则两点距离为：
+                $$|z_1 - z_2| = \sqrt{(a_1 - a_2)^2 + (b_1 - b_2)^2}$$
+              </li>
+              <li><strong>三角不等式（模的性质）</strong>：
+                $$||z_1| - |z_2|| \le |z_1 \pm z_2| \le |z_1| + |z_2|$$
+                对应三角形任意两边之和大于第三边、两边之差小于第三边！
+              </li>
+            </ul>
+
+            <h3 style="color: var(--accent-green); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              3.3 共轭复数 (Conjugate)：关于实轴的倒影镜像
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              设复数 $z = a + bi$，把<strong>实部相等、虚部互为相反数</strong>的复数称为 $z$ 的<strong>共轭复数</strong>，记作 $\bar{z}$：
+              $$\bar{z} = a - bi$$
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #38bdf8; font-size: 0.92rem;">🪞 几何镜像本质</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  点 $Z(a, b)$ 与点 $Z'(a, -b)$ 在复平面上<strong>关于实轴（横轴）完全镜面对称</strong>。水面上方的景物是 $z$，倒映在水面里的倒影正是 $\bar{z}$！
+                </p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #34d399;">
+                <strong style="color: #34d399; font-size: 0.92rem;">⚡ 实数化终极恒等式</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  $$z \cdot \bar{z} = (a + bi)(a - bi) = a^2 - b^2 i^2 = \mathbf{a^2 + b^2 = |z|^2}$$
+                  任何复数乘以它的共轭复数，虚数 $i$ 彻底灰飞烟灭，必然吐出一个<strong>非负实数 $|z|^2$</strong>！这是除法“分母实数化”的绝对利刃！
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 4 · 四则代数运算与几何法则 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">阶梯 4 · 运算精通</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧮 复数的四则代数运算：多项式展开与几何动作的完美统一</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              4.1 复数的加法与减法：平面向量的合成
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              设 $z_1 = a + bi, z_2 = c + di$（$a, b, c, d \in \mathbb{R}$）：
+              $$(a + bi) \pm (c + di) = \mathbf{(a \pm c) + (b \pm d)i}$$
+            </p>
+            <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #38bdf8; margin: 0.75rem 0;">
+              <strong>🎯 几何本质</strong>：实部与实部相加减、虚部与虚部相加减，在数学上<strong>严格等价于二维向量的坐标相加减</strong>！
+              <br>• 复数加法遵循<strong>平行四边形法则</strong>或<strong>三角形首尾相接法则</strong>；
+              <br>• 差向量的模长 $|z_1 - z_2|$ 精确代表点 $Z_1$ 与点 $Z_2$ 之间的<strong>几何距离</strong>。
+            </div>
+
+            <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              4.2 复数的乘法：代数多项式展开与 $i^2 = -1$ 的归宿
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              复数乘法完全遵从初中学习的多项式十字相乘展开法则，遇到 $i^2$ 立即替换为 $-1$：
+              $$\begin{aligned}
+              z_1 \cdot z_2 &= (a + bi)(c + di) \\
+              &= ac + adi + bci + bd \mathbf{i^2} \\
+              &= ac + adi + bci + bd \mathbf{(-1)} \\
+              &= \mathbf{(ac - bd) + (ad + bc)i}
+              \end{aligned}$$
+            </p>
+            <p style="line-height: 1.8; font-size: 0.95rem; color: var(--text-muted);">
+              <strong>运算律完全保持</strong>：
+              <br>• 乘法交换律：$z_1 z_2 = z_2 z_1$
+              <br>• 乘法结合律：$(z_1 z_2) z_3 = z_1 (z_2 z_3)$
+              <br>• 分配律：$z_1 (z_2 + z_3) = z_1 z_2 + z_1 z_3$
+            </p>
+
+            <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              4.3 复数的除法：“分母实数化”的核心套路
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              在实数中，分母有根号时我们要进行“分母有理化”；在复数除法中，面对分母带有 $i$ 的分式，我们要进行<strong>“分母实数化”</strong>——<strong>分子分母同乘以分母的共轭复数</strong>：
+              $$\frac{a + bi}{c + di} = \frac{(a + bi)(c - di)}{(c + di)(c - di)} = \frac{(ac + bd) + (bc - ad)i}{c^2 + d^2} = \mathbf{\frac{ac + bd}{c^2 + d^2} + \frac{bc - ad}{c^2 + d^2}i}$$
+              （前提：$c + di \neq 0$，即 $c^2 + d^2 \neq 0$）
+            </p>
+
+            <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              4.4 虚数单位 $i$ 的整幂次四循环律（周期性）
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              计算虚数单位 $i$ 的更高次幂时，由于 $i^2 = -1$，必然形成以 4 为周期的闭环循环：
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.5rem; margin: 0.75rem 0; text-align: center;">
+              <div style="padding: 0.6rem; background: rgba(56, 189, 248, 0.1); border-radius: 4px; border: 1px solid rgba(56, 189, 248, 0.3);">
+                <span style="font-family: monospace; font-size: 1.1rem; color: #38bdf8; font-weight: bold;">i¹ = i</span>
+              </div>
+              <div style="padding: 0.6rem; background: rgba(244, 63, 94, 0.1); border-radius: 4px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                <span style="font-family: monospace; font-size: 1.1rem; color: #f43f5e; font-weight: bold;">i² = -1</span>
+              </div>
+              <div style="padding: 0.6rem; background: rgba(192, 132, 252, 0.1); border-radius: 4px; border: 1px solid rgba(192, 132, 252, 0.3);">
+                <span style="font-family: monospace; font-size: 1.1rem; color: #c084fc; font-weight: bold;">i³ = -i</span>
+              </div>
+              <div style="padding: 0.6rem; background: rgba(52, 211, 153, 0.1); border-radius: 4px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                <span style="font-family: monospace; font-size: 1.1rem; color: #34d399; font-weight: bold;">i⁴ = 1</span>
+              </div>
+            </div>
+
+            <!-- SVG 矢量图解 3：虚数 i 的四步 90 度旋转四循环 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-amber); margin-bottom: 0.5rem; text-align: left;">
+                📊 矢量图解 3：虚数单位 i 的 90° 逆时针跳跃与整幂次模 4 闭环
+              </div>
+              <svg width="100%" height="240" viewBox="0 0 680 240" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                <defs>
+                  <marker id="arr-rot" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+                  </marker>
+                </defs>
+
+                <!-- Left: Circular Cycle Diagram (center at 180, 120) -->
+                <!-- Axes -->
+                <line x1="60" y1="120" x2="300" y2="120" stroke="#334155" stroke-width="1.5"/>
+                <line x1="180" y1="220" x2="180" y2="20" stroke="#334155" stroke-width="1.5"/>
+                <text x="290" y="135" fill="#64748b" font-size="10">实轴</text>
+                <text x="188" y="28" fill="#64748b" font-size="10">虚轴</text>
+
+                <!-- Circle of radius 75 -->
+                <circle cx="180" cy="120" r="75" fill="none" stroke="rgba(148, 163, 184, 0.2)" stroke-dasharray="3,3"/>
+
+                <!-- 4 Key Points -->
+                <!-- 1: (255, 120) -->
+                <circle cx="255" cy="120" r="5" fill="#34d399"/>
+                <text x="268" y="124" fill="#34d399" font-size="12" font-weight="bold">i⁴ = +1</text>
+
+                <!-- i: (180, 45) -->
+                <circle cx="180" cy="45" r="5" fill="#38bdf8"/>
+                <text x="180" y="36" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">i¹ = +i</text>
+
+                <!-- -1: (105, 120) -->
+                <circle cx="105" cy="120" r="5" fill="#f43f5e"/>
+                <text x="95" y="124" fill="#f43f5e" font-size="12" font-weight="bold" text-anchor="end">i² = -1</text>
+
+                <!-- -i: (180, 195) -->
+                <circle cx="180" cy="195" r="5" fill="#c084fc"/>
+                <text x="180" y="215" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">i³ = -i</text>
+
+                <!-- Rotation arcs with arrows -->
+                <path d="M 250 110 A 75 75 0 0 0 190 50" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arr-rot)"/>
+                <path d="M 170 50 A 75 75 0 0 0 110 110" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arr-rot)"/>
+                <path d="M 110 130 A 75 75 0 0 0 170 190" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arr-rot)"/>
+                <path d="M 190 190 A 75 75 0 0 0 250 130" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#arr-rot)"/>
+
+                <!-- Right Side Formula & Tricks -->
+                <g transform="translate(360, 30)">
+                  <rect width="300" height="180" rx="8" fill="rgba(15, 23, 42, 0.75)" stroke="rgba(148, 163, 184, 0.2)"/>
+                  <text x="15" y="28" fill="#fbbf24" font-size="12" font-weight="bold">⚡ 高考高频解题秒杀定理</text>
+                  <text x="15" y="55" fill="#cbd5e1" font-size="11">1. 整次幂通式（以指数对 4 取模）：</text>
+                  <text x="25" y="75" fill="#38bdf8" font-size="10.5" font-family="monospace">i^(4n) = 1,  i^(4n+1) = i</text>
+                  <text x="25" y="93" fill="#f43f5e" font-size="10.5" font-family="monospace">i^(4n+2) = -1,  i^(4n+3) = -i</text>
+
+                  <text x="15" y="122" fill="#cbd5e1" font-size="11">2. 任意连续 4 项之和为 0：</text>
+                  <text x="25" y="142" fill="#34d399" font-size="10.5" font-weight="bold">i + i² + i³ + i⁴ = i - 1 - i + 1 ≡ 0</text>
+                  <text x="25" y="160" fill="#94a3b8" font-size="10">遇到求和题（如 Σ i^k，k=1~2024），每 4 项打包为 0！</text>
+                </g>
+              </svg>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 5 · 🎮 核心交互实验室 ①：复平面代数与几何联动探索画板 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header" style="background: linear-gradient(90deg, rgba(244, 63, 94, 0.12) 0%, rgba(56, 189, 248, 0.1) 100%);">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">阶梯 5 · 动态交互</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🎮 交互实验室 ①：复平面代数与几何联动探索画板</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              只背公式不如亲眼看见！在这个交互实验室中，你可以直接<strong>按住鼠标左键或在手机屏幕上拖拽</strong>复平面上的两颗复数粒子 $\mathbf{Z_1}$ 和 $\mathbf{Z_2}$。
+              <br>切换下方按钮，实时观察<strong>实虚部分解、模长圆、共轭对称、平行四边形加法</strong>以及最震撼的<strong>“旋转与模长伸缩”乘法过程</strong>！
+            </p>
+
+            <!-- Interactive Visualizer Wrapper -->
+            <div class="visualizer-wrapper" style="margin: 1.5rem 0; padding: 1.25rem; background: #090d16; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);">
+              
+              <!-- Mode Selection Buttons -->
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; justify-content: space-between; padding-bottom: 0.85rem; border-bottom: 1px solid rgba(148, 163, 184, 0.15); margin-bottom: 1rem;">
+                <div style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+                  <button id="btn-mode-single" class="btn btn-primary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; background: #38bdf8; color: #000; font-weight: bold; border: none; border-radius: 4px; cursor: pointer;">
+                    🔘 单点 Z₁ 深度透视
+                  </button>
+                  <button id="btn-mode-add" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; border-color: rgba(52, 211, 153, 0.4); color: #34d399; cursor: pointer;">
+                    ➕ 向量加法 (平行四边形)
+                  </button>
+                  <button id="btn-mode-mul" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; border-color: rgba(251, 191, 36, 0.4); color: #fbbf24; cursor: pointer;">
+                    ✖️ 向量乘法 (旋转与伸缩)
+                  </button>
+                  <button id="btn-mode-rot-i" class="btn btn-secondary" style="padding: 0.4rem 0.75rem; font-size: 0.8rem; border-color: rgba(192, 132, 252, 0.4); color: #c084fc; cursor: pointer;">
+                    🔄 乘 i 纯旋转 90°
+                  </button>
+                </div>
+
+                <div style="font-size: 0.75rem; color: var(--text-dim);">
+                  🖱️ 拖拽粒子改变 Z₁ (青色) 或 Z₂ (黄色)
+                </div>
+              </div>
+
+              <!-- Main Canvas & HUD Flex Layout -->
+              <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: stretch;">
+                
+                <!-- Left: 2D Canvas -->
+                <div style="flex: 1 1 460px; min-width: 320px; position: relative; background: #050811; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.15); overflow: hidden;">
+                  <canvas id="canvas-complex-plane" style="width: 100%; height: 420px; display: block; cursor: crosshair; touch-action: none;"></canvas>
+                  
+                  <!-- Bottom hint on canvas -->
+                  <div style="position: absolute; bottom: 8px; left: 12px; pointer-events: none; font-size: 0.75rem; color: rgba(148, 163, 184, 0.7);">
+                    <span>网格刻度：每格 1.0 个单位 | 范围 [-3.5, +3.5]</span>
+                  </div>
+                </div>
+
+                <!-- Right: Live Math HUD Dashboard -->
+                <div style="flex: 1 1 300px; min-width: 270px; background: rgba(15, 23, 42, 0.7); border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <h4 style="color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.4rem;">
+                      <span>📐</span> 实时代数与几何指标看板
+                    </h4>
+
+                    <!-- Point Z1 Readout -->
+                    <div style="padding: 0.65rem 0.85rem; background: #090d16; border-radius: 6px; border-left: 3px solid #38bdf8; margin-bottom: 0.75rem;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem;">
+                        <span style="color: #38bdf8; font-weight: bold;">复数 Z₁ (青色粒子)</span>
+                        <span id="hud-z1-coord" style="font-family: var(--font-mono); color: #7dd3fc;">(2.0, 1.5)</span>
+                      </div>
+                      <div id="hud-z1-alg" style="font-family: var(--font-mono); color: #f8fafc; font-size: 0.95rem; font-weight: bold;">
+                        z₁ = 2.00 + 1.50i
+                      </div>
+                      <div style="display: flex; gap: 0.75rem; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">
+                        <span>模长 |z₁| = <strong id="hud-z1-mod" style="color: #38bdf8;">2.50</strong></span>
+                        <span>辐角 θ₁ = <strong id="hud-z1-arg" style="color: #fbbf24;">36.9°</strong></span>
+                      </div>
+                    </div>
+
+                    <!-- Point Z2 Readout -->
+                    <div id="hud-z2-box" style="padding: 0.65rem 0.85rem; background: #090d16; border-radius: 6px; border-left: 3px solid #fbbf24; margin-bottom: 0.75rem;">
+                      <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem;">
+                        <span style="color: #fbbf24; font-weight: bold;">复数 Z₂ (黄色粒子)</span>
+                        <span id="hud-z2-coord" style="font-family: var(--font-mono); color: #fde68a;">(0.8, 1.2)</span>
+                      </div>
+                      <div id="hud-z2-alg" style="font-family: var(--font-mono); color: #f8fafc; font-size: 0.95rem; font-weight: bold;">
+                        z₂ = 0.80 + 1.20i
+                      </div>
+                      <div style="display: flex; gap: 0.75rem; font-size: 0.78rem; color: var(--text-muted); margin-top: 0.25rem;">
+                        <span>模长 |z₂| = <strong id="hud-z2-mod" style="color: #fbbf24;">1.44</strong></span>
+                        <span>辐角 θ₂ = <strong id="hud-z2-arg" style="color: #f59e0b;">56.3°</strong></span>
+                      </div>
+                    </div>
+
+                    <!-- Operation Result Readout -->
+                    <div id="hud-res-box" style="padding: 0.75rem 0.85rem; background: #090d16; border-radius: 6px; border-left: 3px solid #34d399; margin-bottom: 0.75rem;">
+                      <div id="hud-res-title" style="font-size: 0.8rem; color: #34d399; font-weight: bold; margin-bottom: 0.25rem;">
+                        共轭对称与模长圆状态
+                      </div>
+                      <div id="hud-res-alg" style="font-family: var(--font-mono); color: #f8fafc; font-size: 0.92rem; font-weight: bold;">
+                        z̄₁ = 2.00 - 1.50i
+                      </div>
+                      <div id="hud-res-desc" style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.45;">
+                        共轭复数 z̄₁ 是关于实轴的倒影；圆盘半径严格等于模长 |z₁| = 2.50。
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div style="padding: 0.6rem 0.75rem; background: rgba(56, 189, 248, 0.06); border-radius: 4px; font-size: 0.76rem; color: var(--text-dim); line-height: 1.4;">
+                    💡 <strong>探索建议</strong>：尝试将 Z₂ 拖到纯虚轴 $i$ 处，点击“✖️ 向量乘法”，看看 Z₁ 会发生怎样的旋转！
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- JavaScript Engine for Complex Plane Canvas -->
+            <script>
+            (function() {
+              const canvas = document.getElementById('canvas-complex-plane');
+              if (!canvas) return;
+              const ctx = canvas.getContext('2d');
+
+              // State
+              let mode = 'single'; // 'single', 'add', 'mul', 'rot_i'
+              let z1 = { x: 1.8, y: 1.2 };
+              let z2 = { x: -0.6, y: 1.4 };
+              let dragging = null; // 'z1' or 'z2'
+
+              const scaleUnit = 52; // pixels per unit
+
+              // DOM elements
+              const btnSingle = document.getElementById('btn-mode-single');
+              const btnAdd = document.getElementById('btn-mode-add');
+              const btnMul = document.getElementById('btn-mode-mul');
+              const btnRotI = document.getElementById('btn-mode-rot-i');
+
+              const hudZ1Coord = document.getElementById('hud-z1-coord');
+              const hudZ1Alg = document.getElementById('hud-z1-alg');
+              const hudZ1Mod = document.getElementById('hud-z1-mod');
+              const hudZ1Arg = document.getElementById('hud-z1-arg');
+
+              const hudZ2Box = document.getElementById('hud-z2-box');
+              const hudZ2Coord = document.getElementById('hud-z2-coord');
+              const hudZ2Alg = document.getElementById('hud-z2-alg');
+              const hudZ2Mod = document.getElementById('hud-z2-mod');
+              const hudZ2Arg = document.getElementById('hud-z2-arg');
+
+              const hudResBox = document.getElementById('hud-res-box');
+              const hudResTitle = document.getElementById('hud-res-title');
+              const hudResAlg = document.getElementById('hud-res-alg');
+              const hudResDesc = document.getElementById('hud-res-desc');
+
+              function setMode(m) {
+                mode = m;
+                [btnSingle, btnAdd, btnMul, btnRotI].forEach(b => {
+                  b.className = 'btn btn-secondary';
+                  b.style.background = 'transparent';
+                  b.style.fontWeight = 'normal';
+                });
+
+                if (m === 'single') {
+                  btnSingle.className = 'btn btn-primary';
+                  btnSingle.style.background = '#38bdf8';
+                  btnSingle.style.color = '#000';
+                  btnSingle.style.fontWeight = 'bold';
+                  hudZ2Box.style.display = 'none';
+                } else if (m === 'add') {
+                  btnAdd.className = 'btn btn-primary';
+                  btnAdd.style.background = '#34d399';
+                  btnAdd.style.color = '#000';
+                  btnAdd.style.fontWeight = 'bold';
+                  hudZ2Box.style.display = 'block';
+                } else if (m === 'mul') {
+                  btnMul.className = 'btn btn-primary';
+                  btnMul.style.background = '#fbbf24';
+                  btnMul.style.color = '#000';
+                  btnMul.style.fontWeight = 'bold';
+                  hudZ2Box.style.display = 'block';
+                } else if (m === 'rot_i') {
+                  btnRotI.className = 'btn btn-primary';
+                  btnRotI.style.background = '#c084fc';
+                  btnRotI.style.color = '#000';
+                  btnRotI.style.fontWeight = 'bold';
+                  hudZ2Box.style.display = 'none';
+                }
+                render();
+              }
+
+              btnSingle.addEventListener('click', () => setMode('single'));
+              btnAdd.addEventListener('click', () => setMode('add'));
+              btnMul.addEventListener('click', () => setMode('mul'));
+              btnRotI.addEventListener('click', () => setMode('rot_i'));
+
+              function toScreen(mathX, mathY, w, h) {
+                return {
+                  x: w / 2 + mathX * scaleUnit,
+                  y: h / 2 - mathY * scaleUnit
+                };
+              }
+
+              function toMath(screenX, screenY, w, h) {
+                return {
+                  x: (screenX - w / 2) / scaleUnit,
+                  y: (h / 2 - screenY) / scaleUnit
+                };
+              }
+
+              function render() {
+                const width = canvas.clientWidth || 460;
+                const height = canvas.clientHeight || 420;
+                const dpr = window.devicePixelRatio || 1;
+
+                if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
+                  canvas.width = Math.floor(width * dpr);
+                  canvas.height = Math.floor(height * dpr);
+                }
+
+                ctx.save();
+                ctx.scale(dpr, dpr);
+                ctx.clearRect(0, 0, width, height);
+
+                const cx = width / 2;
+                const cy = height / 2;
+
+                // 1. Grid
+                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = 'rgba(71, 85, 105, 0.18)';
+                for (let x = cx % scaleUnit; x < width; x += scaleUnit) {
+                  ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+                }
+                for (let y = cy % scaleUnit; y < height; y += scaleUnit) {
+                  ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                }
+
+                // 2. Axes
+                ctx.lineWidth = 1.6;
+                ctx.strokeStyle = '#38bdf8';
+                ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(width, cy); ctx.stroke(); // Real
+                ctx.strokeStyle = '#f43f5e';
+                ctx.beginPath(); ctx.moveTo(cx, height); ctx.lineTo(cx, 0); ctx.stroke(); // Imag
+
+                // Labels
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText('+Re(z) [实轴]', width - 72, cy - 8);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText('+Im(z) [虚轴]', cx + 8, 16);
+
+                // Origin
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px monospace';
+                ctx.fillText('O', cx - 12, cy + 14);
+
+                // Coordinates of Z1 and Z2
+                const pZ1 = toScreen(z1.x, z1.y, width, height);
+                const pZ2 = toScreen(z2.x, z2.y, width, height);
+
+                const mod1 = Math.hypot(z1.x, z1.y);
+                let arg1 = Math.atan2(z1.y, z1.x) * 180 / Math.PI;
+                if (arg1 < 0) arg1 += 360;
+
+                const mod2 = Math.hypot(z2.x, z2.y);
+                let arg2 = Math.atan2(z2.y, z2.x) * 180 / Math.PI;
+                if (arg2 < 0) arg2 += 360;
+
+                // Update HUD basic
+                hudZ1Coord.textContent = `(${z1.x.toFixed(2)}, ${z1.y.toFixed(2)})`;
+                hudZ1Alg.textContent = `z₁ = ${z1.x.toFixed(2)} ${z1.y >= 0 ? '+' : '-'} ${Math.abs(z1.y).toFixed(2)}i`;
+                hudZ1Mod.textContent = mod1.toFixed(2);
+                hudZ1Arg.textContent = arg1.toFixed(1) + '°';
+
+                hudZ2Coord.textContent = `(${z2.x.toFixed(2)}, ${z2.y.toFixed(2)})`;
+                hudZ2Alg.textContent = `z₂ = ${z2.x.toFixed(2)} ${z2.y >= 0 ? '+' : '-'} ${Math.abs(z2.y).toFixed(2)}i`;
+                hudZ2Mod.textContent = mod2.toFixed(2);
+                hudZ2Arg.textContent = arg2.toFixed(1) + '°';
+
+                // Mode: SINGLE
+                if (mode === 'single') {
+                  // Modulus circle
+                  ctx.beginPath();
+                  ctx.arc(cx, cy, mod1 * scaleUnit, 0, Math.PI * 2);
+                  ctx.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+                  ctx.lineWidth = 1.2;
+                  ctx.setLineDash([4, 4]);
+                  ctx.stroke();
+                  ctx.setLineDash([]);
+
+                  // Angle sector
+                  ctx.beginPath();
+                  ctx.moveTo(cx, cy);
+                  ctx.arc(cx, cy, 32, 0, -Math.atan2(z1.y, z1.x), z1.y < 0);
+                  ctx.closePath();
+                  ctx.fillStyle = 'rgba(251, 191, 36, 0.15)';
+                  ctx.fill();
+                  ctx.strokeStyle = '#fbbf24';
+                  ctx.lineWidth = 1.2;
+                  ctx.stroke();
+
+                  // Projections for Z1
+                  ctx.setLineDash([3, 3]);
+                  ctx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
+                  ctx.beginPath();
+                  ctx.moveTo(pZ1.x, cy); ctx.lineTo(pZ1.x, pZ1.y); ctx.lineTo(cx, pZ1.y);
+                  ctx.stroke();
+                  ctx.setLineDash([]);
+
+                  // Conjugate point z1_bar
+                  const pConj = toScreen(z1.x, -z1.y, width, height);
+                  ctx.beginPath();
+                  ctx.moveTo(pZ1.x, pZ1.y);
+                  ctx.lineTo(pConj.x, pConj.y);
+                  ctx.strokeStyle = 'rgba(244, 63, 94, 0.35)';
+                  ctx.stroke();
+
+                  ctx.beginPath();
+                  ctx.arc(pConj.x, pConj.y, 5, 0, Math.PI * 2);
+                  ctx.fillStyle = '#f43f5e';
+                  ctx.fill();
+                  ctx.strokeStyle = '#fff';
+                  ctx.lineWidth = 1;
+                  ctx.stroke();
+                  ctx.fillStyle = '#fda4af';
+                  ctx.font = '11px sans-serif';
+                  ctx.fillText('z̄₁ (共轭镜像)', pConj.x + 8, pConj.y + 4);
+
+                  // Vector OZ1
+                  drawArrow(cx, cy, pZ1.x, pZ1.y, '#38bdf8', 2.6);
+
+                  hudResBox.style.borderLeftColor = '#38bdf8';
+                  hudResTitle.style.color = '#38bdf8';
+                  hudResTitle.textContent = '单点几何属性剖析';
+                  hudResAlg.textContent = `z̄₁ = ${z1.x.toFixed(2)} ${-z1.y >= 0 ? '+' : '-'} ${Math.abs(-z1.y).toFixed(2)}i`;
+                  hudResDesc.innerHTML = `• 模长平方: |z₁|² = a² + b² = ${(mod1 * mod1).toFixed(2)}<br>• 实轴对称倒影 z̄₁，欧氏距离 r = ${mod1.toFixed(2)}`;
+                }
+
+                // Mode: ADDITION
+                else if (mode === 'add') {
+                  const sumX = z1.x + z2.x;
+                  const sumY = z1.y + z2.y;
+                  const pSum = toScreen(sumX, sumY, width, height);
+
+                  // Parallelogram dashed lines
+                  ctx.setLineDash([4, 4]);
+                  ctx.strokeStyle = 'rgba(52, 211, 153, 0.5)';
+                  ctx.lineWidth = 1.4;
+                  ctx.beginPath();
+                  ctx.moveTo(pZ1.x, pZ1.y); ctx.lineTo(pSum.x, pSum.y);
+                  ctx.moveTo(pZ2.x, pZ2.y); ctx.lineTo(pSum.x, pSum.y);
+                  ctx.stroke();
+                  ctx.setLineDash([]);
+
+                  // Vectors
+                  drawArrow(cx, cy, pZ1.x, pZ1.y, '#38bdf8', 2.2);
+                  drawArrow(cx, cy, pZ2.x, pZ2.y, '#fbbf24', 2.2);
+                  drawArrow(cx, cy, pSum.x, pSum.y, '#34d399', 3.2);
+
+                  // Sum particle
+                  ctx.beginPath();
+                  ctx.arc(pSum.x, pSum.y, 6, 0, Math.PI * 2);
+                  ctx.fillStyle = '#34d399';
+                  ctx.fill();
+                  ctx.strokeStyle = '#fff';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  ctx.fillStyle = '#34d399';
+                  ctx.font = 'bold 12px sans-serif';
+                  ctx.fillText('Z₁ + Z₂ (和向量)', pSum.x + 8, pSum.y - 4);
+
+                  hudResBox.style.borderLeftColor = '#34d399';
+                  hudResTitle.style.color = '#34d399';
+                  hudResTitle.textContent = '加法：平行四边形法则';
+                  hudResAlg.textContent = `z₁ + z₂ = ${sumX.toFixed(2)} ${sumY >= 0 ? '+' : '-'} ${Math.abs(sumY).toFixed(2)}i`;
+                  hudResDesc.innerHTML = `实部相加: ${z1.x.toFixed(2)} + (${z2.x.toFixed(2)}) = ${sumX.toFixed(2)}<br>虚部相加: ${z1.y.toFixed(2)} + (${z2.y.toFixed(2)}) = ${sumY.toFixed(2)}<br>和向量模长: |z₁+z₂| = ${Math.hypot(sumX, sumY).toFixed(2)}`;
+                }
+
+                // Mode: MULTIPLICATION
+                else if (mode === 'mul') {
+                  const mulX = z1.x * z2.x - z1.y * z2.y;
+                  const mulY = z1.x * z2.y + z1.y * z2.x;
+                  const pMul = toScreen(mulX, mulY, width, height);
+
+                  drawArrow(cx, cy, pZ1.x, pZ1.y, '#38bdf8', 2.0);
+                  drawArrow(cx, cy, pZ2.x, pZ2.y, '#fbbf24', 2.0);
+                  drawArrow(cx, cy, pMul.x, pMul.y, '#c084fc', 3.2);
+
+                  ctx.beginPath();
+                  ctx.arc(pMul.x, pMul.y, 6, 0, Math.PI * 2);
+                  ctx.fillStyle = '#c084fc';
+                  ctx.fill();
+                  ctx.strokeStyle = '#fff';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  ctx.fillStyle = '#c084fc';
+                  ctx.font = 'bold 12px sans-serif';
+                  ctx.fillText('Z₁ · Z₂ (积向量)', pMul.x + 8, pMul.y - 4);
+
+                  let sumArg = arg1 + arg2;
+                  if (sumArg >= 360) sumArg -= 360;
+
+                  hudResBox.style.borderLeftColor = '#c084fc';
+                  hudResTitle.style.color = '#c084fc';
+                  hudResTitle.textContent = '乘法：模长相乘 · 辐角相加！';
+                  hudResAlg.textContent = `z₁ · z₂ = ${mulX.toFixed(2)} ${mulY >= 0 ? '+' : '-'} ${Math.abs(mulY).toFixed(2)}i`;
+                  hudResDesc.innerHTML = `• 模长伸缩: |z₁|·|z₂| = ${mod1.toFixed(2)} × ${mod2.toFixed(2)} = <strong>${(mod1 * mod2).toFixed(2)}</strong><br>• 角度旋转: θ₁ + θ₂ = ${arg1.toFixed(1)}° + ${arg2.toFixed(1)}° = <strong>${sumArg.toFixed(1)}°</strong>`;
+                }
+
+                // Mode: ROT_I
+                else if (mode === 'rot_i') {
+                  const rotX = -z1.y;
+                  const rotY = z1.x;
+                  const pRot = toScreen(rotX, rotY, width, height);
+
+                  drawArrow(cx, cy, pZ1.x, pZ1.y, '#38bdf8', 2.2);
+                  drawArrow(cx, cy, pRot.x, pRot.y, '#c084fc', 3.0);
+
+                  // 90 deg rotation arc
+                  ctx.beginPath();
+                  const a1Rad = -Math.atan2(z1.y, z1.x);
+                  ctx.arc(cx, cy, 38, a1Rad, a1Rad - Math.PI / 2, true);
+                  ctx.strokeStyle = '#fbbf24';
+                  ctx.lineWidth = 2;
+                  ctx.stroke();
+
+                  ctx.beginPath();
+                  ctx.arc(pRot.x, pRot.y, 6, 0, Math.PI * 2);
+                  ctx.fillStyle = '#c084fc';
+                  ctx.fill();
+                  ctx.strokeStyle = '#fff';
+                  ctx.lineWidth = 1.5;
+                  ctx.stroke();
+                  ctx.fillStyle = '#c084fc';
+                  ctx.font = 'bold 12px sans-serif';
+                  ctx.fillText('Z₁ × i (旋转90°)', pRot.x + 8, pRot.y - 4);
+
+                  hudResBox.style.borderLeftColor = '#c084fc';
+                  hudResTitle.style.color = '#c084fc';
+                  hudResTitle.textContent = '虚数 i 的几何旋转本质';
+                  hudResAlg.textContent = `z₁ × i = ${rotX.toFixed(2)} ${rotY >= 0 ? '+' : '-'} ${Math.abs(rotY).toFixed(2)}i`;
+                  hudResDesc.innerHTML = `• 模长恒定保持: |z₁ × i| = ${mod1.toFixed(2)}<br>• 角度严格逆时针旋转 <strong>90.0°</strong>！这是 i² = -1 最本源的几何真相。`;
+                }
+
+                // Always draw Z1 and Z2 handles
+                drawHandle(pZ1.x, pZ1.y, '#38bdf8', 'Z₁');
+                if (mode === 'add' || mode === 'mul') {
+                  drawHandle(pZ2.x, pZ2.y, '#fbbf24', 'Z₂');
+                }
+
+                ctx.restore();
+              }
+
+              function drawHandle(x, y, color, label) {
+                ctx.beginPath();
+                ctx.arc(x, y, 7, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillStyle = color;
+                ctx.fillText(label, x + 10, y - 6);
+              }
+
+              function drawArrow(fromX, fromY, toX, toY, color, width) {
+                const headLen = 10;
+                const angle = Math.atan2(toY - fromY, toX - fromX);
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = width;
+                ctx.beginPath();
+                ctx.moveTo(fromX, fromY);
+                ctx.lineTo(toX, toY);
+                ctx.stroke();
+
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(toX, toY);
+                ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+                ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+                ctx.closePath();
+                ctx.fill();
+              }
+
+              // Drag Events
+              function getPos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                  x: clientX - rect.left,
+                  y: clientY - rect.top
+                };
+              }
+
+              function onStart(e) {
+                const pos = getPos(e);
+                const width = canvas.clientWidth || 460;
+                const height = canvas.clientHeight || 420;
+
+                const pZ1 = toScreen(z1.x, z1.y, width, height);
+                const pZ2 = toScreen(z2.x, z2.y, width, height);
+
+                const d1 = Math.hypot(pos.x - pZ1.x, pos.y - pZ1.y);
+                const d2 = Math.hypot(pos.x - pZ2.x, pos.y - pZ2.y);
+
+                if (d1 < 24) dragging = 'z1';
+                else if ((mode === 'add' || mode === 'mul') && d2 < 24) dragging = 'z2';
+              }
+
+              function onMove(e) {
+                if (!dragging) return;
+                e.preventDefault();
+                const pos = getPos(e);
+                const width = canvas.clientWidth || 460;
+                const height = canvas.clientHeight || 420;
+                const m = toMath(pos.x, pos.y, width, height);
+
+                // clamp to [-3.5, 3.5]
+                m.x = Math.max(-3.5, Math.min(3.5, m.x));
+                m.y = Math.max(-3.5, Math.min(3.5, m.y));
+
+                if (dragging === 'z1') z1 = m;
+                else if (dragging === 'z2') z2 = m;
+                render();
+              }
+
+              function onEnd() { dragging = null; }
+
+              canvas.addEventListener('mousedown', onStart);
+              window.addEventListener('mousemove', onMove);
+              window.addEventListener('mouseup', onEnd);
+
+              canvas.addEventListener('touchstart', onStart, { passive: false });
+              window.addEventListener('touchmove', onMove, { passive: false });
+              window.addEventListener('touchend', onEnd);
+
+              window.addEventListener('resize', render);
+              setMode('single');
+            })();
+            </script>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 6 · 一元二次方程复数求解与虚实相变分岔 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">阶梯 6 · 方程突破</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. ⚡ 实系数二次方程在复数域的彻底求解与“虚实相变分岔”</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-purple); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              6.1 判别式 $\Delta < 0$ 时的万能求根公式推导
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              考虑实系数一元二次方程：
+              $$a x^2 + b x + c = 0 \quad (a \neq 0, \; a, b, c \in \mathbb{R})$$
+              通过经典的配方法：
+              $$\left(x + \frac{b}{2a}\right)^2 = \frac{b^2 - 4ac}{4a^2} = \frac{\Delta}{4a^2}$$
+            </p>
+            <ul style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted); margin-left: 1.25rem;">
+              <li>当 $\Delta \ge 0$ 时，初中结论生效：有两个实数根 $x = \frac{-b \pm \sqrt{\Delta}}{2a}$；</li>
+              <li>当 $\Delta < 0$ 时，分子上的 $\Delta = - (4ac - b^2)$ 为负数，我们可以把负号提取出来写成 $\sqrt{\Delta} = \sqrt{-1 \cdot (4ac - b^2)} = \mathbf{i \sqrt{4ac - b^2}}$！</li>
+            </ul>
+
+            <div class="definition-box" style="padding: 1.15rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">📜 复数域一元二次方程通用求根公式</h4>
+              <p style="margin: 0; font-size: 1.05rem; line-height: 1.7;">
+                当 $\Delta = b^2 - 4ac < 0$ 时，方程在复数域内<strong>必有一对互为共轭的虚数根</strong>：
+                $$\mathbf{x = \frac{-b \pm i \sqrt{4ac - b^2}}{2a}}$$
+              </p>
+            </div>
+
+            <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #34d399; margin: 1rem 0;">
+              <strong style="color: #34d399;">💎 韦达定理 (Vieta's Formulas) 在复数域坚挺有效！</strong>
+              <p style="margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                设两复根为 $x_1, x_2$，则：
+                <br>• $x_1 + x_2 = -\frac{b}{a}$（由于两根互为共轭，虚部必然正负抵消，两根之和永远是<strong>纯实数</strong>！）
+                <br>• $x_1 \cdot x_2 = \frac{c}{a}$（由共轭复数乘积性质 $z \cdot \bar{z} = |z|^2 > 0$，两根之积同样是<strong>纯实数</strong>！）
+              </p>
+            </div>
+
+            <!-- 核心交互实验室 ②：根的虚实相变分岔探索器 -->
+            <div class="visualizer-wrapper" style="margin: 1.75rem 0; padding: 1.25rem; background: #090d16; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);">
+              <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.75rem; border-bottom: 1px solid rgba(148, 163, 184, 0.15); padding-bottom: 0.85rem; margin-bottom: 1rem;">
+                <div>
+                  <span class="badge" style="background: rgba(192, 132, 252, 0.15); color: #c084fc; border: 1px solid rgba(192, 132, 252, 0.3);">🎮 交互实验室 ②</span>
+                  <h3 style="margin: 0.35rem 0 0; font-size: 1.15rem; color: var(--text-main);">
+                    一元二次方程根的轨迹与虚实相变分岔探索器
+                  </h3>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                  方程原型：$f(x) = x^2 + c = 0$
+                </div>
+              </div>
+
+              <!-- Slider Control -->
+              <div style="background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                  <label for="slider-bifurcation-c" style="font-size: 0.88rem; font-weight: bold; color: #c084fc;">
+                    🎚️ 拖动调节方程常数项 c：$x^2 + c = 0$
+                  </label>
+                  <span id="slider-bifurcation-val" style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: bold; color: #c084fc; background: rgba(0,0,0,0.3); padding: 2px 8px; border-radius: 4px; border: 1px solid rgba(192, 132, 252, 0.3);">-1.00</span>
+                </div>
+                <input type="range" id="slider-bifurcation-c" min="-3.0" max="3.0" step="0.05" value="-1.0" style="width: 100%; accent-color: #c084fc; cursor: pointer;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-dim); margin-top: 0.25rem;">
+                  <span>c < 0 (2个实根在实轴碰撞)</span>
+                  <span>c = 0 (重根在原点接触)</span>
+                  <span>c > 0 (直角拐弯！扎入虚轴成为共轭虚根)</span>
+                </div>
+              </div>
+
+              <!-- Canvas & Bifurcation HUD Layout -->
+              <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: stretch;">
+                <div style="flex: 1 1 450px; min-width: 320px; position: relative; background: #050811; border-radius: 8px; border: 1px solid rgba(148, 163, 184, 0.15); overflow: hidden;">
+                  <canvas id="canvas-bifurcation" style="width: 100%; height: 360px; display: block;"></canvas>
+                  <div style="position: absolute; bottom: 8px; left: 12px; font-size: 0.75rem; color: rgba(148, 163, 184, 0.7);">
+                    <span>轨迹回放：青色轨迹线 = 实轴运行段 | 紫色轨迹线 = 虚轴分岔段</span>
+                  </div>
+                </div>
+
+                <div style="flex: 1 1 280px; min-width: 260px; background: rgba(15, 23, 42, 0.7); border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                  <div>
+                    <h4 style="color: var(--accent-purple); font-size: 0.95rem; margin-bottom: 0.75rem;">
+                      🧬 相变分岔状态仪表盘
+                    </h4>
+
+                    <div style="padding: 0.75rem; background: #090d16; border-radius: 6px; border-left: 3px solid #c084fc; margin-bottom: 0.75rem;">
+                      <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.2rem;">当前方程形态</div>
+                      <div id="disp-bif-eq" style="font-family: var(--font-mono); color: #f8fafc; font-size: 0.95rem; font-weight: bold;">
+                        x² - 1.00 = 0
+                      </div>
+                      <div id="disp-bif-roots" style="font-family: var(--font-mono); color: #34d399; font-size: 0.95rem; font-weight: bold; margin-top: 0.35rem;">
+                        x₁ = +1.00,  x₂ = -1.00
+                      </div>
+                    </div>
+
+                    <div id="disp-bif-desc" style="font-size: 0.82rem; color: #38bdf8; line-height: 1.6; padding: 0.65rem; background: rgba(56, 189, 248, 0.08); border-radius: 4px;">
+                      🔵 实数相：判别式 Δ > 0。两根端坐于实数轴上，完全在初中认知范围内。
+                    </div>
+                  </div>
+
+                  <div style="font-size: 0.76rem; color: var(--text-dim); line-height: 1.45; margin-top: 0.75rem;">
+                    💡 <strong>观察重点</strong>：慢推滑块穿过 c = 0，观察两根在原点相撞后，是如何<strong>发生 90° 直角跃迁、直插虚轴</strong>的！这就是复数对实数维度的升维解放。
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Bifurcation Canvas Script -->
+            <script>
+            (function() {
+              const canvas = document.getElementById('canvas-bifurcation');
+              if (!canvas) return;
+              const ctx = canvas.getContext('2d');
+
+              const sliderC = document.getElementById('slider-bifurcation-c');
+              const dispVal = document.getElementById('slider-bifurcation-val');
+              const dispEq = document.getElementById('disp-bif-eq');
+              const dispRoots = document.getElementById('disp-bif-roots');
+              const dispDesc = document.getElementById('disp-bif-desc');
+
+              let constC = -1.0;
+              const scale = 58;
+
+              sliderC.addEventListener('input', e => {
+                constC = parseFloat(e.target.value);
+                render();
+              });
+
+              function render() {
+                const width = canvas.clientWidth || 450;
+                const height = canvas.clientHeight || 360;
+                const dpr = window.devicePixelRatio || 1;
+
+                if (canvas.width !== Math.floor(width * dpr) || canvas.height !== Math.floor(height * dpr)) {
+                  canvas.width = Math.floor(width * dpr);
+                  canvas.height = Math.floor(height * dpr);
+                }
+
+                ctx.save();
+                ctx.scale(dpr, dpr);
+                ctx.clearRect(0, 0, width, height);
+
+                const cx = width / 2;
+                const cy = height / 2;
+
+                // Grid
+                ctx.lineWidth = 0.8;
+                ctx.strokeStyle = 'rgba(71, 85, 105, 0.18)';
+                for (let x = cx % scale; x < width; x += scale) {
+                  ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+                }
+                for (let y = cy % scale; y < height; y += scale) {
+                  ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                }
+
+                // Axes
+                ctx.lineWidth = 1.6;
+                ctx.strokeStyle = '#38bdf8';
+                ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(width, cy); ctx.stroke();
+                ctx.strokeStyle = '#f43f5e';
+                ctx.beginPath(); ctx.moveTo(cx, height); ctx.lineTo(cx, 0); ctx.stroke();
+
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillStyle = '#38bdf8';
+                ctx.fillText('+Re(x) [实轴]', width - 70, cy - 8);
+                ctx.fillStyle = '#f43f5e';
+                ctx.fillText('+Im(x) [虚轴]', cx + 8, 16);
+
+                // Bifurcation Trajectory lines
+                // Real axis branch (c in [-3, 0] => x in [-sqrt(3), sqrt(3)])
+                const maxR = Math.sqrt(3.0) * scale;
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+                ctx.beginPath();
+                ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy);
+                ctx.stroke();
+
+                // Imaginary axis branch (c in [0, 3] => y in [-sqrt(3), sqrt(3)])
+                ctx.strokeStyle = 'rgba(192, 132, 252, 0.35)';
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR);
+                ctx.stroke();
+
+                // Calculate current roots
+                let r1 = { x: 0, y: 0 }, r2 = { x: 0, y: 0 };
+                dispVal.textContent = (constC >= 0 ? '+' : '') + constC.toFixed(2);
+                dispEq.textContent = `x² ${constC >= 0 ? '+' : '-'} ${Math.abs(constC).toFixed(2)} = 0`;
+
+                if (constC < -0.001) {
+                  // Two real roots
+                  const val = Math.sqrt(-constC);
+                  r1 = { x: val, y: 0 };
+                  r2 = { x: -val, y: 0 };
+                  dispRoots.innerHTML = `<span style="color:#38bdf8;">x₁ = +${val.toFixed(2)},  x₂ = -${val.toFixed(2)}</span> (实根)`;
+                  dispDesc.style.borderColor = '#38bdf8';
+                  dispDesc.style.color = '#38bdf8';
+                  dispDesc.innerHTML = `🔵 <strong>纯实数相</strong>：判别式 Δ > 0。两根在实轴上对称分布。随着 c 增大，两根沿实轴向原点逼近。`;
+                } else if (Math.abs(constC) <= 0.001) {
+                  // Double root at origin
+                  r1 = { x: 0, y: 0 };
+                  r2 = { x: 0, y: 0 };
+                  dispRoots.innerHTML = `<span style="color:#fbbf24;">x₁ = x₂ = 0.00</span> (重根相撞)`;
+                  dispDesc.style.borderColor = '#fbbf24';
+                  dispDesc.style.color = '#fbbf24';
+                  dispDesc.innerHTML = `🟡 <strong>临界相变点</strong>：c = 0。两根在原点发生碰撞融合，曲率归零，即将发生 90° 直角变轨！`;
+                } else {
+                  // Two conjugate imaginary roots
+                  const val = Math.sqrt(constC);
+                  r1 = { x: 0, y: val };
+                  r2 = { x: 0, y: -val };
+                  dispRoots.innerHTML = `<span style="color:#c084fc;">x₁ = +${val.toFixed(2)}i,  x₂ = -${val.toFixed(2)}i</span> (共轭虚根)`;
+                  dispDesc.style.borderColor = '#c084fc';
+                  dispDesc.style.color = '#c084fc';
+                  dispDesc.innerHTML = `🟣 <strong>虚数相变分岔</strong>：判别式 Δ < 0。两根脱离实轴，垂直进入虚轴，成为一对完美的共轭纯虚数！`;
+                }
+
+                // Draw roots particles
+                drawRoot(cx + r1.x * scale, cy - r1.y * scale, constC <= 0 ? '#38bdf8' : '#c084fc', 'x₁');
+                drawRoot(cx + r2.x * scale, cy - r2.y * scale, constC <= 0 ? '#38bdf8' : '#c084fc', 'x₂');
+
+                ctx.restore();
+              }
+
+              function drawRoot(x, y, color, label) {
+                // Glow
+                ctx.beginPath();
+                ctx.arc(x, y, 12, 0, Math.PI * 2);
+                ctx.fillStyle = color.replace(')', ', 0.25)').replace('rgb', 'rgba');
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(x, y, 6.5, 0, Math.PI * 2);
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillStyle = color;
+                ctx.fillText(label, x + 10, y - 6);
+              }
+
+              window.addEventListener('resize', render);
+              render();
+            })();
+            </script>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 7 · 极坐标、欧拉公式与几何乘法真谛 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">阶梯 7 · 极坐标升维</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🌀 高阶升维：极坐标三角形式与欧拉公式的旋转乘法真谛</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              7.1 复数的极坐标三角形式 (Polar Form)
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              在初中和高一，我们习惯用直角坐标 $(x, y)$ 来描述位置。但复数天生就带有<strong>“旋转”</strong>的基因，使用<strong>距离 $r$ 和角度 $\theta$</strong> 才是复数最自然、最优雅的表达方式：
+            </p>
+            <div class="definition-box" style="padding: 1.15rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.4rem;">📜 复数的三角形式与欧拉公式</h4>
+              <p style="margin: 0; font-size: 1.05rem; line-height: 1.8; font-family: var(--font-mono);">
+                $$\mathbf{z = x + iy = r(\cos\theta + i\sin\theta) = r e^{i\theta}}$$
+              </p>
+              <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.6;">
+                • $\mathbf{r = |z| = \sqrt{x^2 + y^2}}$：模长（点到原点的距离）；<br>
+                • $\mathbf{\theta = \operatorname{Arg}(z)}$：辐角（自正实轴逆时针旋转到向量 $\overrightarrow{OZ}$ 的角度）。
+              </div>
+            </div>
+
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              7.2 复数乘法的终极灵魂：“模长相乘，辐角相加”
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              利用三角函数的两角和差公式，我们可以惊奇地推导两个复数相乘的几何结果：
+              $$\begin{aligned}
+              z_1 \cdot z_2 &= [r_1(\cos\theta_1 + i\sin\theta_1)] \cdot [r_2(\cos\theta_2 + i\sin\theta_2)] \\
+              &= r_1 r_2 [(\cos\theta_1\cos\theta_2 - \sin\theta_1\sin\theta_2) + i(\sin\theta_1\cos\theta_2 + \cos\theta_1\sin\theta_2)] \\
+              &= \mathbf{r_1 r_2 [\cos(\theta_1 + \theta_2) + i\sin(\theta_1 + \theta_2)] = (r_1 r_2) e^{i(\theta_1 + \theta_2)}}
+              \end{aligned}$$
+            </p>
+
+            <div style="padding: 1rem 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1rem 0;">
+              <strong style="color: var(--accent-green); font-size: 0.95rem;">💡 乘法几何真理大总结：</strong>
+              <p style="margin: 0.4rem 0 0; font-size: 0.9rem; line-height: 1.7;">
+                在复平面上，<strong>“乘以一个复数 $z_2$”，物理动作绝不是冷冰冰的数字计算，而是两步连续的几何变换：</strong>
+                <br>1. <strong>模长伸缩</strong>：把原向量的长度乘以 $r_2$ 倍；
+                <br>2. <strong>角度旋转</strong>：把原向量逆时针旋转角度 $\theta_2$！
+                <br>特别地：<strong>乘以虚数 $i = 1 \cdot e^{i 90^\circ}$，模长乘以 1，角度逆时针转 $90^\circ$！</strong>
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.65rem;">
+              7.3 棣莫弗定理 (De Moivre) 与幂的“角度加倍”
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              由“辐角相加”法则顺理成章，一个复数连续乘以自身 $n$ 次（即 $n$ 次方）：
+              $$[r(\cos\theta + i\sin\theta)]^n = \mathbf{r^n (\cos n\theta + i\sin n\theta) = r^n e^{i n\theta}}$$
+              这就是闻名遐迩的<strong>棣莫弗定理</strong>！
+              <br>• 当 $n = 2$ 时，辐角以 2 倍速度翻倍：$(e^{i\theta})^2 = e^{i \mathbf{2\theta}}$；
+              <br>• 这直接解释了在专题拓展 2 的三维马鞍面中，为什么切片旋转角 $\theta$ 会在输出中诱发 $\cos(\mathbf{2\theta})$ 的两倍角速度翻转！
+            </p>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 8 · 典型几何轨迹方程全解析 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">阶梯 8 · 几何轨迹</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 🎯 高考几何大题压轴：复数模长诱发的典型轨迹方程</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              在高考数学和自主命题选拔中，常常将复数与<strong>平面解析几何的轨迹问题</strong>紧密融合。
+              <br>只要牢牢记住 $|z_1 - z_2|$ 就是<strong>两点间的欧几里得距离</strong>，所有复杂的复数代数式都能瞬间还原为纯粹的初等几何图像：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              
+              <!-- 轨迹 1：圆 -->
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #38bdf8; font-size: 0.95rem;">① 圆形轨迹方程</strong>
+                <div style="font-family: var(--font-mono); font-size: 1.05rem; color: #f8fafc; margin: 0.4rem 0;">
+                  $$|z - z_0| = r \quad (r > 0)$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  <strong>几何翻译</strong>：动点 $Z$ 到定点 $Z_0$ 的距离恒等于常数 $r$。
+                  <br>图形是<strong>以点 $Z_0$ 为圆心、半径为 $r$ 的圆周</strong>！
+                  <br>• 若 $|z - z_0| \le r$：表示该圆周及其内部圆盘。
+                </p>
+              </div>
+
+              <!-- 轨迹 2：垂直平分线 -->
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #34d399;">
+                <strong style="color: #34d399; font-size: 0.95rem;">② 垂直平分线 (中垂线)</strong>
+                <div style="font-family: var(--font-mono); font-size: 1.05rem; color: #f8fafc; margin: 0.4rem 0;">
+                  $$|z - z_1| = |z - z_2|$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  <strong>几何翻译</strong>：动点 $Z$ 到两定点 $Z_1$ 与 $Z_2$ 的距离相等。
+                  <br>图形是<strong>线段 $Z_1 Z_2$ 的垂直平分线</strong>！
+                  <br>• 若 $|z - z_1| < |z - z_2|$：表示靠 $Z_1$ 侧的半平面。
+                </p>
+              </div>
+
+              <!-- 轨迹 3：阿波罗尼斯圆 -->
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #fbbf24;">
+                <strong style="color: #fbbf24; font-size: 0.95rem;">③ 阿波罗尼斯圆 (定比分点)</strong>
+                <div style="font-family: var(--font-mono); font-size: 1.05rem; color: #f8fafc; margin: 0.4rem 0;">
+                  $$\frac{|z - z_1|}{|z - z_2|} = k \quad (k > 0, \; k \neq 1)$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  <strong>几何翻译</strong>：到两定点距离之比为常数 $k$（$k \neq 1$）的动点轨迹。
+                  <br>图形是一个<strong>阿波罗尼斯圆 (Apollonius Circle)</strong>！圆心和半径可通过内分点与外分点直径确定。
+                </p>
+              </div>
+
+              <!-- 轨迹 4：椭圆与双曲线 -->
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #c084fc;">
+                <strong style="color: #c084fc; font-size: 0.95rem;">④ 椭圆与双曲线</strong>
+                <div style="font-family: var(--font-mono); font-size: 1.05rem; color: #f8fafc; margin: 0.4rem 0;">
+                  $$|z - z_1| \pm |z - z_2| = 2a$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  • 距离之和为定值（$2a > |z_1 - z_2|$）：以 $Z_1, Z_2$ 为焦点的<strong>椭圆</strong>；
+                  <br>• 距离之差为定值（$0 < 2a < |z_1 - z_2|$）：以 $Z_1, Z_2$ 为焦点的<strong>双曲线</strong>。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- SVG 矢量图解 5：几何轨迹示意图 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-green); margin-bottom: 0.5rem; text-align: left;">
+                📊 矢量图解 5：复数模长方程对应圆周与垂直平分线的直观几何构型
+              </div>
+              <svg width="100%" height="240" viewBox="0 0 680 240" style="background:#090d16; border-radius:8px; border:1px solid rgba(148, 163, 184, 0.2); max-width: 100%; display: block; margin: 0 auto;">
+                <!-- Panel 1: Circle |z - z0| = r (left side) -->
+                <g transform="translate(40, 20)">
+                  <rect width="280" height="200" rx="8" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(56, 189, 248, 0.25)"/>
+                  <text x="140" y="26" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">圆周轨迹: |z - z₀| = r</text>
+                  
+                  <!-- Circle center Z0 at (130, 115) -->
+                  <circle cx="130" cy="115" r="55" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
+                  <circle cx="130" cy="115" r="4" fill="#fbbf24"/>
+                  <text x="125" y="132" fill="#fbbf24" font-size="10" font-weight="bold">Z₀(中心)</text>
+
+                  <!-- Moving point Z -->
+                  <circle cx="178" cy="85" r="4.5" fill="#34d399"/>
+                  <line x1="130" y1="115" x2="178" y2="85" stroke="#34d399" stroke-width="1.8"/>
+                  <text x="156" y="96" fill="#34d399" font-size="10">半径 r</text>
+                  <text x="185" y="82" fill="#34d399" font-size="10.5" font-weight="bold">Z(动点)</text>
+
+                  <text x="140" y="185" fill="#94a3b8" font-size="9.5" text-anchor="middle">圆心为复数 z₀，半径恒等于实数 r</text>
+                </g>
+
+                <!-- Panel 2: Perpendicular Bisector |z - z1| = |z - z2| (right side) -->
+                <g transform="translate(360, 20)">
+                  <rect width="280" height="200" rx="8" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(52, 211, 153, 0.25)"/>
+                  <text x="140" y="26" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">中垂线轨迹: |z - z₁| = |z - z₂|</text>
+                  
+                  <!-- Two points Z1 and Z2 -->
+                  <circle cx="80" cy="115" r="4" fill="#38bdf8"/>
+                  <text x="75" y="132" fill="#38bdf8" font-size="10" font-weight="bold">Z₁</text>
+
+                  <circle cx="200" cy="115" r="4" fill="#fbbf24"/>
+                  <text x="195" y="132" fill="#fbbf24" font-size="10" font-weight="bold">Z₂</text>
+
+                  <line x1="80" y1="115" x2="200" y2="115" stroke="#64748b" stroke-dasharray="3,3" stroke-width="1.2"/>
+
+                  <!-- Bisector line at x=140 -->
+                  <line x1="140" y1="45" x2="140" y2="175" stroke="#34d399" stroke-width="2.5"/>
+
+                  <!-- Point Z on bisector -->
+                  <circle cx="140" cy="75" r="4.5" fill="#c084fc"/>
+                  <line x1="80" y1="115" x2="140" y2="75" stroke="#c084fc" stroke-width="1.3"/>
+                  <line x1="200" y1="115" x2="140" y2="75" stroke="#c084fc" stroke-width="1.3"/>
+                  <text x="148" y="72" fill="#c084fc" font-size="10.5" font-weight="bold">Z(动点)</text>
+
+                  <text x="140" y="185" fill="#94a3b8" font-size="9.5" text-anchor="middle">动点 Z 到 Z₁ 与 Z₂ 距离相等的中垂线</text>
+                </g>
+              </svg>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 阶梯 9 · 避坑大全与通往大学线性代数 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">阶梯 9 · 升华闭环</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">9. 🚀 高考避坑五大雷区 & 通往大学线性代数先修桥梁</h2>
+          </div>
+          <div class="card-body">
+            
+            <h3 style="color: var(--accent-rose); font-size: 1.15rem; margin-bottom: 0.65rem;">
+              9.1 高考复数最容易丢分的 5 大致命陷阱
+            </h3>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.85rem; margin: 1rem 0;">
+              
+              <!-- 坑 1 -->
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">❌ 坑点 1：虚部包含字母 $i$</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  若 $z = 5 - 2i$，实部是 $5$，虚部是 <strong>$-2$</strong>，绝不是 $-2i$！虚部是实数系数。
+                </p>
+              </div>
+
+              <!-- 坑 2 -->
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">❌ 坑点 2：虚数私自比较大小</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  若选择题中出现“已知 $z_1 > z_2$”，<strong>前提必须是 $z_1, z_2$ 均为实数</strong>！只要其中任意一个是虚数，大小关系命题直接为假。
+                </p>
+              </div>
+
+              <!-- 坑 3 -->
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">❌ 坑点 3：忽略“纯虚数”的实部为 0 且虚部非 0</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  题目若说“$z = (m^2 - 1) + (m - 1)i$ 为纯虚数”，很多同学只列 $m^2 - 1 = 0 \implies m = \pm 1$；
+                  <br>但若 $m = 1$，虚部 $m - 1 = 0$，此时 $z = 0$ 是实数！因此必须<strong>严格检验虚部 $m - 1 \neq 0$</strong>，最终解只能是 $m = -1$！
+                </p>
+              </div>
+
+              <!-- 坑 4 -->
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">❌ 坑点 4：常用恒等式的快速记忆盲区</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  考场手算极易耗时，务必形成肌肉记忆：
+                  <br>• $(1 + i)^2 = 2i, \quad (1 - i)^2 = -2i$
+                  <br>• $\frac{1 + i}{1 - i} = i, \quad \frac{1 - i}{1 + i} = -i$
+                </p>
+              </div>
+
+              <!-- 坑 5 -->
+              <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 4px solid #ef4444;">
+                <strong style="color: #ef4444;">❌ 坑点 5：三次单位根 $\omega$ 的神奇恒等式</strong>
+                <p style="margin: 0.25rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                  方程 $x^3 = 1$ 的复数根之一为 $\omega = -\frac{1}{2} + \frac{\sqrt{3}}{2}i$。
+                  <br>性质：$\mathbf{\omega^3 = 1}$ 且 $\mathbf{1 + \omega + \omega^2 = 0}$。在求高阶幂或因式分解压轴题中有奇效。
+                </p>
+              </div>
+
+            </div>
+
+            <h3 style="color: var(--accent-green); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.65rem;">
+              9.2 通往大学线性代数：为什么我们必须学好复数？
+            </h3>
+            <p style="line-height: 1.8; font-size: 0.95rem;">
+              很多工科或计算机专业的自学者常问：“线性代数研究的都是实数矩阵、三维坐标系，为什么矩阵特征值求解时总跳出复数？复数在线性代数里到底扮演什么角色？”
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              
+              <div style="padding: 1rem; background: rgba(56, 189, 248, 0.06); border-radius: 6px; border-left: 3px solid #38bdf8;">
+                <strong style="color: #38bdf8; font-size: 0.92rem;">1. 特征方程必须有解（代数闭域）</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  求矩阵特征值必须解特征方程 $\det(\lambda I - A) = 0$。如果局限在实数域内，方程随时可能因为 $\Delta < 0$ 而“断更报废”；只有在复数域中，<strong>代数基本定理才保证任何 $n$ 阶矩阵必定有 $n$ 个特征值</strong>，矩阵谱理论和对角化大厦才能屹立不倒！
+                </p>
+              </div>
+
+              <div style="padding: 1rem; background: rgba(192, 132, 252, 0.06); border-radius: 6px; border-left: 3px solid #c084fc;">
+                <strong style="color: #c084fc; font-size: 0.92rem;">2. 旋转矩阵与复数的完全同构</strong>
+                <p style="margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  二维实平面旋转矩阵 $R_\theta = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$ 与复数 $e^{i\theta} = \cos\theta + i\sin\theta$ 是<strong>完全数学同构的</strong>！矩阵乘法在这一结构下就是复数乘法。复数是最高效优雅的二维刚体旋转算子。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- 下一站导引卡片 -->
+            <div style="margin-top: 1.75rem; padding: 1.25rem; background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(52, 211, 153, 0.08) 100%); border-radius: 8px; border: 1px solid rgba(251, 191, 36, 0.3);">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                  <span class="badge" style="background: var(--accent-amber); color: #000; font-weight: bold;">下一站：升维破壁</span>
+                  <h4 style="margin: 0.35rem 0 0; font-size: 1.1rem; color: var(--text-main);">
+                    带着扎实的复数地基，立刻前往《专题拓展 2：代数基本定理与三维马鞍面》
+                  </h4>
+                  <p style="margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                    在下一篇中，你将看到高中浮在空中的抛物线 $y = x^2 + 1$，在三维复空间中其实是一个气势磅礴的马鞍面！
+                  </p>
+                </div>
+                <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="btn btn-primary" style="padding: 0.6rem 1.2rem; background: var(--accent-amber); color: #000; font-weight: bold; border-radius: 6px; text-decoration: none;">
+                  🚀 启程：三维马鞍面实景探索 ➔
+                </a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <footer style="margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--border-color); text-align: center; font-size: 0.85rem; color: var(--text-dim);">
+        <p>📐 线性代数直觉指南 · 专题拓展系列</p>
+        <p style="margin-top: 0.25rem;">秉持“第一性原理”，让抽象的数学结构在几何直观中清晰显形。</p>
+      </footer>
+
+      </main>
+    </div>
+
+  </div>
+
+</body>
+</html>
