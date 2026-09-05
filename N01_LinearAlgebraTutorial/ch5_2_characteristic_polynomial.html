@@ -21,7 +21,145 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
-  <script src="js/visualizer.js" defer></script>
+  <style>
+    /* 专属于 Ch 5.2 的视觉与交互辅助样式 */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .concept-card {
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .concept-card:hover {
+      transform: translateY(-2px);
+    }
+    .canvas-container-dual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 880px) {
+      .canvas-container-dual {
+        grid-template-columns: 1fr;
+      }
+    }
+    .canvas-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .canvas-box canvas {
+      width: 100%;
+      max-width: 440px;
+      height: 320px;
+      background: #0b1120;
+      border-radius: var(--radius-sm);
+      border: 1px solid #1e293b;
+    }
+    .control-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .matrix-input-grid {
+      display: inline-grid;
+      grid-template-columns: 70px 70px;
+      gap: 6px;
+      vertical-align: middle;
+      padding: 6px;
+      border-left: 2px solid var(--accent-blue);
+      border-right: 2px solid var(--accent-blue);
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .matrix-input-grid input {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.35rem;
+      text-align: center;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .preset-btn {
+      padding: 0.4rem 0.85rem;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover {
+      background: var(--accent-blue);
+      color: #000;
+      border-color: var(--accent-blue);
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .quiz-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1rem 0;
+    }
+    .quiz-toggle {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .quiz-toggle:hover {
+      background: var(--accent-blue);
+      color: #000;
+    }
+    .quiz-answer {
+      display: none;
+      margin-top: 0.85rem;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-left: 3px solid var(--accent-green);
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
 
@@ -271,98 +409,739 @@
         <div class="module-hero">
           <div class="module-badge">Chapter 5: 特征值与对角化</div>
           <h1 class="module-title">Ch 5.2: 特征多项式、代数/几何重数与相似性</h1>
+          <p class="module-subtitle" style="font-size: 1.05rem; color: var(--text-muted); margin-top: 0.75rem; line-height: 1.7;">
+            从几何空间中<strong>算子降维塌缩</strong>的临界条件，到代数多项式的根与系数密码；深入剖析<strong>代数重数</strong>与<strong>几何重数</strong>之间制衡的不等式、剪切亏损的几何病态，以及基变换下坚不可摧的<strong>相似不变量</strong>与<strong>凯莱-哈密顿定理</strong>。
+          </p>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 特征多项式与代数/几何重数 (AM vs GM)</h2>
-  </div>
-  <div class="card-body">
-    <p>多项式 $p(\lambda) = \det(A - \lambda I) = (-1)^n \lambda^n + (-1)^{n-1}\text{tr}(A)\lambda^{n-1} + \dots + \det(A)$ 称为 $A$ 的<strong>特征多项式</strong>。</p>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-blue);">
-        <h4 style="color: var(--accent-blue);">代数重数 (Algebraic Multiplicity, AM)</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征多项式根 $(\lambda - \lambda_i)^{\text{AM}}$ 的代数次数（纯代数根的重数）。</p>
-      </div>
-      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--accent-purple);">
-        <h4 style="color: var(--accent-purple);">几何重数 (Geometric Multiplicity, GM)</h4>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">特征空间 $E_\lambda = \text{Null}(A - \lambda I)$ 的维数（实际能贡献的线性无关特征向量个数）。</p>
-      </div>
-    </div>
-    
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 重数不等式与亏损矩阵 (Defective Matrix)</h4>
-      $$1 \le \text{GM}(\lambda) \le \text{AM}(\lambda)$$
-      <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">
-        若存在某个特征值使得 $\text{GM}(\lambda) < \text{AM}(\lambda)$，则该矩阵缺少足够的线性无关特征向量，称为<strong>亏损矩阵 (Defective Matrix)</strong>，此时矩阵<strong>绝对不可对角化</strong>！<br>
-        <strong>典型亏损剪切矩阵：</strong> $S = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$，特征方程 $(\lambda-1)^2 = 0 \implies \text{AM}=2$。但 $(S-I)\mathbf{v} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}\mathbf{v}=\mathbf{0} \implies v_2=0$，特征空间只有 1 维 $\text{GM}=1 < 2$，因而不可对角化！
-      </p>
-    </div>
-  </div>
-</div>
+        <!-- 导言与几何全局观 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">全景导言</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">0. 问题的源头：从“不倒主轴”到“空间塌缩方程”</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              在 <a href="ch5_1_eigenvalues_eigenvectors.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 5.1</a> 中，我们建立了特征值与特征向量的几何直觉：寻找在矩阵变换 $A$ 作用下<strong>绝不发生旋转偏转、只在原直线上做标量缩放 $\lambda$</strong> 的主轴向量 $\mathbf{v} \neq \mathbf{0}$，满足：
+            </p>
+            <div style="text-align: center; font-size: 1.35rem; margin: 1rem 0; color: var(--accent-blue);">
+              $$A\mathbf{v} = \lambda \mathbf{v} \iff (A - \lambda I)\mathbf{v} = \mathbf{0}$$
+            </div>
+            <p>
+              请从线性方程组的视角仔细凝视右侧方程：这是一个关于未知向量 $\mathbf{v}$ 的齐次线性方程组。我们坚决要求寻找<strong>非零向量</strong> $\mathbf{v} \neq \mathbf{0}$。
+            </p>
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-rose);">
+                <h4 style="color: var(--accent-rose);">❌ 若 $(A - \lambda I)$ 可逆</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  两边左乘逆矩阵得到 $\mathbf{v} = (A - \lambda I)^{-1}\mathbf{0} = \mathbf{0}$。此时核空间退化为平凡单点 $\{\mathbf{0}\}$，不可能存在任何非零特征向量！
+                </p>
+              </div>
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green);">✅ 必须让 $(A - \lambda I)$ 发生“维度坍塌”</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  为了拥有非平凡解，新算子 $(A - \lambda I)$ 必须<strong>不可逆</strong>！在几何上，它必须把整个空间压缩降维（体积累乘为 0），即它的<strong>行列式必须精确为零</strong>：
+                </p>
+                <div style="font-size: 1.15rem; color: var(--accent-green); text-align: center; margin-top: 0.5rem; font-weight: bold;">
+                  $$\det(A - \lambda I) = 0$$
+                </div>
+              </div>
+            </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">黄金定理</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 👑 迹、行列式与凯莱-哈密顿定理 (Cayley-Hamilton)</h2>
-  </div>
-  <div class="card-body">
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 凯莱-哈密顿定理 (Cayley-Hamilton Theorem)</h4>
-      <p>每个方阵 $A$ 都是其自身特征多项式的零点：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$p(A) = O$$
-      </div>
-      <p style="font-size: 0.9rem; color: var(--text-muted);">
-        若 $p(\lambda) = \lambda^2 - 7\lambda + 10 = 0$，则必定有 $A^2 - 7A + 10I = O$！两边同乘 $A^{-1}$ 即可快速求逆：$A^{-1} = \frac{1}{10}(7I - A)$。
-      </p>
-    </div>
-  </div>
-</div>
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="680" height="170" viewBox="0 0 680 170" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width:100%;">
+                <defs>
+                  <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                  </marker>
+                </defs>
+                <!-- Stage 1 -->
+                <rect x="20" y="35" width="170" height="95" rx="8" fill="#1e293b" stroke="#334155"/>
+                <text x="105" y="65" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">几何目标</text>
+                <text x="105" y="90" fill="#f8fafc" font-size="13" text-anchor="middle">寻找不变主轴方向</text>
+                <text x="105" y="112" fill="#94a3b8" font-size="12" text-anchor="middle">Av = λv (v ≠ 0)</text>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 验算定理手算检验</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">检验矩阵 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$（求得特征值 $\lambda_1=5, \lambda_2=2$）</h4>
-      <p><strong>1. 迹验算：</strong> $\lambda_1 + \lambda_2 = 5 + 2 = 7$；$\text{Tr}(A) = 4 + 3 = 7$。吻合！</p>
-      <p><strong>2. 行列式验算：</strong> $\lambda_1 \cdot \lambda_2 = 5 \cdot 2 = 10$；$\det(A) = 4 \cdot 3 - 1 \cdot 2 = 10$。吻合！</p>
-      <p><strong>3. 凯莱-哈密顿验算：</strong> $A^2 - 7A + 10I = \begin{bmatrix} 18 & 7 \\ 14 & 11 \end{bmatrix} - \begin{bmatrix} 28 & 7 \\ 14 & 21 \end{bmatrix} + \begin{bmatrix} 10 & 0 \\ 0 & 10 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}$，完全成立！</p>
-    </div>
-  </div>
-</div>
+                <!-- Arrow 1 -->
+                <line x1="195" y1="82" x2="245" y2="82" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 SymPy 验证特征多项式与凯莱-哈密顿定理</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp
+                <!-- Stage 2 -->
+                <rect x="250" y="35" width="180" height="95" rx="8" fill="#1e293b" stroke="#334155"/>
+                <text x="340" y="65" fill="#c084fc" font-size="14" font-weight="bold" text-anchor="middle">零空间非平凡化</text>
+                <text x="340" y="90" fill="#f8fafc" font-size="13" text-anchor="middle">(A - λI)v = 0 有非零解</text>
+                <text x="340" y="112" fill="#94a3b8" font-size="12" text-anchor="middle">Null(A - λI) 维数 ≥ 1</text>
 
-A = sp.Matrix([[4, 1], [2, 3]])
+                <!-- Arrow 2 -->
+                <line x1="435" y1="82" x2="485" y2="82" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+
+                <!-- Stage 3 -->
+                <rect x="490" y="35" width="170" height="95" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="575" y="65" fill="#34d399" font-size="14" font-weight="bold" text-anchor="middle">特征方程 (代数核心)</text>
+                <text x="575" y="90" fill="#34d399" font-size="15" font-weight="bold" text-anchor="middle">det(A - λI) = 0</text>
+                <text x="575" y="112" fill="#94a3b8" font-size="12" text-anchor="middle">空间体积塌缩为 0</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 1: 特征多项式定义、展开规律与迹/行列式不变量 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">核心理论 1</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 特征多项式精义：系数密码与两大永恒不变量</h2>
+          </div>
+          <div class="card-body">
+            <div class="definition-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); font-size: 1.15rem;">📐 严格定义：特征多项式 (Characteristic Polynomial)</h4>
+              <p>设 $A$ 为 $n \times n$ 阶方阵。关于标量 $\lambda$ 的多项式：</p>
+              <div style="font-size: 1.35rem; text-align: center; margin: 0.9rem 0; color: var(--accent-purple);">
+                $$p(\lambda) = \det(A - \lambda I)$$
+              </div>
+              <p>
+                称为矩阵 $A$ 的<strong>特征多项式</strong>。方程 $p(\lambda) = 0$ 称为 $A$ 的<strong>特征方程</strong>。由行列式按定义展开可知，$p(\lambda)$ 必然是一个<strong>最高次数为 $n$ 的单变元多项式</strong>。
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                注：部分教材亦采用 $\det(\lambda I - A) = 0$，二者仅相差一个符号因子 $(-1)^n$，两者的根（特征值）完全恒等。本教程采用标准的 $p(\lambda) = \det(A - \lambda I)$。
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-blue); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🔍</span> 1.1 系数背后的代数奥秘与韦达定理
+            </h3>
+            <p>
+              当我们把 $n$ 阶多项式 $p(\lambda) = \det(A - \lambda I)$ 彻底展开时，它具有极其整齐优美的形式：
+            </p>
+            <div style="text-align: center; font-size: 1.2rem; margin: 1rem 0;">
+              $$p(\lambda) = (-1)^n \lambda^n + (-1)^{n-1} \text{tr}(A) \lambda^{n-1} + \dots + \det(A)$$
+            </div>
+            <p>
+              根据<strong>代数基本定理</strong>，在复数域 $\mathbb{C}$ 内，$p(\lambda)$ 恰好拥有 $n$ 个复数根（计入重数）：$\lambda_1, \lambda_2, \dots, \lambda_n$。因此多项式可完全因式分解为：
+            </p>
+            <div style="text-align: center; font-size: 1.2rem; margin: 1rem 0; color: var(--accent-blue);">
+              $$p(\lambda) = (\lambda_1 - \lambda)(\lambda_2 - \lambda)\cdots(\lambda_n - \lambda) = (-1)^n (\lambda - \lambda_1)(\lambda - \lambda_2)\cdots(\lambda - \lambda_n)$$
+            </div>
+            <p>
+              将上述两式对比同次项系数（韦达定理），我们立刻捕获了线性代数中最震撼的<strong>两大不变量恒等式</strong>：
+            </p>
+
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-blue);">
+                <h4 style="color: var(--accent-blue);">🌟 恒等式 1：迹等于特征值之和 (Sum of Eigenvalues)</h4>
+                <div style="font-size: 1.3rem; margin: 0.6rem 0; text-align: center; color: var(--accent-blue);">
+                  $$\sum_{i=1}^n \lambda_i = \text{tr}(A) = a_{11} + a_{22} + \dots + a_{nn}$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">
+                  <strong>代数证明要点：</strong>在 $\det(A - \lambda I)$ 的莱布尼茨展开中，唯一能贡献 $\lambda^{n-1}$ 项的只有主对角线元素的乘积 $(a_{11}-\lambda)(a_{22}-\lambda)\cdots(a_{nn}-\lambda)$。展开后 $\lambda^{n-1}$ 的系数恰为 $(-1)^{n-1}(a_{11}+\dots+a_{nn}) = (-1)^{n-1}\text{tr}(A)$。
+                </p>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green);">🌟 恒等式 2：行列式等于特征值之乘积 (Product of Eigenvalues)</h4>
+                <div style="font-size: 1.3rem; margin: 0.6rem 0; text-align: center; color: var(--accent-green);">
+                  $$\prod_{i=1}^n \lambda_i = \det(A)$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">
+                  <strong>极速代数证明：</strong>令标量 $\lambda = 0$ 代入多项式定义式与因式分解式：
+                  $$p(0) = \det(A - 0 \cdot I) = \det(A)$$
+                  同时 $p(0) = (\lambda_1 - 0)(\lambda_2 - 0)\cdots(\lambda_n - 0) = \lambda_1 \lambda_2 \cdots \lambda_n$。两式立等可得！
+                </p>
+              </div>
+            </div>
+
+            <h3 style="color: var(--accent-amber); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>⚡</span> 1.2 二阶与三阶方阵的特征多项式手算极速模板
+            </h3>
+            <p>在笔算与考试中，熟练应用不变量结构能够将复杂的行列式展开降维为心算：</p>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; margin: 1rem 0; background: var(--bg-secondary); border-radius: 6px;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.85rem; color: var(--accent-blue);">阶数</th>
+                    <th style="padding: 0.85rem; color: var(--accent-blue);">统一特征多项式公式</th>
+                    <th style="padding: 0.85rem; color: var(--accent-blue);">判别式与核心技巧</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.85rem; font-weight: bold;">$2 \times 2$ 方阵</td>
+                    <td style="padding: 0.85rem; font-family: var(--font-mono); color: var(--accent-green);">
+                      $\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0$
+                    </td>
+                    <td style="padding: 0.85rem; font-size: 0.9rem; color: var(--text-muted);">
+                      判别式 $\Delta = \text{tr}(A)^2 - 4\det(A)$。<br>
+                      $\Delta > 0$：两互异实特征值；$\Delta = 0$：重特征值；$\Delta < 0$：共轭复特征值。
+                    </td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.85rem; font-weight: bold;">$3 \times 3$ 方阵</td>
+                    <td style="padding: 0.85rem; font-family: var(--font-mono); color: var(--accent-purple);">
+                      $-\lambda^3 + \text{tr}(A)\lambda^2 - M\lambda + \det(A) = 0$
+                    </td>
+                    <td style="padding: 0.85rem; font-size: 0.9rem; color: var(--text-muted);">
+                      $M = M_{11} + M_{22} + M_{33}$ 是主对角线上 3 个 $2\times 2$ 二阶主子式之和！无需大面积展开繁琐项。
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.85rem; font-weight: bold;">三角 / 分块对角阵</td>
+                    <td style="padding: 0.85rem; font-family: var(--font-mono); color: var(--accent-amber);">
+                      $p(\lambda) = \prod_{i=1}^n (a_{ii} - \lambda)$
+                    </td>
+                    <td style="padding: 0.85rem; font-size: 0.9rem; color: var(--text-muted);">
+                      上三角、下三角或对角矩阵的特征值就是主对角线上的元素本身！分块三角阵特征多项式等于对角分块特征多项式之积。
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 2: 代数重数 vs 几何重数与亏损矩阵 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">核心理论 2</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 代数重数 (AM) vs 几何重数 (GM)：亏损矩阵与对角化的死穴</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              当一个特征方程出现重根时（例如 $(\lambda - 3)^2 = 0$），线性代数中最具悬念的故事便拉开了帷幕：这个特征值在几何上到底能提供几个相互独立的特征方向？
+            </p>
+
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-blue);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <h4 style="color: var(--accent-blue);">代数重数 (Algebraic Multiplicity, AM)</h4>
+                  <span class="stat-badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue);">代数根视角</span>
+                </div>
+                <p style="margin: 0.75rem 0 0.5rem; font-size: 0.92rem;">
+                  特征值 $\lambda_0$ 作为特征方程 $p(\lambda) = 0$ 的<strong>代数根的重数</strong>。即因式分解中 $(\lambda - \lambda_0)^{\text{AM}}$ 所能提取出的最高整幂次。
+                </p>
+                <div style="font-size: 0.85rem; color: var(--text-muted); background: var(--bg-primary); padding: 0.5rem; border-radius: 4px;">
+                  直觉：“理论上这个特征值预期应该能够控制多少个维度”。
+                </div>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-purple);">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <h4 style="color: var(--accent-purple);">几何重数 (Geometric Multiplicity, GM)</h4>
+                  <span class="stat-badge" style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple);">几何空间视角</span>
+                </div>
+                <p style="margin: 0.75rem 0 0.5rem; font-size: 0.92rem;">
+                  特征子空间 $E_{\lambda_0} = \text{Null}(A - \lambda_0 I)$ 的<strong>实际维数</strong>。即方程 $(A - \lambda_0 I)\mathbf{v} = \mathbf{0}$ 的基础解系中<strong>线性无关特征向量的个数</strong>：
+                  $$\text{GM}(\lambda_0) = \dim(\text{Null}(A - \lambda_0 I)) = n - \text{rank}(A - \lambda_0 I)$$
+                </p>
+                <div style="font-size: 0.85rem; color: var(--text-muted); background: var(--bg-primary); padding: 0.5rem; border-radius: 4px;">
+                  直觉：“实际上我们能在物理空间中找到的独立不变主轴轴线数”。
+                </div>
+              </div>
+            </div>
+
+            <!-- 核心定理框 -->
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 6px; margin: 1.5rem 0;">
+              <h4 style="color: var(--accent-rose); font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>👑</span> 核心定理：重数基本不等式 (Multiplicity Inequality)
+              </h4>
+              <p style="margin-top: 0.75rem; font-size: 1.05rem;">
+                对任意 $n$ 阶方阵 $A$ 的任一特征值 $\lambda_0$，几何重数与代数重数之间必定恒满足：
+              </p>
+              <div style="text-align: center; font-size: 1.5rem; margin: 1rem 0; color: var(--accent-rose); font-weight: bold;">
+                $$1 \le \text{GM}(\lambda_0) \le \text{AM}(\lambda_0)$$
+              </div>
+              <p style="font-size: 0.95rem; line-height: 1.7;">
+                <strong>结论意义：</strong><br>
+                1. 只要 $\lambda_0$ 是特征值，它至少对应 1 个非零特征向量，故 $\text{GM} \ge 1$ 绝不落空；<br>
+                2. <strong>几何重数绝对不可能超越代数重数</strong>！如果代数重数只有 1，那么几何重数也必定被锁死在 1（$\text{AM}=1 \implies \text{GM}=1$）。
+              </p>
+
+              <!-- 严格推导折叠区 -->
+              <details style="margin-top: 1rem; background: var(--bg-primary); border-radius: 6px; padding: 0.75rem 1rem; border: 1px solid var(--border-color);">
+                <summary style="cursor: pointer; color: var(--accent-rose); font-weight: 600;">
+                  📐 点击查看：为什么 GM ≤ AM？严密代数证明（基底扩充与分块三角化）
+                </summary>
+                <div style="margin-top: 0.75rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.8;">
+                  <p><strong>证：</strong>设 $\text{GM}(\lambda_0) = k \ge 1$。这意味着特征子空间 $E_{\lambda_0}$ 拥有 $k$ 个线性无关的特征向量基底 $\{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$，满足 $A\mathbf{v}_i = \lambda_0 \mathbf{v}_i$。</p>
+                  <p>根据基扩充定理，我们可以将这 $k$ 个无关向量扩充为整个空间 $\mathbb{R}^n$ 的一组基底：$\{\mathbf{v}_1, \dots, \mathbf{v}_k, \mathbf{w}_{k+1}, \dots, \mathbf{w}_n\}$。构造可逆过渡矩阵 $P = [\mathbf{v}_1 \dots \mathbf{v}_k \mid \mathbf{w}_{k+1} \dots \mathbf{w}_n]$。</p>
+                  <p>考察基变换后的相似矩阵 $B = P^{-1}AP$。由于前 $k$ 列满足 $A\mathbf{v}_j = \lambda_0 \mathbf{v}_j$，因此在相似矩阵中：</p>
+                  <div style="text-align: center; margin: 0.5rem 0;">
+                    $$B = P^{-1}AP = \begin{bmatrix} \lambda_0 I_k & X \\ O & Y \end{bmatrix}$$
+                  </div>
+                  <p>根据相似矩阵特征多项式相等以及分块三角阵行列式性质：</p>
+                  <div style="text-align: center; margin: 0.5rem 0;">
+                    $$p_A(\lambda) = p_B(\lambda) = \det\begin{bmatrix} (\lambda_0 - \lambda)I_k & X \\ O & Y - \lambda I_{n-k} \end{bmatrix} = (\lambda_0 - \lambda)^k \cdot \det(Y - \lambda I_{n-k})$$
+                  </div>
+                  <p>上式直接表明：因子 $(\lambda_0 - \lambda)^k = (\lambda_0 - \lambda)^{\text{GM}}$ 必然能够整除 $p_A(\lambda)$！因此特征值 $\lambda_0$ 在特征方程中的根重数 $\text{AM}(\lambda_0)$ 至少为 $k$。即：$\text{AM}(\lambda_0) \ge k = \text{GM}(\lambda_0)$。证毕！</p>
+                </div>
+              </details>
+            </div>
+
+            <h3 style="color: var(--accent-rose); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🚨</span> 2.1 亏损矩阵 (Defective Matrix)：几何空间的“主轴残缺”
+            </h3>
+            <p>
+              重数不等式揭示了线性代数中最关键的分水岭：
+            </p>
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green);">完备可对角化 (Non-Defective)</h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">
+                  每一个特征值都满足 $\text{GM}(\lambda_i) = \text{AM}(\lambda_i)$。这意味着每个特征空间贡献的独立主轴总和恰好填满 $n$ 维空间：
+                  $$\sum \text{GM}(\lambda_i) = \sum \text{AM}(\lambda_i) = n$$
+                  我们拥有全套 $n$ 个线性无关特征向量，矩阵<strong>完美可对角化</strong>！
+                </p>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-rose);">
+                <h4 style="color: var(--accent-rose);">亏损矩阵 (Defective Matrix)</h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted);">
+                  只要存在<strong>某一个特征值</strong>使得 $\text{GM}(\lambda) < \text{AM}(\lambda)$，矩阵所有特征向量的张成空间维数就<strong>严格小于 $n$</strong>。空间特征方向发生了残缺塌陷，该矩阵<strong>绝对不可对角化</strong>！
+                </p>
+              </div>
+            </div>
+
+            <!-- 经典剪切算子解剖 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border: 1px solid var(--border-color); border-radius: 6px; margin: 1.5rem 0;">
+              <h4 style="color: var(--accent-blue);">🔬 深度解剖：最纯粹的亏损矩阵——水平剪切矩阵 (Shear Matrix)</h4>
+              <p>考虑剪切矩阵：$S = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$</p>
+              <ul style="margin: 0.75rem 0 0.5rem 1.5rem; line-height: 1.8;">
+                <li>
+                  <strong>代数计算：</strong>特征多项式 $p(\lambda) = \det\begin{bmatrix} 1-\lambda & 1 \\ 0 & 1-\lambda \end{bmatrix} = (1-\lambda)^2$。唯一的特征值为 $\lambda = 1$，<strong>代数重数 $\text{AM} = 2$</strong>。
+                </li>
+                <li>
+                  <strong>几何特征空间求解：</strong>解方程 $(S - 1 \cdot I)\mathbf{v} = \mathbf{0}$：
+                  $$\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \implies v_2 = 0, \quad v_1 \text{ 任意}$$
+                  因此特征子空间为：$E_1 = \text{span}\left\{\begin{bmatrix} 1 \\ 0 \end{bmatrix}\right\}$。<strong>几何重数 $\text{GM} = \dim(E_1) = 1$</strong>！
+                </li>
+                <li>
+                  <strong>几何直觉真相：</strong>由于 $\text{GM} = 1 < \text{AM} = 2$，$S$ 是典型的亏损矩阵！在几何上，水平剪切使整个平面沿水平方向层层滑动。除了落在水平 $x$ 轴上的向量完全不改变方向（$\lambda=1$）之外，平面上任何其他偏离 $x$ 轴的向量都被剪切推倒、发生旋转偏转向 $x$ 轴倾斜，因此再也找不到第二根不变主轴！
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 3: 矩阵相似性与相似不变量 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">核心理论 3</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 矩阵相似性 (Matrix Similarity) 与坚不可摧的相似不变量</h2>
+          </div>
+          <div class="card-body">
+            <div class="definition-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); font-size: 1.15rem;">📐 矩阵相似的定义与几何本质</h4>
+              <p>设 $A, B$ 是两个 $n \times n$ 方阵。若存在一个<strong>可逆方阵 $P$</strong>，满足：</p>
+              <div style="font-size: 1.35rem; text-align: center; margin: 0.8rem 0; color: var(--accent-green);">
+                $$B = P^{-1}AP$$
+              </div>
+              <p>
+                则称矩阵 $A$ 与 $B$ <strong>相似 (Similar)</strong>，记作 $A \sim B$。
+              </p>
+              <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 0.5rem;">
+                <strong>几何本质（物理不依赖于坐标系）：</strong>正如在 <a href="ch4_6_operator_matrix.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.6</a> 所阐明的，$A$ 和 $B$ 本质上是<strong>同一个抽象线性变换 $T: V \to V$ 在两套不同坐标基底下的矩阵描述</strong>！可逆阵 $P$ 就是基底之间的过渡矩阵。
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-blue); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🛡️</span> 3.1 核心定理：相似变换不改变特征多项式
+            </h3>
+            <p>既然矩阵相似只是改变了观察者的坐标系，那么空间变换内在的固有伸缩本性就绝不会受到影响：</p>
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue);">👑 定理：相似矩阵具有完全相同的特征多项式</h4>
+              <p>若 $B = P^{-1}AP$，则 $p_B(\lambda) = p_A(\lambda)$。</p>
+              <p style="margin-top: 0.6rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.8;">
+                <strong>严格代数推导（四步秒杀）：</strong><br>
+                $$p_B(\lambda) = \det(B - \lambda I) = \det(P^{-1}AP - \lambda P^{-1}IP)$$
+                提取公因式：
+                $$= \det\left(P^{-1}(A - \lambda I)P\right)$$
+                利用行列式乘积定理 $\det(XYZ) = \det(X)\det(Y)\det(Z)$ 以及 $\det(P^{-1}) = \frac{1}{\det(P)}$：
+                $$= \det(P^{-1}) \cdot \det(A - \lambda I) \cdot \det(P) = \frac{1}{\det(P)} \cdot \det(A - \lambda I) \cdot \det(P) = \det(A - \lambda I) = p_A(\lambda)$$
+              </p>
+            </div>
+
+            <h3 style="color: var(--accent-purple); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>📋</span> 3.2 相似不变量全景清单 (Similarity Invariants)
+            </h3>
+            <p>因为 $p_A(\lambda) \equiv p_B(\lambda)$，两个相似矩阵必定共享多项式及其衍生出的一切物理指纹：</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border-top: 3px solid var(--accent-blue);">
+                <strong style="color: var(--accent-blue);">1. 完全相同的特征多项式</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">$p_A(\lambda) \equiv p_B(\lambda)$</p>
+              </div>
+              <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border-top: 3px solid var(--accent-purple);">
+                <strong style="color: var(--accent-purple);">2. 完全相同的特征值谱与 AM</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">代数重数完全恒等</p>
+              </div>
+              <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border-top: 3px solid var(--accent-green);">
+                <strong style="color: var(--accent-green);">3. 恒等的迹与行列式</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">$\text{tr}(A)=\text{tr}(B), \det(A)=\det(B)$</p>
+              </div>
+              <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; border-top: 3px solid var(--accent-amber);">
+                <strong style="color: var(--accent-amber);">4. 相同的几何重数 GM 与秩</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">$\text{rank}(A)=\text{rank}(B), \text{GM}_A(\lambda)=\text{GM}_B(\lambda)$</p>
+              </div>
+            </div>
+
+            <!-- 经典陷阱辨析 -->
+            <div class="alert-box" style="padding: 1.25rem; background: rgba(251, 191, 36, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 6px; margin: 1.5rem 0;">
+              <h4 style="color: var(--accent-amber); font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚠️</span> 经典陷阱辨析：特征多项式相同的两矩阵，一定相似吗？
+              </h4>
+              <p style="font-size: 0.95rem; margin-top: 0.5rem; font-weight: bold; color: var(--accent-rose);">
+                答案是：绝对不一定！相似是极其严苛的等价关系，特征多项式相同仅仅是“必要条件”，绝非“充分条件”！
+              </p>
+              <div style="margin-top: 0.75rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>经典教科书级反例：</strong>对比以下两个 $2\times 2$ 矩阵：</p>
+                <div style="text-align: center; margin: 0.6rem 0;">
+                  $$A = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix} = 2I, \qquad B = \begin{bmatrix} 2 & 1 \\ 0 & 2 \end{bmatrix}$$
+                </div>
+                <ul style="margin-left: 1.5rem;">
+                  <li><strong>特征多项式与特征值：</strong>$p_A(\lambda) = (\lambda-2)^2$，$p_B(\lambda) = (\lambda-2)^2$。完全一致！特征值均为 $\lambda = 2$（$\text{AM}=2$），且 $\text{tr}=4, \det=4$ 完全相同！</li>
+                  <li><strong>几何重数与相似性判定：</strong>
+                    对于矩阵 $A$，任意可逆矩阵 $P$ 作用均有 $P^{-1}AP = P^{-1}(2I)P = 2P^{-1}P = 2I = A$。也就是说，<strong>标量矩阵 $2I$ 只能与它自己相似</strong>！它绝不可能相似于任何非对角矩阵 $B$！
+                  </li>
+                  <li>从几何重数看：$A$ 拥有 $\text{GM}=2$（整个平面全都是特征向量）；而 $B$ 是剪切矩阵，只有 $\text{GM}=1$！由于几何重数也是相似不变量，GM 不同则<strong>一票否决，绝不相似</strong>！</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 4: 凯莱-哈密顿定理与极小多项式 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">核心理论 4</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 👑 凯莱-哈密顿定理 (Cayley-Hamilton)：矩阵吞噬自身多项式</h2>
+          </div>
+          <div class="card-body">
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(129, 140, 248, 0.08); border-left: 4px solid var(--accent-indigo); border-radius: 6px;">
+              <h4 style="color: var(--accent-indigo); font-size: 1.25rem;">👑 凯莱-哈密顿定理 (Cayley-Hamilton Theorem)</h4>
+              <p style="margin-top: 0.5rem; font-size: 1.05rem;">
+                每一个方阵 $A$ 都是其自身特征多项式的零点！即如果矩阵 $A$ 的特征多项式为 $p(\lambda) = \det(A - \lambda I) = c_n \lambda^n + c_{n-1} \lambda^{n-1} + \dots + c_1 \lambda + c_0$，那么将标量 $\lambda$ 替换为矩阵 $A$、常数项 $c_0$ 替换为 $c_0 I$ 后，结果恒为零矩阵：
+              </p>
+              <div style="text-align: center; font-size: 1.6rem; margin: 1rem 0; color: var(--accent-indigo); font-weight: bold;">
+                $$p(A) = c_n A^n + c_{n-1} A^{n-1} + \dots + c_1 A + c_0 I = O$$
+              </div>
+            </div>
+
+            <div class="alert-box" style="padding: 1.25rem; background: rgba(239, 68, 68, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 6px; margin: 1.5rem 0;">
+              <h4 style="color: var(--accent-rose); font-size: 1.1rem;">🛑 致命警示：破除流传极广的“伪证明”谬误</h4>
+              <p style="margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.7;">
+                <strong>荒唐伪证明：</strong>“因为 $p(\lambda) = \det(A - \lambda I)$，直接将 $\lambda = A$ 代入，得到 $p(A) = \det(A - A \cdot I) = \det(O) = 0$。证毕！”<br>
+                <strong style="color: var(--accent-rose);">为什么这是绝对错误的？</strong><br>
+                1. <strong>类型错位：</strong>行列式 $\det(M)$ 的输出结果是一个<strong>纯标量 (Scalar)</strong>，而 $p(A)$ 必须是一个 $n \times n$ 的<strong>矩阵 (Matrix)</strong>！标量 $0$ 与零矩阵 $O$ 根本不是同一种数学对象；<br>
+                2. <strong>符号混淆：</strong>在 $\det(A - \lambda I)$ 中，$\lambda$ 只是一个数乘在单位矩阵 $I$ 前面的标量。你不能把一个矩阵 $A$ 强行塞入作为矩阵元素的标量位置，式子 “$\det(A - A^2)$” 在逻辑上根本未被定义！
+              </p>
+              
+              <details style="margin-top: 1rem; background: var(--bg-primary); border-radius: 6px; padding: 0.75rem 1rem; border: 1px solid var(--border-color);">
+                <summary style="cursor: pointer; color: var(--accent-blue); font-weight: 600;">
+                  📘 点击查看：伴随矩阵法的严谨代数证明
+                </summary>
+                <div style="margin-top: 0.75rem; font-size: 0.92rem; color: var(--text-muted); line-height: 1.8;">
+                  <p><strong>严谨证明：</strong>根据伴随矩阵基本恒等式 $M \cdot \text{adj}(M) = \det(M)I$。令矩阵 $M = A - \lambda I$，则有：</p>
+                  <div style="text-align: center; margin: 0.5rem 0;">
+                    $$(A - \lambda I) \cdot \text{adj}(A - \lambda I) = \det(A - \lambda I) I = p(\lambda) I$$
+                  </div>
+                  <p>注意：$\text{adj}(A - \lambda I)$ 的每个元素是 $A - \lambda I$ 的 $n-1$ 阶代数余子式，因此它是关于 $\lambda$ 的一个最高为 $n-1$ 次的矩阵多项式：</p>
+                  <div style="text-align: center; margin: 0.5rem 0;">
+                    $$\text{adj}(A - \lambda I) = B_{n-1} \lambda^{n-1} + B_{n-2} \lambda^{n-2} + \dots + B_1 \lambda + B_0$$
+                  </div>
+                  <p>将其代入恒等式并展开左侧：</p>
+                  <div style="text-align: center; margin: 0.5rem 0;">
+                    $$(A - \lambda I)(B_{n-1} \lambda^{n-1} + \dots + B_0) = (c_n \lambda^n + c_{n-1} \lambda^{n-1} + \dots + c_0)I$$
+                  </div>
+                  <p>对比两边 $\lambda^k$ 的系数矩阵：</p>
+                  <ul style="margin-left: 2rem;">
+                    <li>$\lambda^n: \quad -B_{n-1} = c_n I$</li>
+                    <li>$\lambda^{n-1}: \quad A B_{n-1} - B_{n-2} = c_{n-1} I$</li>
+                    <li>$\dots$</li>
+                    <li>$\lambda^0: \quad A B_0 = c_0 I$</li>
+                  </ul>
+                  <p>现在，我们将第 $k$ 个方程左乘 $A^k$：</p>
+                  <ul style="margin-left: 2rem;">
+                    <li>$-A^n B_{n-1} = c_n A^n$</li>
+                    <li>$A^n B_{n-1} - A^{n-1} B_{n-2} = c_{n-1} A^{n-1}$</li>
+                    <li>$\dots$</li>
+                    <li>$A B_0 = c_0 I$</li>
+                  </ul>
+                  <p>将全部等式相加，左侧发生如同多米诺骨牌般的<strong>对角连锁相消 (Telescoping Sum)</strong>，结果精确为零矩阵 $O$！而右侧恰好为 $c_n A^n + c_{n-1}A^{n-1} + \dots + c_0 I = p(A)$。因此 $p(A) = O$ 严格成立！证毕！</p>
+                </div>
+              </details>
+            </div>
+
+            <h3 style="color: var(--accent-green); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+              <span>🚀</span> 4.1 凯莱-哈密顿定理的两大震撼实战威力
+            </h3>
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green);">1. 矩阵求逆的“空手套白狼”秘籍</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  若 $A$ 可逆，常数项 $c_0 = \det(A) \neq 0$。由 $c_n A^n + \dots + c_1 A + c_0 I = O$ 移项：
+                  $$-c_0 I = A(c_n A^{n-1} + \dots + c_1 I)$$
+                  两边同除以 $-c_0$ 并同乘 $A^{-1}$，直接得到逆矩阵：
+                </p>
+                <div style="font-size: 1.05rem; color: var(--accent-green); text-align: center; margin-top: 0.5rem; font-weight: bold;">
+                  $$A^{-1} = -\frac{1}{\det(A)}\left(c_n A^{n-1} + c_{n-1} A^{n-2} + \dots + c_1 I\right)$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.25rem;">
+                  对于 $2\times 2$ 矩阵，$\lambda^2 - \text{tr}(A)\lambda + \det(A) = 0 \implies A^{-1} = \frac{1}{\det(A)}(\text{tr}(A)I - A)$，秒出逆矩阵！
+                </p>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-purple);">
+                <h4 style="color: var(--accent-purple);">2. 矩阵超高次幂 $A^{100}$ 的降阶降维</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  求解 $A^k$（$k \gg n$）时，利用多项式带余除法：
+                  $$\lambda^k = q(\lambda)p(\lambda) + r(\lambda)$$
+                  其中余式 $r(\lambda)$ 的次数至多为 $n-1$ 次。将矩阵 $A$ 代入，由于 $p(A) = O$，商式项直接灰飞烟灭：
+                </p>
+                <div style="font-size: 1.15rem; color: var(--accent-purple); text-align: center; margin-top: 0.5rem; font-weight: bold;">
+                  $$A^k = q(A)p(A) + r(A) = r(A)$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.25rem;">
+                  任意天文学数字的高次幂，全部可以被降阶表达为最高仅 $n-1$ 次的矩阵低阶多项式！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 交互式双视图实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">动态实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🧪 双视图联动实验室：几何网格形变 vs 特征多项式曲线</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted);">
+              在这里，你可以自由调节二维矩阵 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$ 的数值，或者点击预设案例。观察<strong>左侧空间网格形变与特征轴方向</strong>，以及<strong>右侧特征多项式抛物线 $p(\lambda)$ 与零点根</strong>的实时共振！
+            </p>
+
+            <!-- 控制面板 -->
+            <div class="control-panel">
+              <div class="control-row">
+                <span style="font-weight: 700; color: var(--accent-blue);">矩阵参数设置：</span>
+                <div class="matrix-input-grid">
+                  <input type="number" id="mat-a" value="2" step="0.1">
+                  <input type="number" id="mat-b" value="1" step="0.1">
+                  <input type="number" id="mat-c" value="0" step="0.1">
+                  <input type="number" id="mat-d" value="2" step="0.1">
+                </div>
+
+                <span style="font-weight: 700; margin-left: 1rem; color: var(--accent-purple);">经典预设：</span>
+                <button class="preset-btn" id="preset-distinct">互异两实根 (拉伸)</button>
+                <button class="preset-btn" id="preset-isotropic">各向同性缩放 (完备重根)</button>
+                <button class="preset-btn" id="preset-shear">水平剪切 (亏损重根)</button>
+                <button class="preset-btn" id="preset-rotation">纯旋转 (共轭复根)</button>
+              </div>
+
+              <!-- 实时指标看板 -->
+              <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color);">
+                <div class="stat-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);" id="stat-trace">
+                  Trace: 4.0
+                </div>
+                <div class="stat-badge" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-green);" id="stat-det">
+                  Det: 4.0
+                </div>
+                <div class="stat-badge" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-amber);" id="stat-delta">
+                  Δ: 0.0
+                </div>
+                <div class="stat-badge" style="background: rgba(192, 132, 252, 0.15); color: var(--accent-purple);" id="stat-roots">
+                  λ: 2.0 (重根)
+                </div>
+                <div class="stat-badge" style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose);" id="stat-status">
+                  状态: 亏损 (Defective, 不可对角化)
+                </div>
+              </div>
+            </div>
+
+            <!-- 双 Canvas 区域 -->
+            <div class="canvas-container-dual">
+              <div class="canvas-box">
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem; text-align: center;">
+                  平面 A：几何网格变换与特征轴向 $E_\lambda$
+                </div>
+                <canvas id="canvas-geom" width="440" height="320"></canvas>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem;">
+                  🟢 绿色/青色射线：特征向量不变主轴；虚线圆：原单位圆；彩色闭合曲线：变换后的像。
+                </div>
+              </div>
+
+              <div class="canvas-box">
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--accent-purple); margin-bottom: 0.5rem; text-align: center;">
+                  平面 B：特征多项式抛物线 $p(\lambda) = \det(A - \lambda I)$
+                </div>
+                <canvas id="canvas-poly" width="440" height="320"></canvas>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.5rem;">
+                  🟡 黄色交点：特征值 $\lambda$；抛物线开口与顶点直接映射 $\Delta = \text{tr}^2 - 4\det$ 的正负。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 6: 四大典型矩阵手算实战精讲 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">计算实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. ✍️ 典型算子手算精讲与重数全判据演练</h2>
+          </div>
+          <div class="card-body">
+            <!-- 案例 1 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 1.5rem;">
+              <h4 style="color: var(--accent-blue);">案例 1：两互异实特征值标准矩阵（完全可对角化）</h4>
+              <p>设 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$</p>
+              <div style="margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>Step 1: 构造并求解特征方程</strong></p>
+                <p>$\text{tr}(A) = 4 + 3 = 7, \quad \det(A) = 4 \times 3 - 1 \times 2 = 10$。</p>
+                <p>套用二阶统一极速公式：$p(\lambda) = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$。</p>
+                <p>求得特征值为：$\lambda_1 = 5 \ (\text{AM}=1), \quad \lambda_2 = 2 \ (\text{AM}=1)$。</p>
+                <p><strong>Step 2: 求解几何重数与特征向量</strong></p>
+                <p>
+                  对于 $\lambda_1 = 5$：$(A - 5I)\mathbf{v} = \begin{bmatrix} -1 & 1 \\ 2 & -2 \end{bmatrix}\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \mathbf{0} \implies -v_1 + v_2 = 0 \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。$\text{GM}_1 = 1 = \text{AM}_1$。<br>
+                  对于 $\lambda_2 = 2$：$(A - 2I)\mathbf{v} = \begin{bmatrix} 2 & 1 \\ 2 & 1 \end{bmatrix}\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \mathbf{0} \implies 2v_1 + v_2 = 0 \implies \mathbf{v}_2 = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$。$\text{GM}_2 = 1 = \text{AM}_2$。
+                </p>
+                <p><strong>判定：</strong>所有特征值满足 $\text{GM}=\text{AM}=1$，矩阵拥有两个独立特征方向，<strong>完全可对角化</strong>！</p>
+              </div>
+            </div>
+
+            <!-- 案例 2 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.05); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 1.5rem;">
+              <h4 style="color: var(--accent-green);">案例 2：二重特征值但几何完备矩阵（实对称矩阵）</h4>
+              <p>设对称矩阵 $B = \begin{bmatrix} 3 & 0 \\ 0 & 3 \end{bmatrix} = 3I$</p>
+              <div style="margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>Step 1: 特征方程</strong>：$p(\lambda) = (3 - \lambda)^2 = 0 \implies \lambda = 3$，代数重数 $\text{AM} = 2$。</p>
+                <p><strong>Step 2: 特征子空间求解</strong>：$(B - 3I)\mathbf{v} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}\mathbf{v} = \mathbf{0}$。</p>
+                <p>对任意向量 $\mathbf{v} \in \mathbb{R}^2$ 该式均恒成立！因此特征子空间 $E_3 = \mathbb{R}^2$，基底可选为 $\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}, \mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$。几何重数 $\text{GM} = 2$！</p>
+                <p><strong>判定：</strong>$\text{GM} = \text{AM} = 2$，重根并不亏损，矩阵完备可对角化！</p>
+              </div>
+            </div>
+
+            <!-- 案例 3 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(244, 63, 94, 0.05); border: 1px solid var(--border-color); border-radius: 6px; margin-bottom: 1.5rem;">
+              <h4 style="color: var(--accent-rose);">案例 3：二重特征值且几何亏损矩阵（剪切与若尔当块雏形）</h4>
+              <p>设 $C = \begin{bmatrix} 3 & 1 \\ 0 & 3 \end{bmatrix}$</p>
+              <div style="margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>Step 1: 特征方程</strong>：$p(\lambda) = (3 - \lambda)^2 = 0 \implies \lambda = 3$，代数重数 $\text{AM} = 2$。</p>
+                <p><strong>Step 2: 特征子空间求解</strong>：$(C - 3I)\mathbf{v} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \mathbf{0} \implies v_2 = 0$。特征向量形式为 $\mathbf{v} = c\begin{bmatrix} 1 \\ 0 \end{bmatrix}$。几何重数 $\text{GM} = 1$！</p>
+                <p><strong>判定：</strong>$\text{GM} = 1 < \text{AM} = 2$！严重缺少一个特征向量，<strong>绝对不可对角化</strong>（亏损矩阵）。这正是后续 Chapter 5.4 和 Jordan 标准型的原点！</p>
+              </div>
+            </div>
+
+            <!-- 案例 4 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.05); border: 1px solid var(--border-color); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple);">案例 4：$3 \times 3$ 矩阵的二阶主子式速算法手算</h4>
+              <p>设 $D = \begin{bmatrix} 1 & 2 & 0 \\ 0 & 3 & 0 \\ 2 & -4 & 2 \end{bmatrix}$（下三角带扰动矩阵）</p>
+              <div style="margin-top: 0.5rem; font-size: 0.92rem; line-height: 1.8;">
+                <p>观察第二列元素，或者利用主对角线展开：</p>
+                <p>
+                  $\det(D - \lambda I) = (3 - \lambda) \cdot \det\begin{bmatrix} 1-\lambda & 0 \\ 2 & 2-\lambda \end{bmatrix} = (3 - \lambda)(1 - \lambda)(2 - \lambda) = 0$。
+                </p>
+                <p>由于特征值分别为 $\lambda_1 = 1, \lambda_2 = 2, \lambda_3 = 3$，全部互不相同（三个两两互异特征值），由 $\text{GM} \ge 1$ 且 $\sum \text{AM} = 3$，必定有每一个 $\text{GM}_i = \text{AM}_i = 1$！无需额外求核空间维数，立可断言 $D$ 必可对角化！</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 核心板块 7: Python / SymPy 代码实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">代码实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 💻 Python / SymPy 工业级代码实战验证</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">
+              在科学计算与工程仿真中，我们使用符号计算库 <code>sympy</code> 提取特征多项式、解析 AM 与 GM，并验证凯莱-哈密顿定理：
+            </p>
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;"><code>import sympy as sp
+
+# 1. 定义亏损剪切矩阵 C 与符号 lambda
 lam = sp.symbols('lambda')
+C = sp.Matrix([
+    [3, 1],
+    [0, 3]
+])
 
-# 计算特征多项式
-char_poly = A.charpoly(lam)
-print("特征多项式:", char_poly.as_expr()) # lambda**2 - 7*lambda + 10
+# 2. 计算特征多项式
+char_poly = C.charpoly(lam)
+print("特征多项式 p(lambda):", char_poly.as_expr())
+# 输出: lambda**2 - 6*lambda + 9 = (lambda - 3)**2
 
-# 验证 Cayley-Hamilton
-A_poly = A**2 - 7*A + 10*sp.eye(2)
-print("A^2 - 7A + 10I = \n", A_poly) # 零矩阵</code></pre>
-  </div>
-</div>
+# 3. 提取特征值与其代数重数 (AM)
+eigen_dict = C.eigenvals()
+print("特征值与代数重数 (AM):", eigen_dict)
+# 输出: {3: 2} -> 特征值 3，代数重数 AM = 2
 
+# 4. 提取特征向量与几何重数 (GM)
+# eigenvects() 返回列表：[(eigenval, algebraic_mult, [eigenvectors])]
+eigen_data = C.eigenvects()
+for val, am, vects in eigen_data:
+    gm = len(vects)
+    print(f"特征值 {val}: 代数重数 AM = {am}, 几何重数 GM = {gm}")
+    print(f"基础解系特征向量基底: {vects}")
+    if gm &lt; am:
+        print("&gt;&gt; 警报: GM &lt; AM，此矩阵属于亏损矩阵 (Defective)，不可对角化！")
+
+# 5. 验证凯莱-哈密顿定理 p(C) = O
+c_poly_val = C**2 - 6*C + 9*sp.eye(2)
+print("验证 Cayley-Hamilton p(C) = \n", c_poly_val)
+# 输出: Matrix([[0, 0], [0, 0]]) -> 精确为零矩阵！
+
+# 6. 利用 Cayley-Hamilton 极速求逆矩阵 C^(-1)
+# 由 C^2 - 6C + 9I = O =&gt; 9I = 6C - C^2 =&gt; C^(-1) = (6I - C)/9
+C_inv_ch = (6*sp.eye(2) - C) / 9
+print("利用 Cayley-Hamilton 算出的逆矩阵:\n", C_inv_ch)
+print("直接求逆结果对比一致性:", C_inv_ch == C.inv())</code></pre>
+          </div>
+        </div>
+
+        <!-- 核心板块 8: 思考探究与自我检测关卡 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自测挑战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 🎯 概念深度检测与思考题</h2>
+          </div>
+          <div class="card-body">
+            
+            <div class="quiz-card">
+              <h4 style="color: var(--text-main);">Q1: 若 $3\times 3$ 方阵 $A$ 满足 $\text{tr}(A) = 6, \det(A) = 8$，已知 $\lambda_1 = 1$，你能否直接断定剩下的特征值？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz('q1-ans')">💡 显示解析与答案</button>
+              <div id="q1-ans" class="quiz-answer">
+                <p><strong>解析：</strong>设另两个特征值为 $\lambda_2, \lambda_3$。</p>
+                <p>根据迹与行列式恒等式：</p>
+                <ul>
+                  <li>$\lambda_1 + \lambda_2 + \lambda_3 = \text{tr}(A) \implies 1 + \lambda_2 + \lambda_3 = 6 \implies \lambda_2 + \lambda_3 = 5$</li>
+                  <li>$\lambda_1 \cdot \lambda_2 \cdot \lambda_3 = \det(A) \implies 1 \cdot (\lambda_2 \lambda_3) = 8 \implies \lambda_2 \lambda_3 = 8$</li>
+                </ul>
+                <p>构造一元二次方程 $t^2 - 5t + 8 = 0$。判别式 $\Delta = 25 - 32 = -7 &lt; 0$。</p>
+                <p>解得共轭复特征值：$\lambda_{2,3} = \frac{5 \pm i\sqrt{7}}{2}$。完全确定，无需知道矩阵的具体数值！</p>
+              </div>
+            </div>
+
+            <div class="quiz-card">
+              <h4 style="color: var(--text-main);">Q2: 为什么单位矩阵 $I$ 的代数重数是 $n$、几何重数也是 $n$，它不仅不亏损，反而是“最完美”的对角矩阵？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz('q2-ans')">💡 显示解析与答案</button>
+              <div id="q2-ans" class="quiz-answer">
+                <p><strong>解析：</strong>对于单位矩阵 $I$，$p(\lambda) = \det(I - \lambda I) = (1 - \lambda)^n = 0$，特征值 $\lambda = 1$ 的代数重数 $\text{AM} = n$。</p>
+                <p>考察其特征子空间：$(I - 1 \cdot I)\mathbf{v} = O\mathbf{v} = \mathbf{0}$。全空间中<strong>任何非零向量</strong>满足此式。因此特征空间 $E_1 = \mathbb{R}^n$，几何重数 $\text{GM} = n$。</p>
+                <p>它表明全空间所有方向都是特征轴，且缩放比例均为 1。它没有任何亏损，是天生已处于对角化状态的矩阵。</p>
+              </div>
+            </div>
+
+            <div class="quiz-card">
+              <h4 style="color: var(--text-main);">Q3: 矩阵 $A$ 与 $A^T$ 的特征多项式相同吗？它们的特征向量也一定相同吗？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz('q3-ans')">💡 显示解析与答案</button>
+              <div id="q3-ans" class="quiz-answer">
+                <p><strong>解析：</strong></p>
+                <p>1. <strong>特征多项式完全相同：</strong>因为转置不改变行列式值，$\det(A^T - \lambda I) = \det((A - \lambda I)^T) = \det(A - \lambda I) = p_A(\lambda)$。因此 $A$ 和 $A^T$ 具有完全相同的特征多项式和特征值谱！</p>
+                <p>2. <strong>特征向量通常截然不同：</strong>$(A - \lambda I)\mathbf{v} = \mathbf{0}$ 对应于 $A - \lambda I$ 的右零空间（列核）；而 $(A^T - \lambda I)\mathbf{w} = \mathbf{0} \iff \mathbf{w}^T(A - \lambda I) = \mathbf{0}^T$ 对应于 $A - \lambda I$ 的左零空间。除非 $A$ 为对称阵，否则左右特征向量在空间中指向完全不同的几何方向！</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
-            <a href="ch5_1_eigenvalues_eigenvectors.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="ch5_1_eigenvalues_eigenvectors.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px;">
               <span>⬅️</span>
               <div>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
@@ -371,12 +1150,12 @@ print("A^2 - 7A + 10I = \n", A_poly) # 零矩阵</code></pre>
             </a>
           </div>
           <div>
-            <a href="index.html" class="btn btn-secondary">
+            <a href="index.html" class="btn btn-secondary" style="text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px;">
               🏠 返回目录
             </a>
           </div>
           <div>
-            <a href="ch5_3_pagerank.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+            <a href="ch5_3_pagerank.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none; padding: 0.6rem 1rem; border-radius: 6px; background: var(--accent-blue); color: #000; font-weight: 600;">
               <div style="text-align: right;">
                 <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
                 <div style="font-weight: 600;">Ch 5.3: PageRank 网页排名算法与马尔可夫稳态</div>
@@ -389,5 +1168,326 @@ print("A^2 - 7A + 10I = \n", A_poly) # 零矩阵</code></pre>
     </div>
   </div>
 
+  <!-- 双视图实验室交互逻辑脚本 -->
+  <script>
+    function toggleQuiz(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+      }
+    }
+
+    (function() {
+      // 交互式 Canvas 控制逻辑
+      const inputA = document.getElementById('mat-a');
+      const inputB = document.getElementById('mat-b');
+      const inputC = document.getElementById('mat-c');
+      const inputD = document.getElementById('mat-d');
+
+      const canvasGeom = document.getElementById('canvas-geom');
+      const canvasPoly = document.getElementById('canvas-poly');
+
+      const statTrace = document.getElementById('stat-trace');
+      const statDet = document.getElementById('stat-det');
+      const statDelta = document.getElementById('stat-delta');
+      const statRoots = document.getElementById('stat-roots');
+      const statStatus = document.getElementById('stat-status');
+
+      const btnDistinct = document.getElementById('preset-distinct');
+      const btnIsotropic = document.getElementById('preset-isotropic');
+      const btnShear = document.getElementById('preset-shear');
+      const btnRotation = document.getElementById('preset-rotation');
+
+      function getMatrix() {
+        return {
+          a: parseFloat(inputA.value) || 0,
+          b: parseFloat(inputB.value) || 0,
+          c: parseFloat(inputC.value) || 0,
+          d: parseFloat(inputD.value) || 0
+        };
+      }
+
+      function setMatrix(a, b, c, d) {
+        inputA.value = a;
+        inputB.value = b;
+        inputC.value = c;
+        inputD.value = d;
+        updateSim();
+      }
+
+      if (btnDistinct) btnDistinct.addEventListener('click', () => setMatrix(2, 1, 0, 0.8));
+      if (btnIsotropic) btnIsotropic.addEventListener('click', () => setMatrix(1.5, 0, 0, 1.5));
+      if (btnShear) btnShear.addEventListener('click', () => setMatrix(1.2, 1.2, 0, 1.2));
+      if (btnRotation) btnRotation.addEventListener('click', () => setMatrix(0, -1, 1, 0));
+
+      [inputA, inputB, inputC, inputD].forEach(input => {
+        if (input) input.addEventListener('input', updateSim);
+      });
+
+      function updateSim() {
+        const { a, b, c, d } = getMatrix();
+        const tr = a + d;
+        const det = a * d - b * c;
+        const delta = tr * tr - 4 * det;
+
+        // 更新仪表盘
+        if (statTrace) statTrace.textContent = `Trace: ${tr.toFixed(2)}`;
+        if (statDet) statDet.textContent = `Det: ${det.toFixed(2)}`;
+        if (statDelta) statDelta.textContent = `Δ: ${delta.toFixed(2)}`;
+
+        let lambda1 = null, lambda2 = null;
+        let isDefective = false;
+
+        if (delta > 0.00001) {
+          lambda1 = (tr + Math.sqrt(delta)) / 2;
+          lambda2 = (tr - Math.sqrt(delta)) / 2;
+          if (statRoots) statRoots.textContent = `λ₁=${lambda1.toFixed(2)}, λ₂=${lambda2.toFixed(2)} (两互异实根)`;
+          if (statStatus) {
+            statStatus.textContent = '状态: 完备可对角化 (AM=GM=1)';
+            statStatus.style.color = 'var(--accent-green)';
+          }
+        } else if (Math.abs(delta) <= 0.00001) {
+          lambda1 = tr / 2;
+          lambda2 = tr / 2;
+          // 判断几何重数 GM：看 rank(A - λI) 是否为 0
+          const eps = 0.0001;
+          const isDiagScalar = (Math.abs(a - lambda1) < eps && Math.abs(d - lambda1) < eps && Math.abs(b) < eps && Math.abs(c) < eps);
+          if (isDiagScalar) {
+            if (statRoots) statRoots.textContent = `λ=${lambda1.toFixed(2)} (重根, AM=2)`;
+            if (statStatus) {
+              statStatus.textContent = '状态: 各向同性完备 (AM=2, GM=2)';
+              statStatus.style.color = 'var(--accent-green)';
+            }
+          } else {
+            isDefective = true;
+            if (statRoots) statRoots.textContent = `λ=${lambda1.toFixed(2)} (重根, AM=2)`;
+            if (statStatus) {
+              statStatus.textContent = '状态: 亏损 (Defective, AM=2, GM=1, 不可对角化)';
+              statStatus.style.color = 'var(--accent-rose)';
+            }
+          }
+        } else {
+          const realPart = (tr / 2).toFixed(2);
+          const imagPart = (Math.sqrt(-delta) / 2).toFixed(2);
+          if (statRoots) statRoots.textContent = `λ = ${realPart} ± ${imagPart}i (共轭复根)`;
+          if (statStatus) {
+            statStatus.textContent = '状态: 实数域无实特征轴 (纯旋转/螺旋偏转)';
+            statStatus.style.color = 'var(--accent-amber)';
+          }
+        }
+
+        drawGeometry(a, b, c, d, lambda1, lambda2, delta);
+        drawPolynomial(tr, det, delta, lambda1, lambda2);
+      }
+
+      function drawGeometry(a, b, c, d, lambda1, lambda2, delta) {
+        if (!canvasGeom) return;
+        const ctx = canvasGeom.getContext('2d');
+        const w = canvasGeom.width;
+        const h = canvasGeom.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const scale = 45; // 像素/单位
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 1. 绘制网格背景
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let x = -5; x <= 5; x++) {
+          ctx.moveTo(cx + x * scale, 0);
+          ctx.lineTo(cx + x * scale, h);
+        }
+        for (let y = -5; y <= 5; y++) {
+          ctx.moveTo(0, cy + y * scale);
+          ctx.lineTo(w, cy + y * scale);
+        }
+        ctx.stroke();
+
+        // 2. 坐标轴
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+        ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+        ctx.stroke();
+
+        // 3. 原单位圆 (虚线)
+        ctx.save();
+        ctx.strokeStyle = '#64748b';
+        ctx.setLineDash([4, 4]);
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(cx, cy, scale, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+
+        // 4. 变换后的椭圆/图形
+        ctx.save();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        const steps = 80;
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const x0 = Math.cos(theta);
+          const y0 = Math.sin(theta);
+          const x1 = a * x0 + b * y0;
+          const y1 = c * x0 + d * y0;
+          const px = cx + x1 * scale;
+          const py = cy - y1 * scale; // y轴反向
+          if (i === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // 5. 特征向量主轴方向
+        if (delta >= -0.00001 && lambda1 !== null) {
+          drawEigenLine(ctx, cx, cy, scale, a, b, c, d, lambda1, '#34d399', 'E(λ₁)');
+          if (lambda2 !== null && Math.abs(lambda1 - lambda2) > 0.0001) {
+            drawEigenLine(ctx, cx, cy, scale, a, b, c, d, lambda2, '#a78bfa', 'E(λ₂)');
+          }
+        }
+      }
+
+      function drawEigenLine(ctx, cx, cy, scale, a, b, c, d, val, color, label) {
+        // 求解 (A - val*I)v = 0
+        // [a - val, b; c, d - val][vx, vy] = 0
+        let vx = 0, vy = 0;
+        if (Math.abs(b) > 0.0001) {
+          vx = b;
+          vy = val - a;
+        } else if (Math.abs(c) > 0.0001) {
+          vx = val - d;
+          vy = c;
+        } else if (Math.abs(a - val) > 0.0001) {
+          vx = 0; vy = 1;
+        } else {
+          vx = 1; vy = 0;
+        }
+
+        const len = Math.hypot(vx, vy);
+        if (len < 0.0001) return;
+        vx /= len;
+        vy /= len;
+
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(cx - vx * scale * 4, cy + vy * scale * 4);
+        ctx.lineTo(cx + vx * scale * 4, cy - vy * scale * 4);
+        ctx.stroke();
+
+        // 标注文案
+        ctx.fillStyle = color;
+        ctx.font = 'bold 12px sans-serif';
+        ctx.fillText(label, cx + vx * scale * 2.5 + 8, cy - vy * scale * 2.5 - 6);
+        ctx.restore();
+      }
+
+      function drawPolynomial(tr, det, delta, lambda1, lambda2) {
+        if (!canvasPoly) return;
+        const ctx = canvasPoly.getContext('2d');
+        const w = canvasPoly.width;
+        const h = canvasPoly.height;
+        const cx = w / 2;
+        const cy = h / 2 + 30; // 稍微下移，方便看顶点
+        const scaleX = 35;
+        const scaleY = 16;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 网格与坐标轴
+        ctx.strokeStyle = '#1e293b';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        for (let x = -6; x <= 6; x++) {
+          ctx.moveTo(cx + x * scaleX, 0);
+          ctx.lineTo(cx + x * scaleX, h);
+        }
+        for (let y = -8; y <= 8; y++) {
+          ctx.moveTo(0, cy - y * scaleY);
+          ctx.lineTo(w, cy - y * scaleY);
+        }
+        ctx.stroke();
+
+        ctx.strokeStyle = '#475569';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(0, cy); ctx.lineTo(w, cy); // lambda 轴
+        ctx.moveTo(cx, 0); ctx.lineTo(cx, h); // p(lambda) 轴
+        ctx.stroke();
+
+        // 轴标签
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '11px sans-serif';
+        ctx.fillText('λ 轴', w - 30, cy - 8);
+        ctx.fillText('p(λ)', cx + 8, 16);
+
+        // 绘制抛物线 p(lambda) = lambda^2 - tr*lambda + det
+        ctx.save();
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+
+        const xMin = -5.5;
+        const xMax = 5.5;
+        const steps = 140;
+        let started = false;
+
+        for (let i = 0; i <= steps; i++) {
+          const lam = xMin + (i / steps) * (xMax - xMin);
+          const pVal = lam * lam - tr * lam + det;
+          const px = cx + lam * scaleX;
+          const py = cy - pVal * scaleY;
+
+          if (py >= -50 && py <= h + 50) {
+            if (!started) {
+              ctx.moveTo(px, py);
+              started = true;
+            } else {
+              ctx.lineTo(px, py);
+            }
+          }
+        }
+        ctx.stroke();
+        ctx.restore();
+
+        // 标记特征根点 (与横轴交点)
+        if (delta >= -0.0001 && lambda1 !== null) {
+          drawRootPoint(ctx, cx, cy, scaleX, lambda1, `λ₁=${lambda1.toFixed(2)}`);
+          if (lambda2 !== null && Math.abs(lambda1 - lambda2) > 0.0001) {
+            drawRootPoint(ctx, cx, cy, scaleX, lambda2, `λ₂=${lambda2.toFixed(2)}`);
+          }
+        }
+      }
+
+      function drawRootPoint(ctx, cx, cy, scaleX, rootVal, label) {
+        const px = cx + rootVal * scaleX;
+        const py = cy;
+        ctx.save();
+        ctx.fillStyle = '#fbbf24';
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(label, px - 16, py + 18);
+        ctx.restore();
+      }
+
+      // 初始化模拟器
+      window.addEventListener('load', () => {
+        updateSim();
+      });
+    })();
+  </script>
 </body>
 </html>

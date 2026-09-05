@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -268,111 +272,473 @@
           <h1 class="module-title">Ch 7.1: 正交性、Gram-Schmidt 正交化与 QR</h1>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交基、几何三大不等式与坐标免逆求解</h2>
-  </div>
-  <div class="card-body">
-    <!-- SVG Graphic 8.1: 3 Geometric Inequalities -->
-    <div style="text-align:center; margin: 1.5rem 0;">
-      <svg width="480" height="180" viewBox="0 0 480 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
-        <line x1="40" y1="140" x2="240" y2="140" stroke="#38bdf8" stroke-width="3"/>
-        <text x="140" y="165" fill="#38bdf8" font-size="13" font-weight="bold">向量 u</text>
+        <!-- 导言：认知跃迁与正交性直觉 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：为什么“正交性”是现代数值计算与科学几何的终极信仰？</div>
+          <p>
+            在前几章中，我们处理了普通的基底 $\{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$。当我们需要求解一个向量 $\mathbf{v}$ 在这些基下的坐标时，必须解一个联立方程组 $B\mathbf{c} = \mathbf{v}$，其时间复杂度为 $O(n^3)$，而且极易受到矩阵条件数恶化的影响，产生巨大的浮点舍入误差。
+          </p>
+          <p>
+            但一旦基底具备了<strong>两两垂直（正交）</strong>且<strong>模长为 1（单位化）</strong>的特性，奇迹就发生了：
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <strong style="color: var(--accent-blue);">⚡ 坐标免逆计算 (Inversion-Free)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$c_i = \mathbf{v} \cdot \mathbf{q}_i$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                求坐标直接退化为独立点积，彻底淘汰高斯消元求逆，各维度坐标互不干扰、瞬间解耦！
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.25);">
+              <strong style="color: var(--accent-purple);">🛡️ 数值误差零放大 (Condition Number = 1)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\kappa(Q) = \|Q\|_2 \|Q^{-1}\|_2 = 1$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                正交变换保持几何长度与角度不变，计算误差在乘法中绝对不会被级联放大，是数值算法最坚固的护城河。
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25);">
+              <strong style="color: var(--accent-green);">📐 能量完美守恒 (Parseval / 勾股定理)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\|\mathbf{v}\|^2 = \sum c_i^2$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                高维勾股定理使能量谱与时空投影严格对应，奠定了傅里叶分析、量子力学态叠加与数字信号压缩的根基。
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <line x1="240" y1="140" x2="240" y2="40" stroke="#a855f7" stroke-width="3"/>
-        <text x="255" y="90" fill="#a855f7" font-size="13" font-weight="bold">向量 v (垂直)</text>
+        <!-- 1. 标准正交基、三大几何不等式与正交矩阵 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">核心理论</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 标准正交基、三大几何不等式与正交矩阵的四大黄金性质</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              设 $V$ 为具有标准内积的欧氏空间 $\mathbb{R}^n$。一组向量系 $\{\mathbf{q}_1, \mathbf{q}_2, \dots, \mathbf{q}_k\}$ 称为<strong>标准正交系 (Orthonormal Set)</strong>，若满足 Kronecker 符号条件：
+            </p>
+            <div style="text-align: center; font-size: 1.15rem; margin: 0.75rem 0;">
+              $$\mathbf{q}_i \cdot \mathbf{q}_j = \mathbf{q}_i^T \mathbf{q}_j = \delta_{ij} = \begin{cases} 1, & i = j \\ 0, & i \neq j \end{cases}$$
+            </div>
 
-        <line x1="40" y1="140" x2="240" y2="40" stroke="#4ade80" stroke-width="3.5"/>
-        <text x="120" y="75" fill="#4ade80" font-size="14" font-weight="bold">斜边 u+v: ||u+v||² = ||u||² + ||v||²</text>
-      </svg>
-    </div>
+            <!-- SVG Graphic: Orthogonal Geometry & 3 Inequalities -->
+            <div style="text-align:center; margin: 1.5rem 0;">
+              <svg width="600" height="220" viewBox="0 0 600 220" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <!-- Coordinate grid background -->
+                <defs>
+                  <pattern id="grid71" width="30" height="30" patternUnits="userSpaceOnUse">
+                    <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+                  </pattern>
+                  <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"/>
+                  </marker>
+                  <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+                  </marker>
+                  <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+                  </marker>
+                  <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#f43f5e"/>
+                  </marker>
+                </defs>
+                <rect width="600" height="220" fill="url(#grid71)" />
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
-        <h4 style="color: var(--accent-blue);">① 勾股定理 (Pythagorean)</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$\mathbf{u} \perp \mathbf{v} \iff \|\mathbf{u} + \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2$</p>
-      </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
-        <h4 style="color: var(--accent-purple);">② 柯西-施瓦茨不等式</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$（共线时取等号）</p>
-      </div>
-      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
-        <h4 style="color: var(--accent-green);">③ 三角不等式</h4>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.35rem;">$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$（两点间线段最短）</p>
-      </div>
-    </div>
+                <!-- Origin at (80, 160) -->
+                <!-- Vector u -->
+                <line x1="80" y1="160" x2="300" y2="160" stroke="#38bdf8" stroke-width="3" marker-end="url(#arr-blue)"/>
+                <text x="180" y="185" fill="#38bdf8" font-size="13" font-weight="bold">向量 u (模长 ||u||)</text>
 
-    <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 标准正交基免求逆分解特权</h4>
-      <p>若 $\{\mathbf{q}_1, \dots, \mathbf{q}_k\}$ 为标准正交基（$\mathbf{q}_i^T \mathbf{q}_j = \delta_{ij}$），则任意向量 $\mathbf{v}$ 的坐标分解<strong>无需任何矩阵求逆，直接通过点积一步求得</strong>：</p>
-      <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0;">
-        $$\mathbf{v} = (\mathbf{v} \cdot \mathbf{q}_1)\mathbf{q}_1 + (\mathbf{v} \cdot \mathbf{q}_2)\mathbf{q}_2 + \dots + (\mathbf{v} \cdot \mathbf{q}_k)\mathbf{q}_k$$
-      </div>
-    </div>
-  </div>
-</div>
+                <!-- Vector v (orthogonal) -->
+                <line x1="300" y1="160" x2="300" y2="40" stroke="#c084fc" stroke-width="3" marker-end="url(#arr-purple)"/>
+                <text x="315" y="105" fill="#c084fc" font-size="13" font-weight="bold">向量 v ⊥ u</text>
+                <!-- Right angle symbol -->
+                <rect x="285" y="145" width="15" height="15" fill="none" stroke="#f8fafc" stroke-width="1.5" opacity="0.6"/>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">构造算法</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌟 Gram-Schmidt 正交化算法与 QR 分解</h2>
-  </div>
-  <div class="card-body">
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 格拉姆-施密特算法递推公式</h4>
-      <p>给定一组线性无关基底 $\{\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_k\}$：</p>
-      <ul style="margin-left: 1.5rem; line-height: 1.8;">
-        <li>$\mathbf{u}_1 = \mathbf{a}_1$</li>
-        <li>$\mathbf{u}_2 = \mathbf{a}_2 - \frac{\mathbf{a}_2 \cdot \mathbf{u}_1}{\|\mathbf{u}_1\|^2} \mathbf{u}_1$</li>
-        <li>$\mathbf{u}_k = \mathbf{a}_k - \sum_{j=1}^{k-1} \frac{\mathbf{a}_k \cdot \mathbf{u}_j}{\|\mathbf{u}_j\|^2} \mathbf{u}_j$</li>
-      </ul>
-      <p>归一化即得标准正交基 $\mathbf{q}_i = \frac{\mathbf{u}_i}{\|\mathbf{u}_i\|}$。</p>
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>QR 分解：</strong> 任何列满秩矩阵 $A$ 均可唯一分解为：</p>
-      $$A = Q R$$
-      <p>其中 $Q$ 为列标准正交矩阵 ($Q^T Q = I$)，$R$ 为主对角线全为正数的上三角矩阵。</p>
-    </div>
-  </div>
-</div>
+                <!-- Hypotenuse u + v -->
+                <line x1="80" y1="160" x2="295" y2="44" stroke="#4ade80" stroke-width="3" marker-end="url(#arr-green)"/>
+                <text x="130" y="90" fill="#4ade80" font-size="14" font-weight="bold">斜边 u + v (勾股: ||u+v||² = ||u||² + ||v||²)</text>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ Gram-Schmidt 正交化手算演练</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">正交化 $\mathbf{a}_1 = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}, \mathbf{a}_2 = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix}$</h4>
-      <p><strong>步骤 1：</strong> $\mathbf{u}_1 = \mathbf{a}_1 = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}$，$\|\mathbf{u}_1\|^2 = 1^2 + 1^2 + 0 = 2$。</p>
-      <p><strong>步骤 2：</strong> 剔除投影分量：</p>
-      $$\mathbf{u}_2 = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} - \frac{1 \cdot 1 + 0 \cdot 1 + 1 \cdot 0}{2} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} - \begin{bmatrix} 0.5 \\ 0.5 \\ 0 \end{bmatrix} = \begin{bmatrix} 0.5 \\ -0.5 \\ 1 \end{bmatrix}$$
-      <p><strong>步骤 3：</strong> 归一化：</p>
-      $$\mathbf{q}_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}, \quad \mathbf{q}_2 = \frac{1}{\sqrt{1.5}} \begin{bmatrix} 0.5 \\ -0.5 \\ 1 \end{bmatrix} = \frac{1}{\sqrt{6}} \begin{bmatrix} 1 \\ -1 \\ 2 \end{bmatrix}$$
-    </div>
-  </div>
-</div>
+                <!-- Arbitrary non-orthogonal vector w -->
+                <line x1="80" y1="160" x2="480" y2="60" stroke="#f43f5e" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arr-red)"/>
+                <text x="390" y="55" fill="#f43f5e" font-size="12">任意向量 x</text>
+                
+                <!-- Projection line of x onto u -->
+                <line x1="475" y1="65" x2="475" y2="160" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <circle cx="475" cy="160" r="4" fill="#38bdf8"/>
+                <text x="440" y="185" fill="#94a3b8" font-size="12">proj_u(x)</text>
+              </svg>
+            </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy QR 分解</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+                <h4 style="color: var(--accent-blue);">① 勾股定理 (Pythagorean)</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+                  $\mathbf{u} \perp \mathbf{v} \iff \|\mathbf{u} + \mathbf{v}\|^2 = \|\mathbf{u}\|^2 + \|\mathbf{v}\|^2$。推广至 $k$ 个两两正交向量，模长平方等于各分量模长平方和。
+                </p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+                <h4 style="color: var(--accent-purple);">② 柯西-施瓦茨不等式</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+                  $|\mathbf{u} \cdot \mathbf{v}| \le \|\mathbf{u}\| \|\mathbf{v}\|$。当且仅当 $\mathbf{u}, \mathbf{v}$ 共线（线性相关）时等号成立。
+                </p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+                <h4 style="color: var(--accent-green);">③ 三角不等式</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem;">
+                  $\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$。两点之间直线段最短；折线总长恒大于等于直达距离。
+                </p>
+              </div>
+            </div>
 
-A = np.array([[1, 1],
-              [1, 0],
-              [0, 1]], dtype=float)
+            <!-- 正交矩阵四大黄金性质 -->
+            <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">👑 正交矩阵 (Orthogonal Matrix) 的四大等价几何与代数特权</h4>
+              <p>设 $Q \in \mathbb{R}^{n \times n}$ 是方阵，以下命题<strong>彼此完全等价</strong>：</p>
+              <ol style="margin-left: 1.5rem; line-height: 1.9;">
+                <li><strong>转置即逆 (Transposed Inverse)</strong>：$Q^T Q = Q Q^T = I$，这意味着 $Q^{-1} = Q^T$（求逆操作瞬间完成，零算力消耗！）。</li>
+                <li><strong>保持内积不变 (Inner Product Preserving)</strong>：对任意 $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$，恒有：
+                  $$(Q\mathbf{x}) \cdot (Q\mathbf{y}) = (Q\mathbf{x})^T (Q\mathbf{y}) = \mathbf{x}^T (Q^T Q) \mathbf{y} = \mathbf{x}^T I \mathbf{y} = \mathbf{x} \cdot \mathbf{y}$$
+                </li>
+                <li><strong>保持几何长度不变 (Isometry / 等距同构)</strong>：$\|Q\mathbf{x}\| = \|\mathbf{x}\|$。无论如何变换，向量绝不被拉伸或压缩！</li>
+                <li><strong>保持空间夹角不变</strong>：$\cos \angle(Q\mathbf{x}, Q\mathbf{y}) = \cos \angle(\mathbf{x}, \mathbf{y})$。$Q$ 代表空间的<strong>刚体旋转 (Rotation, $\det Q = +1$)</strong> 或<strong>镜面对称反射 (Reflection, $\det Q = -1$)</strong>。</li>
+              </ol>
+            </div>
+          </div>
+        </div>
 
-Q, R = np.linalg.qr(A)
-print("标准正交矩阵 Q:\n", np.round(Q, 4))
-print("上三角矩阵 R:\n", np.round(R, 4))
-print("Q^T @ Q = I 验证:\n", np.round(Q.T @ Q, 4))</code></pre>
-  </div>
-</div>
+        <!-- 2. Gram-Schmidt 正交化算法深剖 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">算法构造</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. Gram-Schmidt 正交化算法机制与数值稳定性 (CGS vs MGS)</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              如果我们手头只有一组歪歪扭扭的普通线性无关基 $\{\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_k\}$，如何将它们打磨成晶莹剔透的标准正交基 $\{\mathbf{q}_1, \mathbf{q}_2, \dots, \mathbf{q}_k\}$ 呢？
+            </p>
+            <p>
+              <strong>核心哲学：“逐级投影，剔除阴影”</strong>。每一步将新向量投射到已建立的正交子空间上，然后把投过去的“阴影”（投影分量）剪掉，剩下的就是绝对纯净的垂直残差！
+            </p>
 
+            <div style="background: rgba(15, 23, 42, 0.5); border-radius: 8px; padding: 1.25rem; border: 1px solid rgba(192, 132, 252, 0.3); margin: 1.25rem 0;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📐 格拉姆-施密特通用推导递归式</h4>
+              <ul style="line-height: 2; margin-left: 1.5rem;">
+                <li><strong>第 1 步</strong>：以 $\mathbf{a}_1$ 为基准方向，直接取 $\mathbf{u}_1 = \mathbf{a}_1$。</li>
+                <li><strong>第 2 步</strong>：从 $\mathbf{a}_2$ 中减去它在 $\mathbf{u}_1$ 上的投影：
+                  $$\mathbf{u}_2 = \mathbf{a}_2 - \text{proj}_{\mathbf{u}_1}(\mathbf{a}_2) = \mathbf{a}_2 - \frac{\mathbf{a}_2 \cdot \mathbf{u}_1}{\|\mathbf{u}_1\|^2} \mathbf{u}_1$$
+                </li>
+                <li><strong>第 $k$ 步</strong>：从 $\mathbf{a}_k$ 中减去它在之前<strong>所有已求得正交基底</strong>上的投影之和：
+                  $$\mathbf{u}_k = \mathbf{a}_k - \sum_{j=1}^{k-1} \frac{\mathbf{a}_k \cdot \mathbf{u}_j}{\|\mathbf{u}_j\|^2} \mathbf{u}_j$$
+                </li>
+                <li><strong>归一化</strong>：令 $\mathbf{q}_i = \frac{\mathbf{u}_i}{\|\mathbf{u}_i\|}$，即得标准正交基 $\{\mathbf{q}_1, \dots, \mathbf{q}_k\}$。</li>
+              </ul>
+            </div>
+
+            <!-- 经典 CGS vs 改进 MGS 数值稳定性深度对比 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 1.5rem;">
+              <div style="padding: 1.25rem; background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 8px;">
+                <h4 style="color: #ef4444; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚠️</span> 经典 Gram-Schmidt (CGS) - 易失真
+                </h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem;">
+                  数学理论上极为简洁：每次直接用原始的 $\mathbf{a}_k$ 去点乘之前的 $\mathbf{q}_j$。然而在计算机浮点有限精度运算中，舍入误差会在向量之间快速累积，导致后面生成的基向量<strong>严重失去正交性</strong>，甚至使 $\mathbf{q}_k^T \mathbf{q}_1 \approx 0.1$ 发生严重退化！
+                </p>
+              </div>
+              <div style="padding: 1.25rem; background: rgba(52, 211, 153, 0.05); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: 8px;">
+                <h4 style="color: #4ade80; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🛡️</span> 改进 Gram-Schmidt (MGS) - 工业级坚固
+                </h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem;">
+                  算法改用<strong>“流水线即时消除”</strong>：一旦生成了 $\mathbf{q}_1$，立即将其从后面<strong>所有</strong>还未处理的向量 $\mathbf{a}_2, \dots, \mathbf{a}_n$ 中全量扣除！这样后续的每一次点乘都基于已经去除前置干扰的最新残差向量，数值误差不会几何级放大，工业稳定性极佳！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. QR 分解的数学构造与几何本质 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">矩阵重构</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. QR 分解：矩阵的“正交基底 + 上三角坐标”完美因式分解</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              回顾 Gram-Schmidt 过程，由于每个 $\mathbf{a}_k$ 仅由前 $k$ 个正交基 $\mathbf{q}_1, \dots, \mathbf{q}_k$ 线性组合而成，将其逆向表达：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; font-size: 1.05rem; text-align: center; margin: 1rem 0;">
+              $$\begin{cases}
+              \mathbf{a}_1 = r_{11} \mathbf{q}_1 \\
+              \mathbf{a}_2 = r_{12} \mathbf{q}_1 + r_{22} \mathbf{q}_2 \\
+              \mathbf{a}_3 = r_{13} \mathbf{q}_1 + r_{23} \mathbf{q}_2 + r_{33} \mathbf{q}_3 \\
+              \quad \vdots
+              \end{cases}$$
+            </div>
+            <p>将其打包写为矩阵乘法：</p>
+            <div style="font-size: 1.25rem; text-align: center; margin: 1rem 0; color: var(--accent-blue);">
+              $$\begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \dots & \mathbf{a}_n \end{bmatrix} = \begin{bmatrix} \mathbf{q}_1 & \mathbf{q}_2 & \dots & \mathbf{q}_n \end{bmatrix} \begin{bmatrix} r_{11} & r_{12} & \dots & r_{1n} \\ 0 & r_{22} & \dots & r_{2n} \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \dots & r_{nn} \end{bmatrix}$$
+            </div>
+            <div style="font-size: 1.35rem; text-align: center; font-weight: bold; margin: 0.75rem 0;">
+              $$A = Q R$$
+            </div>
+
+            <div class="definition-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📐 QR 分解的两大构造成分解析</h4>
+              <ul style="line-height: 1.8; margin-left: 1.5rem;">
+                <li><strong>正交矩阵 $Q$ ($m \times n$)</strong>：列向量彼此正交且单位化，$Q^T Q = I_n$。它构成了列空间 $\text{Col}(A)$ 的一组最完美标准正交基。</li>
+                <li><strong>上三角矩阵 $R$ ($n \times n$)</strong>：非零元素全部位于主对角线及上方。主对角元 $r_{jj} = \|\mathbf{u}_j\| > 0$ 正好是每次正交化残差向量的模长；非对角元 $r_{ij} = \mathbf{q}_i \cdot \mathbf{a}_j$ 正好是原向量在对应正交基上的投影分量！</li>
+              </ul>
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+              <p style="font-size: 0.9rem; color: var(--text-muted);">
+                <strong>唯一性定理：</strong> 若实矩阵 $A$ 的各列线性无关（列满秩），且要求 $R$ 的主对角元全部严格为正数（$r_{ii} > 0$），则 $A = QR$ 分解<strong>在数学上唯一确定</strong>！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 交互实验台：2D/3D Gram-Schmidt 投影实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧪 交互实验台：Gram-Schmidt 正交化动态剔除与 QR 实时重构</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted);">
+              拖动滑块调整输入向量 $\mathbf{a}_1, \mathbf{a}_2$ 的坐标，观察实验台如何实时执行 Gram-Schmidt 扣除投影分量，动态渲染垂直残差 $\mathbf{u}_2$、单位正交基 $\mathbf{q}_1, \mathbf{q}_2$，并实时计算更新 $Q$ 矩阵与上三角矩阵 $R$！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Left: Canvas -->
+              <div style="background: #090d16; border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; text-align: center;">
+                <canvas id="gsCanvas" width="460" height="380" style="width: 100%; max-width: 460px; height: auto; background: #070a12; border-radius: 6px;"></canvas>
+                <div style="display: flex; justify-content: space-around; font-size: 0.82rem; margin-top: 0.75rem;">
+                  <span style="color: #38bdf8;">■ 输入 a₁, a₂</span>
+                  <span style="color: #f59e0b;">--- 投影 proj</span>
+                  <span style="color: #c084fc;">■ 残差 u₂ (垂直)</span>
+                  <span style="color: #4ade80;">■ 正交基 q₁, q₂</span>
+                </div>
+              </div>
+
+              <!-- Right: Interactive Controls & Live Matrices -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem; font-size: 0.95rem;">🕹️ 调节输入向量 $\mathbf{a}_1, \mathbf{a}_2$</h4>
+                  
+                  <div style="margin-bottom: 0.75rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                      <span>向量 a₁ 角度 θ₁: <strong id="valTheta1" style="color:var(--accent-blue);">0°</strong></span>
+                      <span>长度 r₁: <strong id="valR1" style="color:var(--accent-blue);">3.0</strong></span>
+                    </div>
+                    <input type="range" id="sliderTheta1" min="-180" max="180" value="15" style="width: 100%; margin-top: 0.25rem;">
+                    <input type="range" id="sliderR1" min="1" max="4" step="0.1" value="3.2" style="width: 100%; margin-top: 0.25rem;">
+                  </div>
+
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                      <span>向量 a₂ 角度 θ₂: <strong id="valTheta2" style="color:var(--accent-purple);">60°</strong></span>
+                      <span>长度 r₂: <strong id="valR2" style="color:var(--accent-purple);">2.8</strong></span>
+                    </div>
+                    <input type="range" id="sliderTheta2" min="-180" max="180" value="65" style="width: 100%; margin-top: 0.25rem;">
+                    <input type="range" id="sliderR2" min="1" max="4" step="0.1" value="2.8" style="width: 100%; margin-top: 0.25rem;">
+                  </div>
+                </div>
+
+                <!-- Live Computed Data Panel -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1;">
+                  <h4 style="color: var(--accent-green); margin-bottom: 0.75rem; font-size: 0.95rem;">📊 实时正交分解与 QR 矩阵</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 1.8; color: #f8fafc;">
+                    <div>• 投影长度 (r₁₂ = a₂·q₁): <span id="statR12" style="color:#f59e0b;">0.000</span></div>
+                    <div>• 残差模长 (r₂₂ = ||u₂||): <span id="statR22" style="color:#c084fc;">0.000</span></div>
+                    <div>• 正交积 (q₁·q₂): <span id="statDot" style="color:#4ade80;">0.00000</span> (恒等于0)</div>
+                    <hr style="border:0; border-top:1px solid var(--border-color); margin:0.5rem 0;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                      <div>
+                        <div style="color:var(--text-muted); font-size:0.75rem;">Q 矩阵 (正交):</div>
+                        <div id="statMatQ" style="background:#090d16; padding:0.4rem; border-radius:4px; font-size:0.8rem; margin-top:0.2rem;"></div>
+                      </div>
+                      <div>
+                        <div style="color:var(--text-muted); font-size:0.75rem;">R 矩阵 (上三角):</div>
+                        <div id="statMatR" style="background:#090d16; padding:0.4rem; border-radius:4px; font-size:0.8rem; margin-top:0.2rem;"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 经典手算演练：高维三向量正交化与 R 提取 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 经典手算精析：三维向量系的 Gram-Schmidt 与 QR 分解全过程</h2>
+          </div>
+          <div class="card-body">
+            <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                【题目】对以下三维矩阵 $A$ 的列向量进行 Gram-Schmidt 正交化并求出 QR 分解：
+              </h4>
+              <div style="text-align: center; font-size: 1.15rem; margin: 0.5rem 0;">
+                $$A = \begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \mathbf{a}_3 \end{bmatrix} = \begin{bmatrix} 1 & 1 & 0 \\ 1 & 0 & 1 \\ 0 & 1 & 1 \end{bmatrix}$$
+              </div>
+
+              <div style="margin-top: 1rem; line-height: 1.8;">
+                <p><strong>第一步：处理第 1 列 $\mathbf{a}_1$</strong></p>
+                $$\mathbf{u}_1 = \mathbf{a}_1 = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}, \quad \|\mathbf{u}_1\| = \sqrt{1^2 + 1^2 + 0^2} = \sqrt{2} = r_{11}$$
+                $$\mathbf{q}_1 = \frac{\mathbf{u}_1}{\|\mathbf{u}_1\|} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第二步：处理第 2 列 $\mathbf{a}_2$（剔除在 $\mathbf{q}_1$ 上的投影）</strong></p>
+                <p>计算投影分量 $r_{12} = \mathbf{q}_1 \cdot \mathbf{a}_2$：</p>
+                $$r_{12} = \frac{1}{\sqrt{2}} (1 \cdot 1 + 1 \cdot 0 + 0 \cdot 1) = \frac{1}{\sqrt{2}}$$
+                <p>剔除投影分量得到正交向量 $\mathbf{u}_2$：</p>
+                $$\mathbf{u}_2 = \mathbf{a}_2 - r_{12} \mathbf{q}_1 = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} - \frac{1}{\sqrt{2}} \cdot \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix} - \begin{bmatrix} 1/2 \\ 1/2 \\ 0 \end{bmatrix} = \begin{bmatrix} 1/2 \\ -1/2 \\ 1 \end{bmatrix}$$
+                <p>计算其模长与单位化：</p>
+                $$r_{22} = \|\mathbf{u}_2\| = \sqrt{\frac{1}{4} + \frac{1}{4} + 1} = \sqrt{\frac{3}{2}} = \frac{\sqrt{6}}{2}$$
+                $$\mathbf{q}_2 = \frac{\mathbf{u}_2}{r_{22}} = \sqrt{\frac{2}{3}} \begin{bmatrix} 1/2 \\ -1/2 \\ 1 \end{bmatrix} = \frac{1}{\sqrt{6}} \begin{bmatrix} 1 \\ -1 \\ 2 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第三步：处理第 3 列 $\mathbf{a}_3$（剔除在 $\mathbf{q}_1, \mathbf{q}_2$ 上的投影）</strong></p>
+                $$r_{13} = \mathbf{q}_1 \cdot \mathbf{a}_3 = \frac{1}{\sqrt{2}}(0 + 1 + 0) = \frac{1}{\sqrt{2}}$$
+                $$r_{23} = \mathbf{q}_2 \cdot \mathbf{a}_3 = \frac{1}{\sqrt{6}}(0 - 1 + 2) = \frac{1}{\sqrt{6}}$$
+                $$\mathbf{u}_3 = \mathbf{a}_3 - r_{13} \mathbf{q}_1 - r_{23} \mathbf{q}_2 = \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix} - \frac{1}{2} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix} - \frac{1}{6} \begin{bmatrix} 1 \\ -1 \\ 2 \end{bmatrix} = \begin{bmatrix} -2/3 \\ 2/3 \\ 2/3 \end{bmatrix}$$
+                $$r_{33} = \|\mathbf{u}_3\| = \sqrt{\frac{4}{9} + \frac{4}{9} + \frac{4}{9}} = \frac{2\sqrt{3}}{3} = \frac{2}{\sqrt{3}}$$
+                $$\mathbf{q}_3 = \frac{\mathbf{u}_3}{r_{33}} = \frac{1}{\sqrt{3}} \begin{bmatrix} -1 \\ 1 \\ 1 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第四步：组合输出 $A = QR$ 终极矩阵形式</strong></p>
+                <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0;">
+                  $$Q = \begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{6}} & -\frac{1}{\sqrt{3}} \\ \frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{6}} & \frac{1}{\sqrt{3}} \\ 0 & \frac{2}{\sqrt{6}} & \frac{1}{\sqrt{3}} \end{bmatrix}, \quad R = \begin{bmatrix} \sqrt{2} & \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\ 0 & \frac{\sqrt{6}}{2} & \frac{1}{\sqrt{6}} \\ 0 & 0 & \frac{2}{\sqrt{3}} \end{bmatrix}$$
+                </div>
+                <p style="color: var(--accent-green); font-weight: bold; margin-top: 0.5rem;">
+                  ✓ 验证：$Q^T Q = I$，$R$ 为严格对角正数上三角矩阵，且乘积 $QR = A$ 完全吻合！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python / NumPy 工业实战演练 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python / NumPy 工业实战：MGS 实现与数值稳定性对抗测试</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              下面的完整 Python 脚本展示了如何手写改进型 Gram-Schmidt (MGS) 算法，并构造著名的病态 Hilbert 矩阵，直观对比经典 CGS、改进 MGS 与工业库 `scipy.linalg.qr` 在正交损失（Orthogonality Loss $\|Q^T Q - I\|_F$）上的天壤之别！
+            </p>
+
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6;"><code>import numpy as np
+from scipy import linalg
+
+def classical_gram_schmidt(A):
+    """经典 Gram-Schmidt (CGS) - 理论简洁但数值不稳定"""
+    m, n = A.shape
+    Q = np.zeros((m, n))
+    R = np.zeros((n, n))
+    for j in range(n):
+        v = A[:, j].copy()
+        for i in range(j):
+            R[i, j] = np.dot(Q[:, i], A[:, j])
+            v -= R[i, j] * Q[:, i]
+        R[j, j] = np.linalg.norm(v)
+        Q[:, j] = v / R[j, j]
+    return Q, R
+
+def modified_gram_schmidt(A):
+    """改进型 Gram-Schmidt (MGS) - 逐级实时消除，工业级坚固"""
+    m, n = A.shape
+    Q = np.zeros((m, n))
+    R = np.zeros((n, n))
+    V = A.copy().astype(float)
+    for i in range(n):
+        R[i, i] = np.linalg.norm(V[:, i])
+        Q[:, i] = V[:, i] / R[i, i]
+        for j in range(i + 1, n):
+            R[i, j] = np.dot(Q[:, i], V[:, j])
+            V[:, j] -= R[i, j] * Q[:, i]  # 立即剔除新基底投影
+    return Q, R
+
+# 1. 构造一个著名的病态测试矩阵 (恶名昭彰的 Hilbert 矩阵切片)
+n = 7
+A = linalg.hilbert(n)
+
+# 2. 分别进行 CGS、MGS 与 SciPy Householder QR
+Q_cgs, R_cgs = classical_gram_schmidt(A)
+Q_mgs, R_mgs = modified_gram_schmidt(A)
+Q_sci, R_sci = linalg.qr(A)
+
+# 3. 测量正交损失度量 ||Q^T Q - I||_F (理论应为 0)
+loss_cgs = np.linalg.norm(Q_cgs.T @ Q_cgs - np.eye(n))
+loss_mgs = np.linalg.norm(Q_mgs.T @ Q_mgs - np.eye(n))
+loss_sci = np.linalg.norm(Q_sci.T @ Q_sci - np.eye(n))
+
+print("=== 算法正交保持度误差 ||Q^T Q - I||_F 测试 ===")
+print(f"经典 CGS 误差:      {loss_cgs:.2e}  (严重漂移失真！)")
+print(f"改进 MGS 误差:      {loss_mgs:.2e}  (提高多个数量级！)")
+print(f"SciPy Householder:  {loss_sci:.2e}  (极佳机器浮点精度！)")
+
+# 4. QR 分解用于极速解线性系统 Ax = b
+# A = Q R  =>  Q R x = b  =>  R x = Q^T b (上三角回代，复杂度仅 O(n^2))
+b = np.ones(n)
+x_qr = linalg.solve_triangular(R_sci, Q_sci.T @ b)
+print("\nQR 求解解向量 x 首两位分量:", np.round(x_qr[:2], 4))</code></pre>
+          </div>
+        </div>
+
+        <!-- 7. 交互自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自我检测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：正交性、Gram-Schmidt 与 QR 深度挑战</h2>
+          </div>
+          <div class="card-body">
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              
+              <!-- Quiz 1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  1. 若矩阵 $Q$ 是实正交方阵（$Q^T Q = I$），以下哪项性质在数学上是不正确的？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 对于任意向量 $\mathbf{x}$，$\|Q\mathbf{x}\| = \|\mathbf{x}\|$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">B. 行列式值必须满足 $\det Q = \pm 1$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">C. $Q$ 的特征值在复平面上必须全为正实数</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. $Q^{-1} = Q^T$ 且 $Q$ 的行向量之间也互相标准正交</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  2. 在 $A = QR$ 分解中，为什么上三角矩阵 $R$ 的主对角线元素 $r_{ii}$ 在几何上必定为正数（假设各列线性无关）？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">A. 因为 $r_{ii} = \|\mathbf{u}_i\|$，它代表正交化过程中剔除投影后的非零残差向量的欧氏模长</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">B. 因为正交矩阵 $Q$ 强制使得特征值全部大于 0</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 纯粹是人为规定的符号约定，其实取负数也完全符合三角矩阵定义</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 因为 $R$ 是由对角协方差矩阵开方得到的</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  3. 改进 Gram-Schmidt (MGS) 之所以比经典算法 (CGS) 在数值上更稳定，根本原因在于：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. MGS 采用了二次高斯消元法来消除浮点截断误差</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. MGS 获得最新正交基后立即从后续所有候选向量中扣除其分量，避免了误差的级联累加</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. MGS 的时间复杂度从 $O(n^3)$ 下降到了 $O(n^2)$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. MGS 会自动将非对称矩阵转换为实对称矩阵后再分解</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -403,6 +769,208 @@ print("Q^T @ Q = I 验证:\n", np.round(Q.T @ Q, 4))</code></pre>
       </main>
     </div>
   </div>
+
+
+  <script>
+    // 交互实验台：2D Gram-Schmidt 正交化动态演示逻辑
+    (function() {
+      const canvas = document.getElementById('gsCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const sTheta1 = document.getElementById('sliderTheta1');
+      const sR1 = document.getElementById('sliderR1');
+      const sTheta2 = document.getElementById('sliderTheta2');
+      const sR2 = document.getElementById('sliderR2');
+
+      const valTheta1 = document.getElementById('valTheta1');
+      const valR1 = document.getElementById('valR1');
+      const valTheta2 = document.getElementById('valTheta2');
+      const valR2 = document.getElementById('valR2');
+
+      const statR12 = document.getElementById('statR12');
+      const statR22 = document.getElementById('statR22');
+      const statDot = document.getElementById('statDot');
+      const statMatQ = document.getElementById('statMatQ');
+      const statMatR = document.getElementById('statMatR');
+
+      function render() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const scale = 42; // pixels per unit
+
+        ctx.clearRect(0, 0, w, h);
+
+        // Draw coordinate grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.lineWidth = 1;
+        for (let x = cx % scale; x < w; x += scale) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = cy % scale; y < h; y += scale) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+
+        // Unit circle
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.arc(cx, cy, scale, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Read sliders
+        const th1 = parseFloat(sTheta1.value) * Math.PI / 180;
+        const r1 = parseFloat(sR1.value);
+        const th2 = parseFloat(sTheta2.value) * Math.PI / 180;
+        const r2 = parseFloat(sR2.value);
+
+        valTheta1.textContent = sTheta1.value + '°';
+        valR1.textContent = r1.toFixed(1);
+        valTheta2.textContent = sTheta2.value + '°';
+        valR2.textContent = r2.toFixed(1);
+
+        // Input vectors
+        const a1 = { x: r1 * Math.cos(th1), y: r1 * Math.sin(th1) };
+        const a2 = { x: r2 * Math.cos(th2), y: r2 * Math.sin(th2) };
+
+        // 1. q1 = a1 / ||a1||
+        const normA1 = Math.hypot(a1.x, a1.y);
+        const q1 = { x: a1.x / normA1, y: a1.y / normA1 };
+
+        // 2. Projection of a2 onto q1: proj = (a2 . q1) * q1
+        const r12 = a2.x * q1.x + a2.y * q1.y;
+        const proj = { x: r12 * q1.x, y: r12 * q1.y };
+
+        // 3. u2 = a2 - proj
+        const u2 = { x: a2.x - proj.x, y: a2.y - proj.y };
+        const r22 = Math.hypot(u2.x, u2.y);
+        const q2 = r22 > 1e-6 ? { x: u2.x / r22, y: u2.y / r22 } : { x: 0, y: 0 };
+
+        function drawVector(vec, color, width, label, isDash = false) {
+          ctx.save();
+          if (isDash) ctx.setLineDash([4, 3]);
+          ctx.strokeStyle = color;
+          ctx.lineWidth = width;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          const tx = cx + vec.x * scale;
+          const ty = cy - vec.y * scale;
+          ctx.lineTo(tx, ty);
+          ctx.stroke();
+
+          // Arrow head
+          const angle = Math.atan2(-(vec.y), vec.x);
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.moveTo(tx, ty);
+          ctx.lineTo(tx - 10 * Math.cos(angle - Math.PI / 6), ty + 10 * Math.sin(angle - Math.PI / 6));
+          ctx.lineTo(tx - 10 * Math.cos(angle + Math.PI / 6), ty + 10 * Math.sin(angle + Math.PI / 6));
+          ctx.closePath();
+          ctx.fill();
+
+          // Text
+          ctx.font = 'bold 12px monospace';
+          ctx.fillStyle = color;
+          ctx.fillText(label, tx + 8, ty - 4);
+          ctx.restore();
+        }
+
+        // Draw Projection shadow
+        drawVector(proj, '#f59e0b', 2, 'proj', true);
+
+        // Dashed line from a2 to proj
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.4)';
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.moveTo(cx + a2.x * scale, cy - a2.y * scale);
+        ctx.lineTo(cx + proj.x * scale, cy - proj.y * scale);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw original a1 & a2
+        drawVector(a1, '#38bdf8', 2.5, 'a₁');
+        drawVector(a2, '#38bdf8', 2.5, 'a₂');
+
+        // Draw residual u2
+        drawVector(u2, '#c084fc', 2, 'u₂ ⊥ a₁');
+
+        // Draw orthonormal bases q1 and q2
+        drawVector(q1, '#4ade80', 3, 'q₁');
+        drawVector(q2, '#4ade80', 3, 'q₂');
+
+        // Update live stats
+        statR12.textContent = r12.toFixed(3);
+        statR22.textContent = r22.toFixed(3);
+        const dot = q1.x * q2.x + q1.y * q2.y;
+        statDot.textContent = Math.abs(dot) < 1e-5 ? '0.00000 (严格正交)' : dot.toFixed(5);
+
+        statMatQ.innerHTML = `[${q1.x.toFixed(2)}, ${q2.x.toFixed(2)}]<br>[${q1.y.toFixed(2)}, ${q2.y.toFixed(2)}]`;
+        statMatR.innerHTML = `[${normA1.toFixed(2)}, ${r12.toFixed(2)}]<br>[ 0.00, ${r22.toFixed(2)}]`;
+      }
+
+      [sTheta1, sR1, sTheta2, sR2].forEach(s => s.addEventListener('input', render));
+      render();
+    })();
+
+    // 交互式自测 Quiz 选项点击逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation(item, isCorrect) {
+        const questionText = item.querySelector('div').innerText;
+        if (questionText.includes('正交方阵') && questionText.includes('不正确')) {
+          return '选项 C 错误。正交矩阵 Q 保留范数，其特征值只能位于复平面的单位圆上（|λ| = 1），可以是复数共轭对（如旋转矩阵的 e^{±iθ}）或 -1，绝对不要求全为正实数！';
+        } else if (questionText.includes('主对角线元素') && questionText.includes('为正数')) {
+          return '选项 A 正确。r_ii = ||u_i|| 代表经过正交投影消除后所剩余垂直残差向量的实际长度，只要列向量线性无关，残差向量非零，模长必为正实数。';
+        } else if (questionText.includes('MGS') && questionText.includes('数值上更稳定')) {
+          return '选项 B 正确。MGS 在生成一个正交分量后立即对后续所有候选向量进行即时正交扣除，避免了老旧截断误差在新向量上的跨步累加，极大保护了正交精度。';
+        }
+        return '';
+      }
+    });
+  </script>
 
 </body>
 </html>

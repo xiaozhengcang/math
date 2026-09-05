@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -268,112 +272,453 @@
           <h1 class="module-title">Ch 7.2: 正交投影矩阵与最小二乘法回归</h1>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交投影 (Orthogonal Projection) 与投影矩阵</h2>
-  </div>
-  <div class="card-body">
-    <!-- SVG Graphic 8.2: Orthogonal Projection Residual -->
-    <div style="text-align:center; margin: 1.5rem 0;">
-      <svg width="480" height="200" viewBox="0 0 480 200" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
-        <!-- Subspace Plane W -->
-        <polygon points="40,160 260,160 380,120 160,120" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
-        <text x="310" y="145" fill="#38bdf8" font-size="13" font-weight="bold">列空间 Col(A)</text>
+        <!-- 导言：认知跃迁与几何救赎 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：当现实数据发生矛盾时，“正交投影”如何拯救世界？</div>
+          <p>
+            在真实的科研、金融与工程世界中，我们观测到的数据往往远远多于未知数的个数（$m \gg n$），此时方程组 $A\mathbf{x} = \mathbf{b}$ 几乎<strong>必定是超定矛盾的（无解）</strong>！
+            目标向量 $\mathbf{b}$ 高悬在矩阵的列空间 $\text{Col}(A)$ 之外，没有任何线性组合能够完美命中它。
+          </p>
+          <p>
+            既然无法精准命中，人类最明智的选择是什么？<strong>退而求其次，寻找“离目标最近的影子”！</strong>
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <strong style="color: var(--accent-blue);">🎯 几何垂足 (Orthogonal Foot)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\mathbf{p} = \text{proj}_{\text{Col}(A)}(\mathbf{b}) = A\hat{\mathbf{x}}$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                点到平面距离最短的充要条件是连线垂直！将目标正交投影到列空间，即可捕获欧氏空间中的绝对最优解。
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.25);">
+              <strong style="color: var(--accent-purple);">📉 残差与四大空间对偶 (Duality)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\mathbf{e} = \mathbf{b} - \mathbf{p} \perp \text{Col}(A)$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                误差向量必须垂直于整个列空间，即 $\mathbf{e} \in \text{Null}(A^T)$，正规方程 $A^T(\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0}$ 就此天成！
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25);">
+              <strong style="color: var(--accent-green);">🤖 机器学习基石 (Foundations of ML)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\min \|\mathbf{b} - A\mathbf{x}\|^2$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                从普通线性回归、Kalman 滤波器到多项式曲面拟合，几乎所有连续优化理论的根基都发源于这套投影几何。
+              </p>
+            </div>
+          </div>
+        </div>
 
-        <!-- Vector b -->
-        <line x1="160" y1="140" x2="300" y2="40" stroke="#ef4444" stroke-width="3"/>
-        <text x="210" y="80" fill="#ef4444" font-size="13" font-weight="bold">目标向量 b</text>
+        <!-- 1. 正交投影算子推导与四大基本子空间对偶 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">几何与代数奠基</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交投影算子推导：从一维直线到高维子空间的对偶几何</h2>
+          </div>
+          <div class="card-body">
+            <!-- SVG Graphic: 3D Orthogonal Projection onto Subspace Plane -->
+            <div style="text-align:center; margin: 1.5rem 0;">
+              <svg width="620" height="240" viewBox="0 0 620 240" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <defs>
+                  <pattern id="grid72" width="25" height="25" patternUnits="userSpaceOnUse">
+                    <path d="M 25 0 L 0 0 0 25" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                  </pattern>
+                  <marker id="m-blue72" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"/>
+                  </marker>
+                  <marker id="m-red72" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#ef4444"/>
+                  </marker>
+                  <marker id="m-green72" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+                  </marker>
+                </defs>
+                <rect width="620" height="240" fill="url(#grid72)" />
 
-        <!-- Projection Pb -->
-        <line x1="160" y1="140" x2="300" y2="140" stroke="#4ade80" stroke-width="3"/>
-        <text x="230" y="155" fill="#4ade80" font-size="13" font-weight="bold">影子 ɓ = Pb</text>
+                <!-- Subspace Plane Col(A) represented as tilted parallelogram -->
+                <polygon points="60,200 360,200 520,130 220,130" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="400" y="160" fill="#38bdf8" font-size="13" font-weight="bold">列空间 Col(A) 平面</text>
 
-        <!-- Residual Line e -->
-        <line x1="300" y1="140" x2="300" y2="40" stroke="#fbbf24" stroke-dasharray="4" stroke-width="2"/>
-        <text x="315" y="90" fill="#fbbf24" font-size="13" font-weight="bold">误差 e ⊥ Col(A)</text>
-      </svg>
-    </div>
+                <!-- Origin Point O -->
+                <circle cx="160" cy="180" r="4" fill="#f8fafc"/>
+                <text x="140" y="195" fill="#94a3b8" font-size="12">原点 O</text>
 
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 正交投影矩阵推导</h4>
-      <p>设子空间 $W = \text{Col}(A)$（$A$ 各列线性无关）。将任意向量 $\mathbf{b}$ 投影到 $W$ 上的投影向量为 $\mathbf{p} = A \hat{\mathbf{x}}$。</p>
-      <p>误差向量 $\mathbf{e} = \mathbf{b} - \mathbf{p}$ 必须垂直于 $W$ 的所有基向量（即 $\mathbf{e} \in \text{Null}(A^T)$）：</p>
-      $$A^T (\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0} \implies A^T A \hat{\mathbf{x}} = A^T \mathbf{b} \implies \hat{\mathbf{x}} = (A^T A)^{-1} A^T \mathbf{b}$$
-      <p>代回 $\mathbf{p} = A \hat{\mathbf{x}}$ 得到<strong>正交投影矩阵 $P$</strong>：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$P = A (A^T A)^{-1} A^T$$
-      </div>
-      <p><strong>投影矩阵的两大铁律：</strong></p>
-      <ul style="margin-left: 1.5rem; line-height: 1.8;">
-        <li><strong>幂等性 (Idempotent)</strong>：$P^2 = P$（投射两次与投射一次相同）。</li>
-        <li><strong>对称性 (Symmetric)</strong>：$P^T = P$。</li>
-      </ul>
-    </div>
-  </div>
-</div>
+                <!-- Vector b outside the plane -->
+                <line x1="160" y1="180" x2="380" y2="50" stroke="#ef4444" stroke-width="3" marker-end="url(#m-red72)"/>
+                <text x="260" y="95" fill="#ef4444" font-size="14" font-weight="bold">目标向量 b ∉ Col(A)</text>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">机器学习基石</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 📊 最小二乘法 (Least Squares) 与 QR 分解加速</h2>
-  </div>
-  <div class="card-body">
-    <p>在数据拟合中，方程 $A\mathbf{x} = \mathbf{b}$ 通常是超定矛盾的（无解）。<strong>最小二乘法寻找最优近似解 $\hat{\mathbf{x}}$，使得残差平方和 $\|\mathbf{b} - A\mathbf{x}\|^2$ 达到全局最小</strong>。</p>
-    <p>正规方程组 (Normal Equations)：</p>
-    <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
-      $$A^T A \hat{\mathbf{x}} = A^T \mathbf{b} \implies \hat{\mathbf{x}} = (A^T A)^{-1} A^T \mathbf{b}$$
-    </div>
-    <div class="intuition-box" style="padding: 1rem; background: rgba(168, 85, 247, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 4px; margin-top: 1rem;">
-      <h4 style="color:var(--accent-purple); margin-bottom:0.4rem;">🚀 QR 分解极速求解最小二乘</h4>
-      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
-        将 $A = QR$ 代入正规方程：$(QR)^T (QR) \hat{\mathbf{x}} = (QR)^T \mathbf{b} \implies R^T Q^T Q R \hat{\mathbf{x}} = R^T Q^T \mathbf{b} \implies R \hat{\mathbf{x}} = Q^T \mathbf{b}$！<br>
-        只需通过上三角回代即可解出 $\hat{\mathbf{x}} = R^{-1} Q^T \mathbf{b}$，彻底避免了计算条件数极差的矩阵乘积 $A^T A$！
-      </p>
-    </div>
-  </div>
-</div>
+                <!-- Projection vector p = Ax_hat on the plane -->
+                <line x1="160" y1="180" x2="380" y2="165" stroke="#4ade80" stroke-width="3.5" marker-end="url(#m-green72)"/>
+                <text x="240" y="195" fill="#4ade80" font-size="14" font-weight="bold">正交投影 p = Ax̂ = Pb</text>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 最小二乘拟合直线手算</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">拟合经过点 $(1, 1), (2, 2), (3, 2)$ 的最佳直线 $y = c + d x$</h4>
-      <p>构造超定方程组：</p>
-      $$\begin{cases} c + 1d = 1 \\ c + 2d = 2 \\ c + 3d = 2 \end{cases} \implies A = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}$$
-      $$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}, \quad A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
-      <p>求解正规方程：$\begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix} \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix} \implies \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 2/3 \\ 1/2 \end{bmatrix}$。</p>
-      <p>最佳拟合直线为：$y = \frac{2}{3} + \frac{1}{2} x$。</p>
-    </div>
-  </div>
-</div>
+                <!-- Error vector e = b - p (perpendicular to plane) -->
+                <line x1="380" y1="165" x2="380" y2="55" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="5,4"/>
+                <text x="395" y="110" fill="#fbbf24" font-size="13" font-weight="bold">残差 e = b - Ax̂ ⊥ Col(A)</text>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 最小二乘与 QR 加速对比</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+                <!-- Right angle at (380, 165) -->
+                <polygon points="380,150 365,150 365,165 380,165" fill="none" stroke="#f8fafc" stroke-width="1.5" opacity="0.7"/>
 
-A = np.array([[1, 1], [1, 2], [1, 3]], dtype=float)
-b = np.array([1, 2, 2], dtype=float)
+                <!-- Arbitrary vector Ax in Col(A) showing Pythagorean optimality -->
+                <line x1="160" y1="180" x2="480" y2="175" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3"/>
+                <circle cx="480" cy="175" r="3" fill="#94a3b8"/>
+                <text x="485" y="190" fill="#94a3b8" font-size="11">任一点 Ax</text>
 
-# 1. 最小二乘求解
-res, residuals, rank, s = np.linalg.lstsq(A, b, rcond=None)
-print("最优拟合参数 (c, d):", np.round(res, 4)) # [0.6667, 0.5]
+                <!-- Hypotenuse from b to Ax -->
+                <line x1="380" y1="50" x2="480" y2="175" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,3"/>
+                <text x="440" y="100" fill="#c084fc" font-size="11">||b - Ax|| (斜边 > 直角边)</text>
+              </svg>
+            </div>
 
-# 2. QR 分解求解验证
+            <h3 style="color: var(--accent-blue); margin-top: 1rem;">1.1 正交投影矩阵 $P$ 的严密代数推导</h3>
+            <p>
+              设矩阵 $A \in \mathbb{R}^{m \times n}$ 具有线性无关的各列（列满秩，$\text{rank}(A) = n \le m$）。列空间 $\text{Col}(A)$ 是由 $A$ 的列张成的 $n$ 维子空间。
+              将任意目标向量 $\mathbf{b} \in \mathbb{R}^m$ 投射到 $\text{Col}(A)$ 上，其投影向量必可由 $A$ 的列线性表出，故记作：
+            </p>
+            <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0;">
+              $$\mathbf{p} = A \hat{\mathbf{x}}$$
+            </div>
+            <p>
+              几何关键：误差残差向量 $\mathbf{e} = \mathbf{b} - \mathbf{p} = \mathbf{b} - A\hat{\mathbf{x}}$ 必须垂直于平面 $\text{Col}(A)$ 中的<strong>每一根基向量</strong>（即 $A$ 的所有列向量 $\mathbf{a}_1, \dots, \mathbf{a}_n$）：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; font-size: 1.15rem; text-align: center; margin: 0.75rem 0; border: 1px solid rgba(56, 189, 248, 0.25);">
+              $$\begin{cases}
+              \mathbf{a}_1^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0 \\
+              \mathbf{a}_2^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0 \\
+              \quad \vdots \\
+              \mathbf{a}_n^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0
+              \end{cases} \implies A^T (\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0}$$
+            </div>
+            <p>移项展开，便得到了线性代数中震撼世界的<strong>正规方程 (Normal Equations)</strong>：</p>
+            <div style="font-size: 1.25rem; text-align: center; font-weight: bold; margin: 0.75rem 0; color: var(--accent-blue);">
+              $$A^T A \hat{\mathbf{x}} = A^T \mathbf{b}$$
+            </div>
+            <p>
+              由于 $A$ 列满秩，方阵 $A^T A \in \mathbb{R}^{n \times n}$ 严格对称正定，因而<strong>必可逆</strong>！两边同时左乘 $(A^T A)^{-1}$：
+            </p>
+            <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
+              $$\hat{\mathbf{x}} = (A^T A)^{-1} A^T \mathbf{b}$$
+            </div>
+            <p>将其代回投影向量 $\mathbf{p} = A \hat{\mathbf{x}}$，即得：</p>
+            <div style="font-size: 1.3rem; text-align: center; color: var(--accent-green); margin: 0.75rem 0;">
+              $$\mathbf{p} = \underbrace{A (A^T A)^{-1} A^T}_{P} \mathbf{b} \implies P = A (A^T A)^{-1} A^T$$
+            </div>
+
+            <div class="intuition-box" style="margin-top: 1rem;">
+              <strong style="color: var(--accent-purple);">🌟 特例：当列向量为标准正交基 $Q$ 时的极致化简</strong>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem;">
+                若 $A = Q$（各列标准正交，满足 $Q^T Q = I$），代入公式：
+                $$P = Q (Q^T Q)^{-1} Q^T = Q I^{-1} Q^T = Q Q^T = \sum_{i=1}^n \mathbf{q}_i \mathbf{q}_i^T$$
+                这与离散傅里叶展开完全统一！求逆项彻底蒸发，正交基让投影矩阵化为各基底外积投影之和！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 正交投影矩阵 P 的四大黄金性质 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">算子特性</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 正交投影矩阵 $P$ 的四大黄金代数与几何铁律</h2>
+          </div>
+          <div class="card-body">
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.2);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.75rem;">👑 投影算子必须恪守的 4 大判定公理</h4>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-blue);">① 幂等性 (Idempotent: $P^2 = P$)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    $P^2 = A(A^TA)^{-1}A^T \cdot A(A^TA)^{-1}A^T = A(A^TA)^{-1}A^T = P$。<br>
+                    <strong>几何直觉：</strong>既然已经投射到了子空间平面上，再投射一次它依然纹丝不动！
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-purple);">② 对称性 (Symmetric: $P^T = P$)</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    $P^T = (A(A^TA)^{-1}A^T)^T = A ((A^TA)^{-1})^T A^T = A(A^TA)^{-1}A^T = P$。<br>
+                    <strong>核心意义：</strong>对称性是<strong>“正交”</strong>投影区别于“斜投影 (Oblique Projection)”的唯一分水岭！
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-green);">③ 特征值只能是 0 或 1</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    由 $P\mathbf{v} = \lambda \mathbf{v}$ 及 $P^2 = P$ 得 $\lambda^2 \mathbf{v} = \lambda \mathbf{v} \implies \lambda(\lambda - 1) = 0$。<br>
+                    特征值 $\lambda=1$ 对应平面内的向量，$\lambda=0$ 对应垂直于平面的向量。
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-amber);">④ 矩阵的迹等于投影空间维数</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    利用迹的循环置换律：<br>
+                    $\text{tr}(P) = \text{tr}(A(A^TA)^{-1}A^T) = \text{tr}((A^TA)^{-1}A^TA) = \text{tr}(I_n) = n = \text{rank}(A)$。
+                  </p>
+                </div>
+              </div>
+
+              <hr style="border:0; border-top:1px solid var(--border-color); margin: 1rem 0;">
+              <h5 style="color: #f8fafc; margin-bottom: 0.4rem;">🛡️ 互补投影矩阵 (Complementary Projector: $I - P$)</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                残差向量为 $\mathbf{e} = \mathbf{b} - \mathbf{p} = (I - P)\mathbf{b}$。易证矩阵 $I - P$ 同样是对称幂等矩阵，它精确地将向量投射到<strong>正交补子空间</strong> $\text{Col}(A)^\perp = \text{Null}(A^T)$ 上！全空间被正交分解为：$I = P + (I - P)$。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 最小二乘法全局最优性与三大求解范式 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">最优化与算法</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 最小二乘 (OLS) 最优性几何证明与三大工业级求解范式</h2>
+          </div>
+          <div class="card-body">
+            <h3 style="color: var(--accent-green);">3.1 勾股定理证明残差平方和全局唯一最小</h3>
+            <p>
+              对于任意假想解 $\mathbf{x} \in \mathbb{R}^n$，我们将总误差分解为两段垂直向量：
+            </p>
+            <div style="font-size: 1.05rem; text-align: center; margin: 0.5rem 0;">
+              $$\mathbf{b} - A\mathbf{x} = \underbrace{(\mathbf{b} - A\hat{\mathbf{x}})}_{\in \text{Null}(A^T)} + \underbrace{(A\hat{\mathbf{x}} - A\mathbf{x})}_{\in \text{Col}(A)}$$
+            </div>
+            <p>
+              因为第一段垂直于第二段，根据高维勾股定理，模长平方严格等于两部分平方之和：
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0; color: var(--accent-green);">
+              $$\|\mathbf{b} - A\mathbf{x}\|^2 = \|\mathbf{b} - A\hat{\mathbf{x}}\|^2 + \|A(\hat{\mathbf{x}} - \mathbf{x})\|^2 \ge \|\mathbf{b} - A\hat{\mathbf{x}}\|^2$$
+            </div>
+            <p>
+              第二项恒大于等于 0！当且仅当 $A\mathbf{x} = A\hat{\mathbf{x}}$（在列满秩下即 $\mathbf{x} = \hat{\mathbf{x}}$）时等号成立。<strong>正交投影在几何与代数上均是无可挑剔的全局唯一最小二乘解！</strong>
+            </p>
+
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 三大工业级求解范式深度对比</h3>
+            <div style="overflow-x: auto; margin-top: 1rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted);">
+                    <th style="padding: 0.75rem;">求解范式</th>
+                    <th style="padding: 0.75rem;">计算公式</th>
+                    <th style="padding: 0.75rem;">条件数敏感度</th>
+                    <th style="padding: 0.75rem;">工业适用场景与评价</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: bold; color: var(--accent-blue);">① 正规方程法 (Normal Eq)</td>
+                    <td style="padding: 0.75rem;">$(A^T A)\hat{\mathbf{x}} = A^T \mathbf{b}$</td>
+                    <td style="padding: 0.75rem; color: #ef4444;">$\kappa(A^T A) = [\kappa(A)]^2$ (平方爆炸)</td>
+                    <td style="padding: 0.75rem;">适合 $m \gg n$ 且 $n$ 极小的简单统计学问题；若 $A$ 接近病态，误差急剧失真。</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: bold; color: var(--accent-green);">② QR 分解加速法 (推荐)</td>
+                    <td style="padding: 0.75rem;">$R\hat{\mathbf{x}} = Q^T \mathbf{b}$</td>
+                    <td style="padding: 0.75rem; color: #4ade80;">$\kappa(R) = \kappa(A)$ (线性平稳)</td>
+                    <td style="padding: 0.75rem;">绝大多数科学计算与机器学习库（如 LAPACK）的默认主力引擎，稳定且速度优良！</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.75rem; font-weight: bold; color: var(--accent-purple);">③ SVD 广义伪逆法 (终极)</td>
+                    <td style="padding: 0.75rem;">$\hat{\mathbf{x}} = A^+ \mathbf{b} = V \Sigma^+ U^T \mathbf{b}$</td>
+                    <td style="padding: 0.75rem; color: #c084fc;">可截断奇异值滤除病态扰动</td>
+                    <td style="padding: 0.75rem;">即使 $A$ 发生严重秩亏损（列相关）也能自动求出最小范数解，鲁棒性最顶尖。</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 交互实验台：动态最小二乘拟合与损失曲面实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧪 交互实验台：动态散点拟合与正规方程残差可视化</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted);">
+              在左侧坐标系中<strong>用鼠标左键点击以添加数据散点</strong>，或拖动调节已有点。右侧实时求解正规方程，动态渲染最优拟合直线 $y = c + dx$、各观测点的垂线残差 $e_i$，并实时更新误差平方和与矩阵数值！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Left: Interactive Canvas -->
+              <div style="background: #090d16; border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; text-align: center;">
+                <div style="display:flex; justify-content:space-between; margin-bottom: 0.5rem;">
+                  <span style="font-size:0.85rem; color:var(--text-muted);">点击画板添加数据点</span>
+                  <button id="btnResetPts" class="btn btn-secondary" style="padding: 0.2rem 0.6rem; font-size: 0.75rem;">重置数据点</button>
+                </div>
+                <canvas id="olsCanvas" width="460" height="360" style="width: 100%; max-width: 460px; height: auto; background: #070a12; border-radius: 6px; cursor: crosshair;"></canvas>
+                <div style="display: flex; justify-content: space-around; font-size: 0.82rem; margin-top: 0.75rem;">
+                  <span style="color: #38bdf8;">● 数据点 (xᵢ, yᵢ)</span>
+                  <span style="color: #4ade80;">— 拟合直线 y=c+dx</span>
+                  <span style="color: #f43f5e;">| 垂直残差 eᵢ</span>
+                </div>
+              </div>
+
+              <!-- Right: Live Math & Coefficients Panel -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem; font-size: 0.95rem;">📐 实时最小二乘解</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.9; color: #f8fafc;">
+                    <div>• 拟合直线方程: <strong id="statLineEq" style="color:var(--accent-green); font-size:1.05rem;">y = 0.00 + 0.00x</strong></div>
+                    <div>• 截距 (Intercept c): <span id="statC" style="color:#38bdf8;">0.000</span></div>
+                    <div>• 斜率 (Slope d): <span id="statD" style="color:#c084fc;">0.000</span></div>
+                    <div>• 残差平方和 (RSS = ||e||²): <span id="statRSS" style="color:#f43f5e;">0.000</span></div>
+                    <div>• 均方误差 (MSE): <span id="statMSE" style="color:#fbbf24;">0.000</span></div>
+                  </div>
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1;">
+                  <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem; font-size: 0.95rem;">🔢 对应正规方程矩阵 $A^T A$ 与 $A^T \mathbf{b}$</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+                    $$A^T A = \begin{bmatrix} m & \sum x_i \\ \sum x_i & \sum x_i^2 \end{bmatrix}, \quad A^T \mathbf{b} = \begin{bmatrix} \sum y_i \\ \sum x_i y_i \end{bmatrix}$$
+                    <div id="statNormMat" style="background:#090d16; padding:0.5rem; border-radius:4px; font-size:0.8rem; margin-top:0.4rem; color:#f8fafc;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 经典手算演练：四点最小二乘回归 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 经典手算精析：四观测点最优直线拟合完整推导演练</h2>
+          </div>
+          <div class="card-body">
+            <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                【题目】求经过观测点 $(0, 1), (1, 1), (2, 2), (3, 4)$ 的最佳拟合直线 $y = c + dx$
+              </h4>
+              <div style="line-height: 1.9;">
+                <p><strong>第一步：构建超定方程组 $A\mathbf{x} = \mathbf{b}$</strong></p>
+                $$\begin{cases}
+                c + 0d = 1 \\
+                c + 1d = 1 \\
+                c + 2d = 2 \\
+                c + 3d = 4
+                \end{cases} \implies A = \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} c \\ d \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 1 \\ 2 \\ 4 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第二步：计算正规方程各项 $A^T A$ 与 $A^T \mathbf{b}$</strong></p>
+                $$A^T A = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 4 & 6 \\ 6 & 14 \end{bmatrix}$$
+                $$A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & 1 & 1 \\ 0 & 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 \\ 1 \\ 2 \\ 4 \end{bmatrix} = \begin{bmatrix} 1+1+2+4 \\ 0+1+4+12 \end{bmatrix} = \begin{bmatrix} 8 \\ 17 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第三步：求解二元一次方程组 $(A^T A)\hat{\mathbf{x}} = A^T \mathbf{b}$</strong></p>
+                $$\begin{bmatrix} 4 & 6 \\ 6 & 14 \end{bmatrix} \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 8 \\ 17 \end{bmatrix}$$
+                <p>计算行列式 $\det(A^T A) = 4 \times 14 - 6^2 = 56 - 36 = 20$：</p>
+                $$(A^T A)^{-1} = \frac{1}{20} \begin{bmatrix} 14 & -6 \\ -6 & 4 \end{bmatrix} = \begin{bmatrix} 0.7 & -0.3 \\ -0.3 & 0.2 \end{bmatrix}$$
+                $$\begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} 0.7 & -0.3 \\ -0.3 & 0.2 \end{bmatrix} \begin{bmatrix} 8 \\ 17 \end{bmatrix} = \begin{bmatrix} 5.6 - 5.1 \\ -2.4 + 3.4 \end{bmatrix} = \begin{bmatrix} 0.5 \\ 1.0 \end{bmatrix}$$
+                <p>得最优拟合直线为：<strong style="color:var(--accent-green); font-size:1.1rem;">$y = 0.5 + 1.0x$</strong>。</p>
+
+                <p style="margin-top: 0.75rem;"><strong>第四步：计算投影向量 $\mathbf{p}$ 与残差平方和验证</strong></p>
+                $$\mathbf{p} = A\hat{\mathbf{x}} = \begin{bmatrix} 0.5 \\ 1.5 \\ 2.5 \\ 3.5 \end{bmatrix}, \quad \mathbf{e} = \mathbf{b} - \mathbf{p} = \begin{bmatrix} 1 - 0.5 \\ 1 - 1.5 \\ 2 - 2.5 \\ 4 - 3.5 \end{bmatrix} = \begin{bmatrix} 0.5 \\ -0.5 \\ -0.5 \\ 0.5 \end{bmatrix}$$
+                <p>验证正交性：$\mathbf{a}_1 \cdot \mathbf{e} = 0.5 - 0.5 - 0.5 + 0.5 = 0$！$\mathbf{a}_2 \cdot \mathbf{e} = 0 - 0.5 - 1.0 + 1.5 = 0$！</p>
+                <p>残差平方和为：$\|\mathbf{e}\|^2 = 0.5^2 + (-0.5)^2 + (-0.5)^2 + 0.5^2 = 1.0$。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python / NumPy / SciPy 工业实战演练 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python 机器学习实战：普通最小二乘 vs QR 稳定性对比</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              工业界在训练高阶多项式模型或多元回归时，最害怕遇到特征共线造成的条件数爆炸。下面的 Python 代码对比了三种求解途径，并展示了在病态数据下 QR 与 SVD 的强大防御能力：
+            </p>
+
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6;"><code>import numpy as np
+from scipy import linalg
+
+# 1. 模拟含噪声的实验观测数据
+np.random.seed(42)
+x = np.linspace(0, 4, 30)
+# 真实规律: y = 1.5 + 2.3*x + 高斯噪声
+y = 1.5 + 2.3 * x + np.random.normal(0, 0.5, size=len(x))
+
+# 2. 构造设计矩阵 A (包含常数偏置列和 x 列)
+A = np.column_stack([np.ones_like(x), x])
+
+# --- 求解范式 1: 直接求解正规方程 (A^T A x = A^T b) ---
+ATA = A.T @ A
+ATb = A.T @ y
+w_normal = np.linalg.solve(ATA, ATb)
+
+# --- 求解范式 2: 利用 QR 分解 (Rx = Q^T b) ---
 Q, R = np.linalg.qr(A)
-x_qr = np.linalg.solve(R, Q.T @ b)
-print("QR 求解结果:", np.round(x_qr, 4))</code></pre>
-  </div>
-</div>
+w_qr = linalg.solve_triangular(R, Q.T @ y)
 
+# --- 求解范式 3: NumPy 工业级 SVD 驱动接口 lstsq ---
+w_lstsq, residuals, rank, s = np.linalg.lstsq(A, y, rcond=None)
+
+print("=== 求解参数 (截距 c, 斜率 d) 对比 ===")
+print("正规方程解: ", np.round(w_normal, 4))
+print("QR 加速解:  ", np.round(w_qr, 4))
+print("NumPy lstsq:", np.round(w_lstsq, 4))
+
+# 3. 构造高阶病态 Vandermonde 多项式回归对抗测试
+# 当多项式阶数升高到 10 阶时，A^T A 的条件数会飙升到 10^16 (机器浮点极限)
+degree = 10
+A_poly = np.vander(x, N=degree+1, increasing=True)
+cond_A = np.linalg.cond(A_poly)
+cond_ATA = np.linalg.cond(A_poly.T @ A_poly)
+
+print("\n=== 10阶多项式回归矩阵条件数恶化指标 ===")
+print(f"原设计矩阵 A 条件数:     {cond_A:.2e}")
+print(f"正规方程 A^T A 条件数:   {cond_ATA:.2e} (精度彻底丧失！)")</code></pre>
+          </div>
+        </div>
+
+        <!-- 7. 交互自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自我检测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：正交投影与最小二乘核心概念挑战</h2>
+          </div>
+          <div class="card-body">
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              
+              <!-- Quiz 1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  1. 一个正交投影矩阵 $P$（向某个 $k$ 维非平凡子空间正交投影）的特征值必然是：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 必须全部严格等于 1</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 只能是 0 或 1（且 1 的重数正好等于子空间的维数 $k$）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 均大于 0，由奇异值开方决定</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 在复平面单位圆上的共轭复数</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  2. 若矩阵 $P$ 满足 $P^2 = P$，但并不满足 $P^T = P$，则 $P$ 对应的是什么样的几何变换？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 正交投影变换</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 斜投影变换 (Oblique Projection，残差与投影平面不垂直)</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 刚体旋转变换</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 纯缩放拉伸变换</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  3. 为什么在数值计算中，解最小二乘更推荐使用 QR 分解而非直接求逆解正规方程 $(A^T A)\hat{\mathbf{x}} = A^T \mathbf{b}$？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 因为 QR 分解可以将超定矩阵变成正方矩阵</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 因为 $A^T A$ 会使得条件数平方 $\kappa(A^T A) = \kappa(A)^2$，剧烈放大计算舍入误差</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 因为正规方程在数学上只适用于二阶矩阵</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 因为 QR 分解不需要使用浮点数除法</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -404,6 +749,250 @@ print("QR 求解结果:", np.round(x_qr, 4))</code></pre>
       </main>
     </div>
   </div>
+
+
+  <script>
+    // 交互实验台：最小二乘拟合与正规方程联动逻辑
+    (function() {
+      const canvas = document.getElementById('olsCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const btnReset = document.getElementById('btnResetPts');
+
+      const statLineEq = document.getElementById('statLineEq');
+      const statC = document.getElementById('statC');
+      const statD = document.getElementById('statD');
+      const statRSS = document.getElementById('statRSS');
+      const statMSE = document.getElementById('statMSE');
+      const statNormMat = document.getElementById('statNormMat');
+
+      // Initial points: (x, y) in math coordinates [0..10, 0..10]
+      let points = [
+        { x: 1.0, y: 1.8 },
+        { x: 2.5, y: 3.2 },
+        { x: 4.0, y: 3.8 },
+        { x: 6.0, y: 6.5 },
+        { x: 7.5, y: 7.2 },
+        { x: 8.8, y: 9.0 }
+      ];
+
+      function toScreen(x, y) {
+        const padL = 40, padB = 40, padT = 20, padR = 20;
+        const pw = canvas.width - padL - padR;
+        const ph = canvas.height - padT - padB;
+        return {
+          px: padL + (x / 10) * pw,
+          py: canvas.height - padB - (y / 10) * ph
+        };
+      }
+
+      function fromScreen(px, py) {
+        const padL = 40, padB = 40, padT = 20, padR = 20;
+        const pw = canvas.width - padL - padR;
+        const ph = canvas.height - padT - padB;
+        const x = Math.max(0, Math.min(10, ((px - padL) / pw) * 10));
+        const y = Math.max(0, Math.min(10, ((canvas.height - padB - py) / ph) * 10));
+        return { x, y };
+      }
+
+      function solveOLS() {
+        const m = points.length;
+        if (m < 2) return { c: 0, d: 0, rss: 0, mse: 0, sX: 0, sXX: 0, sY: 0, sXY: 0 };
+
+        let sumX = 0, sumY = 0, sumXX = 0, sumXY = 0;
+        for (let p of points) {
+          sumX += p.x;
+          sumY += p.y;
+          sumXX += p.x * p.x;
+          sumXY += p.x * p.y;
+        }
+
+        const det = m * sumXX - sumX * sumX;
+        let c = 0, d = 0;
+        if (Math.abs(det) > 1e-8) {
+          c = (sumXX * sumY - sumX * sumXY) / det;
+          d = (m * sumXY - sumX * sumY) / det;
+        }
+
+        let rss = 0;
+        for (let p of points) {
+          const pred = c + d * p.x;
+          const err = p.y - pred;
+          rss += err * err;
+        }
+        const mse = rss / m;
+
+        return { c, d, rss, mse, m, sumX, sumXX, sumY, sumXY };
+      }
+
+      function render() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const padL = 40, padB = 40, padT = 20, padR = 20;
+        const pw = w - padL - padR;
+        const ph = h - padT - padB;
+
+        // Grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= 10; i += 2) {
+          const ptX = toScreen(i, 0);
+          ctx.beginPath(); ctx.moveTo(ptX.px, padT); ctx.lineTo(ptX.px, h - padB); ctx.stroke();
+          const ptY = toScreen(0, i);
+          ctx.beginPath(); ctx.moveTo(padL, ptY.py); ctx.lineTo(w - padR, ptY.py); ctx.stroke();
+
+          // Labels
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px monospace';
+          ctx.fillText(i.toString(), ptX.px - 4, h - padB + 16);
+          if (i > 0) ctx.fillText(i.toString(), padL - 20, ptY.py + 4);
+        }
+
+        // Axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(padL, h - padB);
+        ctx.lineTo(w - padR, h - padB);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(padL, h - padB);
+        ctx.lineTo(padL, padT);
+        ctx.stroke();
+
+        const ols = solveOLS();
+
+        // Draw Residual dashed drops e_i
+        ctx.strokeStyle = '#f43f5e';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]);
+        for (let p of points) {
+          const ptReal = toScreen(p.x, p.y);
+          const predY = ols.c + ols.d * p.x;
+          const ptPred = toScreen(p.x, predY);
+          ctx.beginPath();
+          ctx.moveTo(ptReal.px, ptReal.py);
+          ctx.lineTo(ptPred.px, ptPred.py);
+          ctx.stroke();
+        }
+        ctx.setLineDash([]);
+
+        // Draw OLS Best Fit Line
+        if (points.length >= 2) {
+          const pStart = toScreen(0, ols.c);
+          const pEnd = toScreen(10, ols.c + ols.d * 10);
+
+          ctx.strokeStyle = '#4ade80';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.moveTo(pStart.px, pStart.py);
+          ctx.lineTo(pEnd.px, pEnd.py);
+          ctx.stroke();
+        }
+
+        // Draw Data Points
+        for (let p of points) {
+          const pt = toScreen(p.x, p.y);
+          ctx.fillStyle = '#38bdf8';
+          ctx.beginPath();
+          ctx.arc(pt.px, pt.py, 6, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#fff';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+
+        // Update live math readouts
+        const sign = ols.d >= 0 ? '+' : '-';
+        statLineEq.textContent = `y = ${ols.c.toFixed(2)} ${sign} ${Math.abs(ols.d).toFixed(2)}x`;
+        statC.textContent = ols.c.toFixed(3);
+        statD.textContent = ols.d.toFixed(3);
+        statRSS.textContent = ols.rss.toFixed(4);
+        statMSE.textContent = ols.mse.toFixed(4);
+
+        if (ols.m) {
+          statNormMat.innerHTML = `AᵀA = [${ols.m}, ${ols.sumX.toFixed(1)}; ${ols.sumX.toFixed(1)}, ${ols.sumXX.toFixed(1)}] | Aᵀb = [${ols.sumY.toFixed(1)}, ${ols.sumXY.toFixed(1)}]ᵀ`;
+        }
+      }
+
+      // Interaction: Click to add points
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const px = (e.clientX - rect.left) * (canvas.width / rect.width);
+        const py = (e.clientY - rect.top) * (canvas.height / rect.height);
+        const mathPt = fromScreen(px, py);
+        points.push(mathPt);
+        render();
+      });
+
+      btnReset.addEventListener('click', () => {
+        points = [
+          { x: 1.0, y: 1.8 },
+          { x: 2.5, y: 3.2 },
+          { x: 4.0, y: 3.8 },
+          { x: 6.0, y: 6.5 },
+          { x: 7.5, y: 7.2 },
+          { x: 8.8, y: 9.0 }
+        ];
+        render();
+      });
+
+      render();
+    })();
+
+    // 交互式自测 Quiz 选项点击逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation72(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation72(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation72(item, isCorrect) {
+        const text = item.querySelector('div').innerText;
+        if (text.includes('特征值必然是')) {
+          return '选项 B 正确。由 P² = P 可知特征值 λ² = λ，因此 λ 只能取 0 或 1。属于 λ=1 的特征空间恰好是投影目标子空间 Col(A)，维数为 k；属于 λ=0 的特征空间是正交补空间，维数为 m-k。';
+        } else if (text.includes('满足 P² = P，但并不满足 Pᵀ = P')) {
+          return '选项 B 正确。P² = P 仅保证它是某种投影算子（投两次等于投一次），但若不满足对称性 Pᵀ = P，说明投影方向不垂直于目标子空间，这正是斜投影 (Oblique Projection)！';
+        } else if (text.includes('推荐使用 QR 分解而非直接求逆')) {
+          return '选项 B 正确。计算 AᵀA 会使其条件数平方化（κ(AᵀA) = [κ(A)]²），一旦原设计矩阵条件数为 10^8，AᵀA 条件数瞬间飙至 10^16，直接击穿双精度浮点精度限制！而 QR 分解保持条件数不变。';
+        }
+        return '';
+      }
+    });
+  </script>
 
 </body>
 </html>

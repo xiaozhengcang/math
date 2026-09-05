@@ -257,7 +257,7 @@
               </div>
               <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #06b6d4;">
                 <strong style="color: #06b6d4;">阶梯 7 · 极坐标、欧拉公式与乘法真谛</strong>
-                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">$z = r(\cos\theta + i\sin\theta) = r e^{i\theta}$。乘以一个复数就是“伸缩模长+逆时针旋转”！棣莫弗定理与角度翻倍。</p>
+                <p style="margin: 0.35rem 0 0; font-size: 0.83rem; color: var(--text-muted);">$z = r(\cos\theta + i\sin\theta) = r e^{i\theta}$。欧拉公式三大推导（泰勒级数、微分方程/圆周运动、复利极限）与上帝公式 $e^{i\pi}+1=0$，乘法旋转与棣莫弗定理。</p>
               </div>
               <div style="padding: 0.85rem 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid #10b981;">
                 <strong style="color: #10b981;">阶梯 8 · 典型几何轨迹方程全解析</strong>
@@ -1563,6 +1563,108 @@
               <br>• 当 $n = 2$ 时，辐角以 2 倍速度翻倍：$(e^{i\theta})^2 = e^{i \mathbf{2\theta}}$；
               <br>• 这直接解释了在专题拓展 2 的三维马鞍面中，为什么切片旋转角 $\theta$ 会在输出中诱发 $\cos(\mathbf{2\theta})$ 的两倍角速度翻转！
             </p>
+            <!-- 7.4 欧拉公式推导全解析 -->
+            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(14, 165, 233, 0.05); border: 1px solid rgba(14, 165, 233, 0.25); border-radius: 12px;">
+              <h3 style="color: var(--accent-blue); font-size: 1.25rem; margin-top: 0; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚡</span> 7.4 灵魂拷问：欧拉公式 $e^{i\theta} = \cos\theta + i\sin\theta$ 究竟是怎么推导出来的？
+              </h3>
+              <p style="line-height: 1.8; font-size: 0.95rem;">
+                很多同学在第一次见到 $r e^{i\theta}$ 时都会产生强烈的认知冲击：
+                <strong>$e$ 是自然对数的底（约 2.71828），虚数单位是 $i = \sqrt{-1}$，怎么一个数的虚数次幂突然变成了圆周上的三角函数 $\cos\theta + i\sin\theta$？</strong>
+                <br>数学家欧拉（Leonhard Euler）在 1748 年给出了这个被称为“数学中最美公式”的深刻定理。下面我们从<strong>三个完全不同的认知视角</strong>来彻底揭开它的推导全貌！
+              </p>
+
+              <!-- 视角一 -->
+              <div style="margin-top: 1.25rem; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid #38bdf8;">
+                <h4 style="margin: 0 0 0.5rem; color: #38bdf8; font-size: 1.05rem;">
+                  视角一：泰勒/麦克劳林级数展开法（严格代数推导，最标准的数学证明）
+                </h4>
+                <p style="line-height: 1.8; font-size: 0.93rem;">
+                  微积分告诉我们，光滑函数可以在原点展开为无限多项式（麦克劳林级数）。对于实数指数函数 $e^x$，其展开式定义为：
+                  $$e^x = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \frac{x^4}{4!} + \frac{x^5}{5!} + \frac{x^6}{6!} + \frac{x^7}{7!} + \cdots = \sum_{n=0}^{\infty} \frac{x^n}{n!}$$
+                  大胆假设：如果我们将实数 $x$ 替换为纯虚数 $i\theta$，会发生什么？
+                  <br>回顾虚数单位 $i$ 的周期循环律：
+                  $$i^0 = 1, \quad i^1 = i, \quad i^2 = -1, \quad i^3 = -i, \quad i^4 = 1, \quad \dots$$
+                  将 $x = i\theta$ 代入展开式中，每一项按 $i$ 的幂次展开：
+                  $$e^{i\theta} = 1 + (i\theta) + \frac{(i\theta)^2}{2!} + \frac{(i\theta)^3}{3!} + \frac{(i\theta)^4}{4!} + \frac{(i\theta)^5}{5!} + \frac{(i\theta)^6}{6!} + \frac{(i\theta)^7}{7!} + \cdots$$
+                  $$= 1 + i\theta - \frac{\theta^2}{2!} - i\frac{\theta^3}{3!} + \frac{\theta^4}{4!} + i\frac{\theta^5}{5!} - \frac{\theta^6}{6!} - i\frac{\theta^7}{7!} + \cdots$$
+                  现在，把所有<strong>不含 $i$ 的实数项</strong>归为一组，把所有<strong>含 $i$ 的虚数项</strong>归为一组：
+                  $$e^{i\theta} = \underbrace{\left(1 - \frac{\theta^2}{2!} + \frac{\theta^4}{4!} - \frac{\theta^6}{6!} + \cdots\right)}_{\text{恰好是 } \cos\theta \text{ 的麦克劳林展开！}} + i \underbrace{\left(\theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - \frac{\theta^7}{7!} + \cdots\right)}_{\text{恰好是 } \sin\theta \text{ 的麦克劳林展开！}}$$
+                  两组级数分别完美还原了三角函数的标准泰勒级数定义！因此必然有：
+                  $$\mathbf{e^{i\theta} = \cos\theta + i\sin\theta}$$
+                  两边同乘模长 $r$（$r \ge 0$），即得任意复数的指数形式：
+                  $$\mathbf{z = r e^{i\theta} = r(\cos\theta + i\sin\theta)}$$
+                </p>
+              </div>
+
+              <!-- 视角二 -->
+              <div style="margin-top: 1.25rem; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid #a855f7;">
+                <h4 style="margin: 0 0 0.5rem; color: #a855f7; font-size: 1.05rem;">
+                  视角二：常微分方程与匀速圆周运动法（物理与动力学直觉，最透彻的几何解释）
+                </h4>
+                <p style="line-height: 1.8; font-size: 0.93rem;">
+                  我们定义一个关于角度 $\theta$ 的复变函数：
+                  $$f(\theta) = \cos\theta + i\sin\theta, \quad \text{显然 } f(0) = \cos 0 + i\sin 0 = 1$$
+                  对其求导（关于 $\theta$ 微分）：
+                  $$f'(\theta) = \frac{d}{d\theta}(\cos\theta + i\sin\theta) = -\sin\theta + i\cos\theta$$
+                  利用代数恒等式 $-1 = i^2$，将上式右边提出公因式 $i$：
+                  $$f'(\theta) = i^2\sin\theta + i\cos\theta = i(\cos\theta + i\sin\theta) = i \cdot f(\theta)$$
+                  注意这个极其优美的微分方程：
+                  $$\frac{d f(\theta)}{d\theta} = i \cdot f(\theta)$$
+                  在微积分中，<strong>导数与自身成正比的函数 $\frac{dy}{dx} = k y$ 只有指数函数 $y = C e^{kx}$</strong>！
+                  <br>这里比例常数 $k = i$，初始值 $f(0) = 1 \implies C = 1$。方程的唯一特解必然是：
+                  $$f(\theta) = e^{i\theta}$$
+                  这就再次严格证明了 $e^{i\theta} = \cos\theta + i\sin\theta$。
+                  <br><br>
+                  <strong style="color: #facc15;">💡 物理运动学几何直觉：</strong>
+                  <br>• 在复平面上，<strong>乘以虚数单位 $i$ 的几何意义是“逆时针旋转 $90^\circ$”</strong>。
+                  <br>• 方程 $f'(\theta) = i \cdot f(\theta)$ 翻译成物理语言就是：<strong>位置向量 $f(\theta)$ 的速度向量 $f'(\theta)$，永远与位置向量垂直（相差 $90^\circ$），且速度大小始终等于位置模长 1</strong>！
+                  <br>• 速度恒垂直于位置、速率恒为 1 的运动，正是物理里的<strong>匀速圆周运动</strong>！随着参数 $\theta$ 的流逝，质点在单位圆上以角速度 1 均匀绕行，其坐标就是 $(\cos\theta, \sin\theta)$！
+                </p>
+              </div>
+
+              <!-- 视角三 -->
+              <div style="margin-top: 1.25rem; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid #10b981;">
+                <h4 style="margin: 0 0 0.5rem; color: #10b981; font-size: 1.05rem;">
+                  视角三：连续复利极限累乘法（微元旋转累积，最通俗的生长直觉）
+                </h4>
+                <p style="line-height: 1.8; font-size: 0.93rem;">
+                  常数 $e$ 在分析学中的原始定义来源于“连续复利极限”：
+                  $$e^x = \lim_{n \to \infty} \left(1 + \frac{x}{n}\right)^n$$
+                  令 $x = i\theta$：
+                  $$e^{i\theta} = \lim_{n \to \infty} \left(1 + \frac{i\theta}{n}\right)^n$$
+                  让我们在复平面上看看单步操作 $1 + \frac{i\theta}{n}$ 在做什么：
+                  <br>1. 从实轴上的点 $1$ 出发，向上走一段垂直极微小的距离 $\frac{\theta}{n}$，到达点 $1 + i\frac{\theta}{n}$；
+                  <br>2. 这个微小三角形的斜边长度为 $\sqrt{1 + (\theta/n)^2} \approx 1 + O(1/n^2)$，旋转角度为 $\Delta\theta = \arctan(\frac{\theta}{n}) \approx \frac{\theta}{n}$；
+                  <br>3. 连续乘以自身 $n$ 次：<strong>角度累加 $n \times \frac{\theta}{n} = \theta$</strong>！而模长的极限 $\lim_{n\to\infty} \left(1 + \frac{\theta^2}{2n^2}\right)^n = 1$！
+                  <br>4. 这意味着：$n$ 次微小的“垂直施力”，每一次都在让速度方向偏转一个微角度，将质点沿着半径为 1 的单位圆周弯曲，最终弧长正好累积到 $\theta$，落点位置正是 $(\cos\theta, \sin\theta)$！
+                </p>
+              </div>
+            </div>
+
+            <!-- 7.5 上帝公式 -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(234, 179, 8, 0.08), rgba(239, 68, 68, 0.08)); border: 1px solid rgba(234, 179, 8, 0.35); border-radius: 12px;">
+              <h3 style="color: #facc15; font-size: 1.25rem; margin-top: 0; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🌟</span> 7.5 终极升华：世界上最伟大的数学公式 —— 欧拉恒等式
+              </h3>
+              <p style="line-height: 1.8; font-size: 0.95rem;">
+                在欧拉公式 $e^{i\theta} = \cos\theta + i\sin\theta$ 中，如果我们代入一个极其特殊的角度 $\theta = \pi$（即 $180^\circ$ 半周圆周率）：
+                $$e^{i\pi} = \cos\pi + i\sin\pi = -1 + 0 = -1$$
+                移项整理，即得震惊数学界的<strong>欧拉恒等式（Euler's Identity）</strong>：
+              </p>
+              <div style="text-align: center; margin: 1.25rem 0; font-size: 1.6rem; font-weight: bold; color: #facc15; letter-spacing: 2px;">
+                $$\mathbf{e^{i\pi} + 1 = 0}$$
+              </div>
+              <p style="line-height: 1.8; font-size: 0.95rem;">
+                物理学家理查德·费曼（Richard Feynman）曾赞叹它是<strong>“数学中最非凡的公式”</strong>。为什么它如此受推崇？因为它用最精简的结构，将人类数学史上<strong> 5 个最核心的常数</strong>与<strong> 3 种基本代数运算</strong>融为一体：
+                <br>• <strong>$0$</strong>：加法单位元、中性原点，算术的基石；
+                <br>• <strong>$1$</strong>：乘法单位元、计数起点，离散数学的基石；
+                <br>• <strong>$\pi$</strong>：圆周率，几何学与空间的无理性基石；
+                <br>• <strong>$e$</strong>：自然常数，微积分与动态连续生长的基石；
+                <br>• <strong>$i$</strong>：虚数单位，代数学与旋转扩张的基石；
+                <br>• 加上<strong>加法（$+$）</strong>、<strong>乘法（隐式）</strong>与<strong>乘方（指数运算）</strong>，构成了一幅宇宙级数学和谐画卷！
+              </p>
+            </div>
 
           </div>
         </div>

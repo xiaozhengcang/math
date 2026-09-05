@@ -266,102 +266,741 @@
         <div class="module-hero">
           <div class="module-badge">Chapter 6: 抽象向量空间</div>
           <h1 class="module-title">Ch 6.1: 抽象向量空间 8 大公理与同构定理</h1>
+          <p class="module-subtitle">从具体几何箭头到纯粹代数结构：解码“万物皆向量”的代数本质，见证同构定理如何统一有限维空间的世界观</p>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 原来万物皆向量！抽象向量空间的 8 大公理</h2>
-  </div>
-  <div class="card-body">
-    <p>李宏毅老师在 Chapter 6 中提出了一个极具哲学深度的视角：<strong>向量不仅仅是箭头或实数数组，只要一个对象集合定义了“加法”与“数乘”，并且满足以下 8 大公理，它就是货真价实的向量空间 (Vector Space)！</strong></p>
-    
-    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 向量空间 8 大公理 (8 Axioms of Vector Space)</h4>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
-        <div>
-          <strong style="color: var(--accent-blue);">【加法 4 大公理】</strong>
-          <ol style="margin-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
-            <li>交换律：$\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$</li>
-            <li>结合律：$(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$</li>
-            <li>零元存在：存在 $\mathbf{0}$ 满足 $\mathbf{u} + \mathbf{0} = \mathbf{u}$</li>
-            <li>逆元存在：存在 $-\mathbf{u}$ 满足 $\mathbf{u} + (-\mathbf{u}) = \mathbf{0}$</li>
-          </ol>
+        <!-- 导言卡片：从几何箭头到代数哲学的飞跃 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：从“具体箭头”到“纯粹代数结构”</div>
+          <p>
+            在前五章中，我们熟悉的向量通常是二维平面或三维空间中的<strong>几何带箭头线段</strong>，或者是 $\mathbb{R}^n$ 中的<strong>实数数组列表</strong> $\begin{bmatrix} x_1 & x_2 & \dots & x_n \end{bmatrix}^T$。
+          </p>
+          <p>
+            然而，现代数学与工程学（量子力学态叠加、傅里叶信号分析、连续曲线拟合、机器学习核方法）揭示了一个震撼的真相：<strong>向量并不必须是带有方向和长度的物理箭头！</strong>
+          </p>
+          <p style="margin-top: 0.5rem;">
+            一个多项式 $3x^2 - 2x + 1$、一段声音信号波形 $f(t)$、一个 $3 \times 3$ 的矩阵 $A$、甚至是量子力学中的波函数 $\psi(x)$，都可以是货真价实的“向量”。<strong>只要一个集合定义了“加法”与“数乘”，并且遵守基本的运算法则，前五章积累的所有关于线性无关、基底、维数、变换和特征值的理论，全都能够 100% 毫无保留地迁移过去！</strong>
+          </p>
         </div>
-        <div>
-          <strong style="color: var(--accent-purple);">【数乘 4 大公理】</strong>
-          <ol style="margin-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
-            <li>数乘标量分配律：$c(\mathbf{u} + \mathbf{v}) = c\mathbf{u} + c\mathbf{v}$</li>
-            <li>向量标量分配律：$(c + d)\mathbf{u} = c\mathbf{u} + d\mathbf{u}$</li>
-            <li>标量结合律：$(cd)\mathbf{u} = c(d\mathbf{u})$</li>
-            <li>单位标量乘：$1 \cdot \mathbf{u} = \mathbf{u}$</li>
-          </ol>
+
+        <!-- 1. 运算封闭性前提与 8 大公理全景 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">核心公理体系</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 严密奠基：2 大运算封闭性前提与 8 大公理系统</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              设 $\mathbb{F}$ 是一个标量域（本教程中若无特别说明，均为实数域 $\mathbb{R}$，也可为复数域 $\mathbb{C}$）。一个非空集合 $V$ 若要成为定义在标量域 $\mathbb{F}$ 上的<strong>向量空间 (Vector Space)</strong>，必须首先定义两种基本代数运算：
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height: 1.8;">
+              <li><strong>向量加法 (Vector Addition)</strong>：对任意 $\mathbf{u}, \mathbf{v} \in V$，存在唯一元素 $\mathbf{u} + \mathbf{v}$。</li>
+              <li><strong>标量乘法 (Scalar Multiplication)</strong>：对任意标量 $c \in \mathbb{F}$ 与向量 $\mathbf{u} \in V$，存在唯一元素 $c\mathbf{u}$。</li>
+            </ul>
+
+            <!-- 2 大封闭性前提 -->
+            <div class="warning-box" style="margin: 1.25rem 0;">
+              <div class="box-title">🚨 绝不可忽略的 2 大隐性公理：运算封闭性 (Closure Properties)</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                  <strong style="color: var(--accent-rose);">① 加法封闭性 (Closure under Addition)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-rose);">
+                    $$\forall \, \mathbf{u}, \mathbf{v} \in V \implies \mathbf{u} + \mathbf{v} \in V$$
+                  </div>
+                  <p style="font-size: 0.88rem; color: var(--text-muted);">集合中任意两个元素相加，其结果绝不能“飞出”该集合。</p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                  <strong style="color: var(--accent-amber);">② 标量乘法封闭性 (Closure under Scalar Multiplication)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-amber);">
+                    $$\forall \, c \in \mathbb{F}, \; \mathbf{u} \in V \implies c\mathbf{u} \in V$$
+                  </div>
+                  <p style="font-size: 0.88rem; color: var(--text-muted);">集合中任意元素缩放任意标量倍数，结果仍必须严密驻留在集合内。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 8 大公理系统框 -->
+            <div class="definition-box" style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <h4 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">
+                📐 抽象向量空间 8 大公理 (The 8 Axioms of a Vector Space)
+              </h4>
+              <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+                在满足封闭性前提下，对集合 $V$ 中所有的向量 $\mathbf{u}, \mathbf{v}, \mathbf{w}$ 以及标量域 $\mathbb{F}$ 中所有的标量 $c, d$，以下 8 条公理必须无条件严格满足：
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+                <!-- 左列：加法 4 大公理 (构成阿贝尔群 Abelian Group) -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span style="background: var(--accent-blue); color: #000; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">GROUP</span>
+                    <strong style="color: var(--accent-blue); font-size: 1rem;">【加法 4 大公理（阿贝尔群结构）】</strong>
+                  </div>
+                  <ol style="margin-left: 1.25rem; font-size: 0.92rem; line-height: 2;">
+                    <li><strong>加法交换律 (Commutativity)</strong>：<br>$$\mathbf{u} + \mathbf{v} = \mathbf{v} + \mathbf{u}$$</li>
+                    <li><strong>加法结合律 (Associativity)</strong>：<br>$$(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$$</li>
+                    <li><strong>零元存在性 (Additive Identity)</strong>：<br>存在唯一的零向量 $\mathbf{0} \in V$，使得对任意 $\mathbf{u} \in V$ 均有：$$\mathbf{u} + \mathbf{0} = \mathbf{u}$$</li>
+                    <li><strong>负元存在性 (Additive Inverse)</strong>：<br>对任意 $\mathbf{u} \in V$，存在唯一的逆元 $-\mathbf{u} \in V$，满足：$$\mathbf{u} + (-\mathbf{u}) = \mathbf{0}$$</li>
+                  </ol>
+                </div>
+
+                <!-- 右列：数乘 4 大公理 (与标量域相容与分配) -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.2);">
+                  <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span style="background: var(--accent-purple); color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 4px;">ACTION</span>
+                    <strong style="color: var(--accent-purple); font-size: 1rem;">【数乘 4 大公理（相容与分配结构）】</strong>
+                  </div>
+                  <ol style="margin-left: 1.25rem; font-size: 0.92rem; line-height: 2;" start="5">
+                    <li><strong>标量对向量加法的分配律 (Distributivity over Vectors)</strong>：<br>$$c(\mathbf{u} + \mathbf{v}) = c\mathbf{u} + c\mathbf{v}$$</li>
+                    <li><strong>标量加法对向量的分配律 (Distributivity over Scalars)</strong>：<br>$$(c + d)\mathbf{u} = c\mathbf{u} + d\mathbf{u}$$</li>
+                    <li><strong>标量数乘结合律 (Scalar Compatibility)</strong>：<br>$$(cd)\mathbf{u} = c(d\mathbf{u})$$</li>
+                    <li><strong>乘法单位元作用 (Multiplicative Identity)</strong>：<br>标量域中的数字 $1$ 作用于向量时：$$1 \cdot \mathbf{u} = \mathbf{u}$$</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <!-- 公理级定理与严密推导 -->
+            <div class="proof-box">
+              <div class="box-title">🔍 探微穷理：由 8 大公理出发的不可思议的基础定理严格推导</div>
+              <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1rem;">
+                在抽象代数中，诸如“$0 \times \text{任何东西} = 0$”或者“$-1 \times \text{向量} = \text{相反向量}$”并不是理所当然的常识，它们是<strong>完全依靠 8 大公理严格逻辑推导出来的必然定理</strong>！
+              </p>
+
+              <details class="proof-accordion" open>
+                <summary>📌 定理 1：标量零乘向量恒为零向量，即 $0 \cdot \mathbf{v} = \mathbf{0}$</summary>
+                <div style="padding: 1rem; font-size: 0.9rem; line-height: 1.8;">
+                  <p><strong>证明过程：</strong></p>
+                  <p>由实数标量算术性质可知 $0 = 0 + 0$。根据公理 6（标量加法分配律）：</p>
+                  $$0 \cdot \mathbf{v} = (0 + 0)\mathbf{v} = 0\cdot\mathbf{v} + 0\cdot\mathbf{v}$$
+                  <p>等式两边同时加上向量 $0\cdot\mathbf{v}$ 的加法逆元 $-(0\cdot\mathbf{v})$（公理 4）：</p>
+                  $$0\cdot\mathbf{v} + \big(-(0\cdot\mathbf{v})\big) = \big(0\cdot\mathbf{v} + 0\cdot\mathbf{v}\big) + \big(-(0\cdot\mathbf{v})\big)$$
+                  <p>左边由公理 4 直接化简为零向量 $\mathbf{0}$；右边应用公理 2（结合律）与公理 4、3：</p>
+                  $$\mathbf{0} = 0\cdot\mathbf{v} + \Big(0\cdot\mathbf{v} + \big(-(0\cdot\mathbf{v})\big)\Big) = 0\cdot\mathbf{v} + \mathbf{0} = 0\cdot\mathbf{v}$$
+                  <p>因此严格证明：$0 \cdot \mathbf{v} = \mathbf{0}$！ $\blacksquare$</p>
+                </div>
+              </details>
+
+              <details class="proof-accordion">
+                <summary>📌 定理 2：标量 $-1$ 数乘向量等于其加法逆元，即 $(-1)\mathbf{v} = -\mathbf{v}$</summary>
+                <div style="padding: 1rem; font-size: 0.9rem; line-height: 1.8;">
+                  <p><strong>证明思路：</strong> 欲证 $(-1)\mathbf{v}$ 是 $\mathbf{v}$ 的逆元 $-\mathbf{v}$，只需验证 $\mathbf{v} + (-1)\mathbf{v} = \mathbf{0}$ 即可（因为由公理 4 逆元具有唯一性）。</p>
+                  $$\begin{aligned}
+                  \mathbf{v} + (-1)\mathbf{v} &= 1\cdot\mathbf{v} + (-1)\mathbf{v} \quad &(\text{公理 8: } 1\cdot\mathbf{v} = \mathbf{v}) \\
+                  &= (1 + (-1))\mathbf{v} \quad &(\text{公理 6: 标量分配律}) \\
+                  &= 0 \cdot \mathbf{v} \quad &(\text{标量域中 } 1 + (-1) = 0) \\
+                  &= \mathbf{0} \quad &(\text{由定理 1})
+                  \end{aligned}$$
+                  <p>由于 $\mathbf{v} + (-1)\mathbf{v} = \mathbf{0}$，由逆元的唯一性，立即得出 $(-1)\mathbf{v} = -\mathbf{v}$！ $\blacksquare$</p>
+                </div>
+              </details>
+
+              <details class="proof-accordion">
+                <summary>📌 定理 3：零乘积判别律，若 $c\mathbf{v} = \mathbf{0}$，则必有 $c = 0$ 或 $\mathbf{v} = \mathbf{0}$</summary>
+                <div style="padding: 1rem; font-size: 0.9rem; line-height: 1.8;">
+                  <p><strong>证明：</strong> 假设 $c \neq 0$，则标量倒数 $c^{-1} = \frac{1}{c}$ 存在。等式两端同乘 $c^{-1}$：</p>
+                  $$c^{-1}(c\mathbf{v}) = c^{-1}\mathbf{0} \implies (c^{-1}c)\mathbf{v} = \mathbf{0} \implies 1\cdot\mathbf{v} = \mathbf{0} \implies \mathbf{v} = \mathbf{0}$$
+                  <p>这保证了抽象空间中不会出现“非零标量乘非零向量等于零”的病态退化！ $\blacksquare$</p>
+                </div>
+              </details>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <h3>🌌 经典抽象向量空间实例</h3>
-    <ul style="margin-left: 1.5rem; line-height: 1.8;">
-      <li><strong>多项式空间 $\mathcal{P}_n$</strong>：所有次数不超过 $n$ 的实多项式集合。</li>
-      <li><strong>连续函数空间 $C[a, b]$</strong>：区间 $[a, b]$ 上所有连续函数的集合（无穷维向量空间！）。</li>
-      <li><strong>矩阵空间 $\mathcal{M}_{m \times n}$</strong>：所有 $m \times n$ 实矩阵构成的空间。</li>
-    </ul>
-  </div>
-</div>
+        <!-- 2. 抽象向量空间全景展台与经典反例辨析 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">博览群象</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌌 经典抽象向量空间全景展台与反例辨析</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              一旦理解了 8 大公理与封闭性，你眼中的数学世界将豁然开朗。以下是 5 个在现代科学中无处不在的经典抽象向量空间：
+            </p>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">同构定理</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 👑 向量空间同构定理 (Isomorphism Theorem)</h2>
-  </div>
-  <div class="card-body">
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 有限维实向量空间同构定理</h4>
-      <p><strong>任何维数为 $n$ 的实向量空间 $V$，在代数结构上都严格与 $\mathbb{R}^n$ 同构 ($V \cong \mathbb{R}^n$)！</strong></p>
-      <p><strong>意义：</strong> 无论研究的是三次多项式 $\mathcal{P}_3$、对称矩阵空间还是微分方程解空间，只要取定一组基底，所有的抽象元素都可以无损映射为 $\mathbb{R}^n$ 中的列向量，所有之前学过的矩阵乘法、RREF、特征值理论全部可以直接应用！</p>
-    </div>
-  </div>
-</div>
+            <div class="grid-2" style="margin: 1.5rem 0;">
+              <!-- 展台 1: 多项式空间 -->
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-blue); font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>📈</span> 展台 1：多项式空间 $\mathcal{P}_n(\mathbb{R})$
+                </h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-main);">
+                  最高次数不超过 $n$ 的实系数多项式集合：
+                  $$p(x) = a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n$$
+                </p>
+                <ul style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.2rem; margin-top: 0.5rem;">
+                  <li><strong>加法</strong>：对应项系数分别相加；<strong>数乘</strong>：各项系数同乘标量。</li>
+                  <li><strong>零向量</strong>：恒为零的多项式 $0$；<strong>逆元</strong>：$-p(x)$。</li>
+                  <li><strong>空间维数</strong>：$\dim(\mathcal{P}_n) = n+1$（基底含常数项 $1$ 到 $x^n$ 共 $n+1$ 个元素）。</li>
+                </ul>
+              </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 抽象多项式基底判定</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">判定 $\mathcal{P}_2$ 中的多项式组 $\{1 + x, x + x^2, 1 + x^2\}$ 是否构成基底</h4>
-      <p>在标准基 $\{1, x, x^2\}$ 下写出它们的坐标向量：</p>
-      $$[p_1] = \begin{bmatrix}1\\1\\0\end{bmatrix}, \quad [p_2] = \begin{bmatrix}0\\1\\1\end{bmatrix}, \quad [p_3] = \begin{bmatrix}1\\0\\1\end{bmatrix}$$
-      <p>计算坐标矩阵行列式：$\det \begin{bmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{bmatrix} = 2 \neq 0$。</p>
-      <p><strong>结论：</strong> 由同构定理，坐标向量线性无关 $\implies$ 原多项式组构成 $\mathcal{P}_2$ 的一组基底！</p>
-    </div>
-  </div>
-</div>
+              <!-- 展台 2: 矩阵空间 -->
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-purple); font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🔲</span> 展台 2：矩阵空间 $\mathcal{M}_{m \times n}(\mathbb{R})$
+                </h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-main);">
+                  所有大小为 $m \times n$ 的实矩阵构成的集合：
+                </p>
+                <ul style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.2rem; margin-top: 0.5rem;">
+                  <li>矩阵可以当作“向量”来看待！矩阵相加即对应元素相加，标量乘矩阵即全元素缩放。</li>
+                  <li><strong>维数</strong>：$\dim(\mathcal{M}_{m \times n}) = m \times n$。</li>
+                  <li><strong>重要子空间</strong>：$n \times n$ 对称矩阵空间 $\mathcal{S}_n$（维数 $n(n+1)/2$）、反对称矩阵空间 $\mathcal{A}_n$（维数 $n(n-1)/2$）。</li>
+                </ul>
+              </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 SymPy 符号化多项式基底同构计算</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import sympy as sp
+              <!-- 展台 3: 连续函数空间 -->
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-green); font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🌊</span> 展台 3：连续函数空间 $C[a, b]$（无穷维！）
+                </h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-main);">
+                  定义在闭区间 $[a, b]$ 上所有实连续函数的集合：
+                </p>
+                <ul style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.2rem; margin-top: 0.5rem;">
+                  <li>$(f + g)(x) = f(x) + g(x)$，$(c \cdot f)(x) = c f(x)$。</li>
+                  <li>连续函数之和仍连续，数乘仍连续（封闭性完备满足）。</li>
+                  <li><strong>无穷维空间</strong>：无法用有限个函数作为基底表示所有连续函数！这是第 6.2 节傅里叶级数与泛函分析的宏伟舞台。</li>
+                </ul>
+              </div>
 
-x = sp.symbols('x')
+              <!-- 展台 4: 齐次微分方程解空间 -->
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem;">
+                <h4 style="color: var(--accent-amber); font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚙️</span> 展台 4：线性微分方程解空间
+                </h4>
+                <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-main);">
+                  例如经典简谐振动方程 $y'' + \omega^2 y = 0$ 的所有解构成的集合：
+                </p>
+                <ul style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.2rem; margin-top: 0.5rem;">
+                  <li>若 $y_1, y_2$ 满足方程，则线性叠加 $c_1 y_1 + c_2 y_2$ 依然满足方程！</li>
+                  <li>解集构成一个严格的 <strong>2 维向量空间</strong>！</li>
+                  <li>基底正是两个线性无关特解：$\{\cos(\omega t), \sin(\omega t)\}$！</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 反例辨析：哪些不是向量空间？ -->
+            <div class="warning-box" style="margin-top: 1.5rem;">
+              <div class="box-title">⚠️ 避坑指南：哪些集合【不是】向量空间？（反例深度辨析）</div>
+              <div style="overflow-x: auto; margin-top: 0.75rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid var(--border-highlight); background: rgba(255,255,255,0.03);">
+                      <th style="padding: 10px; color: var(--accent-rose);">候选集合 $S$</th>
+                      <th style="padding: 10px; color: var(--accent-rose);">定义在域</th>
+                      <th style="padding: 10px; color: var(--accent-rose);">破坏的核心公理 / 性质</th>
+                      <th style="padding: 10px; color: var(--accent-rose);">反例实证</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: 600;">第一象限中的二维向量 $S = \{(x, y) \mid x \ge 0, y \ge 0\}$</td>
+                      <td style="padding: 8px;">$\mathbb{R}$</td>
+                      <td style="padding: 8px; color: var(--accent-rose);">数乘封闭性破损、无加法逆元</td>
+                      <td style="padding: 8px;">向量 $(1, 2) \in S$，但乘标量 $-1$ 得到 $(-1, -2) \notin S$。</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: 600;">不过原点的直线 $S = \{(x, y) \mid y = 2x + 1\}$</td>
+                      <td style="padding: 8px;">$\mathbb{R}$</td>
+                      <td style="padding: 8px; color: var(--accent-rose);">无零元、加法与数乘皆不封闭</td>
+                      <td style="padding: 8px;">$(0, 0) \notin S$；两点 $(0, 1) + (1, 3) = (1, 4) \notin S$。</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: 600;">整数分量向量集合 $\mathbb{Z}^n$</td>
+                      <td style="padding: 8px;">$\mathbb{R}$</td>
+                      <td style="padding: 8px; color: var(--accent-rose);">实数标量乘法不封闭</td>
+                      <td style="padding: 8px;">向量 $[1, 2]^T \in \mathbb{Z}^2$，乘以标量 $0.5$ 得到 $[0.5, 1]^T \notin \mathbb{Z}^2$。</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 8px; font-weight: 600;">单位球面 $S = \{\mathbf{v} \in \mathbb{R}^3 \mid \|\mathbf{v}\| = 1\}$</td>
+                      <td style="padding: 8px;">$\mathbb{R}$</td>
+                      <td style="padding: 8px; color: var(--accent-rose);">加法不封闭、无零向量</td>
+                      <td style="padding: 8px;">$\mathbf{e}_1 + \mathbf{e}_2$ 模长为 $\sqrt{2} \neq 1$；零向量模长为 $0$ 不在球面上。</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 子空间判定 3 步准则 -->
+            <div class="concept-box" style="margin-top: 1.5rem;">
+              <div class="box-title">✅ 极简利器：子空间判别“三步准则” (Subspace Criterion)</div>
+              <p>
+                若 $W$ 是已知向量空间 $V$ 的一个子集，要证明 $W$ 是一个合法子空间，<strong>不需要繁琐地去验证全部 8 大公理</strong>（因为结合律、分配律等代数结构会自动从母空间 $V$ 继承）！只需要严谨核验以下 3 项：
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-green);">1. 包含零元：</strong> $\mathbf{0} \in W$。
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-green);">2. 加法封闭：</strong> $\mathbf{u}, \mathbf{v} \in W \implies \mathbf{u} + \mathbf{v} \in W$。
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-green);">3. 数乘封闭：</strong> $c \in \mathbb{F}, \mathbf{u} \in W \implies c\mathbf{u} \in W$。
+                </div>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 0.5rem;">
+                <em>（等价单步检验法：对任意 $c, d \in \mathbb{F}$ 及 $\mathbf{u}, \mathbf{v} \in W$，只需证明线性组合 $c\mathbf{u} + d\mathbf{v} \in W$ 即可！）</em>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 抽象基底与坐标映射 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">桥梁纽带</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 抽象基底、维数与坐标映射 (Coordinate Mapping)</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              在抽象向量空间 $V$ 中，“线性无关”与“基底”的定义形式与 $\mathbb{R}^n$ 中完全一致：
+            </p>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; line-height: 1.8;">
+              <li>向量组 $\{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$ <strong>线性无关</strong>，当且仅当方程 $c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2 + \dots + c_n \mathbf{b}_n = \mathbf{0}$ 仅有全零平凡解 $c_1 = c_2 = \dots = c_n = 0$。</li>
+              <li>若该向量组既线性无关又能<strong>张成全空间 ($\operatorname{Span}\{\mathbf{b}_1, \dots, \mathbf{b}_n\} = V$)</strong>，则称它为空间 $V$ 的一组<strong>基底 (Basis)</strong> $\mathcal{B}$，向量数量 $n$ 称为空间的<strong>维数 (Dimension)</strong>，记作 $\dim(V) = n$。</li>
+            </ul>
+
+            <!-- 坐标映射定义 -->
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1.5rem 0;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📐 坐标映射 (Coordinate Mapping) 的数学定义</h4>
+              <p>
+                一旦在 $n$ 维向量空间 $V$ 中选定了一组有序基底 $\mathcal{B} = \{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$，由基底的性质，空间中的任意抽象向量 $\mathbf{x} \in V$ 都可以<strong>唯一</strong>表示为：
+              </p>
+              <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
+                $$\mathbf{x} = c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2 + \dots + c_n \mathbf{b}_n$$
+              </div>
+              <p>
+                这组唯一的标量系数构成的实数列表，称为 $\mathbf{x}$ 在基底 $\mathcal{B}$ 下的<strong>坐标向量 (Coordinate Vector)</strong>，记作 $[\mathbf{x}]_\mathcal{B}$：
+              </p>
+              <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
+                $$[\mathbf{x}]_\mathcal{B} = \begin{bmatrix} c_1 \\ c_2 \\ \vdots \\ c_n \end{bmatrix} \in \mathbb{R}^n$$
+              </div>
+              <p>
+                映射 $[\cdot]_\mathcal{B}: V \to \mathbb{R}^n$ 将抽象的数学对象 $\mathbf{x}$ 映射为了欧式空间中具象的列向量 $[\mathbf{x}]_\mathcal{B}$！
+              </p>
+            </div>
+
+            <!-- SVG 交换图与保线性 -->
+            <div style="text-align: center; margin: 2rem 0;">
+              <svg width="640" height="240" viewBox="0 0 640 240" style="background:#090d16; border-radius:10px; border:1px solid var(--border-color); max-width:100%;">
+                <defs>
+                  <marker id="arr-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#34d399"/>
+                  </marker>
+                  <marker id="arr-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                </defs>
+
+                <!-- Left Top: u, v in V -->
+                <rect x="50" y="30" width="180" height="50" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="140" y="60" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">抽象向量 u, v ∈ V</text>
+
+                <!-- Right Top: cu + dv in V -->
+                <rect x="410" y="30" width="180" height="50" rx="8" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                <text x="500" y="60" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">抽象组合 cu + dv ∈ V</text>
+
+                <path d="M 235 55 L 405 55" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-blue)"/>
+                <text x="320" y="45" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">线性运算 (在 V 中)</text>
+
+                <!-- Left Bottom: [u]_B, [v]_B in R^n -->
+                <rect x="50" y="160" width="180" height="50" rx="8" fill="rgba(52, 211, 153, 0.12)" stroke="#34d399" stroke-width="1.5"/>
+                <text x="140" y="190" fill="#34d399" font-size="14" font-weight="bold" text-anchor="middle">坐标向量 [u]ᵦ, [v]ᵦ ∈ ℝⁿ</text>
+
+                <!-- Right Bottom: c[u]_B + d[v]_B in R^n -->
+                <rect x="410" y="160" width="180" height="50" rx="8" fill="rgba(52, 211, 153, 0.12)" stroke="#34d399" stroke-width="1.5"/>
+                <text x="500" y="190" fill="#34d399" font-size="14" font-weight="bold" text-anchor="middle">c[u]ᵦ + d[v]ᵦ = [cu + dv]ᵦ</text>
+
+                <path d="M 235 185 L 405 185" stroke="#34d399" stroke-width="2.5" marker-end="url(#arr-green)"/>
+                <text x="320" y="208" fill="#34d399" font-size="12" font-weight="bold" text-anchor="middle">列向量运算 (在 ℝⁿ 中)</text>
+
+                <!-- Down Arrows: Mapping -->
+                <path d="M 140 85 L 140 155" stroke="#c084fc" stroke-width="2" marker-end="url(#arr-green)"/>
+                <text x="105" y="125" fill="#c084fc" font-size="12" font-weight="bold">[ · ]ᵦ</text>
+
+                <path d="M 500 85 L 500 155" stroke="#c084fc" stroke-width="2" marker-end="url(#arr-green)"/>
+                <text x="515" y="125" fill="#c084fc" font-size="12" font-weight="bold">[ · ]ᵦ</text>
+              </svg>
+            </div>
+
+            <div class="proof-box">
+              <div class="box-title">🔍 坐标映射的核心定理：它不仅保线性，而且是严格的双射 (Bijection)</div>
+              <p><strong>性质 1：保持线性运算（线性映射）</strong></p>
+              $$[c\mathbf{u} + d\mathbf{v}]_\mathcal{B} = c[\mathbf{u}]_\mathcal{B} + d[\mathbf{v}]_\mathcal{B}$$
+              <p><em>证明：</em> 设 $\mathbf{u} = \sum a_i \mathbf{b}_i, \mathbf{v} = \sum b_i \mathbf{b}_i$，则 $c\mathbf{u} + d\mathbf{v} = \sum (ca_i + db_i)\mathbf{b}_i$。由基底线性表出的唯一性，其坐标向量恰好是 $c[a_i] + d[b_i] = c[\mathbf{u}]_\mathcal{B} + d[\mathbf{v}]_\mathcal{B}$。 $\blacksquare$</p>
+
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+
+              <p><strong>性质 2：严格的单射（一对一，Injective）与满射（映上，Surjective）</strong></p>
+              <ul style="margin-left: 1.2rem; line-height: 1.8;">
+                <li><strong>单射性</strong>：若 $[\mathbf{u}]_\mathcal{B} = [\mathbf{v}]_\mathcal{B}$，则对应各项系数全等，必有 $\mathbf{u} = \mathbf{v}$（不同抽象向量绝不可能产生相同的坐标）。</li>
+                <li><strong>满射性</strong>：对 $\mathbb{R}^n$ 中任意给定的列向量 $[c_1, \dots, c_n]^T$，空间 $V$ 中必然存在向量 $\mathbf{x} = \sum c_i \mathbf{b}_i$ 映射为它。</li>
+              </ul>
+              <p style="margin-top: 0.5rem; color: var(--accent-green); font-weight: 600;">
+                结论：坐标映射是一个双射线性映射 —— 这正是代数学中“同构 (Isomorphism)”的严格定义！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 向量空间同构定理 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">大一统定理</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 👑 向量空间同构定理 (The Isomorphism Theorem)</h2>
+          </div>
+          <div class="card-body">
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(251, 191, 36, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 8px;">
+              <h3 style="color: var(--accent-amber); margin-bottom: 0.75rem;">👑 有限维实向量空间基本定理</h3>
+              <div style="font-size: 1.3rem; text-align: center; margin: 1rem 0; font-weight: bold; color: var(--accent-amber);">
+                $$V \text{ 为定义在 } \mathbb{R} \text{ 上的 } n \text{ 维向量空间} \implies V \cong \mathbb{R}^n$$
+              </div>
+              <p style="font-size: 1.05rem; line-height: 1.8;">
+                <strong>核心结论 1：</strong> 任意维数为 $n$ 的有限维实向量空间 $V$，在代数结构上都与欧几里得空间 $\mathbb{R}^n$ <strong>严格同构 (Isomorphic)</strong>，记作 <strong>$V \cong \mathbb{R}^n$</strong>！
+              </p>
+              <p style="font-size: 1.05rem; line-height: 1.8; margin-top: 0.5rem;">
+                <strong>核心结论 2：</strong> 两个有限维实向量空间 $V$ 与 $W$ 同构，<strong>当且仅当它们的维数完全相等</strong>：
+                $$\dim(V) = \dim(W) \iff V \cong W$$
+              </p>
+            </div>
+
+            <div class="step-container" style="margin-top: 1.5rem;">
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-blue); color:#000;">1</div>
+                <div class="step-content">
+                  <div class="step-title">同构的哲学冲击：有限维世界在代数上“只有一种几何”</div>
+                  <p>
+                    初学者常常觉得多项式是一门学问、矩阵代数是第二门学问、微分方程是第三门学问。然而同构定理告诉你：<strong>在代数本质上，根本没有“多项式空间”，也没有“矩阵空间”，只要维数是 3，它们全都是披着不同外衣的 $\mathbb{R}^3$！</strong>
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-purple); color:#fff;">2</div>
+                <div class="step-content">
+                  <div class="step-title">无损保真性：代数性质 100% 镜像互译</div>
+                  <p>
+                    同构映射像一面完美的全息镜：原空间中的向量<strong>线性无关</strong> $\iff$ 坐标向量在 $\mathbb{R}^n$ 中线性无关；原空间中子空间的<strong>维数</strong> $\iff$ 象空间的维数；原空间算子的<strong>核与象</strong> $\iff$ 对应矩阵的零空间与列空间。
+                  </p>
+                </div>
+              </div>
+
+              <div class="step-card">
+                <div class="step-number" style="background: var(--accent-green); color:#000;">3</div>
+                <div class="step-content">
+                  <div class="step-title">现代计算科学的基石：抽象问题的“编码与解码”工作流</div>
+                  <p>
+                    计算机只懂存储浮点数数组（列向量），根本不懂什么是连续函数。我们在计算机中处理多项式拟合、图像滤波、量子计算时，正是<strong>第一步取基底将抽象对象编码为列向量 $\mathbf{x} \mapsto [\mathbf{x}]_\mathcal{B}$</strong>，在 CPU/GPU 中用高效的 BLAS 矩阵乘法和高斯消元计算完，<strong>最后一步通过逆同构解码还原回现实世界</strong>！
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 交互式动态实验室：P2 与 R3 同构联动 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">全息动态实验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🎨 交互式实验室：多项式空间 $\mathcal{P}_2$ 与 $\mathbb{R}^3$ 的同构全息联动</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+              💡 <strong>操作指南</strong>：拖动滑块改变多项式 $p(x) = c_0 + c_1 x + c_2 x^2$ 的标量系数，左侧实时观察函数几何图像的变化，右侧 3D 视窗实时观察对应坐标向量 $[c_0, c_1, c_2]^T$ 在 $\mathbb{R}^3$ 中的空间箭头！在右侧 3D 画布上<strong>按住鼠标左键拖拽可 360° 旋转视角</strong>。
+            </p>
+
+            <div class="visualizer-wrapper" style="background: #090d16; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              
+              <!-- 双联动画布区域 -->
+              <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; width: 100%; justify-content: center; align-items: stretch;">
+                
+                <!-- Left: 2D Polynomial Function Graph -->
+                <div style="flex: 1 1 360px; min-width: 300px; display: flex; flex-direction: column; align-items: center; background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 1rem; border: 1px solid var(--border-color);">
+                  <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem; font-size: 0.95rem;">
+                    📈 抽象多项式空间 $\mathcal{P}_2$：函数曲线 $p(x)$
+                  </div>
+                  <canvas id="canvas-poly-func" width="380" height="300" style="width: 100%; max-width: 380px; height: 300px; background: #0f172a; border-radius: 6px; border: 1px solid var(--border-color);"></canvas>
+                  <div id="poly-formula-disp" style="font-family: var(--font-mono); margin-top: 0.5rem; font-size: 0.9rem; color: #38bdf8; font-weight: 600;">
+                    p(x) = 1.0 + 1.0x + 0.5x²
+                  </div>
+                </div>
+
+                <!-- Right: 3D Coordinate Space Vector -->
+                <div style="flex: 1 1 360px; min-width: 300px; display: flex; flex-direction: column; align-items: center; background: rgba(15, 23, 42, 0.7); border-radius: 8px; padding: 1rem; border: 1px solid var(--border-color);">
+                  <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.5rem; font-size: 0.95rem;">
+                    🌐 同构欧式空间 $\mathbb{R}^3$：坐标向量 $[p(x)]_\mathcal{B}$
+                  </div>
+                  <canvas id="canvas-poly-3d" width="380" height="300" style="width: 100%; max-width: 380px; height: 300px; background: #0f172a; border-radius: 6px; border: 1px solid var(--border-color); cursor: grab;"></canvas>
+                  <div id="coord-disp" style="font-family: var(--font-mono); margin-top: 0.5rem; font-size: 0.9rem; color: #c084fc; font-weight: 600;">
+                    [p]ᵦ = [1.0, 1.0, 0.5]ᵀ
+                  </div>
+                </div>
+              </div>
+
+              <!-- 交互控制面板 -->
+              <div style="width: 100%; margin-top: 1.5rem; background: rgba(30, 41, 59, 0.6); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+                <div style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; align-items: center;">
+                  
+                  <div class="control-group">
+                    <label style="color: var(--accent-blue); font-weight: 600;">常数项 $c_0$ (基底 1)：</label>
+                    <input type="range" id="slider-c0" min="-3" max="3" step="0.1" value="1.0" style="width: 120px;">
+                    <span id="val-c0" style="font-family: var(--font-mono); min-width: 32px; color: var(--accent-blue);">1.0</span>
+                  </div>
+
+                  <div class="control-group">
+                    <label style="color: var(--accent-purple); font-weight: 600;">一次项 $c_1$ (基底 $x$)：</label>
+                    <input type="range" id="slider-c1" min="-3" max="3" step="0.1" value="1.0" style="width: 120px;">
+                    <span id="val-c1" style="font-family: var(--font-mono); min-width: 32px; color: var(--accent-purple);">1.0</span>
+                  </div>
+
+                  <div class="control-group">
+                    <label style="color: var(--accent-green); font-weight: 600;">二次项 $c_2$ (基底 $x^2$)：</label>
+                    <input type="range" id="slider-c2" min="-3" max="3" step="0.1" value="0.5" style="width: 120px;">
+                    <span id="val-c2" style="font-family: var(--font-mono); min-width: 32px; color: var(--accent-green);">0.5</span>
+                  </div>
+                </div>
+
+                <!-- 预设快速测试按钮 -->
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1rem;">
+                  <button class="btn btn-secondary" onclick="setPolyPreset(1, 0, 0)" style="font-size: 0.8rem; padding: 4px 10px;">基底 1</button>
+                  <button class="btn btn-secondary" onclick="setPolyPreset(0, 1, 0)" style="font-size: 0.8rem; padding: 4px 10px;">基底 x</button>
+                  <button class="btn btn-secondary" onclick="setPolyPreset(0, 0, 1)" style="font-size: 0.8rem; padding: 4px 10px;">基底 x²</button>
+                  <button class="btn btn-secondary" onclick="setPolyPreset(1, -2, 1)" style="font-size: 0.8rem; padding: 4px 10px;">完全平方式 (x-1)²</button>
+                  <button class="btn btn-secondary" onclick="setPolyPreset(0, 0, 0)" style="font-size: 0.8rem; padding: 4px 10px;">零多项式 0</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 阶梯式手算实战精解 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">阶梯式手算</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. ✍️ 4 大递进阶梯式手算范例精解</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- 范例 1 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">
+                🌟 范例 1：判定多项式组 $\{1+x, \; x+x^2, \; 1+x^2\}$ 是否构成 $\mathcal{P}_2$ 的一组基底
+              </h4>
+              <p><strong>解题步骤（利用同构定理将多项式转译为列向量）：</strong></p>
+              <ol style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>
+                  <strong>选定标准基底：</strong> 取 $\mathcal{P}_2$ 的标准单项式基底 $\mathcal{B} = \{1, x, x^2\}$。
+                </li>
+                <li>
+                  <strong>写出各多项式的坐标向量：</strong>
+                  $$p_1 = 1 + x \implies [p_1]_\mathcal{B} = \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}, \quad p_2 = x + x^2 \implies [p_2]_\mathcal{B} = \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix}, \quad p_3 = 1 + x^2 \implies [p_3]_\mathcal{B} = \begin{bmatrix} 1 \\ 0 \\ 1 \end{bmatrix}$$
+                </li>
+                <li>
+                  <strong>构造坐标矩阵并计算行列式：</strong>
+                  $$A = \begin{bmatrix} [p_1]_\mathcal{B} & [p_2]_\mathcal{B} & [p_3]_\mathcal{B} \end{bmatrix} = \begin{bmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{bmatrix}$$
+                  按第一行展开：$\det(A) = 1 \cdot (1 - 0) - 0 + 1 \cdot (1 - 0) = 1 + 1 = 2 \neq 0$。
+                </li>
+                <li>
+                  <strong>由同构定理下结论：</strong>
+                  由于 $\det(A) = 2 \neq 0$，列向量组在 $\mathbb{R}^3$ 中线性无关。由于 $\dim(\mathcal{P}_2) = 3$，由维数判定定理，该多项式组严格构成 $\mathcal{P}_2$ 的一组基底！
+                </li>
+              </ol>
+            </div>
+
+            <!-- 范例 2 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+                🌟 范例 2：多项式基变换与过渡矩阵
+              </h4>
+              <p>
+                设新基底为 $\mathcal{C} = \{p_1, p_2, p_3\} = \{1+x, x+x^2, 1+x^2\}$。求多项式 $q(x) = 3 + 2x + 5x^2$ 在新基底 $\mathcal{C}$ 下的坐标 $[q]_\mathcal{C}$。
+              </p>
+              <p><strong>求解过程：</strong></p>
+              <p>由基变换理论，过渡矩阵 $P_{\mathcal{B} \leftarrow \mathcal{C}} = \begin{bmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{bmatrix}$ 满足：$[q]_\mathcal{B} = P [q]_\mathcal{C}$。</p>
+              <p>已知 $q$ 在标准基下的坐标为 $[q]_\mathcal{B} = \begin{bmatrix} 3 & 2 & 5 \end{bmatrix}^T$。需求解线性方程组 $P [q]_\mathcal{C} = [q]_\mathcal{B}$：</p>
+              $$\begin{bmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{bmatrix} \begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} = \begin{bmatrix} 3 \\ 2 \\ 5 \end{bmatrix}$$
+              <p>对增广矩阵进行高斯消元：</p>
+              $$\left[\begin{array}{ccc|c} 1 & 0 & 1 & 3 \\ 1 & 1 & 0 & 2 \\ 0 & 1 & 1 & 5 \end{array}\right] \xrightarrow{R_2 - R_1} \left[\begin{array}{ccc|c} 1 & 0 & 1 & 3 \\ 0 & 1 & -1 & -1 \\ 0 & 1 & 1 & 5 \end{array}\right] \xrightarrow{R_3 - R_2} \left[\begin{array}{ccc|c} 1 & 0 & 1 & 3 \\ 0 & 1 & -1 & -1 \\ 0 & 0 & 2 & 6 \end{array}\right]$$
+              <p>回代求解：$c_3 = 3$；$c_2 = -1 + 3 = 2$；$c_1 = 3 - 3 = 0$。</p>
+              <p><strong>验算：</strong> $0 \cdot (1+x) + 2(x+x^2) + 3(1+x^2) = 2x + 2x^2 + 3 + 3x^2 = 3 + 2x + 5x^2 = q(x)$，完全吻合！故 $[q]_\mathcal{C} = \begin{bmatrix} 0 & 2 & 3 \end{bmatrix}^T$。</p>
+            </div>
+
+            <!-- 范例 3 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">
+                🌟 范例 3：$2 \times 2$ 矩阵空间的同构与对称/反对称子空间直和分解
+              </h4>
+              <p>
+                考虑矩阵空间 $\mathcal{M}_{2 \times 2}(\mathbb{R})$。其标准基底为：
+                $$E_{11} = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}, \; E_{12} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}, \; E_{21} = \begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix}, \; E_{22} = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}$$
+                显然 $\dim(\mathcal{M}_{2 \times 2}) = 4 \implies \mathcal{M}_{2 \times 2} \cong \mathbb{R}^4$。
+              </p>
+              <p><strong>子空间分解定理：</strong> 任意矩阵 $M$ 都可唯一分解为一个对称矩阵 $S$ 与一个反对称矩阵 $A$ 之和：</p>
+              $$M = \frac{M + M^T}{2} + \frac{M - M^T}{2} = S + A$$
+              <ul style="margin-left: 1.5rem; line-height: 1.8;">
+                <li><strong>对称子空间 $\mathcal{S}_2$</strong>：满足 $a_{12} = a_{21}$，基底为 $\{E_{11}, E_{22}, E_{12}+E_{21}\}$，维数 $\dim(\mathcal{S}_2) = 3$。</li>
+                <li><strong>反对称子空间 $\mathcal{A}_2$</strong>：主对角为 0 且 $a_{12} = -a_{21}$，基底为 $\{E_{12} - E_{21}\}$，维数 $\dim(\mathcal{A}_2) = 1$。</li>
+                <li><strong>直和 (Direct Sum)</strong>：$\mathcal{S}_2 \cap \mathcal{A}_2 = \{\mathbf{0}\}$，且 $\dim(\mathcal{S}_2) + \dim(\mathcal{A}_2) = 3 + 1 = 4 = \dim(\mathcal{M}_{2 \times 2})$。因此 $\mathcal{M}_{2 \times 2} = \mathcal{S}_2 \oplus \mathcal{A}_2$！</li>
+              </ul>
+            </div>
+
+            <!-- 范例 4 -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(251, 191, 36, 0.06); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">
+                🌟 范例 4：抽象微积分算子矩阵化与零空间 (求导算子 $D = \frac{d}{dx}$)
+              </h4>
+              <p>
+                考虑微积分中的求导映射 $D = \frac{d}{dx}: \mathcal{P}_2 \to \mathcal{P}_2$。它是一个合法的线性变换。
+              </p>
+              <ol style="margin-left: 1.5rem; line-height: 1.8;">
+                <li>
+                  <strong>将基底分别求导：</strong>
+                  $$D(1) = 0 = 0\cdot 1 + 0\cdot x + 0\cdot x^2 \implies [D(1)]_\mathcal{B} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$$
+                  $$D(x) = 1 = 1\cdot 1 + 0\cdot x + 0\cdot x^2 \implies [D(x)]_\mathcal{B} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}$$
+                  $$D(x^2) = 2x = 0\cdot 1 + 2\cdot x + 0\cdot x^2 \implies [D(x^2)]_\mathcal{B} = \begin{bmatrix} 0 \\ 2 \\ 0 \end{bmatrix}$$
+                </li>
+                <li>
+                  <strong>拼合为求导算子的矩阵表示 $[D]_\mathcal{B}$：</strong>
+                  $$[D]_\mathcal{B} = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix}$$
+                </li>
+                <li>
+                  <strong>代数意义与零空间：</strong>
+                  $[D]_\mathcal{B}$ 是一个上三角严格次对角方阵，其行列式 $\det([D]_\mathcal{B}) = 0$。求导算子的核空间（零空间）满足 $[D]_\mathcal{B} \mathbf{c} = \mathbf{0}$，解得 $\mathbf{c} = [k, 0, 0]^T$。这对应于常数多项式 $p(x) = k$。<strong>“常数的导数为 0”这一微积分基本常识，在代数上直接对应为求导矩阵的一维零空间！</strong>
+                </li>
+              </ol>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 7. Python 工业级代码实战 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 💻 SymPy & NumPy 抽象空间同构与微分算子实战</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              使用 Python 符号计算库 SymPy，我们可以直接在计算机中构建抽象多项式向量空间、自动提取基底坐标并实现算子矩阵化：
+            </p>
+
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;"><code>import sympy as sp
+import numpy as np
+
+print("=== 1. 多项式组基底同构与线性相关性判定 ===")
+x = sp.Symbol('x')
+# 定义 3 个抽象多项式向量
 p1 = 1 + x
 p2 = x + x**2
 p3 = 1 + x**2
 
-# 构造标准基 [1, x, x^2] 坐标矩阵
-M = sp.Matrix([[1, 0, 1],
-               [1, 1, 0],
-               [0, 1, 1]])
+# 定义标准基底 B = [1, x, x^2]
+basis = [sp.Integer(1), x, x**2]
 
-print("多项式坐标矩阵行列式:", M.det()) # 2
-print("是否构成抽象空间基底:", M.det() != 0)</code></pre>
-  </div>
-</div>
+def get_poly_coords(poly, basis, var):
+    """提取多项式在基底 [1, x, x^2] 下的坐标向量"""
+    p_poly = sp.Poly(poly, var)
+    # 按从低次到高次提取系数
+    return [p_poly.coeff_monomial(b) for b in basis]
+
+coords = [get_poly_coords(p, basis, x) for p in [p1, p2, p3]]
+coord_matrix = sp.Matrix(coords).T  # 转置使每一列为一个向量坐标
+
+print("多项式坐标矩阵 [p1, p2, p3]_B:")
+sp.pprint(coord_matrix)
+print("坐标矩阵行列式:", coord_matrix.det())
+print("是否构成抽象空间 P2 的基底:", coord_matrix.det() != 0)
+
+print("\n=== 2. 抽象微分算子 D = d/dx 矩阵化与零空间计算 ===")
+# 对基底各元素依次求导并提取坐标
+D_cols = []
+for b in basis:
+    deriv = sp.diff(b, x)
+    D_cols.append(get_poly_coords(deriv, basis, x))
+
+D_matrix = sp.Matrix(D_cols).T
+print("微分算子在基底 B 下的矩阵表示 [D]_B:")
+sp.pprint(D_matrix)
+
+# 验证多项式求导: 对 p(x) = 3 + 2x + 5x^2 求导
+test_poly = 3 + 2*x + 5*x**2
+test_coords = sp.Matrix(get_poly_coords(test_poly, basis, x))
+deriv_coords = D_matrix * test_coords
+
+print("\n待求导多项式坐标 [3, 2, 5]^T:")
+print("矩阵乘法求导结果坐标:", deriv_coords.T)
+# 还原为抽象多项式
+restored_deriv = sum(c * b for c, b in zip(deriv_coords, basis))
+print("还原后多项式导数:", restored_deriv)  # 应为 2 + 10x
+print("SymPy diff 真实导数:", sp.diff(test_poly, x))
+
+# 计算微分算子的零空间（常数多项式）
+null_space = D_matrix.nullspace()
+print("\n求导矩阵的零空间基底 (对应常数函数空间):")
+sp.pprint(null_space)</code></pre>
+          </div>
+        </div>
+
+        <!-- 8. 巩固自测与深度思考 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自测拓展</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 🧠 巩固自测与深度思考题</h2>
+          </div>
+          <div class="card-body">
+            
+            <details class="proof-accordion">
+              <summary>💡 思考题 1：连续函数空间 $C[0, 1]$ 为什么不可能与任何有限维欧氏空间 $\mathbb{R}^n$ 同构？</summary>
+              <div style="padding: 1rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>严密解析：</strong></p>
+                <p>
+                  假设存在某个有限维数 $n$，使得 $C[0, 1] \cong \mathbb{R}^n$。由同构基本定理，两空间同构当且仅当它们的维数相等，这意味着 $\dim(C[0, 1]) = n$。
+                </p>
+                <p>
+                  然而，在 $C[0, 1]$ 中，我们随时可以构造出包含任意多个线性无关函数的集合。例如单项式多项式族 $\{1, x, x^2, \dots, x^n, x^{n+1}\}$。如果它们线性相关，则存在不全为零的系数使得 $\sum_{i=0}^{n+1} c_i x^i = 0$ 恒成立，而由代数基本定理，非零多项式在闭区间上至多只有 $n+1$ 个根，不可能在整段区间恒为零！
+                </p>
+                <p>
+                  因此单项式族严格线性无关，这证明 $C[0, 1]$ 包含 $n+1$ 个线性无关向量，其维数必然 $\ge n+1 > n$，产生矛盾！故连续函数空间是真正的<strong>无穷维向量空间</strong>，无法与任何有限维 $\mathbb{R}^n$ 同构。
+                </p>
+              </div>
+            </details>
+
+            <details class="proof-accordion">
+              <summary>💡 思考题 2：若 $T: V \to W$ 是线性同构，那么 $V$ 中线性无关的一组向量，经 $T$ 映射后在 $W$ 中一定线性无关吗？</summary>
+              <div style="padding: 1rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>严密解析：</strong></p>
+                <p><strong>结论：必然线性无关！</strong> 同构映射严格保持向量组的线性无关性与线性相关性。</p>
+                <p><em>证明：</em> 设 $\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 在 $V$ 中线性无关。考虑映射后的象向量的线性组合：</p>
+                $$c_1 T(\mathbf{v}_1) + c_2 T(\mathbf{v}_2) + \dots + c_k T(\mathbf{v}_k) = \mathbf{0}_W$$
+                <p>由 $T$ 的线性性，可将系数合并进算子内部：</p>
+                $$T(c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_k \mathbf{v}_k) = \mathbf{0}_W$$
+                <p>由于同构映射 $T$ 是严格单射，其核空间只包含零元 $\operatorname{Ker}(T) = \{\mathbf{0}_V\}$。因此算子内部的向量必为零向量：</p>
+                $$c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_k \mathbf{v}_k = \mathbf{0}_V$$
+                <p>又由于原向量组 $\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 本身线性无关，唯一的系数解只能是 $c_1 = c_2 = \dots = c_k = 0$！因此 $\{T(\mathbf{v}_1), \dots, T(\mathbf{v}_k)\}$ 在 $W$ 中严格线性无关。 $\blacksquare$</p>
+              </div>
+            </details>
+
+            <details class="proof-accordion">
+              <summary>💡 思考题 3：多项式求导算子 $D = \frac{d}{dx}: \mathcal{P}_2 \to \mathcal{P}_2$ 是同构映射吗？</summary>
+              <div style="padding: 1rem; font-size: 0.92rem; line-height: 1.8;">
+                <p><strong>严密解析：</strong></p>
+                <p><strong>结论：绝对不是同构映射！</strong></p>
+                <p>
+                  虽然定义域和目标空间相同（都是 3 维空间 $\mathcal{P}_2$），但求导算子既不是单射也不是满射：
+                </p>
+                <ul style="margin-left: 1.2rem; line-height: 1.8;">
+                  <li>所有常数多项式（如 $p(x) = 5$ 与 $q(x) = 9$）求导后都等于 $0$，即 $\operatorname{Ker}(D) = \operatorname{Span}\{1\} \neq \{\mathbf{0}\}$，不满足单射。</li>
+                  <li>求导后得到的最高次数只能到 1 次（常数 + 一次项），目标空间中的二次多项式（例如 $x^2$）永远不可能作为求导结果，即 $\operatorname{Im}(D) = \mathcal{P}_1 \neq \mathcal{P}_2$，不满足满射。</li>
+                </ul>
+                <p>在代数上，其矩阵表示 $[D]_\mathcal{B}$ 的行列式为 0（不可逆），因此求导算子不是同构！</p>
+              </div>
+            </details>
+
+          </div>
+        </div>
 
 
         <!-- Page Navigation Buttons -->
@@ -393,6 +1032,343 @@ print("是否构成抽象空间基底:", M.det() != 0)</code></pre>
       </main>
     </div>
   </div>
+
+  <!-- Interactive Visualizer Script for Polynomial & 3D Vector Isomorphism -->
+  <script>
+    (function() {
+      const sliderC0 = document.getElementById('slider-c0');
+      const sliderC1 = document.getElementById('slider-c1');
+      const sliderC2 = document.getElementById('slider-c2');
+      const valC0 = document.getElementById('val-c0');
+      const valC1 = document.getElementById('val-c1');
+      const valC2 = document.getElementById('val-c2');
+      const formulaDisp = document.getElementById('poly-formula-disp');
+      const coordDisp = document.getElementById('coord-disp');
+
+      const canvasFunc = document.getElementById('canvas-poly-func');
+      const canvas3D = document.getElementById('canvas-poly-3d');
+      if (!canvasFunc || !canvas3D) return;
+
+      const ctxFunc = canvasFunc.getContext('2d');
+      const ctx3D = canvas3D.getContext('2d');
+
+      // 3D rotation angles
+      let angleX = 0.5;
+      let angleY = 0.6;
+      let isDragging = false;
+      let lastMouseX = 0;
+      let lastMouseY = 0;
+
+      canvas3D.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        canvas3D.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          canvas3D.style.cursor = 'grab';
+        }
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - lastMouseX;
+        const dy = e.clientY - lastMouseY;
+        angleY += dx * 0.01;
+        angleX += dy * 0.01;
+        lastMouseX = e.clientX;
+        lastMouseY = e.clientY;
+        render();
+      });
+
+      // Touch events for mobile
+      canvas3D.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          lastMouseX = e.touches[0].clientX;
+          lastMouseY = e.touches[0].clientY;
+        }
+      });
+
+      window.addEventListener('touchend', () => { isDragging = false; });
+      window.addEventListener('touchmove', (e) => {
+        if (!isDragging || e.touches.length !== 1) return;
+        const dx = e.touches[0].clientX - lastMouseX;
+        const dy = e.touches[0].clientY - lastMouseY;
+        angleY += dx * 0.01;
+        angleX += dy * 0.01;
+        lastMouseX = e.touches[0].clientX;
+        lastMouseY = e.touches[0].clientY;
+        render();
+      });
+
+      window.setPolyPreset = function(c0, c1, c2) {
+        sliderC0.value = c0;
+        sliderC1.value = c1;
+        sliderC2.value = c2;
+        render();
+      };
+
+      function getCoeffs() {
+        return {
+          c0: parseFloat(sliderC0.value),
+          c1: parseFloat(sliderC1.value),
+          c2: parseFloat(sliderC2.value)
+        };
+      }
+
+      function updateLabels(c0, c1, c2) {
+        valC0.textContent = c0.toFixed(1);
+        valC1.textContent = c1.toFixed(1);
+        valC2.textContent = c2.toFixed(1);
+
+        // Format formula
+        let s0 = `${c0.toFixed(1)}`;
+        let s1 = c1 >= 0 ? ` + ${c1.toFixed(1)}x` : ` - ${Math.abs(c1).toFixed(1)}x`;
+        let s2 = c2 >= 0 ? ` + ${c2.toFixed(1)}x²` : ` - ${Math.abs(c2).toFixed(1)}x²`;
+        formulaDisp.textContent = `p(x) = ${s0}${s1}${s2}`;
+        coordDisp.textContent = `[p]ᵦ = [${c0.toFixed(1)}, ${c1.toFixed(1)}, ${c2.toFixed(1)}]ᵀ`;
+      }
+
+      // Draw 2D function curve
+      function draw2DFunction(c0, c1, c2) {
+        const w = canvasFunc.width;
+        const h = canvasFunc.height;
+        ctxFunc.clearRect(0, 0, w, h);
+
+        const xMin = -2.5, xMax = 2.5;
+        const yMin = -4.0, yMax = 5.0;
+
+        function toScreen(x, y) {
+          return {
+            x: ((x - xMin) / (xMax - xMin)) * w,
+            y: h - ((y - yMin) / (yMax - yMin)) * h
+          };
+        }
+
+        // Draw grid
+        ctxFunc.strokeStyle = 'rgba(255, 255, 255, 0.07)';
+        ctxFunc.lineWidth = 1;
+        for (let x = -2; x <= 2; x += 1) {
+          const ptTop = toScreen(x, yMax);
+          const ptBottom = toScreen(x, yMin);
+          ctxFunc.beginPath();
+          ctxFunc.moveTo(ptTop.x, ptTop.y);
+          ctxFunc.lineTo(ptBottom.x, ptBottom.y);
+          ctxFunc.stroke();
+        }
+        for (let y = -3; y <= 4; y += 1) {
+          const ptLeft = toScreen(xMin, y);
+          const ptRight = toScreen(xMax, y);
+          ctxFunc.beginPath();
+          ctxFunc.moveTo(ptLeft.x, ptLeft.y);
+          ctxFunc.lineTo(ptRight.x, ptRight.y);
+          ctxFunc.stroke();
+        }
+
+        // Draw Axes
+        const origin = toScreen(0, 0);
+        ctxFunc.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctxFunc.lineWidth = 1.5;
+
+        // X axis
+        ctxFunc.beginPath();
+        ctxFunc.moveTo(0, origin.y);
+        ctxFunc.lineTo(w, origin.y);
+        ctxFunc.stroke();
+
+        // Y axis
+        ctxFunc.beginPath();
+        ctxFunc.moveTo(origin.x, 0);
+        ctxFunc.lineTo(origin.x, h);
+        ctxFunc.stroke();
+
+        // Axis labels
+        ctxFunc.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctxFunc.font = '11px sans-serif';
+        ctxFunc.fillText('x', w - 15, origin.y - 6);
+        ctxFunc.fillText('y', origin.x + 6, 15);
+
+        // Draw 3 basis functions (subtle dotted curves)
+        // 1. e1(x) = 1
+        ctxFunc.strokeStyle = 'rgba(56, 189, 248, 0.25)';
+        ctxFunc.setLineDash([3, 3]);
+        ctxFunc.beginPath();
+        for (let px = 0; px <= w; px += 4) {
+          const xVal = xMin + (px / w) * (xMax - xMin);
+          const pt = toScreen(xVal, 1);
+          if (px === 0) ctxFunc.moveTo(pt.x, pt.y);
+          else ctxFunc.lineTo(pt.x, pt.y);
+        }
+        ctxFunc.stroke();
+
+        // 2. e2(x) = x
+        ctxFunc.strokeStyle = 'rgba(192, 132, 252, 0.25)';
+        ctxFunc.beginPath();
+        for (let px = 0; px <= w; px += 4) {
+          const xVal = xMin + (px / w) * (xMax - xMin);
+          const pt = toScreen(xVal, xVal);
+          if (px === 0) ctxFunc.moveTo(pt.x, pt.y);
+          else ctxFunc.lineTo(pt.x, pt.y);
+        }
+        ctxFunc.stroke();
+
+        // 3. e3(x) = x^2
+        ctxFunc.strokeStyle = 'rgba(52, 211, 153, 0.25)';
+        ctxFunc.beginPath();
+        for (let px = 0; px <= w; px += 4) {
+          const xVal = xMin + (px / w) * (xMax - xMin);
+          const pt = toScreen(xVal, xVal * xVal);
+          if (px === 0) ctxFunc.moveTo(pt.x, pt.y);
+          else ctxFunc.lineTo(pt.x, pt.y);
+        }
+        ctxFunc.stroke();
+        ctxFunc.setLineDash([]);
+
+        // Draw Resulting Polynomial p(x)
+        ctxFunc.strokeStyle = '#38bdf8';
+        ctxFunc.lineWidth = 3;
+        ctxFunc.beginPath();
+        let first = true;
+        for (let px = 0; px <= w; px += 2) {
+          const xVal = xMin + (px / w) * (xMax - xMin);
+          const yVal = c0 + c1 * xVal + c2 * xVal * xVal;
+          const pt = toScreen(xVal, yVal);
+          if (first) { ctxFunc.moveTo(pt.x, pt.y); first = false; }
+          else { ctxFunc.lineTo(pt.x, pt.y); }
+        }
+        ctxFunc.stroke();
+
+        // Highlighting y-intercept at x = 0
+        const intercept = toScreen(0, c0);
+        ctxFunc.fillStyle = '#fbbf24';
+        ctxFunc.beginPath();
+        ctxFunc.arc(intercept.x, intercept.y, 4.5, 0, Math.PI * 2);
+        ctxFunc.fill();
+      }
+
+      // Draw 3D Vector Space
+      function draw3DVector(c0, c1, c2) {
+        const w = canvas3D.width;
+        const h = canvas3D.height;
+        ctx3D.clearRect(0, 0, w, h);
+
+        const cx = w / 2;
+        const cy = h / 2 + 20;
+        const scale = 36;
+
+        // 3D projection helper
+        function project(x, y, z) {
+          // Rotate around Y axis
+          const cosY = Math.cos(angleY), sinY = Math.sin(angleY);
+          const x1 = x * cosY + z * sinY;
+          const z1 = -x * sinY + z * cosY;
+
+          // Rotate around X axis
+          const cosX = Math.cos(angleX), sinX = Math.sin(angleX);
+          const y2 = y * cosX - z1 * sinX;
+          const z2 = y * sinX + z1 * cosX;
+
+          return {
+            x: cx + x1 * scale,
+            y: cy - y2 * scale,
+            depth: z2
+          };
+        }
+
+        // Draw ground grid in XZ plane (y = 0)
+        ctx3D.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx3D.lineWidth = 1;
+        for (let i = -3; i <= 3; i++) {
+          const p1 = project(-3, 0, i);
+          const p2 = project(3, 0, i);
+          ctx3D.beginPath(); ctx3D.moveTo(p1.x, p1.y); ctx3D.lineTo(p2.x, p2.y); ctx3D.stroke();
+
+          const q1 = project(i, 0, -3);
+          const q2 = project(i, 0, 3);
+          ctx3D.beginPath(); ctx3D.moveTo(q1.x, q1.y); ctx3D.lineTo(q2.x, q2.y); ctx3D.stroke();
+        }
+
+        // Draw 3 Coordinate Axes
+        const o = project(0, 0, 0);
+
+        function drawAxis(target, color, label) {
+          const pt = project(target.x, target.y, target.z);
+          ctx3D.strokeStyle = color;
+          ctx3D.lineWidth = 1.5;
+          ctx3D.beginPath();
+          ctx3D.moveTo(o.x, o.y);
+          ctx3D.lineTo(pt.x, pt.y);
+          ctx3D.stroke();
+
+          ctx3D.fillStyle = color;
+          ctx3D.font = 'bold 11px monospace';
+          ctx3D.fillText(label, pt.x + 4, pt.y - 2);
+        }
+
+        // X = c0 (常数项), Y = c2 (二次项, 上), Z = c1 (一次项)
+        drawAxis({ x: 3.5, y: 0, z: 0 }, '#38bdf8', 'c₀ (1)');
+        drawAxis({ x: 0, y: 3.5, z: 0 }, '#34d399', 'c₂ (x²)');
+        drawAxis({ x: 0, y: 0, z: 3.5 }, '#c084fc', 'c₁ (x)');
+
+        // Draw projection dashed lines to vector endpoint
+        const tip = project(c0, c2, c1);
+        const ground = project(c0, 0, c1);
+
+        ctx3D.setLineDash([3, 3]);
+        ctx3D.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx3D.lineWidth = 1;
+
+        // Ground shadow
+        ctx3D.beginPath();
+        ctx3D.moveTo(o.x, o.y);
+        ctx3D.lineTo(ground.x, ground.y);
+        ctx3D.lineTo(tip.x, tip.y);
+        ctx3D.stroke();
+
+        ctx3D.beginPath();
+        ctx3D.moveTo(ground.x, ground.y);
+        const xPt = project(c0, 0, 0);
+        ctx3D.lineTo(xPt.x, xPt.y);
+        ctx3D.stroke();
+        ctx3D.setLineDash([]);
+
+        // Draw main vector arrow
+        ctx3D.strokeStyle = '#c084fc';
+        ctx3D.lineWidth = 3.5;
+        ctx3D.beginPath();
+        ctx3D.moveTo(o.x, o.y);
+        ctx3D.lineTo(tip.x, tip.y);
+        ctx3D.stroke();
+
+        // Vector arrowhead
+        ctx3D.fillStyle = '#fbbf24';
+        ctx3D.beginPath();
+        ctx3D.arc(tip.x, tip.y, 5, 0, Math.PI * 2);
+        ctx3D.fill();
+
+        ctx3D.fillStyle = '#f8fafc';
+        ctx3D.font = 'bold 12px sans-serif';
+        ctx3D.fillText(`[p]ᵦ (${c0.toFixed(1)}, ${c1.toFixed(1)}, ${c2.toFixed(1)})`, tip.x + 8, tip.y - 4);
+      }
+
+      function render() {
+        const { c0, c1, c2 } = getCoeffs();
+        updateLabels(c0, c1, c2);
+        draw2DFunction(c0, c1, c2);
+        draw3DVector(c0, c1, c2);
+      }
+
+      sliderC0.addEventListener('input', render);
+      sliderC1.addEventListener('input', render);
+      sliderC2.addEventListener('input', render);
+
+      render();
+    })();
+  </script>
 
 </body>
 </html>

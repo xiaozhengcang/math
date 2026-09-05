@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -266,81 +270,752 @@
         <div class="module-hero">
           <div class="module-badge">Chapter 6: 抽象向量空间</div>
           <h1 class="module-title">Ch 6.2: 抽象内积空间与傅里叶级数分解</h1>
+          <p class="module-subtitle" style="font-size: 1.05rem; color: var(--text-muted); margin-top: 0.75rem; line-height: 1.7;">
+            从“纯代数骨架”跃迁至“几何度量世界”：赋予抽象向量以<strong>长度、距离与夹角</strong>，深入剖析<strong>柯西-施瓦茨不等式</strong>的极美证明，并见证<strong>傅里叶级数</strong>如何作为无穷维函数空间上的正交投影，完美统一代数与信号分析。
+          </p>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 抽象内积空间 (Inner Product Space) 与连续函数内积</h2>
-  </div>
-  <div class="card-body">
-    <div class="definition-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 抽象内积公理 (Inner Product Axioms)</h4>
-      <p>向量空间 $V$ 上的<strong>内积 (Inner Product)</strong> $\langle \mathbf{u}, \mathbf{v} \rangle$ 是赋予空间“长度与角度度量”的映射，严格满足：</p>
-      <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li><strong>对称性 (Symmetry)</strong>：$\langle \mathbf{u}, \mathbf{v} \rangle = \langle \mathbf{v}, \mathbf{u} \rangle$。</li>
-        <li><strong>双线性 (Bilinearity)</strong>：$\langle c\mathbf{u}_1 + d\mathbf{u}_2, \mathbf{v} \rangle = c\langle \mathbf{u}_1, \mathbf{v} \rangle + d\langle \mathbf{u}_2, \mathbf{v} \rangle$。</li>
-        <li><strong>正定性 (Positive Definiteness)</strong>：$\langle \mathbf{u}, \mathbf{u} \rangle \ge 0$，等号成立当且仅当 $\mathbf{u} = \mathbf{0}$。</li>
-      </ol>
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
-      <p><strong>连续函数空间 $C[a, b]$ 上的 $L^2$ 积分内积：</strong></p>
-      $$\langle f, g \rangle = \int_a^b f(x) g(x) dx$$
-      <p>函数的范数长度为 $\|f\| = \sqrt{\langle f, f \rangle} = \sqrt{\int_a^b f(x)^2 dx}$。连续函数版柯西-施瓦茨不等式：</p>
-      $$\left( \int_a^b f(x) g(x) dx \right)^2 \le \left( \int_a^b f(x)^2 dx \right) \left( \int_a^b g(x)^2 dx \right)$$
-    </div>
-  </div>
-</div>
+        <!-- 导言：认知跃迁与几何血肉 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：当抽象代数注入“几何度量”的灵魂</div>
+          <p>
+            在 <a href="ch6_1_vector_space_isomorphism.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.1 抽象向量空间</a> 中，我们建立了令人震撼的“万物皆向量”世界观：只要满足 8 大代数公理，函数、多项式与矩阵都可以线性组合。
+          </p>
+          <p>
+            然而，纯粹的向量空间只有“代数骨架”——它<strong>只知道加法和数乘</strong>，却完全不知道向量的<strong>“长短”</strong>、向量之间的<strong>“距离远近”</strong>、更无法判断两个向量是否<strong>“垂直正交”</strong>！
+          </p>
+          <p style="margin-top: 0.5rem;">
+            引入<strong>内积 (Inner Product) $\langle \mathbf{u}, \mathbf{v} \rangle$</strong>，就是为抽象向量空间注入<strong>度量几何 (Metric & Geometry)</strong> 的决定性跃迁。一旦有了内积：
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <strong style="color: var(--accent-blue);">📏 长度 (Norm)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.3rem;">$\|\mathbf{v}\| = \sqrt{\langle \mathbf{v}, \mathbf{v} \rangle}$</div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">衡量抽象元素（如函数能量、矩阵大小）的绝对模长。</p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.25);">
+              <strong style="color: var(--accent-purple);">🎯 距离 (Distance)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.3rem;">$d(\mathbf{u}, \mathbf{v}) = \|\mathbf{u} - \mathbf{v}\|$</div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">定义任意两点间的接近程度，支撑最佳逼近与回归。</p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.25);">
+              <strong style="color: var(--accent-green);">📐 夹角与垂直 (Orthogonality)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.3rem;">$\langle \mathbf{u}, \mathbf{v} \rangle = 0 \iff \mathbf{u} \perp \mathbf{v}$</div>
+              <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">正交性让极其繁琐的线性方程解算瞬间化为纯粹的独立投影！</p>
+            </div>
+          </div>
+        </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">傅里叶级数</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🎵 傅里叶级数：无穷维函数空间上的正交投影</h2>
-  </div>
-  <div class="card-body">
-    <p>三角函数系 $\{1, \cos(x), \sin(x), \cos(2x), \sin(2x), \dots\}$ 在区间 $[-\pi, \pi]$ 上构成正交基：</p>
-    $$\int_{-\pi}^\pi \cos(nx) \sin(mx) dx = 0, \quad \int_{-\pi}^\pi \cos(nx) \cos(mx) dx = \pi \delta_{nm} \ (n \ge 1), \quad \int_{-\pi}^\pi 1^2 dx = 2\pi$$
-    <p>任意周期信号 $f(x)$ 展开为<strong>傅里叶级数 (Fourier Series)</strong>，在几何上就是<strong>将无穷维向量 $f(x)$ 正交投影到各个频率的正交三角基底上</strong>：</p>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
-      <div style="padding: 0.8rem; background: var(--bg-secondary); border-radius: 6px;">
-        $$a_n = \frac{\langle f, \cos(nx) \rangle}{\|\cos(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(nx) dx$$
-      </div>
-      <div style="padding: 0.8rem; background: var(--bg-secondary); border-radius: 6px;">
-        $$b_n = \frac{\langle f, \sin(nx) \rangle}{\|\sin(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(nx) dx$$
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- 1. 抽象内积公理体系 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">公理基石</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 严密奠基：抽象内积公理系统 (Real & Complex)</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              设 $V$ 是实数域 $\mathbb{R}$（或复数域 $\mathbb{C}$）上的向量空间。所谓<strong>内积 (Inner Product)</strong>，是一个将任意两个向量 $\mathbf{u}, \mathbf{v} \in V$ 映射到标量域的操作，记作 $\langle \mathbf{u}, \mathbf{v} \rangle$。
+            </p>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 函数正交性积分手算</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">验证 $f(x) = x$ 与 $g(x) = x^2$ 在 $[-1, 1]$ 上关于内积 $\langle f, g \rangle = \int_{-1}^1 f(x)g(x)dx$ 是否正交</h4>
-      $$\langle f, g \rangle = \int_{-1}^1 x \cdot x^2 dx = \int_{-1}^1 x^3 dx = \left[ \frac{x^4}{4} \right]_{-1}^1 = \frac{1}{4} - \frac{1}{4} = 0$$
-      <p>内积为 0 $\implies$ 奇函数与偶函数的乘积为奇函数，在对称区间积分恒为 0，两者严格正交！</p>
-    </div>
-  </div>
-</div>
+            <div class="definition-box" style="margin: 1.25rem 0; padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <h4 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">
+                📐 实内积空间公理 (Real Inner Product Axioms)
+              </h4>
+              <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+                对于实向量空间 $V$ 中的任意向量 $\mathbf{u}, \mathbf{v}, \mathbf{w} \in V$ 及标量 $c \in \mathbb{R}$，映射 $\langle \cdot, \cdot \rangle: V \times V \to \mathbb{R}$ 必须严格无条件满足以下 4 条公理：
+              </p>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 SciPy 数值积分计算函数内积</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import scipy.integrate as integrate
-import numpy as np
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  <strong style="color: var(--accent-blue);">① 对称性 (Symmetry)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-blue);">
+                    $$\langle \mathbf{u}, \mathbf{v} \rangle = \langle \mathbf{v}, \mathbf{u} \rangle$$
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">两个实向量的位置互换，内积值恒定保持不变。</p>
+                </div>
 
-# 验证 cos(x) 与 cos(2x) 在 [-pi, pi] 上的正交内积
-val, err = integrate.quad(lambda x: np.cos(x) * np.cos(2*x), -np.pi, np.pi)
-print("函数内积 <cos(x), cos(2x)>:", np.round(val, 6)) # 0.0</code></pre>
-  </div>
-</div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  <strong style="color: var(--accent-purple);">② 第一变元加法分配律 (Additivity)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-purple);">
+                    $$\langle \mathbf{u} + \mathbf{v}, \mathbf{w} \rangle = \langle \mathbf{u}, \mathbf{w} \rangle + \langle \mathbf{v}, \mathbf{w} \rangle$$
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">第一位置的向量和可拆分为各项与目标向量的独立内积之和。</p>
+                </div>
 
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  <strong style="color: var(--accent-green);">③ 标量数乘齐次性 (Homogeneity)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-green);">
+                    $$\langle c\mathbf{u}, \mathbf{v} \rangle = c \langle \mathbf{u}, \mathbf{v} \rangle$$
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">标量因数可自由提至内积括号外（与加法结合统称第一变元线性性）。</p>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                  <strong style="color: var(--accent-amber);">④ 正定性 (Positive Definiteness)</strong>
+                  <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0; color: var(--accent-amber);">
+                    $$\langle \mathbf{u}, \mathbf{u} \rangle \ge 0, \quad \langle \mathbf{u}, \mathbf{u} \rangle = 0 \iff \mathbf{u} = \mathbf{0}$$
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted);">自内积永远非负；自内积为零当且仅当向量本身是零向量。</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 复数域拓展警告卡片 -->
+            <div class="warning-box" style="margin: 1.25rem 0;">
+              <div class="box-title">🌐 视野拓展：复内积空间与共轭对称性 (Conjugate Symmetry)</div>
+              <p style="font-size: 0.9rem; line-height: 1.8;">
+                若标量域为复数域 $\mathbb{C}$（如量子力学希尔伯特空间），为了保证自身的内积 $\langle \mathbf{u}, \mathbf{u} \rangle$ 仍是<strong>非负实数</strong>（物理世界中概率与长度必须为实数），公理 1 必须升级为<strong>共轭对称性</strong>：
+              </p>
+              <div style="text-align: center; font-size: 1.15rem; color: var(--accent-rose); margin: 0.5rem 0;">
+                $$\langle \mathbf{u}, \mathbf{v} \rangle = \overline{\langle \mathbf{v}, \mathbf{u} \rangle}$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">
+                此时第二变元的标量数乘满足共轭线性：$\langle \mathbf{u}, c\mathbf{v} \rangle = \bar{c}\langle \mathbf{u}, \mathbf{v} \rangle$。实内积空间则是复内积空间在虚部为零时的自然特例。
+              </p>
+            </div>
+
+            <!-- 公理级严格推导 -->
+            <div class="proof-box">
+              <div class="box-title">🔍 逻辑探微：由内积公理严密推导的基础性质</div>
+              <details class="proof-accordion" open>
+                <summary>📌 性质 1：零向量与任何向量的内积必恒为零，即 $\langle \mathbf{0}, \mathbf{v} \rangle = 0$</summary>
+                <div style="padding: 1rem; font-size: 0.9rem; line-height: 1.8;">
+                  <p><strong>证明：</strong> 根据向量空间公理，零向量可写为 $\mathbf{0} = 0 \cdot \mathbf{0}$。应用内积公理 ③（标量齐次性）：</p>
+                  $$\langle \mathbf{0}, \mathbf{v} \rangle = \langle 0 \cdot \mathbf{0}, \mathbf{v} \rangle = 0 \cdot \langle \mathbf{0}, \mathbf{v} \rangle = 0 \quad \blacksquare$$
+                </div>
+              </details>
+              <details class="proof-accordion" style="margin-top: 0.5rem;">
+                <summary>📌 性质 2：实内积关于第二变元同样具有线性分配性（双线性 Bilinearity）</summary>
+                <div style="padding: 1rem; font-size: 0.9rem; line-height: 1.8;">
+                  <p><strong>证明：</strong> 应用对称性与第一变元线性性：</p>
+                  $$\langle \mathbf{u}, c\mathbf{v}_1 + d\mathbf{v}_2 \rangle = \langle c\mathbf{v}_1 + d\mathbf{v}_2, \mathbf{u} \rangle = c\langle \mathbf{v}_1, \mathbf{u} \rangle + d\langle \mathbf{v}_2, \mathbf{u} \rangle = c\langle \mathbf{u}, \mathbf{v}_1 \rangle + d\langle \mathbf{u}, \mathbf{v}_2 \rangle \quad \blacksquare$$
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 由内积诱导的几何系统 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">诱导几何</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 几何度量三要素：范数、柯西-施瓦茨与平行四边形律</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              一旦内积确立，欧几里得空间的所有经典几何概念立即以完全自然的方式推广到任意抽象向量空间：
+            </p>
+
+            <div class="concept-grid" style="margin: 1.25rem 0;">
+              <div class="concept-card" style="border-left-color: var(--accent-blue);">
+                <h4 style="color: var(--accent-blue);">1. 诱导范数 (Induced Norm)</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  向量的模长定义为自内积的非负平方根：
+                </p>
+                <div style="text-align: center; font-size: 1.15rem; color: var(--accent-blue); margin: 0.5rem 0;">
+                  $$\|\mathbf{u}\| = \sqrt{\langle \mathbf{u}, \mathbf{u} \rangle}$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">
+                  满足非负性、绝对齐次性 $\|c\mathbf{u}\| = |c| \|\mathbf{u}\|$ 以及三角不等式。
+                </p>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-purple);">
+                <h4 style="color: var(--accent-purple);">2. 诱导距离与夹角 (Metric & Angle)</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                  两向量之间的距离与夹角余弦值：
+                </p>
+                <div style="text-align: center; font-size: 1.05rem; color: var(--accent-purple); margin: 0.5rem 0;">
+                  $$d(\mathbf{u}, \mathbf{v}) = \|\mathbf{u} - \mathbf{v}\|, \quad \cos \theta = \frac{\langle \mathbf{u}, \mathbf{v} \rangle}{\|\mathbf{u}\| \|\mathbf{v}\|}$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">
+                  夹角定义成立的前提是分数绝不超过 1，这由<strong>柯西-施瓦茨不等式</strong>铁律保证！
+                </p>
+              </div>
+            </div>
+
+            <!-- 柯西-施瓦茨不等式与证明 -->
+            <div class="proof-box" style="margin: 1.5rem 0;">
+              <div class="box-title">👑 分析学第一神盾：柯西-施瓦茨不等式 (Cauchy-Schwarz Inequality)</div>
+              <p style="font-size: 0.95rem; line-height: 1.8; margin-bottom: 0.75rem;">
+                在任意实内积空间 $V$ 中，对任意两向量 $\mathbf{u}, \mathbf{v} \in V$，恒有：
+              </p>
+              <div style="font-size: 1.35rem; color: var(--accent-rose); text-align: center; margin: 1rem 0; font-weight: bold;">
+                $$|\langle \mathbf{u}, \mathbf{v} \rangle| \le \|\mathbf{u}\| \, \|\mathbf{v}\|$$
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                等号成立<strong>当且仅当 $\mathbf{u}$ 与 $\mathbf{v}$ 线性相关</strong>（即其中一个是另一个的标量倍）。
+              </p>
+
+              <details class="proof-accordion" open>
+                <summary>💡 极其优美的“一元二次多项式判别式法”证明（必读核心）</summary>
+                <div style="padding: 1rem; font-size: 0.92rem; line-height: 1.9;">
+                  <p><strong>第一步：平凡情况排除</strong></p>
+                  <p>若 $\mathbf{v} = \mathbf{0}$，则不等式两边皆为 $0$，显然等式成立。下设 $\mathbf{v} \neq \mathbf{0}$，从而 $\|\mathbf{v}\|^2 = \langle \mathbf{v}, \mathbf{v} \rangle > 0$。</p>
+
+                  <p><strong>第二步：构造一元二次非负函数</strong></p>
+                  <p>对任意实数 $t \in \mathbb{R}$，考虑向量 $\mathbf{u} + t\mathbf{v}$ 的范数平方。由正定性公理，范数平方永远大于等于 0：</p>
+                  $$p(t) = \|\mathbf{u} + t\mathbf{v}\|^2 = \langle \mathbf{u} + t\mathbf{v}, \mathbf{u} + t\mathbf{v} \rangle \ge 0$$
+
+                  <p><strong>第三步：应用双线性性完全展开</strong></p>
+                  $$p(t) = \langle \mathbf{u}, \mathbf{u} \rangle + 2t \langle \mathbf{u}, \mathbf{v} \rangle + t^2 \langle \mathbf{v}, \mathbf{v} \rangle = A t^2 + B t + C \ge 0$$
+                  <p>其中二次项系数 $A = \|\mathbf{v}\|^2 > 0$，$B = 2\langle \mathbf{u}, \mathbf{v} \rangle$，$C = \|\mathbf{u}\|^2$。</p>
+
+                  <p><strong>第四步：二次方程判别式审判</strong></p>
+                  <p>一个开口向上的二次函数 $p(t) \ge 0$ 对<strong>所有实数 $t$ 恒成立</strong>，意味着它在坐标系中最多只能与横轴相切，<strong>绝不可能有两个不同实根</strong>！因此其判别式必须小于等于零：</p>
+                  $$\Delta = B^2 - 4AC = \big(2\langle \mathbf{u}, \mathbf{v} \rangle\big)^2 - 4 \|\mathbf{v}\|^2 \|\mathbf{u}\|^2 \le 0$$
+                  $$\iff 4 \langle \mathbf{u}, \mathbf{v} \rangle^2 \le 4 \|\mathbf{u}\|^2 \|\mathbf{v}\|^2 \iff |\langle \mathbf{u}, \mathbf{v} \rangle| \le \|\mathbf{u}\| \|\mathbf{v}\| \quad \blacksquare$$
+
+                  <p style="margin-top: 0.5rem; color: var(--accent-amber);">
+                    🎯 <strong>等号讨论</strong>：等号成立意味着 $\Delta = 0$，即存在某个唯一的 $t_0$ 使得 $\|\mathbf{u} + t_0 \mathbf{v}\|^2 = 0$。根据正定性公理，必有 $\mathbf{u} + t_0 \mathbf{v} = \mathbf{0}$，即 $\mathbf{u} = -t_0 \mathbf{v}$，两向量严格线性相关！
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <!-- 三角不等式与平行四边形定则 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <strong style="color: var(--accent-green); font-size: 1rem;">🔺 三角不等式 (Triangle Inequality)</strong>
+                <div style="font-size: 1.15rem; color: var(--accent-green); margin: 0.75rem 0; text-align: center;">
+                  $$\|\mathbf{u} + \mathbf{v}\| \le \|\mathbf{u}\| + \|\mathbf{v}\|$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  <strong>证明概要</strong>：$\|\mathbf{u}+\mathbf{v}\|^2 = \|\mathbf{u}\|^2 + 2\langle \mathbf{u}, \mathbf{v} \rangle + \|\mathbf{v}\|^2 \le \|\mathbf{u}\|^2 + 2\|\mathbf{u}\|\|\mathbf{v}\| + \|\mathbf{v}\|^2 = (\|\mathbf{u}\|+\|\mathbf{v}\|)^2$。开平方即得证！
+                </p>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1);">
+                <strong style="color: var(--accent-indigo); font-size: 1rem;">▱ 平行四边形定则 (Parallelogram Law)</strong>
+                <div style="font-size: 1.15rem; color: var(--accent-indigo); margin: 0.75rem 0; text-align: center;">
+                  $$\|\mathbf{u} + \mathbf{v}\|^2 + \|\mathbf{u} - \mathbf{v}\|^2 = 2\|\mathbf{u}\|^2 + 2\|\mathbf{v}\|^2$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  两条对角线平方和等于四条边平方和。<strong>这是检验一个范数能否由内积诱导的充要准则（Jordan-von Neumann 定理）</strong>！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 四大典型抽象内积空间 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">名篇博览</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 典型抽象内积空间四大名篇</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              内积不仅仅存在于高中平面几何的点积 $\mathbf{u} \cdot \mathbf{v} = x_1 y_1 + x_2 y_2$。在机器学习、图像处理与工程计算中，不同对象拥有完全量身定制的抽象内积：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+              <!-- 1. 加权马氏内积 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="background: var(--accent-blue); color: #000; font-size: 0.75rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">CASE 1</span>
+                  <strong style="color: var(--accent-blue);">加权欧氏内积与马氏距离</strong>
+                </div>
+                <div style="font-size: 1.05rem; margin: 0.5rem 0;">
+                  $$\langle \mathbf{x}, \mathbf{y} \rangle_W = \mathbf{x}^T W \mathbf{y}$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  只要权重矩阵 $W$ 是<strong>对称正定矩阵 (SPD)</strong>，该公式完美满足全部 4 条内积公理！
+                  在统计学与机器学习中，当 $W = \Sigma^{-1}$（协方差逆矩阵）时，诱导的距离正是<strong>马氏距离 (Mahalanobis Distance)</strong>，能消除各特征方差不一及相关性的干扰。
+                </p>
+              </div>
+
+              <!-- 2. Frobenius 矩阵内积 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="background: var(--accent-purple); color: #fff; font-size: 0.75rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">CASE 2</span>
+                  <strong style="color: var(--accent-purple);">矩阵空间 $M_{m \times n}$ 上的 Frobenius 内积</strong>
+                </div>
+                <div style="font-size: 1.05rem; margin: 0.5rem 0;">
+                  $$\langle A, B \rangle_F = \operatorname{tr}(A^T B) = \sum_{i=1}^m \sum_{j=1}^n A_{ij} B_{ij}$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  将矩阵视为展平的超大向量做点积。诱导范数即深度学习中常用的权重衰减正则项 <strong>Frobenius 范数</strong> $\|A\|_F = \sqrt{\operatorname{tr}(A^T A)} = \sqrt{\sum A_{ij}^2}$。
+                  例如，对称矩阵与反对称矩阵在此内积下<strong>严格垂直正交</strong>！
+                </p>
+              </div>
+
+              <!-- 3. 连续函数 L2 空间 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="background: var(--accent-green); color: #000; font-size: 0.75rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">CASE 3</span>
+                  <strong style="color: var(--accent-green);">连续函数空间 $C[a, b]$ 上的 $L^2$ 内积</strong>
+                </div>
+                <div style="font-size: 1.05rem; margin: 0.5rem 0;">
+                  $$\langle f, g \rangle = \int_a^b f(x) g(x) dx$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  离散求和 $\sum x_i y_i$ 在无穷维连续区间的直接极限对应！函数的长度 $\|f\| = \sqrt{\int_a^b f(x)^2 dx}$ 对应信号物理系统中的<strong>总能量 (Total Energy)</strong>。
+                </p>
+              </div>
+
+              <!-- 4. 加权多项式与正交多项式族 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(251, 191, 36, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="background: var(--accent-amber); color: #000; font-size: 0.75rem; font-weight: 800; padding: 2px 6px; border-radius: 4px;">CASE 4</span>
+                  <strong style="color: var(--accent-amber);">加权函数内积与正交多项式族</strong>
+                </div>
+                <div style="font-size: 1.05rem; margin: 0.5rem 0;">
+                  $$\langle f, g \rangle_w = \int_a^b f(x) g(x) w(x) dx \quad (w(x) > 0)$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  引入正权函数 $w(x)$。当 $w(x)=1$ 时施密特正交化产生<strong>勒让德多项式 (Legendre)</strong>；当 $w(x)=(1-x^2)^{-1/2}$ 时产生<strong>切比雪夫多项式 (Chebyshev)</strong>。它们是现代数值计算中最高精度的求积基石！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 函数空间 Gram-Schmidt 与勒让德多项式 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">算法应用</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 函数空间正交化实战：手工打造勒让德多项式 (Legendre)</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              在多项式空间 $P_2[-1, 1]$ 中，单项式基 $\{1, x, x^2\}$ 极其直观，但它们彼此<strong>并不正交</strong>（例如 $\langle 1, x^2 \rangle = \int_{-1}^1 x^2 dx = \frac{2}{3} \neq 0$）。
+              用不正交的基做曲线拟合会导致著名的<strong>希尔伯特病态矩阵 (Hilbert Matrix)</strong>，数值条件数极度恶化。
+            </p>
+            <p>
+              现在，我们在区间 $[-1, 1]$ 上利用内积 $\langle f, g \rangle = \int_{-1}^1 f(x)g(x)dx$，对标准基 $\{v_0 = 1, v_1 = x, v_2 = x^2\}$ 执行标准的 <strong>Gram-Schmidt 正交化算法</strong>：
+            </p>
+
+            <div class="example-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(251, 191, 36, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+              <h4 style="color: var(--accent-amber);">✍️ 步骤剖析：前三阶勒让德正交基的手工推导</h4>
+              
+              <div style="margin-top: 0.75rem; line-height: 1.9; font-size: 0.92rem;">
+                <p><strong>① 第一个基向量：</strong></p>
+                $$P_0(x) = v_0(x) = 1, \quad \|P_0\|^2 = \int_{-1}^1 1^2 dx = 2$$
+
+                <p><strong>② 第二个基向量（投影消除）：</strong></p>
+                $$P_1(x) = v_1(x) - \frac{\langle v_1, P_0 \rangle}{\|P_0\|^2} P_0(x)$$
+                <p>由于 $\langle x, 1 \rangle = \int_{-1}^1 x dx = 0$（奇函数在对称区间积分），所以分子为 0！</p>
+                $$P_1(x) = x - 0 = x, \quad \|P_1\|^2 = \int_{-1}^1 x^2 dx = \left[\frac{x^3}{3}\right]_{-1}^1 = \frac{2}{3}$$
+
+                <p><strong>③ 第三个基向量（消除在 $P_0$ 和 $P_1$ 上的投影分量）：</strong></p>
+                $$P_2(x) = v_2(x) - \frac{\langle v_2, P_0 \rangle}{\|P_0\|^2} P_0(x) - \frac{\langle v_2, P_1 \rangle}{\|P_1\|^2} P_1(x)$$
+                <p>计算各内积项：</p>
+                <ul>
+                  <li>$\langle v_2, P_0 \rangle = \int_{-1}^1 x^2 \cdot 1 dx = \frac{2}{3}$</li>
+                  <li>$\langle v_2, P_1 \rangle = \int_{-1}^1 x^2 \cdot x dx = \int_{-1}^1 x^3 dx = 0$（奇函数积分）</li>
+                </ul>
+                <p>代入公式：</p>
+                $$P_2(x) = x^2 - \frac{2/3}{2} \cdot 1 - 0 \cdot x = x^2 - \frac{1}{3}$$
+                <p style="color: var(--text-muted); font-size: 0.88rem;">
+                  （数学界传统习惯将端点值标准化为 $P_n(1) = 1$，乘以比例常数 $\frac{3}{2}$ 即得标准型 $\frac{1}{2}(3x^2 - 1)$）。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 傅里叶级数：无穷维空间的正交投影 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">理论巅峰</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🎵 傅里叶级数：无穷维函数空间中的正交投影本质</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              现在，我们揭晓线性代数中最震撼的统一画卷之一：<strong>傅里叶级数 (Fourier Series) 本质上正是无穷维函数空间上的正交投影分解！</strong>
+            </p>
+            <p>
+              在欧几里得几何 $\mathbb{R}^3$ 中，如果一组基底 $\{\mathbf{e}_1, \mathbf{e}_2, \mathbf{e}_3\}$ 是两两相互垂直的正交基，我们要把任意向量 $\mathbf{v}$ 分解为坐标组合 $\mathbf{v} = c_1 \mathbf{e}_1 + c_2 \mathbf{e}_2 + c_3 \mathbf{e}_3$，<strong>根本不需要做任何高斯消元或求逆矩阵</strong>！两边直接与 $\mathbf{e}_k$ 作内积：
+            </p>
+            <div style="text-align: center; font-size: 1.15rem; color: var(--accent-purple); margin: 0.75rem 0;">
+              $$\langle \mathbf{v}, \mathbf{e}_k \rangle = c_k \langle \mathbf{e}_k, \mathbf{e}_k \rangle \implies c_k = \frac{\langle \mathbf{v}, \mathbf{e}_k \rangle}{\|\mathbf{e}_k\|^2}$$
+            </div>
+            <p>
+              交叉项全部因为正交性而消失（$\langle \mathbf{e}_i, \mathbf{e}_k \rangle = 0$）。正是正交性让每个坐标的求解完全解耦！
+            </p>
+
+            <!-- 三角基底的正交性证明框 -->
+            <div class="definition-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple);">📐 区间 $[-\pi, \pi]$ 上的三角函数正交基族</h4>
+              <p>考虑集合 $\{1, \cos(x), \sin(x), \cos(2x), \sin(2x), \dots, \cos(nx), \sin(nx), \dots\}$，在内积 $\langle f, g \rangle = \int_{-\pi}^\pi f(x)g(x)dx$ 下：</p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  $$\int_{-\pi}^\pi \cos(nx) \sin(mx) dx = 0 \quad (\forall n, m)$$
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">偶函数 $\times$ 奇函数 = 奇函数，对称积分恒为 0</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  $$\int_{-\pi}^\pi \cos(nx) \cos(mx) dx = \begin{cases} 0 & n \ne m \\ \pi & n = m \ge 1 \end{cases}$$
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">同频同相积分长度为 $\sqrt{\pi}$</div>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 0.8rem; border-radius: 6px;">
+                  $$\int_{-\pi}^\pi 1^2 dx = 2\pi \implies \|1\|^2 = 2\pi$$
+                  <div style="font-size: 0.8rem; color: var(--text-muted); text-align: center;">常数基底的范数平方为 $2\pi$</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 傅里叶系数公式与投影坐标 -->
+            <p style="margin-top: 1rem;">
+              因此，周期为 $2\pi$ 的任意函数 $f(x)$ 展开为傅里叶级数：
+            </p>
+            <div style="text-align: center; font-size: 1.2rem; color: var(--accent-blue); margin: 0.5rem 0;">
+              $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty \Big( a_n \cos(nx) + b_n \sin(nx) \Big)$$
+            </div>
+            <p>各个傅里叶系数不过是<strong>正交投影在各基底上的坐标标量</strong>：</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.25);">
+                <strong style="color: var(--accent-blue);">直流均值投影：</strong>
+                <div style="font-size: 1.05rem; margin: 0.4rem 0;">
+                  $$a_0 = \frac{\langle f, 1 \rangle}{\|1\|^2 / 2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) dx$$
+                </div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.25);">
+                <strong style="color: var(--accent-purple);">余弦基正交投影坐标：</strong>
+                <div style="font-size: 1.05rem; margin: 0.4rem 0;">
+                  $$a_n = \frac{\langle f, \cos(nx) \rangle}{\|\cos(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(nx) dx$$
+                </div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.25);">
+                <strong style="color: var(--accent-green);">正弦基正交投影坐标：</strong>
+                <div style="font-size: 1.05rem; margin: 0.4rem 0;">
+                  $$b_n = \frac{\langle f, \sin(nx) \rangle}{\|\sin(nx)\|^2} = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(nx) dx$$
+                </div>
+              </div>
+            </div>
+
+            <!-- 最佳平方逼近与帕塞瓦尔能量守恒 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+              <div class="concept-card" style="border-left-color: var(--accent-amber);">
+                <h4 style="color: var(--accent-amber);">🎯 最佳平方逼近定理 (Best Approximation)</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.7;">
+                  如果将级数截断到前 $N$ 阶频率，所得部分和 $S_N(x) = \frac{a_0}{2} + \sum_{n=1}^N (a_n \cos nx + b_n \sin nx)$，是在有限维三角多项式子空间 $W_N$ 中，<strong>与目标原函数 $f(x)$ 距离 $\|f - S_N\|^2$ 最近的唯一元素</strong>！
+                  垂线距离最短，残差误差向量 $(f - S_N)$ 与子空间中所有基函数严格正交。
+                </p>
+              </div>
+
+              <div class="concept-card" style="border-left-color: var(--accent-rose);">
+                <h4 style="color: var(--accent-rose);">⚡ 帕塞瓦尔恒等式：无穷维勾股定理 (Parseval's Identity)</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.7;">
+                  在几何中，三维向量的模长平方等于各直角坐标平方和 $\|v\|^2 = x^2 + y^2 + z^2$。在无穷维希尔伯特空间中，函数的总能量正好等于各频域谐波坐标平方和：
+                </p>
+                <div style="font-size: 1rem; color: var(--accent-rose); text-align: center; margin-top: 0.5rem;">
+                  $$\frac{1}{\pi} \int_{-\pi}^\pi |f(x)|^2 dx = \frac{a_0^2}{2} + \sum_{n=1}^\infty (a_n^2 + b_n^2)$$
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 双视图交互可视化实验台 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">交互实验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 🔬 双视图交互实验台：正交基波形合成与频域投影谱</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+              切换不同周期的目标信号波形，拖动滑块增加谐波项数 $N$。观察<strong>左侧时域波形如何逼近目标</strong>（以及在间断点处的<strong>吉布斯现象 Gibbs Phenomenon</strong>），同时在<strong>右侧观察其在各正交三角基底上的坐标投影谱</strong>：
+            </p>
+
+            <!-- 控制面板 -->
+            <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; margin: 1.25rem 0; padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+                <span style="font-size: 0.9rem; font-weight: 600;">目标波形：</span>
+                <button class="btn btn-secondary wave-btn active" data-wave="square" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">🟦 奇对称方波 (Square)</button>
+                <button class="btn btn-secondary wave-btn" data-wave="triangle" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">🔺 偶对称三角波 (Triangle)</button>
+                <button class="btn btn-secondary wave-btn" data-wave="sawtooth" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">⚡ 锯齿斜坡波 (Sawtooth)</button>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 0.75rem; min-width: 260px;">
+                <label for="harmonics-slider" style="font-size: 0.9rem; font-weight: 600; white-space: nowrap;">截断阶数 $N$：<span id="harmonics-val" style="color: var(--accent-blue); font-weight: bold;">5</span></label>
+                <input id="harmonics-slider" type="range" min="1" max="25" value="5" step="1" style="flex: 1; accent-color: var(--accent-blue); cursor: pointer;">
+              </div>
+            </div>
+
+            <!-- 双视图双画布网格 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+              <!-- 左视图：时域函数逼近 -->
+              <div style="background: #090d16; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <strong style="color: var(--accent-blue); font-size: 0.95rem;">🌊 时域空间：原函数 $f(x)$ 与正交截断和 $S_N(x)$</strong>
+                  <span style="font-size: 0.75rem; color: #94a3b8;">$x \in [-\pi, \pi]$</span>
+                </div>
+                <canvas id="fourierCanvas" width="540" height="320" style="width: 100%; height: auto; display: block; border-radius: 4px; background: #060911;"></canvas>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-top: 0.6rem; color: var(--text-muted);">
+                  <div><span style="color: #64748b; font-weight: bold;">— —</span> 目标原函数 $f(x)$</div>
+                  <div><span style="color: #38bdf8; font-weight: bold;">——</span> 截断逼近 $S_N(x)$</div>
+                  <div><span style="color: #c084fc; font-weight: bold;">····</span> 最新加入正交谐波</div>
+                </div>
+              </div>
+
+              <!-- 右视图：频域正交基坐标谱 -->
+              <div style="background: #090d16; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <strong style="color: var(--accent-purple); font-size: 0.95rem;">📊 坐标空间：在正交基 $\{\phi_n\}$ 上的投影系数谱</strong>
+                  <span style="font-size: 0.75rem; color: #94a3b8;">投影坐标值</span>
+                </div>
+                <canvas id="spectrumCanvas" width="540" height="320" style="width: 100%; height: auto; display: block; border-radius: 4px; background: #060911;"></canvas>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-top: 0.6rem; color: var(--text-muted);">
+                  <div>柱高度 = 坐标分量 $c_n = \frac{\langle f, \phi_n \rangle}{\|\phi_n\|^2}$</div>
+                  <div id="metric-energy" style="color: var(--accent-green); font-weight: 600;">能量捕获率: --%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 动态状态指标指示面板 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem;">
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">当前波形解析式特征</div>
+                <div id="stat-formula" style="font-size: 0.95rem; font-weight: 600; color: var(--accent-blue); margin-top: 0.2rem;">
+                  奇函数 (仅含奇次正弦谐波)
+                </div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">$L^2$ 均方误差范数 $\|f - S_N\|$</div>
+                <div id="stat-error" style="font-size: 0.95rem; font-weight: 600; color: var(--accent-amber); margin-top: 0.2rem;">
+                  计算中...
+                </div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; color: var(--text-muted);">帕塞瓦尔能量逼近比</div>
+                <div id="stat-parseval" style="font-size: 0.95rem; font-weight: 600; color: var(--accent-green); margin-top: 0.2rem;">
+                  计算中...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. 手算步骤示范精解 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">经典手算</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. ✍️ 经典题解：方波正交投影系数完整分步积分推导</h2>
+          </div>
+          <div class="card-body">
+            <div class="example-box" style="padding: 1.5rem; background: rgba(244, 63, 94, 0.06); border-left: 4px solid var(--accent-rose); border-radius: 6px;">
+              <h4 style="color: var(--accent-rose); font-size: 1.05rem;">
+                题目：设周期为 $2\pi$ 的标准对称方波在 $[-\pi, \pi]$ 上定义为：
+              </h4>
+              <div style="font-size: 1.15rem; text-align: center; margin: 0.5rem 0;">
+                $$f(x) = \begin{cases} -1, & -\pi \le x < 0 \\ +1, & 0 \le x < \pi \end{cases}$$
+              </div>
+              <p style="font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;">求其傅里叶正交投影级数。</p>
+
+              <div style="margin-top: 1rem; line-height: 1.9; font-size: 0.92rem;">
+                <p><strong>第一步：利用对称性简化内积计算</strong></p>
+                <p>
+                  注意到 $f(-x) = -f(x)$，原函数是严格的<strong>奇函数</strong>。
+                  由于常数 $1$ 与余弦函数 $\cos(nx)$ 均为偶函数，奇函数与偶函数的乘积仍为奇函数，在关于原点对称的区间 $[-\pi, \pi]$ 上积分恒等于零！
+                </p>
+                $$a_0 = \frac{1}{\pi} \int_{-\pi}^\pi f(x) dx = 0, \quad a_n = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \cos(nx) dx = 0 \quad (\forall n \ge 1)$$
+                <p>因此该函数在直流基与所有余弦正交基上的投影分量<strong>完全为零</strong>！</p>
+
+                <p><strong>第二步：计算在正弦正交基上的投影坐标 $b_n$</strong></p>
+                <p>
+                  奇函数 $\times$ 奇函数 $\sin(nx)$ = 偶函数。利用对称区间的偶函数积分性质：
+                </p>
+                $$b_n = \frac{1}{\pi} \int_{-\pi}^\pi f(x) \sin(nx) dx = \frac{2}{\pi} \int_0^\pi (+1) \cdot \sin(nx) dx = \frac{2}{\pi} \left[ -\frac{\cos(nx)}{n} \right]_0^\pi = \frac{2}{n\pi} \big( 1 - \cos(n\pi) \big)$$
+
+                <p><strong>第三步：奇偶谐波分情况讨论</strong></p>
+                <p>因为 $\cos(n\pi) = (-1)^n$：</p>
+                <ul>
+                  <li>当 $n$ 为<strong>偶数</strong>时，$\cos(n\pi) = 1$，分子 $1 - 1 = 0 \implies b_n = 0$；</li>
+                  <li>当 $n$ 为<strong>奇数</strong>时，$\cos(n\pi) = -1$，分子 $1 - (-1) = 2 \implies b_n = \frac{4}{n\pi}$。</li>
+                </ul>
+
+                <p><strong>第四步：写出最终正交投影坐标级数</strong></p>
+                <div style="font-size: 1.15rem; color: var(--accent-blue); text-align: center; margin: 0.75rem 0;">
+                  $$f(x) = \frac{4}{\pi} \left( \sin x + \frac{1}{3}\sin(3x) + \frac{1}{5}\sin(5x) + \frac{1}{7}\sin(7x) + \dots \right)$$
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.88rem;">
+                  💡 <strong>副产物大惊喜（莱布尼茨 $\pi$ 公式）</strong>：令 $x = \frac{\pi}{2}$，此时 $f(\frac{\pi}{2}) = 1$，$\sin(\frac{n\pi}{2}) = 1, 0, -1, 0, \dots$。
+                  代入即得著名的级数 $1 = \frac{4}{\pi} (1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \dots) \implies \frac{\pi}{4} = 1 - \frac{1}{3} + \frac{1}{5} - \frac{1}{7} + \dots$！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. Python / NumPy / SciPy 科学计算实战 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 💻 科学计算实战：NumPy 矩阵内积与 SciPy 连续积分投影</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1rem;">
+              以下代码涵盖了从离散矩阵 Frobenius 内积到连续函数高精度数值积分，并检验帕塞瓦尔能量守恒的完整工业级实现：
+            </p>
+
+            <pre class="code-block" style="background: #0b1120; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.7; border: 1px solid var(--border-color);"><code>import numpy as np
+import scipy.integrate as integrate
+
+# ==========================================
+# 1. 矩阵空间上的 Frobenius 抽象内积与夹角
+# ==========================================
+def matrix_inner_product(A, B):
+    """计算矩阵空间的 Frobenius 内积 ⟨A, B⟩ = tr(A^T B)"""
+    return np.trace(A.T @ B)
+
+A = np.array([[1.0, 2.0], [3.0, 4.0]])
+B = np.array([[2.0, -1.0], [0.0, 1.0]])
+
+inner_AB = matrix_inner_product(A, B)
+norm_A = np.sqrt(matrix_inner_product(A, A))  # 等价于 np.linalg.norm(A, 'fro')
+norm_B = np.sqrt(matrix_inner_product(B, B))
+cos_theta = inner_AB / (norm_A * norm_B)
+
+print(f"=== 矩阵 Frobenius 内积 ===")
+print(f"内积 ⟨A, B⟩: {inner_AB:.4f}")
+print(f"||A||_F: {norm_A:.4f}, ||B||_F: {norm_B:.4f}")
+print(f"两矩阵夹角余弦 cos(theta): {cos_theta:.4f} (角度: {np.degrees(np.arccos(cos_theta)):.2f}°)\n")
+
+# ==========================================
+# 2. 连续函数空间 L^2 高精度数值正交投影
+# ==========================================
+def compute_fourier_coeffs(f_func, N=5):
+    """利用 SciPy 数值积分计算函数 f 在 [-pi, pi] 上的前 N 阶傅里叶正交投影坐标"""
+    # a0 坐标: (1/pi) * integral(f(x) dx)
+    a0, _ = integrate.quad(f_func, -np.pi, np.pi)
+    a0 /= np.pi
+    
+    an = np.zeros(N)
+    bn = np.zeros(N)
+    for n in range(1, N + 1):
+        an_val, _ = integrate.quad(lambda x: f_func(x) * np.cos(n * x), -np.pi, np.pi)
+        bn_val, _ = integrate.quad(lambda x: f_func(x) * np.sin(n * x), -np.pi, np.pi)
+        an[n - 1] = an_val / np.pi
+        bn[n - 1] = bn_val / np.pi
+    return a0, an, bn
+
+# 测试对称方波: x &lt; 0 时为 -1, x &gt;= 0 时为 1
+square_func = lambda x: 1.0 if x >= 0 else -1.0
+a0, an, bn = compute_fourier_coeffs(square_func, N=5)
+
+print(f"=== 方波正交投影傅里叶坐标 ===")
+print(f"a0 (直流分量): {a0:.6f}")
+for n in range(1, 6):
+    print(f"谐波阶数 n={n}: an={an[n-1]:.4f}, bn={bn[n-1]:.4f} (理论值 4/(n*pi): {4/(n*np.pi) if n%2==1 else 0:.4f})")
+
+# ==========================================
+# 3. 帕塞瓦尔恒等式能量守恒验证
+# ==========================================
+total_energy, _ = integrate.quad(lambda x: square_func(x)**2, -np.pi, np.pi)
+total_energy /= np.pi  # (1/pi) * integral(f^2 dx) = 2.0
+
+reconstructed_energy = 0.5 * (a0**2) + np.sum(an**2 + bn**2)
+print(f"\n=== 帕塞瓦尔能量守恒对比 ===")
+print(f"原时域信号能量: {total_energy:.4f}")
+print(f"前 5 阶频域谐波能量累加: {reconstructed_energy:.4f} (能量捕获率: {reconstructed_energy/total_energy * 100:.2f}%)")
+</code></pre>
+          </div>
+        </div>
+
+        <!-- 9. 交互式自测检查站 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">认知检验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">9. 🧠 交互自测：抽象内积与正交投影概念挑战</h2>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.25rem;">
+              点击选项即时检验对抽象内积公理、几何不等式与傅里叶正交投影本质的理解：
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+              <!-- Q1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
+                  1. 在实向量空间 $\mathbb{R}^2$ 中，下列哪一个双线性运算<strong>不能</strong>构成合法的内积？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    A. $\langle \mathbf{x}, \mathbf{y} \rangle = 2x_1 y_1 + 3x_2 y_2$
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="true" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    B. $\langle \mathbf{x}, \mathbf{y} \rangle = x_1 y_1 - x_2 y_2$
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    C. $\langle \mathbf{x}, \mathbf{y} \rangle = x_1 y_1 + x_1 y_2 + x_2 y_1 + 2x_2 y_2$
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    D. $\langle \mathbf{x}, \mathbf{y} \rangle = 5x_1 y_1 + 4x_2 y_2$
+                  </button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.6;"></div>
+              </div>
+
+              <!-- Q2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
+                  2. 柯西-施瓦茨不等式 $|\langle \mathbf{u}, \mathbf{v} \rangle| \le \|\mathbf{u}\| \|\mathbf{v}\|$ 中，等号成立的充要条件是：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    A. 向量 $\mathbf{u}$ 与 $\mathbf{v}$ 相互正交垂直
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="true" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    B. 向量 $\mathbf{u}$ 与 $\mathbf{v}$ 线性相关（一者为另一者的标量倍）
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    C. 两个向量的范数模长严格相等 $\|\mathbf{u}\| = \|\mathbf{v}\|$
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    D. 内积必须严格等于正整数 1
+                  </button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.6;"></div>
+              </div>
+
+              <!-- Q3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
+                  3. 为什么傅里叶级数的展开系数 $a_n, b_n$ 可以通过独立的单个定积分直接得出，而不需要求解庞大的联立多元方程组？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    A. 因为三角函数在实数轴上严格连续且可微
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="true" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    B. 因为三角函数系基底两两正交，作内积时所有交叉项积分恒为零，联立方程矩阵退化为对角阵
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    C. 因为原信号在间断点处一定满足狄利克雷收敛条件
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    D. 因为欧拉公式将三角函数转换为了复指数函数
+                  </button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.6;"></div>
+              </div>
+
+              <!-- Q4 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.75rem;">
+                  4. 帕塞瓦尔恒等式 (Parseval's Identity) 在几何与物理上的核心意义是什么？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="quiz-opt btn btn-secondary" data-correct="true" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    A. 它是无穷维正交坐标系下的勾股定理，表明信号在时域的总能量等于所有正交频域谐波能量之和
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    B. 它证明了吉布斯尖峰现象会随着项数增加到无穷大时完全消失
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    C. 它说明偶函数的正弦投影分量永远比奇函数更大
+                  </button>
+                  <button class="quiz-opt btn btn-secondary" data-correct="false" style="text-align: left; justify-content: flex-start; padding: 0.6rem 1rem;">
+                    D. 它表明任何连续函数都可以用有限阶多项式无误差表示
+                  </button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem; line-height: 1.6;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -371,6 +1046,404 @@ print("函数内积 <cos(x), cos(2x)>:", np.round(val, 6)) # 0.0</code></pre>
       </main>
     </div>
   </div>
+
+  <!-- 双视图交互画布与交互控制脚本 -->
+  <script>
+    (function initInteractiveLaboratory() {
+      // DOM Elements
+      const fourierCanvas = document.getElementById('fourierCanvas');
+      const spectrumCanvas = document.getElementById('spectrumCanvas');
+      if (!fourierCanvas || !spectrumCanvas) return;
+
+      const ctxF = fourierCanvas.getContext('2d');
+      const ctxS = spectrumCanvas.getContext('2d');
+
+      const sliderN = document.getElementById('harmonics-slider');
+      const labelN = document.getElementById('harmonics-val');
+      const waveButtons = document.querySelectorAll('.wave-btn');
+
+      const statFormula = document.getElementById('stat-formula');
+      const statError = document.getElementById('stat-error');
+      const statParseval = document.getElementById('stat-parseval');
+      const metricEnergy = document.getElementById('metric-energy');
+
+      let currentWave = 'square';
+      let N = parseInt(sliderN.value, 10);
+
+      // Target waveform functions on [-pi, pi]
+      function targetFunction(x, wave) {
+        if (wave === 'square') {
+          return x >= 0 ? 1.0 : -1.0;
+        } else if (wave === 'triangle') {
+          // Continuous symmetric triangle wave: 1 - 2*|x|/pi
+          return 1.0 - (2.0 * Math.abs(x)) / Math.PI;
+        } else if (wave === 'sawtooth') {
+          // Sawtooth slope: x / pi
+          return x / Math.PI;
+        }
+        return 0;
+      }
+
+      // Theoretical Fourier coefficients for analytic waveforms
+      function getFourierCoefficients(wave, maxN) {
+        let a0 = 0;
+        const an = new Float64Array(maxN + 1);
+        const bn = new Float64Array(maxN + 1);
+
+        if (wave === 'square') {
+          a0 = 0;
+          for (let n = 1; n <= maxN; n++) {
+            an[n] = 0;
+            bn[n] = (n % 2 === 1) ? (4.0 / (n * Math.PI)) : 0;
+          }
+        } else if (wave === 'triangle') {
+          // f(x) = 1 - 2|x|/pi => a0 = 0, an = 4/(pi^2 * n^2) for odd n, bn = 0
+          a0 = 0;
+          for (let n = 1; n <= maxN; n++) {
+            an[n] = (n % 2 === 1) ? (4.0 / (Math.PI * Math.PI * n * n)) : 0;
+            bn[n] = 0;
+          }
+        } else if (wave === 'sawtooth') {
+          // f(x) = x / pi => odd function, bn = 2 * (-1)^(n+1) / (n * pi)
+          a0 = 0;
+          for (let n = 1; n <= maxN; n++) {
+            an[n] = 0;
+            bn[n] = (2.0 * Math.pow(-1, n + 1)) / (n * Math.PI);
+          }
+        }
+
+        return { a0, an, bn };
+      }
+
+      // Theoretical L2 norm squared for [-pi, pi]: (1/pi) * int f^2 dx
+      function getTargetEnergy(wave) {
+        if (wave === 'square') return 2.0; // int_{-pi}^pi 1 dx / pi = 2
+        if (wave === 'triangle') {
+          // int_{-pi}^pi (1 - 2|x|/pi)^2 dx / pi = 2/3 ≈ 0.6667
+          return 2.0 / 3.0;
+        }
+        if (wave === 'sawtooth') {
+          // int_{-pi}^pi (x/pi)^2 dx / pi = 2/3 ≈ 0.6667
+          return 2.0 / 3.0;
+        }
+        return 1.0;
+      }
+
+      // Evaluate partial sum S_N(x)
+      function evalFourierSum(x, coeffs, cutoffN) {
+        let sum = coeffs.a0 / 2.0;
+        for (let n = 1; n <= cutoffN; n++) {
+          if (coeffs.an[n] !== 0) sum += coeffs.an[n] * Math.cos(n * x);
+          if (coeffs.bn[n] !== 0) sum += coeffs.bn[n] * Math.sin(n * x);
+        }
+        return sum;
+      }
+
+      // Render Left Canvas: Waveform Synthesis
+      function drawWaveforms() {
+        const w = fourierCanvas.width;
+        const h = fourierCanvas.height;
+        ctxF.clearRect(0, 0, w, h);
+
+        const padX = 40;
+        const padY = 30;
+        const plotW = w - padX * 2;
+        const plotH = h - padY * 2;
+        const centerY = padY + plotH / 2;
+
+        const xMin = -Math.PI;
+        const xMax = Math.PI;
+        const yMin = -1.4;
+        const yMax = 1.4;
+
+        function toScreen(x, y) {
+          const sx = padX + ((x - xMin) / (xMax - xMin)) * plotW;
+          const sy = centerY - (y / (yMax - yMin)) * plotH;
+          return { x: sx, y: sy };
+        }
+
+        // Draw Coordinate Grid & Axes
+        ctxF.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctxF.lineWidth = 1;
+
+        // Horizontal grid
+        [-1.0, -0.5, 0.5, 1.0].forEach(y => {
+          const pt1 = toScreen(xMin, y);
+          const pt2 = toScreen(xMax, y);
+          ctxF.beginPath(); ctxF.moveTo(pt1.x, pt1.y); ctxF.lineTo(pt2.x, pt2.y); ctxF.stroke();
+          ctxF.fillStyle = '#64748b';
+          ctxF.font = '10px monospace';
+          ctxF.fillText(y.toFixed(1), 8, pt1.y + 3);
+        });
+
+        // Main Zero Axes
+        const o1 = toScreen(xMin, 0);
+        const o2 = toScreen(xMax, 0);
+        ctxF.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctxF.lineWidth = 1.5;
+        ctxF.beginPath(); ctxF.moveTo(o1.x, o1.y); ctxF.lineTo(o2.x, o2.y); ctxF.stroke();
+
+        const v1 = toScreen(0, yMin);
+        const v2 = toScreen(0, yMax);
+        ctxF.beginPath(); ctxF.moveTo(v1.x, v1.y); ctxF.lineTo(v2.x, v2.y); ctxF.stroke();
+
+        // X-axis ticks: -pi, -pi/2, 0, pi/2, pi
+        const ticks = [
+          { val: -Math.PI, label: '-π' },
+          { val: -Math.PI / 2, label: '-π/2' },
+          { val: 0, label: '0' },
+          { val: Math.PI / 2, label: 'π/2' },
+          { val: Math.PI, label: 'π' }
+        ];
+        ticks.forEach(t => {
+          const pt = toScreen(t.val, 0);
+          ctxF.fillStyle = '#94a3b8';
+          ctxF.font = '11px sans-serif';
+          ctxF.fillText(t.label, pt.x - 8, centerY + 18);
+        });
+
+        const coeffs = getFourierCoefficients(currentWave, N);
+
+        // 1. Draw Target Waveform f(x) [Dashed Gray/Slate]
+        ctxF.setLineDash([4, 4]);
+        ctxF.strokeStyle = '#64748b';
+        ctxF.lineWidth = 2;
+        ctxF.beginPath();
+        let stepCount = 300;
+        for (let i = 0; i <= stepCount; i++) {
+          const x = xMin + (i / stepCount) * (xMax - xMin);
+          const y = targetFunction(x, currentWave);
+          const pt = toScreen(x, y);
+          if (i === 0) ctxF.moveTo(pt.x, pt.y);
+          else ctxF.lineTo(pt.x, pt.y);
+        }
+        ctxF.stroke();
+        ctxF.setLineDash([]);
+
+        // 2. Draw the latest single harmonic added at rank N (Dotted Purple)
+        ctxF.setLineDash([2, 3]);
+        ctxF.strokeStyle = 'rgba(192, 132, 252, 0.45)';
+        ctxF.lineWidth = 1.5;
+        ctxF.beginPath();
+        for (let i = 0; i <= stepCount; i++) {
+          const x = xMin + (i / stepCount) * (xMax - xMin);
+          let latestHarmonic = 0;
+          if (coeffs.an[N] !== 0) latestHarmonic += coeffs.an[N] * Math.cos(N * x);
+          if (coeffs.bn[N] !== 0) latestHarmonic += coeffs.bn[N] * Math.sin(N * x);
+          const pt = toScreen(x, latestHarmonic);
+          if (i === 0) ctxF.moveTo(pt.x, pt.y);
+          else ctxF.lineTo(pt.x, pt.y);
+        }
+        ctxF.stroke();
+        ctxF.setLineDash([]);
+
+        // 3. Draw Fourier Partial Sum S_N(x) [Solid Cyan Gradient]
+        ctxF.strokeStyle = '#38bdf8';
+        ctxF.lineWidth = 2.5;
+        ctxF.beginPath();
+        for (let i = 0; i <= stepCount; i++) {
+          const x = xMin + (i / stepCount) * (xMax - xMin);
+          const y = evalFourierSum(x, coeffs, N);
+          const pt = toScreen(x, y);
+          if (i === 0) ctxF.moveTo(pt.x, pt.y);
+          else ctxF.lineTo(pt.x, pt.y);
+        }
+        ctxF.stroke();
+      }
+
+      // Render Right Canvas: Projection Spectrum Bar Chart
+      function drawSpectrum() {
+        const w = spectrumCanvas.width;
+        const h = spectrumCanvas.height;
+        ctxS.clearRect(0, 0, w, h);
+
+        const padL = 40;
+        const padR = 20;
+        const padT = 30;
+        const padB = 40;
+        const plotW = w - padL - padR;
+        const plotH = h - padT - padB;
+        const baselineY = padT + plotH / 2;
+
+        const maxDisplayN = Math.max(15, N);
+        const coeffs = getFourierCoefficients(currentWave, maxDisplayN);
+
+        // Grid & Zero Axis
+        ctxS.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctxS.lineWidth = 1;
+        ctxS.beginPath();
+        ctxS.moveTo(padL, baselineY);
+        ctxS.lineTo(padL + plotW, baselineY);
+        ctxS.stroke();
+
+        ctxS.beginPath();
+        ctxS.moveTo(padL, padT);
+        ctxS.lineTo(padL, padT + plotH);
+        ctxS.stroke();
+
+        // Ticks for vertical scale [-1.5 to +1.5]
+        const maxVal = 1.4;
+        [-1.0, -0.5, 0.5, 1.0].forEach(v => {
+          const y = baselineY - (v / maxVal) * (plotH / 2);
+          ctxS.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+          ctxS.beginPath(); ctxS.moveTo(padL, y); ctxS.lineTo(padL + plotW, y); ctxS.stroke();
+          ctxS.fillStyle = '#64748b';
+          ctxS.font = '10px monospace';
+          ctxS.fillText(v.toFixed(1), 10, y + 3);
+        });
+
+        // Draw Bars for n = 1 to maxDisplayN
+        const barSlot = plotW / maxDisplayN;
+        const barWidth = Math.max(4, barSlot * 0.65);
+
+        let energySum = (coeffs.a0 * coeffs.a0) / 2.0;
+
+        for (let n = 1; n <= maxDisplayN; n++) {
+          const isIncluded = n <= N;
+          const cn = coeffs.an[n] !== 0 ? coeffs.an[n] : coeffs.bn[n];
+          if (isIncluded) energySum += coeffs.an[n] * coeffs.an[n] + coeffs.bn[n] * coeffs.bn[n];
+
+          const barH = (cn / maxVal) * (plotH / 2);
+          const bx = padL + (n - 0.5) * barSlot - barWidth / 2;
+          const by = cn >= 0 ? baselineY - barH : baselineY;
+          const hActual = Math.max(1, Math.abs(barH));
+
+          if (isIncluded) {
+            // Active harmonic in current truncated sum
+            if (n === N) {
+              ctxS.fillStyle = '#c084fc'; // Latest harmonic: purple
+            } else {
+              ctxS.fillStyle = cn >= 0 ? '#38bdf8' : '#f43f5e';
+            }
+          } else {
+            // Future harmonics not yet included
+            ctxS.fillStyle = 'rgba(100, 116, 139, 0.25)';
+          }
+
+          ctxS.fillRect(bx, by, barWidth, hActual);
+
+          // Bar Border for active
+          if (isIncluded) {
+            ctxS.strokeStyle = n === N ? '#e9d5ff' : 'rgba(255, 255, 255, 0.3)';
+            ctxS.lineWidth = 1;
+            ctxS.strokeRect(bx, by, barWidth, hActual);
+          }
+
+          // X Labels (rank n)
+          if (maxDisplayN <= 15 || n % 2 === 1 || n === N) {
+            ctxS.fillStyle = isIncluded ? '#f8fafc' : '#64748b';
+            ctxS.font = '10px monospace';
+            ctxS.fillText(n.toString(), bx + barWidth / 2 - 3, baselineY + (cn >= 0 ? 14 : -6));
+          }
+        }
+
+        // Metrics update
+        const targetEnergy = getTargetEnergy(currentWave);
+        const energyRatio = Math.min(100.0, (energySum / targetEnergy) * 100);
+        const l2Error = Math.sqrt(Math.max(0, targetEnergy - energySum) * Math.PI);
+
+        metricEnergy.textContent = `能量捕获率: ${energyRatio.toFixed(2)}%`;
+        statParseval.textContent = `${energyRatio.toFixed(2)}% (Parseval 能量)`;
+        statError.textContent = `${l2Error.toFixed(4)}`;
+
+        if (currentWave === 'square') {
+          statFormula.textContent = '奇对称方波 (仅含奇次正弦谐波 bn = 4/(nπ))';
+        } else if (currentWave === 'triangle') {
+          statFormula.textContent = '偶对称三角波 (仅含奇次余弦谐波 an = 4/(n²π²))';
+        } else if (currentWave === 'sawtooth') {
+          statFormula.textContent = '锯齿斜坡波 (全频正弦谐波 bn = 2(-1)ⁿ⁺¹/(nπ))';
+        }
+      }
+
+      function updateAll() {
+        labelN.textContent = N.toString();
+        drawWaveforms();
+        drawSpectrum();
+      }
+
+      // Slider listener
+      sliderN.addEventListener('input', (e) => {
+        N = parseInt(e.target.value, 10);
+        updateAll();
+      });
+
+      // Wave selector buttons
+      waveButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          waveButtons.forEach(b => {
+            b.classList.remove('active');
+            b.classList.remove('btn-primary');
+            b.classList.add('btn-secondary');
+          });
+          btn.classList.add('active');
+          btn.classList.remove('btn-secondary');
+          btn.classList.add('btn-primary');
+          currentWave = btn.getAttribute('data-wave');
+          updateAll();
+        });
+      });
+
+      // Initial render
+      updateAll();
+
+      // Window resize listener
+      window.addEventListener('resize', () => {
+        updateAll();
+      });
+    })();
+
+    // 交互式自测 Quiz 选项点击逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation(item, isCorrect) {
+        const questionText = item.querySelector('div').innerText;
+        if (questionText.includes('不能构成合法的内积')) {
+          return '选项 B 中，若取非零向量 x = (0, 1)，自内积为 ⟨x, x⟩ = 0 - 1 = -1 < 0，彻底违反了内积公理 ④（正定性公理），因此不能作为内积。';
+        } else if (questionText.includes('等号成立的充要条件')) {
+          return '一元二次函数 p(t) = ||u + tv||² 恒非负，判别式 Δ = 0 意味着存在唯一实数 t 使得 ||u + tv|| = 0 即 u = -tv，这在几何与代数上均代表两向量平行共线（线性相关）。';
+        } else if (questionText.includes('不需要求解庞大的联立多元方程组')) {
+          return '因为正交三角基底两两正交，内积时交叉项 ⟨cos(nx), cos(mx)⟩ (n ≠ m) 全为零！联立方程组的 Gram 矩阵为纯对角矩阵，各未知坐标彻底解耦独立。';
+        } else if (questionText.includes('帕塞瓦尔恒等式')) {
+          return '帕塞瓦尔恒等式正是高维/无穷维正交基下的广义勾股定理！时域积分能量与频域谐波系数平方和严格守恒，是现代信号能量分析的核心基石。';
+        }
+        return '';
+      }
+    });
+  </script>
 
 </body>
 </html>

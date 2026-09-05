@@ -13,8 +13,12 @@ if (!window.MathJax || !window.MathJax.version) {
     processEnvironments: true
   };
   window.MathJax.options = window.MathJax.options || {
+    enableAssistiveMml: false,
     ignoreHtmlClass: 'tex2jax_ignore',
     processHtmlClass: 'tex2jax_process'
+  };
+  window.MathJax.svg = window.MathJax.svg || {
+    fontCache: 'global'
   };
 }
 
@@ -23,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
   highlightActiveNav();
   initSidebarScroll();
   setupSmoothScroll();
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
 });
 
 // Sidebar Scroll Persistence

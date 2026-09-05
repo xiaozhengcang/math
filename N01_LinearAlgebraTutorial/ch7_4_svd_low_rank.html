@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -268,125 +272,419 @@
           <h1 class="module-title">Ch 7.4: 奇异值分解 SVD、伪逆与图像低秩压缩</h1>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 奇异值分解 (SVD)：线性代数的最高巅峰</h2>
-  </div>
-  <div class="card-body">
-    <p>特征值分解只能处理方阵，且不一定可对角化。而 <strong>奇异值分解 (Singular Value Decomposition, SVD)</strong> 适用于<strong>任何形状 ($m \times n$) 的实数矩阵</strong>！</p>
+        <!-- 导言：认知跃迁与终极之巅 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：线性代数的珠穆朗玛峰——万物皆可对角化</div>
+          <p>
+            如果说特征值分解 $A = PDP^{-1}$ 是线性代数的一颗明珠，那它仍然背负着巨大的遗憾：<strong>它只能处理方阵</strong>，且一旦矩阵亏损就彻底失效。
+          </p>
+          <p>
+            而 <strong>奇异值分解 (Singular Value Decomposition, SVD)</strong> 则是当之无愧的宇宙终极法则：<strong>对世界上任何尺寸、任何形状、任何秩的实矩阵（长方形、矮胖形、瘦高形、奇异亏损形），SVD 永远无条件成立！</strong>
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <strong style="color: var(--accent-blue);">🌌 几何三步曲 (The Trinity)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$A = U \Sigma V^T$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                旋转 $V^T$ $\to$ 拉伸 $\Sigma$ $\to$ 旋转 $U$。把定义域里的单位超球面，优雅映射为值域里的超椭球面。
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.25);">
+              <strong style="color: var(--accent-purple);">🏛️ 四大基本子空间大一统</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\text{Row}(A) \oplus \text{Null}(A) \to \text{Col}(A) \oplus \text{Null}(A^T)$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                矩阵的行空间、零空间、列空间、左零空间的所有标准正交基，全部由 $V$ 和 $U$ 的列向量精确统治！
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25);">
+              <strong style="color: var(--accent-green);">💾 工业低秩压缩神迹 (Eckart-Young)</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                只需保留前几个最大的奇异值，就能以极小的存储代价捕获图像、推荐系统与大语言模型权重的绝对核心信息！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. SVD 定理与几何三步曲 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">终极定理</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 奇异值分解定理：几何三步曲与超球面变形机制</h2>
+          </div>
+          <div class="card-body">
+            <!-- SVG Graphic: SVD 3-step Transformation Diagram -->
+            <div style="text-align:center; margin: 1.5rem 0;">
+              <svg width="640" height="210" viewBox="0 0 640 210" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <defs>
+                  <marker id="m-step74" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                    <path d="M0,0 L0,6 L8,3 z" fill="#f8fafc"/>
+                  </marker>
+                </defs>
+
+                <!-- Stage 1: Unit Circle in R^n -->
+                <g transform="translate(90, 105)">
+                  <circle cx="0" cy="0" r="50" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="2"/>
+                  <line x1="-65" y1="0" x2="65" y2="0" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <line x1="0" y1="-65" x2="0" y2="65" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <!-- Basis vectors v1, v2 -->
+                  <line x1="0" y1="0" x2="40" y2="-30" stroke="#4ade80" stroke-width="2.5"/>
+                  <text x="35" y="-35" fill="#4ade80" font-size="12" font-weight="bold">v₁</text>
+                  <line x1="0" y1="0" x2="30" y2="40" stroke="#c084fc" stroke-width="2.5"/>
+                  <text x="32" y="52" fill="#c084fc" font-size="12" font-weight="bold">v₂</text>
+                </g>
+                <text x="90" y="185" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">1. 输入空间单位圆</text>
+                <text x="90" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">{x : ||x|| = 1}</text>
+
+                <!-- Step 1 Arrow: V^T -->
+                <line x1="165" y1="105" x2="215" y2="105" stroke="#f8fafc" stroke-width="2" marker-end="url(#m-step74)"/>
+                <text x="190" y="95" fill="#f8fafc" font-size="11" text-anchor="middle">Vᵀ 旋转</text>
+
+                <!-- Stage 2: Axis-Aligned Ellipse via Sigma -->
+                <g transform="translate(310, 105)">
+                  <ellipse cx="0" cy="0" rx="70" ry="32" fill="rgba(192, 132, 252, 0.12)" stroke="#c084fc" stroke-width="2"/>
+                  <line x1="-80" y1="0" x2="80" y2="0" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <line x1="0" y1="-50" x2="0" y2="50" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+                  <!-- Stretched semi-axes -->
+                  <line x1="0" y1="0" x2="70" y2="0" stroke="#4ade80" stroke-width="3"/>
+                  <text x="35" y="-6" fill="#4ade80" font-size="11" font-weight="bold">σ₁</text>
+                  <line x1="0" y1="0" x2="0" y2="-32" stroke="#c084fc" stroke-width="3"/>
+                  <text x="6" y="-16" fill="#c084fc" font-size="11" font-weight="bold">σ₂</text>
+                </g>
+                <text x="310" y="185" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">2. Σ 奇异值纯拉伸</text>
+                <text x="310" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">半轴对齐坐标系</text>
+
+                <!-- Step 2 Arrow: U -->
+                <line x1="400" y1="105" x2="450" y2="105" stroke="#f8fafc" stroke-width="2" marker-end="url(#m-step74)"/>
+                <text x="425" y="95" fill="#f8fafc" font-size="11" text-anchor="middle">U 旋转</text>
+
+                <!-- Stage 3: Rotated Output Ellipse in R^m -->
+                <g transform="translate(545, 105) rotate(-35)">
+                  <ellipse cx="0" cy="0" rx="70" ry="32" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="2"/>
+                  <!-- Semi-axes u1, u2 -->
+                  <line x1="0" y1="0" x2="70" y2="0" stroke="#4ade80" stroke-width="3"/>
+                  <text x="40" y="-6" fill="#4ade80" font-size="11" font-weight="bold">σ₁u₁</text>
+                  <line x1="0" y1="0" x2="0" y2="-32" stroke="#c084fc" stroke-width="3"/>
+                  <text x="6" y="-16" fill="#c084fc" font-size="11" font-weight="bold">σ₂u₂</text>
+                </g>
+                <text x="545" y="185" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">3. 输出空间最终超椭圆</text>
+                <text x="545" y="200" fill="#94a3b8" font-size="10" text-anchor="middle">{Ax : ||x|| = 1}</text>
+              </svg>
+            </div>
+
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+              <h4 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">
+                👑 奇异值分解定理 (Singular Value Decomposition Theorem)
+              </h4>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                任意实数矩阵 $A \in \mathbb{R}^{m \times n}$（秩 $\text{rank}(A) = r$），均可唯一分解为三个基础算子的乘积：
+              </p>
+              <div style="font-size: 1.35rem; text-align: center; margin: 0.75rem 0; color: var(--accent-blue); font-weight: bold;">
+                $$A = U \Sigma V^T = \sum_{i=1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+              </div>
+              <ul style="margin-left: 1.5rem; line-height: 2;">
+                <li><strong>$U \in \mathbb{R}^{m \times m}$（左奇异矩阵）</strong>：正交方阵（$U^T U = I_m$），各列向量 $\mathbf{u}_i$ 称为<strong>左奇异向量</strong>。它们是半轴方向，满足对称矩阵 $A A^T \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i$。</li>
+                <li><strong>$\Sigma \in \mathbb{R}^{m \times n}$（奇异值矩形对角矩阵）</strong>：除主对角线前 $r$ 项为严格正数 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r > 0$ 外，其余元素全为 0。每个 $\sigma_i = \sqrt{\lambda_i(A^T A)}$ 称为<strong>奇异值</strong>。</li>
+                <li><strong>$V \in \mathbb{R}^{n \times n}$（右奇异矩阵）</strong>：正交方阵（$V^T V = I_n$），各列向量 $\mathbf{v}_i$ 称为<strong>右奇异向量</strong>。它们满足对称矩阵 $A^T A \mathbf{v}_i = \sigma_i^2 \mathbf{v}_i$。</li>
+              </ul>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
+                <strong>核心映射关系：</strong> 对每个非零奇异分量，必满足 $A \mathbf{v}_i = \sigma_i \mathbf{u}_i$！输入正交轴 $\mathbf{v}_i$ 经 $A$ 作用后，不仅保持了与其它轴的严格正交，且长度被精确缩放了 $\sigma_i$ 倍，指向 $\mathbf{u}_i$ 方向！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SVD 与四大基本子空间大一统 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">几何宏图</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 四大基本子空间终极大统一：SVD 的正交基直通车</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              在 Ch 4.3 中，我们震撼见识了 Strang 教授提出的“四大基本子空间”。当时寻找各空间的基底需要经历冗长的高斯消元与自由变量分离。
+              而现在，<strong>SVD 一次性直接打包赋予了四大空间无可挑剔的标准正交基</strong>！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+              <!-- Input Space R^n -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3);">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📥 输入空间 $\mathbb{R}^n$ 的正交解耦（右奇异向量 $V$）</h4>
+                <ul style="font-size: 0.88rem; line-height: 1.9; margin-left: 1.25rem; color: var(--text-muted);">
+                  <li><strong style="color: #f8fafc;">行空间 $\text{Row}(A)$：</strong>由前 $r$ 个向量 $\mathbf{v}_1, \dots, \mathbf{v}_r$ 张成。这些向量跨越非零奇异值，被 $A$ 忠实映射到列空间！</li>
+                  <li><strong style="color: #f8fafc;">零空间 $\text{Null}(A)$：</strong>由剩余 $n - r$ 个向量 $\mathbf{v}_{r+1}, \dots, \mathbf{v}_n$ 张成。因为对应 $\sigma_j = 0$，它们被 $A$ 彻底压缩为零向量：$A\mathbf{v}_j = \mathbf{0}$！</li>
+                </ul>
+              </div>
+
+              <!-- Output Space R^m -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.3);">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📤 输出空间 $\mathbb{R}^m$ 的正交解耦（左奇异向量 $U$）</h4>
+                <ul style="font-size: 0.88rem; line-height: 1.9; margin-left: 1.25rem; color: var(--text-muted);">
+                  <li><strong style="color: #f8fafc;">列空间 $\text{Col}(A)$：</strong>由前 $r$ 个向量 $\mathbf{u}_1, \dots, \mathbf{u}_r$ 张成。它们是实际输出信号的完美标准正交基！</li>
+                  <li><strong style="color: #f8fafc;">左零空间 $\text{Null}(A^T)$：</strong>由剩余 $m - r$ 个向量 $\mathbf{u}_{r+1}, \dots, \mathbf{u}_m$ 张成。构成列空间的正交补平面，不可达区域！</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 矩阵条件数与 SVD -->
+            <div style="background: rgba(251, 191, 36, 0.05); padding: 1rem; border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.25);">
+              <h5 style="color: #fbbf24; margin-bottom: 0.3rem;">📊 矩阵条件数 (Condition Number) 的 SVD 终极定义</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                在数值分析中，矩阵的 $L_2$ 条件数精确等于最大奇异值与最小奇异值之比：
+                $$\kappa_2(A) = \|A\|_2 \|A^{-1}\|_2 = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\sigma_1}{\sigma_r}$$
+                几何含义：超椭球最长半轴与最短半轴的畸变扁平比！若 $\sigma_r \approx 0$，椭球被压扁成纸片，求逆必然引发灾难性的误差爆炸！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Eckart-Young 低秩逼近定理与伪逆 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">工业奇迹</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. Eckart-Young 低秩逼近定理与 Moore-Penrose 广义伪逆</h2>
+          </div>
+          <div class="card-body">
+            <h3 style="color: var(--accent-green);">3.1 Eckart-Young-Mirsky 最优低秩截断定理</h3>
+            <p>
+              若将 SVD 展开式仅截取前 $k$ 个最大奇异项（$k < r$）：
+            </p>
+            <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0; color: var(--accent-green);">
+              $$A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+            </div>
+            <p>
+              <strong>Eckart-Young-Mirsky 定理：</strong>在所有秩不超过 $k$ 的矩阵集合中，$A_k$ 是原矩阵 $A$ 在谱范数与 Frobenius 范数意义下的<strong>绝对全局最佳逼近</strong>！其逼近截断残差恰好由被舍弃的尾部奇异值精确掌控：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; font-size: 1.1rem; text-align: center; margin: 0.75rem 0;">
+              $$\|A - A_k\|_2 = \sigma_{k+1}, \quad \|A - A_k\|_F = \sqrt{\sum_{j=k+1}^r \sigma_j^2}$$
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">
+              <strong>图像与权重压缩原理：</strong>原始图像矩阵需要存储 $m \times n$ 个浮点数。而截断矩阵 $A_k$ 只需要存储 $k$ 个左向量 $\mathbf{u}_i$、$k$ 个右向量 $\mathbf{v}_i$ 和 $k$ 个标量 $\sigma_i$，总参数量骤降为 <strong>$k(m + n + 1)$</strong>！
+              当 $k \ll \min(m, n)$ 时，压缩比可高达数十倍，而画面细节依然高度保真！
+            </p>
+
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 Moore-Penrose 广义伪逆 ($A^+$)</h3>
+            <p>
+              当矩阵 $A$ 不是方阵，或者不可逆（行列式为 0，秩亏损）时，逆矩阵 $A^{-1}$ 根本不存在。
+              借助 SVD，我们可以定义宇宙通用的<strong>广义逆矩阵 (Pseudoinverse, $A^+$)</strong>：
+            </p>
+            <div style="font-size: 1.3rem; text-align: center; margin: 0.75rem 0; color: var(--accent-purple); font-weight: bold;">
+              $$A^+ = V \Sigma^+ U^T = \sum_{i=1}^r \frac{1}{\sigma_i} \mathbf{v}_i \mathbf{u}_i^T$$
+            </div>
+            <p>
+              其中 $\Sigma^+$ 极其朴素直观：将每一个非零奇异值取倒数 $\frac{1}{\sigma_i}$，而为零的奇异值保留为 0，最后进行转置。
+            </p>
+            <div class="intuition-box" style="margin-top: 1rem;">
+              <strong style="color: var(--accent-blue);">👑 Penrose 四大公理与极小范数最小二乘解</strong>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.3rem;">
+                $A^+$ 是唯一满足 Penrose 四大公理的算子：$A A^+ A = A$, $A^+ A A^+ = A^+$, $(A A^+)^T = A A^+$, $(A^+ A)^T = A^+ A$。<br>
+                <strong>终极应用：</strong>对于任何线性方程组 $A\mathbf{x} = \mathbf{b}$：
+                <br>• 若方程<strong>无解（超定）</strong>，$\mathbf{x}^+ = A^+ \mathbf{b}$ 给出欧氏残差最小的<strong>最小二乘解</strong>；
+                <br>• 若方程有<strong>无穷多解（欠定）</strong>，$\mathbf{x}^+ = A^+ \mathbf{b}$ 在所有可行解中自动挑出<strong>长度模长 $\|\mathbf{x}\|$ 最小的极小范数解</strong>！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 交互实验台：SVD 映射与低秩压缩实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧪 交互实验台：SVD 超椭球变换与截断低秩逼近实验室</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted);">
+              拖动截断秩 $k$ 滑块，观察由 10 个合成特征构成的矩阵如何由低秩外积逐级清晰重构，实时监控累积能量百分比与奇异值衰减谱！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Left: Canvas -->
+              <div style="background: #090d16; border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; text-align: center;">
+                <canvas id="svdCanvas" width="460" height="340" style="width: 100%; max-width: 460px; height: auto; background: #070a12; border-radius: 6px;"></canvas>
+                <div style="display: flex; justify-content: space-around; font-size: 0.82rem; margin-top: 0.75rem;">
+                  <span style="color: #38bdf8;">■ 原始高秩模式 A</span>
+                  <span style="color: #4ade80;">■ 截断秩-k 重构 A_k</span>
+                  <span style="color: #c084fc;">■ 奇异值能谱 σᵢ</span>
+                </div>
+              </div>
+
+              <!-- Right: Controls & Metrics -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem; font-size: 0.95rem;">🕹️ 调节低秩逼近截断阶数 $k$</h4>
+                  
+                  <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 0.4rem;">
+                    <span>截断秩 $k$: <strong id="valK" style="color: var(--accent-green); font-size: 1.15rem;">1</strong> / 10</span>
+                    <span id="statCompRatio" style="color: var(--accent-purple); font-weight: bold;">存储压缩: 85.0% 节省</span>
+                  </div>
+                  <input type="range" id="sliderK" min="1" max="10" value="1" style="width: 100%;">
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1;">
+                  <h4 style="color: var(--accent-amber); margin-bottom: 0.6rem; font-size: 0.95rem;">📊 实时能谱捕获指标</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                    <div>• 累计能量占比 (Frobenius): <strong id="statEnergy" style="color:var(--accent-green); font-size:1.1rem;">0.00%</strong></div>
+                    <div>• 谱范数逼近误差 (σₖ₊₁): <span id="statSpecErr" style="color:#f43f5e;">0.000</span></div>
+                    <div>• 当前第 k 项奇异值 σₖ: <span id="statSigmaK" style="color:#38bdf8;">0.000</span></div>
+                    <div>• 矩阵条件数 cond(A): <span id="statCond">12.4</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 经典手算演练：非方阵 SVD 全过程 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 经典手算精析：非方阵 (2×3) SVD 与伪逆完整手推演练</h2>
+          </div>
+          <div class="card-body">
+            <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                【题目】求矮胖形长方矩阵 $A = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix}$ 的 SVD 分解与广义伪逆 $A^+$。
+              </h4>
+              <div style="line-height: 1.9;">
+                <p><strong>第一步：计算 $A A^T$（$2 \times 2$ 实对称矩阵）并求左奇异向量 $U$</strong></p>
+                $$A A^T = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} = \begin{bmatrix} 9+4+4 & 6+6-4 \\ 6+6-4 & 4+9+4 \end{bmatrix} = \begin{bmatrix} 17 & 8 \\ 8 & 17 \end{bmatrix}$$
+                <p>特征多项式：$(17 - \lambda)^2 - 8^2 = (25 - \lambda)(9 - \lambda) = 0$。</p>
+                <p>求得特征值：$\lambda_1 = 25, \lambda_2 = 9$。</p>
+                <p><strong>奇异值：</strong> $\sigma_1 = \sqrt{25} = 5, \quad \sigma_2 = \sqrt{9} = 3$。</p>
+                <p>求特征向量得 $U$：</p>
+                $$\lambda_1 = 25 \implies \begin{bmatrix} -8 & 8 \\ 8 & -8 \end{bmatrix}\mathbf{u}_1 = \mathbf{0} \implies \mathbf{u}_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
+                $$\lambda_2 = 9 \implies \begin{bmatrix} 8 & 8 \\ 8 & 8 \end{bmatrix}\mathbf{u}_2 = \mathbf{0} \implies \mathbf{u}_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix}$$
+                $$U = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第二步：利用 $\mathbf{v}_i = \frac{1}{\sigma_i} A^T \mathbf{u}_i$ 极速求右奇异向量 $\mathbf{v}_1, \mathbf{v}_2$</strong></p>
+                $$\mathbf{v}_1 = \frac{1}{5} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \frac{1}{5\sqrt{2}} \begin{bmatrix} 5 \\ 5 \\ 0 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}$$
+                $$\mathbf{v}_2 = \frac{1}{3} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix} = \frac{1}{3\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} = \frac{1}{3\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix}$$
+                <p>零空间基底 $\mathbf{v}_3$ 与 $\mathbf{v}_1, \mathbf{v}_2$ 正交（取叉乘或解方程）：$\mathbf{v}_3 = \frac{1}{3} \begin{bmatrix} 2 \\ -2 \\ -1 \end{bmatrix}$。</p>
+
+                <p style="margin-top: 0.75rem;"><strong>第三步：整合输出 SVD 终极矩阵</strong></p>
+                $$A = \underbrace{\frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}}_{U (2 \times 2)} \underbrace{\begin{bmatrix} 5 & 0 & 0 \\ 0 & 3 & 0 \end{bmatrix}}_{\Sigma (2 \times 3)} \underbrace{\begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\ \frac{1}{3\sqrt{2}} & -\frac{1}{3\sqrt{2}} & \frac{4}{3\sqrt{2}} \\ \frac{2}{3} & -\frac{2}{3} & -\frac{1}{3} \end{bmatrix}}_{V^T (3 \times 3)}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第四步：计算广义伪逆 $A^+$</strong></p>
+                $$A^+ = V \Sigma^+ U^T = \frac{1}{5} \mathbf{v}_1 \mathbf{u}_1^T + \frac{1}{3} \mathbf{v}_2 \mathbf{u}_2^T = \frac{1}{90} \begin{bmatrix} 11 & 7 \\ 7 & 11 \\ 20 & -20 \end{bmatrix}$$
+                <p style="color: var(--accent-green); font-weight: bold;">
+                  ✓ 检验：计算 $A A^+ = I_2$！因为 $A$ 行满秩，伪逆正是完美的右逆！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python / NumPy 工业实战演练 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python 工业实战：图像 SVD 低秩压缩与能量曲线</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              下面的 Python 脚本展示了如何对真实图像矩阵进行 SVD 奇异值分解，分别保留 $k = 5, 20, 50$ 阶分量重构图像，并计算能量损失与压缩率：
+            </p>
+
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6;"><code>import numpy as np
+
+# 1. 模拟生成一个 200x200 具有特定主导模式的图像灰度矩阵
+np.random.seed(42)
+m, n = 200, 200
+X = np.zeros((m, n))
+# 模拟水平/垂直条纹主模式
+for i in range(5):
+    X += (5 - i) * np.outer(np.sin(np.linspace(0, (i+1)*np.pi, m)),
+                            np.cos(np.linspace(0, (i+1)*np.pi, n)))
+# 叠加微弱白噪声
+X += np.random.normal(0, 0.2, size=(m, n))
+
+# 2. 全量 SVD 分解
+U, s, Vt = np.linalg.svd(X, full_matrices=False)
+
+print("=== SVD 图像奇异值能谱分析 ===")
+print("前 5 个主奇异值:", np.round(s[:5], 2))
+print("总奇异值数量:   ", len(s))
+total_energy = np.sum(s**2)
+
+# 3. 截断低秩逼近测试
+for k in [2, 5, 15, 40]:
+    # 截断矩阵重构: A_k = U[:, :k] @ diag(s[:k]) @ Vt[:k, :]
+    X_k = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]
     
-    <!-- SVG Graphic 8.3: SVD 3-step Transformation Diagram -->
-    <div style="text-align:center; margin: 1.5rem 0;">
-      <svg width="520" height="180" viewBox="0 0 520 180" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color);">
-        <!-- Step 1: Circle -->
-        <circle cx="70" cy="90" r="40" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2"/>
-        <text x="70" y="150" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">1. 单位圆</text>
-
-        <line x1="120" y1="90" x2="160" y2="90" stroke="#a855f7" stroke-width="2.5"/>
-        <text x="140" y="80" fill="#a855f7" font-size="11" font-weight="bold" text-anchor="middle">Vᵀ 旋转</text>
-
-        <!-- Step 2: Axis-aligned Ellipse -->
-        <ellipse cx="230" cy="90" rx="55" ry="25" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7" stroke-width="2"/>
-        <text x="230" y="150" fill="#a855f7" font-size="12" font-weight="bold" text-anchor="middle">2. Σ 奇异值拉伸</text>
-
-        <line x1="300" y1="90" x2="340" y2="90" stroke="#4ade80" stroke-width="2.5"/>
-        <text x="320" y="80" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle">U 旋转</text>
-
-        <!-- Step 3: Rotated Ellipse -->
-        <g transform="rotate(-30 430 90)">
-          <ellipse cx="430" cy="90" rx="55" ry="25" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-width="2"/>
-        </g>
-        <text x="430" y="150" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">3. 最终变形椭圆</text>
-      </svg>
-    </div>
-
-    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">👑 奇异值分解定理 (SVD Theorem)</h4>
-      <p>任意 $m \times n$ 实矩阵 $A$ 都可以分解为：</p>
-      <div style="font-size: 1.3rem; text-align: center; margin: 0.75rem 0;">
-        $$A = U \Sigma V^T = \sum_{i=1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
-      </div>
-      <ul style="margin-left: 1.5rem; line-height: 1.8;">
-        <li>$U$ 是 $m \times m$ 正交矩阵，列向量 $\mathbf{u}_i$ 为<strong>左奇异向量 (Left Singular Vectors)</strong>（$A A^T$ 的正交特征向量）。</li>
-        <li>$\Sigma$ 是 $m \times n$ 对角矩形矩阵，主对角线元素 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r > 0$ 为<strong>奇异值</strong>（$\sigma_i = \sqrt{\lambda_i(A^T A)}$）。</li>
-        <li>$V$ 是 $n \times n$ 正交矩阵，列向量 $\mathbf{v}_i$ 为<strong>右奇异向量 (Right Singular Vectors)</strong>（$A^T A$ 的正交特征向量）。</li>
-      </ul>
-      <p><strong>几何三步曲：</strong> 任何矩阵变换都可以精确解构为：<strong>输入空间正交旋转 ($V^T$) $\to$ 沿坐标轴拉伸伸缩 ($\Sigma$) $\to$ 输出空间正交旋转 ($U$)</strong>！</p>
-    </div>
-  </div>
-</div>
-
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">工程奇迹</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🖼️ Eckart-Young 低秩逼近定理与 Moore-Penrose 伪逆</h2>
-  </div>
-  <div class="card-body">
-    <p>取前 $k$ 个最大奇异值构造截断矩阵 $A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$。根据 <strong>Eckart-Young-Mirsky 定理</strong>，$A_k$ 是在谱范数与 Frobenius 范数意义下对原矩阵 $A$ 的<strong>全局理论最优秩-$k$ 逼近</strong>：</p>
-    $$\|A - A_k\|_2 = \sigma_{k+1}, \quad \|A - A_k\|_F = \sqrt{\sum_{j=k+1}^r \sigma_j^2}$$
+    # 计算能量保留率
+    captured_energy = np.sum(s[:k]**2) / total_energy * 100
     
-    <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
+    # 计算参数压缩比
+    original_params = m * n
+    compressed_params = k * (m + n + 1)
+    compression_ratio = (1 - compressed_params / original_params) * 100
     
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
-      <h4 style="color: var(--accent-purple);">👑 广义 Moore-Penrose 伪逆 ($A^+$)</h4>
-      <p>对于任意矩阵 $A = U \Sigma V^T$，其<strong>广义伪逆</strong>定义为：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.5rem 0;">
-        $$A^+ = V \Sigma^+ U^T$$
-      </div>
-      <p style="font-size:0.9rem; color:var(--text-muted);">
-        其中 $\Sigma^+$ 将非零奇异值取倒数 $\frac{1}{\sigma_i}$ 并转置。对于任意线性系统 $A\mathbf{x} = \mathbf{b}$，$\hat{\mathbf{x}} = A^+ \mathbf{b}$ 永远给出<strong>最小二乘极小范数最优解</strong>！
-      </p>
-    </div>
-  </div>
-</div>
+    # 误差范数
+    frobenius_error = np.linalg.norm(X - X_k, 'fro')
+    
+    print(f"秩 k={k:2d}: 能量保留={captured_energy:6.2f}% | 节省空间={compression_ratio:5.1f}% | 误差={frobenius_error:.2f}")
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 2×2 SVD 分解手算演练</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">求 $A = \begin{bmatrix} 3 & 0 \\ 0 & -2 \end{bmatrix}$ 的 SVD</h4>
-      <p>计算 $A^T A = \begin{bmatrix} 9 & 0 \\ 0 & 4 \end{bmatrix} \implies \lambda_1 = 9, \lambda_2 = 4$。</p>
-      <p>奇异值：$\sigma_1 = \sqrt{9} = 3, \sigma_2 = \sqrt{4} = 2$。</p>
-      <p>右奇异向量：$\mathbf{v}_1 = \begin{bmatrix}1\\0\end{bmatrix}, \mathbf{v}_2 = \begin{bmatrix}0\\1\end{bmatrix} \implies V = I$。</p>
-      <p>左奇异向量 $\mathbf{u}_i = \frac{1}{\sigma_i} A \mathbf{v}_i$：</p>
-      $$\mathbf{u}_1 = \frac{1}{3} \begin{bmatrix}3\\0\end{bmatrix} = \begin{bmatrix}1\\0\end{bmatrix}, \quad \mathbf{u}_2 = \frac{1}{2} \begin{bmatrix}0\\-2\end{bmatrix} = \begin{bmatrix}0\\-1\end{bmatrix}$$
-      $$A = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix} \begin{bmatrix} 3 & 0 \\ 0 & 2 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}^T$$
-    </div>
-  </div>
-</div>
+# 4. 广义伪逆求解 Ax = b
+b = np.random.randn(m)
+x_pinv = np.linalg.pinv(X) @ b
+print("\n伪逆最小范数解 ||x||:", np.round(np.linalg.norm(x_pinv), 4))</code></pre>
+          </div>
+        </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy SVD 伪逆与低秩压缩</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+        <!-- 7. 交互自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自我检测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：SVD、低秩逼近与伪逆深度挑战</h2>
+          </div>
+          <div class="card-body">
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              
+              <!-- Quiz 1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  1. 关于实矩阵 $A$ 的奇异值 $\sigma_i$，下列哪项表述是绝对正确的？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">A. 奇异值 $\sigma_i = \sqrt{\lambda_i(A^T A)}$，必须全部为非负实数</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">B. 奇异值正好等于 $A$ 的特征值的绝对值 $|\lambda_i(A)|$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 奇异值可能是纯虚数</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 矩阵乘常数 $-2$ 时，奇异值也变为负数</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
 
-# 构造一个 100x100 的模拟图像矩阵
-img = np.random.randn(100, 100)
+              <!-- Quiz 2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  2. 根据 Eckart-Young 定理，如果原矩阵 $A$ 的奇异值为 $[10, 8, 5, 2, 0.5]$，若将其截断为秩-2 矩阵 $A_2$，则在谱范数下的逼近误差 $\|A - A_2\|_2$ 严格等于：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 10</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 5（正好是被舍弃的第一个最大奇异值 $\sigma_3$）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 0.5</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. $\sqrt{5^2 + 2^2 + 0.5^2}$</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
 
-# SVD 分解
-U, s, Vt = np.linalg.svd(img)
+              <!-- Quiz 3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  3. 当欠定方程组 $A\mathbf{x} = \mathbf{b}$ 拥有无穷多个可行解时，广义伪逆给出的特解 $\hat{\mathbf{x}} = A^+ \mathbf{b}$ 具备什么独特优势？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 它是所有未知数全为正整数的解</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 它是所有无数可行解中，欧氏几何范数（模长 $\|\mathbf{x}\|$）绝对最小的唯一解</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 它会使得误差向量指向特征空间正交补</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 它要求输入矩阵必须是对称正定方阵</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
 
-# 截断秩-10 逼近
-k = 10
-compressed_img = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]
-
-# 伪逆计算
-A_pinv = np.linalg.pinv(img)
-
-print(f"原矩阵大小: {img.size} 参数")
-print(f"压缩后存储: {k*(U.shape[0] + Vt.shape[0] + 1)} 参数")
-print("Moore-Penrose 伪逆尺寸:", A_pinv.shape)</code></pre>
-  </div>
-</div>
-
+            </div>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -417,6 +715,175 @@ print("Moore-Penrose 伪逆尺寸:", A_pinv.shape)</code></pre>
       </main>
     </div>
   </div>
+
+
+  <script>
+    // 交互实验台：SVD 截断低秩逼近实验室逻辑
+    (function() {
+      const canvas = document.getElementById('svdCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const sliderK = document.getElementById('sliderK');
+      const valK = document.getElementById('valK');
+      const statCompRatio = document.getElementById('statCompRatio');
+      const statEnergy = document.getElementById('statEnergy');
+      const statSpecErr = document.getElementById('statSpecErr');
+      const statSigmaK = document.getElementById('statSigmaK');
+      const statCond = document.getElementById('statCond');
+
+      // Predefined synthetic 10 singular values with power-law decay
+      const sigmas = [12.0, 8.5, 6.2, 4.1, 2.5, 1.4, 0.8, 0.4, 0.2, 0.1];
+      const totalEnergy = sigmas.reduce((sum, s) => sum + s * s, 0);
+
+      function render() {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const k = parseInt(sliderK.value, 10);
+        valK.textContent = k.toString();
+
+        // 1. Left side: Spectrum bar chart (pad 30..220)
+        const padL = 35;
+        const padT = 30;
+        const padB = 40;
+        const barAreaW = 180;
+        const barAreaH = h - padT - padB;
+        const maxSig = sigmas[0];
+
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padL, h - padB); ctx.lineTo(padL + barAreaW, h - padB); ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(padL, padT); ctx.lineTo(padL, h - padB); ctx.stroke();
+
+        const slotW = barAreaW / sigmas.length;
+        const barW = slotW * 0.7;
+
+        let curEnergy = 0;
+        for (let i = 0; i < sigmas.length; i++) {
+          const s = sigmas[i];
+          const isKept = i < k;
+          if (isKept) curEnergy += s * s;
+
+          const barH = (s / maxSig) * barAreaH;
+          const bx = padL + i * slotW + (slotW - barW) / 2;
+          const by = h - padB - barH;
+
+          ctx.fillStyle = isKept ? (i === k - 1 ? '#c084fc' : '#4ade80') : 'rgba(100, 116, 139, 0.25)';
+          ctx.fillRect(bx, by, barW, barH);
+
+          if (isKept) {
+            ctx.strokeStyle = '#f8fafc';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(bx, by, barW, barH);
+          }
+
+          // Labels
+          ctx.fillStyle = isKept ? '#f8fafc' : '#64748b';
+          ctx.font = '10px monospace';
+          ctx.fillText(`σ${i+1}`, bx - 1, h - padB + 14);
+        }
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('奇异值能谱 (前 k 项已保留)', padL, padT - 10);
+
+        // 2. Right side: Reconstructed low-rank heatmap pattern (pad 250..430)
+        const heatX = 255;
+        const heatY = padT + 5;
+        const heatSize = barAreaH;
+        const gridSize = 16;
+        const cell = heatSize / gridSize;
+
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(`秩-${k} 重构模式 Aₖ 灰度图`, heatX, padT - 10);
+
+        for (let r = 0; r < gridSize; r++) {
+          for (let c = 0; c < gridSize; c++) {
+            // Synthesize value based on first k harmonics
+            let val = 0;
+            for (let i = 0; i < k; i++) {
+              const u_i = Math.sin((i + 1) * Math.PI * (r / gridSize));
+              const v_i = Math.cos((i + 1) * Math.PI * (c / gridSize));
+              val += (sigmas[i] / maxSig) * u_i * v_i;
+            }
+            // Normalize brightness to [0..255]
+            const normVal = Math.max(0, Math.min(255, Math.floor(128 + val * 65)));
+            ctx.fillStyle = `rgb(${Math.floor(normVal * 0.4)}, ${Math.floor(normVal * 0.85)}, ${normVal})`;
+            ctx.fillRect(heatX + c * cell, heatY + r * cell, cell - 0.5, cell - 0.5);
+          }
+        }
+
+        // Metrics update
+        const energyRatio = (curEnergy / totalEnergy) * 100;
+        const specErr = k < sigmas.length ? sigmas[k] : 0.0;
+        const savedSpace = (1 - (k * 21) / (gridSize * gridSize)) * 100;
+
+        statEnergy.textContent = energyRatio.toFixed(2) + '%';
+        statSpecErr.textContent = specErr.toFixed(3);
+        statSigmaK.textContent = sigmas[k - 1].toFixed(2);
+        statCompRatio.textContent = `存储压缩: ${Math.max(0, savedSpace).toFixed(1)}% 节省`;
+        statCond.textContent = (sigmas[0] / sigmas[sigmas.length - 1]).toFixed(1);
+      }
+
+      sliderK.addEventListener('input', render);
+      render();
+    })();
+
+    // 交互式自测 Quiz 选项点击逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation74(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation74(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation74(item, isCorrect) {
+        const text = item.querySelector('div').innerText;
+        if (text.includes('奇异值 σ_i') && text.includes('绝对正确')) {
+          return '选项 A 正确。AᵀA 是半正定对称矩阵，其特征值全为非负实数，因此开方得到的奇异值 σ_i 必定全为非负实数。对于非对称矩阵，奇异值并不等于特征值的模。';
+        } else if (text.includes('谱范数下的逼近误差 ||A - A_2||_2')) {
+          return '选项 B 正确。根据著名的 Eckart-Young-Mirsky 定理，保留前 k 项截断后，谱范数误差严格等于被遗弃的第 k+1 个奇异值，即 σ_3 = 5！';
+        } else if (text.includes('广义伪逆给出的特解') && text.includes('独特优势')) {
+          return '选项 B 正确。当方程有无穷多解时，伪逆解 x⁺ = A⁺b 保证其误差落在行空间 Row(A) 内，彻底杜绝了零空间 Null(A) 任意自由向量的污染，因此拥有严格最小的欧氏范数 ||x||！';
+        }
+        return '';
+      }
+    });
+  </script>
 
 </body>
 </html>

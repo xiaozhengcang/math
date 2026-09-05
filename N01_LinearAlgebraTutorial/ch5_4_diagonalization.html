@@ -21,7 +21,169 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
-  <script src="js/visualizer.js" defer></script>
+  <style>
+    /* 专属于 Ch 5.4 的视觉强化与交互面板样式 */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .concept-card {
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--accent-blue);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .concept-card:hover {
+      transform: translateY(-2px);
+    }
+    .canvas-container-dual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 880px) {
+      .canvas-container-dual {
+        grid-template-columns: 1fr;
+      }
+    }
+    .canvas-box {
+      background: #090d16;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .canvas-box canvas {
+      width: 100%;
+      max-width: 440px;
+      height: 330px;
+      background: #0b1120;
+      border-radius: var(--radius-sm);
+      border: 1px solid #1e293b;
+    }
+    .control-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .control-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.85rem;
+    }
+    .matrix-input-grid {
+      display: inline-grid;
+      grid-template-columns: 68px 68px;
+      gap: 6px;
+      vertical-align: middle;
+      padding: 6px;
+      border-left: 2px solid var(--accent-blue);
+      border-right: 2px solid var(--accent-blue);
+      border-radius: 4px;
+      background: rgba(15, 23, 42, 0.6);
+    }
+    .matrix-input-grid input {
+      width: 100%;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.35rem;
+      text-align: center;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .preset-btn {
+      padding: 0.45rem 0.9rem;
+      background: #1e293b;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover {
+      background: var(--accent-blue);
+      color: #000;
+      border-color: var(--accent-blue);
+    }
+    .preset-btn.active {
+      background: var(--accent-blue);
+      color: #000;
+      font-weight: 700;
+    }
+    .stat-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .quiz-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+    .quiz-toggle {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid var(--accent-blue);
+      color: var(--accent-blue);
+      padding: 0.45rem 0.9rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 0.75rem;
+      transition: all 0.2s ease;
+    }
+    .quiz-toggle:hover {
+      background: var(--accent-blue);
+      color: #000;
+    }
+    .quiz-answer {
+      display: none;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-left: 3px solid var(--accent-green);
+      border-radius: 4px;
+    }
+    .math-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    .math-table th, .math-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .math-table th {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--accent-blue);
+      font-weight: 600;
+    }
+    .math-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  </style>
 </head>
 <body>
 
@@ -87,7 +249,7 @@
           <span>矩阵乘法 4 大视角与几何变换</span>
         </a>
         
-        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 2.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
           <span>逆矩阵、初等矩阵与可逆等价定理</span>
         </a>
@@ -251,7 +413,6 @@
         <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
       </div>
     </aside>
-    
 
     <!-- Main Content Area -->
     <div class="main-wrapper">
@@ -264,92 +425,554 @@
       <main class="content-area">
         <!-- Hero Header -->
         <div class="module-hero">
-          <div class="module-badge">Chapter 5: 特征值与对角化</div>
-          <h1 class="module-title">Ch 5.4: 矩阵对角化 A=PDP⁻¹ 与高阶幂应用</h1>
+          <div class="module-badge">Chapter 5 · 第 4 讲</div>
+          <h1 class="module-title">Ch 5.4: 矩阵对角化 $A=PDP^{-1}$ 与高阶幂应用</h1>
+          <p class="module-subtitle">
+            从变量深度纠缠的“复杂变换网格”，跃迁至彼此独立的“特权特征坐标系”：彻底解密线性代数最强大的解耦工具与工程杀手锏。
+          </p>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 矩阵对角化 (Diagonalization) $A = PDP^{-1}$</h2>
-  </div>
-  <div class="card-body">
-    <p>如果能将一个复杂的矩阵变换在某个好坐标系（特征基底）下解耦为各个坐标轴的独立拉伸，矩阵将化为最简单的对角矩阵：</p>
-    
-    <div class="definition-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">📐 对角化充要条件定理</h4>
-      <p>$n \times n$ 矩阵 $A$ <strong>可对角化 (Diagonalizable)</strong> 的充要条件是：<strong>$A$ 拥有 $n$ 个线性无关的特征向量</strong> $\mathbf{v}_1, \dots, \mathbf{v}_n$（即所有特征值的代数重数等于几何重数 $\text{AM}=\text{GM}$）。</p>
-      <p>此时令特征向量矩阵 $P = [\mathbf{v}_1 \dots \mathbf{v}_n]$，特征值对角矩阵 $D = \text{diag}(\lambda_1, \dots, \lambda_n)$，则：</p>
-      <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-        $$A = P D P^{-1} \iff D = P^{-1} A P$$
-      </div>
-      <p><strong>矩阵高阶幂 $A^k$ 极速计算：</strong> $$A^k = (P D P^{-1})^k = P D^k P^{-1} = P \begin{bmatrix} \lambda_1^k & & \\ & \ddots & \\ & & \lambda_n^k \end{bmatrix} P^{-1}$$</p>
-    </div>
-  </div>
-</div>
+        <!-- 0. 问题的源头与宏大直觉 -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">思维跃迁</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">0. 问题的源头：为什么要对角化？（耦合系统的终极救赎）</h2>
+          </div>
+          <div class="card-body">
+            <p>在现实世界的工程、物理和数据科学中，绝大多数动力系统都是<strong>高度耦合 (Coupled)</strong> 的：</p>
+            <div class="concept-grid">
+              <div class="concept-card">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔗 现实的苦恼：交织纠缠的坐标</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                  在一个二阶动力系统中，明天变量 $x_{k+1}$ 的值不仅取决于今天的 $x_k$，还混杂着 $y_k$；同时 $y_{k+1}$ 也受 $x_k$ 牵扯：
+                </p>
+                $$\begin{cases} x_{k+1} = 4x_k + y_k \\ y_{k+1} = 2x_k + 3y_k \end{cases} \iff \mathbf{x}_{k+1} = A\mathbf{x}_k$$
+                <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 0.5rem;">
+                  如果要预测 100 步后的状态 $\mathbf{x}_{100} = A^{100}\mathbf{x}_0$，直接迭代将面对极度臃肿交叠的代数式。
+                </p>
+              </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">经典应用</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🐰 斐波那契数列动力系统与通项公式推导</h2>
-  </div>
-  <div class="card-body">
-    <p>斐波那契递推关系 $F_{k+2} = F_{k+1} + F_k$ 可以写为二维离散动力系统：</p>
-    <div style="text-align: center; margin: 0.75rem 0; font-size: 1.15rem;">
-      $$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \mathbf{u}_k = A^k \mathbf{u}_0$$
-    </div>
-    <p>转移矩阵 $A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}$ 的特征方程为 $\lambda^2 - \lambda - 1 = 0$，解得黄金分割特征值：</p>
-    $$\lambda_1 = \frac{1+\sqrt{5}}{2} \approx 1.618 \quad (\text{黄金比例}), \quad \lambda_2 = \frac{1-\sqrt{5}}{2} \approx -0.618$$
-    <p>通过对角化 $A^k = P D^k P^{-1}$，立即推导出著名的<strong>比奈通项公式 (Binet's Formula)</strong>：</p>
-    <div class="math-block" style="text-align:center; font-size:1.2rem; padding:1rem; color:var(--accent-amber);">
-      $$F_n = \frac{1}{\sqrt{5}} \left[ \left( \frac{1+\sqrt{5}}{2} \right)^n - \left( \frac{1-\sqrt{5}}{2} \right)^n \right]$$
-    </div>
-  </div>
-</div>
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">✨ 对角化的神性：寻找“独立自洽的主轴”</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                  如果换一副“眼睛”（选取特征向量作为基底），在这个新坐标系中，各方向上的分量<strong>互不干扰、各自独立按指数膨胀或衰减</strong>：
+                </p>
+                $$\begin{cases} u_{k+1} = \lambda_1 u_k \\ v_{k+1} = \lambda_2 v_k \end{cases} \implies \begin{bmatrix} u_{100} \\ v_{100} \end{bmatrix} = \begin{bmatrix} \lambda_1^{100} & 0 \\ 0 & \lambda_2^{100} \end{bmatrix} \begin{bmatrix} u_0 \\ v_0 \end{bmatrix}$$
+                <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 0.5rem;">
+                  <strong>对角化的灵魂：</strong>将原本在标准基下错综复杂、倾斜旋转的矩阵变换，还原为纯粹的、沿各坐标轴独立的<strong>伸缩变换 (Pure Scaling)</strong>。
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 矩阵对角化与 $A^{10}$ 手算</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">计算 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$ 的 $A^k$ 通项公式</h4>
-      <p>已知特征值 $\lambda_1 = 5, \lambda_2 = 2$，特征向量 $\mathbf{v}_1 = \begin{bmatrix}1\\1\end{bmatrix}, \mathbf{v}_2 = \begin{bmatrix}1\\-2\end{bmatrix}$。</p>
-      <p>构造 $P = \begin{bmatrix} 1 & 1 \\ 1 & -2 \end{bmatrix}$，求逆 $P^{-1} = \frac{1}{-3} \begin{bmatrix} -2 & -1 \\ -1 & 1 \end{bmatrix} = \begin{bmatrix} 2/3 & 1/3 \\ 1/3 & -1/3 \end{bmatrix}$。</p>
-      $$A^k = \begin{bmatrix} 1 & 1 \\ 1 & -2 \end{bmatrix} \begin{bmatrix} 5^k & 0 \\ 0 & 2^k \end{bmatrix} \begin{bmatrix} 2/3 & 1/3 \\ 1/3 & -1/3 \end{bmatrix} = \frac{1}{3} \begin{bmatrix} 2 \cdot 5^k + 2^k & 5^k - 2^k \\ 2 \cdot 5^k - 2 \cdot 2^k & 5^k + 2 \cdot 2^k \end{bmatrix}$$
-    </div>
-  </div>
-</div>
+        <!-- 1. 核心理论：代数推导与几何三步曲 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">代数机制与几何图景</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 矩阵对角化定理的严谨推导与“三步曲”几何图景</h2>
+          </div>
+          <div class="card-body">
+            <h3>1.1 代数推导：从向量等式到矩阵拼接</h3>
+            <p>
+              设 $n \times n$ 矩阵 $A$ 拥有 $n$ 个特征值 $\lambda_1, \lambda_2, \dots, \lambda_n$，对应的特征向量分别为 $\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_n$。根据定义：
+            </p>
+            $$A\mathbf{v}_1 = \lambda_1 \mathbf{v}_1, \quad A\mathbf{v}_2 = \lambda_2 \mathbf{v}_2, \quad \dots, \quad A\mathbf{v}_n = \lambda_n \mathbf{v}_n$$
+            <p>
+              现在将这 $n$ 个列向量<strong>横向拼装</strong>成一个矩阵 $P = [\mathbf{v}_1 \; \mathbf{v}_2 \; \cdots \; \mathbf{v}_n]$，两边同时应用矩阵乘法分块法则：
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; margin: 1rem 0; padding: 1rem; background: rgba(192, 132, 252, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(192, 132, 252, 0.2);">
+              $$A P = A \begin{bmatrix} \mathbf{v}_1 & \mathbf{v}_2 & \cdots & \mathbf{v}_n \end{bmatrix} = \begin{bmatrix} A\mathbf{v}_1 & A\mathbf{v}_2 & \cdots & A\mathbf{v}_n \end{bmatrix}$$
+              $$= \begin{bmatrix} \lambda_1 \mathbf{v}_1 & \lambda_2 \mathbf{v}_2 & \cdots & \lambda_n \mathbf{v}_n \end{bmatrix} = \begin{bmatrix} \mathbf{v}_1 & \mathbf{v}_2 & \cdots & \mathbf{v}_n \end{bmatrix} \begin{bmatrix} \lambda_1 & 0 & \cdots & 0 \\ 0 & \lambda_2 & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots & \lambda_n \end{bmatrix} = P D$$
+            </div>
+            <p>
+              我们得到了极简的根本关系式：<strong>$AP = PD$</strong>！
+            </p>
+            <div class="definition-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+              <h4 style="color: var(--accent-blue);">📐 矩阵对角化定理 (Diagonalization Theorem)</h4>
+              <p>
+                若特征向量组 $\{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_n\}$ <strong>线性无关</strong>，则特征向量矩阵 $P$ <strong>非奇异可逆 ($P^{-1}$ 存在)</strong>。
+                两边右乘 $P^{-1}$，即得对角化分解：
+              </p>
+              <div style="font-size: 1.35rem; text-align: center; margin: 0.75rem 0; font-weight: 700; color: var(--accent-blue);">
+                $$A = P D P^{-1} \iff D = P^{-1} A P$$
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0;">
+                反之，若 $A$ 相似于对角矩阵 $D$（即存在可逆 $P$ 使得 $A = PDP^{-1}$），则 $P$ 的列向量必是 $A$ 的 $n$ 个线性无关特征向量，$D$ 的对角元素必是对应的特征值。
+              </p>
+            </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 验证矩阵对角化与高阶幂</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+            <h3 style="margin-top: 1.75rem;">1.2 几何视角：$A = P D P^{-1}$ 的三步曲舞台剧</h3>
+            <p>
+              在几何坐标系变换（参考 Ch 4.5 与 Ch 4.6）中，矩阵乘法作用于向量 $\mathbf{x}$ 的过程 $A\mathbf{x} = P(D(P^{-1}\mathbf{x}))$ 是极其优美而严整的三步走：
+            </p>
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-amber);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-amber); margin-bottom: 0.25rem;">步骤 1：$P^{-1}$</div>
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">换底投影（转入特征坐标系）</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">
+                  将标准基底下的现实向量 $\mathbf{x}$，通过基变换逆矩阵 $P^{-1}$ 转换为以特征向量为基底的局部坐标：
+                  $$[\mathbf{x}]_{\mathcal{B}} = P^{-1} \mathbf{x}$$
+                </p>
+              </div>
 
-A = np.array([[4, 1], [2, 3]], dtype=float)
+              <div class="concept-card" style="border-left-color: var(--accent-purple);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-purple); margin-bottom: 0.25rem;">步骤 2：$D$</div>
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">纯粹解耦拉伸（主轴独立缩放）</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">
+                  在特征基底构成的坐标系中，各轴完全解耦。第 $i$ 个分量只沿着第 $i$ 根特征轴被缩放 $\lambda_i$ 倍，<strong>没有任何旋转或倾斜扭曲</strong>：
+                  $$[\mathbf{y}]_{\mathcal{B}} = D [\mathbf{x}]_{\mathcal{B}} = \begin{bmatrix} \lambda_1 c_1 \\ \lambda_2 c_2 \\ \vdots \end{bmatrix}$$
+                </p>
+              </div>
 
-# 对角化分解
-evals, P = np.linalg.eig(A)
-D = np.diag(evals)
-P_inv = np.linalg.inv(P)
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <div style="font-size: 1.5rem; font-weight: 800; color: var(--accent-green); margin-bottom: 0.25rem;">步骤 3：$P$</div>
+                <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">还原现实（转回标准坐标系）</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted);">
+                  把在特征坐标系中拉伸好的坐标向量，通过矩阵 $P$ 重新打包还原回标准笛卡尔坐标系的物理世界：
+                  $$\mathbf{y} = P [\mathbf{y}]_{\mathcal{B}} = A\mathbf{x}$$
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
 
-# 验证 A = P @ D @ P_inv
-A_rebuilt = P @ D @ P_inv
-print("重构 A 误差:", np.linalg.norm(A - A_rebuilt))
+        <!-- 2. 能否对角化的终极判定与认知误区扫雷 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">判定法则与避坑</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 对角化充要判定准则与 4 大经典认知雷区</h2>
+          </div>
+          <div class="card-body">
+            <h3>2.1 终极大一统判定定理：几何重数必须跑满代数重数</h3>
+            <p>
+              矩阵不是无条件可对角化的！能否对角化的物理核心在于：<strong>特征向量是否足以撑起整个全空间 $\mathbb{R}^n$</strong>。
+            </p>
+            <div class="concept-grid">
+              <div class="concept-card" style="border-left-color: var(--accent-blue);">
+                <h4 style="color: var(--accent-blue);">充足条件（充分性速判）</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                  若 $n \times n$ 方阵 $A$ 拥有 <strong>$n$ 个互不相同的特征值</strong>（$\lambda_1 \neq \lambda_2 \neq \dots \neq \lambda_n$），则不同特征值对应的特征向量必线性无关，<strong>$A$ 一定可对角化</strong>！
+                </p>
+              </div>
+              <div class="concept-card" style="border-left-color: var(--accent-green);">
+                <h4 style="color: var(--accent-green);">终极充要判定（含重根情况）</h4>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                  当特征多项式出现重根时，$A$ 可对角化 $\iff$ 对每一个特征值 $\lambda_i$，其<strong>几何重数等于代数重数</strong>：
+                  $$\text{GM}(\lambda_i) = \dim(\ker(A - \lambda_i I)) = \text{AM}(\lambda_i)$$
+                  即重根特征值张成的特征子空间维数未发生亏损。
+                </p>
+              </div>
+            </div>
 
-# 计算 A^10
-k = 10
-A_k_diag = P @ np.diag(evals**k) @ P_inv
-A_k_direct = np.linalg.matrix_power(A, k)
-print("两者计算结果完全一致:", np.allclose(A_k_diag, A_k_direct))</code></pre>
-  </div>
-</div>
+            <h3 style="margin-top: 1.5rem;">2.2 常见认知误区扫雷与四象限矩阵分类</h3>
+            <p>
+              初学者最容易将“<strong>可逆性 (Invertible)</strong>”与“<strong>可对角化 (Diagonalizable)</strong>”混为一谈。事实上，这是两个完全正交、互不绑定的独立数学维度：
+            </p>
+            <table class="math-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">分类象限</th>
+                  <th style="width: 25%;">代表性矩阵实例</th>
+                  <th style="width: 25%;">特征值与可逆性</th>
+                  <th style="width: 25%;">特征向量与对角化属性</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 700; color: var(--accent-green);">① 可逆 且 可对角化</td>
+                  <td>$A = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$</td>
+                  <td>$\lambda_1 = 2, \lambda_2 = 3 \neq 0$<br>$\det(A) = 6 \neq 0$（可逆）</td>
+                  <td>特征向量 $\mathbf{e}_1, \mathbf{e}_2$ 线性无关，自身已是对角矩阵。</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: var(--accent-amber);">② 不可逆 但 可对角化</td>
+                  <td>$B = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$（正交投影）</td>
+                  <td>$\lambda_1 = 1, \lambda_2 = 0$<br>$\det(B) = 0$（不可逆，奇异）</td>
+                  <td>拥有 2 个独立特征向量 $\mathbf{e}_1, \mathbf{e}_2$，特征子空间填满 $\mathbb{R}^2$！</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: var(--accent-rose);">③ 可逆 但 不可对角化</td>
+                  <td>$C = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$（水平剪切）</td>
+                  <td>$\lambda_1 = \lambda_2 = 1 \neq 0$<br>$\det(C) = 1 \neq 0$（可逆）</td>
+                  <td>代数重数 $\text{AM}=2$，但解 $(C-I)\mathbf{v}=\mathbf{0}$ 仅有 1 个基底 $\begin{bmatrix}1\\0\end{bmatrix}$（$\text{GM}=1$），特征向量亏损！</td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 700; color: var(--accent-purple);">④ 不可逆 且 不可对角化</td>
+                  <td>$N = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$（幂零算子）</td>
+                  <td>$\lambda_1 = \lambda_2 = 0$<br>$\det(N) = 0$（不可逆）</td>
+                  <td>$\text{AM}=2$，但 $\ker(N)$ 维数仅为 1，严重亏损。</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
 
+        <!-- 3. 交互式双视图实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">交互探索</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 🧪 双视图联动实验室：现实直角网格 vs 特征解耦网格</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              请切换不同类型的预设矩阵，或者直接手动输入矩阵元素与调节连续幂次 $k$。
+              对比左侧（标准直角系下的复杂网格拉伸与轨迹）与右侧（以特征向量为轴的特征坐标系下的纯平行放缩）：
+            </p>
+
+            <div class="control-panel">
+              <div class="control-row">
+                <span style="font-weight: 600; color: var(--text-main);">选择典型预设：</span>
+                <button class="preset-btn active" id="btn-preset-distinct">良态互异拉伸 (可对角化)</button>
+                <button class="preset-btn" id="btn-preset-symmetric">实对称矩阵 (正交对角化)</button>
+                <button class="preset-btn" id="btn-preset-shear">病态剪切矩阵 (亏损不可对角化)</button>
+                <button class="preset-btn" id="btn-preset-projection">投影矩阵 (奇异但可对角化)</button>
+              </div>
+
+              <div class="control-row" style="margin-top: 1rem;">
+                <span style="font-weight: 600; color: var(--text-main);">矩阵 $A = $</span>
+                <div class="matrix-input-grid">
+                  <input type="number" id="mat-a" value="1.5" step="0.1">
+                  <input type="number" id="mat-b" value="0.5" step="0.1">
+                  <input type="number" id="mat-c" value="0.5" step="0.1">
+                  <input type="number" id="mat-d" value="1.5" step="0.1">
+                </div>
+
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-left: 1.5rem;">
+                  <label for="slider-power" style="font-weight: 600; color: var(--accent-amber);">连续幂次 $k = $ <span id="power-display">1</span></label>
+                  <input type="range" id="slider-power" min="1" max="6" value="1" step="1" style="width: 140px;">
+                </div>
+
+                <button class="preset-btn" id="btn-reset" style="margin-left: auto;">🔄 重置初始测试点</button>
+              </div>
+
+              <div class="control-row" style="margin-top: 0.5rem; gap: 1rem;">
+                <div class="stat-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">
+                  <span>特征值: </span><span id="stat-evals">λ₁ = 2.00, λ₂ = 1.00</span>
+                </div>
+                <div class="stat-badge" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-green);">
+                  <span>对角化状态: </span><span id="stat-status">可对角化 (完全良态)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 双画板容器 -->
+            <div class="canvas-container-dual">
+              <div class="canvas-box">
+                <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🌐 视角 A：现实笛卡尔直角系 (标准空间)</span>
+                </div>
+                <canvas id="canvas-real" width="440" height="330"></canvas>
+                <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.5rem; text-align: center;">
+                  青色/紫色虚线为特征向量方向主轴；红色连线为测试点在连续作用 $A^k$ 下的实际演化轨迹。
+                </div>
+              </div>
+
+              <div class="canvas-box">
+                <div style="font-weight: 700; color: var(--accent-green); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🎯 视角 B：特征基解耦坐标系 (固有空间)</span>
+                </div>
+                <canvas id="canvas-eigen" width="440" height="330"></canvas>
+                <div style="font-size: 0.78rem; color: var(--text-dim); margin-top: 0.5rem; text-align: center;">
+                  以特征向量为观察轴，两轴完全解耦！每个分量单纯沿自身轴缩放 $\lambda_i^k$。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 四大工业级杀手应用深度推导 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工程威力</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🚀 矩阵对角化的四大工业级杀手应用</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- 应用 1 -->
+            <div class="example-box" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(251, 191, 36, 0.06); border-left: 4px solid var(--accent-amber); border-radius: 4px;">
+              <h3 style="color: var(--accent-amber); margin-bottom: 0.5rem;">应用 1：高阶矩阵幂 $A^k$ 极速计算（多米诺骨牌抵消）</h3>
+              <p>
+                若直接进行矩阵相乘，计算 $A^k$ 需要执行 $k-1$ 次 $O(n^3)$ 的矩阵连乘，总运算量为 $O(k n^3)$。但利用对角化，中间所有的 $P^{-1}P$ 发生连锁湮灭：
+              </p>
+              <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
+                $$A^k = \underbrace{(P D P^{-1})(P D P^{-1}) \dots (P D P^{-1})}_{k \text{ 次}} = P D \underbrace{(P^{-1} P)}_{I} D \dots D P^{-1} = P D^k P^{-1}$$
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted);">
+                而对角矩阵的幂运算只需要对主对角线上的标量求 $k$ 次幂：$D^k = \text{diag}(\lambda_1^k, \dots, \lambda_n^k)$！
+                无论 $k$ 是 100 还是 10 亿，只需<strong>两次固定的矩阵乘法</strong>即可一步求出闭式解析解！
+              </p>
+            </div>
+
+            <!-- 应用 2 -->
+            <div class="example-box" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
+              <h3 style="color: var(--accent-purple); margin-bottom: 0.5rem;">应用 2：🐰 斐波那契数列动力系统与比奈公式 (Binet's Formula) 严密推导</h3>
+              <p>
+                斐波那契递推数列 $F_{k+2} = F_{k+1} + F_k$（初值 $F_0 = 0, F_1 = 1$）通过引入状态向量 $\mathbf{u}_k = \begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix}$，可以升维为马尔可夫风格的离散线性动力系统：
+              </p>
+              $$\begin{bmatrix} F_{k+1} \\ F_k \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix} \begin{bmatrix} F_k \\ F_{k-1} \end{bmatrix} \implies \mathbf{u}_k = A^k \mathbf{u}_0, \quad \text{其中 } A = \begin{bmatrix} 1 & 1 \\ 1 & 0 \end{bmatrix}, \;\mathbf{u}_0 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$$
+              <p><strong>第一步：求特征值与特征向量</strong></p>
+              <p>特征方程：$\det(A - \lambda I) = \lambda(1-\lambda) - 1 = \lambda^2 - \lambda - 1 = 0$。由求根公式得黄金分割特征值：</p>
+              $$\lambda_1 = \frac{1+\sqrt{5}}{2} \approx 1.618 \quad (\text{黄金比例 } \phi), \qquad \lambda_2 = \frac{1-\sqrt{5}}{2} \approx -0.618 \quad (-\phi^{-1})$$
+              <p>分别代入解出特征向量：$\mathbf{v}_1 = \begin{bmatrix} \lambda_1 \\ 1 \end{bmatrix}, \; \mathbf{v}_2 = \begin{bmatrix} \lambda_2 \\ 1 \end{bmatrix}$。</p>
+              
+              <p><strong>第二步：初值在特征基底上的投影展开</strong></p>
+              <p>将初始状态 $\mathbf{u}_0 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ 分解为特征基底的线性组合 $\mathbf{u}_0 = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2$：</p>
+              $$\begin{bmatrix} 1 \\ 0 \end{bmatrix} = c_1 \begin{bmatrix} \lambda_1 \\ 1 \end{bmatrix} + c_2 \begin{bmatrix} \lambda_2 \\ 1 \end{bmatrix} \implies \begin{cases} c_1 \lambda_1 + c_2 \lambda_2 = 1 \\ c_1 + c_2 = 0 \end{cases} \implies c_1 = \frac{1}{\lambda_1 - \lambda_2} = \frac{1}{\sqrt{5}}, \quad c_2 = -\frac{1}{\sqrt{5}}$$
+
+              <p><strong>第三步：对角化演化得到终极通项</strong></p>
+              $$\mathbf{u}_k = A^k \mathbf{u}_0 = c_1 \lambda_1^k \mathbf{v}_1 + c_2 \lambda_2^k \mathbf{v}_2 = \frac{1}{\sqrt{5}} \lambda_1^k \begin{bmatrix} \lambda_1 \\ 1 \end{bmatrix} - \frac{1}{\sqrt{5}} \lambda_2^k \begin{bmatrix} \lambda_2 \\ 1 \end{bmatrix}$$
+              <p>取第二个分量 $F_k$，即震撼数学界的<strong>比奈通项公式</strong>：</p>
+              <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0; color: var(--accent-purple); font-weight: 700;">
+                $$F_k = \frac{1}{\sqrt{5}} \left[ \left(\frac{1+\sqrt{5}}{2}\right)^k - \left(\frac{1-\sqrt{5}}{2}\right)^k \right]$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-dim);">
+                💡 <strong>直觉洞察：</strong>因为 $|\lambda_2| \approx 0.618 < 1$，随着 $k \to \infty$，第二项 $\lambda_2^k \to 0$ 迅速衰减消失。主导特征值 $\lambda_1$ 完全主宰系统增长速率，因此相邻项比值自然收敛于黄金分割：$\lim_{k \to \infty} \frac{F_{k+1}}{F_k} = \lambda_1 = \frac{1+\sqrt{5}}{2}$！
+              </p>
+            </div>
+
+            <!-- 应用 3 -->
+            <div class="example-box" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+              <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">应用 3：微分方程组 (ODEs) 解耦与矩阵指数 $e^{At}$</h3>
+              <p>
+                考虑一阶常微分方程组 $\frac{d\mathbf{x}}{dt} = A\mathbf{x}$。由于矩阵 $A$ 充满非对角项，各分量导数互相纠缠。
+                利用坐标代换 $\mathbf{x}(t) = P \mathbf{y}(t)$（即 $\mathbf{y} = P^{-1}\mathbf{x}$），代入原方程：
+              </p>
+              $$P \frac{d\mathbf{y}}{dt} = A P \mathbf{y} \implies \frac{d\mathbf{y}}{dt} = (P^{-1} A P) \mathbf{y} = D \mathbf{y}$$
+              <p>原本纠缠的方程组瞬间被彻底解耦为 $n$ 个独立的一阶标量常微分方程：</p>
+              $$\frac{dy_i}{dt} = \lambda_i y_i \implies y_i(t) = C_i e^{\lambda_i t}$$
+              <p>利用矩阵指数函数定义，原系统解可紧凑写为：</p>
+              <div style="font-size: 1.2rem; text-align: center; margin: 0.5rem 0;">
+                $$\mathbf{x}(t) = e^{At} \mathbf{x}(0) = P e^{Dt} P^{-1} \mathbf{x}(0) = P \begin{bmatrix} e^{\lambda_1 t} & & 0 \\ & \ddots & \\ 0 & & e^{\lambda_n t} \end{bmatrix} P^{-1} \mathbf{x}(0)$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-dim);">
+                这是控制论、连续时间马尔可夫链以及量子力学薛定谔方程（哈密顿量对角化求时间演化算符 $U(t) = e^{-iHt/\hbar}$）的数学根基。
+              </p>
+            </div>
+
+            <!-- 应用 4 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 4px;">
+              <h3 style="color: var(--accent-green); margin-bottom: 0.5rem;">应用 4：网络科学中的图邻接矩阵幂与路径计数</h3>
+              <p>
+                在图论中，设简单图 $G$ 的邻接矩阵为 $A$（若节点 $i, j$ 相连则 $A_{ij}=1$，否则为 $0$）。
+                一个基础定理是：<strong>$(A^k)_{ij}$ 恰好等于从节点 $i$ 到节点 $j$ 长度为 $k$ 的可行路径总数</strong>！
+              </p>
+              <p style="font-size: 0.9rem; color: var(--text-muted);">
+                利用对角化 $A = P D P^{-1}$，任意两点间的长路径总数可由图的谱（特征值 $\lambda_1, \dots, \lambda_n$）直接求得：
+                $$(A^k)_{ij} = \sum_{r=1}^n P_{ir} (P^{-1})_{rj} \lambda_r^k$$
+                当路径长度 $k$ 很大时，图的拓扑连通性与信息扩散瓶颈完全由第一大特征值 $\lambda_1$（谱半径）主导。
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 5. 手算精析三部曲 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 典型算子手算精析（互异、重根良态与病态亏损三部曲）</h2>
+          </div>
+          <div class="card-body">
+
+            <!-- 例题 1 -->
+            <div class="example-box" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
+              <h4 style="color: var(--accent-green);">例题 1（标准互异良态）：计算 $A = \begin{bmatrix} 4 & 1 \\ 2 & 3 \end{bmatrix}$ 的对角化与 $A^k$ 通项公式</h4>
+              <p><strong>解题步骤：</strong></p>
+              <p><strong>Step 1：求解特征方程</strong></p>
+              $$\det(A - \lambda I) = \begin{vmatrix} 4-\lambda & 1 \\ 2 & 3-\lambda \end{vmatrix} = (4-\lambda)(3-\lambda) - 2 = \lambda^2 - 7\lambda + 10 = (\lambda - 5)(\lambda - 2) = 0$$
+              <p>得到两个互异实特征值：$\lambda_1 = 5, \; \lambda_2 = 2$。互不相同，必然可对角化！</p>
+
+              <p><strong>Step 2：求解特征向量</strong></p>
+              <ul style="margin-left: 1.5rem; color: var(--text-muted); font-size: 0.92rem;">
+                <li>对 $\lambda_1 = 5$：解 $(A - 5I)\mathbf{v} = \mathbf{0} \implies \begin{bmatrix} -1 & 1 \\ 2 & -2 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} = \mathbf{0} \implies -x + y = 0 \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。</li>
+                <li>对 $\lambda_2 = 2$：解 $(A - 2I)\mathbf{v} = \mathbf{0} \implies \begin{bmatrix} 2 & 1 \\ 2 & 1 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} = \mathbf{0} \implies 2x + y = 0 \implies \mathbf{v}_2 = \begin{bmatrix} 1 \\ -2 \end{bmatrix}$。</li>
+              </ul>
+
+              <p><strong>Step 3：组装矩阵 $P, D$ 并求逆 $P^{-1}$</strong></p>
+              $$P = \begin{bmatrix} 1 & 1 \\ 1 & -2 \end{bmatrix}, \quad D = \begin{bmatrix} 5 & 0 \\ 0 & 2 \end{bmatrix}$$
+              $$\det(P) = (1)(-2) - (1)(1) = -3 \implies P^{-1} = \frac{1}{-3} \begin{bmatrix} -2 & -1 \\ -1 & 1 \end{bmatrix} = \frac{1}{3} \begin{bmatrix} 2 & 1 \\ 1 & -1 \end{bmatrix}$$
+
+              <p><strong>Step 4：计算高阶幂 $A^k = P D^k P^{-1}$</strong></p>
+              $$A^k = \begin{bmatrix} 1 & 1 \\ 1 & -2 \end{bmatrix} \begin{bmatrix} 5^k & 0 \\ 0 & 2^k \end{bmatrix} \frac{1}{3} \begin{bmatrix} 2 & 1 \\ 1 & -1 \end{bmatrix} = \frac{1}{3} \begin{bmatrix} 5^k & 2^k \\ 5^k & -2 \cdot 2^k \end{bmatrix} \begin{bmatrix} 2 & 1 \\ 1 & -1 \end{bmatrix} = \frac{1}{3} \begin{bmatrix} 2 \cdot 5^k + 2^k & 5^k - 2^k \\ 2 \cdot 5^k - 2 \cdot 2^k & 5^k + 2 \cdot 2^k \end{bmatrix} \quad \blacksquare$$
+            </div>
+
+            <!-- 例题 2 -->
+            <div class="example-box" style="margin-bottom: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+              <h4 style="color: var(--accent-blue);">例题 2（三维重根良态矩阵）：分析 $A = \begin{bmatrix} 2 & 0 & 0 \\ 0 & 2 & 0 \\ 1 & 0 & 3 \end{bmatrix}$ 能否对角化</h4>
+              <p><strong>解题步骤：</strong></p>
+              <p>
+                特征多项式（按第一行展开）：$\det(A-\lambda I) = (2-\lambda)(2-\lambda)(3-\lambda) = (2-\lambda)^2 (3-\lambda) = 0$。
+                特征值为 $\lambda_1 = 3$（代数重数 1），$\lambda_2 = \lambda_3 = 2$（代数重数 $\text{AM}=2$）。
+              </p>
+              <p><strong>检验重根 $\lambda = 2$ 的几何重数 $\text{GM}$：</strong></p>
+              $$A - 2I = \begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \\ 1 & 0 & 1 \end{bmatrix}$$
+              <p>显然此矩阵的秩 $\text{rank}(A-2I) = 1$。根据秩-零度定理：</p>
+              $$\text{GM}(2) = \dim(\ker(A-2I)) = 3 - \text{rank}(A-2I) = 3 - 1 = 2 = \text{AM}(2)$$
+              <p>
+                方程 $x_1 + x_3 = 0$ 的自由未知量有两个（$x_2$ 与 $x_3$），基础解系为：
+                $\mathbf{v}_1 = \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}, \; \mathbf{v}_2 = \begin{bmatrix} -1 \\ 0 \\ 1 \end{bmatrix}$。
+                重根成功张成了 2 维平面！加上 $\lambda=3$ 对应的 $\mathbf{v}_3 = \begin{bmatrix} 0 \\ 0 \\ 1 \end{bmatrix}$，正好凑齐 3 个线性无关的特征向量。
+                <strong>因此该矩阵完全可以对角化！$\blacksquare$</strong>
+              </p>
+            </div>
+
+            <!-- 例题 3 -->
+            <div class="example-box" style="padding: 1.25rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
+              <h4 style="color: var(--accent-rose);">例题 3（病态亏损反例）：证明剪切矩阵 $A = \begin{bmatrix} 3 & 1 \\ 0 & 3 \end{bmatrix}$ 绝不可能对角化</h4>
+              <p><strong>分析过程：</strong></p>
+              <p>特征多项式为 $(\lambda - 3)^2 = 0 \implies \lambda = 3$（代数重数 $\text{AM}=2$）。</p>
+              <p>求解特征方程 $(A - 3I)\mathbf{v} = \mathbf{0}$：</p>
+              $$\begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix} \implies y = 0, \quad x \text{ 为任意实数}$$
+              <p>
+                特征子空间 $\ker(A-3I) = \text{span}\left(\begin{bmatrix} 1 \\ 0 \end{bmatrix}\right)$，其维数（几何重数）为 $\text{GM} = 1$。
+              </p>
+              <p style="color: var(--accent-rose); font-weight: 600;">
+                代数重数 2 严格大于 几何重数 1！全空间 $\mathbb{R}^2$ 中无论如何只能挑出 1 个独立特征向量，无法凑足基底所需的 2 个向量。
+                因此 $A$ 是缺陷矩阵 (Defective Matrix)，<strong>数学上绝对无法被对角化！</strong>
+              </p>
+              <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 0.5rem;">
+                💡 <strong>后续延伸：</strong>这种无法对角化的矩阵如何化简？数学家 Jordan 给出的终极解答是<strong>若尔当标准型 (Jordan Canonical Form)</strong>，即主对角线上放特征值，紧邻的上对角线放 1，形成若尔当块。
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 6. Python / SymPy / NumPy 实战 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业计算</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python / SymPy / NumPy 工业级实战演练</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              在工业界中，我们既可以用 <code>SymPy</code> 进行纯代数符号推导（获得精准根号和分数），也可以用 <code>NumPy</code> 进行大规模数值对角化与性能对比：
+            </p>
+
+            <h4 style="color: var(--accent-blue); margin-top: 1rem;">1. SymPy 符号对角化求解精准解析解</h4>
+            <pre class="code-block" style="background: #0f172a; padding: 1.15rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.5;"><code>import sympy as sp
+
+# 定义符号矩阵
+A = sp.Matrix([[4, 1], [2, 3]])
+
+# SymPy 一键对角化：返回特征向量矩阵 P 与对角矩阵 D
+P, D = A.diagonalize()
+
+print("P (特征向量矩阵):")
+sp.pprint(P)
+print("\nD (特征值对角矩阵):")
+sp.pprint(D)
+
+# 验证 A == P * D * P^(-1)
+assert A == P * D * P.inv()
+print("\n恒等式 A = P * D * P^(-1) 严格成立！")
+
+# 求解 A^k 的闭式代数通项
+k = sp.symbols('k', integer=True, positive=True)
+D_k = sp.diag(D[0, 0]**k, D[1, 1]**k)
+A_k = P * D_k * P.inv()
+
+print("\nA^k 的解析通项公式:")
+sp.pprint(sp.simplify(A_k))</code></pre>
+
+            <h4 style="color: var(--accent-green); margin-top: 1.5rem;">2. NumPy 高阶幂计算与时间开销性能基准测试</h4>
+            <pre class="code-block" style="background: #0f172a; padding: 1.15rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.5;"><code>import numpy as np
+import time
+
+# 构造一个 500x500 的良态随机对称矩阵
+n = 500
+np.random.seed(42)
+M = np.random.randn(n, n)
+A = (M + M.T) / 2  # 实对称矩阵天然可正交对角化
+
+power_k = 1000
+
+# 方法 A：传统矩阵连乘 / 快速幂 (np.linalg.matrix_power)
+t0 = time.time()
+res_direct = np.linalg.matrix_power(A, power_k)
+t_direct = time.time() - t0
+
+# 方法 B：对角化分解 A^k = P * D^k * P^(-1)
+t0 = time.time()
+evals, P = np.linalg.eigh(A)  # 对称矩阵专属高效特征分解
+P_inv = P.T                   # 正交矩阵的逆就是转置！极速！
+res_diag = P @ np.diag(evals ** power_k) @ P_inv
+t_diag = time.time() - t0
+
+print(f"Direct matrix_power(A, {power_k}) 耗时: {t_direct:.5f} 秒")
+print(f"Diagonalization P @ D^k @ P.T    耗时: {t_diag:.5f} 秒")
+print("两者结果绝对误差范数:", np.linalg.norm(res_direct - res_diag))</code></pre>
+
+            <div class="definition-box" style="margin-top: 1.25rem; padding: 1rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.25rem;">⚠️ 工业实战暗坑：病态矩阵与特征基条件数 $\kappa(P)$</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0;">
+                当矩阵 $A$ 接近“不可对角化”时，其不同特征向量之间的夹角会无限逼近 $0$（几乎平行）。
+                此时特征基底矩阵 $P$ 极度接近奇异，逆矩阵 $P^{-1}$ 的数值计算会产生巨大的舍入误差（条件数 $\kappa(P) = \|P\| \|P^{-1}\| \gg 10^{12}$）。
+                在数值分析中，工业级库（如 LAPACK / SciPy）遇到此类病态系统更倾向于使用<strong>Schur 三角化分解</strong> ($A = Q U Q^*$)，以保证全过程的正交数值稳定性。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. 概念深度检测与思考题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">深度自测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🎯 核心概念深度检测与思考题</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- Quiz 1 -->
+            <div class="quiz-card">
+              <h4 style="color: var(--accent-blue);">思考题 1：如果方阵 $A$ 满足 $A^2 = A$（幂等矩阵 / 投影算子），它一定可以被对角化吗？其特征值可能是什么？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz(this)">👉 点击展开深度解析</button>
+              <div class="quiz-answer">
+                <p><strong>答案：一定可以对角化！且其特征值只能是 $0$ 或 $1$。</strong></p>
+                <p><strong>严谨证明：</strong></p>
+                <ol style="margin-left: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                  <li>设 $\lambda$ 为 $A$ 的特征值，$\mathbf{v} \neq \mathbf{0}$ 为对应特征向量。两边作用 $A$：$A^2\mathbf{v} = A(\lambda\mathbf{v}) = \lambda^2\mathbf{v}$。由 $A^2=A$ 得 $\lambda^2\mathbf{v} = \lambda\mathbf{v} \implies (\lambda^2 - \lambda)\mathbf{v} = \mathbf{0}$。因为 $\mathbf{v} \neq \mathbf{0}$，必有 $\lambda^2 - \lambda = 0 \implies \lambda \in \{0, 1\}$。</li>
+                  <li>对于空间中的任意向量 $\mathbf{x} \in \mathbb{R}^n$，我们可以天然恒等分解为：
+                  $$\mathbf{x} = A\mathbf{x} + (I - A)\mathbf{x}$$
+                  其中 $A(A\mathbf{x}) = A^2\mathbf{x} = A\mathbf{x}$，故 $A\mathbf{x} \in \ker(A - I)$（即 $\lambda=1$ 的特征子空间）；
+                  而 $A(I - A)\mathbf{x} = (A - A^2)\mathbf{x} = \mathbf{0}$，故 $(I - A)\mathbf{x} \in \ker(A)$（即 $\lambda=0$ 的特征子空间）。</li>
+                  <li>因此全空间是两个特征子空间的直和 $\mathbb{R}^n = \ker(A - I) \oplus \ker(A)$，特征向量能够张满全空间，几何重数之和必等于 $n$。故<strong>任何幂等矩阵必然可对角化</strong>！</li>
+                </ol>
+              </div>
+            </div>
+
+            <!-- Quiz 2 -->
+            <div class="quiz-card">
+              <h4 style="color: var(--accent-blue);">思考题 2：若 $A$ 与 $B$ 均可对角化，在什么条件下它们可以“被同一个基底同时对角化 (Simultaneous Diagonalization)”？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz(this)">👉 点击展开深度解析</button>
+              <div class="quiz-answer">
+                <p><strong>答案：充要条件是 $A$ 与 $B$ 可交换（对易），即 $AB = BA$！</strong></p>
+                <p><strong>物理与数学背景：</strong></p>
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                  若存在同一个可逆矩阵 $P$，使得 $P^{-1}AP = D_1$ 且 $P^{-1}BP = D_2$ 均为对角矩阵。由于对角矩阵之间的乘法是天生可交换的（$D_1 D_2 = D_2 D_1$）：
+                </p>
+                $$AB = (P D_1 P^{-1})(P D_2 P^{-1}) = P (D_1 D_2) P^{-1} = P (D_2 D_1) P^{-1} = BA$$
+                <p style="font-size: 0.88rem; color: var(--text-dim);">
+                  💡 <strong>量子力学核心桥梁：</strong>在量子力学中，物理可观测量对应自伴算符（可对角化矩阵）。两个物理量能被同时精确测量（如动量与位置、角动量不同分量）的充要条件，就是代表它们的算符对易 $[A, B] = AB - BA = 0$。如果不对易，就会出现海森堡不确定性原理！
+                </p>
+              </div>
+            </div>
+
+            <!-- Quiz 3 -->
+            <div class="quiz-card">
+              <h4 style="color: var(--accent-blue);">思考题 3：如果方阵 $A$ 可对角化，那么其转置矩阵 $A^T$ 与逆矩阵 $A^{-1}$（若存在）是否也必然可对角化？</h4>
+              <button class="quiz-toggle" onclick="toggleQuiz(this)">👉 点击展开深度解析</button>
+              <div class="quiz-answer">
+                <p><strong>答案：两者都必然可以对角化！</strong></p>
+                <ul style="margin-left: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                  <li><strong>对转置矩阵 $A^T$：</strong>由 $A = PDP^{-1}$，两边同时取转置得 $A^T = (P^{-1})^T D^T P^T = (P^T)^{-1} D P^T$。因为 $D$ 是对角矩阵，其转置等于自身 $D^T = D$。令 $Q = (P^T)^{-1}$，则 $A^T = Q D Q^{-1}$，因此 $A^T$ 同样相似于同一个对角矩阵 $D$，必可对角化！</li>
+                  <li><strong>对逆矩阵 $A^{-1}$：</strong>若 $A$ 可逆，则所有特征值 $\lambda_i \neq 0$。两边同时取逆：$A^{-1} = (PDP^{-1})^{-1} = P D^{-1} P^{-1}$。其中 $D^{-1} = \text{diag}(1/\lambda_1, \dots, 1/\lambda_n)$ 仍然是对角矩阵，基底仍然是 $P$，因此 $A^{-1}$ 同样可以完美对角化！</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -381,5 +1004,428 @@ print("两者计算结果完全一致:", np.allclose(A_k_diag, A_k_direct))</cod
     </div>
   </div>
 
+  <script>
+    // ==========================================
+    // 交互式双视图实验室脚本驱动 (Ch 5.4 专属)
+    // ==========================================
+
+    function toggleQuiz(btn) {
+      const ans = btn.nextElementSibling;
+      if (ans.style.display === 'block') {
+        ans.style.display = 'none';
+        btn.textContent = '👉 点击展开深度解析';
+      } else {
+        ans.style.display = 'block';
+        btn.textContent = '👆 收起深度解析';
+      }
+    }
+
+    // 2x2 线性代数微型引擎
+    const Math2D = {
+      solveEigen(a, b, c, d) {
+        const tr = a + d;
+        const det = a * d - b * c;
+        const disc = tr * tr - 4 * det;
+
+        if (disc < -1e-7) {
+          // 复数特征值
+          const realPart = tr / 2;
+          const imagPart = Math.sqrt(-disc) / 2;
+          return { isReal: false, l1: realPart, l2: imagPart, v1: null, v2: null, diagonalizable: false };
+        }
+
+        const sqrtDisc = Math.sqrt(Math.max(0, disc));
+        const l1 = (tr + sqrtDisc) / 2;
+        const l2 = (tr - sqrtDisc) / 2;
+
+        // 特征向量求解 helper
+        function getVec(lambda) {
+          // (a - lambda) x + b y = 0
+          // c x + (d - lambda) y = 0
+          const r1x = a - lambda, r1y = b;
+          const r2x = c, r2y = d - lambda;
+          let vx = 0, vy = 0;
+          if (Math.abs(r1y) > 1e-7) {
+            vx = 1; vy = -r1x / r1y;
+          } else if (Math.abs(r1x) > 1e-7) {
+            vx = -r1y / r1x; vy = 1;
+          } else if (Math.abs(r2y) > 1e-7) {
+            vx = 1; vy = -r2x / r2y;
+          } else if (Math.abs(r2x) > 1e-7) {
+            vx = -r2y / r2x; vy = 1;
+          } else {
+            // 全零矩阵
+            return { x: 1, y: 0 };
+          }
+          const len = Math.hypot(vx, vy);
+          return { x: vx / len, y: vy / len };
+        }
+
+        let v1 = getVec(l1);
+        let v2 = getVec(l2);
+
+        // 判断是否重根缺陷
+        let isDefective = false;
+        if (Math.abs(l1 - l2) < 1e-5) {
+          // 检验 (A - lambda I) 是否为零矩阵
+          if (Math.abs(a - l1) > 1e-5 || Math.abs(b) > 1e-5 || Math.abs(c) > 1e-5 || Math.abs(d - l1) > 1e-5) {
+            isDefective = true;
+            v2 = null;
+          } else {
+            // 是标量倍数单位矩阵，几何重数 2
+            v1 = { x: 1, y: 0 };
+            v2 = { x: 0, y: 1 };
+          }
+        }
+
+        return {
+          isReal: true,
+          l1, l2,
+          v1, v2,
+          diagonalizable: !isDefective
+        };
+      },
+
+      applyMat(a, b, c, d, p) {
+        return {
+          x: a * p.x + b * p.y,
+          y: c * p.x + d * p.y
+        };
+      },
+
+      matPower(a, b, c, d, k) {
+        let ra = 1, rb = 0, rc = 0, rd = 1;
+        let ba = a, bb = b, bc = c, bd = d;
+        let p = k;
+        while (p > 0) {
+          if (p & 1) {
+            const na = ra * ba + rb * bc;
+            const nb = ra * bb + rb * bd;
+            const nc = rc * ba + rd * bc;
+            const nd = rc * bb + rd * bd;
+            ra = na; rb = nb; rc = nc; rd = nd;
+          }
+          const nba = ba * ba + bb * bc;
+          const nbb = ba * bb + bb * bd;
+          const nbc = bc * ba + bd * bc;
+          const nbd = bc * bb + bd * bd;
+          ba = nba; bb = nbb; bc = nbc; bd = nbd;
+          p >>= 1;
+        }
+        return [ra, rb, rc, rd];
+      }
+    };
+
+    // DOM 元素引用
+    const matAInput = document.getElementById('mat-a');
+    const matBInput = document.getElementById('mat-b');
+    const matCInput = document.getElementById('mat-c');
+    const matDInput = document.getElementById('mat-d');
+    const sliderPower = document.getElementById('slider-power');
+    const powerDisplay = document.getElementById('power-display');
+    const statEvals = document.getElementById('stat-evals');
+    const statStatus = document.getElementById('stat-status');
+
+    const canvasReal = document.getElementById('canvas-real');
+    const ctxReal = canvasReal.getContext('2d');
+    const canvasEigen = document.getElementById('canvas-eigen');
+    const ctxEigen = canvasEigen.getContext('2d');
+
+    // 默认初始测试向量
+    let testPoint = { x: 1.0, y: 0.5 };
+
+    function getInputs() {
+      return {
+        a: parseFloat(matAInput.value) || 0,
+        b: parseFloat(matBInput.value) || 0,
+        c: parseFloat(matCInput.value) || 0,
+        d: parseFloat(matDInput.value) || 0,
+        k: parseInt(sliderPower.value, 10) || 1
+      };
+    }
+
+    function setPreset(a, b, c, d) {
+      matAInput.value = a;
+      matBInput.value = b;
+      matCInput.value = c;
+      matDInput.value = d;
+      render();
+    }
+
+    // 预设按钮事件
+    document.getElementById('btn-preset-distinct').addEventListener('click', (e) => {
+      setPreset(1.5, 0.5, 0.5, 1.5);
+      setActivePresetBtn(e.target);
+    });
+    document.getElementById('btn-preset-symmetric').addEventListener('click', (e) => {
+      setPreset(1.2, 0.6, 0.6, 0.4);
+      setActivePresetBtn(e.target);
+    });
+    document.getElementById('btn-preset-shear').addEventListener('click', (e) => {
+      setPreset(1.0, 1.0, 0.0, 1.0);
+      setActivePresetBtn(e.target);
+    });
+    document.getElementById('btn-preset-projection').addEventListener('click', (e) => {
+      setPreset(1.0, 0.0, 0.0, 0.0);
+      setActivePresetBtn(e.target);
+    });
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      testPoint = { x: 1.0, y: 0.5 };
+      sliderPower.value = 1;
+      powerDisplay.textContent = '1';
+      render();
+    });
+
+    function setActivePresetBtn(activeBtn) {
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        if (btn.id.startsWith('btn-preset-')) btn.classList.remove('active');
+      });
+      activeBtn.classList.add('active');
+    }
+
+    [matAInput, matBInput, matCInput, matDInput].forEach(inp => {
+      inp.addEventListener('input', () => {
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          if (btn.id.startsWith('btn-preset-')) btn.classList.remove('active');
+        });
+        render();
+      });
+    });
+
+    sliderPower.addEventListener('input', () => {
+      powerDisplay.textContent = sliderPower.value;
+      render();
+    });
+
+    // 坐标系转换工具
+    function toCanvas(pt, width, height, scale) {
+      return {
+        x: width / 2 + pt.x * scale,
+        y: height / 2 - pt.y * scale
+      };
+    }
+
+    function drawGrid(ctx, w, h, scale) {
+      ctx.clearRect(0, 0, w, h);
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+
+      const cx = w / 2;
+      const cy = h / 2;
+
+      for (let x = cx % scale; x < w; x += scale) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, h);
+        ctx.stroke();
+      }
+      for (let y = cy % scale; y < h; y += scale) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(w, y);
+        ctx.stroke();
+      }
+
+      // 坐标主轴
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+      ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+      ctx.stroke();
+    }
+
+    function drawVector(ctx, from, to, color, label, lineWidth = 2.5) {
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = lineWidth;
+
+      ctx.beginPath();
+      ctx.moveTo(from.x, from.y);
+      ctx.lineTo(to.x, to.y);
+      ctx.stroke();
+
+      // 绘制箭头
+      const headlen = 8;
+      const angle = Math.atan2(to.y - from.y, to.x - from.x);
+      ctx.beginPath();
+      ctx.moveTo(to.x, to.y);
+      ctx.lineTo(to.x - headlen * Math.cos(angle - Math.PI / 6), to.y - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(to.x - headlen * Math.cos(angle + Math.PI / 6), to.y - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = 'bold 12px "Fira Code", monospace';
+        ctx.fillText(label, to.x + 8, to.y - 4);
+      }
+    }
+
+    function render() {
+      const { a, b, c, d, k } = getInputs();
+      const eigen = Math2D.solveEigen(a, b, c, d);
+
+      // 更新状态指示栏
+      if (!eigen.isReal) {
+        statEvals.textContent = `λ = ${eigen.l1.toFixed(2)} ± ${eigen.l2.toFixed(2)}i (复特征值)`;
+        statStatus.textContent = '实数域不可对角化 (含纯旋转分量)';
+        statStatus.parentElement.style.background = 'rgba(244, 63, 94, 0.15)';
+        statStatus.style.color = 'var(--accent-rose)';
+      } else if (!eigen.diagonalizable) {
+        statEvals.textContent = `λ₁ = λ₂ = ${eigen.l1.toFixed(2)} (重根)`;
+        statStatus.textContent = '亏损矩阵 (不可对角化！缺少特征向量)';
+        statStatus.parentElement.style.background = 'rgba(244, 63, 94, 0.15)';
+        statStatus.style.color = 'var(--accent-rose)';
+      } else {
+        statEvals.textContent = `λ₁ = ${eigen.l1.toFixed(2)}, λ₂ = ${eigen.l2.toFixed(2)}`;
+        statStatus.textContent = '可对角化 (特征向量完备)';
+        statStatus.parentElement.style.background = 'rgba(52, 211, 153, 0.15)';
+        statStatus.style.color = 'var(--accent-green)';
+      }
+
+      const w = canvasReal.width;
+      const h = canvasReal.height;
+      const scale = 48; // 每单位 48px
+
+      // ----------------------------------------------------
+      // 1. 绘制左视图：现实笛卡尔空间 (直角坐标系)
+      // ----------------------------------------------------
+      drawGrid(ctxReal, w, h, scale);
+      const originR = { x: w / 2, y: h / 2 };
+
+      // 绘制特征向量主轴线（无限延长线）
+      if (eigen.isReal && eigen.v1) {
+        ctxReal.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+        ctxReal.lineWidth = 1.5;
+        ctxReal.setLineDash([5, 5]);
+        ctxReal.beginPath();
+        ctxReal.moveTo(originR.x - eigen.v1.x * 300, originR.y + eigen.v1.y * 300);
+        ctxReal.lineTo(originR.x + eigen.v1.x * 300, originR.y - eigen.v1.y * 300);
+        ctxReal.stroke();
+        ctxReal.setLineDash([]);
+        
+        const ptV1 = toCanvas({ x: eigen.v1.x * 1.6, y: eigen.v1.y * 1.6 }, w, h, scale);
+        drawVector(ctxReal, originR, ptV1, '#38bdf8', `v₁ (λ₁=${eigen.l1.toFixed(2)})`, 2);
+      }
+
+      if (eigen.isReal && eigen.v2) {
+        ctxReal.strokeStyle = 'rgba(192, 132, 252, 0.4)';
+        ctxReal.lineWidth = 1.5;
+        ctxReal.setLineDash([5, 5]);
+        ctxReal.beginPath();
+        ctxReal.moveTo(originR.x - eigen.v2.x * 300, originR.y + eigen.v2.y * 300);
+        ctxReal.lineTo(originR.x + eigen.v2.x * 300, originR.y - eigen.v2.y * 300);
+        ctxReal.stroke();
+        ctxReal.setLineDash([]);
+
+        const ptV2 = toCanvas({ x: eigen.v2.x * 1.6, y: eigen.v2.y * 1.6 }, w, h, scale);
+        drawVector(ctxReal, originR, ptV2, '#c084fc', `v₂ (λ₂=${eigen.l2.toFixed(2)})`, 2);
+      }
+
+      // 计算动力系统轨迹点 x_0, x_1, ..., x_k
+      let trajReal = [ { ...testPoint } ];
+      let cur = { ...testPoint };
+      for (let step = 1; step <= k; step++) {
+        cur = Math2D.applyMat(a, b, c, d, cur);
+        trajReal.push({ ...cur });
+      }
+
+      // 绘制演化折线
+      ctxReal.strokeStyle = 'rgba(251, 191, 36, 0.5)';
+      ctxReal.lineWidth = 2;
+      ctxReal.beginPath();
+      for (let i = 0; i < trajReal.length; i++) {
+        const cp = toCanvas(trajReal[i], w, h, scale);
+        if (i === 0) ctxReal.moveTo(cp.x, cp.y);
+        else ctxReal.lineTo(cp.x, cp.y);
+      }
+      ctxReal.stroke();
+
+      // 绘制各轨迹点
+      trajReal.forEach((pt, idx) => {
+        const cp = toCanvas(pt, w, h, scale);
+        ctxReal.fillStyle = idx === 0 ? '#34d399' : (idx === k ? '#f43f5e' : '#fbbf24');
+        ctxReal.beginPath();
+        ctxReal.arc(cp.x, cp.y, idx === k ? 5.5 : 4, 0, Math.PI * 2);
+        ctxReal.fill();
+
+        ctxReal.font = '11px "Fira Code", monospace';
+        ctxReal.fillStyle = '#94a3b8';
+        ctxReal.fillText(`x_${idx}`, cp.x + 6, cp.y - 6);
+      });
+
+      // ----------------------------------------------------
+      // 2. 绘制右视图：特征解耦空间 (以特征向量为坐标轴)
+      // ----------------------------------------------------
+      drawGrid(ctxEigen, w, h, scale);
+      const originE = { x: w / 2, y: h / 2 };
+
+      if (!eigen.isReal || !eigen.diagonalizable) {
+        // 不可对角化提示
+        ctxEigen.fillStyle = 'rgba(244, 63, 94, 0.85)';
+        ctxEigen.font = 'bold 14px "Inter", sans-serif';
+        ctxEigen.textAlign = 'center';
+        ctxEigen.fillText('⚠️ 当前矩阵无法在实数域对角化', w / 2, h / 2 - 12);
+        ctxEigen.font = '12px "Inter", sans-serif';
+        ctxEigen.fillStyle = '#94a3b8';
+        ctxEigen.fillText('（无法找到两个线性无关的特征轴来构成解耦坐标系）', w / 2, h / 2 + 12);
+        ctxEigen.textAlign = 'start';
+        return;
+      }
+
+      // 坐标轴标签 (特征轴 1 与特征轴 2)
+      ctxEigen.font = 'bold 12px "Fira Code", monospace';
+      ctxEigen.fillStyle = '#38bdf8';
+      ctxEigen.fillText('特征主轴 u (v₁ 方向)', w - 140, h / 2 - 8);
+      ctxEigen.fillStyle = '#c084fc';
+      ctxEigen.fillText('特征主轴 v (v₂ 方向)', w / 2 + 8, 24);
+
+      // 解耦坐标系下的初值坐标 [c1, c2]^T = P^(-1) * x0
+      // P = [v1.x  v2.x]
+      //     [v1.y  v2.y]
+      const detP = eigen.v1.x * eigen.v2.y - eigen.v2.x * eigen.v1.y;
+      if (Math.abs(detP) < 1e-7) return;
+
+      const c1 = (eigen.v2.y * testPoint.x - eigen.v2.x * testPoint.y) / detP;
+      const c2 = (-eigen.v1.y * testPoint.x + eigen.v1.x * testPoint.y) / detP;
+
+      // 在解耦空间下计算轨迹：(c1 * λ1^step, c2 * λ2^step)
+      let trajEigen = [];
+      for (let step = 0; step <= k; step++) {
+        const u = c1 * Math.pow(eigen.l1, step);
+        const v = c2 * Math.pow(eigen.l2, step);
+        trajEigen.push({ x: u, y: v });
+      }
+
+      // 绘制解耦轨迹折线
+      ctxEigen.strokeStyle = 'rgba(52, 211, 153, 0.6)';
+      ctxEigen.lineWidth = 2;
+      ctxEigen.beginPath();
+      for (let i = 0; i < trajEigen.length; i++) {
+        const cp = toCanvas(trajEigen[i], w, h, scale);
+        if (i === 0) ctxEigen.moveTo(cp.x, cp.y);
+        else ctxEigen.lineTo(cp.x, cp.y);
+      }
+      ctxEigen.stroke();
+
+      // 绘制解耦各轨迹点与正交投影虚线
+      trajEigen.forEach((pt, idx) => {
+        const cp = toCanvas(pt, w, h, scale);
+        ctxEigen.fillStyle = idx === 0 ? '#34d399' : (idx === k ? '#f43f5e' : '#38bdf8');
+        ctxEigen.beginPath();
+        ctxEigen.arc(cp.x, cp.y, idx === k ? 5.5 : 4, 0, Math.PI * 2);
+        ctxEigen.fill();
+
+        ctxEigen.font = '11px "Fira Code", monospace';
+        ctxEigen.fillStyle = '#94a3b8';
+        ctxEigen.fillText(`u_${idx}`, cp.x + 6, cp.y - 6);
+      });
+    }
+
+    // 初始化渲染
+    window.addEventListener('load', () => {
+      render();
+    });
+  </script>
 </body>
 </html>

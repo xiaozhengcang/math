@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';" id="MathJax-script" async></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -268,92 +272,427 @@
           <h1 class="module-title">Ch 7.3: 实对称矩阵正交对角化与谱分解</h1>
         </div>
 
-        
-<div class="card">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-blue); color: #000;">核心概念</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">1. 实对称矩阵与谱定理 (Spectral Theorem)</h2>
-  </div>
-  <div class="card-body">
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
-      <h4 style="color: var(--accent-blue);">👑 实对称矩阵谱定理 (Spectral Theorem for Symmetric Matrices)</h4>
-      <p>若 $A$ 是实对称矩阵（$A = A^T$），则它拥有线性代数中最完美的性质：</p>
-      <ol style="margin-left: 1.5rem; line-height: 1.8;">
-        <li>$A$ 的所有特征值 $\lambda_1, \dots, \lambda_n$ <strong>必定全为实数</strong>。</li>
-        <li>属于不同特征值的特征向量<strong>彼此严格正交</strong>。</li>
-        <li>$A$ <strong>必定可以正交对角化 (Orthogonally Diagonalizable)</strong>：
-          $$A = Q \Lambda Q^T$$
-          其中 $Q = [\mathbf{q}_1 \dots \mathbf{q}_n]$ 为正交矩阵 ($Q^T Q = I$)，$\Lambda = \text{diag}(\lambda_1, \dots, \lambda_n)$。
-        </li>
-      </ol>
-      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
-      <p><strong>精简严密代数证明：</strong></p>
-      <ul style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.9rem; color: var(--text-muted);">
-        <li><strong>实特征值证明：</strong> $\lambda \|\mathbf{x}\|^2 = \mathbf{x}^* (A\mathbf{x}) = \mathbf{x}^* A^* \mathbf{x} = (A\mathbf{x})^* \mathbf{x} = (\lambda \mathbf{x})^* \mathbf{x} = \bar{\lambda} \|\mathbf{x}\|^2 \implies \lambda = \bar{\lambda} \implies \lambda \in \mathbb{R}$。</li>
-        <li><strong>正交性证明：</strong> $\lambda_1 (\mathbf{v}_1^T \mathbf{v}_2) = (A\mathbf{v}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T A^T \mathbf{v}_2 = \mathbf{v}_1^T (A\mathbf{v}_2) = \lambda_2 (\mathbf{v}_1^T \mathbf{v}_2)$。由于 $\lambda_1 \neq \lambda_2$，必有 $\mathbf{v}_1^T \mathbf{v}_2 = 0$！ $\blacksquare$</li>
-      </ul>
-    </div>
-  </div>
-</div>
+        <!-- 导言：认知跃迁与完美对称 -->
+        <div class="intuition-box">
+          <div class="box-title">💡 认知跃迁：为什么“对称矩阵”被誉为线性代数中最完美的贵族？</div>
+          <p>
+            在前几章中，普通的矩阵可能遭遇各种病态折磨：特征值可能产生虚数（发生旋转无法直观对角化）、特征向量可能线性相关（发生亏损导致无法对角化 $A \neq PDP^{-1}$）。
+          </p>
+          <p>
+            然而，只要一个矩阵满足极简的转置对称性 <strong>$A = A^T$</strong>，所有丑陋与病态瞬间一扫而空！自然界的全部优待都降临于此：
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <strong style="color: var(--accent-blue);">💎 特征值必定全为实数</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\lambda_i \in \mathbb{R}$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                无论多高阶的对称矩阵，其特征值绝对不会出现虚数部，变换纯粹是沿特定方向的真实拉伸！
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.25);">
+              <strong style="color: var(--accent-purple);">📐 特征轴天生两两正交</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$\mathbf{q}_i \perp \mathbf{q}_j \quad (i \neq j)$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                不同特征值对应的特征向量绝对互相垂直，构成整个空间的完美直角刚性坐标系！
+              </p>
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25);">
+              <strong style="color: var(--accent-green);">👑 必定可正交对角化</strong>
+              <div style="font-size: 0.95rem; margin-top: 0.4rem;">$A = Q \Lambda Q^T$</div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">
+                再也不需要求逆矩阵 $P^{-1}$，过往复杂的变换直接退化为刚体旋转 $Q$ 与主轴拉伸 $\Lambda$ 的完美组合！
+              </p>
+            </div>
+          </div>
+        </div>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-purple); color: #fff;">谱分解</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">2. 🌈 谱分解 (Spectral Decomposition) 与二次型正定性</h2>
-  </div>
-  <div class="card-body">
-    <p>将正交对角化按外积视角展开：</p>
-    <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0;">
-      $$A = \sum_{i=1}^n \lambda_i \mathbf{q}_i \mathbf{q}_i^T$$
-    </div>
-    <p>每一个 $\mathbf{q}_i \mathbf{q}_i^T$ 都是投影到特征轴 $\mathbf{q}_i$ 上的<strong>秩为 1 的正交投影矩阵</strong>！</p>
-    
-    <div class="intuition-box" style="padding: 1rem; background: rgba(168, 85, 247, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 4px; margin-top: 1rem;">
-      <h4 style="color:var(--accent-purple); margin-bottom:0.4rem;">🎯 二次型与正定矩阵 (Positive Definite Matrix)</h4>
-      <p style="font-size:0.9rem; color:var(--text-muted); line-height:1.7;">
-        实对称矩阵定义的二次能量面 $q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x} = \sum \lambda_i y_i^2$。<br>
-        若所有特征值 $\lambda_i > 0$，则 $q(\mathbf{x}) > 0 \ (\forall \mathbf{x} \neq \mathbf{0})$，称 $A$ 为<strong>正定矩阵 (Positive Definite, $A \succ 0$)</strong>，几何图像为严格向上开口的抛物超椭球面（凸优化全局极小值的保障）。
-      </p>
-    </div>
-  </div>
-</div>
+        <!-- 1. 谱定理严密证明与几何意义 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">核心丰碑</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 实对称矩阵谱定理 (Spectral Theorem) 及其极美证明</h2>
+          </div>
+          <div class="card-body">
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+              <h4 style="color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 0.75rem;">
+                👑 实对称矩阵谱定理 (Spectral Theorem for Symmetric Matrices)
+              </h4>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                设 $A \in \mathbb{R}^{n \times n}$ 为实对称矩阵（$A = A^T$），则：
+              </p>
+              <ol style="margin-left: 1.5rem; line-height: 2;">
+                <li>$A$ 的所有特征值 $\lambda_1, \lambda_2, \dots, \lambda_n$ <strong>必定全部为实数</strong>。</li>
+                <li>属于不同特征值的特征向量<strong>彼此严格正交</strong>。</li>
+                <li>存在正交矩阵 $Q$（满足 $Q^T Q = I$），使得 $A$ <strong>正交对角化</strong>：
+                  <div style="font-size: 1.25rem; text-align: center; margin: 0.5rem 0; color: var(--accent-blue);">
+                    $$A = Q \Lambda Q^T = Q \begin{bmatrix} \lambda_1 & & 0 \\ & \ddots & \\ 0 & & \lambda_n \end{bmatrix} Q^T$$
+                  </div>
+                </li>
+              </ol>
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">3. ✍️ 对称矩阵正交对角化手算</h2>
-  </div>
-  <div class="card-body">
-    <div class="example-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px;">
-      <h4 style="color: var(--accent-green);">正交对角化对称矩阵 $A = \begin{bmatrix} 3 & 1 \\ 1 & 3 \end{bmatrix}$</h4>
-      <p>特征方程：$(3-\lambda)^2 - 1 = 0 \implies \lambda_1 = 4, \lambda_2 = 2$。</p>
-      <p>求特征向量：</p>
-      $$\lambda_1 = 4 \implies (A - 4I)\mathbf{v} = \begin{bmatrix} -1 & 1 \\ 1 & -1 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{q}_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
-      $$\lambda_2 = 2 \implies (A - 2I)\mathbf{v} = \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{q}_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} -1 \\ 1 \end{bmatrix}$$
-      <p>谱分解验证：</p>
-      $$A = 4 \cdot \frac{1}{2} \begin{bmatrix} 1 & 1 \\ 1 & 1 \end{bmatrix} + 2 \cdot \frac{1}{2} \begin{bmatrix} 1 & -1 \\ -1 & 1 \end{bmatrix} = \begin{bmatrix} 2 & 2 \\ 2 & 2 \end{bmatrix} + \begin{bmatrix} 1 & -1 \\ -1 & 1 \end{bmatrix} = \begin{bmatrix} 3 & 1 \\ 1 & 3 \end{bmatrix}$$
-    </div>
-  </div>
-</div>
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
 
-<div class="card" style="margin-top: 2rem;">
-  <div class="card-header">
-    <span class="badge" style="background: var(--accent-amber); color: #000;">Python 实战</span>
-    <h2 class="card-title" style="margin-top: 0.5rem;">4. 💻 NumPy 对称矩阵谱分解</h2>
-  </div>
-  <div class="card-body">
-    <pre class="code-block" style="background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem;"><code>import numpy as np
+              <h5 style="color: var(--accent-green); margin-bottom: 0.5rem;">✍️ 性质 1 严谨证明：特征值必为实数</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                设 $\lambda \in \mathbb{C}$ 为 $A$ 的特征值，$\mathbf{x} \in \mathbb{C}^n$ 为对应的非零特征向量（$A\mathbf{x} = \lambda \mathbf{x}$）。
+                考虑复共轭转置内积 $\mathbf{x}^* A \mathbf{x}$（其中 $\mathbf{x}^* = \bar{\mathbf{x}}^T$）：
+                $$\mathbf{x}^* (A\mathbf{x}) = \mathbf{x}^* (\lambda \mathbf{x}) = \lambda (\mathbf{x}^* \mathbf{x}) = \lambda \|\mathbf{x}\|^2$$
+                另一方面，由于 $A$ 是实对称矩阵，满足 $A^* = \bar{A}^T = A^T = A$：
+                $$\mathbf{x}^* A \mathbf{x} = (A^* \mathbf{x})^* \mathbf{x} = (A\mathbf{x})^* \mathbf{x} = (\lambda \mathbf{x})^* \mathbf{x} = \bar{\lambda} (\mathbf{x}^* \mathbf{x}) = \bar{\lambda} \|\mathbf{x}\|^2$$
+                两式相减得 $(\lambda - \bar{\lambda}) \|\mathbf{x}\|^2 = 0$。由于 $\mathbf{x} \neq \mathbf{0}$，必有 $\lambda = \bar{\lambda}$，即虚部为 0，<strong>$\lambda \in \mathbb{R}$ 必为纯实数</strong>！$\blacksquare$
+              </p>
 
-A = np.array([[3, 1], [1, 3]], dtype=float)
+              <h5 style="color: var(--accent-purple); margin-top: 1rem; margin-bottom: 0.5rem;">✍️ 性质 2 严谨证明：互异特征值特征向量正交</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                设 $A\mathbf{v}_1 = \lambda_1 \mathbf{v}_1$，$A\mathbf{v}_2 = \lambda_2 \mathbf{v}_2$，且 $\lambda_1 \neq \lambda_2$。计算点积项：
+                $$\lambda_1 (\mathbf{v}_1^T \mathbf{v}_2) = (\lambda_1 \mathbf{v}_1)^T \mathbf{v}_2 = (A\mathbf{v}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T (A^T \mathbf{v}_2)$$
+                由于对称性 $A^T = A$，右边变为：
+                $$\mathbf{v}_1^T (A \mathbf{v}_2) = \mathbf{v}_1^T (\lambda_2 \mathbf{v}_2) = \lambda_2 (\mathbf{v}_1^T \mathbf{v}_2)$$
+                整理得：
+                $$(\lambda_1 - \lambda_2) (\mathbf{v}_1 \cdot \mathbf{v}_2) = 0$$
+                因为 $\lambda_1 \neq \lambda_2$，括号内差值非零，故必须且只能是 <strong>$\mathbf{v}_1 \cdot \mathbf{v}_2 = 0$</strong>！特征向量天生垂直！$\blacksquare$
+              </p>
+            </div>
+          </div>
+        </div>
 
-# 专用于对称矩阵的 eigh 分解
-evals, Q = np.linalg.eigh(A)
-print("特征值:", evals)
-print("正交特征向量矩阵 Q:\n", Q)
-print("重构 A:\n", Q @ np.diag(evals) @ Q.T)</code></pre>
-  </div>
-</div>
+        <!-- 2. 谱分解与外积视角 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">空间解构</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 谱分解 (Spectral Decomposition)：矩阵的外积投影原子化</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              将正交对角化公式 $A = Q \Lambda Q^T$ 按照列乘行（外积）视角展开：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; font-size: 1.15rem; text-align: center; margin: 1rem 0;">
+              $$A = \begin{bmatrix} \mathbf{q}_1 & \dots & \mathbf{q}_n \end{bmatrix} \begin{bmatrix} \lambda_1 & & 0 \\ & \ddots & \\ 0 & & \lambda_n \end{bmatrix} \begin{bmatrix} \mathbf{q}_1^T \\ \vdots \\ \mathbf{q}_n^T \end{bmatrix} = \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T + \lambda_2 \mathbf{q}_2 \mathbf{q}_2^T + \dots + \lambda_n \mathbf{q}_n \mathbf{q}_n^T$$
+            </div>
+            <div style="font-size: 1.35rem; text-align: center; font-weight: bold; margin: 0.75rem 0; color: var(--accent-purple);">
+              $$A = \sum_{i=1}^n \lambda_i P_i \quad \text{其中 } P_i = \mathbf{q}_i \mathbf{q}_i^T$$
+            </div>
 
+            <div class="intuition-box" style="margin-top: 1rem;">
+              <strong style="color: var(--accent-green);">🌌 谱分解的深刻物理与几何图像</strong>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.4rem;">
+                每一个矩阵 $P_i = \mathbf{q}_i \mathbf{q}_i^T$ 都是一个<strong>秩为 1 的正交投影算子</strong>，它精确地将向量投射到第 $i$ 根主轴上：
+                <br>• $P_i^2 = P_i, \quad P_i^T = P_i$（标准对称幂等投影矩阵）
+                <br>• $P_i P_j = \mathbf{q}_i (\mathbf{q}_i^T \mathbf{q}_j) \mathbf{q}_j^T = \mathbf{0} \ (i \neq j)$（各投影算子彼此正交隔离、零干扰）
+                <br>• $\sum_{i=1}^n P_i = I$（投影完全覆盖，全空间恒等分解）
+                <br><strong>结论：</strong>任何实对称矩阵变换，本质上不过是<strong>将向量分别投影到 $n$ 根垂直正交的坐标轴上，分别放大 $\lambda_i$ 倍，再线性叠加起来</strong>！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 二次型、主轴定理与正定矩阵 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">能量曲面与优化</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 二次型 (Quadratic Forms)、主轴定理与正定矩阵五大充要判据</h2>
+          </div>
+          <div class="card-body">
+            <h3 style="color: var(--accent-green);">3.1 二次型几何与主轴定理 (Principal Axis Theorem)</h3>
+            <p>
+              在多元微积分、物理学能量、以及机器学习损失函数中，处处充满二次多项式 $q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$。
+              当存在交叉项（如 $2b x_1 x_2$）时，几何曲面是倾斜旋转的。
+            </p>
+            <p>
+              通过正交基变换 $\mathbf{x} = Q\mathbf{y}$，二次型瞬间完成“主轴对齐”，交叉项全部消灭：
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0; color: var(--accent-green);">
+              $$q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x} = (Q\mathbf{y})^T A (Q\mathbf{y}) = \mathbf{y}^T (Q^T A Q) \mathbf{y} = \mathbf{y}^T \Lambda \mathbf{y} = \lambda_1 y_1^2 + \lambda_2 y_2^2 + \dots + \lambda_n y_n^2$$
+            </div>
+
+            <!-- SVG Graphic: Quadratic Energy Contours and Principal Axes -->
+            <div style="text-align:center; margin: 1.5rem 0;">
+              <svg width="600" height="230" viewBox="0 0 600 230" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <defs>
+                  <pattern id="grid73" width="25" height="25" patternUnits="userSpaceOnUse">
+                    <path d="M 25 0 L 0 0 0 25" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+                  </pattern>
+                </defs>
+                <rect width="600" height="230" fill="url(#grid73)" />
+
+                <!-- Left: Tilted Ellipse (Coupled) -->
+                <g transform="translate(160, 115) rotate(-35)">
+                  <!-- Ellipses -->
+                  <ellipse cx="0" cy="0" rx="90" ry="45" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="2"/>
+                  <ellipse cx="0" cy="0" rx="60" ry="30" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1.5"/>
+                  <ellipse cx="0" cy="0" rx="30" ry="15" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1"/>
+
+                  <!-- Principal Axes q1, q2 -->
+                  <line x1="-110" y1="0" x2="110" y2="0" stroke="#4ade80" stroke-width="2.5"/>
+                  <text x="75" y="-8" fill="#4ade80" font-size="11" font-weight="bold">主轴 q₁</text>
+
+                  <line x1="0" y1="-65" x2="0" y2="65" stroke="#c084fc" stroke-width="2.5"/>
+                  <text x="8" y="-45" fill="#c084fc" font-size="11" font-weight="bold">主轴 q₂</text>
+                </g>
+                <text x="160" y="210" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">耦合倾斜椭圆 (含交叉项 2x₁x₂)</text>
+
+                <!-- Arrow pointing right -->
+                <path d="M 290 115 L 330 115 M 325 110 L 330 115 L 325 120" fill="none" stroke="#f8fafc" stroke-width="2"/>
+                <text x="310" y="105" fill="#94a3b8" font-size="11" text-anchor="middle">正交旋转 Q</text>
+
+                <!-- Right: Axis-Aligned Ellipse (Decoupled) -->
+                <g transform="translate(460, 115)">
+                  <ellipse cx="0" cy="0" rx="90" ry="45" fill="rgba(74, 222, 128, 0.1)" stroke="#4ade80" stroke-width="2"/>
+                  <ellipse cx="0" cy="0" rx="60" ry="30" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-width="1.5"/>
+                  <ellipse cx="0" cy="0" rx="30" ry="15" fill="rgba(74, 222, 128, 0.2)" stroke="#4ade80" stroke-width="1"/>
+
+                  <line x1="-110" y1="0" x2="110" y2="0" stroke="#f8fafc" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <text x="85" y="-8" fill="#4ade80" font-size="11" font-weight="bold">y₁ 轴 (λ₁)</text>
+
+                  <line x1="0" y1="-65" x2="0" y2="65" stroke="#f8fafc" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <text x="8" y="-45" fill="#c084fc" font-size="11" font-weight="bold">y₂ 轴 (λ₂)</text>
+                </g>
+                <text x="460" y="210" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">解耦标准椭圆: λ₁y₁² + λ₂y₂² = C</text>
+              </svg>
+            </div>
+
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 正定矩阵 (Positive Definite, $A \succ 0$) 五大充要判定金律</h3>
+            <p>
+              实对称矩阵 $A$ 称为<strong>正定矩阵 (Positive Definite)</strong>，若对任意非零向量 $\mathbf{x} \neq \mathbf{0}$，二次型恒严格正：$\mathbf{x}^T A \mathbf{x} > 0$。以下 5 条判定准则<strong>在数学上彼此完全等价</strong>：
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-blue);">
+                <strong style="color: var(--accent-blue);">① 特征值判据</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">$A$ 的所有特征值严格大于 0：$\lambda_1, \dots, \lambda_n > 0$。</p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-purple);">
+                <strong style="color: var(--accent-purple);">② 顺序主子式判据 (Sylvester)</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">$A$ 的所有左上角前 $k \times k$ 阶主子式行列式全为正数（$\det A_k > 0$）。</p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-green);">
+                <strong style="color: var(--accent-green);">③ 主元判据 (Pivot)</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">消元过程中所有主元全为正数（$d_1, d_2, \dots, d_n > 0$ 无需行交换）。</p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-amber);">
+                <strong style="color: var(--accent-amber);">④ Cholesky 分解判据</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">存在唯一主对角元全正的下三角矩阵 $L$，使得 $A = L L^T$。</p>
+              </div>
+              <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 6px; border-left: 3px solid var(--accent-rose);">
+                <strong style="color: var(--accent-rose);">⑤ 凸优化几何意义</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">二次曲面形如向上开口的严密超碗面，极值点 $\mathbf{x}=\mathbf{0}$ 是唯一的全局绝对极小值！</p>
+              </div>
+            </div>
+
+            <!-- 瑞利商 -->
+            <div style="margin-top: 1.25rem; padding: 1rem; background: rgba(251, 191, 36, 0.06); border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.25);">
+              <h5 style="color: #fbbf24; margin-bottom: 0.35rem;">🏆 瑞利商 (Rayleigh Quotient) 与极值极小极大定理</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                定义标量函数 $R(\mathbf{x}) = \frac{\mathbf{x}^T A \mathbf{x}}{\mathbf{x}^T \mathbf{x}}$。根据谱分解，对任意非零向量 $\mathbf{x}$，瑞利商被严格钳制在最小与最大特征值之间：
+                $$\lambda_{\min} \le \frac{\mathbf{x}^T A \mathbf{x}}{\mathbf{x}^T \mathbf{x}} \le \lambda_{\max}$$
+                当 $\mathbf{x}$ 沿着最大特征向量 $\mathbf{q}_{\max}$ 时取最大值 $\lambda_{\max}$！这一性质是现代主成分分析 (PCA) 与图谱聚类算法寻找第一主成分的核心数学来源！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 交互实验台：二次型能量曲面与主轴旋转实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧪 交互实验台：二次型主轴旋转与正定性动态探索</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted);">
+              通过调节二阶对称矩阵 $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$ 的三个参数，实时观察等高线椭圆（或双曲线）主轴的旋转偏转、特征值符号与正定/负定/马鞍面几何形态：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Left Canvas -->
+              <div style="background: #090d16; border-radius: 8px; border: 1px solid var(--border-color); padding: 1rem; text-align: center;">
+                <canvas id="quadCanvas" width="460" height="380" style="width: 100%; max-width: 460px; height: auto; background: #070a12; border-radius: 6px;"></canvas>
+                <div style="display: flex; justify-content: space-around; font-size: 0.82rem; margin-top: 0.75rem;">
+                  <span style="color: #38bdf8;">— 等高线 q(x) = C</span>
+                  <span style="color: #4ade80;">■ 特征轴 q₁ (λ₁)</span>
+                  <span style="color: #c084fc;">■ 特征轴 q₂ (λ₂)</span>
+                </div>
+              </div>
+
+              <!-- Right Controls & Analysis -->
+              <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem; font-size: 0.95rem;">🕹️ 调节对称矩阵参数 $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$</h4>
+                  
+                  <div style="margin-bottom: 0.5rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                      <span>参数 a (x₁² 系数): <strong id="valA" style="color:var(--accent-blue);">3.0</strong></span>
+                    </div>
+                    <input type="range" id="sliderA" min="-4" max="6" step="0.2" value="3" style="width: 100%;">
+                  </div>
+
+                  <div style="margin-bottom: 0.5rem;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                      <span>参数 b (x₁x₂ 耦合项): <strong id="valB" style="color:var(--accent-purple);">1.5</strong></span>
+                    </div>
+                    <input type="range" id="sliderB" min="-4" max="4" step="0.1" value="1.5" style="width: 100%;">
+                  </div>
+
+                  <div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.85rem;">
+                      <span>参数 c (x₂² 系数): <strong id="valC" style="color:var(--accent-green);">3.0</strong></span>
+                    </div>
+                    <input type="range" id="sliderC" min="-4" max="6" step="0.2" value="3" style="width: 100%;">
+                  </div>
+                </div>
+
+                <!-- Live Mathematical Properties -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); flex-grow: 1;">
+                  <h4 style="color: var(--accent-amber); margin-bottom: 0.6rem; font-size: 0.95rem;">📊 实时特征谱与曲面定性</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                    <div>• 特征值 λ₁: <strong id="statL1" style="color:#4ade80;">4.500</strong></div>
+                    <div>• 特征值 λ₂: <strong id="statL2" style="color:#c084fc;">1.500</strong></div>
+                    <div>• 行列式 det(A) = ac - b²: <span id="statDet">6.75</span></div>
+                    <div>• 矩阵曲面定性: <strong id="statDefiniteness" style="color:var(--accent-green);">正定矩阵 (严格凸椭球碗面)</strong></div>
+                    <div>• 主轴旋转角 θ: <span id="statAngle">45.0°</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 经典手算演练：3x3 对称矩阵谱分解 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 经典手算精析：带重根的 3×3 对称矩阵正交对角化全流程</h2>
+          </div>
+          <div class="card-body">
+            <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                【题目】正交对角化实对称矩阵 $A = \begin{bmatrix} 2 & 1 & 1 \\ 1 & 2 & 1 \\ 1 & 1 & 2 \end{bmatrix}$，并写出谱分解外积展开式。
+              </h4>
+              <div style="line-height: 1.9;">
+                <p><strong>第一步：求解特征多项式 $\det(A - \lambda I) = 0$</strong></p>
+                $$\det \begin{bmatrix} 2-\lambda & 1 & 1 \\ 1 & 2-\lambda & 1 \\ 1 & 1 & 2-\lambda \end{bmatrix} = (4 - \lambda)(1 - \lambda)^2 = 0$$
+                <p>求得特征值：单根 $\lambda_1 = 4$，二重特征值 $\lambda_{2,3} = 1$（代数重数为 2）。</p>
+
+                <p style="margin-top: 0.75rem;"><strong>第二步：求单根 $\lambda_1 = 4$ 的特征向量</strong></p>
+                $$(A - 4I)\mathbf{v} = \begin{bmatrix} -2 & 1 & 1 \\ 1 & -2 & 1 \\ 1 & 1 & -2 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix} \implies \mathbf{q}_1 = \frac{1}{\sqrt{3}} \begin{bmatrix} 1 \\ 1 \\ 1 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第三步：求重根 $\lambda = 1$ 的二维特征子空间及 Gram-Schmidt 正交化</strong></p>
+                $$(A - I)\mathbf{v} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 1 & 1 \\ 1 & 1 & 1 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies x_1 + x_2 + x_3 = 0$$
+                <p>由于基础解系有 2 个自由变量，任选两个线性无关解：</p>
+                $$\mathbf{a}_2 = \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}, \quad \mathbf{a}_3 = \begin{bmatrix} 1 \\ 0 \\ -1 \end{bmatrix}$$
+                <p>易见它们都自动垂直于 $\mathbf{q}_1$（$1 \cdot 1 + 1 \cdot (-1) + 1 \cdot 0 = 0$）。但它们内部尚未正交，采用 Gram-Schmidt 正交化：</p>
+                $$\mathbf{u}_2 = \mathbf{a}_2 = \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix} \implies \mathbf{q}_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix}$$
+                $$\mathbf{u}_3 = \mathbf{a}_3 - (\mathbf{a}_3 \cdot \mathbf{q}_2)\mathbf{q}_2 = \begin{bmatrix} 1 \\ 0 \\ -1 \end{bmatrix} - \frac{1}{2} \begin{bmatrix} 1 \\ -1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1/2 \\ 1/2 \\ -1 \end{bmatrix} \implies \mathbf{q}_3 = \frac{1}{\sqrt{6}} \begin{bmatrix} 1 \\ 1 \\ -2 \end{bmatrix}$$
+
+                <p style="margin-top: 0.75rem;"><strong>第四步：组合输出正交矩阵 $Q$ 与谱分解外积展开</strong></p>
+                $$Q = \begin{bmatrix} \frac{1}{\sqrt{3}} & \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{6}} \\ \frac{1}{\sqrt{3}} & -\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{6}} \\ \frac{1}{\sqrt{3}} & 0 & -\frac{2}{\sqrt{6}} \end{bmatrix}, \quad \Lambda = \begin{bmatrix} 4 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+                <p>其谱分解展开为：</p>
+                $$A = 4 \mathbf{q}_1 \mathbf{q}_1^T + 1 \mathbf{q}_2 \mathbf{q}_2^T + 1 \mathbf{q}_3 \mathbf{q}_3^T = 4 \left(\frac{1}{3}\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}\right) + 1 \left(I - \frac{1}{3}\begin{bmatrix}1&1&1\\1&1&1\\1&1&1\end{bmatrix}\right) = \begin{bmatrix}2&1&1\\1&2&1\\1&1&2\end{bmatrix}$$
+                <p style="color: var(--accent-green); font-weight: bold;">
+                  ✓ 结果完美自洽！两个正交投影分量天衣无缝重构原始对称矩阵！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python / NumPy 工业实战演练 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python 工业实战：协方差谱分解与 PCA 主成分提取</h2>
+          </div>
+          <div class="card-body">
+            <p>
+              数据科学中著名的<strong>主成分分析 (PCA)</strong>，其核心就是样本协方差矩阵（天然实对称）的谱分解！下面的 Python 脚本展示了如何利用 `np.linalg.eigh` 极速完成谱分解与特征降维：
+            </p>
+
+            <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.6;"><code>import numpy as np
+
+# 1. 模拟生成具有明显相关性的高维数据 (1000 个样本, 3 个特征)
+np.random.seed(42)
+mean = [0, 0, 0]
+cov_true = np.array([[4.0, 1.8, 0.2],
+                     [1.8, 2.0, 0.5],
+                     [0.2, 0.5, 1.0]])  # 对称正定协方差矩阵
+X = np.random.multivariate_normal(mean, cov_true, size=1000)
+
+# 2. 中心化并计算样本协方差矩阵
+X_centered = X - np.mean(X, axis=0)
+Sigma = (X_centered.T @ X_centered) / (len(X) - 1)
+
+# 3. 对实对称矩阵调用专属高精度算法 eigh (返回升序特征值和正交特征向量)
+eigenvalues, Q = np.linalg.eigh(Sigma)
+
+# 倒序排列：使得最大特征值排在最前
+idx = np.argsort(eigenvalues)[::-1]
+evals_sorted = eigenvalues[idx]
+Q_sorted = Q[:, idx]
+
+print("=== 样本协方差矩阵谱分解结果 ===")
+print("各主轴特征值 (方差贡献):", np.round(evals_sorted, 4))
+explained_variance_ratio = evals_sorted / np.sum(evals_sorted)
+print("方差解释率占比:        ", np.round(explained_variance_ratio * 100, 2), "%")
+
+# 4. 谱分解重构矩阵验证: A = Q @ diag(evals) @ Q^T
+Sigma_reconstructed = Q_sorted @ np.diag(evals_sorted) @ Q_sorted.T
+reconstruction_err = np.linalg.norm(Sigma - Sigma_reconstructed)
+print(f"外积谱分解重构误差 ||A - QΛQ^T||: {reconstruction_err:.2e} (完全精确！)")</code></pre>
+          </div>
+        </div>
+
+        <!-- 7. 交互自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">自我检测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：实对称矩阵与谱分解核心概念挑战</h2>
+          </div>
+          <div class="card-body">
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              
+              <!-- Quiz 1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  1. 关于实对称矩阵 $A$ 的性质，下列说法中<strong>错误</strong>的是：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. $A$ 的全部特征值都是实数</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">B. 只要 $A$ 包含重特征值，其几何重数依然必定等于代数重数（绝不亏损）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">C. $A$ 的特征值必定全为正数</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 属于不同特征值的特征向量必定正交</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  2. 若二次型矩阵 $A$ 具有特征值 $\lambda_1 = 3, \lambda_2 = -2$，则该二次型 $q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$ 的几何曲面类型属于：
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 严格凸的椭球面 (Positive Definite)</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 双曲面 / 马鞍面 (Indefinite 不定二次型，存在负曲率方向)</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 严格凹的倒扣碗面 (Negative Definite)</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 简并的一维抛物柱面</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  3. 谱分解 $A = \sum \lambda_i \mathbf{q}_i \mathbf{q}_i^T$ 中，每一项矩阵 $P_i = \mathbf{q}_i \mathbf{q}_i^T$ 具有何种代数性质？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">A. 是对称且幂等的秩-1 正交投影矩阵（$P_i^T = P_i, P_i^2 = P_i, \text{rank}(P_i)=1$）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">B. 是满秩可逆矩阵</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 是反对称反对角矩阵</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 属于上三角正规矩阵</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
 
         <!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
@@ -384,6 +723,242 @@ print("重构 A:\n", Q @ np.diag(evals) @ Q.T)</code></pre>
       </main>
     </div>
   </div>
+
+
+  <script>
+    // 交互实验台：二次型能量曲面与主轴旋转探索逻辑
+    (function() {
+      const canvas = document.getElementById('quadCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      const sA = document.getElementById('sliderA');
+      const sB = document.getElementById('sliderB');
+      const sC = document.getElementById('sliderC');
+
+      const valA = document.getElementById('valA');
+      const valB = document.getElementById('valB');
+      const valC = document.getElementById('valC');
+
+      const statL1 = document.getElementById('statL1');
+      const statL2 = document.getElementById('statL2');
+      const statDet = document.getElementById('statDet');
+      const statDefiniteness = document.getElementById('statDefiniteness');
+      const statAngle = document.getElementById('statAngle');
+
+      function render() {
+        const w = canvas.width;
+        const h = canvas.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const scale = 36; // pixels per unit
+
+        ctx.clearRect(0, 0, w, h);
+
+        const a = parseFloat(sA.value);
+        const b = parseFloat(sB.value);
+        const c = parseFloat(sC.value);
+
+        valA.textContent = a.toFixed(1);
+        valB.textContent = b.toFixed(1);
+        valC.textContent = c.toFixed(1);
+
+        // Eigenvalues of 2x2 symmetric matrix: det( [a-λ, b; b, c-λ] ) = 0
+        // λ² - (a+c)λ + (ac - b²) = 0
+        const tr = a + c;
+        const det = a * c - b * b;
+        const disc = Math.max(0, tr * tr - 4 * det);
+        const l1 = (tr + Math.sqrt(disc)) / 2;
+        const l2 = (tr - Math.sqrt(disc)) / 2;
+
+        // Principal axis rotation angle θ: tan(2θ) = 2b / (a - c)
+        let theta = 0;
+        if (Math.abs(b) > 1e-6) {
+          theta = 0.5 * Math.atan2(2 * b, a - c);
+        } else {
+          theta = a >= c ? 0 : Math.PI / 2;
+        }
+
+        // Draw background grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+        ctx.lineWidth = 1;
+        for (let x = cx % scale; x < w; x += scale) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = cy % scale; y < h; y += scale) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Main Axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+
+        // Draw Contours of q(x, y) = a x² + 2b xy + c y² = C
+        // In eigen-coordinates: l1 y1² + l2 y2² = C
+        const constants = [1.0, 3.0, 6.0];
+        constants.forEach(C => {
+          if (l1 > 0 && l2 > 0) {
+            // Positive definite: Ellipses
+            const rx = Math.sqrt(C / l1) * scale;
+            const ry = Math.sqrt(C / l2) * scale;
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(-theta);
+            ctx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          } else if (l1 < 0 && l2 < 0) {
+            // Negative definite: plot for negative C
+            const rx = Math.sqrt(-C / l1) * scale;
+            const ry = Math.sqrt(-C / l2) * scale;
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(-theta);
+            ctx.strokeStyle = 'rgba(244, 63, 94, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+          } else if (Math.abs(l1) > 1e-4 && Math.abs(l2) > 1e-4) {
+            // Indefinite: Hyperbolas
+            ctx.save();
+            ctx.translate(cx, cy);
+            ctx.rotate(-theta);
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+            ctx.lineWidth = 2;
+
+            // Branch 1 & 2
+            const posL = l1 > 0 ? l1 : l2;
+            const negL = l1 > 0 ? -l2 : -l1;
+            const aHyp = Math.sqrt(C / posL) * scale;
+            const bHyp = Math.sqrt(C / negL) * scale;
+
+            ctx.beginPath();
+            for (let t = -2.5; t <= 2.5; t += 0.1) {
+              const xHyp = aHyp * Math.cosh(t);
+              const yHyp = bHyp * Math.sinh(t);
+              if (t === -2.5) ctx.moveTo(xHyp, yHyp); else ctx.lineTo(xHyp, yHyp);
+            }
+            ctx.stroke();
+
+            ctx.beginPath();
+            for (let t = -2.5; t <= 2.5; t += 0.1) {
+              const xHyp = -aHyp * Math.cosh(t);
+              const yHyp = bHyp * Math.sinh(t);
+              if (t === -2.5) ctx.moveTo(xHyp, yHyp); else ctx.lineTo(xHyp, yHyp);
+            }
+            ctx.stroke();
+            ctx.restore();
+          }
+        });
+
+        // Draw Eigen-axes q1 & q2
+        const axisLen = 140;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-theta);
+
+        // q1 (Green)
+        ctx.strokeStyle = '#4ade80';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(-axisLen, 0); ctx.lineTo(axisLen, 0); ctx.stroke();
+        ctx.fillStyle = '#4ade80';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText(`q₁ (λ₁=${l1.toFixed(2)})`, axisLen - 60, -8);
+
+        // q2 (Purple)
+        ctx.strokeStyle = '#c084fc';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(0, -axisLen); ctx.lineTo(0, axisLen); ctx.stroke();
+        ctx.fillStyle = '#c084fc';
+        ctx.font = 'bold 12px monospace';
+        ctx.fillText(`q₂ (λ₂=${l2.toFixed(2)})`, 8, -axisLen + 20);
+
+        ctx.restore();
+
+        // Update readouts
+        statL1.textContent = l1.toFixed(3);
+        statL2.textContent = l2.toFixed(3);
+        statDet.textContent = det.toFixed(3);
+        statAngle.textContent = (theta * 180 / Math.PI).toFixed(1) + '°';
+
+        if (l1 > 1e-4 && l2 > 1e-4) {
+          statDefiniteness.textContent = '正定矩阵 (Positive Definite, 严格凸椭球碗面)';
+          statDefiniteness.style.color = '#4ade80';
+        } else if (l1 < -1e-4 && l2 < -1e-4) {
+          statDefiniteness.textContent = '负定矩阵 (Negative Definite, 倒扣凹面)';
+          statDefiniteness.style.color = '#f43f5e';
+        } else if (l1 * l2 < -1e-4) {
+          statDefiniteness.textContent = '不定矩阵 (Indefinite, 马鞍面/双曲曲面)';
+          statDefiniteness.style.color = '#fbbf24';
+        } else {
+          statDefiniteness.textContent = '半正定/半负定 (含零特征值简并柱面)';
+          statDefiniteness.style.color = '#94a3b8';
+        }
+      }
+
+      [sA, sB, sC].forEach(s => s.addEventListener('input', render));
+      render();
+    })();
+
+    // 交互式自测 Quiz 选项点击逻辑
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation73(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation73(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation73(item, isCorrect) {
+        const text = item.querySelector('div').innerText;
+        if (text.includes('实对称矩阵') && text.includes('错误')) {
+          return '选项 C 说法错误。实对称矩阵的特征值只保证全为实数（实轴上任意点），完全可能小于 0 或等于 0。只有当且仅当该实对称矩阵还是正定矩阵时，特征值才全为正实数！';
+        } else if (text.includes('具有特征值 λ₁ = 3, λ₂ = -2')) {
+          return '选项 B 正确。特征值一正一负意味着在第一特征轴方向上能量曲面向上弯曲，而在第二特征轴方向上向下弯曲，几何形态正是著名的马鞍面（不定二次型），也是优化算法中最棘手的鞍点。';
+        } else if (text.includes('P_i = q_i q_iᵀ 具有何种代数性质')) {
+          return '选项 A 正确。外积矩阵 P_i = q_i q_iᵀ 满足 (q_i q_iᵀ)ᵀ = q_i q_iᵀ（对称），且 (q_i q_iᵀ)(q_i q_iᵀ) = q_i(q_iᵀ q_i)q_iᵀ = q_i q_iᵀ（幂等），其列向量全部共线，秩严格为 1。';
+        }
+        return '';
+      }
+    });
+  </script>
 
 </body>
 </html>
