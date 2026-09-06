@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第四章 不定积分 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="03_第三章_微分中值定理与导数的应用.html" class="nav-btn">← 上一章: 第三章 微分中值定理与导数的应用</a>
+      <a href="05_第五章_定积分.html" class="nav-btn primary">下一章: 第五章 定积分 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第四章 不定积分</h1>
+      <p class="chapter-intro">
+        在前两章中，我们研究了微积分的一大核心运算——微分法：已知函数 $F(x)$，求其导数 $f(x) = F'(x)$. 然而，在大量的物理学与工程应用中，往往面临着相反的问题：已知物体的瞬时运动速度求其路程函数，已知曲线上各点的切线斜率求该曲线的方程，已知非均匀杆的线密度求其质量分布等. 这就提出了互逆的运算需求：<strong>已知导数 $f(x)$，寻求原来的函数 $F(x)$</strong>. 这类互逆运算称为<strong>求原函数</strong>或<strong>不定积分</strong>（Indefinite Integral）. 本章将建立原函数与不定积分的概念，总结基本积分公式表，系统深入讨论换元积分法、分部积分法以及有理函数积分的技巧.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 不定积分的概念与性质</h2>
+
+      <h3>一、原函数与不定积分的定义</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (原函数 Primitive Function)</div>
+        <p>
+          设函数 $f(x)$ 定义在某区间 $I$ 上. 如果在区间 $I$ 内任一点 $x$，都有：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$F'(x) = f(x) \quad \text{或} \quad dF(x) = f(x)dx$$
+        </p>
+        <p>那么函数 $F(x)$ 就称为 $f(x)$ 在区间 $I$ 内的一个<strong>原函数</strong>.</p>
+      </div>
+
+      <p>
+        <strong>原函数存在定理</strong>：若函数 $f(x)$ 在区间 $I$ 上<strong>连续</strong>，则 $f(x)$ 在区间 $I$ 上必有原函数.（此定理将在第五节用变上限积分严格证明）.
+      </p>
+
+      <p>
+        <strong>原函数的结构性质</strong>：如果 $F(x)$ 是 $f(x)$ 的一个原函数，那么对于任意常数 $C$，$F(x) + C$ 也是 $f(x)$ 的原函数；反之，$f(x)$ 的任意两个原函数之间仅仅相差一个常数.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 (不定积分 Indefinite Integral)</div>
+        <p>
+          在区间 $I$ 上，函数 $f(x)$ 的<strong>全体原函数</strong>称为 $f(x)$ 在该区间上的<strong>不定积分</strong>，记作：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int f(x)dx = F(x) + C$$
+        </p>
+        <p>其中 $\int$ 称为<strong>积分号</strong>，$f(x)$ 称为<strong>被积函数</strong>，$f(x)dx$ 称为<strong>被积表达式</strong>，$x$ 称为<strong>积分变量</strong>，$C$ 称为<strong>积分常数</strong>.</p>
+      </div>
+
+      <p>
+        <strong>不定积分的几何意义</strong>：微分方程 $\frac{dy}{dx} = f(x)$ 的解曲线称为<strong>积分曲线</strong>. 不定积分 $\int f(x)dx = F(x) + C$ 在几何上表示一族平行曲线（图 4-1、图 4-2）. 在相同横坐标 $x$ 处，各条积分曲线的切线斜率都等于 $f(x)$，因而切线彼此平行.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_4_1.webp" alt="图 4-1 积分曲线族与平行切线" loading="lazy">
+          <figcaption>图 4-1 积分曲线族与平行切线</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_4_2.webp" alt="图 4-2 过特定定点的特定积分曲线确定" loading="lazy">
+          <figcaption>图 4-2 过特定定点的特定积分曲线确定</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、不定积分的基本性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (线性运算法则)</div>
+        <ol>
+          <li>非零常数因子可以移到积分号外：$\int k f(x)dx = k \int f(x)dx \quad (k \ne 0)$</li>
+          <li>有限个函数代数和的积分等于各函数积分的代数和：$\int [f(x) \pm g(x)]dx = \int f(x)dx \pm \int g(x)dx$</li>
+        </ol>
+      </div>
+
+      <h3>三、基本积分表</h3>
+      <div class="exercise-block" style="background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); line-height: 2;">
+        <ol style="column-count: 2; column-gap: 30px; margin: 0; padding-left: 25px;">
+          <li>$\int 0\,dx = C$</li>
+          <li>$\int x^\mu dx = \frac{x^{\mu+1}}{\mu+1} + C \quad (\mu \ne -1)$</li>
+          <li>$\int \frac{1}{x}dx = \ln|x| + C$</li>
+          <li>$\int e^x dx = e^x + C, \quad \int a^x dx = \frac{a^x}{\ln a} + C$</li>
+          <li>$\int \cos x\,dx = \sin x + C$</li>
+          <li>$\int \sin x\,dx = -\cos x + C$</li>
+          <li>$\int \sec^2 x\,dx = \tan x + C$</li>
+          <li>$\int \csc^2 x\,dx = -\cot x + C$</li>
+          <li>$\int \sec x \tan x\,dx = \sec x + C$</li>
+          <li>$\int \csc x \cot x\,dx = -\csc x + C$</li>
+          <li>$\int \frac{dx}{a^2 + x^2} = \frac{1}{a}\arctan\frac{x}{a} + C$</li>
+          <li>$\int \frac{dx}{\sqrt{a^2 - x^2}} = \arcsin\frac{x}{a} + C$</li>
+          <li>$\int \frac{dx}{x^2 - a^2} = \frac{1}{2a}\ln\left|\frac{x-a}{x+a}\right| + C$</li>
+          <li>$\int \frac{dx}{\sqrt{x^2 \pm a^2}} = \ln|x + \sqrt{x^2 \pm a^2}| + C$</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 换元积分法</h2>
+
+      <h3>一、第一类换元法（凑微分法）</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2 (第一类换元公式)</div>
+        <p>设 $f(u)$ 具有原函数 $F(u)$，且 $u = \varphi(x)$ 可导，则：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int f(\varphi(x))\varphi'(x)dx = \int f(\varphi(x))d\varphi(x) = \left. \int f(u)du \right|_{u=\varphi(x)} = F(\varphi(x)) + C$$
+        </p>
+      </div>
+
+      <h3>二、第二类换元法（变量代换法）</h3>
+      <p>
+        当被积函数含有根式等难以直接凑微分的结构时，引进新自变量 $x = \psi(t)$，将复杂的无理式转化为有理式.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 3 (第二类换元公式)</div>
+        <p>设 $x = \psi(t)$ 单调可导，且 $\psi'(t) \ne 0$. 若 $\int f(\psi(t))\psi'(t)dt = G(t) + C$，则：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int f(x)dx = \left. G(t) \right|_{t = \psi^{-1}(x)} + C$$
+        </p>
+      </div>
+
+      <p><strong>经典三类三角代换</strong>（利用辅助直角三角形回代，图 4-3、图 4-4、图 4-5）：</p>
+      <ul>
+        <li>含 $\sqrt{a^2 - x^2}$：令 $x = a\sin t \quad (-\frac{\pi}{2} < t < \frac{\pi}{2})$，根式化为 $a\cos t$；</li>
+        <li>含 $\sqrt{a^2 + x^2}$：令 $x = a\tan t \quad (-\frac{\pi}{2} < t < \frac{\pi}{2})$，根式化为 $a\sec t$；</li>
+        <li>含 $\sqrt{x^2 - a^2}$：令 $x = a\sec t \quad (0 \le t < \frac{\pi}{2} \text{ 或 } \pi \le t < \frac{3\pi}{2})$，根式化为 $a\tan t$.</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_4_3.webp" alt="图 4-3 正弦代换辅助直角三角形（求 cos t 与 cot t 回代）" loading="lazy">
+          <figcaption>图 4-3 正弦代换辅助直角三角形（求 cos t 与 cot t 回代）</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_4_4.webp" alt="图 4-4 正切代换辅助直角三角形（求 sin t 与 cos t 回代）" loading="lazy">
+          <figcaption>图 4-4 正切代换辅助直角三角形（求 sin t 与 cos t 回代）</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_4_5.webp" alt="图 4-5 正割代换辅助直角三角形（求 sin t 与 tan t 回代）" loading="lazy">
+          <figcaption>图 4-5 正割代换辅助直角三角形（求 sin t 与 tan t 回代）</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 分部积分法</h2>
+      <p>
+        根据乘积求导法则 $(uv)' = u'v + uv'$，两边积分得：$\int (uv)'dx = \int u'v dx + \int uv' dx$. 移项整理得到：
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4 (分部积分公式 Integration by Parts)</div>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int u\,dv = uv - \int v\,du \quad \text{或} \quad \int u(x)v'(x)dx = u(x)v(x) - \int v(x)u'(x)dx$$
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 选取 $u$ 与 $dv$ 的优先级法则</div>
+        <p><strong>口诀</strong>：“反、对、幂、指、三”</p>
+        <p>排在前面的优先选作 $u$（通过求导降次或转化为代数式），排在后面的选作 $dv$（易于积分出 $v$）.</p>
+        <ul>
+          <li>$\int P_n(x)e^{\lambda x}dx, \int P_n(x)\sin\omega x dx$：选幂函数为 $u$，三角/指数为 $dv$；</li>
+          <li>$\int P_n(x)\ln x dx, \int P_n(x)\arcsin x dx$：选对数/反三角函数为 $u$，多项式为 $dv$；</li>
+          <li>$\int e^{ax}\cos bx dx$：连续两次分部积分出现原积分同类项，通过移项解代数方程求得（循环积分法）.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 有理函数的积分</h2>
+      <p>
+        有理函数是指两个多项式的商 $R(x) = \frac{P(x)}{Q(x)}$. 当分子次数小于分母次数时称为真分式. 根据代数学定理，任何有理真分式都可以唯一分解为以下四类最简部分分式之和：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{A}{x - a}, \quad \frac{A}{(x - a)^k}, \quad \frac{Mx + N}{x^2 + px + q}, \quad \frac{Mx + N}{(x^2 + px + q)^k} \quad (p^2 - 4q < 0)$$
+      </p>
+      <p>
+        这四类分式都可以用初等函数积出. 因此，<strong>任何有理函数的不定积分一定可以用初等函数表示</strong>.
+      </p>
+
+      <h3>万能置换公式（三角有理式的积分）</h3>
+      <p>
+        对于形如 $\int R(\sin x, \cos x)dx$ 的三角有理式，作半角代换 $u = \tan\frac{x}{2}$（万能代换）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\sin x = \frac{2u}{1 + u^2}, \quad \cos x = \frac{1 - u^2}{1 + u^2}, \quad dx = \frac{2}{1 + u^2}du$$
+      </p>
+      <p>可将任何三角有理积分化为普通多项式有理积分.</p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 积分表的使用</h2>
+      <p>
+        在科学研究与工程设计中，遇到形式繁复的不定积分时，除掌握基本技巧外，更常查阅预先编纂好的《积分表》（如本书附录Ⅳ）. 使用积分表时，首先需要通过变量代换、三角恒等变形或配方，将所求积分化为表中列出的标准类型，然后对应套用公式.
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题四 -->
+      <h2>总习题四</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 计算下列不定积分：</p>
+        <p>(1) $\int \frac{dx}{x\sqrt{1 + \ln x}}$；</p>
+        <p><em>解</em>：凑微分 $\int (1 + \ln x)^{-\frac{1}{2}}d(1 + \ln x) = 2\sqrt{1 + \ln x} + C$.</p>
+
+        <p>(2) $\int x^2 e^{2x}dx$；</p>
+        <p><em>解</em>：两次分部积分：<br>
+        $\int x^2 d(\frac{1}{2}e^{2x}) = \frac{1}{2}x^2 e^{2x} - \int x e^{2x}dx = \frac{1}{2}x^2 e^{2x} - \frac{1}{2}x e^{2x} + \frac{1}{4}e^{2x} + C = \frac{1}{4}e^{2x}(2x^2 - 2x + 1) + C$.</p>
+
+        <p>(3) $\int \frac{dx}{\sin x}$；</p>
+        <p><em>解</em>：$\int \csc x dx = \int \frac{\sin x}{1 - \cos^2 x}dx = -\int \frac{d(\cos x)}{1 - \cos^2 x} = \frac{1}{2}\ln\left|\frac{1 - \cos x}{1 + \cos x}\right| + C = \ln|\csc x - \cot x| + C = \ln\left|\tan\frac{x}{2}\right| + C$.</p>
+
+        <p>(4) $\int \sqrt{a^2 - x^2}dx$ ($a > 0$)；</p>
+        <p><em>解</em>：令 $x = a\sin t$ ($-\frac{\pi}{2} \le t \le \frac{\pi}{2}$)，则 $dx = a\cos t dt$：<br>
+        $\int a^2 \cos^2 t dt = \frac{a^2}{2}\int (1 + \cos 2t)dt = \frac{a^2}{2}\left(t + \frac{1}{2}\sin 2t\right) + C = \frac{a^2}{2}(t + \sin t \cos t) + C$.<br>
+        由辅助直角三角形（图 4-3），$\sin t = \frac{x}{a}, \cos t = \frac{\sqrt{a^2 - x^2}}{a}$，代回得：<br>
+        $$\int \sqrt{a^2 - x^2}dx = \frac{a^2}{2}\arcsin\frac{x}{a} + \frac{x}{2}\sqrt{a^2 - x^2} + C$$</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="03_第三章_微分中值定理与导数的应用.html" class="nav-btn">← 上一章: 第三章 微分中值定理与导数的应用</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="05_第五章_定积分.html" class="nav-btn primary">下一章: 第五章 定积分 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

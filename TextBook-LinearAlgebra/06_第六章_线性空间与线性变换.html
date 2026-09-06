@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第六章 线性空间与线性变换 - 工程数学 线性代数 (第七版)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📐</span> 工程数学 线性代数 (第七版) · 数字化重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="05_第五章_相似矩阵及二次型.html" class="nav-btn">← 上一章: 相似矩阵及二次型</a>
+      <a href="07_部分习题参考答案.html" class="nav-btn primary">习题参考答案 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第六章 线性空间与线性变换</h1>
+      <p class="chapter-intro">
+        在前五章中，我们主要在具体的数组向量空间 $\mathbb{R}^n$ 与矩阵空间中展开讨论。然而，现代数学与近代物理（如泛函分析、量子力学、信号处理）的实际对象远不止于数组——连续函数、收敛级数、多项式、线性微分方程的解集等都可以相加与数乘，并且满足完全一致的代数规律。将这些具体对象的共性抽取出来，便诞生了抽象的<strong>线性空间</strong>概念；而保持线性空间代数结构不变的映射，就是<strong>线性变换</strong>。本章将带领读者完成从“具体算术”到“近代公理化代数”的终极飞跃。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 线性空间的定义与性质</h2>
+
+      <h3>一、八条公理化定义</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.1 线性空间 (实线性空间)</div>
+        <p>
+          设 $V$ 是一个非空集合，$\mathbb{R}$ 为实数域。如果集合 $V$ 中定义了两种代数运算：
+        </p>
+        <ul>
+          <li><strong>加法运算</strong>：对于 $V$ 中任意两个元素 $\boldsymbol{\alpha}, \boldsymbol{\beta}$，在 $V$ 中有唯一确定的元素 $\boldsymbol{\alpha} + \boldsymbol{\beta}$ 与之对应，称为 $\boldsymbol{\alpha}$ 与 $\boldsymbol{\beta}$ 的<strong>和</strong>；</li>
+          <li><strong>数乘运算</strong>：对于任意实数 $k \in \mathbb{R}$ 与 $V$ 中任意元素 $\boldsymbol{\alpha}$，在 $V$ 中有唯一确定的元素 $k\boldsymbol{\alpha}$ 与之对应，称为数 $k$ 与 $\boldsymbol{\alpha}$ 的<strong>数乘积</strong>。</li>
+        </ul>
+        <p>
+          并且这两种运算满足以下 <strong>8 条公理</strong>：
+        </p>
+        <ol>
+          <li><strong>加法交换律</strong>：$\boldsymbol{\alpha} + \boldsymbol{\beta} = \boldsymbol{\beta} + \boldsymbol{\alpha}$；</li>
+          <li><strong>加法结合律</strong>：$(\boldsymbol{\alpha} + \boldsymbol{\beta}) + \boldsymbol{\gamma} = \boldsymbol{\alpha} + (\boldsymbol{\beta} + \boldsymbol{\gamma})$；</li>
+          <li><strong>零元存在性</strong>：$V$ 中存在一个元素 $\boldsymbol{0}$（称为零元素），对任意 $\boldsymbol{\alpha} \in V$，满足 $\boldsymbol{\alpha} + \boldsymbol{0} = \boldsymbol{\alpha}$；</li>
+          <li><strong>负元存在性</strong>：对任意 $\boldsymbol{\alpha} \in V$，存在元素 $-\boldsymbol{\alpha} \in V$（称为 $\boldsymbol{\alpha}$ 的负元素），满足 $\boldsymbol{\alpha} + (-\boldsymbol{\alpha}) = \boldsymbol{0}$；</li>
+          <li><strong>数乘单位元</strong>：$1 \boldsymbol{\alpha} = \boldsymbol{\alpha}$；</li>
+          <li><strong>数乘结合律</strong>：$k(l\boldsymbol{\alpha}) = (kl)\boldsymbol{\alpha}$ ($k, l \in \mathbb{R}$)；</li>
+          <li><strong>数对向量分配律</strong>：$(k + l)\boldsymbol{\alpha} = k\boldsymbol{\alpha} + l\boldsymbol{\alpha}$；</li>
+          <li><strong>向量对数分配律</strong>：$k(\boldsymbol{\alpha} + \boldsymbol{\beta}) = k\boldsymbol{\alpha} + k\boldsymbol{\beta}$。</li>
+        </ol>
+        <p>
+          则称集合 $V$ 为实数域 $\mathbb{R}$ 上的<strong>线性空间 (Linear Space)</strong>（或向量空间），$V$ 中的元素统称为<strong>向量</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📋 典型线性空间范例</div>
+        <ol>
+          <li><strong>$n$ 维数组向量空间 $\mathbb{R}^n$</strong>：元素为 $n$ 元实数组，加法与数乘按分量定义；</li>
+          <li><strong>矩阵空间 $\mathbb{R}^{m \times n}$</strong>：全体 $m \times n$ 实矩阵的集合，在常规矩阵加法与数乘下构成 $m \times n$ 维线性空间；</li>
+          <li><strong>多项式空间 $P[x]_n$</strong>：次数不超过 $n$ 的实系数一元多项式的全体（含零多项式），构成 $n+1$ 维线性空间；</li>
+          <li><strong>连续函数空间 $C[a, b]$</strong>：闭区间 $[a, b]$ 上全体实连续函数，在常规函数逐点相加与数乘下构成<strong>无限维线性空间</strong>！</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 线性空间的推论性质</div>
+        <ol>
+          <li>零元素 $\boldsymbol{0}$ 是<strong>唯一的</strong>；每个元素 $\boldsymbol{\alpha}$ 的负元素 $-\boldsymbol{\alpha}$ 是<strong>唯一的</strong>；</li>
+          <li>$0\boldsymbol{\alpha} = \boldsymbol{0}$；$k\boldsymbol{0} = \boldsymbol{0}$；$(-1)\boldsymbol{\alpha} = -\boldsymbol{\alpha}$；</li>
+          <li>若 $k\boldsymbol{\alpha} = \boldsymbol{0}$，则必有 $k = 0$ 或 $\boldsymbol{\alpha} = \boldsymbol{0}$。</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 维数、基与坐标</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.2 维数、基与坐标</div>
+        <p>
+          在线性空间 $V$ 中，如果存在 $n$ 个元素 $\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2, \dots, \boldsymbol{\alpha}_n$，满足：
+        </p>
+        <ol>
+          <li>$\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ <strong>线性无关</strong>；</li>
+          <li>$V$ 中<strong>任一元素 $\boldsymbol{\alpha}$ 都可以由它们线性表出</strong>。</li>
+        </ol>
+        <p>
+          则称 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 为线性空间 $V$ 的一个<strong>基 (Basis)</strong>，数 $n$ 称为线性空间 $V$ 的<strong>维数 (Dimension)</strong>，记作 $\dim V = n$。称 $V$ 为 $n$ 维线性空间。
+        </p>
+        <p>
+          设 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 为 $V$ 的基，对任意 $\boldsymbol{\alpha} \in V$，存在唯一的一组实数 $x_1, \dots, x_n$ 使得：
+        </p>
+        $$\boldsymbol{\alpha} = x_1 \boldsymbol{\alpha}_1 + x_2 \boldsymbol{\alpha}_2 + \cdots + x_n \boldsymbol{\alpha}_n.$$
+        <p>
+          列向量 $X = (x_1, x_2, \dots, x_n)^T \in \mathbb{R}^n$ 称为元素 $\boldsymbol{\alpha}$ 在基 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 下的<strong>坐标</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 同构定理：抽象空间的具象化</div>
+        <p>
+          一旦在线性空间 $V$ 中选定了一组基，就建立了一个一一对应映射：
+          $$\boldsymbol{\alpha} \in V \longleftrightarrow X = (x_1, \dots, x_n)^T \in \mathbb{R}^n.$$
+          而且这个映射保持加法与数乘完全对应：$\boldsymbol{\alpha} + \boldsymbol{\beta} \leftrightarrow X + Y$，$k\boldsymbol{\alpha} \leftrightarrow kX$。
+          这表明：<strong>任何实数域上的 $n$ 维线性空间，本质上与 $\mathbb{R}^n$ 是完全同构 (Isomorphic) 的！</strong>研究抽象空间的问题，完全可以转化为研究其坐标向量组成的数组空间问题。
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 基变换与坐标变换</h2>
+
+      <h3>一、基变换与过渡矩阵</h3>
+      <p>
+        在线性空间中，基的选取具有很大的任意性。设 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 为空间 $V$ 的一组旧基，$\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n$ 为同一空间的一组新基。
+        新基中的每一个向量都可以由旧基线性表出：
+      </p>
+      $$\begin{cases}
+      \boldsymbol{\beta}_1 = p_{11}\boldsymbol{\alpha}_1 + p_{21}\boldsymbol{\alpha}_2 + \cdots + p_{n1}\boldsymbol{\alpha}_n, \\
+      \boldsymbol{\beta}_2 = p_{12}\boldsymbol{\alpha}_1 + p_{22}\boldsymbol{\alpha}_2 + \cdots + p_{n2}\boldsymbol{\alpha}_n, \\
+      \quad \cdots\cdots\cdots\cdots \\
+      \boldsymbol{\beta}_n = p_{1n}\boldsymbol{\alpha}_1 + p_{2n}\boldsymbol{\alpha}_2 + \cdots + p_{nn}\boldsymbol{\alpha}_n.
+      \end{cases}$$
+      <p>
+        利用形式上的矩阵乘积，可将上述线性表出方程紧凑地写为：
+      </p>
+      $$(\boldsymbol{\beta}_1, \boldsymbol{\beta}_2, \dots, \boldsymbol{\beta}_n) = (\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2, \dots, \boldsymbol{\alpha}_n) P,$$
+      <p>
+        其中方阵：
+      </p>
+      $$P = \begin{pmatrix}
+      p_{11} & p_{12} & \cdots & p_{1n} \\
+      p_{21} & p_{22} & \cdots & p_{2n} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      p_{n1} & p_{n2} & \cdots & p_{nn}
+      \end{pmatrix}$$
+      <p>
+        称为由旧基 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 到新基 $\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n$ 的<strong>过渡矩阵 (Transition Matrix)</strong>。
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 过渡矩阵的可逆性</div>
+        <p>
+          <strong>内容</strong>：任何一组基到另一组基的<strong>过渡矩阵 $P$ 必定是可逆矩阵</strong>！
+        </p>
+        <p><em>证明</em>：因为新基 $\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n$ 线性无关，由第四章向量组表出定理，列满秩即方阵可逆，故 $|P| \ne 0$。</p>
+      </div>
+
+      <h3>二、坐标变换公式</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 6.1 坐标变换公式</div>
+        <p>
+          设元素 $\boldsymbol{\alpha} \in V$ 在旧基下的坐标为 $X = (x_1, \dots, x_n)^T$，在新基下的坐标为 $Y = (y_1, \dots, y_n)^T$。由旧基到新基的过渡矩阵为 $P$，则：
+        </p>
+        $$X = P Y \quad \text{或} \quad Y = P^{-1} X.$$
+        <p><strong>两步严谨证明</strong>：</p>
+        <p>
+          根据同一向量在两组基下的坐标展开：
+          $$\boldsymbol{\alpha} = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) X,$$
+          $$\boldsymbol{\alpha} = (\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n) Y.$$
+          将基变换公式 $(\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n) = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) P$ 代入后式：
+          $$\boldsymbol{\alpha} = [(\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) P] Y = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) (PY).$$
+          因此：
+          $$(\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) X = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) (PY).$$
+          由基向量组 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 的线性无关性，坐标表示具有唯一性，直接得到：
+          $$X = PY \implies Y = P^{-1}X.$$
+          证毕。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 助记口诀与几何反向性</div>
+        <p>
+          “<strong>基变换左旧右新乘 $P$，坐标变换新等于 $P$ 逆乘旧</strong>”。
+          几何直观：如果基底向量放大了 2 倍（$P = 2E$），则同一个空间向量在新基底下的度量数值（坐标）必然缩减为原来的 $\frac{1}{2}$（$P^{-1} = \frac{1}{2}E$），呈现反变特性 (Contravariant)。
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 线性变换</h2>
+
+      <h3>一、线性变换的公理化定义</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.3 线性变换</div>
+        <p>
+          设 $V$ 是线性空间，一个映射 $T: V \to V$ 如果对任意元素 $\boldsymbol{\alpha}, \boldsymbol{\beta} \in V$ 和任意实数 $k \in \mathbb{R}$，满足：
+        </p>
+        <ol>
+          <li><strong>保加法性</strong>：$T(\boldsymbol{\alpha} + \boldsymbol{\beta}) = T(\boldsymbol{\alpha}) + T(\boldsymbol{\beta})$；</li>
+          <li><strong>保数乘性</strong>：$T(k\boldsymbol{\alpha}) = k T(\boldsymbol{\alpha})$。</li>
+        </ol>
+        <p>
+          则称映射 $T$ 为线性空间 $V$ 上的一个<strong>线性变换 (Linear Transformation)</strong>（或线性算子）。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 线性变换的基本性质</div>
+        <ol>
+          <li>保零元：$T(\boldsymbol{0}) = \boldsymbol{0}$；保负元：$T(-\boldsymbol{\alpha}) = -T(\boldsymbol{\alpha})$；</li>
+          <li>保线性组合：$T\left(\sum_{i=1}^m k_i \boldsymbol{\alpha}_i\right) = \sum_{i=1}^m k_i T(\boldsymbol{\alpha}_i)$；</li>
+          <li>若向量组 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_m$ 线性相关，则其像向量组 $T(\boldsymbol{\alpha}_1), \dots, T(\boldsymbol{\alpha}_m)$ 也必线性相关；</li>
+          <li><strong>线性变换的值域（像）与核</strong>：
+            <ul>
+              <li><strong>像空间 (Image)</strong>：$\mathrm{Im}(T) = \{T(\boldsymbol{\alpha}) \mid \boldsymbol{\alpha} \in V\}$ 是 $V$ 的子空间；</li>
+              <li><strong>核空间 (Kernel)</strong>：$\mathrm{Ker}(T) = \{\boldsymbol{\alpha} \in V \mid T(\boldsymbol{\alpha}) = \boldsymbol{0}\}$ 是 $V$ 的子空间；</li>
+              <li><strong>维数定理</strong>：$\dim(\mathrm{Im}(T)) + \dim(\mathrm{Ker}(T)) = \dim V$。</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 线性变换的矩阵表示式</h2>
+
+      <h3>一、线性变换在给定基下的矩阵表示</h3>
+      <p>
+        在线性空间 $V$ 中取定一组基 $\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2, \dots, \boldsymbol{\alpha}_n$。
+        由于基向量经线性变换后的像 $T(\boldsymbol{\alpha}_1), \dots, T(\boldsymbol{\alpha}_n)$ 仍然属于 $V$，它们可以用原基底唯一线性表出：
+      </p>
+      $$\begin{cases}
+      T(\boldsymbol{\alpha}_1) = a_{11}\boldsymbol{\alpha}_1 + a_{21}\boldsymbol{\alpha}_2 + \cdots + a_{n1}\boldsymbol{\alpha}_n, \\
+      T(\boldsymbol{\alpha}_2) = a_{12}\boldsymbol{\alpha}_1 + a_{22}\boldsymbol{\alpha}_2 + \cdots + a_{n2}\boldsymbol{\alpha}_n, \\
+      \quad \cdots\cdots\cdots\cdots \\
+      T(\boldsymbol{\alpha}_n) = a_{1n}\boldsymbol{\alpha}_1 + a_{2n}\boldsymbol{\alpha}_2 + \cdots + a_{nn}\boldsymbol{\alpha}_n.
+      \end{cases}$$
+      <p>
+        矩阵形式写为：
+      </p>
+      $$(T(\boldsymbol{\alpha}_1), T(\boldsymbol{\alpha}_2), \dots, T(\boldsymbol{\alpha}_n)) = (\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2, \dots, \boldsymbol{\alpha}_n) A,$$
+      <p>
+        其中方阵 $A = (a_{ij})_{n \times n}$ 称为线性变换 $T$ 在基 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 下的<strong>矩阵 (Matrix Representation)</strong>。
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 像向量与原象向量的坐标代数关系</div>
+        <p>
+          设向量 $\boldsymbol{\alpha} \in V$ 在基 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 下的坐标为 $X$，其像向量 $\boldsymbol{\beta} = T(\boldsymbol{\alpha})$ 在同一基下的坐标为 $Y$。
+          则有：
+        </p>
+        $$Y = A X.$$
+        <p>
+          <strong>深刻结论</strong>：线性变换对抽象向量的作用，完全等价于其表示矩阵 $A$ 与该向量的坐标列向量 $X$ 的矩阵相乘！
+        </p>
+      </div>
+
+      <h3>二、不同基下的表示矩阵之间的相似关系</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 6.2 相似矩阵的几何本质定理</div>
+        <p>
+          设线性空间 $V$ 中有两组基：旧基 $\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n$ 与新基 $\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n$，由旧基到新基的过渡矩阵为 $P$。
+        </p>
+        <p>
+          设线性变换 $T$ 在旧基下的矩阵为 $A$，在新基下的矩阵为 $B$。则矩阵 $A$ 与 $B$ 必满足：
+        </p>
+        $$B = P^{-1} A P.$$
+        <p><strong>严谨证明</strong>：</p>
+        <p>
+          由新基下的矩阵定义：
+          $$(T(\boldsymbol{\beta}_1), \dots, T(\boldsymbol{\beta}_n)) = (\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n) B.$$
+          利用基变换公式 $(\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n) = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) P$，左端为：
+          $$T((\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) P) = (T(\boldsymbol{\alpha}_1), \dots, T(\boldsymbol{\alpha}_n)) P = [(\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) A] P = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) (AP).$$
+          右端为：
+          $$(\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_n) B = [(\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) P] B = (\boldsymbol{\alpha}_1, \dots, \boldsymbol{\alpha}_n) (PB).$$
+          由于基向量组线性无关，系数矩阵必唯一相等：
+          $$AP = PB \implies B = P^{-1} A P.$$
+          证毕。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 宏大代数视野：相似对角化的终极意义</div>
+        <p>
+          定理 6.2 彻底揭开了第五章矩阵相似对角化的全部神秘面纱：
+        </p>
+        <p>
+          <strong>问</strong>：为什么我们要费尽心力去寻找可逆矩阵 $P$ 使得 $P^{-1} A P = \Lambda$ 成对角阵？<br>
+          <strong>答</strong>：因为对角矩阵 $\Lambda$ 意味着各个基向量之间互不偶联、各自独立伸缩！寻找对角化的过程，本质上就是在空间中<strong>寻找一组最理想的特征基底</strong>。在这组基底所对应的自然参考系中，纷繁复杂的空间变换化为了最质朴纯粹的一维拉伸，这正是现代物理中“主轴”、“本征态”与工程信号分解的终极真谛。
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题六 -->
+      <h2>习题六 精选题解与综合演练</h2>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 6.1 多项式空间的基变换与过渡矩阵</div>
+        <p><strong>题目</strong>：在多项式线性空间 $P[x]_2$ 中，取两组基：</p>
+        $$\text{旧基 } \alpha_1 = 1, \quad \alpha_2 = x, \quad \alpha_3 = x^2;$$
+        $$\text{新基 } \beta_1 = 1 + x, \quad \beta_2 = x + x^2, \quad \beta_3 = 1 + x^2.$$
+        <p>求由旧基到新基的过渡矩阵 $P$，并求多项式 $f(x) = 2 - 3x + x^2$ 在新基下的坐标。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p><strong>(1) 求过渡矩阵 $P$</strong>：</p>
+        <p>将新基按旧基展开为列：</p>
+        $$\begin{cases}
+        \beta_1 = 1\alpha_1 + 1\alpha_2 + 0\alpha_3, \\
+        \beta_2 = 0\alpha_1 + 1\alpha_2 + 1\alpha_3, \\
+        \beta_3 = 1\alpha_1 + 0\alpha_2 + 1\alpha_3.
+        \end{cases}$$
+        <p>写成矩阵过渡形式 $(\beta_1, \beta_2, \beta_3) = (\alpha_1, \alpha_2, \alpha_3) P$，得：</p>
+        $$P = \begin{pmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{pmatrix}.$$
+        <p><strong>(2) 求新基下的坐标</strong>：</p>
+        <p>$f(x) = 2\alpha_1 - 3\alpha_2 + 1\alpha_3$，故在旧基下的坐标为 $X = (2, -3, 1)^T$。由坐标变换公式 $Y = P^{-1} X$ 即解方程 $PY = X$：</p>
+        $$\begin{pmatrix} 1 & 0 & 1 & 2 \\ 1 & 1 & 0 & -3 \\ 0 & 1 & 1 & 1 \end{pmatrix} \sim \begin{pmatrix} 1 & 0 & 1 & 2 \\ 0 & 1 & -1 & -5 \\ 0 & 1 & 1 & 1 \end{pmatrix} \sim \begin{pmatrix} 1 & 0 & 1 & 2 \\ 0 & 1 & -1 & -5 \\ 0 & 0 & 2 & 6 \end{pmatrix}.$$
+        <p>由第 3 行得 $y_3 = 3$；回代入第 2 行得 $y_2 = -5 + 3 = -2$；代入第 1 行得 $y_1 = 2 - 3 = -1$。因此在新基下的坐标为：</p>
+        $$Y = \begin{pmatrix} -1 \\ -2 \\ 3 \end{pmatrix}.$$
+        <p>验证：$-(1+x) - 2(x+x^2) + 3(1+x^2) = (-1+3) + (-1-2)x + (-2+3)x^2 = 2 - 3x + x^2$，结果完全正确。</p>
+      </div>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 6.2 微分算子线性变换的矩阵表示</div>
+        <p><strong>题目</strong>：设 $V$ 是由多项式基 $1, x, x^2, x^3$ 张成的 4 维空间，求求导变换 $D: f(x) \mapsto f'(x)$ 在该基下的矩阵表示。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p>分别对各个基多项式求导：</p>
+        $$\begin{aligned}
+        D(1) &= 0 = 0 \cdot 1 + 0 \cdot x + 0 \cdot x^2 + 0 \cdot x^3, \\
+        D(x) &= 1 = 1 \cdot 1 + 0 \cdot x + 0 \cdot x^2 + 0 \cdot x^3, \\
+        D(x^2) &= 2x = 0 \cdot 1 + 2 \cdot x + 0 \cdot x^2 + 0 \cdot x^3, \\
+        D(x^3) &= 3x^2 = 0 \cdot 1 + 0 \cdot x + 3 \cdot x^2 + 0 \cdot x^3.
+        \end{aligned}$$
+        <p>以求导后的坐标作为矩阵各列：</p>
+        $$A = \begin{pmatrix}
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 2 & 0 \\
+        0 & 0 & 0 & 3 \\
+        0 & 0 & 0 & 0
+        \end{pmatrix}.$$
+        <p>注意到 $A$ 是一个严格上三角矩阵，且主对角线上方元素分别为 $1, 2, 3$。由于 $A^4 = O$，这生动反映了“对 3 次多项式求导 4 次必恒为 0”的幂零算子代数性质。</p>
+      </div>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <a href="05_第五章_相似矩阵及二次型.html" class="nav-btn">← 上一章: 第五章 相似矩阵及二次型</a>
+        <a href="07_部分习题参考答案.html" class="nav-btn primary">附录: 部分习题参考答案 →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>工程数学 线性代数 (第七版) · 同济大学数学科学学院 编 · 数字化重构版</p>
+    <p>全离线矢量 MathJax 3 引擎 · 纯语义 HTML5 架构 · 无任何外部网络依赖</p>
+  </footer>
+
+</body>
+</html>

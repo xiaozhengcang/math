@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第二章 随机变量及其分布 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="01_第一章_随机事件与概率.html" class="nav-btn">← 上一章: 随机事件与概率</a>
+      <a href="03_第三章_多维随机变量及其分布.html" class="nav-btn primary">下一章: 多维随机变量及其分布 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第二章 随机变量及其分布</h1>
+      <p class="chapter-intro">
+        在第一章中，我们研究了随机事件及其概率. 但在很多实际问题中，人们不仅关心某一事件是否发生，更关心试验结果所对应的数值大小. 例如，抛掷三枚硬币出现正面朝上的次数、某商场一天的客流量、某批电子元器件的使用寿命、某测量值的误差等. 为了全面、定量地用高等数学的分析工具（如微积分）来研究随机现象，我们必须把随机试验的每一个可能结果与实数对应起来，这就引出了现代概率论的核心概念——<strong>随机变量</strong>.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 随机变量及其分布</h2>
+
+      <h3>一、随机变量的概念</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.1：随机变量</div>
+        <p>设随机试验的样本空间为 $\Omega = \{\omega\}$. 如果对于每一个样本点 $\omega \in \Omega$，都有唯一的一个实数 $X(\omega)$ 与之对应，则称定义在样本空间 $\Omega$ 上的单值实值函数 $X = X(\omega)$ 为<strong>随机变量</strong>（Random Variable），通常用大写英文字母 $X, Y, Z, \dots$ 表示.</p>
+      </div>
+
+      <p>
+        <em>本质理解</em>：随机变量本质上是一个<strong>映射</strong>，它将抽象的试验结果 $\omega$ 映射到实数轴 $\mathbb{R}$ 上，使得任何一个随机事件都可以表示为关于实数的集合，例如：
+        $$\{X = a\} = \{\omega : X(\omega) = a\}, \qquad \{a < X \le b\} = \{\omega : a < X(\omega) \le b\}$$
+      </p>
+
+      <h3>二、随机变量的分布函数</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.2：累积分布函数（CDF）</div>
+        <p>设 $X$ 为一个随机变量，$x$ 为任意实数，函数
+          $$F(x) = P(X \le x), \qquad -\infty < x < +\infty$$
+          称为随机变量 $X$ 的<strong>分布函数</strong>（或<strong>累积分布函数</strong>，Cumulative Distribution Function，简称 CDF）.
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.1：分布函数的三大基本性质（充要条件）</div>
+        <p>任一随机变量的分布函数 $F(x)$ 必然具备以下三条充要基本性质：</p>
+        <ol>
+          <li><strong>单调不减性</strong>：若 $x_1 < x_2$，则 $F(x_1) \le F(x_2)$；</li>
+          <li><strong>有界性与极限性质</strong>：对任意 $x$，有 $0 \le F(x) \le 1$，且：
+            $$\lim_{x \to -\infty} F(x) = F(-\infty) = 0, \qquad \lim_{x \to +\infty} F(x) = F(+\infty) = 1$$
+          </li>
+          <li><strong>右连续性</strong>：对任意实数 $x_0$，有 $\lim_{x \to x_0^+} F(x) = F(x_0)$，即 $F(x_0 + 0) = F(x_0)$.</li>
+        </ol>
+        <p><strong>区间概率计算基本公式</strong>：对任意实数 $a < b$，随机变量 $X$ 落在半开区间 $(a, b]$ 的概率为：
+          $$P(a < X \le b) = F(b) - F(a)$$
+        </p>
+      </div>
+
+      <h3>三、离散型随机变量及其分布律</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.3：离散型随机变量与分布律</div>
+        <p>如果随机变量 $X$ 的全部可能取值是<strong>有限个</strong>或<strong>无限可列个</strong>，设其可能取值为 $x_1, x_2, \dots, x_k, \dots$，并且取各个值的概率为：
+          $$P(X = x_k) = p_k, \qquad k = 1, 2, \dots$$
+        </p>
+        <p>则称 $X$ 为<strong>离散型随机变量</strong>（Discrete Random Variable），上述概率等式或表格形式称为 $X$ 的<strong>概率分布律</strong>（简称<strong>分布律</strong>或<strong>概率质量函数</strong>，PMF）.</p>
+      </div>
+
+      <p>分布律可用表格直观表示：</p>
+      <div style="text-align:center; margin: 15px 0;">
+        <table style="margin: 0 auto; border-collapse: collapse; border: 1px solid var(--border-color); background: #fff;">
+          <tr style="background: #f1f5f9; border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$X$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$x_1$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$x_2$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$\dots$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$x_k$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">$\dots$</th>
+          </tr>
+          <tr>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); font-weight: bold;">$P$</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color);">$p_1$</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color);">$p_2$</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color);">$\dots$</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color);">$p_k$</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color);">$\dots$</td>
+          </tr>
+        </table>
+      </div>
+
+      <p><strong>分布律的充要性质</strong>：(1) 非负性：$p_k \ge 0$； (2) 归一性：$\sum_k p_k = 1$.</p>
+      <p>离散型随机变量的分布函数表现为<strong>阶梯形单调不减的跳跃函数</strong>，跳跃点恰为可能取值 $x_k$，跳跃高度为对应概率 $p_k$：
+        $$F(x) = \sum_{x_k \le x} p_k$$
+      </p>
+
+      <h3>四、连续型随机变量及其概率密度函数</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.4：连续型随机变量与概率密度函数（PDF）</div>
+        <p>如果对于随机变量 $X$ 的分布函数 $F(x)$，存在一个非负可积函数 $f(x)$，使得对于任意实数 $x$，都有：
+          $$F(x) = \int_{-\infty}^x f(t) \, dt$$
+        </p>
+        <p>则称 $X$ 为<strong>连续型随机变量</strong>（Continuous Random Variable），称函数 $f(x)$ 为 $X$ 的<strong>概率密度函数</strong>（Probability Density Function，简称<strong>概率密度</strong>或 PDF）.</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.2：概率密度的四大基本性质</div>
+        <ol>
+          <li><strong>非负性</strong>：$f(x) \ge 0, \quad (-\infty < x < +\infty)$；</li>
+          <li><strong>归一性（全概率为 1）</strong>：曲线与 $x$ 轴包围的总面积等于 1：
+            $$\int_{-\infty}^{+\infty} f(x) \, dx = 1$$
+          </li>
+          <li><strong>区间概率计算</strong>：对于任意实数 $a \le b$，有：
+            $$P(a < X \le b) = P(a \le X \le b) = \int_a^b f(x) \, dx$$
+          </li>
+          <li><strong>导数关系</strong>：在 $f(x)$ 的连续点处，分布函数的导数等于概率密度：
+            $$F'(x) = f(x)$$
+          </li>
+        </ol>
+        <p><em>极重要推论</em>：对于连续型随机变量 $X$，其取任意<strong>单点值</strong>的概率恒为零！即对任意实数 $c$：
+          $$P(X = c) = 0$$
+          因此端点是否包含不影响概率：$P(a < X < b) = P(a \le X \le b) = P(a \le X < b) = P(a < X \le b)$.
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 常用的离散型随机变量</h2>
+
+      <h3>一、0-1 分布（两点分布 / 伯努利分布）</h3>
+      <p>若随机变量 $X$ 只能取 0 或 1 两个值，其分布律为：
+        $$P(X = 1) = p, \qquad P(X = 0) = 1 - p = q, \qquad (0 < p < 1)$$
+      </p>
+      <p>记作 $X \sim B(1, p)$ 或 $X \sim 0\text{-}1(p)$. 例如掷硬币正面朝上（1）与反面（0）、产品合格（0）与次品（1）等单次试验结果.</p>
+
+      <h3>二、二项分布（Binomial Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.5：二项分布</div>
+        <p>设将一试验独立重复进行 $n$ 次（称为 <strong>$n$ 重伯努利试验</strong>），在每次试验中事件 $A$ 发生的概率均为 $p$ ($0 < p < 1$)，不发生概率 $q = 1-p$. 设随机变量 $X$ 表示 $n$ 次试验中事件 $A$ 发生的总次数，则 $X$ 服从参数为 $n, p$ 的<strong>二项分布</strong>，记为：
+          $$X \sim B(n, p)$$
+          其概率分布律为：
+          $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k} = C_n^k p^k q^{n-k}, \qquad k = 0, 1, 2, \dots, n$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.3：泊松定理（二项分布的泊松逼近）</div>
+        <p>在 $n$ 重伯努利试验中，当试验次数 $n$ 很大而每次试验成功概率 $p$ 很小（稀有事件），且乘积 $\lambda = np$ 保持适中常数时，二项分布可由泊松分布高精度逼近：
+          $$\lim_{n \to \infty} \binom{n}{k} p^k (1-p)^{n-k} = \frac{\lambda^k}{k!} e^{-\lambda}, \qquad (k = 0, 1, 2, \dots)$$
+        </p>
+        <p>工程经验法则：当 $n \ge 20, p \le 0.05$（或 $n \ge 100, np \le 10$）时，用泊松分布近似计算二项分布极其准确方便.</p>
+      </div>
+
+      <h3>三、泊松分布（Poisson Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.6：泊松分布</div>
+        <p>若随机变量 $X$ 的可能取值为 $0, 1, 2, \dots, n, \dots$，其分布律为：
+          $$P(X = k) = \frac{\lambda^k}{k!} e^{-\lambda}, \qquad k = 0, 1, 2, \dots, \quad (\lambda > 0)$$
+          则称 $X$ 服从参数为 $\lambda$ 的<strong>泊松分布</strong>，记为 $X \sim P(\lambda)$.
+        </p>
+      </div>
+      <p>
+        <em>典型应用背景</em>：泊松分布常用于描述在固定时间间隔或固定空间区域内，某稀有事件发生次数的概率模型（如放射性物质在 1 秒内蜕变的粒子数、电话交换台在 1 分钟内呼入的通话次数、某路口每天发生的交通事故数等）.
+      </p>
+
+      <h3>四、超几何分布与几何分布</h3>
+      <p>
+        <strong>1. 超几何分布（Hypergeometric Distribution）</strong>：
+        从含 $M$ 件次品的 $N$ 件产品中不放回随机抽取 $n$ 件，抽得次品数 $X$ 的分布律为：
+        $$P(X = k) = \frac{C_M^k C_{N-M}^{n-k}}{C_N^n}, \qquad k = \max(0, n-(N-M)), \dots, \min(n, M)$$
+        记作 $X \sim H(N, M, n)$. 当 $N$ 极大而 $n$ 相对很小时，不放回抽样无限趋近于放回抽样，超几何分布逼近二项分布 $B(n, \frac{M}{N})$.
+      </p>
+      <p>
+        <strong>2. 几何分布（Geometric Distribution）</strong>：
+        在独立伯努利试验中，事件 $A$ 首次发生所需的试验总次数 $X$ 的分布律为：
+        $$P(X = k) = (1-p)^{k-1} p, \qquad k = 1, 2, 3, \dots$$
+        记作 $X \sim G(p)$. 几何分布具有<strong>无记忆性</strong>（Memoryless Property）：对任意正整数 $m, n$，有 $P(X > m + n | X > m) = P(X > n)$.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 常用的连续型随机变量</h2>
+
+      <h3>一、均匀分布（Uniform Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.7：均匀分布</div>
+        <p>若连续型随机变量 $X$ 的概率密度函数为：
+          $$f(x) = \begin{cases}
+            \frac{1}{b - a}, & a \le x \le b \\
+            0, & \text{其他}
+          \end{cases}$$
+          则称 $X$ 在区间 $[a, b]$ 上服从<strong>均匀分布</strong>，记作 $X \sim U(a, b)$.
+        </p>
+        <p>其分布函数为：
+          $$F(x) = \begin{cases}
+            0, & x < a \\
+            \frac{x - a}{b - a}, & a \le x < b \\
+            1, & x \ge b
+          \end{cases}$$
+        </p>
+      </div>
+
+      <h3>二、指数分布（Exponential Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.8：指数分布</div>
+        <p>若连续型随机变量 $X$ 的概率密度函数为：
+          $$f(x) = \begin{cases}
+            \lambda e^{-\lambda x}, & x > 0 \\
+            0, & x \le 0
+          \end{cases} \qquad (\lambda > 0)$$
+          则称 $X$ 服从参数为 $\lambda$ 的<strong>指数分布</strong>，记作 $X \sim E(\lambda)$.
+        </p>
+        <p>其分布函数为：
+          $$F(x) = \begin{cases}
+            1 - e^{-\lambda x}, & x > 0 \\
+            0, & x \le 0
+          \end{cases}$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.4：指数分布的无记忆性（连续分布中唯二具备）</div>
+        <p>设 $X \sim E(\lambda)$，则对任意实数 $s, t > 0$，有：
+          $$P(X > s + t \mid X > s) = P(X > t)$$
+        </p>
+        <p><em>物理意义</em>：若某元件使用寿命服从指数分布，则“该元件已工作了 $s$ 小时”这一事实，对其未来还能再工作 $t$ 小时的条件概率没有任何影响（元件不老化、永远如新）. 指数分布广泛应用于排队论、可靠性工程与寿命分析.</p>
+      </div>
+
+      <h3>三、正态分布（高斯分布，Normal Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.9：正态分布</div>
+        <p>若连续型随机变量 $X$ 的概率密度函数为：
+          $$f(x) = \frac{1}{\sqrt{2\pi}\sigma} e^{-\frac{(x - \mu)^2}{2\sigma^2}}, \qquad -\infty < x < +\infty$$
+          其中实数 $\mu$ 和 $\sigma > 0$ 为常数，则称 $X$ 服从参数为 $\mu, \sigma^2$ 的<strong>正态分布</strong>（或<strong>高斯分布</strong>），记作：
+          $$X \sim N(\mu, \sigma^2)$$
+        </p>
+      </div>
+
+      <h4>正态分布概率密度的曲线特征（钟形曲线）：</h4>
+      <ol>
+        <li><strong>对称性</strong>：曲线关于直线 $x = \mu$ 严格轴对称，并在对称轴处达到最大值 $f(\mu) = \frac{1}{\sqrt{2\pi}\sigma}$；</li>
+        <li><strong>单峰与渐近线</strong>：在 $(-\infty, \mu)$ 上严格单调递增，在 $(\mu, +\infty)$ 上严格单调递减；以 $x$ 轴为水平渐近线；</li>
+        <li><strong>拐点</strong>：曲线在 $x = \mu \pm \sigma$ 处存在两个拐点；</li>
+        <li><strong>参数几何意义</strong>：$\mu$ 为<strong>位置参数</strong>，决定曲线对称中心；$\sigma$ 为<strong>形状参数</strong>，$\sigma$ 越小曲线越尖锐高耸，$\sigma$ 越大曲线越矮平分散（面积始终为 1）.</li>
+      </ol>
+
+      <h4>标准正态分布 $\Phi(x)$：</h4>
+      <p>
+        当 $\mu = 0, \sigma = 1$ 时的正态分布称为<strong>标准正态分布</strong>，记为 $X \sim N(0, 1)$：
+        $$\varphi(x) = \frac{1}{\sqrt{2\pi}} e^{-\frac{x^2}{2}}, \qquad \Phi(x) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt$$
+        标准正态分布函数满足极重要的反对称性质：
+        $$\Phi(-x) = 1 - \Phi(x), \qquad \Phi(0) = 0.5$$
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.5：一般正态分布的标准正态标准化定理</div>
+        <p>若 $X \sim N(\mu, \sigma^2)$，则令标准化变量 $X^* = \frac{X - \mu}{\sigma}$，必有：
+          $$X^* = \frac{X - \mu}{\sigma} \sim N(0, 1)$$
+          因此任意正态分布的区间概率均可通过查标准正态分布表（附录 3）计算：
+          $$P(a < X \le b) = \Phi\left(\frac{b - \mu}{\sigma}\right) - \Phi\left(\frac{a - \mu}{\sigma}\right)$$
+        </p>
+        <p><strong>著名 $3\sigma$ 原则</strong>：
+          $$P(|X - \mu| < \sigma) = 2\Phi(1) - 1 \approx 68.26\%$$
+          $$P(|X - \mu| < 2\sigma) = 2\Phi(2) - 1 \approx 95.44\%$$
+          $$P(|X - \mu| < 3\sigma) = 2\Phi(3) - 1 \approx 99.74\%$$
+          几乎所有的样本值（$99.74\%$）都落在区间 $(\mu - 3\sigma, \mu + 3\sigma)$ 内，超出的概率不足 $0.26\%$.
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 随机变量函数的分布</h2>
+
+      <h3>一、离散型随机变量函数的分布</h3>
+      <p>设 $X$ 为离散型随机变量，其分布律为 $P(X = x_k) = p_k$. 设 $Y = g(X)$：</p>
+      <ol>
+        <li>首先计算出 $Y$ 的所有可能取值 $y_k = g(x_k)$；</li>
+        <li>如果所有的 $y_k$ 互不相同，则 $P(Y = y_k) = P(X = x_k) = p_k$；</li>
+        <li>如果若干个不同的 $x_k$ 对应相同的 $y$ 值，则根据互斥事件加法公式，将对应的所有概率相加：
+          $$P(Y = y) = \sum_{g(x_k) = y} P(X = x_k)$$
+        </li>
+      </ol>
+
+      <h3>二、连续型随机变量函数的分布</h3>
+      <p>已知 $X$ 的概率密度为 $f_X(x)$，求 $Y = g(X)$ 的概率密度 $f_Y(y)$，最通用的方法是<strong>分布函数法</strong>：</p>
+      <p><strong>第一步</strong>：写出 $Y$ 的分布函数定义：
+        $$F_Y(y) = P(Y \le y) = P(g(X) \le y) = \int_{g(x) \le y} f_X(x) \, dx$$
+      </p>
+      <p><strong>第二步</strong>：解出不等式 $g(x) \le y$ 关于 $x$ 的积分区域并计算积分；</p>
+      <p><strong>第三步</strong>：对 $F_Y(y)$ 关于 $y$ 求导得出概率密度 $f_Y(y) = F_Y'(y)$.</p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2.6：严格单调可导函数密度变换公式</div>
+        <p>设连续型随机变量 $X$ 的概率密度为 $f_X(x)$，其取值范围在区间 $(a, b)$ 上. 若函数 $y = g(x)$ 在 $(a, b)$ 上处处<strong>严格单调且导数 $g'(x) \ne 0$</strong>，设其反函数为 $x = h(y)$，则 $Y = g(X)$ 在对应值域上的概率密度函数为：
+          $$f_Y(y) = f_X(h(y)) \cdot |h'(y)| = f_X(h(y)) \cdot \left|\frac{dx}{dy}\right|$$
+        </p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 14：标准正态平方服从自由度为 1 的 $\chi^2$ 分布</div>
+        <p>设 $X \sim N(0, 1)$，求 $Y = X^2$ 的概率密度函数 $f_Y(y)$.</p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【解】</strong></p>
+        <p>显然当 $y \le 0$ 时，$P(Y \le y) = 0$，故 $f_Y(y) = 0$.</p>
+        <p>当 $y > 0$ 时，由分布函数法：
+          $$F_Y(y) = P(Y \le y) = P(X^2 \le y) = P(-\sqrt{y} \le X \le \sqrt{y}) = \Phi(\sqrt{y}) - \Phi(-\sqrt{y}) = 2\Phi(\sqrt{y}) - 1$$
+        </p>
+        <p>两边对 $y$ 求导：
+          $$f_Y(y) = F_Y'(y) = 2 \varphi(\sqrt{y}) \cdot \frac{d}{dy}(\sqrt{y}) = 2 \times \left(\frac{1}{\sqrt{2\pi}} e^{-\frac{y}{2}}\right) \times \frac{1}{2\sqrt{y}} = \frac{1}{\sqrt{2\pi y}} e^{-\frac{y}{2}}$$
+        </p>
+        <p>综上所述：
+          $$f_Y(y) = \begin{cases}
+            \frac{1}{\sqrt{2\pi}} y^{-\frac{1}{2}} e^{-\frac{y}{2}}, & y > 0 \\
+            0, & y \le 0
+          \end{cases}$$
+          （这正是数理统计中极为重要的自由度为 1 的 $\chi^2(1)$ 检验分布！）.
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与测试题二</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 本章核心要点概括</div>
+        <p>1. <strong>分布函数 $F(x) = P(X \le x)$</strong> 是刻画任意随机变量概率特性的统领工具，三条充要条件：单调不减、右连续、极限值 0 与 1；</p>
+        <p>2. <strong>六大经典常见分布</strong>：
+          <ul>
+            <li>离散型：0-1 分布 $B(1, p)$、二项分布 $B(n, p)$、泊松分布 $P(\lambda)$；</li>
+            <li>连续型：均匀分布 $U(a, b)$、指数分布 $E(\lambda)$、正态分布 $N(\mu, \sigma^2)$；</li>
+          </ul>
+        </p>
+        <p>3. <strong>正态标准化与概率换算</strong>：若 $X \sim N(\mu, \sigma^2)$，则 $Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$，利用标准正态表 $\Phi(x)$ 结合 $\Phi(-x) = 1 - \Phi(x)$ 求解任意对称/单侧区间；</p>
+        <p>4. <strong>函数分布 $Y = g(X)$</strong>：离散型合并同类项，连续型牢记“分布函数求导法”与“单调导数变换公式 $f_Y(y) = f_X(h(y))|h'(y)|$”.</p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

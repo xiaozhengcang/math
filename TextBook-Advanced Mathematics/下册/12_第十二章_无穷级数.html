@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第十二章 无穷级数 - 高等数学（下册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (下册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="11_第十一章_曲线积分与曲面积分.html" class="nav-btn">← 上一章: 第十一章 曲线积分与曲面积分</a>
+      <a href="13_部分习题参考答案与提示.html" class="nav-btn primary">下一章: 部分习题参考答案与提示 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第十二章 无穷级数</h1>
+      <p class="chapter-intro">
+        在初等代数中，加法运算只能针对有限多个数进行；然而，在微积分学与现代物理分析中，我们必须把加法运算推广到无限多个项相加的情形——这就是<strong>无穷级数</strong>（Infinite Series）. 级数是高等数学中表示函数、研究函数性态以及进行高精度数值计算的核心工具. 例如，圆周率 $\pi$、自然常数 $e$、以及三角函数、对数函数的数值计算与芯片内算法，全部基于无穷级数的逼近理论. 本章将首先建立常数项级数的敛散性概念，系统讨论正项级数审敛法与交错级数的莱布尼茨判据；进而研究以幂函数为基底的<strong>幂级数</strong>，推导函数展开为泰勒级数的充要条件；最后，建立以正弦与余弦正交三角函数系为基底的<strong>傅里叶级数</strong>（Fourier Series），为信号频域分解与热传导、波动方程等偏微分方程的求解奠定关键数学基础.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 常数项级数的概念和性质</h2>
+
+      <h3>一、无穷级数与部分和的定义</h3>
+      <p>
+        给定一个数列 $u_1, u_2, u_3, \dots, u_n, \dots$，将它的所有项用加号连接起来的无限表达式：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\sum_{n=1}^\infty u_n = u_1 + u_2 + u_3 + \dots + u_n + \dots$$
+      </p>
+      <p>称为<strong>常数项无穷级数</strong>（简称<strong>级数</strong>），其中 $u_n$ 称为级数的<strong>通项</strong>（或一般项）.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (级数的敛散性与和)</div>
+        <p>
+          级数的前 $n$ 项之和 $s_n = \sum_{k=1}^n u_k = u_1 + u_2 + \dots + u_n$ 称为级数的<strong>部分和</strong>. 当 $n$ 无限增大时，如果部分和数列 $\{s_n\}$ 的极限存在，即
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\lim_{n \to \infty} s_n = s$$
+        </p>
+        <p>那么称无穷级数 $\sum_{n=1}^\infty u_n$ <strong>收敛</strong>，并称极限值 $s$ 为级数的<strong>和</strong>，记作 $\sum_{n=1}^\infty u_n = s$. 如果 $\{s_n\}$ 的极限不存在，则称级数<strong>发散</strong>（图 12-1）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_1.webp" alt="图 12-1 无穷等比级数正方形对半切割面积收敛极限" loading="lazy">
+          <figcaption>图 12-1 无穷等比级数正方形对半切割面积收敛极限</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>等比级数（几何级数）</strong>：$\sum_{n=0}^\infty a q^n = a + aq + aq^2 + \dots$ ($a \ne 0$)：
+      </p>
+      <ul>
+        <li>当 $|q| < 1$ 时，级数<strong>收敛</strong>，和为 $s = \frac{a}{1 - q}$；</li>
+        <li>当 $|q| \ge 1$ 时，级数<strong>发散</strong>.</li>
+      </ul>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 级数收敛的必要条件</div>
+        <p>若级数 $\sum_{n=1}^\infty u_n$ 收敛，则其通项趋于零：$\lim_{n \to \infty} u_n = 0$.</p>
+        <p><strong>逆否命题</strong>：若 $\lim_{n \to \infty} u_n \ne 0$（或极限不存在），则级数必发散！但通项趋于零绝不能保证级数收敛（如调和级数 $\sum \frac{1}{n}$ 发散）.</p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 常数项级数的审敛法</h2>
+
+      <h3>一、正项级数审敛法</h3>
+      <p>每一项都非负（$u_n \ge 0$）的级数称为<strong>正项级数</strong>. 正项级数收敛的充分必要条件是其部分和数列 $\{s_n\}$ 有界.</p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 正项级数四大判别准则</div>
+        <ol>
+          <li><strong>比较审敛法（极限形式）</strong>：设 $\sum u_n, \sum v_n$ 为正项级数，若 $\lim_{n \to \infty}\frac{u_n}{v_n} = l$：
+            <ul>
+              <li>若 $0 < l < +\infty$，则两级数同敛散；</li>
+              <li>基准级数：$p$-级数 $\sum_{n=1}^\infty \frac{1}{n^p}$，当 $p > 1$ 时收敛，当 $p \le 1$ 时发散（图 12-2）；</li>
+            </ul>
+          </li>
+          <li><strong>比值审敛法（达朗贝尔判别法 D'Alembert）</strong>：设 $\lim_{n \to \infty} \frac{u_{n+1}}{u_n} = \rho$：
+            <ul>
+              <li>$\rho < 1$ 时收敛；$\rho > 1$ 时发散；$\rho = 1$ 时失效；</li>
+            </ul>
+          </li>
+          <li><strong>根值审敛法（柯西判别法 Cauchy）</strong>：设 $\lim_{n \to \infty} \sqrt[n]{u_n} = \rho$：
+            <ul>
+              <li>$\rho < 1$ 时收敛；$\rho > 1$ 时发散；$\rho = 1$ 时失效；</li>
+            </ul>
+          </li>
+          <li><strong>积分审敛法</strong>：若 $f(x)$ 在 $[1, +\infty)$ 上非负单调递减，则 $\sum_{n=1}^\infty f(n)$ 与反常积分 $\int_1^{+\infty} f(x)dx$ 同敛散（图 12-3）.</li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_2.webp" alt="图 12-2 调和级数与反常积分对数发散几何阶梯比较" loading="lazy">
+          <figcaption>图 12-2 调和级数与反常积分对数发散几何阶梯比较</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_3.webp" alt="图 12-3 积分审敛法上下矩形阶梯面积夹逼" loading="lazy">
+          <figcaption>图 12-3 积分审敛法上下矩形阶梯面积夹逼</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、交错级数与绝对收敛</h3>
+      <p>
+        正负项交替出现的级数 $\sum_{n=1}^\infty (-1)^{n-1} u_n = u_1 - u_2 + u_3 - u_4 + \dots$ ($u_n > 0$) 称为<strong>交错级数</strong>.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 莱布尼茨审敛法 (Leibniz Criterion)</div>
+        <p>若交错级数满足：(1) $u_n \ge u_{n+1}$（单调递减）；(2) $\lim_{n \to \infty} u_n = 0$，则该交错级数必<strong>收敛</strong>，且其和 $s \le u_1$，余项误差截断满足 $|r_n| \le u_{n+1}$（图 12-4）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_4.webp" alt="图 12-4 莱布尼茨交错级数部分和在数轴上左右收缩夹逼" loading="lazy">
+          <figcaption>图 12-4 莱布尼茨交错级数部分和在数轴上左右收缩夹逼</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>绝对收敛与条件收敛</strong>：若 $\sum |u_n|$ 收敛，称原级数 $\sum u_n$ <strong>绝对收敛</strong>；若 $\sum u_n$ 收敛但 $\sum |u_n|$ 发散，称原级数<strong>条件收敛</strong>.
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 幂级数</h2>
+
+      <h3>一、阿贝尔定理与收敛半径</h3>
+      <p>
+        形如 $\sum_{n=0}^\infty a_n (x - x_0)^n$ 的函数项级数称为<strong>幂级数</strong>.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 阿贝尔定理 (Abel's Theorem)</div>
+        <p>
+          如果级数 $\sum a_n x^n$ 当 $x = x_0$ ($x_0 \ne 0$) 时收敛，则对满足 $|x| < |x_0|$ 的一切 $x$，该级数必<strong>绝对收敛</strong>；反之，若在 $x = x_1$ 时发散，则对满足 $|x| > |x_1|$ 的一切 $x$，该级数必<strong>发散</strong>（图 12-5、图 12-6）.
+        </p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_5.webp" alt="图 12-5 阿贝尔定理对称收敛区间与发散区间分布" loading="lazy">
+          <figcaption>图 12-5 阿贝尔定理对称收敛区间与发散区间分布</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_6.webp" alt="图 12-6 收敛区间 (-R, R) 与端点收敛性判定" loading="lazy">
+          <figcaption>图 12-6 收敛区间 (-R, R) 与端点收敛性判定</figcaption>
+        </figure>
+      </div>
+
+      <p><strong>收敛半径计算公式</strong>：设 $\lim_{n \to \infty} \left|\frac{a_{n+1}}{a_n}\right| = \rho$，则收敛半径 $R = \frac{1}{\rho}$（规定 $\frac{1}{0} = +\infty, \frac{1}{+\infty} = 0$）.</p>
+
+      <h3>二、和函数的优良分析性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 幂级数分析运算性质</div>
+        <ol>
+          <li><strong>连续性</strong>：和函数 $s(x) = \sum_{n=0}^\infty a_n x^n$ 在收敛区间 $(-R, R)$ 内处处连续；</li>
+          <li><strong>逐项求导</strong>：$s'(x) = \sum_{n=1}^\infty n a_n x^{n-1}$，逐项求导后收敛半径保持不变（图 12-7）；</li>
+          <li><strong>逐项积分</strong>：$\int_0^x s(t)dt = \sum_{n=0}^\infty \frac{a_n}{n+1} x^{n+1}$，逐项积分后收敛半径保持不变.</li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_7.webp" alt="图 12-7 逐项微积分运算保持收敛域形态几何图解" loading="lazy">
+          <figcaption>图 12-7 逐项微积分运算保持收敛域形态几何图解</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 函数展开成幂级数</h2>
+      <p>五大核心初等函数的麦克劳林展开式（图 12-8）：</p>
+      <ul>
+        <li>$e^x = \sum_{n=0}^\infty \frac{x^n}{n!} \quad (-\infty < x < +\infty)$</li>
+        <li>$\sin x = \sum_{n=0}^\infty (-1)^n \frac{x^{2n+1}}{(2n+1)!} \quad (-\infty < x < +\infty)$</li>
+        <li>$\cos x = \sum_{n=0}^\infty (-1)^n \frac{x^{2n}}{(2n)!} \quad (-\infty < x < +\infty)$</li>
+        <li>$\frac{1}{1 - x} = \sum_{n=0}^\infty x^n \quad (-1 < x < 1)$</li>
+        <li>$\ln(1 + x) = \sum_{n=1}^\infty (-1)^{n-1} \frac{x^n}{n} \quad (-1 < x \le 1)$</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_8.webp" alt="图 12-8 多项式阶数升高时对超越函数高阶逼近" loading="lazy">
+          <figcaption>图 12-8 多项式阶数升高时对超越函数高阶逼近</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节与第七节 -->
+      <h2>第六节与第七节 傅里叶级数</h2>
+
+      <h3>一、三角函数系的正交性</h3>
+      <p>三角函数系 $\{1, \cos x, \sin x, \cos 2x, \sin 2x, \dots, \cos nx, \sin nx, \dots\}$ 在区间 $[-\pi, \pi]$ 上具有<strong>正交性</strong>：任意两个不同函数乘积在 $[-\pi, \pi]$ 上的积分恒等于零；而自身平方的积分等于 $\pi$（对 $1$ 为 $2\pi$）. 这构成了傅里叶分析的正交基底.</p>
+
+      <h3>二、傅里叶级数展开与狄利克雷收敛定理</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 狄利克雷收敛定理 (Dirichlet Theorem)</div>
+        <p>
+          设以 $2\pi$ 为周期的周期函数 $f(x)$ 在一个周期 $[-\pi, \pi]$ 上满足：(1) 连续或只有有限个第一类间断点；(2) 只有有限个极值点. 那么 $f(x)$ 的傅里叶级数必收敛：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty (a_n \cos nx + b_n \sin nx)$$
+        </p>
+        <p>在连续点处收敛于 $f(x)$；在间断点 $x_0$ 处收敛于平均值 $\frac{f(x_0^-) + f(x_0^+)}{2}$（图 12-9、图 12-10、图 12-11、图 12-12）.</p>
+        <p><strong>欧拉-傅里叶系数公式</strong>：</p>
+        <p style="text-align: center; margin: 8px 0;">
+          $$a_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\cos nx dx \quad (n = 0, 1, 2, \dots), \qquad b_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\sin nx dx \quad (n = 1, 2, \dots)$$
+        </p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_9.webp" alt="图 12-9 方波周期信号傅里叶展开前 n 项有限和逼近" loading="lazy">
+          <figcaption>图 12-9 方波周期信号傅里叶展开前 n 项有限和逼近</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_10.webp" alt="图 12-10 三角波（锯齿波）周期信号平滑逼近" loading="lazy">
+          <figcaption>图 12-10 三角波（锯齿波）周期信号平滑逼近</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_11.webp" alt="图 12-11 吉布斯现象（Gibbs Phenomenon）间断点跳跃峰" loading="lazy">
+          <figcaption>图 12-11 吉布斯现象（Gibbs Phenomenon）间断点跳跃峰</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_12.webp" alt="图 12-12 全波整流交流电余弦级数波形" loading="lazy">
+          <figcaption>图 12-12 全波整流交流电余弦级数波形</figcaption>
+        </figure>
+      </div>
+
+      <h3>三、正弦级数与余弦级数（半程延拓）</h3>
+      <p>
+        对于定义在 $[0, \pi]$ 或 $[0, l]$ 上的非周期函数，可以通过<strong>奇延拓</strong>展开为只含正弦项的<strong>正弦级数</strong>，或通过<strong>偶延拓</strong>展开为只含余弦项的<strong>余弦级数</strong>（图 12-13、图 12-14、图 12-15、图 12-16）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_13.webp" alt="图 12-13 奇延拓构造正弦级数周期波形" loading="lazy">
+          <figcaption>图 12-13 奇延拓构造正弦级数周期波形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_14.webp" alt="图 12-14 偶延拓构造余弦级数连续波形" loading="lazy">
+          <figcaption>图 12-14 偶延拓构造余弦级数连续波形</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_15.webp" alt="图 12-15 任意周期 2l 脉冲波列傅里叶分解" loading="lazy">
+          <figcaption>图 12-15 任意周期 2l 脉冲波列傅里叶分解</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_12_16.webp" alt="图 12-16 离散频谱图各次谐波振幅谱与相位谱" loading="lazy">
+          <figcaption>图 12-16 离散频谱图各次谐波振幅谱与相位谱</figcaption>
+        </figure>
+      </div>
+
+      <h3>四、复数形式的傅里叶级数</h3>
+      <p>
+        利用欧拉公式 $\cos\theta = \frac{e^{i\theta} + e^{-i\theta}}{2}, \sin\theta = \frac{e^{i\theta} - e^{-i\theta}}{2i}$，傅里叶级数可以高度紧凑地表示为双边复指数级数（图 12-17）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$f(t) = \sum_{n=-\infty}^{+\infty} c_n e^{i n \omega_0 t}, \qquad c_n = \frac{1}{T}\int_{-\frac{T}{2}}^{\frac{T}{2}} f(t)e^{-i n \omega_0 t}dt$$
+      </p>
+      <p>这一公式直接通向了现代通信与信号处理的基石——<strong>傅里叶变换</strong>（Fourier Transform）.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_12_17.webp" alt="图 12-17 复数形式傅里叶级数复平面旋转矢量合成" loading="lazy">
+          <figcaption>图 12-17 复数形式傅里叶级数复平面旋转矢量合成</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题十二 -->
+      <h2>总习题十二</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 判别级数 $\sum_{n=1}^\infty \frac{n!}{n^n}$ 的敛散性.</p>
+        <p><em>解</em>：应用达朗贝尔比值判别法：<br>
+        $\lim_{n \to \infty} \frac{u_{n+1}}{u_n} = \lim_{n \to \infty} \frac{(n+1)!}{(n+1)^{n+1}} \cdot \frac{n^n}{n!} = \lim_{n \to \infty} \left(\frac{n}{n+1}\right)^n = \lim_{n \to \infty} \frac{1}{(1 + \frac{1}{n})^n} = \frac{1}{e}$.<br>
+        因为 $\frac{1}{e} < 1$，所以由比值审敛法，该级数<strong>收敛</strong>.</p>
+
+        <p><strong>2.</strong> 求幂级数 $\sum_{n=1}^\infty \frac{x^n}{n \cdot 2^n}$ 的收敛域与和函数.</p>
+        <p><em>解</em>：$a_n = \frac{1}{n 2^n}$，收敛半径 $R = \lim_{n \to \infty} \left|\frac{a_n}{a_{n+1}}\right| = \lim \frac{(n+1)2^{n+1}}{n 2^n} = 2$.<br>
+        端点检验：当 $x = 2$ 时，$\sum \frac{1}{n}$ 发散；当 $x = -2$ 时，$\sum \frac{(-1)^n}{n}$ 收敛.<br>
+        故收敛域为 $[-2, 2)$.<br>
+        求和函数：记 $s(x) = \sum_{n=1}^\infty \frac{x^n}{n 2^n}$，逐项求导：<br>
+        $s'(x) = \sum_{n=1}^\infty \frac{x^{n-1}}{2^n} = \frac{1}{2}\sum_{n=1}^\infty \left(\frac{x}{2}\right)^{n-1} = \frac{1}{2} \cdot \frac{1}{1 - \frac{x}{2}} = \frac{1}{2 - x}$ ($|x| < 2$).<br>
+        积分并利用 $s(0) = 0$：$s(x) = \int_0^x \frac{dt}{2 - t} = -\ln(1 - \frac{x}{2})$. 连续延拓到 $x = -2$，和函数为 $-\ln(1 - \frac{x}{2})$ ($x \in [-2, 2)$).</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="11_第十一章_曲线积分与曲面积分.html" class="nav-btn">← 上一章: 第十一章 曲线积分与曲面积分</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="13_部分习题参考答案与提示.html" class="nav-btn primary">下一章: 部分习题参考答案与提示 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

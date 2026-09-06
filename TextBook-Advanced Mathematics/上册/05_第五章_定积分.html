@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第五章 定积分 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="04_第四章_不定积分.html" class="nav-btn">← 上一章: 第四章 不定积分</a>
+      <a href="06_第六章_定积分的应用.html" class="nav-btn primary">下一章: 第六章 定积分的应用 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第五章 定积分</h1>
+      <p class="chapter-intro">
+        如果说微分学是关于“局部变化率与微元分解”的学问，那么积分学则是关于“无限累加与整体合成”的科学. <strong>定积分</strong>（Definite Integral）概念的建立，是人类数学史上最辉煌的飞跃之一. 它最初源于计算不规则平面图形的面积、立体体积以及变速运动的总位移，但其本质是<strong>某种特定形式的和式的极限</strong>. 本章将从曲边梯形面积的逼近过程出发，建立严格的定积分概念，深入剖析定积分的代数与几何性质；进而建立微积分发展史上最关键的里程碑——<strong>微积分基本公式（牛顿-莱布尼茨公式）</strong>，揭示微分与积分之间互逆的内在规律；并系统讨论定积分的换元与分部算法、反常积分（广义积分）及其敛散性审敛法与 $\Gamma$ 函数.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 定积分的概念与性质</h2>
+
+      <h3>一、定积分问题的引例</h3>
+
+      <h4>1. 曲边梯形的面积</h4>
+      <p>
+        在直角坐标系中，由连续曲线 $y = f(x)$ ($f(x) \ge 0$)、两条平行直线 $x = a, x = b$ 以及 $x$ 轴所围成的平面图形，称为<strong>曲边梯形</strong>（图 5-1）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_1.webp" alt="图 5-1 曲边梯形几何定义" loading="lazy">
+          <figcaption>图 5-1 曲边梯形几何定义</figcaption>
+        </figure>
+      </div>
+
+      <p>为了求出曲边梯形的面积 $A$，采用“以直代曲、无限细分”的四步经典算法：</p>
+      <ol>
+        <li><strong>分割</strong>：在区间 $[a, b]$ 中任意插入 $n-1$ 个分点：$a = x_0 < x_1 < x_2 < \dots < x_n = b$，将区间分成 $n$ 个小区间 $[x_{i-1}, x_i]$，其长度记为 $\Delta x_i = x_i - x_{i-1}$ ($i = 1, 2, \dots, n$). 记 $\lambda = \max_{1 \le i \le n} \{\Delta x_i\}$.</li>
+        <li><strong>近似</strong>：在每个小区间 $[x_{i-1}, x_i]$ 上任取一点 $\xi_i \in [x_{i-1}, x_i]$，用以 $\Delta x_i$ 为底、高为 $f(\xi_i)$ 的窄矩形面积近似代替第 $i$ 个窄曲边梯形的面积（图 5-2）：$\Delta A_i \approx f(\xi_i)\Delta x_i$.</li>
+        <li><strong>求和</strong>：曲边梯形总面积近似等于各窄矩形面积之和：$A \approx \sum_{i=1}^n f(\xi_i)\Delta x_i$.</li>
+        <li><strong>取极限</strong>：令最大子区间长度 $\lambda \to 0$（此时分割数 $n \to \infty$），和式的极限即为曲边梯形的精确面积：$A = \lim_{\lambda \to 0} \sum_{i=1}^n f(\xi_i)\Delta x_i$.</li>
+      </ol>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_2.webp" alt="图 5-2 矩形和式近似逼近曲边梯形" loading="lazy">
+          <figcaption>图 5-2 矩形和式近似逼近曲边梯形</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、定积分的定义</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (定积分 Riemann Integral)</div>
+        <p>
+          设函数 $f(x)$ 在闭区间 $[a, b]$ 上有界. 在 $[a, b]$ 中任意插入分点 $a = x_0 < x_1 < \dots < x_n = b$，在每个小区间 $[x_{i-1}, x_i]$ 上任取一点 $\xi_i$，作和式：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$I_n = \sum_{i=1}^n f(\xi_i)\Delta x_i$$
+        </p>
+        <p>
+          记 $\lambda = \max_{1 \le i \le n} \{\Delta x_i\}$. 如果当 $\lambda \to 0$ 时，不论对 $[a, b]$ 如何分割，也不论在小区间上点 $\xi_i$ 如何选取，和式的极限都存在且为同一个确定的常数 $I$，则称函数 $f(x)$ 在区间 $[a, b]$ 上<strong>可积</strong>（Integrable），并将此极限值 $I$ 称为函数 $f(x)$ 在区间 $[a, b]$ 上的<strong>定积分</strong>，记作：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\int_a^b f(x)dx = \lim_{\lambda \to 0} \sum_{i=1}^n f(\xi_i)\Delta x_i$$
+        </p>
+        <p>其中 $a$ 称为<strong>积分下限</strong>，$b$ 称为<strong>积分上限</strong>，$[a, b]$ 称为<strong>积分区间</strong>.</p>
+      </div>
+
+      <p>
+        <strong>可积充分条件</strong>：若函数 $f(x)$ 在 $[a, b]$ 上<strong>连续</strong>，或在 $[a, b]$ 上有界且只有有限个第一类间断点，则 $f(x)$ 在 $[a, b]$ 上必可积.
+      </p>
+
+      <h3>三、定积分的基本性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (定积分的运算性质)</div>
+        <ol>
+          <li><strong>线性性质</strong>：$\int_a^b [k_1 f(x) \pm k_2 g(x)]dx = k_1 \int_a^b f(x)dx \pm k_2 \int_a^b g(x)dx$</li>
+          <li><strong>区间可加性</strong>：对任意三点 $a, b, c$，恒有 $\int_a^b f(x)dx = \int_a^c f(x)dx + \int_c^b f(x)dx$</li>
+          <li><strong>保号性</strong>：若在 $[a, b]$ 上 $f(x) \ge 0$，则 $\int_a^b f(x)dx \ge 0$；特别地，若 $f(x) \le g(x)$，则 $\int_a^b f(x)dx \le \int_a^b g(x)dx$</li>
+          <li><strong>绝对值不等式</strong>：$\left|\int_a^b f(x)dx\right| \le \int_a^b |f(x)|dx$</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2 (定积分中值定理)</div>
+        <p>
+          如果函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则在积分区间 $[a, b]$ 上至少存在一点 $\xi \in [a, b]$，使得：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int_a^b f(x)dx = f(\xi)(b - a)$$
+        </p>
+        <p><strong>几何意义</strong>：曲边梯形的面积等于以区间长 $(b - a)$ 为底、以平均高度 $f(\xi)$ 为高的等面积矩形（图 5-3、图 5-4）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_3.webp" alt="图 5-3 积分中值定理的等面积矩形解释" loading="lazy">
+          <figcaption>图 5-3 积分中值定理的等面积矩形解释</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_5_4.webp" alt="图 5-4 梯形近似法与抛物线法截面估算" loading="lazy">
+          <figcaption>图 5-4 梯形近似法与抛物线法截面估算</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 微积分基本公式</h2>
+
+      <h3>一、积分上限的函数及其导数</h3>
+      <p>
+        设函数 $f(x)$ 在 $[a, b]$ 上连续. 如果将定积分的上限变为变量 $x \in [a, b]$，则定积分定义了一个新的函数：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\Phi(x) = \int_a^x f(t)dt \quad (a \le x \le b)$$
+      </p>
+      <p>称为<strong>变上限积分函数</strong>（图 5-5）.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_5.webp" alt="图 5-5 变上限积分几何意义：面积随上限 x 的增长" loading="lazy">
+          <figcaption>图 5-5 变上限积分几何意义：面积随上限 x 的增长</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 3 (变上限积分求导定理)</div>
+        <p>如果函数 $f(x)$ 在区间 $[a, b]$ 上连续，则变上限积分 $\Phi(x) = \int_a^x f(t)dt$ 在 $[a, b]$ 上处处可导，且其导数等于被积函数在上限处的值：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\Phi'(x) = \frac{d}{dx}\left[\int_a^x f(t)dt\right] = f(x)$$
+        </p>
+        <p><strong>重要推论</strong>：连续函数 $f(x)$ 的原函数一定存在，$\Phi(x)$ 就是 $f(x)$ 的一个原函数. 这彻底确立了原函数存在定理.</p>
+        <p><strong>复合上限求导链式法则</strong>：若积分限为可导函数，则：</p>
+        <p style="text-align: center; margin: 8px 0;">
+          $$\frac{d}{dx}\left[\int_{\psi(x)}^{\varphi(x)} f(t)dt\right] = f(\varphi(x))\varphi'(x) - f(\psi(x))\psi'(x)$$
+        </p>
+      </div>
+
+      <h3>二、牛顿-莱布尼茨公式</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4 (牛顿-莱布尼茨公式 Newton-Leibniz Formula)</div>
+        <p>如果函数 $F(x)$ 是连续函数 $f(x)$ 在区间 $[a, b]$ 上的任意一个原函数，则：</p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\int_a^b f(x)dx = F(b) - F(a) = [F(x)]_a^b$$
+        </p>
+        <p>
+          这个公式将求和式的极限（定积分）直接转化为求被积函数的原函数，在微分与积分之间架起了宏伟的金门大桥，彻底解放了微积分的计算力！
+        </p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 定积分的换元法和分部积分法</h2>
+
+      <h3>一、定积分的换元法</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5 (定积分换元公式)</div>
+        <p>设函数 $f(x)$ 在区间 $[a, b]$ 上连续，变换 $x = \varphi(t)$ 满足：</p>
+        <ol>
+          <li>$\varphi(\alpha) = a, \varphi(\beta) = b$；</li>
+          <li>$\varphi(t)$ 在闭区间 $[\alpha, \beta]$（或 $[\beta, \alpha]$）上具有连续导数，且其值域在 $[a, b]$ 内；</li>
+        </ol>
+        <p>则恒有：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int_a^b f(x)dx = \int_\alpha^\beta f(\varphi(t))\varphi'(t)dt$$
+        </p>
+        <p><strong>特别提醒</strong>：定积分换元<strong>必须同步改变积分上下限</strong>，换限后直接按新变量计算定值，<strong>绝不需要再回代原变量</strong>！</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_6.webp" alt="图 5-6 变量代换下的区间对应与保号方向" loading="lazy">
+          <figcaption>图 5-6 变量代换下的区间对应与保号方向</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_5_7.webp" alt="图 5-7 椭圆面积换元计算模型" loading="lazy">
+          <figcaption>图 5-7 椭圆面积换元计算模型</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、定积分的分部积分法</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6 (定积分分部积分公式)</div>
+        <p>若 $u(x), v(x)$ 在 $[a, b]$ 上具有连续导数，则：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int_a^b u(x)v'(x)dx = [u(x)v(x)]_a^b - \int_a^b v(x)u'(x)dx$$
+        </p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_8.webp" alt="图 5-8 华里斯公式正弦高次幂积分面积递减图形" loading="lazy">
+          <figcaption>图 5-8 华里斯公式正弦高次幂积分面积递减图形</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>华里斯公式（点火公式 Wallis Formula）</strong>：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$I_n = \int_0^{\frac{\pi}{2}} \sin^n x dx = \int_0^{\frac{\pi}{2}} \cos^n x dx = \begin{cases} \frac{n-1}{n} \cdot \frac{n-3}{n-2} \dots \frac{1}{2} \cdot \frac{\pi}{2}, & (n \text{ 为正偶数}) \\ \frac{n-1}{n} \cdot \frac{n-3}{n-2} \dots \frac{2}{3} \cdot 1, & (n \text{ 为大于 1 的奇数}) \end{cases}$$
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 反常积分</h2>
+
+      <h3>一、无穷限的反常积分</h3>
+      <p>
+        当积分区间延伸到无穷大时，定义为有限区间积分的极限（图 5-9）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\int_a^{+\infty} f(x)dx = \lim_{b \to +\infty} \int_a^b f(x)dx, \qquad \int_{-\infty}^b f(x)dx = \lim_{a \to -\infty} \int_a^b f(x)dx$$
+      </p>
+      <p>若极限存在，称该反常积分<strong>收敛</strong>；若极限不存在，称反常积分<strong>发散</strong>.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_9.webp" alt="图 5-9 无穷延伸区域的面积与收敛性" loading="lazy">
+          <figcaption>图 5-9 无穷延伸区域的面积与收敛性</figcaption>
+        </figure>
+      </div>
+
+      <p><strong>基准 $p$-积分</strong>：$\int_1^{+\infty} \frac{dx}{x^p}$，当 $p > 1$ 时收敛，其值为 $\frac{1}{p-1}$；当 $p \le 1$ 时发散.</p>
+
+      <h3>二、无界函数的反常积分（瑕积分）</h3>
+      <p>
+        如果被积函数在区间端点 $a$ 处趋于无穷大（称 $a$ 为<strong>瑕点</strong>），其反常积分定义为（图 5-10）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\int_a^b f(x)dx = \lim_{\varepsilon \to 0^+} \int_{a + \varepsilon}^b f(x)dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_10.webp" alt="图 5-10 瑕点处的纵向趋于无穷大截割极限" loading="lazy">
+          <figcaption>图 5-10 瑕点处的纵向趋于无穷大截割极限</figcaption>
+        </figure>
+      </div>
+
+      <p><strong>基准瑕积分</strong>：$\int_a^b \frac{dx}{(x - a)^q}$，当 $q < 1$ 时收敛；当 $q \ge 1$ 时发散.</p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 反常积分的审敛法 $\Gamma$ 函数</h2>
+
+      <h3>一、非负反常积分比较审敛法</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 7 (比较审敛原理)</div>
+        <p>设对所有 $x \in [a, +\infty)$，有 $0 \le f(x) \le g(x)$：</p>
+        <ol>
+          <li>若 $\int_a^{+\infty} g(x)dx$ 收敛，则 $\int_a^{+\infty} f(x)dx$ 必收敛；</li>
+          <li>若 $\int_a^{+\infty} f(x)dx$ 发散，则 $\int_a^{+\infty} g(x)dx$ 必发散.</li>
+        </ol>
+      </div>
+
+      <h3>二、$\Gamma$ 函数（欧拉第二积分）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 ($\Gamma$ 函数)</div>
+        <p>含参变量的反常积分：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\Gamma(\alpha) = \int_0^{+\infty} x^{\alpha - 1} e^{-x} dx \quad (\alpha > 0)$$
+        </p>
+        <p>称为<strong>伽马函数</strong>（图 5-11）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_5_11.webp" alt="图 5-11 伽马函数连续曲线形态" loading="lazy">
+          <figcaption>图 5-11 伽马函数连续曲线形态</figcaption>
+        </figure>
+      </div>
+
+      <p><strong>$\Gamma$ 函数的核心性质</strong>：</p>
+      <ul>
+        <li><strong>递推公式</strong>：$\Gamma(\alpha + 1) = \alpha \Gamma(\alpha)$；</li>
+        <li><strong>阶乘推广</strong>：当 $n$ 为正整数时，$\Gamma(n + 1) = n!$；</li>
+        <li><strong>特殊值</strong>：$\Gamma(1) = 1, \quad \Gamma\left(\frac{1}{2}\right) = \sqrt{\pi}$.</li>
+      </ul>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题五 -->
+      <h2>总习题五</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 计算导数：$\frac{d}{dx}\left[\int_0^{x^2} \sqrt{1 + t^2}dt\right]$.</p>
+        <p><em>解</em>：应用变上限复合求导公式：$\sqrt{1 + (x^2)^2} \cdot (x^2)' = 2x\sqrt{1 + x^4}$.</p>
+
+        <p><strong>2.</strong> 计算定积分：$I = \int_0^1 x \arctan x dx$.</p>
+        <p><em>解</em>：分部积分法：<br>
+        $I = \int_0^1 \arctan x d\left(\frac{x^2}{2}\right) = \left[\frac{x^2}{2}\arctan x\right]_0^1 - \frac{1}{2}\int_0^1 \frac{x^2}{1 + x^2}dx$<br>
+        $= \frac{1}{2}\cdot\frac{\pi}{4} - \frac{1}{2}\int_0^1 \left(1 - \frac{1}{1 + x^2}\right)dx = \frac{\pi}{8} - \frac{1}{2}[x - \arctan x]_0^1 = \frac{\pi}{8} - \frac{1}{2}\left(1 - \frac{\pi}{4}\right) = \frac{\pi}{4} - \frac{1}{2}$.</p>
+
+        <p><strong>3.</strong> 计算反常积分：$I = \int_0^{+\infty} x e^{-x} dx$.</p>
+        <p><em>解</em>：由 $\Gamma$ 函数定义，$I = \Gamma(2) = 1! = 1$；或分部积分：<br>
+        $\int_0^{+\infty} x d(-e^{-x}) = [-x e^{-x}]_0^{+\infty} + \int_0^{+\infty} e^{-x}dx = 0 + [-e^{-x}]_0^{+\infty} = 1$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="04_第四章_不定积分.html" class="nav-btn">← 上一章: 第四章 不定积分</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="06_第六章_定积分的应用.html" class="nav-btn primary">下一章: 第六章 定积分的应用 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

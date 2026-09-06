@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第六章 统计量和抽样分布 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="05_第五章_大数定律及中心极限定理.html" class="nav-btn">← 上一章: 大数定律及中心极限定理</a>
+      <a href="07_第七章_参数估计.html" class="nav-btn primary">下一章: 参数估计 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第六章 统计量和抽样分布</h1>
+      <p class="chapter-intro">
+        从本章开始，我们正式进入<strong>数理统计学</strong>（Mathematical Statistics）的知识体系. 概率论是已知随机变量的概率分布来推求随机现象发生的概率与规律；而数理统计学则是“逆向”的科学思维：人们面对的是一个分布类型完全未知或含有未知参数的客观总体，必须通过从总体中科学抽取部分个体（称为样本），记录试验观测数据，并对这些数据进行科学的加工提炼，进而对总体的统计规律做出合理的推断. 本章重点介绍数理统计的理论基石——样本、统计量及其<strong>抽样分布</strong>.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 总体与样本</h2>
+
+      <h3>一、总体与个体</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.1：总体与个体</div>
+        <p>在数理统计中，研究对象的某项数量指标或综合指标的全体称为<strong>总体</strong>（Population），总体中所包含的每一个具体的观测单位称为<strong>个体</strong>（Individual）.</p>
+        <p>总体中所包含个体的总数称为总体的<strong>容量</strong>. 包含有限个个体的总体称为有限总体；包含无限多个个体的总体称为无限总体. 在数理统计中，我们关心的往往不是具体的实物，而是个体所具有的数量指标 $X$. 因此，<strong>一个总体在数学上等价于一个随机变量 $X$ 及其概率分布</strong>.</p>
+      </div>
+
+      <h3>二、简单随机样本</h3>
+      <p>为了推断总体的统计特性，必须从总体中抽取一部分个体进行观测，所抽出的这部分个体组成的集合称为<strong>样本</strong>（Sample），抽取个体的过程称为<strong>抽样</strong>.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.2：简单随机样本</div>
+        <p>设总体为随机变量 $X$，若从该总体中随机抽取的 $n$ 个相互独立的个体 $X_1, X_2, \dots, X_n$ 满足：</p>
+        <ol>
+          <li><strong>代表性（同分布）</strong>：每一个 $X_i$ 与总体 $X$ 具有完全相同的概率分布；</li>
+          <li><strong>独立性</strong>：随机变量 $X_1, X_2, \dots, X_n$ 之间相互独立.</li>
+        </ol>
+        <p>则称 $(X_1, X_2, \dots, X_n)$ 为来自总体 $X$ 的容量为 $n$ 的<strong>简单随机样本</strong>（Simple Random Sample，简称<strong>样本</strong>），$n$ 称为样本容量.</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.1：简单随机样本的联合分布</div>
+        <p>设总体 $X$ 的分布函数为 $F(x)$，概率密度（连续型）或分布律（离散型）为 $f(x)$. 则容量为 $n$ 的简单随机样本 $(X_1, X_2, \dots, X_n)$ 的<strong>联合分布函数</strong>与<strong>联合概率密度</strong>分别为各个边缘分量的直接连乘积：
+          $$F^*(x_1, x_2, \dots, x_n) = \prod_{i=1}^n F(x_i), \qquad f^*(x_1, x_2, \dots, x_n) = \prod_{i=1}^n f(x_i)$$
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 统计量</h2>
+
+      <h3>一、统计量的定义</h3>
+      <p>
+        样本数据包含关于总体的全部信息，但在原始数据中这些信息往往是分散零乱的. 为了进行统计推断，需要将样本信息进行集中提炼，构造出只依赖于样本数据的代数函数.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.3：统计量</div>
+        <p>设 $X_1, X_2, \dots, X_n$ 是来自总体 $X$ 的一个样本，若样本函数
+          $$T = g(X_1, X_2, \dots, X_n)$$
+          中<strong>不包含任何未知的总体参数</strong>，则称 $T$ 为一个<strong>统计量</strong>（Statistic）.</p>
+        <p><em>特别提醒</em>：统计量自身是一个明确可计算的随机变量. 例如若总体均值 $\mu$ 未知，则 $\bar{X} = \frac{1}{n}\sum X_i$ 是统计量，但 $\bar{X} - \mu$ 就<strong>不是</strong>统计量！</p>
+      </div>
+
+      <h3>二、常用的基本统计量</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.4：五大核心统计量</div>
+        <ol>
+          <li><strong>样本均值</strong>：反映样本数据中心位置的指标：
+            $$\bar{X} = \frac{1}{n} \sum_{i=1}^n X_i$$
+          </li>
+          <li><strong>样本方差</strong>：反映样本数据离散波动程度的指标（<strong>注意分母为 $n-1$</strong>）：
+            $$S^2 = \frac{1}{n-1} \sum_{i=1}^n (X_i - \bar{X})^2 = \frac{1}{n-1}\left(\sum_{i=1}^n X_i^2 - n\bar{X}^2\right)$$
+            样本标准差为 $S = \sqrt{S^2}$.
+          </li>
+          <li><strong>样本 $k$ 阶原点矩</strong>：$$A_k = \frac{1}{n}\sum_{i=1}^n X_i^k \qquad (k=1, 2, \dots)$$（特别地，$A_1 = \bar{X}$）.</li>
+          <li><strong>样本 $k$ 阶中心矩</strong>：$$B_k = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^k \qquad (k=2, 3, \dots)$$
+            （注意：二阶中心矩 $B_2 = \frac{1}{n}\sum (X_i - \bar{X})^2 = \frac{n-1}{n}S^2$）.
+          </li>
+          <li><strong>次序统计量</strong>：将样本观测值按从小到大的顺序排列：
+            $$X_{(1)} \le X_{(2)} \le \dots \le X_{(n)}$$
+            其中 $X_{(1)} = \min(X_1, \dots, X_n)$ 为样本极小值，$X_{(n)} = \max(X_1, \dots, X_n)$ 为样本极大值. 差值 $R = X_{(n)} - X_{(1)}$ 称为<strong>样本极差</strong>.
+          </li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.2：样本均值与样本方差的期望与方差性质（普适任意总体）</div>
+        <p>设总体 $X$ 具有数学期望 $E(X) = \mu$ 和方差 $D(X) = \sigma^2$，则对容量为 $n$ 的任意样本，恒有：</p>
+        <ol>
+          <li>$$E(\bar{X}) = \mu, \qquad D(\bar{X}) = \frac{\sigma^2}{n}$$</li>
+          <li>$$E(S^2) = \sigma^2$$</li>
+        </ol>
+        <p><em>深刻启示</em>：公式 (2) 正是为什么统计学中样本方差分母必须除以自由度 $n-1$ 而不是 $n$ 的数学根源！除以 $n-1$ 恰好使得样本方差的期望等于总体方差 $\sigma^2$（无偏性）.</p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 三大抽样分布</h2>
+      <p>
+        统计量本身的概率分布称为<strong>抽样分布</strong>. 在正态总体假设下，衍生出数理统计中最为辉煌的“三大经典抽样分布”：卡方分布、学生 $t$ 分布与费希尔 $F$ 分布.
+      </p>
+
+      <h3>一、$\chi^2$ 分布（卡方分布）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.5：$\chi^2$ 分布（Chi-Square Distribution）</div>
+        <p>设 $X_1, X_2, \dots, X_n$ <strong>相互独立</strong>，且每个变量都服从<strong>标准正态分布</strong> $N(0, 1)$. 则它们平方和组成的随机变量：
+          $$\chi^2 = \sum_{i=1}^n X_i^2 = X_1^2 + X_2^2 + \dots + X_n^2$$
+          服从自由度为 $n$ 的<strong>卡方分布</strong>，记作：
+          $$\chi^2 \sim \chi^2(n)$$
+        </p>
+      </div>
+
+      <h4>$\chi^2(n)$ 分布的核心性质：</h4>
+      <ol>
+        <li><strong>数学期望与方差</strong>：$$E(\chi^2) = n, \qquad D(\chi^2) = 2n$$</li>
+        <li><strong>可加性定理（再生性）</strong>：若 $\chi_1^2 \sim \chi^2(n_1), \chi_2^2 \sim \chi^2(n_2)$ 且两者相互独立，则它们的和仍然服从卡方分布，自由度直接相加：
+          $$\chi_1^2 + \chi_2^2 \sim \chi^2(n_1 + n_2)$$
+        </li>
+        <li><strong>渐近正态性</strong>：当自由度 $n$ 充分大时，根据中心极限定理，$\chi^2(n)$ 渐近逼近正态分布 $N(n, 2n)$.</li>
+      </ol>
+
+      <h3>二、$t$ 分布（学生分布，Student's t-Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.6：$t$ 分布</div>
+        <p>设 $X \sim N(0, 1), Y \sim \chi^2(n)$，且 $X$ 与 $Y$ <strong>相互独立</strong>，则称随机变量
+          $$T = \frac{X}{\sqrt{Y/n}}$$
+          服从自由度为 $n$ 的 <strong>$t$ 分布</strong>（学生氏分布），记作：
+          $$T \sim t(n)$$
+        </p>
+      </div>
+
+      <h4>$t(n)$ 分布的曲线特征与性质：</h4>
+      <ol>
+        <li><strong>对称性</strong>：概率密度曲线关于 $t = 0$ 严格对称，形状类似标准正态分布，但具有“更肥厚的尾部”（极端值概率更大）；</li>
+        <li><strong>极限性质</strong>：当自由度 $n \to \infty$ 时，$t(n)$ 的概率密度一致收敛于标准正态分布密度 $\varphi(t)$；在实际应用中，当 $n > 30$ 时，$t$ 分布已非常接近标准正态；</li>
+        <li><strong>分位数对称性</strong>：$$t_{1-\alpha}(n) = -t_\alpha(n)$$</li>
+      </ol>
+
+      <h3>三、$F$ 分布（费希尔分布，Fisher's F-Distribution）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.7：$F$ 分布</div>
+        <p>设 $U \sim \chi^2(n_1), V \sim \chi^2(n_2)$，且 $U$ 与 $V$ <strong>相互独立</strong>，则称变量
+          $$F = \frac{U / n_1}{V / n_2}$$
+          服从第一自由度为 $n_1$、第二自由度为 $n_2$ 的 <strong>$F$ 分布</strong>，记作：
+          $$F \sim F(n_1, n_2)$$
+        </p>
+      </div>
+
+      <h4>$F(n_1, n_2)$ 分布的核心性质：</h4>
+      <ol>
+        <li><strong>倒数性质</strong>：若 $F \sim F(n_1, n_2)$，则其倒数交换自由度：
+          $$\frac{1}{F} \sim F(n_2, n_1)$$
+        </li>
+        <li><strong>分位数的互逆倒数公式（极常用查表技巧）</strong>：
+          $$F_{1-\alpha}(n_1, n_2) = \frac{1}{F_\alpha(n_2, n_1)}$$
+        </li>
+        <li><strong>$t$ 分布与 $F$ 分布的平方联系</strong>：若 $T \sim t(n)$，则其平方服从第一自由度为 1 的 $F$ 分布：
+          $$T^2 \sim F(1, n)$$
+        </li>
+      </ol>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 正态总体的抽样分布四大定理</h2>
+      <p>
+        在正态总体假定下，样本均值与样本方差拥有极其优美且深刻的抽样分布性质，这是后续参数估计与假设检验的全部数理基石.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.3（单正态总体样本均值分布定理）</div>
+        <p>设总体 $X \sim N(\mu, \sigma^2)$，$(X_1, \dots, X_n)$ 为其样本，则样本均值 $\bar{X}$ 仍服从正态分布：
+          $$\bar{X} \sim N\left(\mu, \frac{\sigma^2}{n}\right) \iff \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.4（单正态总体样本方差分布与独立性定理，极重要）</div>
+        <p>设总体 $X \sim N(\mu, \sigma^2)$，样本容量为 $n$. 则：</p>
+        <ol>
+          <li>标准化样本方差服从自由度为 $n-1$ 的卡方分布：
+            $$\frac{(n-1)S^2}{\sigma^2} = \frac{\sum_{i=1}^n (X_i - \bar{X})^2}{\sigma^2} \sim \chi^2(n-1)$$
+          </li>
+          <li><strong>样本均值 $\bar{X}$ 与样本方差 $S^2$ 相互独立！</strong></li>
+        </ol>
+        <p><em>特别提醒</em>：对于非正态总体，均值与方差通常不独立；但在正态总体下，$\bar{X}$ 与 $S^2$ 彼此彻底独立！</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.5（单正态总体未知方差的 $t$ 统计量定理）</div>
+        <p>将未知总体方差 $\sigma$ 用样本标准差 $S$ 替换后，构造出的 Student 统计量服从自由度为 $n-1$ 的 $t$ 分布：
+          $$T = \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t(n-1)$$
+        </p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【证明】</strong> 由定理 6.3 知 $Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)$；由定理 6.4 知 $Y = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$，且 $Z$ 与 $Y$ 独立. 根据 $t$ 分布定义：
+          $$T = \frac{Z}{\sqrt{Y / (n-1)}} = \frac{\frac{\bar{X} - \mu}{\sigma / \sqrt{n}}}{\sqrt{\frac{(n-1)S^2 / \sigma^2}{n-1}}} = \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t(n-1) \qquad \blacksquare$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6.6（双正态总体均值差与方差比分布定理）</div>
+        <p>设两总体 $X \sim N(\mu_1, \sigma_1^2), Y \sim N(\mu_2, \sigma_2^2)$ 相互独立，样本容量分别为 $n_1, n_2$，样本均值为 $\bar{X}, \bar{Y}$，样本方差为 $S_1^2, S_2^2$：</p>
+        <ol>
+          <li><strong>两方差比服从 $F$ 分布</strong>：
+            $$\frac{S_1^2 / \sigma_1^2}{S_2^2 / \sigma_2^2} = \frac{S_1^2 / S_2^2}{\sigma_1^2 / \sigma_2^2} \sim F(n_1 - 1, \; n_2 - 1)$$
+            特别地，当 $\sigma_1^2 = \sigma_2^2$ 时，有 $\frac{S_1^2}{S_2^2} \sim F(n_1 - 1, n_2 - 1)$；
+          </li>
+          <li><strong>两均值差在方差未知但相等时的两样本 $t$ 统计量</strong>：设 $\sigma_1^2 = \sigma_2^2 = \sigma^2$，定义<strong>合并样本方差（Pooled Variance）</strong>：
+            $$S_w^2 = \frac{(n_1 - 1)S_1^2 + (n_2 - 1)S_2^2}{n_1 + n_2 - 2}$$
+            则：
+            $$T = \frac{(\bar{X} - \bar{Y}) - (\mu_1 - \mu_2)}{S_w \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}} \sim t(n_1 + n_2 - 2)$$
+          </li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与测试题六</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 本章核心架构图谱</div>
+        <p>1. <strong>统计量核心判别</strong>：不含未知总体参数；</p>
+        <p>2. <strong>三大抽样分布构造要诀</strong>：
+          <ul>
+            <li>$\chi^2(n)$：标准正态的平方和；期望为 $n$，方差为 $2n$；</li>
+            <li>$t(n)$：$\frac{N(0, 1)}{\sqrt{\chi^2(n)/n}}$；</li>
+            <li>$F(n_1, n_2)$：$\frac{\chi^2(n_1)/n_1}{\chi^2(n_2)/n_2}$；倒数自由度互换；</li>
+          </ul>
+        </p>
+        <p>3. <strong>正态抽样四大定理口诀</strong>：
+          <ul>
+            <li>均值正态性：$\bar{X} \sim N(\mu, \sigma^2/n)$；</li>
+            <li>方差卡方性：$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$，且 $\bar{X} \perp S^2$；</li>
+            <li>未知 $\sigma$ 用 $S$：产生 $t(n-1)$；</li>
+            <li>双样本方差比：产生 $F(n_1-1, n_2-1)$；方差相等均值差产生 $t(n_1+n_2-2)$.</li>
+          </ul>
+        </p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

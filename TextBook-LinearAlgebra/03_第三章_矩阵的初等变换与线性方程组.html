@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第三章 矩阵的初等变换与线性方程组 - 工程数学 线性代数 (第七版)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📐</span> 工程数学 线性代数 (第七版) · 数字化重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="02_第二章_矩阵及其运算.html" class="nav-btn">← 上一章: 矩阵及其运算</a>
+      <a href="04_第四章_向量组的线性相关性.html" class="nav-btn primary">下一章: 向量组线性相关性 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第三章 矩阵的初等变换与线性方程组</h1>
+      <p class="chapter-intro">
+        在前面的章节中，我们学习了行列式和矩阵运算。然而，克拉默法则与伴随矩阵求逆公式仅适用于方程个数等于未知数个数（$m=n$）且系数行列式非零的特殊情形。对于包含 $m$ 个方程、$n$ 个未知数的一般线性方程组，如何彻底判别其有解、无解还是有无穷多解？如何以最高计算效率求出逆矩阵和全部解？答案正是<strong>矩阵的初等行变换</strong>与<strong>矩阵的秩</strong>。同济教材的精髓正是在于“以初等变换为利器，以矩阵的秩为统帅”，将整个线性方程组理论推向至高完备境界。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 矩阵的初等变换</h2>
+
+      <h3>一、高斯消元法与初等变换的提出</h3>
+      <p>
+        求解一般线性方程组最经典、最有效的方法是初等消元法（高斯消元法）。在消元过程中，允许对各方程施行的操作包括：
+      </p>
+      <ol>
+        <li>交换两个方程的位置；</li>
+        <li>用一个非零常数乘某一个方程的两边；</li>
+        <li>把一个方程的常数倍加到另一个方程上去。</li>
+      </ol>
+      <p>
+        显然，这些操作并不改变方程组解的集合（即保持解的等价性）。而在线性方程组中，各个方程完全对应于增广矩阵的每一行。因此，上述针对方程的操作自然抽象为矩阵的<strong>初等行变换</strong>。
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3.1 矩阵的初等变换</div>
+        <p>
+          下面三类对矩阵的变换统称为矩阵的<strong>初等行变换 (Elementary Row Operations)</strong>：
+        </p>
+        <ol>
+          <li><strong>对调变换</strong>：对调两行（对调第 $i$ 行与第 $j$ 行，记作 $r_i \leftrightarrow r_j$）；</li>
+          <li><strong>倍乘变换</strong>：以非零数 $k$ 乘某一行中的所有元素（第 $i$ 行乘 $k$，记作 $r_i \times k$ 或 $k r_i$）；</li>
+          <li><strong>倍加变换</strong>：把某一行中所有元素的 $k$ 倍加到另一行对应的元素上去（把第 $j$ 行的 $k$ 倍加到第 $i$ 行，记作 $r_i + k r_j$）。</li>
+        </ol>
+        <p>
+          把上述定义中的“行”换成“列”，就得到矩阵的<strong>初等列变换</strong>，分别记作 $c_i \leftrightarrow c_j$、$c_i \times k$、$c_i + k c_j$。
+          初等行变换与初等列变换统称为<strong>初等变换</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3.2 矩阵的等价关系</div>
+        <p>
+          如果矩阵 $A$ 经有限次初等变换变成矩阵 $B$，就称矩阵 $A$ 与矩阵 $B$ <strong>等价</strong>，记作 $A \sim B$。
+        </p>
+        <p>矩阵的等价关系满足等价关系的三个基本性质：</p>
+        <ul>
+          <li><strong>反身性</strong>：$A \sim A$；</li>
+          <li><strong>对称性</strong>：若 $A \sim B$，则 $B \sim A$；</li>
+          <li><strong>传递性</strong>：若 $A \sim B$ 且 $B \sim C$，则 $A \sim C$。</li>
+        </ul>
+      </div>
+
+      <h3>二、行阶梯形、行最简形与矩阵标准形</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3.3 行阶梯形矩阵与行最简形矩阵</div>
+        <p><strong>1. 行阶梯形矩阵 (Row Echelon Form)</strong>：</p>
+        <ul>
+          <li>零行（元素全为 0 的行）全部位于矩阵的最下方；</li>
+          <li>各非零行的首个非零元素（称为<strong>主元 pivot</strong>）所在的列标，严格随着行标的增加而向右移动（呈阶梯状下降）。</li>
+        </ul>
+        <p><strong>2. 行最简形矩阵 (Reduced Row Echelon Form, RREF)</strong>：</p>
+        <ul>
+          <li>它本身是一个行阶梯形矩阵；</li>
+          <li>每个非零行的主元必须全为 1；</li>
+          <li><strong>每个主元所在的列中，除了主元 1 之外，该列的其余所有元素全为 0</strong>。</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 3.1 矩阵化为行最简形与标准形</div>
+        <p>
+          <strong>1. 行最简形定理</strong>：任何一个矩阵 $A$ 经过有限次<strong>初等行变换</strong>，必定可以唯一地化为一个行最简形矩阵。
+        </p>
+        <p>
+          <strong>2. 标准形定理</strong>：任何一个 $m \times n$ 矩阵 $A$，经过有限次初等行变换与初等列变换，必定可以化为如下形式的<strong>标准形 (Normal Form)</strong>：
+        </p>
+        $$F = \begin{pmatrix} E_r & O \\ O & O \end{pmatrix}_{m \times n} = \begin{pmatrix}
+        1 & \cdots & 0 & 0 & \cdots & 0 \\
+        \vdots & \ddots & \vdots & \vdots & & \vdots \\
+        0 & \cdots & 1 & 0 & \cdots & 0 \\
+        0 & \cdots & 0 & 0 & \cdots & 0 \\
+        \vdots & & \vdots & \vdots & & \vdots \\
+        0 & \cdots & 0 & 0 & \cdots & 0
+        \end{pmatrix}.$$
+        <p>
+          其中 $r$ 是由矩阵 $A$ 唯一确定的非负整数（即矩阵的秩 $R(A) = r$）。左上角的 $E_r$ 为 $r$ 阶单位矩阵，其余各子块全为零矩阵。
+        </p>
+      </div>
+
+      <h3>三、初等矩阵与核心乘法法则</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3.4 初等矩阵</div>
+        <p>
+          由单位矩阵 $E$ 经过<strong>一次</strong>初等变换得到的方阵称为<strong>初等矩阵 (Elementary Matrix)</strong>。相应地有三类初等矩阵：
+        </p>
+        <ol>
+          <li><strong>对调初等矩阵 $E(i, j)$</strong>：由单位矩阵 $E$ 对调第 $i, j$ 两行（或两列）得到；</li>
+          <li><strong>倍乘初等矩阵 $E(i(k))$ ($k \ne 0$)</strong>：由单位矩阵 $E$ 第 $i$ 行（或列）乘以非零数 $k$ 得到；</li>
+          <li><strong>倍加初等矩阵 $E(i, j(k))$</strong>：由单位矩阵 $E$ 第 $j$ 行的 $k$ 倍加到第 $i$ 行（或第 $i$ 列的 $k$ 倍加到第 $j$ 列）得到。</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 3.2 初等变换与初等矩阵的核心乘法法则</div>
+        <p>
+          <strong>核心定理</strong>：
+        </p>
+        <ul>
+          <li><strong>对 $m \times n$ 矩阵 $A$ 施行一次初等行变换，相当于在 $A$ 的左端乘以相应的 $m$ 阶初等矩阵（左行右列：左乘变行）；</strong></li>
+          <li><strong>对 $m \times n$ 矩阵 $A$ 施行一次初等列变换，相当于在 $A$ 的右端乘以相应的 $n$ 阶初等矩阵（左行右列：右乘变列）。</strong></li>
+        </ul>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 初等矩阵的可逆性与矩阵可逆充要条件</div>
+        <p>
+          初等矩阵都是可逆矩阵，并且它们的逆矩阵仍是同类型的初等矩阵：
+        </p>
+        $$E(i, j)^{-1} = E(i, j), \quad [E(i(k))]^{-1} = E(i(1/k)), \quad [E(i, j(k))]^{-1} = E(i, j(-k)).$$
+        <p>
+          <strong>定理 3.3</strong>：方阵 $A$ 可逆的充分必要条件是 $A$ 可以表示为有限个初等矩阵的乘积：
+          $$A = P_1 P_2 \cdots P_l.$$
+        </p>
+      </div>
+
+      <h3>四、初等行变换求逆矩阵与求解矩阵方程的高效算法</h3>
+      <p>
+        设 $A$ 为可逆方阵，则存在初等行变换序列，其对应的初等矩阵乘积记为 $P = P_l \cdots P_1$，使得：
+      </p>
+      $$P A = E \implies P = A^{-1}.$$
+      <p>
+        若将相同的初等矩阵 $P$ 作用在单位矩阵 $E$ 上：$P E = P = A^{-1}$。
+        因此，我们将 $A$ 与 $E$ 并排写在一起构成分块矩阵 $(A \mid E)$，同时施加完全相同的初等行变换：
+      </p>
+      $$(A \mid E) \xrightarrow{\text{初等行变换}} (P A \mid P E) = (E \mid A^{-1}).$$
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 3.1 初等行变换求三阶方阵的逆</div>
+        <p>求矩阵 $A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 2 & 1 \\ 3 & 4 & 3 \end{pmatrix}$ 的逆矩阵 $A^{-1}$。</p>
+        <p><strong>解</strong>：构造分块矩阵 $(A \mid E)$：</p>
+        $$(A \mid E) = \begin{pmatrix}
+        1 & 2 & 3 & 1 & 0 & 0 \\
+        2 & 2 & 1 & 0 & 1 & 0 \\
+        3 & 4 & 3 & 0 & 0 & 1
+        \end{pmatrix}.$$
+        <p>施行初等行变换消去第 1 列非对角元：$r_2 - 2r_1, r_3 - 3r_1$：</p>
+        $$\sim \begin{pmatrix}
+        1 & 2 & 3 & 1 & 0 & 0 \\
+        0 & -2 & -5 & -2 & 1 & 0 \\
+        0 & -2 & -6 & -3 & 0 & 1
+        \end{pmatrix}.$$
+        <p>用第 2 行消第 3 行：$r_3 - r_2$：</p>
+        $$\sim \begin{pmatrix}
+        1 & 2 & 3 & 1 & 0 & 0 \\
+        0 & -2 & -5 & -2 & 1 & 0 \\
+        0 & 0 & -1 & -1 & -1 & 1
+        \end{pmatrix}.$$
+        <p>第 2, 3 行乘以负号使主元为正：$r_3 \times (-1), r_2 + 5r_3$：</p>
+        $$r_3 \times (-1): \begin{pmatrix}
+        1 & 2 & 3 & 1 & 0 & 0 \\
+        0 & -2 & -5 & -2 & 1 & 0 \\
+        0 & 0 & 1 & 1 & 1 & -1
+        \end{pmatrix} \xrightarrow{r_2 + 5r_3} \begin{pmatrix}
+        1 & 2 & 3 & 1 & 0 & 0 \\
+        0 & -2 & 0 & 3 & 6 & -5 \\
+        0 & 0 & 1 & 1 & 1 & -1
+        \end{pmatrix}.$$
+        <p>回代消去第 1 行的第 3 列与第 2 列：$r_1 - 3r_3$：</p>
+        $$\sim \begin{pmatrix}
+        1 & 2 & 0 & -2 & -3 & 3 \\
+        0 & -2 & 0 & 3 & 6 & -5 \\
+        0 & 0 & 1 & 1 & 1 & -1
+        \end{pmatrix} \xrightarrow{r_1 + r_2} \begin{pmatrix}
+        1 & 0 & 0 & 1 & 3 & -2 \\
+        0 & -2 & 0 & 3 & 6 & -5 \\
+        0 & 0 & 1 & 1 & 1 & -1
+        \end{pmatrix}.$$
+        <p>最后将第 2 行除以 $-2$：$r_2 \times (-1/2)$：</p>
+        $$\sim \begin{pmatrix}
+        1 & 0 & 0 & 1 & 3 & -2 \\
+        0 & 1 & 0 & -3/2 & -3 & 5/2 \\
+        0 & 0 & 1 & 1 & 1 & -1
+        \end{pmatrix}.$$
+        <p>左侧已成功化为单位矩阵 $E$，因此右侧即为所求逆矩阵：</p>
+        $$A^{-1} = \begin{pmatrix}
+        1 & 3 & -2 \\
+        -3/2 & -3 & 5/2 \\
+        1 & 1 & -1
+        \end{pmatrix} = \frac{1}{2} \begin{pmatrix}
+        2 & 6 & -4 \\
+        -3 & -6 & 5 \\
+        2 & 2 & -2
+        \end{pmatrix}.$$
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 矩阵的秩</h2>
+
+      <h3>一、矩阵的秩的定义</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3.5 矩阵的 $k$ 阶子式与秩</div>
+        <p>
+          在 $m \times n$ 矩阵 $A$ 中，任取 $k$ 行与 $k$ 列（$k \le \min(m, n)$），位于这些行与列交叉点上的 $k^2$ 个元素按原次序组成的 $k$ 阶行列式，称为矩阵 $A$ 的一个 <strong>$k$ 阶子式</strong>。
+        </p>
+        <p>
+          设矩阵 $A$ 中有一个不等于 0 的 $r$ 阶子式 $D$，并且所有 $r+1$ 阶子式（如果存在的话）全等于 0，则称数 $r$ 为矩阵 $A$ 的<strong>秩 (Rank)</strong>，记作 $R(A)$ 或 $\mathrm{rank}(A)$。
+          零矩阵的秩规定为 0：$R(O) = 0$。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 3.4 初等变换不改变矩阵的秩（核心定理）</div>
+        <p>
+          <strong>内容</strong>：若矩阵 $A$ 经初等变换化为矩阵 $B$（即 $A \sim B$），则 $A$ 与 $B$ 的秩必然相等：
+        </p>
+        $$R(A) = R(B).$$
+        <p>
+          <strong>阶梯形计算法则</strong>：<strong>任意行阶梯形矩阵的秩，严格等于其非零行的行数！</strong><br>
+          因此，求任意大矩阵的秩，只需用初等行变换将其化为行阶梯形矩阵，数出非零行的个数即为矩阵的秩。
+        </p>
+      </div>
+
+      <h3>二、矩阵的秩的六大重要不等式与性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 矩阵的秩的高频理论性质</div>
+        <ol>
+          <li><strong>界限与转置不变性</strong>：$0 \le R(A_{m \times n}) \le \min(m, n)$，且 $R(A^T) = R(A)$；</li>
+          <li><strong>满秩判定</strong>：设 $A$ 为 $n$ 阶方阵，则 $R(A) = n \iff |A| \ne 0$（称 $A$ 为满秩矩阵/非奇异矩阵/可逆矩阵）；$R(A) < n \iff |A| = 0$（降秩矩阵/奇异矩阵/不可逆矩阵）；</li>
+          <li><strong>乘可逆矩阵秩不变</strong>：若 $P, Q$ 为可逆方阵，则 $R(PAQ) = R(A)$；</li>
+          <li><strong>和的秩不等式</strong>：$R(A + B) \le R(A) + R(B)$；</li>
+          <li><strong>积的秩不等式</strong>：$R(AB) \le \min(R(A), R(B))$；</li>
+          <li><strong>西尔维斯特 (Sylvester) 不等式</strong>：设 $A_{m \times n}, B_{n \times s}$，则：
+            $$R(AB) \ge R(A) + R(B) - n.$$
+            <em>重要推论</em>：若 $AB = O$，则必有 $R(A) + R(B) \le n$。
+          </li>
+          <li><strong>分块对角矩阵的秩</strong>：$R\begin{pmatrix} A & O \\ O & B \end{pmatrix} = R(A) + R(B)$。</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 线性方程组的解</h2>
+
+      <h3>一、线性方程组有解判别定理（四大基本定理）</h3>
+      <p>
+        考虑一般非齐次线性方程组 $A\boldsymbol{x} = \boldsymbol{b}$，其中 $A$ 为 $m \times n$ 系数矩阵，$B = (A \mid \boldsymbol{b})$ 为 $m \times (n+1)$ 增广矩阵，未知数个数为 $n$。
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 3.5 线性方程组可解性定理 (同济四大核心判据)</div>
+        <p><strong>1. 无解判定</strong>：</p>
+        $$A\boldsymbol{x} = \boldsymbol{b} \text{ 无解} \iff R(A) < R(A \mid \boldsymbol{b}).$$
+        <p><em>几何/阶梯形特征</em>：增广矩阵化为行阶梯形后，出现一行形如 $(0, 0, \dots, 0 \mid d)$（其中 $d \ne 0$），对应矛盾方程 $0 = d$。</p>
+        
+        <p><strong>2. 有唯一解判定</strong>：</p>
+        $$A\boldsymbol{x} = \boldsymbol{b} \text{ 有唯一解} \iff R(A) = R(A \mid \boldsymbol{b}) = n \quad (\text{未知数的个数}).$$
+        
+        <p><strong>3. 有无穷多解判定</strong>：</p>
+        $$A\boldsymbol{x} = \boldsymbol{b} \text{ 有无穷多解} \iff R(A) = R(A \mid \boldsymbol{b}) = r < n.$$
+        <p>此时方程组有 $n - r$ 个<strong>自由未知量</strong>，通解中含有 $n - r$ 个任意常数。</p>
+        
+        <p><strong>4. 齐次线性方程组 $A\boldsymbol{x} = \boldsymbol{0}$ 的解判定</strong>：</p>
+        <ul>
+          <li>因常数项全为 0，恒有 $R(A) = R(A \mid \boldsymbol{0})$，故齐次方程组<strong>恒有解</strong>（至少有零解）；</li>
+          <li>齐次线性方程组<strong>只有零解</strong> $\iff R(A) = n$；</li>
+          <li>齐次线性方程组<strong>有非零解（无穷多解）</strong> $\iff R(A) < n$。</li>
+        </ul>
+      </div>
+
+      <h3>二、高斯消元法求通解的规范化程序</h3>
+      <p>
+        利用矩阵初等行变换求解线性方程组的标准程序如下：
+      </p>
+      <ol>
+        <li>写出增广矩阵 $B = (A \mid \boldsymbol{b})$；</li>
+        <li>仅施行<strong>初等行变换</strong>将 $B$ 化为行最简形矩阵；</li>
+        <li>检查是否有矛盾行 $(0, \dots, 0 \mid d)$ ($d \ne 0$)，若有则无解；</li>
+        <li>若有解，以每个非零行的主元所对应的未知数作为<strong>主变量</strong>，其余 $n - r$ 个未知数作为<strong>自由未知量</strong>移到等式右端；</li>
+        <li>写出包含任意常数的通解矢量形式。</li>
+      </ol>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 3.2 线性方程组无穷多解求解</div>
+        <p>求解线性方程组：</p>
+        $$\begin{cases}
+        x_1 - 2x_2 + 3x_3 - 4x_4 = 4, \\
+        x_2 - x_3 + x_4 = -3, \\
+        x_1 + 3x_2 - 3x_4 = 1, \\
+        -7x_2 + 3x_3 + x_4 = -3.
+        \end{cases}$$
+        <p><strong>解</strong>：写出增广矩阵并进行初等行变换：</p>
+        $$(A \mid \boldsymbol{b}) = \begin{pmatrix}
+        1 & -2 & 3 & -4 & 4 \\
+        0 & 1 & -1 & 1 & -3 \\
+        1 & 3 & 0 & -3 & 1 \\
+        0 & -7 & 3 & 1 & -3
+        \end{pmatrix} \xrightarrow{r_3 - r_1} \begin{pmatrix}
+        1 & -2 & 3 & -4 & 4 \\
+        0 & 1 & -1 & 1 & -3 \\
+        0 & 5 & -3 & 1 & -3 \\
+        0 & -7 & 3 & 1 & -3
+        \end{pmatrix}.$$
+        <p>用第 2 行消去第 3, 4 行：$r_3 - 5r_2, r_4 + 7r_2$：</p>
+        $$\sim \begin{pmatrix}
+        1 & -2 & 3 & -4 & 4 \\
+        0 & 1 & -1 & 1 & -3 \\
+        0 & 0 & 2 & -4 & 12 \\
+        0 & 0 & -4 & 8 & -24
+        \end{pmatrix} \xrightarrow{r_3 \div 2, r_4 + 2r_3} \begin{pmatrix}
+        1 & -2 & 3 & -4 & 4 \\
+        0 & 1 & -1 & 1 & -3 \\
+        0 & 0 & 1 & -2 & 6 \\
+        0 & 0 & 0 & 0 & 0
+        \end{pmatrix}.$$
+        <p>继续化为行最简形：$r_2 + r_3, r_1 - 3r_3$：</p>
+        $$\sim \begin{pmatrix}
+        1 & -2 & 0 & 2 & -14 \\
+        0 & 1 & 0 & -1 & 3 \\
+        0 & 0 & 1 & -2 & 6 \\
+        0 & 0 & 0 & 0 & 0
+        \end{pmatrix} \xrightarrow{r_1 + 2r_2} \begin{pmatrix}
+        1 & 0 & 0 & 0 & -8 \\
+        0 & 1 & 0 & -1 & 3 \\
+        0 & 0 & 1 & -2 & 6 \\
+        0 & 0 & 0 & 0 & 0
+        \end{pmatrix}.$$
+        <p>
+          非零行数 $r = 3$，未知数个数 $n = 4$。$R(A) = R(A \mid \boldsymbol{b}) = 3 < 4$，因此方程组有无穷多解，自由未知量为 $4 - 3 = 1$ 个。
+          主变量为 $x_1, x_2, x_3$，自由未知量选为 $x_4 = c$（$c$ 为任意实数）。
+          还原为代数方程：
+        </p>
+        $$\begin{cases}
+        x_1 = -8, \\
+        x_2 = 3 + c, \\
+        x_3 = 6 + 2c, \\
+        x_4 = c.
+        \end{cases}$$
+        <p>写为向量形式的通解：</p>
+        $$\begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} = \begin{pmatrix} -8 \\ 3 \\ 6 \\ 0 \end{pmatrix} + c \begin{pmatrix} 0 \\ 1 \\ 2 \\ 1 \end{pmatrix} \quad (c \in \mathbb{R}).$$
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题三 -->
+      <h2>习题三 精选题解与综合演练</h2>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 3.1 含参数线性方程组的解的讨论</div>
+        <p><strong>题目</strong>：设线性方程组：</p>
+        $$\begin{cases}
+        \lambda x_1 + x_2 + x_3 = 1, \\
+        x_1 + \lambda x_2 + x_3 = \lambda, \\
+        x_1 + x_2 + \lambda x_3 = \lambda^2.
+        \end{cases}$$
+        <p>问 $\lambda$ 取何值时，方程组：(1) 有唯一解；(2) 无解；(3) 有无穷多解？并在有无穷多解时求出通解。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p>首先计算系数行列式 $|A|$：</p>
+        $$|A| = \begin{vmatrix}
+        \lambda & 1 & 1 \\
+        1 & \lambda & 1 \\
+        1 & 1 & \lambda
+        \end{vmatrix} \xlongequal{r_1+r_2+r_3} (\lambda+2) \begin{vmatrix}
+        1 & 1 & 1 \\
+        1 & \lambda & 1 \\
+        1 & 1 & \lambda
+        \end{vmatrix} = (\lambda+2)(\lambda-1)^2.$$
+        <p><strong>(1) 当 $\lambda \ne 1$ 且 $\lambda \ne -2$ 时</strong>：$|A| \ne 0 \implies R(A) = R(A \mid \boldsymbol{b}) = 3$，由克拉默法则，方程组有<strong>唯一解</strong>。</p>
+        <p><strong>(2) 当 $\lambda = -2$ 时</strong>：增广矩阵为：</p>
+        $$(A \mid \boldsymbol{b}) = \begin{pmatrix}
+        -2 & 1 & 1 & 1 \\
+        1 & -2 & 1 & -2 \\
+        1 & 1 & -2 & 4
+        \end{pmatrix} \sim \begin{pmatrix}
+        1 & 1 & -2 & 4 \\
+        0 & -3 & 3 & -6 \\
+        0 & 3 & -3 & 9
+        \end{pmatrix} \sim \begin{pmatrix}
+        1 & 1 & -2 & 4 \\
+        0 & 1 & -1 & 2 \\
+        0 & 0 & 0 & 3
+        \end{pmatrix}.$$
+        <p>出现矛盾行 $(0, 0, 0 \mid 3)$，$R(A) = 2 < R(A \mid \boldsymbol{b}) = 3$，因此当 $\lambda = -2$ 时方程组<strong>无解</strong>。</p>
+        <p><strong>(3) 当 $\lambda = 1$ 时</strong>：增广矩阵为：</p>
+        $$(A \mid \boldsymbol{b}) = \begin{pmatrix}
+        1 & 1 & 1 & 1 \\
+        1 & 1 & 1 & 1 \\
+        1 & 1 & 1 & 1
+        \end{pmatrix} \sim \begin{pmatrix}
+        1 & 1 & 1 & 1 \\
+        0 & 0 & 0 & 0 \\
+        0 & 0 & 0 & 0
+        \end{pmatrix}.$$
+        <p>此时 $R(A) = R(A \mid \boldsymbol{b}) = 1 < 3$，方程组有<strong>无穷多解</strong>，自由未知量有两个（$x_2 = c_1, x_3 = c_2$）。
+        主方程为 $x_1 + x_2 + x_3 = 1 \implies x_1 = 1 - c_1 - c_2$。
+        向量通解为：</p>
+        $$\begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix} = \begin{pmatrix} 1 \\ 0 \\ 0 \end{pmatrix} + c_1 \begin{pmatrix} -1 \\ 1 \\ 0 \end{pmatrix} + c_2 \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} \quad (c_1, c_2 \in \mathbb{R}).$$
+      </div>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <a href="02_第二章_矩阵及其运算.html" class="nav-btn">← 上一章: 第二章 矩阵及其运算</a>
+        <a href="04_第四章_向量组的线性相关性.html" class="nav-btn primary">下一章: 第四章 向量组线性相关性 →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>工程数学 线性代数 (第七版) · 同济大学数学科学学院 编 · 数字化重构版</p>
+    <p>全离线矢量 MathJax 3 引擎 · 纯语义 HTML5 架构 · 无任何外部网络依赖</p>
+  </footer>
+
+</body>
+</html>

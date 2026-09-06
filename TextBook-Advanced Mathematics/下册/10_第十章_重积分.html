@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第十章 重积分 - 高等数学（下册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (下册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="09_第九章_多元函数微分法及其应用.html" class="nav-btn">← 上一章: 第九章 多元函数微分法及其应用</a>
+      <a href="11_第十一章_曲线积分与曲面积分.html" class="nav-btn primary">下一章: 第十一章 曲线积分与曲面积分 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第十章 重积分</h1>
+      <p class="chapter-intro">
+        一元定积分是把区间细分、在小线段上取近似并求极限的过程，用于计算平面曲边梯形面积和一维非均匀分布物理量. 当研究对象扩展到平面二维空间乃至立体三维空间时，例如计算空间立体的体积、曲面面积、非均匀平面薄板或立体构件的质量、质心以及转动惯量，就需要将一元积分推广到二维平面闭区域上的<strong>二重积分</strong>（Double Integral）和三维立体闭区域上的<strong>三重积分</strong>（Triple Integral）. 重积分的本质仍然是某种特定和式的极限. 本章将建立二重积分与三重积分的严格概念，系统推导直角坐标系、极坐标系、柱面坐标系与球面坐标系下的化二次积分算法，并深入探讨其在空间几何体积、曲面面积、质心与引力计算中的综合应用.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 二重积分的概念与性质</h2>
+
+      <h3>一、引例：曲顶柱体的体积</h3>
+      <p>
+        设底面为 $xOy$ 平面上的闭区域 $D$，顶面为连续曲面 $z = f(x, y) \ge 0$，侧面以 $D$ 的边界曲线为准线、母线平行于 $z$ 轴的柱面，这一立体称为<strong>曲顶柱体</strong>（图 10-1、图 10-2、图 10-3）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_1.webp" alt="图 10-1 曲顶柱体空间立体模型" loading="lazy">
+          <figcaption>图 10-1 曲顶柱体空间立体模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_2.webp" alt="图 10-2 底面区域细分与平顶小柱体逼近" loading="lazy">
+          <figcaption>图 10-2 底面区域细分与平顶小柱体逼近</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_3.webp" alt="图 10-3 小平顶柱体微元累加逼近真实体积" loading="lazy">
+          <figcaption>图 10-3 小平顶柱体微元累加逼近真实体积</figcaption>
+        </figure>
+      </div>
+
+      <p>采用经典“分割、近似、求和、取极限”四步法：</p>
+      <ol>
+        <li>用任意网格曲线将底面区域 $D$ 分割成 $n$ 个小闭区域 $\Delta\sigma_1, \Delta\sigma_2, \dots, \Delta\sigma_n$；</li>
+        <li>在每个小区域 $\Delta\sigma_i$ 上任取一点 $(\xi_i, \eta_i)$，以此点函数值 $f(\xi_i, \eta_i)$ 为高、小区域面积 $\Delta\sigma_i$ 为底，作小圆柱，其小体积近似为 $\Delta V_i \approx f(\xi_i, \eta_i)\Delta\sigma_i$；</li>
+        <li>曲顶柱体总体积近似为 $V \approx \sum_{i=1}^n f(\xi_i, \eta_i)\Delta\sigma_i$；</li>
+        <li>令小区域直径的最大值 $\lambda \to 0$，和式的极限即为总体积：$V = \lim_{\lambda \to 0}\sum_{i=1}^n f(\xi_i, \eta_i)\Delta\sigma_i$.</li>
+      </ol>
+
+      <h3>二、二重积分的定义</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (二重积分 Double Integral)</div>
+        <p>
+          设函数 $f(x, y)$ 在平面有界闭区域 $D$ 上有定义. 如果极限
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\lim_{\lambda \to 0} \sum_{i=1}^n f(\xi_i, \eta_i)\Delta\sigma_i = I$$
+        </p>
+        <p>不论区域 $D$ 如何分割，也不论点 $(\xi_i, \eta_i)$ 如何选取，极限值 $I$ 恒存在且唯一，则称函数 $f(x, y)$ 在闭区域 $D$ 上<strong>可积</strong>，并称此极限为函数在 $D$ 上的<strong>二重积分</strong>，记作：</p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\iint_D f(x, y)d\sigma \quad \text{或} \quad \iint_D f(x, y)dxdy$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 二重积分的基本性质与中值定理</div>
+        <ol>
+          <li><strong>线性性质</strong>：$\iint_D [k_1 f(x, y) \pm k_2 g(x, y)]d\sigma = k_1 \iint_D f(x, y)d\sigma \pm k_2 \iint_D g(x, y)d\sigma$</li>
+          <li><strong>区域可加性</strong>：若 $D = D_1 \cup D_2$，且 $D_1, D_2$ 无内部公共点，则 $\iint_D f d\sigma = \iint_{D_1} f d\sigma + \iint_{D_2} f d\sigma$</li>
+          <li><strong>中值定理</strong>：设 $f(x, y)$ 在闭区域 $D$ 上连续，$\sigma$ 为 $D$ 的面积，则在 $D$ 内至少存在一点 $(\xi, \eta)$，使得：
+            $$\iint_D f(x, y)d\sigma = f(\xi, \eta)\sigma$$
+          </li>
+        </ol>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 二重积分的计算法</h2>
+
+      <h3>一、直角坐标系下的二次积分</h3>
+      <p>
+        二重积分的实际计算是通过转化为两次连续的一元单积分（<strong>二次积分</strong>，累次积分）来实现的（富比尼定理 Fubini's Theorem）.
+      </p>
+
+      <h4>1. X-型区域（先 $y$ 后 $x$ 积分）</h4>
+      <p>
+        区域形如 $D = \{(x, y) \mid a \le x \le b, \varphi_1(x) \le y \le \varphi_2(x)\}$（图 10-4、图 10-5）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iint_D f(x, y)dxdy = \int_a^b dx \int_{\varphi_1(x)}^{\varphi_2(x)} f(x, y)dy$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_4.webp" alt="图 10-4 X-型积分区域上下边界函数及垂直贯穿线" loading="lazy">
+          <figcaption>图 10-4 X-型积分区域上下边界函数及垂直贯穿线</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_5.webp" alt="图 10-5 截面微元平行扫描与曲顶柱体体积转化" loading="lazy">
+          <figcaption>图 10-5 截面微元平行扫描与曲顶柱体体积转化</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. Y-型区域（先 $x$ 后 $y$ 积分）</h4>
+      <p>
+        区域形如 $D = \{(x, y) \mid c \le y \le d, \psi_1(y) \le x \le \psi_2(y)\}$（图 10-6、图 10-7）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iint_D f(x, y)dxdy = \int_c^d dy \int_{\psi_1(y)}^{\psi_2(y)} f(x, y)dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_6.webp" alt="图 10-6 Y-型区域左右边界及水平贯穿线" loading="lazy">
+          <figcaption>图 10-6 Y-型区域左右边界及水平贯穿线</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_7.webp" alt="图 10-7 复合不规则区域分割为规则子区域" loading="lazy">
+          <figcaption>图 10-7 复合不规则区域分割为规则子区域</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_8.webp" alt="图 10-8 三角形区域积分限确定与交换次序" loading="lazy">
+          <figcaption>图 10-8 三角形区域积分限确定与交换次序</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_9.webp" alt="图 10-9 抛物线与直线相交区域积分次序变换" loading="lazy">
+          <figcaption>图 10-9 抛物线与直线相交区域积分次序变换</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_10.webp" alt="图 10-10 X-型区域扫描边界定限" loading="lazy">
+          <figcaption>图 10-10 X-型区域扫描边界定限</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_11.webp" alt="图 10-11 Y-型区域扫描边界定限" loading="lazy">
+          <figcaption>图 10-11 Y-型区域扫描边界定限</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_12.webp" alt="图 10-12 既是 X-型又是 Y-型的四边形区域" loading="lazy">
+          <figcaption>图 10-12 既是 X-型又是 Y-型的四边形区域</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_13.webp" alt="图 10-13 双曲线与直线围成的区域分块积分" loading="lazy">
+          <figcaption>图 10-13 双曲线与直线围成的区域分块积分</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_14.webp" alt="图 10-14 梯形区域积分路径选择比较" loading="lazy">
+          <figcaption>图 10-14 梯形区域积分路径选择比较</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_15.webp" alt="图 10-15 半圆形区域关于坐标轴对称性化简" loading="lazy">
+          <figcaption>图 10-15 半圆形区域关于坐标轴对称性化简</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_16.webp" alt="图 10-16 两个相交圆相贯闭区域的第一象限对称性" loading="lazy">
+          <figcaption>图 10-16 两个相交圆相贯闭区域的第一象限对称性</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_17.webp" alt="图 10-17 包含奇异内点的区域边界避让处理" loading="lazy">
+          <figcaption>图 10-17 包含奇异内点的区域边界避让处理</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、极坐标系下的二次积分</h3>
+      <p>
+        当积分区域为圆形、扇形、圆环，或被积函数含有 $x^2 + y^2$ 时，采用极坐标变换 $x = r\cos\theta, y = r\sin\theta$（图 10-18 至图 10-24）.
+      </p>
+      <p>
+        面积微元为 $d\sigma = r dr d\theta$. 二重积分化为极坐标二次积分公式为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iint_D f(x, y)dxdy = \int_\alpha^\beta d\theta \int_{r_1(\theta)}^{r_2(\theta)} f(r\cos\theta, r\sin\theta) r dr$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_18.webp" alt="图 10-18 极坐标网格划分面积微元 dσ = r dr dθ" loading="lazy">
+          <figcaption>图 10-18 极坐标网格划分面积微元 dσ = r dr dθ</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_19.webp" alt="图 10-19 极坐标同心圆与射线扇形小微元几何推导" loading="lazy">
+          <figcaption>图 10-19 极坐标同心圆与射线扇形小微元几何推导</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_20.webp" alt="图 10-20 极点在区域边界上时的射线积分限扫描" loading="lazy">
+          <figcaption>图 10-20 极点在区域边界上时的射线积分限扫描</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_21.webp" alt="图 10-21 极点在区域内部时 θ 遍历 0 到 2π 全周" loading="lazy">
+          <figcaption>图 10-21 极点在区域内部时 θ 遍历 0 到 2π 全周</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_22.webp" alt="图 10-22 心脏线外侧与圆内侧夹层极坐标积分区域" loading="lazy">
+          <figcaption>图 10-22 心脏线外侧与圆内侧夹层极坐标积分区域</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_23.webp" alt="图 10-23 伯努利双纽线单瓣极坐标角度范围定限" loading="lazy">
+          <figcaption>图 10-23 伯努利双纽线单瓣极坐标角度范围定限</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_24.webp" alt="图 10-24 偏心圆极坐标方程 r = 2a cos θ 定限解析" loading="lazy">
+          <figcaption>图 10-24 偏心圆极坐标方程 r = 2a cos θ 定限解析</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_25.webp" alt="图 10-25 一般曲线坐标变换下的雅可比面积伸缩比" loading="lazy">
+          <figcaption>图 10-25 一般曲线坐标变换下的雅可比面积伸缩比</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_26.webp" alt="图 10-26 平行四边形区域线性变换为标准正方形" loading="lazy">
+          <figcaption>图 10-26 平行四边形区域线性变换为标准正方形</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 三重积分</h2>
+
+      <h3>一、三重积分的定义</h3>
+      <p>
+        设 $f(x, y, z)$ 为空间有界闭立体 $\Omega$ 上的连续函数（图 10-27、图 10-28）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iiint_\Omega f(x, y, z)dv = \lim_{\lambda \to 0}\sum_{i=1}^n f(\xi_i, \eta_i, \zeta_i)\Delta v_i$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_27.webp" alt="图 10-27 空间立体闭区域网格立方体细分" loading="lazy">
+          <figcaption>图 10-27 空间立体闭区域网格立方体细分</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_28.webp" alt="图 10-28 空间体积微元 dv = dx dy dz 几何结构" loading="lazy">
+          <figcaption>图 10-28 空间体积微元 dv = dx dy dz 几何结构</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、常用三种坐标系下的三重积分计算</h3>
+
+      <h4>1. 直角坐标系（“投影法”先一后二）</h4>
+      <p>
+        若立体 $\Omega$ 投影在 $xOy$ 面上为区域 $D_{xy}$，上下底曲面为 $z_1(x, y) \le z \le z_2(x, y)$（图 10-29、图 10-30、图 10-31）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iiint_\Omega f(x, y, z)dxdydz = \iint_{D_{xy}} dxdy \int_{z_1(x, y)}^{z_2(x, y)} f(x, y, z)dz$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_29.webp" alt="图 10-29 投影法（先一后二）垂直柱体穿透定限" loading="lazy">
+          <figcaption>图 10-29 投影法（先一后二）垂直柱体穿透定限</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_30.webp" alt="图 10-30 平行平面截面截割薄片体积（先二后一截面法）" loading="lazy">
+          <figcaption>图 10-30 平行平面截面截割薄片体积（先二后一截面法）</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_31.webp" alt="图 10-31 四面体闭区域空间投影与各平面方程交线" loading="lazy">
+          <figcaption>图 10-31 四面体闭区域空间投影与各平面方程交线</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. 柱面坐标系（Cylindrical Coordinates）</h4>
+      <p>
+        $x = r\cos\theta, y = r\sin\theta, z = z$，体积微元为 $dv = r dr d\theta dz$（图 10-32、图 10-33、图 10-34）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iiint_\Omega f(x, y, z)dv = \iiint_\Omega f(r\cos\theta, r\sin\theta, z) r dr d\theta dz$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_32.webp" alt="图 10-32 柱面坐标系空间动点 (r, θ, z) 几何定义" loading="lazy">
+          <figcaption>图 10-32 柱面坐标系空间动点 (r, θ, z) 几何定义</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_33.webp" alt="图 10-33 柱面坐标系体积微元 dv = r dr dθ dz 结构" loading="lazy">
+          <figcaption>图 10-33 柱面坐标系体积微元 dv = r dr dθ dz 结构</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_34.webp" alt="图 10-34 圆锥体与圆柱体相交立体的柱面坐标定限" loading="lazy">
+          <figcaption>图 10-34 圆锥体与圆柱体相交立体的柱面坐标定限</figcaption>
+        </figure>
+      </div>
+
+      <h4>3. 球面坐标系（Spherical Coordinates）</h4>
+      <p>
+        $x = r\sin\varphi\cos\theta, y = r\sin\varphi\sin\theta, z = r\cos\varphi$（$r \ge 0, 0 \le \varphi \le \pi, 0 \le \theta \le 2\pi$），体积微元为 $dv = r^2\sin\varphi dr d\varphi d\theta$（图 10-35、图 10-36、图 10-37）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iiint_\Omega f(x, y, z)dv = \iiint_\Omega F(r, \varphi, \theta) r^2\sin\varphi dr d\varphi d\theta$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_35.webp" alt="图 10-35 球面坐标系 (r, φ, θ) 空间角度关系" loading="lazy">
+          <figcaption>图 10-35 球面坐标系 (r, φ, θ) 空间角度关系</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_36.webp" alt="图 10-36 球面坐标系体积微元 dv = r² sin φ dr dφ dθ 结构" loading="lazy">
+          <figcaption>图 10-36 球面坐标系体积微元 dv = r² sin φ dr dφ dθ 结构</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_37.webp" alt="图 10-37 上半球面与冰淇淋锥体空间立体定限" loading="lazy">
+          <figcaption>图 10-37 上半球面与冰淇淋锥体空间立体定限</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 重积分的应用</h2>
+
+      <h3>一、曲面的面积</h3>
+      <p>
+        光滑空间曲面 $z = f(x, y)$ 在区域 $D$ 上的<strong>面积公式</strong>（图 10-38、图 10-39）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$A = \iint_D \sqrt{1 + \left(\frac{\partial z}{\partial x}\right)^2 + \left(\frac{\partial z}{\partial y}\right)^2} dxdy$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_38.webp" alt="图 10-38 切平面投影小平行四边形面积微元 dS" loading="lazy">
+          <figcaption>图 10-38 切平面投影小平行四边形面积微元 dS</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_39.webp" alt="图 10-39 半球面曲面面积二重积分微元计算" loading="lazy">
+          <figcaption>图 10-39 半球面曲面面积二重积分微元计算</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、质心坐标与转动惯量</h3>
+      <p>
+        非均匀立体 $\Omega$ 密度为 $\rho(x, y, z)$，总质量为 $M = \iiint_\Omega \rho dv$（图 10-40、图 10-41、图 10-42）. <strong>质心坐标公式</strong>：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\bar{x} = \frac{1}{M}\iiint_\Omega x \rho dv, \qquad \bar{y} = \frac{1}{M}\iiint_\Omega y \rho dv, \qquad \bar{z} = \frac{1}{M}\iiint_\Omega z \rho dv$$
+      </p>
+      <p>绕各坐标轴的<strong>转动惯量</strong>：$I_z = \iiint_\Omega (x^2 + y^2)\rho dv, \quad I_x = \iiint_\Omega (y^2 + z^2)\rho dv, \quad I_y = \iiint_\Omega (x^2 + z^2)\rho dv$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_10_40.webp" alt="图 10-40 均匀半球体的质心几何对称轴平衡分析" loading="lazy">
+          <figcaption>图 10-40 均匀半球体的质心几何对称轴平衡分析</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_41.webp" alt="图 10-41 圆锥体质心位于中心轴距底面 1/4 高度处" loading="lazy">
+          <figcaption>图 10-41 圆锥体质心位于中心轴距底面 1/4 高度处</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_10_42.webp" alt="图 10-42 非均匀平面薄片的静矩与质心坐标计算" loading="lazy">
+          <figcaption>图 10-42 非均匀平面薄片的静矩与质心坐标计算</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题十 -->
+      <h2>总习题十</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 计算二重积分 $I = \iint_D e^{x^2 + y^2}dxdy$，其中 $D$ 为闭圆盘 $x^2 + y^2 \le R^2$.</p>
+        <p><em>解</em>：变换为极坐标：$D: 0 \le \theta \le 2\pi, 0 \le r \le R$. 被积函数 $e^{r^2}$，面积元素 $r dr d\theta$：<br>
+        $$I = \int_0^{2\pi} d\theta \int_0^R e^{r^2} r dr = 2\pi \left[\frac{1}{2}e^{r^2}\right]_0^R = \pi (e^{R^2} - 1)$$</p>
+
+        <p><strong>2.</strong> 交换二次积分次序：$I = \int_0^1 dx \int_{x^2}^x f(x, y)dy$.</p>
+        <p><em>解</em>：积分区域由 $y = x^2$（下曲线）与 $y = x$（上曲线）所界定，交点为 $(0, 0)$ 与 $(1, 1)$.<br>
+        改视为 Y-型区域：$y$ 从 $0$ 变到 $1$；对于固定的 $y$，左边界为直线 $x = y$，右边界为抛物线 $x = \sqrt{y}$.<br>
+        故：$I = \int_0^1 dy \int_y^{\sqrt{y}} f(x, y)dx$.</p>
+
+        <p><strong>3.</strong> 利用球面坐标计算立体 $\Omega: x^2 + y^2 + z^2 \le a^2, z \ge \sqrt{x^2 + y^2}$ 的体积.</p>
+        <p><em>解</em>：边界圆锥面在球面坐标下为 $\varphi = \frac{\pi}{4}$，球面为 $r = a$：<br>
+        $$V = \int_0^{2\pi} d\theta \int_0^{\frac{\pi}{4}} \sin\varphi d\varphi \int_0^a r^2 dr = 2\pi \cdot [-\cos\varphi]_0^{\frac{\pi}{4}} \cdot \frac{a^3}{3} = \frac{2}{3}\pi a^3 \left(1 - \frac{\sqrt{2}}{2}\right) = \frac{2 - \sqrt{2}}{3}\pi a^3$$</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="09_第九章_多元函数微分法及其应用.html" class="nav-btn">← 上一章: 第九章 多元函数微分法及其应用</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="11_第十一章_曲线积分与曲面积分.html" class="nav-btn primary">下一章: 第十一章 曲线积分与曲面积分 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

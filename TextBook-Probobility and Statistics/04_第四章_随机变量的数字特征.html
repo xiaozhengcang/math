@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第四章 随机变量的数字特征 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="03_第三章_多维随机变量及其分布.html" class="nav-btn">← 上一章: 多维随机变量及其分布</a>
+      <a href="05_第五章_大数定律及中心极限定理.html" class="nav-btn primary">下一章: 大数定律及中心极限定理 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第四章 随机变量的数字特征</h1>
+      <p class="chapter-intro">
+        在前面的章节中，我们学习了用分布律、分布函数或概率密度来完整描述随机变量的统计特征. 然而在许多实际应用中，由于客观条件的限制，我们可能无法或不需要知道随机变量的完整分布形态，而只需要掌握能够集中反映随机变量核心特性的若干个关键数值指标——例如平均水平、波动离散程度、变量间的关联程度等. 这类在概率统计中起关键作用的常数，统称为<strong>随机变量的数字特征</strong>.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 数学期望</h2>
+
+      <h3>一、数学期望的定义</h3>
+      <p>
+        数学期望（Mathematical Expectation）简称为<strong>期望</strong>，又称<strong>均值</strong>，它是刻画随机变量取值集中趋势的最重要位置特征.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.1：离散型随机变量的数学期望</div>
+        <p>设离散型随机变量 $X$ 的分布律为 $P(X = x_k) = p_k$ ($k = 1, 2, \dots$). 如果级数
+          $$\sum_{k=1}^\infty x_k p_k$$
+          <strong>绝对收敛</strong>，即 $\sum_{k=1}^\infty |x_k| p_k < +\infty$，则称该级数的和为随机变量 $X$ 的<strong>数学期望</strong>，记作 $E(X)$ 或 $\mu$，即：
+          $$E(X) = \sum_{k=1}^\infty x_k p_k$$
+        </p>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.2：连续型随机变量的数学期望</div>
+        <p>设连续型随机变量 $X$ 的概率密度函数为 $f(x)$. 如果广义反常积分
+          $$\int_{-\infty}^{+\infty} x f(x) \, dx$$
+          <strong>绝对收敛</strong>，即 $\int_{-\infty}^{+\infty} |x| f(x) \, dx < +\infty$，则称该积分的值为连续型随机变量 $X$ 的<strong>数学期望</strong>，记作：
+          $$E(X) = \int_{-\infty}^{+\infty} x f(x) \, dx$$
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📘 为什么必须强调“绝对收敛”？（柯西分布的期望不存在）</div>
+        <p>如果级数或积分不是绝对收敛，根据微积分黎曼重排定理，级数重排顺序后会产生歧义甚至发散. 著名的反例是<strong>柯西分布</strong>（Cauchy Distribution），其概率密度为 $f(x) = \frac{1}{\pi(1+x^2)}$，虽然图形对称，但 $\int_{-\infty}^{+\infty} |x|f(x)\,dx = \infty$，因此柯西分布的数学期望<strong>不存在</strong>！</p>
+      </div>
+
+      <h3>二、随机变量函数的数学期望定理</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4.1：随机变量函数的期望公式（无需先求函数本身的分布）</div>
+        <p><strong>(1) 一维情形</strong>：设 $Y = g(X)$ 为随机变量 $X$ 的函数：</p>
+        <ul>
+          <li>若 $X$ 为离散型，分布律为 $P(X = x_k) = p_k$，则当级数绝对收敛时：
+            $$E[g(X)] = \sum_k g(x_k) p_k$$
+          </li>
+          <li>若 $X$ 为连续型，概率密度为 $f(x)$，则当积分绝对收敛时：
+            $$E[g(X)] = \int_{-\infty}^{+\infty} g(x) f(x) \, dx$$
+          </li>
+        </ul>
+        <p><strong>(2) 二维情形</strong>：设 $Z = g(X, Y)$ 为二维随机变量 $(X, Y)$ 的函数：</p>
+        <ul>
+          <li>离散型：$$E[g(X, Y)] = \sum_i \sum_j g(x_i, y_j) p_{ij}$$</li>
+          <li>连续型：$$E[g(X, Y)] = \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} g(x, y) f(x, y) \, dx \, dy$$</li>
+        </ul>
+      </div>
+
+      <h3>三、数学期望的基本性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4.2：数学期望的四大线性性质</div>
+        <ol>
+          <li><strong>常数的期望等于自身</strong>：设 $c$ 为常数，则 $E(c) = c$；</li>
+          <li><strong>常数因子可提至期望符号外</strong>：设 $c$ 为常数，则 $E(cX) = cE(X)$；</li>
+          <li><strong>线性可加性（无条件成立）</strong>：对任意两个随机变量 $X, Y$（<strong>不论它们是否相互独立</strong>），恒有：
+            $$E(X \pm Y) = E(X) \pm E(Y)$$
+            推广到任意有限个随机变量：$E\left(\sum_{i=1}^n c_i X_i\right) = \sum_{i=1}^n c_i E(X_i)$；
+          </li>
+          <li><strong>乘积的可乘性（独立条件）</strong>：如果随机变量 $X$ 与 $Y$ <strong>相互独立</strong>，则：
+            $$E(XY) = E(X) \cdot E(Y)$$
+          </li>
+        </ol>
+      </div>
+
+      <h3>四、常见随机变量的数学期望速查</h3>
+      <ul>
+        <li>$0\text{-}1$ 分布 $X \sim B(1, p)$：$E(X) = p$；</li>
+        <li>二项分布 $X \sim B(n, p)$：$E(X) = np$（分解为 $n$ 个独立两点变量 $X = \sum X_i$ 直接得 $n \times p$）；</li>
+        <li>泊松分布 $X \sim P(\lambda)$：$E(X) = \lambda$；</li>
+        <li>几何分布 $X \sim G(p)$：$E(X) = \frac{1}{p}$；</li>
+        <li>均匀分布 $X \sim U(a, b)$：$E(X) = \frac{a + b}{2}$；</li>
+        <li>指数分布 $X \sim E(\lambda)$：$E(X) = \frac{1}{\lambda}$；</li>
+        <li>正态分布 $X \sim N(\mu, \sigma^2)$：$E(X) = \mu$.</li>
+      </ul>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 方差和标准差</h2>
+
+      <h3>一、方差和标准差的定义</h3>
+      <p>
+        数学期望给出了随机变量取值的平均中心位置，但无法反映随机变量取值在其中心周围的<strong>分散或波动程度</strong>. 例如两只股票平均年收益均为 10%，但一只波动范围在 8%~12% 之间，另一只在 -30%~50% 之间剧烈震荡，两者的风险迥然不同. 为衡量这种波动性，引出<strong>方差</strong>.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.3：方差与标准差</div>
+        <p>设 $X$ 为随机变量，若 $E\{[X - E(X)]^2\}$ 存在，则称偏差平方的数学期望为 $X$ 的<strong>方差</strong>（Variance），记作 $D(X)$ 或 $\mathrm{Var}(X)$ 或 $\sigma^2$，即：
+          $$D(X) = E\{[X - E(X)]^2\}$$
+        </p>
+        <p>方差的算术平方根 $\sigma(X) = \sqrt{D(X)}$ 称为随机变量 $X$ 的<strong>标准差</strong>（Standard Deviation），其量纲与随机变量 $X$ 本身一致.</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4.3：方差的最实用化简计算公式</div>
+        <p>在实际解题和理论推导中，方差几乎总是使用下列公式展开计算：
+          $$D(X) = E(X^2) - [E(X)]^2$$
+        </p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【推导证明】</strong> 令 $\mu = E(X)$ 为常数，展开平方得：
+          $$\begin{aligned}
+            D(X) &= E[(X - \mu)^2] = E(X^2 - 2\mu X + \mu^2) \\
+                 &= E(X^2) - 2\mu E(X) + \mu^2 = E(X^2) - 2\mu^2 + \mu^2 \\
+                 &= E(X^2) - \mu^2 = E(X^2) - [E(X)]^2 \qquad \blacksquare
+          \end{aligned}$$
+        </p>
+      </div>
+
+      <h3>二、方差的基本性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4.4：方差的性质</div>
+        <ol>
+          <li><strong>常数的方差为 0</strong>：$D(c) = 0$；反之，$D(X) = 0 \iff P(X = c) = 1$（$X$ 几乎处处为常数）；</li>
+          <li><strong>常数因子的平方倍法则</strong>：设 $a, b$ 为常数，则：
+            $$D(aX + b) = a^2 D(X)$$
+            （平移量 $b$ 不改变离散波动幅度，故方差对常数平移不敏感）；
+          </li>
+          <li><strong>一般和的方差公式</strong>：对任意随机变量 $X, Y$：
+            $$D(X \pm Y) = D(X) + D(Y) \pm 2 \mathrm{Cov}(X, Y)$$
+          </li>
+          <li><strong>独立变量的方差可加性</strong>：若 $X$ 与 $Y$ <strong>相互独立</strong>（或不相关），则：
+            $$D(X \pm Y) = D(X) + D(Y)$$
+            推广到 $n$ 个独立变量：$D\left(\sum_{i=1}^n a_i X_i\right) = \sum_{i=1}^n a_i^2 D(X_i)$.
+          </li>
+        </ol>
+      </div>
+
+      <h3>三、标准化随机变量</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.4：标准化变量</div>
+        <p>设随机变量 $X$ 的均值为 $\mu = E(X)$，方差为 $\sigma^2 = D(X) > 0$. 构造无量纲的新随机变量：
+          $$X^* = \frac{X - E(X)}{\sqrt{D(X)}} = \frac{X - \mu}{\sigma}$$
+          称 $X^*$ 为 $X$ 的<strong>标准化随机变量</strong>（Standardized Random Variable），其必然满足：
+          $$E(X^*) = 0, \qquad D(X^*) = 1$$
+        </p>
+      </div>
+
+      <h3>四、常见随机变量的方差速查</h3>
+      <ul>
+        <li>$0\text{-}1$ 分布 $X \sim B(1, p)$：$D(X) = p(1-p) = pq$；</li>
+        <li>二项分布 $X \sim B(n, p)$：$D(X) = np(1-p) = npq$；</li>
+        <li>泊松分布 $X \sim P(\lambda)$：$D(X) = \lambda$（<strong>泊松分布的期望等于方差！</strong>）；</li>
+        <li>均匀分布 $X \sim U(a, b)$：$D(X) = \frac{(b - a)^2}{12}$；</li>
+        <li>指数分布 $X \sim E(\lambda)$：$D(X) = \frac{1}{\lambda^2}$（标准差等于期望：$\sigma = \mu = \frac{1}{\lambda}$）；</li>
+        <li>正态分布 $X \sim N(\mu, \sigma^2)$：$D(X) = \sigma^2$.</li>
+      </ul>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 协方差和相关系数</h2>
+
+      <h3>一、协方差的定义与性质</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.5：协方差</div>
+        <p>对二维随机变量 $(X, Y)$，称数值
+          $$\mathrm{Cov}(X, Y) = E\{[X - E(X)][Y - E(Y)]\}$$
+          为随机变量 $X$ 与 $Y$ 的<strong>协方差</strong>（Covariance）.</p>
+        <p><strong>协方差展开实用公式</strong>：
+          $$\mathrm{Cov}(X, Y) = E(XY) - E(X)E(Y)$$
+        </p>
+      </div>
+
+      <h4>协方差的基本性质：</h4>
+      <ol>
+        <li>对称性：$\mathrm{Cov}(X, Y) = \mathrm{Cov}(Y, X)$；</li>
+        <li>自协方差即方差：$\mathrm{Cov}(X, X) = D(X)$；</li>
+        <li>常数性质：$\mathrm{Cov}(aX, bY) = ab \,\mathrm{Cov}(X, Y)$；$\mathrm{Cov}(X + c, Y) = \mathrm{Cov}(X, Y)$；</li>
+        <li>双线性可加性：$\mathrm{Cov}(X_1 + X_2, Y) = \mathrm{Cov}(X_1, Y) + \mathrm{Cov}(X_2, Y)$；</li>
+        <li>如果 $X$ 与 $Y$ 独立，则 $E(XY) = E(X)E(Y)$，故 $\mathrm{Cov}(X, Y) = 0$.</li>
+      </ol>
+
+      <h3>二、相关系数</h3>
+      <p>
+        由于协方差带有量纲，其绝对值大小不仅取决于变量间的关联程度，还强烈受到变量单位尺度的影响（例如把长度单位从米改成毫米，协方差会膨胀 $10^6$ 倍）. 为了消除量纲干扰，必须进行标准化无量纲化处理，由此定义<strong>相关系数</strong>.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.6：相关系数</div>
+        <p>设 $D(X) > 0, D(Y) > 0$，称数值
+          $$\rho_{XY} = \frac{\mathrm{Cov}(X, Y)}{\sqrt{D(X)}\sqrt{D(Y)}}$$
+          为随机变量 $X$ 与 $Y$ 的<strong>相关系数</strong>（Correlation Coefficient，通常简记为 $\rho$）.</p>
+        <p>相关系数本质上正是标准化随机变量 $X^*$ 与 $Y^*$ 的协方差：$$\rho_{XY} = \mathrm{Cov}(X^*, Y^*) = E(X^* Y^*)$$</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4.5：相关系数的两大核心定理（柯西-施瓦茨不等式推论）</div>
+        <ol>
+          <li><strong>有界性</strong>：$|\rho_{XY}| \le 1$，即 $$-1 \le \rho_{XY} \le 1$$</li>
+          <li><strong>线性相关判定定理</strong>：$|\rho_{XY}| = 1$ 的充分必要条件是：存在常数 $a \ne 0$ 和 $b$，使得
+            $$P(Y = aX + b) = 1$$
+            即 $X$ 与 $Y$ 之间几乎处处存在严格的<strong>线性关系</strong>：
+            <ul>
+              <li>当 $\rho_{XY} = 1$ 时，为严格正相关（$a > 0$）；</li>
+              <li>当 $\rho_{XY} = -1$ 时，为严格负相关（$a < 0$）.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <h3>三、不相关与相互独立的辩证关系</h3>
+      <div class="callout callout-note">
+        <div class="callout-title">📘 核心考点辨析：不相关 vs 相互独立</div>
+        <p>当 $\rho_{XY} = 0$（即 $\mathrm{Cov}(X, Y) = 0$ 或 $E(XY) = E(X)E(Y)$）时，称 $X$ 与 $Y$ <strong>不相关</strong>.</p>
+        <p><strong>1. 概念层级不同</strong>：
+          <ul>
+            <li><strong>“独立”</strong>是一个强概念，它要求任意函数均无关系（$P(AB)=P(A)P(B)$，包含线性与一切非线性关系）；</li>
+            <li><strong>“不相关”</strong>是一个较弱的概念，它仅仅说明两者之间<strong>不存在线性关系</strong>，但可能存在非常强烈的非线性函数关系（如圆周方程 $X^2 + Y^2 = 1$）！</li>
+          </ul>
+        </p>
+        <p><strong>2. 逻辑推导链条</strong>：
+          $$X, Y \text{ 相互独立} \implies X, Y \text{ 不相关} (\rho = 0)$$
+          但反之不成立：$$X, Y \text{ 不相关} \;\; \not\!\!\!\implies X, Y \text{ 相互独立}$$
+        </p>
+        <p><strong>3. 唯一特例</strong>：如果 $(X, Y)$ 服从<strong>二维正态分布</strong>，则独立与不相关完全等价！</p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 其他数字特征</h2>
+
+      <h3>一、矩的概念</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.7：原点矩与中心矩</div>
+        <p>设 $X$ 和 $Y$ 为随机变量，$k, l$ 为正整数：</p>
+        <ul>
+          <li><strong>$k$ 阶原点矩</strong>：$\alpha_k = E(X^k)$（特别地，一阶原点矩就是数学期望 $\alpha_1 = E(X)$）；</li>
+          <li><strong>$k$ 阶中心矩</strong>：$\mu_k = E\{[X - E(X)]^k\}$（特别地，一阶中心矩恒为 0，二阶中心矩就是方差 $\mu_2 = D(X)$）；</li>
+          <li><strong>$k+l$ 阶混合原点矩</strong>：$\alpha_{k+l} = E(X^k Y^l)$；</li>
+          <li><strong>$k+l$ 阶混合中心矩</strong>：$\mu_{k+l} = E\{[X - E(X)]^k [Y - E(Y)]^l\}$（特别地，$\mu_{1+1} = \mathrm{Cov}(X, Y)$ 即为协方差）.</li>
+        </ul>
+      </div>
+
+      <h3>二、分位数与中位数</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4.8：分位数（Quantile）与中位数（Median）</div>
+        <p>设连续型随机变量 $X$ 的分布函数为 $F(x)$，对于给定的概率值 $\alpha \in (0, 1)$：</p>
+        <ul>
+          <li>满足 $F(x_\alpha) = P(X \le x_\alpha) = \alpha$ 的实数 $x_\alpha$ 称为 $X$ 的 <strong>$\alpha$ 分位数</strong>（下侧分位数）；</li>
+          <li>满足 $P(X > z_\alpha) = 1 - F(z_\alpha) = \alpha$ 的实数 $z_\alpha$ 称为 $X$ 的<strong>上侧 $\alpha$ 分位数</strong>（数理统计常用）；</li>
+          <li>当 $\alpha = 0.5$ 时的分位数 $m = x_{0.5}$ 满足 $P(X \le m) = P(X \ge m) = 0.5$，称为随机变量 $X$ 的<strong>中位数</strong>.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与测试题四</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 本章数字特征速查总表</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; border:1px solid var(--border-color); font-size:14px;">
+            <tr style="background:#f8fafc; border-bottom:2px solid var(--border-color);">
+              <th style="padding:8px; border:1px solid var(--border-color);">分布名称</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">记号</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">参数</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">数学期望 $E(X)$</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">方差 $D(X)$</th>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">0-1 分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$B(1, p)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$0 < p < 1$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$p$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$p(1-p)$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">二项分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$B(n, p)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$n \ge 1, 0 < p < 1$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$np$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$np(1-p)$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">泊松分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$P(\lambda)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\lambda > 0$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\lambda$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\lambda$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">几何分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$G(p)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$0 < p < 1$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{1}{p}$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{1-p}{p^2}$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">均匀分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$U(a, b)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$a < b$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{a+b}{2}$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{(b-a)^2}{12}$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">指数分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$E(\lambda)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\lambda > 0$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{1}{\lambda}$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\frac{1}{\lambda^2}$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">正态分布</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$N(\mu, \sigma^2)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\mu \in \mathbb{R}, \sigma > 0$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\mu$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\sigma^2$</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

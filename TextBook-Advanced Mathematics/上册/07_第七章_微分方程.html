@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第七章 微分方程 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="06_第六章_定积分的应用.html" class="nav-btn">← 上一章: 第六章 定积分的应用</a>
+      <a href="08_附录.html" class="nav-btn primary">下一章: 附录 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第七章 微分方程</h1>
+      <p class="chapter-intro">
+        科学技术的根本任务之一，是探索自然规律并预测客观事物随时间的动态演变. 在很多实际物理、力学、生物与工程问题中，直接找出反映未知函数与其自变量之间显式联系往往极为困难；然而，根据已知的物理定律（如牛顿第二定律、动量守恒、能量守恒、基尔霍夫定律、衰变定律等），我们常常能够容易地建立未知函数、它的自变量以及它的某些阶导数之间的平衡关系. 这种包含未知函数导数的方程就是<strong>微分方程</strong>（Differential Equation）. 本章将从物理几何引例出发，建立微分方程的基本概念，系统讨论一阶微分方程（可分离变量、齐次、一阶线性、伯努利方程）、可降阶高阶微分方程、高阶线性微分方程解的结构，深入阐述常系数线性微分方程的特征方程与待定系数特解法、欧拉方程，并分析阻尼振动、共振与电路动态响应等经典应用模型.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 微分方程的基本概念</h2>
+
+      <h3>一、引例</h3>
+
+      <h4>1. 几何问题：已知切线斜率确定曲线方程</h4>
+      <p>
+        设曲线通过点 $(1, 2)$，且曲线上任一点 $P(x, y)$ 处的切线斜率等于该点横坐标的 $2$ 倍（图 7-1）. 按照导数的几何意义，有：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{dy}{dx} = 2x$$
+      </p>
+      <p>两边积分得通解 $y = x^2 + C$. 代入初始条件 $x = 1, y = 2$，得 $2 = 1 + C \implies C = 1$. 因而所求曲线方程为 $y = x^2 + 1$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_1.webp" alt="图 7-1 满足斜率条件的抛物线切线与特解确定" loading="lazy">
+          <figcaption>图 7-1 满足斜率条件的抛物线切线与特解确定</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. 力学问题：考虑空气阻力的自由落体运动</h4>
+      <p>
+        质量为 $m$ 的物体在重力与空气阻力作用下由静止下落（图 7-2）. 设空气阻力与运动速度成正比，比例系数为 $k > 0$. 取向下为正方向，根据牛顿第二运动定律 $F = ma = m\frac{dv}{dt}$：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$m\frac{dv}{dt} = mg - kv$$
+      </p>
+      <p>初值条件为 $v(0) = 0$. 求解可得下落速度 $v(t) = \frac{mg}{k}(1 - e^{-\frac{k}{m}t})$，当 $t \to \infty$ 时速度趋于极限收尾速度 $v_\infty = \frac{mg}{k}$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_2.webp" alt="图 7-2 受空气阻力的自由落体受力分析与终端速度" loading="lazy">
+          <figcaption>图 7-2 受空气阻力的自由落体受力分析与终端速度</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_7_3.webp" alt="图 7-3 托里拆利容器小孔出水水面高度下降微分方程" loading="lazy">
+          <figcaption>图 7-3 托里拆利容器小孔出水水面高度下降微分方程</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、微分方程的基本概念与术语</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (微分方程的基本概念)</div>
+        <ul>
+          <li><strong>常微分方程</strong>：含有自变量、未知函数以及未知函数的导数（或微分）的方程称为常微分方程；</li>
+          <li><strong>阶数</strong>：微分方程中所出现的未知函数的<strong>最高阶导数的阶数</strong>，称为微分方程的<strong>阶</strong>；</li>
+          <li><strong>解</strong>：代入微分方程能使方程恒成立的函数称为该方程的解；</li>
+          <li><strong>通解</strong>：含有独立的任意常数，且任意常数的个数等于微分方程阶数的解，称为微分方程的<strong>通解</strong>；</li>
+          <li><strong>特解</strong>：确定了任意常数具体数值的解称为<strong>特解</strong>；</li>
+          <li><strong>初值条件与柯西问题</strong>：用来确定通解中任意常数的附加条件称为<strong>初始条件</strong>（如 $y|_{x=x_0} = y_0$）. 求微分方程满足初值条件的特解的问题称为<strong>初值问题</strong>（Cauchy Problem）.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 可分离变量的微分方程</h2>
+      <p>
+        如果一阶微分方程可以化为如下形式：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$g(y)dy = f(x)dx$$
+      </p>
+      <p>即方程两端各自只含有单一变量及其微分，称此方程为<strong>可分离变量的微分方程</strong>. 两端直接积分即得通解：$\int g(y)dy = \int f(x)dx + C$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_4.webp" alt="图 7-4 放射性元素衰变按指数规律递减动态曲线" loading="lazy">
+          <figcaption>图 7-4 放射性元素衰变按指数规律递减动态曲线</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 齐次方程</h2>
+      <p>
+        如果一阶微分方程可以写成 $\frac{dy}{dx} = \varphi\left(\frac{y}{x}\right)$ 的形式，称其为<strong>齐次微分方程</strong>.
+      </p>
+      <p>
+        <strong>求解法</strong>：引入中间变量代换 $u = \frac{y}{x}$，则 $y = ux, \frac{dy}{dx} = u + x\frac{du}{dx}$. 代入原方程得 $u + x\frac{du}{dx} = \varphi(u) \implies \frac{du}{\varphi(u) - u} = \frac{dx}{x}$，化为可分离变量方程求解，积出后再以 $\frac{y}{x}$ 替换 $u$.
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 一阶线性微分方程</h2>
+      <p>
+        形如 $y' + P(x)y = Q(x)$ 的微分方程称为<strong>一阶线性微分方程</strong>. 当 $Q(x) \equiv 0$ 时称为齐次方程；当 $Q(x) \not\equiv 0$ 时称为非齐次方程.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 常数变易法与通解公式</div>
+        <p>一阶线性非齐次方程 $y' + P(x)y = Q(x)$ 的<strong>通解公式</strong>为：</p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$y = e^{-\int P(x)dx} \left[\int Q(x) e^{\int P(x)dx} dx + C\right]$$
+        </p>
+      </div>
+
+      <p>
+        <strong>伯努利方程</strong>：形如 $y' + P(x)y = Q(x)y^n$ ($n \ne 0, 1$) 的非线性方程，通过两边同除以 $y^n$ 并作代换 $z = y^{1-n}$，化为关于 $z$ 的一阶线性微分方程.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_5.webp" alt="图 7-5 RL 串联电路接通直流电源后电流暂态增长响应" loading="lazy">
+          <figcaption>图 7-5 RL 串联电路接通直流电源后电流暂态增长响应</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 可降阶的高阶微分方程</h2>
+      <p>某些特殊形式的二阶微分方程，可以通过适当的代换降低其阶数，从而化为一阶方程求解：</p>
+      <ol>
+        <li><strong>$y'' = f(x)$ 型</strong>：连续对 $x$ 积分两次即可；</li>
+        <li><strong>$y'' = f(x, y')$ 型（不显含 $y$）</strong>：设 $p = y'$，则 $y'' = \frac{dp}{dx}$，代入化为关于 $p$ 与 $x$ 的一阶方程 $\frac{dp}{dx} = f(x, p)$；</li>
+        <li><strong>$y'' = f(y, y')$ 型（不显含自变量 $x$）</strong>：设 $p = y'$，由复合求导链式法则 $y'' = \frac{dp}{dx} = \frac{dp}{dy}\frac{dy}{dx} = p\frac{dp}{dy}$，化为关于 $p$ 与 $y$ 的一阶方程 $p\frac{dp}{dy} = f(y, p)$. 经典应用为两端悬挂重链条的<strong>悬链线</strong>方程推导（图 7-6、图 7-7）.</li>
+      </ol>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_6.webp" alt="图 7-6 均匀柔软重绳在自重平衡下的受力与悬链线弧段" loading="lazy">
+          <figcaption>图 7-6 均匀柔软重绳在自重平衡下的受力与悬链线弧段</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_7_7.webp" alt="图 7-7 悬链线 y = a cosh(x/a) 几何特征与最低点切线" loading="lazy">
+          <figcaption>图 7-7 悬链线 y = a cosh(x/a) 几何特征与最低点切线</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节 -->
+      <h2>第六节 高阶线性微分方程</h2>
+      <p>
+        二阶线性微分方程的一般形式为 $y'' + P(x)y' + Q(x)y = f(x)$.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 线性微分方程解的结构定理</div>
+        <ol>
+          <li>如果 $y_1(x)$ 与 $y_2(x)$ 是齐次方程 $y'' + P(x)y' + Q(x)y = 0$ 的两个<strong>线性无关特解</strong>（即 $\frac{y_1(x)}{y_2(x)} \ne \text{常数}$），那么：
+            $$y = C_1 y_1(x) + C_2 y_2(x)$$
+            即为齐次方程的<strong>通解</strong>；</li>
+          <li>设 $y^*(x)$ 是非齐次方程 $y'' + P(x)y' + Q(x)y = f(x)$ 的一个特解，而 $Y(x)$ 是对应齐次方程的通解，则非齐次方程的<strong>通解</strong>为：
+            $$y = Y(x) + y^*(x) = C_1 y_1(x) + C_2 y_2(x) + y^*(x)$$
+          </li>
+        </ol>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 常系数齐次线性微分方程</h2>
+      <p>
+        方程形式为 $y'' + py' + qy = 0$，其中 $p, q$ 为常数. 作欧拉代换 $y = e^{rx}$，代入方程得<strong>特征方程</strong>：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$r^2 + pr + q = 0$$
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 特征根与通解对应法则</div>
+        <ol>
+          <li><strong>有两个不同实根</strong> $r_1 \ne r_2$（$\Delta = p^2 - 4q > 0$）：通解为 $y = C_1 e^{r_1 x} + C_2 e^{r_2 x}$；</li>
+          <li><strong>有两个相等实根</strong> $r_1 = r_2 = r$（$\Delta = 0$）：通解为 $y = (C_1 + C_2 x)e^{rx}$；</li>
+          <li><strong>有一对共轭复根</strong> $r_{1,2} = \alpha \pm i\beta$（$\Delta < 0$）：通解为 $y = e^{\alpha x}(C_1 \cos\beta x + C_2 \sin\beta x)$. 对应弹簧振子阻尼振动衰减波形（图 7-8、图 7-9）.</li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_8.webp" alt="图 7-8 弹簧振子阻尼自由振动物理系统模型" loading="lazy">
+          <figcaption>图 7-8 弹簧振子阻尼自由振动物理系统模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_7_9.webp" alt="图 7-9 欠阻尼振动位移随时间衰减振荡曲线" loading="lazy">
+          <figcaption>图 7-9 欠阻尼振动位移随时间衰减振荡曲线</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第八节 -->
+      <h2>第八节 常系数非齐次线性微分方程</h2>
+      <p>
+        对于 $y'' + py' + qy = f(x)$，根据自由项 $f(x)$ 的类型，采用<strong>待定系数法</strong>求特解 $y^*$：
+      </p>
+
+      <h3>1. $f(x) = e^{\lambda x} P_m(x)$ 型</h3>
+      <p>
+        特解设为 $y^* = x^k Q_m(x)e^{\lambda x}$，其中 $Q_m(x)$ 是与 $P_m(x)$ 同次的待定多项式；$k$ 是 $\lambda$ 作为特征方程实根的重数（若 $\lambda$ 不是特征根，取 $k = 0$；若 $\lambda$ 是单根，取 $k = 1$；若 $\lambda$ 是二重根，取 $k = 2$），如图 7-10、图 7-11 所示.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_10.webp" alt="图 7-10 阶跃激励下系统响应与特解平衡位置过渡" loading="lazy">
+          <figcaption>图 7-10 阶跃激励下系统响应与特解平衡位置过渡</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_7_11.webp" alt="图 7-11 指数衰减外力激励下的非齐次特解演化" loading="lazy">
+          <figcaption>图 7-11 指数衰减外力激励下的非齐次特解演化</figcaption>
+        </figure>
+      </div>
+
+      <h3>2. $f(x) = e^{\lambda x}[P_l(x)\cos\omega x + P_n(x)\sin\omega x]$ 型</h3>
+      <p>
+        特解设为 $y^* = x^k e^{\lambda x}[R_m(x)\cos\omega x + S_m(x)\sin\omega x]$，其中 $m = \max(l, n)$；当 $\lambda \pm i\omega$ 不是特征根时取 $k = 0$；当 $\lambda \pm i\omega$ 是特征方程的单根时取 $k = 1$.
+      </p>
+      <p>
+        <strong>共振现象（Resonance）</strong>：当外力策动频率 $\omega$ 与系统固有频率 $\omega_0$ 恰好相等且无阻尼时，$\pm i\omega$ 成为特征根，$k = 1$，特解中出现因子 $x\sin\omega t$，振幅随时间无界线性增长，引发著名的<strong>共振破坏</strong>（图 7-12）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_12.webp" alt="图 7-12 无阻尼强迫振动在固有频率驱动下的共振发散波形" loading="lazy">
+          <figcaption>图 7-12 无阻尼强迫振动在固有频率驱动下的共振发散波形</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第九节 与 第十节 -->
+      <h2>第九节 欧拉方程与微分方程组</h2>
+
+      <h3>一、欧拉方程</h3>
+      <p>
+        形如 $x^2 y'' + p x y' + q y = f(x)$（各阶导数前乘以自变量相应幂次）的方程称为<strong>欧拉方程</strong>. 作自变量代换 $x = e^t$（即 $t = \ln x$），由链式法则可将其化为常系数线性微分方程求解.
+      </p>
+
+      <h3>二、常系数线性微分方程组</h3>
+      <p>
+        多回路复杂电路系统或多个相互耦合的振动质点系统，其动态行为由一组联立的微分方程刻画（图 7-13）. 通常采用微分算子消元法将其转化为单个高阶常微分方程求解.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_7_13.webp" alt="图 7-13 双回路 RLC 耦合动态电路拓扑与微分方程组" loading="lazy">
+          <figcaption>图 7-13 双回路 RLC 耦合动态电路拓扑与微分方程组</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题七 -->
+      <h2>总习题七</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 求一阶线性微分方程 $xy' - 2y = x^3 \cos x$ 的通解.</p>
+        <p><em>解</em>：方程化为标准形式 $y' - \frac{2}{x}y = x^2 \cos x$ ($x \ne 0$).<br>
+        这里 $P(x) = -\frac{2}{x}, Q(x) = x^2 \cos x$. 积分因子 $e^{\int P(x)dx} = e^{-2\ln|x|} = \frac{1}{x^2}$.<br>
+        由通解公式：<br>
+        $$y = x^2 \left[\int x^2 \cos x \cdot \frac{1}{x^2} dx + C\right] = x^2 \left[\int \cos x dx + C\right] = x^2 (\sin x + C)$$</p>
+
+        <p><strong>2.</strong> 求二阶微分方程 $y'' - 4y' + 4y = 0$ 满足初始条件 $y(0) = 1, y'(0) = 0$ 的特解.</p>
+        <p><em>解</em>：特征方程为 $r^2 - 4r + 4 = 0 \implies (r - 2)^2 = 0 \implies r_1 = r_2 = 2$.<br>
+        对应二重根，通解为 $y = (C_1 + C_2 x)e^{2x}$. 求导：$y' = C_2 e^{2x} + 2(C_1 + C_2 x)e^{2x}$.<br>
+        代入初值条件：$y(0) = C_1 = 1$；$y'(0) = C_2 + 2C_1 = 0 \implies C_2 = -2$.<br>
+        故特解为：$y = (1 - 2x)e^{2x}$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="06_第六章_定积分的应用.html" class="nav-btn">← 上一章: 第六章 定积分的应用</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="08_附录.html" class="nav-btn primary">下一章: 附录 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

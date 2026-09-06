@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>部分习题参考答案 - 工程数学 线性代数 (第七版)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📐</span> 工程数学 线性代数 (第七版) · 数字化重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="06_第六章_线性空间与线性变换.html" class="nav-btn">← 上一章: 线性空间与变换</a>
+      <a href="index.html" class="nav-btn primary">返回全书首页</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>附录 部分习题参考答案</h1>
+      <p class="chapter-intro">
+        本附录收录了同济大学数学科学学院编《工程数学 线性代数》（第七版）第一章至第六章重点习题与综合计算题的规范参考解答、核心演算数值与关键推导步骤，供读者在完成各章练习与自测后对照检验。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题一答案 -->
+      <h2>第一章 行列式 · 参考答案</h2>
+      
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题一 重点计算题答案</div>
+        <p><strong>1. 全排列与逆序数</strong>：</p>
+        <ul>
+          <li>(1) 排列 $3 \quad 4 \quad 2 \quad 1 \quad 5$：逆序数 $\tau = 2 + 2 + 1 + 0 + 0 = 5$（奇排列）；</li>
+          <li>(2) 排列 $2 \quad 4 \quad 1 \quad 3$：逆序数 $\tau = 1 + 2 + 0 + 0 = 3$（奇排列）；</li>
+          <li>(3) 排列 $1 \quad 3 \quad \dots \quad (2n-1) \quad 2 \quad 4 \quad \dots \quad 2n$：逆序数 $\tau = \frac{n(n-1)}{2}$；</li>
+          <li>(4) 倒序排列 $n(n-1)\dots 2 1$：逆序数 $\tau = \frac{n(n-1)}{2}$。</li>
+        </ul>
+        <p><strong>2. 二阶与三阶行列式计算</strong>：</p>
+        <ul>
+          <li>(1) $\begin{vmatrix} a & b \\ c & d \end{vmatrix} = ad - bc$；</li>
+          <li>(2) $\begin{vmatrix} \cos \theta & -\sin \theta \\ \sin \theta & \cos \theta \end{vmatrix} = \cos^2 \theta + \sin^2 \theta = 1$；</li>
+          <li>(3) $\begin{vmatrix} 1 & 2 & -4 \\ -2 & 2 & 1 \\ -3 & 4 & -2 \end{vmatrix} = -14$。</li>
+        </ul>
+        <p><strong>3. 四阶及 $n$ 阶行列式计算</strong>：</p>
+        <ul>
+          <li>(1) 例 1.3 四阶数值行列式：$D = 40$；</li>
+          <li>(2) 范德蒙德行列式：$V_4 = \prod_{1 \le j < i \le 4} (x_i - x_j) = 12$；</li>
+          <li>(3) $n$ 阶爪型行列式：$D_n = [x^2 - (n-1)a^2] x^{n-2}$ ($x \ne 0$)；</li>
+          <li>(4) $n$ 阶全 1 主对角 $x$ 行列式：$[x + (n-1)a](x - a)^{n-1}$；</li>
+          <li>(5) 三对角递推行列式：$D_n = \frac{\alpha^{n+1} - \beta^{n+1}}{\alpha - \beta}$ ($\alpha \ne \beta$)。</li>
+        </ul>
+        <p><strong>4. 克拉默法则求解</strong>：</p>
+        <ul>
+          <li>$\begin{cases} 2x_1 + x_2 - 5x_3 + x_4 = 8, \\ x_1 - 3x_2 - 6x_4 = 9, \\ 2x_2 - x_3 + 2x_4 = -5, \\ x_1 + 4x_2 - 7x_3 + 6x_4 = 0 \end{cases} \implies x_1 = 3, \; x_2 = -4, \; x_3 = -1, \; x_4 = 1$。</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题二答案 -->
+      <h2>第二章 矩阵及其运算 · 参考答案</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题二 重点计算题答案</div>
+        <p><strong>1. 矩阵乘法与幂次</strong>：</p>
+        <ul>
+          <li>(1) 设 $A = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}$，则 $A^n = \begin{pmatrix} 1 & n & \frac{n(n-1)}{2} \\ 0 & 1 & n \\ 0 & 0 & 1 \end{pmatrix}$；</li>
+          <li>(2) 设 $A = \begin{pmatrix} \lambda & 1 \\ 0 & \lambda \end{pmatrix}$，则 $A^n = \begin{pmatrix} \lambda^n & n\lambda^{n-1} \\ 0 & \lambda^n \end{pmatrix}$；</li>
+          <li>(3) 对称反称分解：$A = \frac{1}{2}(A + A^T) + \frac{1}{2}(A - A^T)$。</li>
+        </ul>
+        <p><strong>2. 伴随矩阵与逆矩阵计算</strong>：</p>
+        <ul>
+          <li>(1) 二阶求逆：$\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}$ ($ad - bc \ne 0$)；</li>
+          <li>(2) 三阶求逆：$A = \begin{pmatrix} 1 & 2 & 3 \\ 2 & 2 & 1 \\ 3 & 4 & 3 \end{pmatrix} \implies A^{-1} = \frac{1}{2}\begin{pmatrix} 2 & 6 & -4 \\ -3 & -6 & 5 \\ 2 & 2 & -2 \end{pmatrix}$；</li>
+          <li>(3) 伴随矩阵性质：$|A| = 3, n = 3 \implies |A^*| = |A|^{n-1} = 3^2 = 9$；$(2A)^* = 2^{n-1} A^* = 4A^*$。</li>
+        </ul>
+        <p><strong>3. 分块矩阵求逆</strong>：</p>
+        <ul>
+          <li>(1) 分块对角阵：$\begin{pmatrix} A & O \\ O & B \end{pmatrix}^{-1} = \begin{pmatrix} A^{-1} & O \\ O & B^{-1} \end{pmatrix}$；</li>
+          <li>(2) 分块副对角阵：$\begin{pmatrix} O & A \\ B & O \end{pmatrix}^{-1} = \begin{pmatrix} O & B^{-1} \\ A^{-1} & O \end{pmatrix}$；</li>
+          <li>(3) 分块下三角阵：$\begin{pmatrix} A & O \\ C & B \end{pmatrix}^{-1} = \begin{pmatrix} A^{-1} & O \\ -B^{-1} C A^{-1} & B^{-1} \end{pmatrix}$。</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题三答案 -->
+      <h2>第三章 矩阵的初等变换与线性方程组 · 参考答案</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题三 重点计算题答案</div>
+        <p><strong>1. 初等行变换求逆矩阵</strong>：</p>
+        <ul>
+          <li>$\begin{pmatrix} 2 & 1 & -3 \\ 1 & 2 & -2 \\ -1 & 3 & 2 \end{pmatrix}^{-1} = \frac{1}{13} \begin{pmatrix} 10 & -11 & 4 \\ 0 & 1 & 1 \\ 5 & -7 & 3 \end{pmatrix}$。</li>
+        </ul>
+        <p><strong>2. 矩阵的秩</strong>：</p>
+        <ul>
+          <li>$A = \begin{pmatrix} 3 & 1 & 0 & 2 \\ 1 & -1 & 2 & -1 \\ 1 & 3 & -4 & 4 \end{pmatrix} \xrightarrow{\text{化阶梯形}} \begin{pmatrix} 1 & -1 & 2 & -1 \\ 0 & 4 & -6 & 5 \\ 0 & 0 & 0 & 0 \end{pmatrix} \implies R(A) = 2$。</li>
+        </ul>
+        <p><strong>3. 线性方程组解的结构与讨论</strong>：</p>
+        <ul>
+          <li>(1) 无穷多解通解：$\boldsymbol{x} = \begin{pmatrix} -8 \\ 3 \\ 6 \\ 0 \end{pmatrix} + c \begin{pmatrix} 0 \\ 1 \\ 2 \\ 1 \end{pmatrix}$ ($c \in \mathbb{R}$)；</li>
+          <li>(2) 含参讨论：$\begin{cases} \lambda x_1 + x_2 + x_3 = 1 \\ x_1 + \lambda x_2 + x_3 = \lambda \\ x_1 + x_2 + \lambda x_3 = \lambda^2 \end{cases}$：
+            <ul>
+              <li>当 $\lambda \ne 1$ 且 $\lambda \ne -2$ 时，有唯一解；</li>
+              <li>当 $\lambda = -2$ 时，无解；</li>
+              <li>当 $\lambda = 1$ 时，有无穷多解，通解为 $(1, 0, 0)^T + c_1(-1, 1, 0)^T + c_2(-1, 0, 1)^T$。</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题四答案 -->
+      <h2>第四章 向量组的线性相关性 · 参考答案</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题四 重点计算题答案</div>
+        <p><strong>1. 极大线性无关组与秩</strong>：</p>
+        <ul>
+          <li>例 4.1 中向量组的秩 $R = 2$，极大无关组为 $\{\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2\}$，其余向量表出为：$\boldsymbol{\alpha}_3 = -2\boldsymbol{\alpha}_1 + \boldsymbol{\alpha}_2$，$\boldsymbol{\alpha}_4 = \boldsymbol{\alpha}_1 + \boldsymbol{\alpha}_2$。</li>
+        </ul>
+        <p><strong>2. 齐次线性方程组基础解系</strong>：</p>
+        <ul>
+          <li>矩阵 $A = \begin{pmatrix} 1 & 2 & 2 & 1 \\ 2 & 1 & -2 & -2 \\ 1 & -1 & -4 & -3 \end{pmatrix}$，非零行数 $r = 2$，$n - r = 4 - 2 = 2$。
+            基础解系为：$\boldsymbol{\xi}_1 = (-2, 0, 1, 0)^T$，$\boldsymbol{\xi}_2 = (-5/3, 4/3, 0, 1)^T$（或整数形式 $(-5, 4, 0, 3)^T$）。
+            齐次通解为 $c_1 \boldsymbol{\xi}_1 + c_2 \boldsymbol{\xi}_2$。
+          </li>
+        </ul>
+        <p><strong>3. 非齐次线性方程组通解</strong>：</p>
+        <ul>
+          <li>习题 4.2：特解 $\boldsymbol{\eta}^* = (1, 0, 0, 0)^T$，导出基础解系 $\boldsymbol{\xi}_1 = (0, 1, 1, 0)^T, \boldsymbol{\xi}_2 = (-1, 4, 0, 3)^T$。
+            通解为 $\boldsymbol{x} = \boldsymbol{\eta}^* + c_1 \boldsymbol{\xi}_1 + c_2 \boldsymbol{\xi}_2$ ($c_1, c_2 \in \mathbb{R}$)。
+          </li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题五答案 -->
+      <h2>第五章 相似矩阵及二次型 · 参考答案</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题五 重点计算题答案</div>
+        <p><strong>1. 施密特正交化</strong>：</p>
+        <ul>
+          <li>$\boldsymbol{\alpha}_1 = (1, 1, 1)^T, \boldsymbol{\alpha}_2 = (0, 1, 1)^T \implies \boldsymbol{\beta}_1 = (1, 1, 1)^T, \boldsymbol{\beta}_2 = (-2/3, 1/3, 1/3)^T$。
+            单位化后为：$\boldsymbol{e}_1 = \frac{1}{\sqrt{3}}(1, 1, 1)^T, \boldsymbol{e}_2 = \frac{1}{\sqrt{6}}(-2, 1, 1)^T$。
+          </li>
+        </ul>
+        <p><strong>2. 特征值与特征向量</strong>：</p>
+        <ul>
+          <li>$A = \begin{pmatrix} -1 & 1 & 0 \\ -4 & 3 & 0 \\ 1 & 0 & 2 \end{pmatrix} \implies |\lambda E - A| = (\lambda - 1)^2(\lambda - 2) = 0$。
+            特征值 $\lambda_1 = 2, \lambda_2 = \lambda_3 = 1$。
+            对应 $\lambda_1 = 2$ 的特征向量为 $k(0, 0, 1)^T$；
+            对应 $\lambda_2 = 1$ 的特征向量为 $k(1, 2, -1)^T$。由于重根 1 对应的基础解系只有一个向量，几何重数 $1 < 2$，故该矩阵<strong>不可对角化</strong>！
+          </li>
+        </ul>
+        <p><strong>3. 实对称矩阵正交相似对角化与二次型标准形</strong>：</p>
+        <ul>
+          <li>$A = \begin{pmatrix} 2 & 0 & 0 \\ 0 & 3 & 2 \\ 0 & 2 & 3 \end{pmatrix} \implies \lambda_1 = 1, \lambda_2 = 2, \lambda_3 = 5$。
+            正交矩阵 $P = \begin{pmatrix} 0 & 1 & 0 \\ \frac{1}{\sqrt{2}} & 0 & \frac{1}{\sqrt{2}} \\ -\frac{1}{\sqrt{2}} & 0 & \frac{1}{\sqrt{2}} \end{pmatrix}$，标准形为 $f = y_1^2 + 2y_2^2 + 5y_3^2$。
+          </li>
+        </ul>
+        <p><strong>4. 正定性参数判定</strong>：</p>
+        <ul>
+          <li>二次型 $x_1^2 + x_2^2 + 5x_3^2 + 2t x_1 x_2 - 2x_1 x_3 + 4x_2 x_3$ 正定 $\iff -\frac{4}{5} < t < 0$。</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题六答案 -->
+      <h2>第六章 线性空间与线性变换 · 参考答案</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📘 习题六 重点计算题答案</div>
+        <p><strong>1. 过渡矩阵与坐标变换</strong>：</p>
+        <ul>
+          <li>旧基 $1, x, x^2$ 到新基 $1+x, x+x^2, 1+x^2$ 的过渡矩阵：
+            $$P = \begin{pmatrix} 1 & 0 & 1 \\ 1 & 1 & 0 \\ 0 & 1 & 1 \end{pmatrix}, \quad P^{-1} = \frac{1}{2}\begin{pmatrix} 1 & 1 & -1 \\ -1 & 1 & 1 \\ 1 & -1 & 1 \end{pmatrix};$$
+            多项式 $2 - 3x + x^2$ 在新基下的坐标为 $Y = (-1, -2, 3)^T$。
+          </li>
+        </ul>
+        <p><strong>2. 线性变换的矩阵表示</strong>：</p>
+        <ul>
+          <li>求导变换 $D$ 在基 $1, x, x^2, x^3$ 下的矩阵：
+            $$A = \begin{pmatrix} 0 & 1 & 0 & 0 \\ 0 & 0 & 2 & 0 \\ 0 & 0 & 0 & 3 \\ 0 & 0 & 0 & 0 \end{pmatrix};$$
+          </li>
+          <li>线性变换的核与像维数：$\dim(\mathrm{Ker}(D)) = 1$（常数多项式子空间），$\dim(\mathrm{Im}(D)) = 3$（不超过 2 次多项式子空间），两者维数之和为 4，严格满足维数定理。</li>
+        </ul>
+      </div>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <a href="06_第六章_线性空间与线性变换.html" class="nav-btn">← 上一章: 第六章 线性空间与变换</a>
+        <a href="index.html" class="nav-btn primary">返回全书首页</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>工程数学 线性代数 (第七版) · 同济大学数学科学学院 编 · 数字化重构版</p>
+    <p>全离线矢量 MathJax 3 引擎 · 纯语义 HTML5 架构 · 无任何外部网络依赖</p>
+  </footer>
+
+</body>
+</html>

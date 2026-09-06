@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第五章 大数定律及中心极限定理 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="04_第四章_随机变量的数字特征.html" class="nav-btn">← 上一章: 随机变量的数字特征</a>
+      <a href="06_第六章_统计量和抽样分布.html" class="nav-btn primary">下一章: 统计量和抽样分布 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第五章 大数定律及中心极限定理</h1>
+      <p class="chapter-intro">
+        在自然界和人类社会的随机现象中，单个随机事件的出现呈现出偶然性与不可预测性，但是大量随机现象的群体行为在总体上却展现出高度的稳定性与深刻的规律性. 这种在大量重复试验中由偶然性向必然性转化的统计规律，正是概率论连接现实统计实践的坚固桥梁. 本章将深入探讨两大极限定理体系：阐释“算术平均值趋于常数”的<strong>大数定律</strong>，以及阐释“大量微小随机扰动之和逼近正态分布”的<strong>中心极限定理</strong>.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 大数定律</h2>
+
+      <h3>一、切比雪夫不等式</h3>
+      <p>在推导大数定律前，首先需要建立一个极其优美的理论基石——切比雪夫不等式.</p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.1：切比雪夫不等式（Chebyshev's Inequality）</div>
+        <p>设随机变量 $X$ 具有数学期望 $E(X) = \mu$ 和方差 $D(X) = \sigma^2$. 则对任意给定的正数 $\varepsilon > 0$，恒有下列不等式成立：
+          $$P(|X - \mu| \ge \varepsilon) \le \frac{\sigma^2}{\varepsilon^2}$$
+          等价的对偶形式为：
+          $$P(|X - \mu| < \varepsilon) \ge 1 - \frac{\sigma^2}{\varepsilon^2}$$
+        </p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【严格证明（连续型）】</strong> 设 $X$ 的概率密度为 $f(x)$，由方差定义：
+          $$\begin{aligned}
+            \sigma^2 = D(X) &= \int_{-\infty}^{+\infty} (x - \mu)^2 f(x) \, dx \\
+            &= \int_{|x - \mu| < \varepsilon} (x - \mu)^2 f(x) \, dx + \int_{|x - \mu| \ge \varepsilon} (x - \mu)^2 f(x) \, dx
+          \end{aligned}$$
+          因为被积函数非负，丢弃第一项正积分，得到放缩不等式：
+          $$\sigma^2 \ge \int_{|x - \mu| \ge \varepsilon} (x - \mu)^2 f(x) \, dx$$
+          在积分区域 $|x - \mu| \ge \varepsilon$ 上，显然 $(x - \mu)^2 \ge \varepsilon^2$，再次放缩：
+          $$\sigma^2 \ge \int_{|x - \mu| \ge \varepsilon} \varepsilon^2 f(x) \, dx = \varepsilon^2 \int_{|x - \mu| \ge \varepsilon} f(x) \, dx = \varepsilon^2 P(|X - \mu| \ge \varepsilon)$$
+          两边同除以 $\varepsilon^2$，即证：
+          $$P(|X - \mu| \ge \varepsilon) \le \frac{\sigma^2}{\varepsilon^2} \qquad \blacksquare$$
+        </p>
+      </div>
+
+      <p>
+        <em>理论价值</em>：切比雪夫不等式不需要知道 $X$ 的具体分布，只需均值和方差，就能给出随机变量偏离期望值概率的普适上限估算.
+      </p>
+
+      <h3>二、依概率收敛的定义</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.1：依概率收敛（Convergence in Probability）</div>
+        <p>设 $X_1, X_2, \dots, X_n, \dots$ 为一个随机变量序列，$a$ 为一个确定的常数（或随机变量）. 如果对于任意给定的任意小正数 $\varepsilon > 0$，都有：
+          $$\lim_{n \to \infty} P(|X_n - a| < \varepsilon) = 1 \qquad \left(\text{或 } \lim_{n \to \infty} P(|X_n - a| \ge \varepsilon) = 0\right)$$
+          则称随机变量序列 $\{X_n\}$ <strong>依概率收敛于常数 $a$</strong>，记作：
+          $$X_n \xrightarrow{P} a \qquad (n \to \infty)$$
+        </p>
+      </div>
+
+      <h3>三、三大经典大数定律</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.2：切比雪夫大数定律（独立变量均值依概率收敛）</div>
+        <p>设 $X_1, X_2, \dots, X_n, \dots$ 为<strong>两两不相关</strong>的随机变量序列，每个 $X_i$ 都有有限的期望 $E(X_i) = \mu_i$ 和方差 $D(X_i) = \sigma_i^2$. 如果方差序列<strong>一致有上界</strong>，即存在常数 $C$ 使得对所有的 $i$ 都有 $D(X_i) \le C$，则对于任意 $\varepsilon > 0$，有：
+          $$\lim_{n \to \infty} P\left( \left| \frac{1}{n}\sum_{i=1}^n X_i - \frac{1}{n}\sum_{i=1}^n E(X_i) \right| < \varepsilon \right) = 1$$
+          即算术平均值依概率收敛于数学期望的算术平均：
+          $$\frac{1}{n}\sum_{i=1}^n X_i \xrightarrow{P} \frac{1}{n}\sum_{i=1}^n E(X_i)$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.3：伯努利大数定律（频率稳定性的理论基石）</div>
+        <p>设 $n_A$ 是 $n$ 次独立伯努利试验中事件 $A$ 发生的次数，每次试验中事件 $A$ 发生的概率为 $p$ ($0 < p < 1$). 则对于任意给定的 $\varepsilon > 0$，有：
+          $$\lim_{n \to \infty} P\left( \left| \frac{n_A}{n} - p \right| < \varepsilon \right) = 1$$
+          即事件 $A$ 出现的<strong>频率 $\frac{n_A}{n}$ 依概率收敛于其概率 $p$</strong>：
+          $$\frac{n_A}{n} \xrightarrow{P} p \qquad (n \to \infty)$$
+        </p>
+        <p><em>重大意义</em>：雅各布·伯努利证明的这一定理，在数学上彻底确立了“频率逼近概率”的科学性，成为数理统计学经验估计法（用样本频率推断总体概率）的理论立足点！</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.4：辛钦大数定律（独立同分布大数定律，考研重点）</div>
+        <p>设 $X_1, X_2, \dots, X_n, \dots$ 是<strong>独立同分布（i.i.d.）</strong>的随机变量序列，具有相同的数学期望 $E(X_i) = \mu$（<strong>无需假定方差存在或有界</strong>）. 则对于任意 $\varepsilon > 0$，有：
+          $$\lim_{n \to \infty} P\left( \left| \frac{1}{n}\sum_{i=1}^n X_i - \mu \right| < \varepsilon \right) = 1$$
+          即样本均值 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ 依概率收敛于总体的数学期望 $\mu$：
+          $$\bar{X}_n \xrightarrow{P} \mu \qquad (n \to \infty)$$
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 中心极限定理</h2>
+      <p>
+        大数定律研究的是大量独立随机变量之和的平均值在何种意义下收敛到确定常数；而<strong>中心极限定理</strong>（Central Limit Theorem，简称 CLT）则深入回答了另一个根本问题：<strong>大量相互独立的随机变量之和，其概率分布形态究竟逼近于什么分布？</strong>
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.5：独立同分布中心极限定理（列维-林德伯格定理，Lindeberg-Lévy CLT）</div>
+        <p>设随机变量序列 $X_1, X_2, \dots, X_n, \dots$ <strong>独立同分布</strong>，具有有限的数学期望 $E(X_i) = \mu$ 和有限的正方差 $D(X_i) = \sigma^2 > 0$ ($i = 1, 2, \dots$). 则它们的和 $\sum_{i=1}^n X_i$ 的标准化变量渐近服从<strong>标准正态分布</strong>：
+          $$\lim_{n \to \infty} P\left( \frac{\sum_{i=1}^n X_i - n\mu}{\sqrt{n}\sigma} \le x \right) = \int_{-\infty}^x \frac{1}{\sqrt{2\pi}} e^{-\frac{t^2}{2}} \, dt = \Phi(x)$$
+          或者等价地对样本均值 $\bar{X}_n$：
+          $$\lim_{n \to \infty} P\left( \frac{\bar{X}_n - \mu}{\frac{\sigma}{\sqrt{n}}} \le x \right) = \Phi(x)$$
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5.6：德莫佛-拉普拉斯中心极限定理（二项分布的正态逼近）</div>
+        <p>设随机变量 $X_n \sim B(n, p)$ 服从参数为 $n, p$ ($0 < p < 1$) 的二项分布. 则对于任意实数 $x$，有：
+          $$\lim_{n \to \infty} P\left( \frac{X_n - np}{\sqrt{np(1-p)}} \le x \right) = \Phi(x)$$
+        </p>
+        <p><strong>区间近似计算实用公式</strong>：当 $n$ 充分大（如 $np \ge 5, n(1-p) \ge 5$）时，$X_n$ 可近似看作服从正态分布 $N(np, np(1-p))$：
+          $$P(x_1 \le X_n \le x_2) \approx \Phi\left(\frac{x_2 - np}{\sqrt{np(1-p)}}\right) - \Phi\left(\frac{x_1 - np}{\sqrt{np(1-p)}}\right)$$
+          <em>连续性校正（Correction for Continuity）</em>：在计算离散变量的概率时，取区间端点扩展半个单位可获得更高精度：
+          $$P(x_1 \le X_n \le x_2) \approx \Phi\left(\frac{x_2 + 0.5 - np}{\sqrt{np(1-p)}}\right) - \Phi\left(\frac{x_1 - 0.5 - np}{\sqrt{np(1-p)}}\right)$$
+        </p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 16：中心极限定理在轮船载客载重估算中的应用</div>
+        <p>某客轮准载客人数为 400 人. 设每位旅客的体重是独立同分布的随机变量，其均值为 65 千克，标准差为 15 千克. 问：旅客总重量超过 26600 千克的概率是多少？</p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【解】</strong></p>
+        <p>设 $X_i$ 表示第 $i$ 位旅客的体重，$n = 400$ 人. $E(X_i) = \mu = 65, D(X_i) = \sigma^2 = 15^2 = 225$.</p>
+        <p>旅客总重量 $S_{400} = \sum_{i=1}^{400} X_i$. 其期望与方差为：
+          $$E(S_{400}) = 400 \times 65 = 26000, \qquad D(S_{400}) = 400 \times 225 = 90000 = 300^2$$
+        </p>
+        <p>由列维-林德伯格中心极限定理，$S_{400}$ 近似服从 $N(26000, 300^2)$，因此总重量超过 26600 千克的概率为：
+          $$\begin{aligned}
+            P(S_{400} > 26600) &= 1 - P(S_{400} \le 26600) \\
+            &\approx 1 - \Phi\left(\frac{26600 - 26000}{300}\right) \\
+            &= 1 - \Phi(2.00) = 1 - 0.9772 = 0.0228 = 2.28\%
+          \end{aligned}$$
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与复习指南</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 大数定律与中心极限定理对照梳理</div>
+        <p>1. <strong>切比雪夫不等式</strong>：$P(|X - \mu| \ge \varepsilon) \le \frac{\sigma^2}{\varepsilon^2}$，任意分布通用，方差越小偏离概率越小；</p>
+        <p>2. <strong>大数定律核心主线（均值收敛）</strong>：
+          <ul>
+            <li>切比雪夫大数定律：两两不相关，方差有界；</li>
+            <li>伯努利大数定律：频率依概率收敛于概率；</li>
+            <li>辛钦大数定律：独立同分布，只需期望存在 $\bar{X} \xrightarrow{P} \mu$；</li>
+          </ul>
+        </p>
+        <p>3. <strong>中心极限定理核心主线（分布逼近）</strong>：
+          <ul>
+            <li>列维-林德伯格定理：$n$ 个独立同分布变量和的标准化变量收敛于标准正态分布 $N(0, 1)$；</li>
+            <li>德莫佛-拉普拉斯定理：二项分布的标准化形式收敛于标准正态分布 $N(0, 1)$；</li>
+          </ul>
+        </p>
+        <p>4. <strong>宏观科学启示</strong>：中心极限定理解释了为什么自然界中各种测量误差、考试成绩、生物特征指标（身高、体温）普遍呈现出优美的<strong>正态分布（高斯分布）</strong>形态——因为它们是由无数个微小且相互独立的随机扰动累加作用的结果！</p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

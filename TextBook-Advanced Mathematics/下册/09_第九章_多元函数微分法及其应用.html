@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第九章 多元函数微分法及其应用 - 高等数学（下册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (下册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="08_第八章_向量代数与空间解析几何.html" class="nav-btn">← 上一章: 第八章 向量代数与空间解析几何</a>
+      <a href="10_第十章_重积分.html" class="nav-btn primary">下一章: 第十章 重积分 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第九章 多元函数微分法及其应用</h1>
+      <p class="chapter-intro">
+        一元微积分研究的是因变量依赖于一个独立自变量的变化规律. 但是，自然界与工程技术中所遇到的绝大多数客观事物都同时受到多个因素的制约. 例如，理想气体的状态由压强与温度共同决定；长方体的体积由长、宽、高三个尺寸共同决定；电路中消耗的电功率取决于电压与电阻两个变量. 因此，必须把一元微积分推广到多元函数的情形. 本章将建立多元函数的极限、连续、偏导数与全微分的基本概念，推导多元复合函数与隐函数的求导法则，研究反映空间几何方向变化率的<strong>方向导数与梯度</strong>，建立空间曲面的切平面与法线方程，并深入讨论多元函数的极值与带约束条件的<strong>拉格朗日乘数法</strong>.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 多元函数的基本概念</h2>
+
+      <h3>一、平面点集与区域</h3>
+      <p>
+        坐标平面上具有某种性质的点 $P(x, y)$ 的集合，称为<strong>平面点集</strong>，常记作 $E$.
+      </p>
+      <ul>
+        <li><strong>邻域</strong>：点 $P_0(x_0, y_0)$ 的 $\delta$ 邻域是指开圆盘 $U(P_0, \delta) = \{P \in \mathbf{R}^2 \mid |P P_0| < \delta\}$（图 9-1）；</li>
+        <li><strong>内点、外点与边界点</strong>：若存在 $U(P) \subset E$，称 $P$ 为内点；若存在 $U(P) \cap E = \varnothing$，称 $P$ 为外点；若在 $P$ 的任一邻域内既有属于 $E$ 的点又有不属于 $E$ 的点，称 $P$ 为边界点. 边界点的全体称为边界 $\partial E$；</li>
+        <li><strong>区域</strong>：连通的开集称为<strong>开区域</strong>（简称<strong>区域</strong>）；开区域连同其边界称为<strong>闭区域</strong>（图 9-2、图 9-3、图 9-4）.</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_1.webp" alt="图 9-1 平面点集中的内点、外点与边界点邻域" loading="lazy">
+          <figcaption>图 9-1 平面点集中的内点、外点与边界点邻域</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_2.webp" alt="图 9-2 二元函数的开区域定义域" loading="lazy">
+          <figcaption>图 9-2 二元函数的开区域定义域</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_3.webp" alt="图 9-3 闭圆盘有界闭区域" loading="lazy">
+          <figcaption>图 9-3 闭圆盘有界闭区域</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_4.webp" alt="图 9-4 带孔的多连通闭区域" loading="lazy">
+          <figcaption>图 9-4 带孔的多连通闭区域</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、二元函数的极限与连续性</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (二重极限)</div>
+        <p>
+          设函数 $z = f(x, y)$ 在点 $P_0(x_0, y_0)$ 的去心邻域内有定义. 如果对任意给定的 $\varepsilon > 0$，总存在 $\delta > 0$，使得当 $0 < \sqrt{(x - x_0)^2 + (y - y_0)^2} < \delta$ 时，恒有 $|f(x, y) - L| < \varepsilon$，则称 $L$ 为函数当 $(x, y) \to (x_0, y_0)$ 时的<strong>二重极限</strong>（全面极限），记作 $\lim_{\substack{x \to x_0 \\ y \to y_0}} f(x, y) = L$.
+        </p>
+        <p><strong>注意</strong>：二重极限要求动点 $P$ 沿<strong>任意可能路径</strong>趋于 $P_0$ 时函数值均趋于同一个数 $L$. 若沿两条不同路径（如 $y = kx$）极限不同，则二重极限必不存在.</p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 偏导数</h2>
+
+      <h3>一、偏导数的定义与几何意义</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 (偏导数 Partial Derivative)</div>
+        <p>
+          设函数 $z = f(x, y)$ 在点 $(x_0, y_0)$ 的某邻域内有定义. 固定 $y = y_0$，将 $z$ 视为一元函数 $f(x, y_0)$. 如果其在 $x_0$ 处的导数存在，则称此导数为 $f(x, y)$ 在点 $(x_0, y_0)$ 处对 $x$ 的<strong>偏导数</strong>，记作：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$f_x(x_0, y_0), \quad z_x|_{(x_0, y_0)}, \quad \left.\frac{\partial z}{\partial x}\right|_{(x_0, y_0)}, \quad \text{或} \quad \left.\frac{\partial f}{\partial x}\right|_{(x_0, y_0)}$$
+        </p>
+        <p>即：$f_x(x_0, y_0) = \lim_{\Delta x \to 0} \frac{f(x_0 + \Delta x, y_0) - f(x_0, y_0)}{\Delta x}$. 类似地定义对 $y$ 的偏导数 $f_y(x_0, y_0)$.</p>
+      </div>
+
+      <p>
+        <strong>几何意义</strong>：空间曲面 $z = f(x, y)$ 被垂直平面 $y = y_0$ 所截得到平面曲线 $C_x$（图 9-5）. 偏导数 $f_x(x_0, y_0)$ 就是曲线 $C_x$ 在点 $M_0$ 处的切线对 $x$ 轴的斜率；同样，$f_y(x_0, y_0)$ 是截线 $C_y$ 切线对 $y$ 轴的斜率.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_5.webp" alt="图 9-5 偏导数的几何意义：空间截线切线斜率" loading="lazy">
+          <figcaption>图 9-5 偏导数的几何意义：空间截线切线斜率</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、高阶偏导数</h3>
+      <p>
+        二阶偏导数有四个：$f_{xx} = \frac{\partial^2 z}{\partial x^2}, f_{yy} = \frac{\partial^2 z}{\partial y^2}$，以及混合偏导数 $f_{xy} = \frac{\partial^2 z}{\partial x \partial y}, f_{yx} = \frac{\partial^2 z}{\partial y \partial x}$.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (混合偏导数相等定理 克莱罗定理)</div>
+        <p>如果函数 $z = f(x, y)$ 的两个二阶混合偏导数 $f_{xy}$ 和 $f_{yx}$ 在点 $(x_0, y_0)$ 的邻域内<strong>连续</strong>，则它们在该点必定相等：$f_{xy}(x_0, y_0) = f_{yx}(x_0, y_0)$.</p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 全微分</h2>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 3 (全微分 Total Differential)</div>
+        <p>
+          如果函数 $z = f(x, y)$ 的全增量 $\Delta z = f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0, y_0)$ 可以表示为：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\Delta z = A \Delta x + B \Delta y + o(\rho) \quad (\rho = \sqrt{\Delta x^2 + \Delta y^2} \to 0)$$
+        </p>
+        <p>其中 $A, B$ 与 $\Delta x, \Delta y$ 无关，则称函数在点 $(x_0, y_0)$ <strong>可微</strong>，线性主部 $A \Delta x + B \Delta y$ 称为<strong>全微分</strong>，记作 $dz$：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$dz = \frac{\partial z}{\partial x} dx + \frac{\partial z}{\partial y} dy$$
+        </p>
+      </div>
+
+      <p><strong>可微性、偏导数与连续性的关系</strong>：</p>
+      <ul>
+        <li>可微必连续；可微必有一阶偏导数，且 $A = f_x, B = f_y$；</li>
+        <li>偏导数存在不一定连续，更不一定可微；</li>
+        <li><strong>充分条件</strong>：若一阶偏导数 $f_x, f_y$ 在该点<strong>连续</strong>，则函数在该点必<strong>可微</strong>.</li>
+      </ul>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节与第五节 -->
+      <h2>第四节与第五节 多元复合函数与隐函数求导法则</h2>
+
+      <h3>一、复合函数求导链式法则</h3>
+      <p>若 $z = f(u, v)$，而 $u = \varphi(x, y), v = \psi(x, y)$，则：</p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{\partial z}{\partial x} = \frac{\partial z}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial z}{\partial v}\frac{\partial v}{\partial x}, \qquad \frac{\partial z}{\partial y} = \frac{\partial z}{\partial u}\frac{\partial u}{\partial y} + \frac{\partial z}{\partial v}\frac{\partial v}{\partial y}$$
+      </p>
+
+      <h3>二、隐函数存在定理与求导公式</h3>
+      <p>由方程 $F(x, y, z) = 0$ 确定隐函数 $z = z(x, y)$，在 $F_z \ne 0$ 时，其偏导数为：</p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{\partial z}{\partial x} = -\frac{F_x}{F_z}, \qquad \frac{\partial z}{\partial y} = -\frac{F_y}{F_z}$$
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节 -->
+      <h2>第六节 多元函数微分学的几何应用</h2>
+
+      <h3>一、空间曲线的切线与法平面</h3>
+      <p>空间曲线参数方程为 $\boldsymbol{r}(t) = (x(t), y(t), z(t))$（图 9-6、图 9-7）. 点 $t_0$ 处的<strong>切向量</strong>为 $\boldsymbol{T} = (x'(t_0), y'(t_0), z'(t_0))$.</p>
+      <p>切线方程为：$\frac{x - x_0}{x'(t_0)} = \frac{y - y_0}{y'(t_0)} = \frac{z - z_0}{z'(t_0)}$；法平面方程为：$x'(t_0)(x - x_0) + y'(t_0)(y - y_0) + z'(t_0)(z - z_0) = 0$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_6.webp" alt="图 9-6 空间曲线割线逼近切向量几何形成" loading="lazy">
+          <figcaption>图 9-6 空间曲线割线逼近切向量几何形成</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_7.webp" alt="图 9-7 空间曲线上动点的切线与垂直法平面" loading="lazy">
+          <figcaption>图 9-7 空间曲线上动点的切线与垂直法平面</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、空间曲面的切平面与法线</h3>
+      <p>
+        对于隐式曲面 $F(x, y, z) = 0$（图 9-8、图 9-9），在点 $M_0(x_0, y_0, z_0)$ 处的<strong>法向量</strong>为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\boldsymbol{n} = (F_x(M_0), F_y(M_0), F_z(M_0))$$
+      </p>
+      <p><strong>切平面方程</strong>：$F_x(M_0)(x - x_0) + F_y(M_0)(y - y_0) + F_z(M_0)(z - z_0) = 0$；</p>
+      <p><strong>法线方程</strong>：$\frac{x - x_0}{F_x(M_0)} = \frac{y - y_0}{F_y(M_0)} = \frac{z - z_0}{F_z(M_0)}$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_8.webp" alt="图 9-8 空间曲面在点 M 处的切平面与法向量" loading="lazy">
+          <figcaption>图 9-8 空间曲面在点 M 处的切平面与法向量</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_9.webp" alt="图 9-9 显式曲面 z = f(x, y) 的切平面投影构造" loading="lazy">
+          <figcaption>图 9-9 显式曲面 z = f(x, y) 的切平面投影构造</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 方向导数与梯度</h2>
+
+      <h3>一、方向导数</h3>
+      <p>
+        设 $\boldsymbol{l} = (\cos\alpha, \cos\beta)$ 为平面上的单位方向向量. 函数 $f(x, y)$ 沿方向 $\boldsymbol{l}$ 的<strong>方向导数</strong>为（图 9-10）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{\partial f}{\partial \boldsymbol{l}} = \lim_{t \to 0^+} \frac{f(x_0 + t\cos\alpha, y_0 + t\cos\beta) - f(x_0, y_0)}{t} = f_x \cos\alpha + f_y \cos\beta$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_10.webp" alt="图 9-10 方向导数的射线增量极限几何定义" loading="lazy">
+          <figcaption>图 9-10 方向导数的射线增量极限几何定义</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、梯度</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 4 (梯度 Gradient)</div>
+        <p>向量 $\operatorname{\mathbf{grad}} f = \nabla f = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$ 称为函数 $f(x, y)$ 在该点处的<strong>梯度</strong>.</p>
+        <p><strong>核心几何性质</strong>：</p>
+        <ul>
+          <li>方向导数等于梯度与方向向量的点积：$\frac{\partial f}{\partial \boldsymbol{l}} = \nabla f \cdot \boldsymbol{l} = |\nabla f| \cos\theta$；</li>
+          <li>当 $\boldsymbol{l}$ 与梯度同向时（$\theta = 0$），方向导数取得<strong>最大值</strong> $|\nabla f|$；</li>
+          <li><strong>梯度的方向是函数增长最快的方向，梯度的模是这个最大增长率</strong>；</li>
+          <li>梯度恒垂直于通过该点的等值线（或等值面）.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第八节与第九节 -->
+      <h2>第八节与第九节 多元函数的极值与最值</h2>
+
+      <h3>一、无条件极值充分条件</h3>
+      <p>
+        驻点处记 $A = f_{xx}, B = f_{xy}, C = f_{yy}, \Delta = AC - B^2$：
+      </p>
+      <ul>
+        <li>若 $AC - B^2 > 0$：当 $A < 0$ 时有<strong>极大值</strong>；当 $A > 0$ 时有<strong>极小值</strong>；</li>
+        <li>若 $AC - B^2 < 0$：该点<strong>不是极值点</strong>（鞍点）；</li>
+        <li>若 $AC - B^2 = 0$：失效，需借助更高阶项或其他方法判定.</li>
+      </ul>
+
+      <h3>二、条件极值与拉格朗日乘数法</h3>
+      <p>
+        求函数 $z = f(x, y)$ 在约束条件 $\varphi(x, y) = 0$ 下的极值（图 9-11、图 9-12、图 9-13）.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 拉格朗日乘数法 (Lagrange Multiplier Method)</div>
+        <p>构造拉格朗日函数：$L(x, y, \lambda) = f(x, y) + \lambda \varphi(x, y)$，联立求解一阶偏导数全为零的方程组：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\begin{cases} L_x = f_x + \lambda \varphi_x = 0 \\ L_y = f_y + \lambda \varphi_y = 0 \\ L_\lambda = \varphi(x, y) = 0 \end{cases}$$
+        </p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_9_11.webp" alt="图 9-11 梯形断面渠道水力最优水力截面条件极值" loading="lazy">
+          <figcaption>图 9-11 梯形断面渠道水力最优水力截面条件极值</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_12.webp" alt="图 9-12 目标函数等值线与约束曲线相切拉格朗日乘数几何解释" loading="lazy">
+          <figcaption>图 9-12 目标函数等值线与约束曲线相切拉格朗日乘数几何解释</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_9_13.webp" alt="图 9-13 空间闭曲面上距离极值几何切点分析" loading="lazy">
+          <figcaption>图 9-13 空间闭曲面上距离极值几何切点分析</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题九 -->
+      <h2>总习题九</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 设 $z = \ln(x^2 + y^2)$，证明：$\frac{\partial^2 z}{\partial x^2} + \frac{\partial^2 z}{\partial y^2} = 0$（满足二维拉普拉斯方程）.</p>
+        <p><em>证</em>：$\frac{\partial z}{\partial x} = \frac{2x}{x^2 + y^2}, \frac{\partial^2 z}{\partial x^2} = \frac{2(x^2 + y^2) - 2x(2x)}{(x^2 + y^2)^2} = \frac{2(y^2 - x^2)}{(x^2 + y^2)^2}$.<br>
+        由对称性，$\frac{\partial^2 z}{\partial y^2} = \frac{2(x^2 - y^2)}{(x^2 + y^2)^2}$.<br>
+        两式相加：$\frac{\partial^2 z}{\partial x^2} + \frac{\partial^2 z}{\partial y^2} = \frac{2(y^2 - x^2 + x^2 - y^2)}{(x^2 + y^2)^2} = 0$. 证毕.</p>
+
+        <p><strong>2.</strong> 求球面 $x^2 + y^2 + z^2 = 14$ 在点 $(1, 2, 3)$ 处的切平面方程与法线方程.</p>
+        <p><em>解</em>：令 $F(x, y, z) = x^2 + y^2 + z^2 - 14$.<br>
+        梯度法向量 $\boldsymbol{n} = (2x, 2y, 2z)|_{(1, 2, 3)} = (2, 4, 6) \sim (1, 2, 3)$.<br>
+        切平面方程：$1(x - 1) + 2(y - 2) + 3(z - 3) = 0 \implies x + 2y + 3z - 14 = 0$.<br>
+        法线方程：$\frac{x - 1}{1} = \frac{y - 2}{2} = \frac{z - 3}{3}$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="08_第八章_向量代数与空间解析几何.html" class="nav-btn">← 上一章: 第八章 向量代数与空间解析几何</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="10_第十章_重积分.html" class="nav-btn primary">下一章: 第十章 重积分 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

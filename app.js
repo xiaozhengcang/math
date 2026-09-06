@@ -407,7 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
       node.mathTools.toLowerCase().includes(q) ||
       node.applications.toLowerCase().includes(q) ||
       node.books.some(b => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q)) ||
-      node.papers.some(p => p.title.toLowerCase().includes(q) || p.authors.toLowerCase().includes(q));
+      node.papers.some(p => p.title.toLowerCase().includes(q) || p.authors.toLowerCase().includes(q)) ||
+      (node.localLinks && node.localLinks.some(l => l.name.toLowerCase().includes(q) || l.url.toLowerCase().includes(q)));
   }
 
   // --------------------------------------------------------------------------

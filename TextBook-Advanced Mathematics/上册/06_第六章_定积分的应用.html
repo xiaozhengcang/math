@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第六章 定积分的应用 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="05_第五章_定积分.html" class="nav-btn">← 上一章: 第五章 定积分</a>
+      <a href="07_第七章_微分方程.html" class="nav-btn primary">下一章: 第七章 微分方程 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第六章 定积分的应用</h1>
+      <p class="chapter-intro">
+        定积分不仅具有深刻纯粹的数学理论价值，更是解决工程技术、几何测量、物理动力学与天体力学中连续累加物理量的通用利器. 解决这类实际问题的根本方法就是<strong>元素法</strong>（又称<strong>微元法</strong>）. 本章将首先阐明微元法的数学机理与操作步骤，随后将定积分全方位应用于计算平面图形面积、旋转体体积与任意已知平行截面立体体积、平面曲线弧长等经典几何学问题；进而深入解决变力沿直线做功、液体侧压力、质点引力等经典物理学模型，充分展现微积分“以微积分大、化不均匀为均匀”的巨大威力.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 定积分的元素法</h2>
+      <p>
+        在第五章中，我们通过“分割、近似、求和、取极限”四步法求得了曲边梯形的面积与质点位移. 在工程实际中，很多具有整体连续分布特征的物理量 $U$（如质量、功、压力等），都满足<strong>区间可加性</strong>：即如果将区间 $[a, b]$ 分成许多小区间，整个量 $U$ 就等于各个小区间上相应部分改变量之和.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 微元法（元素法）的操作准则</div>
+        <ol>
+          <li>根据实际问题选取一个自变量（例如 $x$），并确定其整体变化区间 $[a, b]$；</li>
+          <li>在 $[a, b]$ 内任取微小区间 $[x, x + dx]$，计算相应于该微小区间的量 $\Delta U$ 的线性主部（近似值），记作：
+            $$dU = f(x)dx$$
+            称 $dU$ 为所求量 $U$ 的<strong>微分元素</strong>（或<strong>微元</strong>）；</li>
+          <li>在全区间 $[a, b]$ 上对微元 $dU$ 进行定积分累加，即得所求总量：
+            $$U = \int_a^b f(x)dx$$
+          </li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_1.webp" alt="图 6-1 微元法积分元素 dU = f(x)dx 几何图解" loading="lazy">
+          <figcaption>图 6-1 微元法积分元素 dU = f(x)dx 几何图解</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_2.webp" alt="图 6-2 沿 x 轴连续细分区间的小梯形元素累加" loading="lazy">
+          <figcaption>图 6-2 沿 x 轴连续细分区间的小梯形元素累加</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 定积分在几何学上的应用</h2>
+
+      <h3>一、平面图形的面积</h3>
+
+      <h4>1. 直角坐标系下的面积</h4>
+      <p>
+        由上曲线 $y = f_2(x)$、下曲线 $y = f_1(x)$ 及两直线 $x = a, x = b$ 所围成的平面图形面积（图 6-3、图 6-4），其面积元素为 $dA = [f_2(x) - f_1(x)]dx$，总面积为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$A = \int_a^b [f_2(x) - f_1(x)]dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_3.webp" alt="图 6-3 上下两条连续曲线围成的平面区域" loading="lazy">
+          <figcaption>图 6-3 上下两条连续曲线围成的平面区域</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_4.webp" alt="图 6-4 椭圆 x²/a² + y²/b² = 1 的四对称截面面积" loading="lazy">
+          <figcaption>图 6-4 椭圆 x²/a² + y²/b² = 1 的四对称截面面积</figcaption>
+        </figure>
+      </div>
+
+      <p>若选用 $y$ 为积分变量，则面积元素为 $dA = [\varphi_2(y) - \varphi_1(y)]dy$（图 6-5、图 6-6）：</p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$A = \int_c^d [\varphi_2(y) - \varphi_1(y)]dy$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_5.webp" alt="图 6-5 左右两条曲线围成的 Y-型区域面积" loading="lazy">
+          <figcaption>图 6-5 左右两条曲线围成的 Y-型区域面积</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_6.webp" alt="图 6-6 抛物线与直线相交区域积分限确定" loading="lazy">
+          <figcaption>图 6-6 抛物线与直线相交区域积分限确定</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. 极坐标系下的面积</h4>
+      <p>
+        由极坐标方程 $\rho = \rho(\theta)$ 及两条射线 $\theta = \alpha, \theta = \beta$ 所围成的曲边扇形（图 6-7、图 6-8），面积微元等于以 $\rho$ 为半径、顶角为 $d\theta$ 的小圆扇形面积：$dA = \frac{1}{2}\rho^2(\theta)d\theta$. 总面积为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$A = \frac{1}{2}\int_\alpha^\beta \rho^2(\theta)d\theta$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_7.webp" alt="图 6-7 心脏线 ρ = a(1 + cos θ) 对称图形" loading="lazy">
+          <figcaption>图 6-7 心脏线 ρ = a(1 + cos θ) 对称图形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_8.webp" alt="图 6-8 阿基米德螺线与射线构成的极坐标曲边扇形" loading="lazy">
+          <figcaption>图 6-8 阿基米德螺线与射线构成的极坐标曲边扇形</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、空间立体的体积</h3>
+
+      <h4>1. 旋转体的体积</h4>
+      <p>
+        由曲线 $y = f(x)$、直线 $x = a, x = b$ 及 $x$ 轴所围成的平面图形绕 $x$ 轴旋转一周构成的立体（图 6-9、图 6-10），取厚度为 $dx$ 的小圆薄片为微元，体积元素为 $dV = \pi [f(x)]^2 dx$. 旋转体总体积为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$V_x = \pi \int_a^b [f(x)]^2 dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_9.webp" alt="图 6-9 直角三角形绕轴旋转构成圆锥体模型" loading="lazy">
+          <figcaption>图 6-9 直角三角形绕轴旋转构成圆锥体模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_10.webp" alt="图 6-10 旋转体薄圆盘体积微元 dV = π y² dx" loading="lazy">
+          <figcaption>图 6-10 旋转体薄圆盘体积微元 dV = π y² dx</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_11.webp" alt="图 6-11 旋转抛物台体体积计算" loading="lazy">
+          <figcaption>图 6-11 旋转抛物台体体积计算</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_12.webp" alt="图 6-12 圆环绕外轴旋转生成的圆环体（Torus）" loading="lazy">
+          <figcaption>图 6-12 圆环绕外轴旋转生成的圆环体（Torus）</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        若平面图形绕 $y$ 轴旋转，采用圆柱薄壳法（柱壳微元）：$dV = 2\pi x f(x)dx$，总体积为 $V_y = 2\pi \int_a^b x f(x)dx$.
+      </p>
+
+      <h4>2. 平行截面面积已知的立体体积</h4>
+      <p>
+        如果立体的垂直于 $x$ 轴的任意截面面积 $A(x)$ 是 $x$ 的已知连续函数（图 6-13、图 6-14、图 6-15），则厚度为 $dx$ 的平截头薄板微元体积为 $dV = A(x)dx$，总体积为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$V = \int_a^b A(x)dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_13.webp" alt="图 6-13 平行截面薄片元素体积累加示意图" loading="lazy">
+          <figcaption>图 6-13 平行截面薄片元素体积累加示意图</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_14.webp" alt="图 6-14 拟柱体与任意多面柱截面体积" loading="lazy">
+          <figcaption>图 6-14 拟柱体与任意多面柱截面体积</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_15.webp" alt="图 6-15 两个正交正圆柱体相贯相交体（牟合方盖）" loading="lazy">
+          <figcaption>图 6-15 两个正交正圆柱体相贯相交体（牟合方盖）</figcaption>
+        </figure>
+      </div>
+
+      <h3>三、平面曲线的弧长</h3>
+      <p>
+        根据第三章的弧微分公式 $ds = \sqrt{dx^2 + dy^2}$（图 6-16），平面曲线从起点到终点的弧长公式：
+      </p>
+      <ul>
+        <li><strong>直角坐标方程</strong> $y = f(x)$ ($a \le x \le b$)：$s = \int_a^b \sqrt{1 + [f'(x)]^2}dx$（图 6-17）</li>
+        <li><strong>参数方程</strong> $\begin{cases} x = \varphi(t) \\ y = \psi(t) \end{cases}$ ($\alpha \le t \le \beta$)：$s = \int_\alpha^\beta \sqrt{[\varphi'(t)]^2 + [\psi'(t)]^2}dt$（图 6-18）</li>
+        <li><strong>极坐标方程</strong> $\rho = \rho(\theta)$ ($\alpha \le \theta \le \beta$)：$s = \int_\alpha^\beta \sqrt{\rho^2(\theta) + [\rho'(\theta)]^2}d\theta$（图 6-19）</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_16.webp" alt="图 6-16 折线内接多边形逼近曲线弧长极限" loading="lazy">
+          <figcaption>图 6-16 折线内接多边形逼近曲线弧长极限</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_17.webp" alt="图 6-17 悬链线 y = a cosh(x/a) 的弧长计算" loading="lazy">
+          <figcaption>图 6-17 悬链线 y = a cosh(x/a) 的弧长计算</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_18.webp" alt="图 6-18 摆线一拱周期的完整弧长计算模型" loading="lazy">
+          <figcaption>图 6-18 摆线一拱周期的完整弧长计算模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_19.webp" alt="图 6-19 心脏线与星形线全弧长积分几何对称性" loading="lazy">
+          <figcaption>图 6-19 心脏线与星形线全弧长积分几何对称性</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_20.webp" alt="图 6-20 综合几何题阴影平面图形面积分割" loading="lazy">
+          <figcaption>图 6-20 综合几何题阴影平面图形面积分割</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_21.webp" alt="图 6-21 极小化两曲线夹层阴影面积极值问题" loading="lazy">
+          <figcaption>图 6-21 极小化两曲线夹层阴影面积极值问题</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_22.webp" alt="图 6-22 抛物线绕其切线或对角对称轴旋转体" loading="lazy">
+          <figcaption>图 6-22 抛物线绕其切线或对角对称轴旋转体</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_23.webp" alt="图 6-23 球缺与球台旋转体截面体积" loading="lazy">
+          <figcaption>图 6-23 球缺与球台旋转体截面体积</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_24.webp" alt="图 6-24 底为椭圆顶为双曲抛物面的立柱体积" loading="lazy">
+          <figcaption>图 6-24 底为椭圆顶为双曲抛物面的立柱体积</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_25.webp" alt="图 6-25 楔形立体切割截面面积分布" loading="lazy">
+          <figcaption>图 6-25 楔形立体切割截面面积分布</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_26.webp" alt="图 6-26 双纽线 ρ² = a² cos 2θ 闭合全长" loading="lazy">
+          <figcaption>图 6-26 双纽线 ρ² = a² cos 2θ 闭合全长</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_27.webp" alt="图 6-27 渐开线缠绕轮廓曲线弧长演化" loading="lazy">
+          <figcaption>图 6-27 渐开线缠绕轮廓曲线弧长演化</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 定积分在物理学上的应用</h2>
+
+      <h3>一、变力沿直线作功</h3>
+      <p>
+        设大小随位置变化的力 $F(x)$ 沿 $x$ 轴正向推动质点由点 $x = a$ 移动到点 $x = b$（图 6-28、图 6-29）. 取位移微元 $dx$，在该微小位移上力可视为恒力，功的微元为 $dW = F(x)dx$. 总功为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$W = \int_a^b F(x)dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_28.webp" alt="图 6-28 单位正电荷在点电荷电场中受斥力移动做功" loading="lazy">
+          <figcaption>图 6-28 单位正电荷在点电荷电场中受斥力移动做功</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_29.webp" alt="图 6-29 气缸中气体绝热膨胀推动活塞对外做功" loading="lazy">
+          <figcaption>图 6-29 气缸中气体绝热膨胀推动活塞对外做功</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>抽水做功</strong>：设容器盛满密度为 $\rho$ 的液体，需要将其从顶部完全抽尽（图 6-30、图 6-31）. 取深度为 $x$、厚度为 $dx$ 的薄水层，其质量为 $dm = \rho A(x)dx$，需提升高度为 $x$，故功元素为 $dW = \rho g x A(x)dx$，总功为 $W = \rho g \int_0^H x A(x)dx$.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_30.webp" alt="图 6-30 半球形水池抽水做功微分薄层分析" loading="lazy">
+          <figcaption>图 6-30 半球形水池抽水做功微分薄层分析</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_31.webp" alt="图 6-31 圆台形水桶抽水做功模型与截面" loading="lazy">
+          <figcaption>图 6-31 圆台形水桶抽水做功模型与截面</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、水压力（侧向静水总压力）</h3>
+      <p>
+        处于液体中深度为 $x$ 处的压强为 $p = \rho g x$. 对于垂直浸入液体中的平板薄片，在深度 $x$ 处取水平窄条（宽度为 $b(x)$，高为 $dx$），其面积为 $dA = b(x)dx$，水压力微元为 $dP = \rho g x b(x)dx$. 平板受到的总侧向水压力为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$P = \int_a^b \rho g x b(x)dx$$
+      </p>
+
+      <h3>三、引力与质心模型</h3>
+      <p>
+        设细棒位于坐标轴上，线密度为 $\rho(x)$（图 6-32）. 细棒对棒外一点 $M_0$ 处质点的引力，通过万有引力定律建立微元 $dF = G \frac{m \rho(x)dx}{(x - x_0)^2}$ 进行积分求解（图 6-33、图 6-34、图 6-35）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_32.webp" alt="图 6-32 非均匀细长直棒的质量分布与质心积分" loading="lazy">
+          <figcaption>图 6-32 非均匀细长直棒的质量分布与质心积分</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_33.webp" alt="图 6-33 细长棒对端点轴线上质点的万有引力合力" loading="lazy">
+          <figcaption>图 6-33 细长棒对端点轴线上质点的万有引力合力</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_6_34.webp" alt="图 6-34 球状木质薄壳与同心环状立体的引力场" loading="lazy">
+          <figcaption>图 6-34 球状木质薄壳与同心环状立体的引力场</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_6_35.webp" alt="图 6-35 三条多项式曲线分层介质间的法向相互作用力" loading="lazy">
+          <figcaption>图 6-35 三条多项式曲线分层介质间的法向相互作用力</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题六 -->
+      <h2>总习题六</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 求由抛物线 $y = 2 - x^2$ 与直线 $y = -x$ 所围成的平面图形的面积.</p>
+        <p><em>解</em>：联立方程组解交点横坐标：$2 - x^2 = -x \implies x^2 - x - 2 = 0 \implies x_1 = -1, x_2 = 2$.<br>
+        在 $[-1, 2]$ 上，$2 - x^2 \ge -x$：<br>
+        $$A = \int_{-1}^2 [(2 - x^2) - (-x)]dx = \left[2x - \frac{x^3}{3} + \frac{x^2}{2}\right]_{-1}^2 = \left(4 - \frac{8}{3} + 2\right) - \left(-2 + \frac{1}{3} + \frac{1}{2}\right) = \frac{10}{3} - \left(-\frac{7}{6}\right) = \frac{9}{2}$$</p>
+
+        <p><strong>2.</strong> 求星形线 $\begin{cases} x = a\cos^3 t \\ y = a\sin^3 t \end{cases}$ ($a > 0$) 绕 $x$ 轴旋转所得旋转体的体积.</p>
+        <p><em>解</em>：利用对称性取第一象限部分 ($t \in [0, \frac{\pi}{2}]$) 乘以 $2$：<br>
+        $V = 2\pi \int_0^{\frac{\pi}{2}} y^2 |dx| = 2\pi \int_0^{\frac{\pi}{2}} (a\sin^3 t)^2 \cdot 3a\cos^2 t \sin t dt = 6\pi a^3 \int_0^{\frac{\pi}{2}} \sin^7 t \cos^2 t dt$.<br>
+        利用点火公式：$\int_0^{\frac{\pi}{2}} \sin^7 t (1 - \sin^2 t)dt = I_7 - I_9 = \frac{6}{7}\cdot\frac{4}{5}\cdot\frac{2}{3} - \frac{8}{9}\cdot\frac{6}{7}\cdot\frac{4}{5}\cdot\frac{2}{3} = \frac{16}{35}\left(1 - \frac{8}{9}\right) = \frac{16}{315}$.<br>
+        故 $V = 6\pi a^3 \cdot \frac{16}{315} = \frac{32}{105}\pi a^3$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="05_第五章_定积分.html" class="nav-btn">← 上一章: 第五章 定积分</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="07_第七章_微分方程.html" class="nav-btn primary">下一章: 第七章 微分方程 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

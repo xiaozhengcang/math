@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第十一章 曲线积分与曲面积分 - 高等数学（下册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (下册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="10_第十章_重积分.html" class="nav-btn">← 上一章: 第十章 重积分</a>
+      <a href="12_第十二章_无穷级数.html" class="nav-btn primary">下一章: 第十二章 无穷级数 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第十一章 曲线积分与曲面积分</h1>
+      <p class="chapter-intro">
+        在前面的章节中，我们的积分区域局限于坐标轴上的直线段、平面区域或空间立体内部. 然而，在经典电磁学（麦克斯韦方程组）、流体力学以及航天轨道力学中，大量的物理过程都是沿着弯曲的空间曲线路径进行（如沿航线做功、电荷线分布引力），或者穿过弯曲的空间曲面进行（如穿过曲面的磁通量、流体流过曲面的通量）. 这就要求我们将积分的几何积分域扩展为曲线和曲面，从而发展出<strong>曲线积分</strong>（Line Integral）与<strong>曲面积分</strong>（Surface Integral）. 本章将建立对弧长与对坐标的两类曲线积分、对面积与对坐标的两类曲面积分，深入阐述微积分学中三座顶峰级的积分转换定理——<strong>格林公式</strong>（Green's Theorem）、<strong>高斯公式</strong>（Gauss's Theorem）与<strong>斯托克斯公式</strong>（Stokes' Theorem），并由此奠定近代矢量场论（梯度、散度与旋度）的数学大厦.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 对弧长的曲线积分（第一类曲线积分）</h2>
+
+      <h3>一、引例与概念定义</h3>
+      <p>
+        考虑一段非均匀曲线形构件 $L$，其线密度为 $\rho(x, y)$（图 11-1）. 将曲线细分为 $n$ 个小弧段 $\Delta s_i$，小段质量近似为 $\Delta M_i \approx \rho(\xi_i, \eta_i)\Delta s_i$. 和式的极限即为总质量：
+      </p>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (第一类曲线积分)</div>
+        <p>
+          设 $L$ 为平面上的一条光滑曲线弧，函数 $f(x, y)$ 在 $L$ 上有定义. 极限
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int_L f(x, y)ds = \lim_{\lambda \to 0}\sum_{i=1}^n f(\xi_i, \eta_i)\Delta s_i$$
+        </p>
+        <p>称为函数 $f(x, y)$ 在曲线弧 $L$ 上<strong>对弧长的曲线积分</strong>（第一类曲线积分）.</p>
+        <p><strong>重要性质</strong>：第一类曲线积分的积分值<strong>与曲线 $L$ 的走向方向无关</strong>：$\int_{L^-} f(x, y)ds = \int_{L^+} f(x, y)ds$.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_1.webp" alt="图 11-1 曲线构件弧长微元与线密度质量分割" loading="lazy">
+          <figcaption>图 11-1 曲线构件弧长微元与线密度质量分割</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、第一类曲线积分的计算法</h3>
+      <p>化为定积分的核心是将弧微分 $ds$ 展开（图 11-2、图 11-3、图 11-4）：</p>
+      <ul>
+        <li><strong>参数方程</strong> $\begin{cases} x = \varphi(t) \\ y = \psi(t) \end{cases}$ ($\alpha \le t \le \beta$)：
+          $$\int_L f(x, y)ds = \int_\alpha^\beta f(\varphi(t), \psi(t))\sqrt{\varphi'^2(t) + \psi'^2(t)}dt \quad (\text{注意下限 } \alpha < \text{ 上限 } \beta)$$
+        </li>
+        <li><strong>直角坐标方程</strong> $y = g(x)$ ($a \le x \le b$)：
+          $$\int_L f(x, y)ds = \int_a^b f(x, g(x))\sqrt{1 + g'^2(x)}dx$$
+        </li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_2.webp" alt="图 11-2 平面圆周弧长微元参数代换积分" loading="lazy">
+          <figcaption>图 11-2 平面圆周弧长微元参数代换积分</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_3.webp" alt="图 11-3 螺旋线空间第一类曲线积分微元模型" loading="lazy">
+          <figcaption>图 11-3 螺旋线空间第一类曲线积分微元模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_4.webp" alt="图 11-4 抛物线形薄板的曲线质心积分" loading="lazy">
+          <figcaption>图 11-4 抛物线形薄板的曲线质心积分</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 对坐标的曲线积分（第二类曲线积分）</h2>
+
+      <h3>一、引例：变力沿曲线所作的功</h3>
+      <p>
+        质点在变力 $\boldsymbol{F}(x, y) = P(x, y)\boldsymbol{i} + Q(x, y)\boldsymbol{j}$ 作用下，沿有向平面光滑曲线弧 $L$ 从起点 $A$ 移动到终点 $B$（图 11-5、图 11-6）. 在微元位移向量 $d\boldsymbol{r} = (dx, dy)$ 上，所做的功为点积微元 $dW = \boldsymbol{F} \cdot d\boldsymbol{r} = P dx + Q dy$.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_5.webp" alt="图 11-5 质点在变力场中沿有向曲线路径做功微元" loading="lazy">
+          <figcaption>图 11-5 质点在变力场中沿有向曲线路径做功微元</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_6.webp" alt="图 11-6 位移切向量分解与做功投影累加" loading="lazy">
+          <figcaption>图 11-6 位移切向量分解与做功投影累加</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 (第二类曲线积分)</div>
+        <p>
+          总功为和式的极限，称为向量场在有向曲线 $L$ 上<strong>对坐标的曲线积分</strong>（第二类曲线积分），记作：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\int_L P(x, y)dx + Q(x, y)dy = \int_L \boldsymbol{F} \cdot d\boldsymbol{r}$$
+        </p>
+        <p><strong>方向敏感性</strong>：如果改变积分路径的走向，积分值改变符号：$\int_{L^-} P dx + Q dy = -\int_{L^+} P dx + Q dy$.</p>
+      </div>
+
+      <p>
+        <strong>两类曲线积分的联系</strong>：设 $L$ 上点处切向量方向余弦为 $(\cos\alpha, \cos\beta)$，则 $dx = \cos\alpha ds, dy = \cos\beta ds$（图 11-7），有：
+        $$\int_L P dx + Q dy = \int_L (P\cos\alpha + Q\cos\beta)ds$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_7.webp" alt="图 11-7 有向曲线切向方向余弦几何投影分解" loading="lazy">
+          <figcaption>图 11-7 有向曲线切向方向余弦几何投影分解</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 格林公式及其应用</h2>
+
+      <h3>一、格林公式</h3>
+      <p>
+        格林公式建立了<strong>平面闭区域上的二重积分</strong>与其<strong>闭边界曲线上的第二类曲线积分</strong>之间的直接等价联系（图 11-8、图 11-9、图 11-10、图 11-11）.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (格林公式 Green's Theorem)</div>
+        <p>
+          设闭区域 $D$ 由分段光滑曲线 $L$ 围成，函数 $P(x, y)$ 及 $Q(x, y)$ 在 $D$ 上具有一阶连续偏导数，则有：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\iint_D \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)dxdy = \oint_L P dx + Q dy$$
+        </p>
+        <p>其中 $L$ 为 $D$ 的<strong>全边界正向</strong>：人沿边界行走时，区域 $D$ 始终位于左侧（对单连通区域即为逆时针方向）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_8.webp" alt="图 11-8 单连通闭区域的正向边界逆时针走向" loading="lazy">
+          <figcaption>图 11-8 单连通闭区域的正向边界逆时针走向</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_9.webp" alt="图 11-9 X-型凸区域格林公式纵向证明构造" loading="lazy">
+          <figcaption>图 11-9 X-型凸区域格林公式纵向证明构造</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_10.webp" alt="图 11-10 Y-型区域格林公式横向证明构造" loading="lazy">
+          <figcaption>图 11-10 Y-型区域格林公式横向证明构造</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_11.webp" alt="图 11-11 复连通内孔区域割线法化为单连通边界" loading="lazy">
+          <figcaption>图 11-11 复连通内孔区域割线法化为单连通边界</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、平面曲线积分与路径无关的条件</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2 (曲线积分与路径无关四大等价条件)</div>
+        <p>设 $G$ 为开单连通区域，$P(x, y), Q(x, y)$ 在 $G$ 内具有一阶连续偏导数，则以下四个条件完全等价：</p>
+        <ol>
+          <li>沿 $G$ 内任意光滑闭曲线 $C$，恒有 $\oint_C P dx + Q dy = 0$；</li>
+          <li>对 $G$ 内任意起点 $A$ 与终点 $B$，曲线积分 $\int_L P dx + Q dy$ <strong>与连接 $A, B$ 的路径无关</strong>（仅取决于起终点）；</li>
+          <li>$P dx + Q dy$ 在 $G$ 内是某个二元函数 $u(x, y)$ 的<strong>全微分</strong>，即 $du = P dx + Q dy$（此时 $\boldsymbol{F}$ 为保守场/有势场，$\int_L = u(B) - u(A)$）；</li>
+          <li>在 $G$ 内处处成立：
+            $$\frac{\partial Q}{\partial x} = \frac{\partial P}{\partial y}$$
+          </li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_12.webp" alt="图 11-12 两条不同连接路径构成的闭合回路" loading="lazy">
+          <figcaption>图 11-12 两条不同连接路径构成的闭合回路</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_13.webp" alt="图 11-13 路径无关下沿平行于坐标轴折线积分法" loading="lazy">
+          <figcaption>图 11-13 路径无关下沿平行于坐标轴折线积分法</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_14.webp" alt="图 11-14 原点具有奇异奇点的非单连通涡旋场" loading="lazy">
+          <figcaption>图 11-14 原点具有奇异奇点的非单连通涡旋场</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_15.webp" alt="图 11-15 挖去原点微小圆回路的复连通等价性" loading="lazy">
+          <figcaption>图 11-15 挖去原点微小圆回路的复连通等价性</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_16.webp" alt="图 11-16 全微分求原函数的定积分下限基准点选取" loading="lazy">
+          <figcaption>图 11-16 全微分求原函数的定积分下限基准点选取</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_17.webp" alt="图 11-17 折线路径积分求势函数 u(x, y) 过程图" loading="lazy">
+          <figcaption>图 11-17 折线路径积分求势函数 u(x, y) 过程图</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_18.webp" alt="图 11-18 复合闭回路相互抵消的内部辅助割线" loading="lazy">
+          <figcaption>图 11-18 复合闭回路相互抵消的内部辅助割线</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节与第五节 -->
+      <h2>第四节与第五节 曲面积分</h2>
+
+      <h3>一、对面积的曲面积分（第一类曲面积分）</h3>
+      <p>
+        设 $\Sigma$ 为光滑曲面，$f(x, y, z)$ 为其上的密度分布（图 11-19、图 11-20、图 11-21）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\iint_\Sigma f(x, y, z)dS = \lim_{\lambda \to 0}\sum_{i=1}^n f(\xi_i, \eta_i, \zeta_i)\Delta S_i$$
+      </p>
+      <p>若曲面由 $z = z(x, y)$ 给出在 $D_{xy}$ 上，投影计算公式为：$\iint_\Sigma f dS = \iint_{D_{xy}} f(x, y, z(x, y))\sqrt{1 + z_x^2 + z_y^2}dxdy$.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_19.webp" alt="图 11-19 空间曲面小曲面块 dS 与薄壳质量分割" loading="lazy">
+          <figcaption>图 11-19 空间曲面小曲面块 dS 与薄壳质量分割</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_20.webp" alt="图 11-20 半球壳曲面在底面圆盘的投影映射" loading="lazy">
+          <figcaption>图 11-20 半球壳曲面在底面圆盘的投影映射</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_21.webp" alt="图 11-21 圆锥面侧面积展开与第一类曲面积分" loading="lazy">
+          <figcaption>图 11-21 圆锥面侧面积展开与第一类曲面积分</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、对坐标的曲面积分（第二类曲面积分）</h3>
+      <p>
+        设流速场为 $\boldsymbol{v}(x, y, z) = (P, Q, R)$，在有向曲面 $\Sigma$ 上的流量为（图 11-22 至图 11-26）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\Phi = \iint_\Sigma P dydz + Q dzdx + R dxdy = \iint_\Sigma \boldsymbol{v} \cdot \boldsymbol{n} dS$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_22.webp" alt="图 11-22 单位时间内流体穿过有向曲面的法向通量" loading="lazy">
+          <figcaption>图 11-22 单位时间内流体穿过有向曲面的法向通量</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_23.webp" alt="图 11-23 有向曲面法向量 n 与侧（外侧/内侧）的指定" loading="lazy">
+          <figcaption>图 11-23 有向曲面法向量 n 与侧（外侧/内侧）的指定</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_24.webp" alt="图 11-24 莫比乌斯单侧不可定向曲面与双侧定向曲面" loading="lazy">
+          <figcaption>图 11-24 莫比乌斯单侧不可定向曲面与双侧定向曲面</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_25.webp" alt="图 11-25 曲面法向量在三个坐标平面上的投影符号确定" loading="lazy">
+          <figcaption>图 11-25 曲面法向量在三个坐标平面上的投影符号确定</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_26.webp" alt="图 11-26 闭曲面上侧与下侧投影相消的组合计算" loading="lazy">
+          <figcaption>图 11-26 闭曲面上侧与下侧投影相消的组合计算</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节 -->
+      <h2>第六节 高斯公式 通量与散度</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 3 (高斯公式 Gauss's Divergence Theorem)</div>
+        <p>
+          设空间闭立体 $\Omega$ 的全外边界为分片光滑闭曲面 $\Sigma$，函数 $P, Q, R$ 在 $\Omega$ 上具有一阶连续偏导数，则：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\iiint_\Omega \left(\frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z}\right)dv = \iint_\Sigma P dydz + Q dzdx + R dxdy$$
+        </p>
+        <p>其中闭曲面积分 $\iint_\Sigma$ 取 $\Omega$ 的<strong>外侧</strong>（图 11-27、图 11-28）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_27.webp" alt="图 11-27 空间立体柱体在上下外侧曲面的通量平衡证明" loading="lazy">
+          <figcaption>图 11-27 空间立体柱体在上下外侧曲面的通量平衡证明</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_28.webp" alt="图 11-28 点电荷空间库仑电场高斯闭曲面通量" loading="lazy">
+          <figcaption>图 11-28 点电荷空间库仑电场高斯闭曲面通量</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 散度 (Divergence)</div>
+        <p>向量场 $\boldsymbol{A} = (P, Q, R)$ 的散度定义为单位体积向外的源强密度：</p>
+        <p style="text-align: center; margin: 8px 0;">
+          $$\operatorname{div}\boldsymbol{A} = \nabla \cdot \boldsymbol{A} = \frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z}$$
+        </p>
+        <p>高斯公式可写为：$\iiint_\Omega \operatorname{div}\boldsymbol{A} dv = \iint_\Sigma \boldsymbol{A} \cdot \boldsymbol{n} dS$（通量等于散度的体积分）.</p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 斯托克斯公式 环流量与旋度</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4 (斯托克斯公式 Stokes' Theorem)</div>
+        <p>
+          设光滑有向曲面 $\Sigma$ 的边界为分段光滑有向闭曲线 $\Gamma$，其走向与 $\Sigma$ 的法向量 $\boldsymbol{n}$ 符合右手螺旋法则（图 11-29、图 11-30、图 11-31），则：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\iint_\Sigma \operatorname{rot}\boldsymbol{A} \cdot \boldsymbol{n} dS = \oint_\Gamma P dx + Q dy + R dz$$
+        </p>
+        <p>其中<strong>旋度</strong>（Curl）定义为：
+          $$\operatorname{rot}\boldsymbol{A} = \nabla \times \boldsymbol{A} = \begin{vmatrix} \boldsymbol{i} & \boldsymbol{j} & \boldsymbol{k} \\ \frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\ P & Q & R \end{vmatrix}$$
+        </p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_11_29.webp" alt="图 11-29 空间有向曲面与边界回路右手定则定向规范" loading="lazy">
+          <figcaption>图 11-29 空间有向曲面与边界回路右手定则定向规范</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_30.webp" alt="图 11-30 斯托克斯公式微元环流面元投影证明" loading="lazy">
+          <figcaption>图 11-30 斯托克斯公式微元环流面元投影证明</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_11_31.webp" alt="图 11-31 闭合回路围成不同张力膜曲面的环量守恒" loading="lazy">
+          <figcaption>图 11-31 闭合回路围成不同张力膜曲面的环量守恒</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题十一 -->
+      <h2>总习题十一</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 利用格林公式计算 $I = \oint_L (e^x \sin y - 2y)dx + (e^x \cos y - 2)dy$，其中 $L$ 为上半圆周 $x^2 + y^2 = 2x$ ($y \ge 0$) 从原点 $(0, 0)$ 到点 $(2, 0)$ 的弧段.</p>
+        <p><em>解</em>：补线段 $L_1$: 从 $(2, 0)$ 沿 $x$ 轴到 $(0, 0)$（$y = 0, dy = 0, x$ 从 $2$ 到 $0$）.<br>
+        在封闭区域 $D$ 上：$P = e^x \sin y - 2y, Q = e^x \cos y - 2$.<br>
+        $\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y} = e^x \cos y - (e^x \cos y - 2) = 2$.<br>
+        闭曲线正向积分为：$\oint_{L + L_1} = \iint_D 2 dxdy = 2 \cdot \text{Area}(D) = 2 \cdot \frac{1}{2}\pi (1)^2 = \pi$.<br>
+        在线段 $L_1$ 上：$\int_{L_1} P dx + Q dy = \int_2^0 0 dx = 0$.<br>
+        故所求积分 $I = \oint_{L + L_1} - \int_{L_1} = \pi - 0 = \pi$.</p>
+
+        <p><strong>2.</strong> 计算 $\iint_\Sigma x^3 dydz + y^3 dzdx + z^3 dxdy$，其中 $\Sigma$ 为球面 $x^2 + y^2 + z^2 = a^2$ 的外侧.</p>
+        <p><em>解</em>：应用高斯公式：<br>
+        $\frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z} = 3x^2 + 3y^2 + 3z^2$.<br>
+        原式 $= \iiint_\Omega 3(x^2 + y^2 + z^2)dv$. 变换为球面坐标：<br>
+        $= 3 \int_0^{2\pi} d\theta \int_0^\pi \sin\varphi d\varphi \int_0^a r^2 \cdot r^2 dr = 3 \cdot 2\pi \cdot 2 \cdot \frac{a^5}{5} = \frac{12}{5}\pi a^5$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="10_第十章_重积分.html" class="nav-btn">← 上一章: 第十章 重积分</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="12_第十二章_无穷级数.html" class="nav-btn primary">下一章: 第十二章 无穷级数 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

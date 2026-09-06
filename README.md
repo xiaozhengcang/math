@@ -40,6 +40,10 @@
   - 节点打卡状态自动持久化，顶部导航栏实时展示完成百分比。
 - **23 个专属子目录入门级 HTML 材料**：
   - 结合经典教材（Rudin, Strang, Boyd, Cover & Thomas, Wainwright, Sutton 等）与奠基论文（LoRA, Neural ODE, Shannon 1948, GCN, Adam, WGAN, ResNet, AlphaFold, DDPM, Flow Matching, Mamba, CLIP, GPT-3, o1/PRM, DPO, Double Descent, Grokking, Chinchilla 等）深度拆解。
+- **经典数字化重构教材文库 (Core Digital Textbooks)**：
+  - **《高等数学》（同济第八版·全两册）**：796 页全书纯文本重写，322 幅独立剪裁高清插图，一元/多元微积分、重积分、曲线曲面积分与级数完整覆盖。
+  - **《工程数学 线性代数》（同济第七版）**：“十二五”国家级规划教材，第七版将“向量空间”前置架构优化，内置 2.2MB 离线矢量 MathJax 3 引擎。
+  - **《概率论与数理统计》（同济版）**：251 页纯文本重构，180 幅独立矢量插图，从柯尔莫哥洛夫公理到贝叶斯、抽样分布与参数假设检验。
 - **交互式数学与算法实验室 (Visual Labs)**：
   - **LoRA 低秩微调省减计算器** (N01/N21)。
   - **Softmax 测度 Sampling 解码器** (N03/N18)。
@@ -80,10 +84,13 @@
 
 ```text
 Math/
-├── index.html                   # 全景门户主页面 (DAG 画布 + 分层航道 + 实验台)
-├── nodes_data.js                # N01 - N23 全量节点结构化元数据库
-├── app.js                       # Canvas DAG 渲染引擎、交互悬停高亮、平移缩放与逻辑
+├── index.html                   # 全景门户主页面 (DAG 画布 + 分层航道 + 教材文库 + 实验台)
+├── nodes_data.js                # N01 - N23 全量节点结构化元数据库 (含教材联动)
+├── app.js                       # Canvas DAG 渲染引擎、交互悬停高亮、平移缩放与实时搜索
 ├── style.css                    # Modern Web Design 全套 CSS 样式系统 (深色玻璃态)
+├── TextBook-Advanced Mathematics/ # 经典教材: 同济《高等数学》(第八版 上下册 数字化重构)
+├── TextBook-LinearAlgebra/      # 经典教材: 同济《工程数学 线性代数》(第七版 数字化重构)
+├── TextBook-Probobility and Statistics/ # 经典教材: 同济《概率论与数理统计》(纯文本数字化重构)
 ├── algebra1.html                # Week 1 实战: 向量与矩阵运算底座
 ├── week2_geometric_projection.html # Week 2 实战: 正交投影与法方程
 ├── attention.html               # Attention (QKV) 矩阵运算几何本质交互教程

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第三章 微分中值定理与导数的应用 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="02_第二章_导数与微分.html" class="nav-btn">← 上一章: 第二章 导数与微分</a>
+      <a href="04_第四章_不定积分.html" class="nav-btn primary">下一章: 第四章 不定积分 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+
+      <h1>第三章 微分中值定理与导数的应用</h1>
+      <p class="chapter-intro">
+        导数反映的是函数在局部的瞬时变化率；但在科学研究与工程应用中，我们常常需要从局部的瞬时变化率推知函数在整个区间上的整体性态与宏观规律. 连接函数局部导数与其在区间上整体改变量的桥梁，就是闻名遐迩的<strong>微分中值定理</strong>. 本章将首先建立以罗尔定理、拉格朗日中值定理与柯西中值定理为核心的理论基石，并由此导出利用导数研究未定型极限的强有力工具——<strong>洛必达法则</strong>，以及用多项式逼近一般函数的<strong>泰勒公式</strong>. 进而，系统运用导数深入研究函数的单调性、曲线的凹凸性、极值与最值、曲率几何特征，并探讨方程近似求解的牛顿切线法.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 微分中值定理</h2>
+
+      <h3>一、费马引理与极值必要条件</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 引理 1 (费马引理 Fermat's Lemma)</div>
+        <p>
+          设函数 $f(x)$ 在点 $x_0$ 的某邻域 $U(x_0)$ 内有定义，并在 $x_0$ 处取得极值（极大值或极小值）. 若 $f(x)$ 在 $x_0$ 处可导，则必有：
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$f'(x_0) = 0$$
+        </p>
+        <div class="callout-title" style="margin-top: 8px;">证明概要：</div>
+        <p>
+          设 $f(x_0)$ 为极大值，则在 $U(x_0)$ 内任意 $x$，有 $f(x) \le f(x_0)$. 当 $x > x_0$ 时，$\frac{f(x) - f(x_0)}{x - x_0} \le 0$，令 $x \to x_0^+$ 得右导数 $f'_+(x_0) \le 0$；当 $x < x_0$ 时，$\frac{f(x) - f(x_0)}{x - x_0} \ge 0$，令 $x \to x_0^-$ 得左导数 $f'_-(x_0) \ge 0$. 因 $f'(x_0)$ 存在，$f'_+(x_0) = f'_-(x_0) = f'(x_0)$，故必有 $f'(x_0) = 0$.
+        </p>
+      </div>
+      <p>通常把导数等于零的点 $x_0$ 称为函数的<strong>驻点</strong>（Stationary Point）或稳定点.</p>
+
+      <h3>二、罗尔定理</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (罗尔定理 Rolle's Theorem)</div>
+        <p>如果函数 $f(x)$ 满足条件：</p>
+        <ol>
+          <li>在闭区间 $[a, b]$ 上连续；</li>
+          <li>在开区间 $(a, b)$ 内可导；</li>
+          <li>在区间端点处的函数值相等，即 $f(a) = f(b)$；</li>
+        </ol>
+        <p>那么在开区间 $(a, b)$ 内至少存在一点 $\xi \in (a, b)$，使得：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$f'(\xi) = 0$$
+        </p>
+      </div>
+
+      <p>
+        <strong>几何意义</strong>：一条连续光滑且两端高度相等的曲线弧 $AB$，弧上除端点外处处存在不垂直于 $x$ 轴的切线，那么在这段曲线上至少有一点处的切线平行于水平弦 $AB$（即斜率为 $0$），如图 3-1 所示.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_1.webp" alt="图 3-1 罗尔定理的几何意义：水平切线" loading="lazy">
+          <figcaption>图 3-1 罗尔定理的几何意义：水平切线</figcaption>
+        </figure>
+      </div>
+
+      <h3>三、拉格朗日中值定理</h3>
+      <p>
+        如果在罗尔定理中去掉“端点函数值相等”这一限制，便得到微积分中最为重要的核心定理之一——拉格朗日中值定理.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 2 (拉格朗日中值定理 Lagrange's Mean Value Theorem)</div>
+        <p>如果函数 $f(x)$ 满足条件：</p>
+        <ol>
+          <li>在闭区间 $[a, b]$ 上连续；</li>
+          <li>在开区间 $(a, b)$ 内可导；</li>
+        </ol>
+        <p>那么在开区间 $(a, b)$ 内至少存在一点 $\xi \in (a, b)$，使得：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$f(b) - f(a) = f'(\xi)(b - a) \quad \text{或} \quad \frac{f(b) - f(a)}{b - a} = f'(\xi)$$
+        </p>
+      </div>
+
+      <p>
+        <strong>几何意义</strong>：如图 3-2 所示，在满足条件的连续光滑曲线弧 $AB$ 上，至少存在一点 $C(\xi, f(\xi))$，该点处的切线平行于弦线 $AB$（切线斜率等于连接端点割线的斜率）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_2.webp" alt="图 3-2 拉格朗日中值定理的几何意义：切线平行于割线" loading="lazy">
+          <figcaption>图 3-2 拉格朗日中值定理的几何意义：切线平行于割线</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>有限增量公式</strong>：若记 $a = x_0, b = x_0 + \Delta x$，则存在 $\theta \in (0, 1)$，使得 $\Delta y = f(x_0 + \Delta x) - f(x_0) = f'(x_0 + \theta\Delta x)\Delta x$. 这给出了函数改变量的精确表达式.
+      </p>
+
+      <h3>四、柯西中值定理</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 3 (柯西中值定理 Cauchy's Mean Value Theorem)</div>
+        <p>如果函数 $f(x)$ 及 $F(x)$ 满足：</p>
+        <ol>
+          <li>在闭区间 $[a, b]$ 上连续；</li>
+          <li>在开区间 $(a, b)$ 内可导；</li>
+          <li>对任一 $x \in (a, b)$，都有 $F'(x) \ne 0$；</li>
+        </ol>
+        <p>那么在开区间 $(a, b)$ 内至少存在一点 $\xi \in (a, b)$，使得：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\frac{f(b) - f(a)}{F(b) - F(a)} = \frac{f'(\xi)}{F'(\xi)}$$
+        </p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 洛必达法则</h2>
+      <p>
+        在求极限时，经常会遇到分式函数分子分母同时趋于零（$\frac{0}{0}$ 型）或同时趋于无穷大（$\frac{\infty}{\infty}$ 型）的情形. 柯西中值定理为解决这类“未定型”极限提供了极其简捷有效的方法——<strong>洛必达法则</strong>.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 4 (洛必达法则 $\frac{0}{0}$ 型)</div>
+        <p>设：</p>
+        <ol>
+          <li>当 $x \to x_0$ 时，函数 $f(x)$ 及 $g(x)$ 都趋于零：$\lim f(x) = 0, \lim g(x) = 0$；</li>
+          <li>在点 $x_0$ 的去心邻域内，$f'(x)$ 及 $g'(x)$ 都存在，且 $g'(x) \ne 0$；</li>
+          <li>极限 $\lim_{x \to x_0} \frac{f'(x)}{g'(x)}$ 存在（或为无穷大）；</li>
+        </ol>
+        <p>则比值的极限存在且等于导数比值的极限：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$\lim_{x \to x_0} \frac{f(x)}{g(x)} = \lim_{x \to x_0} \frac{f'(x)}{g'(x)}$$
+        </p>
+        <p>类似法则同样适用于 $x \to \infty$ 以及单侧极限 $x \to x_0^\pm$，并且对 $\frac{\infty}{\infty}$ 型未定型同样完全成立.</p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">⚠️ 洛必达法则使用注意事项</div>
+        <ul>
+          <li><strong>前提验证</strong>：每次求导前必须严格验证是否属于 $\frac{0}{0}$ 或 $\frac{\infty}{\infty}$ 型未定型，非未定型绝不能应用！</li>
+          <li><strong>其他未定型转化</strong>：
+            <ul>
+              <li>$0 \cdot \infty$ 型：通过倒数变形化为 $\frac{0}{1/\infty} = \frac{0}{0}$ 或 $\frac{\infty}{1/0} = \frac{\infty}{\infty}$；</li>
+              <li>$\infty - \infty$ 型：通过通分或有理化化为分式；</li>
+              <li>$0^0, 1^\infty, \infty^0$ 型：通过取对数化为 $0 \cdot \infty$ 型求解.</li>
+            </ul>
+          </li>
+          <li><strong>失效情形</strong>：如果 $\lim \frac{f'(x)}{g'(x)}$ 呈现周期性振荡而不存在（例如 $\lim_{x \to \infty} \frac{x + \sin x}{x}$，导数之比为 $1 + \cos x$ 不收敛），洛必达法则失效，但原极限依然可以由其他方法（如夹逼准则或分子分母同除以 $x$）求得.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 泰勒公式</h2>
+      <p>
+        多项式函数是最简单、计算最方便的一类函数. 微分 $dy = f'(x_0)\Delta x$ 实现了用一次多项式局部近似函数. 为了提高精度并考察误差，需要用更高次数的多项式逼近函数，这便是<strong>泰勒公式</strong>（Taylor's Formula）.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 5 (泰勒中值定理)</div>
+        <p>
+          如果函数 $f(x)$ 在含 $x_0$ 的某个开区间 $(a, b)$ 内具有直到 $n+1$ 阶的导数，则对任一 $x \in (a, b)$，有：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$f(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + \dots + \frac{f^{(n)}(x_0)}{n!}(x - x_0)^n + R_n(x)$$
+        </p>
+        <p>其中误差余项有两种常用形式：</p>
+        <ul>
+          <li><strong>拉格朗日余项</strong>：$R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x - x_0)^{n+1}$，其中 $\xi$ 介于 $x_0$ 与 $x$ 之间；</li>
+          <li><strong>佩亚诺余项</strong>：$R_n(x) = o((x - x_0)^n)$，常用于求极限与局部性质分析.</li>
+        </ul>
+      </div>
+
+      <p>
+        当 $x_0 = 0$ 时的泰勒公式称为<strong>麦克劳林公式</strong>（Maclaurin's Formula）. 常用基本初等函数的麦克劳林展开式（带佩亚诺余项）：
+      </p>
+      <ul>
+        <li>$e^x = 1 + x + \frac{x^2}{2!} + \dots + \frac{x^n}{n!} + o(x^n)$</li>
+        <li>$\sin x = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots + (-1)^{m-1}\frac{x^{2m-1}}{(2m-1)!} + o(x^{2m})$</li>
+        <li>$\cos x = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \dots + (-1)^m \frac{x^{2m}}{(2m)!} + o(x^{2m+1})$</li>
+        <li>$\ln(1 + x) = x - \frac{x^2}{2} + \frac{x^3}{3} - \dots + (-1)^{n-1}\frac{x^n}{n} + o(x^n)$</li>
+        <li>$(1 + x)^\alpha = 1 + \alpha x + \frac{\alpha(\alpha - 1)}{2!} x^2 + \dots + \frac{\alpha(\alpha - 1)\dots(\alpha - n + 1)}{n!} x^n + o(x^n)$</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_3.webp" alt="图 3-3 各阶泰勒多项式逼近正弦函数图形" loading="lazy">
+          <figcaption>图 3-3 各阶泰勒多项式逼近正弦函数图形</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 函数的单调性与曲线的凹凸性</h2>
+
+      <h3>一、函数单调性的判定法</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 6 (单调性判定定理)</div>
+        <p>设函数 $y = f(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 内可导：</p>
+        <ol>
+          <li>如果在 $(a, b)$ 内 $f'(x) > 0$，则 $f(x)$ 在 $[a, b]$ 上<strong>严格单调增加</strong>；</li>
+          <li>如果在 $(a, b)$ 内 $f'(x) < 0$，则 $f(x)$ 在 $[a, b]$ 上<strong>严格单调减少</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_4.webp" alt="图 3-4 单调曲线切线斜率非负的几何特征" loading="lazy">
+          <figcaption>图 3-4 单调曲线切线斜率非负的几何特征</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_5.webp" alt="图 3-5 函数单调递增区间与递减区间的分布" loading="lazy">
+          <figcaption>图 3-5 函数单调递增区间与递减区间的分布</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、曲线的凹凸性与拐点</h3>
+      <p>
+        两条上升的曲线弧，其弯曲方向可能完全不同（图 3-6、图 3-7）. 如果曲线弧始终位于其上任一点切线的上方（即连接弧上任意两点的割线位于曲线弧的上方），称该曲线弧为<strong>凹的</strong>（Convex downwards）；反之若弧段位于其切线的下方，则称为<strong>凸的</strong>（Concave downwards），如图 3-8 所示.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_6.webp" alt="图 3-6 两种不同弯曲方向的上升曲线弧" loading="lazy">
+          <figcaption>图 3-6 两种不同弯曲方向的上升曲线弧</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_7.webp" alt="图 3-7 曲线凸向与割线位置关系" loading="lazy">
+          <figcaption>图 3-7 曲线凸向与割线位置关系</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_8.webp" alt="图 3-8 曲线的凹凸性与其切线的相对位置" loading="lazy">
+          <figcaption>图 3-8 曲线的凹凸性与其切线的相对位置</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 7 (凹凸性判定法)</div>
+        <p>设函数 $f(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 内具有二阶导数：</p>
+        <ol>
+          <li>若在 $(a, b)$ 内 $f''(x) > 0$，则曲线 $y = f(x)$ 在 $[a, b]$ 上是<strong>凹的</strong>；</li>
+          <li>若在 $(a, b)$ 内 $f''(x) < 0$，则曲线 $y = f(x)$ 在 $[a, b]$ 上是<strong>凸的</strong>.</li>
+        </ol>
+      </div>
+
+      <p>
+        <strong>拐点定义</strong>：连续曲线凹弧与凸弧的连接分界点，称为曲线的<strong>拐点</strong>（Inflection Point）. 拐点横坐标 $x_0$ 处的必要条件是 $f''(x_0) = 0$ 或二阶导数不存在；充分条件是二阶导数在点 $x_0$ 的左右两侧异号.
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 函数的极值与最大值最小值</h2>
+
+      <h3>一、极值的判别法</h3>
+      <p>函数的极大值点与极小值点统称为<strong>极值点</strong>. 极值只能在驻点（$f'(x) = 0$）或不可导点处取得（如图 3-9、图 3-10 所示）.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_9.webp" alt="图 3-9 曲线的峰值点、谷值点与尖点极值" loading="lazy">
+          <figcaption>图 3-9 曲线的峰值点、谷值点与尖点极值</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_10.webp" alt="图 3-10 四种典型极值点邻域内切线斜率变号特征" loading="lazy">
+          <figcaption>图 3-10 四种典型极值点邻域内切线斜率变号特征</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 极值第一充分条件 (一阶导数变号法)</div>
+        <p>设 $f(x)$ 在 $x_0$ 的某邻域内连续，且在去心邻域内可导：</p>
+        <ol>
+          <li>若当 $x$ 穿过 $x_0$ 时，$f'(x)$ 由正变负，则 $f(x_0)$ 为<strong>极大值</strong>；</li>
+          <li>若当 $x$ 穿过 $x_0$ 时，$f'(x)$ 由负变正，则 $f(x_0)$ 为<strong>极小值</strong>；</li>
+          <li>若 $f'(x)$ 在两侧符号相同，则 $f(x_0)$ <strong>不是极值</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 极值第二充分条件 (二阶导数判别法)</div>
+        <p>设 $f(x)$ 在 $x_0$ 处具有二阶导数且 $f'(x_0) = 0$：</p>
+        <ol>
+          <li>若 $f''(x_0) < 0$，则 $f(x_0)$ 为<strong>极大值</strong>；</li>
+          <li>若 $f''(x_0) > 0$，则 $f(x_0)$ 为<strong>极小值</strong>；</li>
+          <li>若 $f''(x_0) = 0$，此方法失效，需用第一充分条件或更高阶展开判定.</li>
+        </ol>
+      </div>
+
+      <h3>二、工程最优化与实际最值问题</h3>
+      <p>
+        在工程建筑、机械加工与运筹调度中，经常需要在一定约束条件下确定最优几何尺寸、最低施工成本或最高输出效率. 下图展示了教材中经典的实际建模案例（图 3-11 至图 3-23）：
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_11.webp" alt="图 3-11 矩形铁皮折叠水槽容积最大化模型" loading="lazy">
+          <figcaption>图 3-11 矩形铁皮折叠水槽容积最大化模型</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_12.webp" alt="图 3-12 沿圆木截取抗弯强度最大矩形梁截面" loading="lazy">
+          <figcaption>图 3-12 沿圆木截取抗弯强度最大矩形梁截面</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_13.webp" alt="图 3-13 管道铺设路径折线运费最经济选点" loading="lazy">
+          <figcaption>图 3-13 管道铺设路径折线运费最经济选点</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_14.webp" alt="图 3-14 沿河公路车站位置最优选址模型" loading="lazy">
+          <figcaption>图 3-14 沿河公路车站位置最优选址模型</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_15.webp" alt="图 3-15 光线经两种不同介质界面的折射定律（费马原理）" loading="lazy">
+          <figcaption>图 3-15 光线经两种不同介质界面的折射定律（费马原理）</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_16.webp" alt="图 3-16 两光源照射下的照度最弱点位置计算" loading="lazy">
+          <figcaption>图 3-16 两光源照射下的照度最弱点位置计算</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_17.webp" alt="图 3-17 梯形明渠水力最优湿周水截面" loading="lazy">
+          <figcaption>图 3-17 梯形明渠水力最优湿周水截面</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_18.webp" alt="图 3-18 生产批量与仓储保管费用平衡模型" loading="lazy">
+          <figcaption>图 3-18 生产批量与仓储保管费用平衡模型</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_19.webp" alt="图 3-19 抛物线形拱桥用料最省跨度设计" loading="lazy">
+          <figcaption>图 3-19 抛物线形拱桥用料最省跨度设计</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_20.webp" alt="图 3-20 斜拉重物最省力的拉力倾角推导" loading="lazy">
+          <figcaption>图 3-20 斜拉重物最省力的拉力倾角推导</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_21.webp" alt="图 3-21 考虑自重的起重杠杆最优臂长比" loading="lazy">
+          <figcaption>图 3-21 考虑自重的起重杠杆最优臂长比</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_22.webp" alt="图 3-22 圆形铁皮裁切圆锥漏斗最大容积圆心角" loading="lazy">
+          <figcaption>图 3-22 圆形铁皮裁切圆锥漏斗最大容积圆心角</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_23.webp" alt="图 3-23 转角走廊搬运硬直杆的最大通过长度" loading="lazy">
+          <figcaption>图 3-23 转角走廊搬运硬直杆的最大通过长度</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节 -->
+      <h2>第六节 函数图形的描绘</h2>
+      <p>
+        综合运用函数的奇偶性、周期性、单调区间、极值点、凹凸区间、拐点以及渐近线，可以描绘出函数的整体几何图形（如图 3-24 至图 3-26 所示）.
+      </p>
+      <p><strong>三种渐近线求法</strong>：</p>
+      <ul>
+        <li><strong>铅直渐近线</strong>：若 $\lim_{x \to x_0^\pm} f(x) = \infty$，则直线 $x = x_0$ 为铅直渐近线；</li>
+        <li><strong>水平渐近线</strong>：若 $\lim_{x \to \infty} f(x) = c$，则直线 $y = c$ 为水平渐近线；</li>
+        <li><strong>斜渐近线</strong>：若 $\lim_{x \to \infty} \frac{f(x)}{x} = a \ne 0$ 且 $\lim_{x \to \infty} [f(x) - ax] = b$，则直线 $y = ax + b$ 为斜渐近线.</li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_24.webp" alt="图 3-24 有理分式函数的渐近线与特征点综合图形" loading="lazy">
+          <figcaption>图 3-24 有理分式函数的渐近线与特征点综合图形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_25.webp" alt="图 3-25 含有斜渐近线与极小值点的代数曲线描绘" loading="lazy">
+          <figcaption>图 3-25 含有斜渐近线与极小值点的代数曲线描绘</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_26.webp" alt="图 3-26 衰减振荡函数的包络线与拐点分布" loading="lazy">
+          <figcaption>图 3-26 衰减振荡函数的包络线与拐点分布</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 曲率</h2>
+
+      <h3>一、弧微分与曲率的定义</h3>
+      <p>
+        设曲线具有连续一阶导数，弧长参数从点 $A$ 起算为 $s$. <strong>弧微分公式</strong>（图 3-27、图 3-28）：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$ds = \sqrt{dx^2 + dy^2} = \sqrt{1 + y'^2} dx$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_27.webp" alt="图 3-27 曲线的弧长参数与弧微分几何直角三角形" loading="lazy">
+          <figcaption>图 3-27 曲线的弧长参数与弧微分几何直角三角形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_28.webp" alt="图 3-28 动点沿弧移动时切线转角的微分演变" loading="lazy">
+          <figcaption>图 3-28 动点沿弧移动时切线转角的微分演变</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>曲率</strong>（Curvature）用来刻画曲线弯曲程度的剧烈程度. 设动点沿曲线移动 $\Delta s$ 时，切线倾角的改变量为 $\Delta\alpha$（图 3-29、图 3-30）. 弧段的平均曲率为 $\bar{K} = \left|\frac{\Delta\alpha}{\Delta s}\right|$；当 $\Delta s \to 0$ 时的极限定义为点处的<strong>曲率</strong>：
+      </p>
+      <p style="text-align: center; margin: 12px 0;">
+        $$K = \lim_{\Delta s \to 0} \left|\frac{\Delta\alpha}{\Delta s}\right| = \left|\frac{d\alpha}{ds}\right|$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_29.webp" alt="图 3-29 切线转角 Δα 与弧长 Δs 的比值分析" loading="lazy">
+          <figcaption>图 3-29 切线转角 Δα 与弧长 Δs 的比值分析</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_30.webp" alt="图 3-30 半径为 R 的圆周曲率处处为常数 1/R" loading="lazy">
+          <figcaption>图 3-30 半径为 R 的圆周曲率处处为常数 1/R</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、曲率的计算公式与曲率圆</h3>
+      <p>
+        由 $\tan\alpha = y'$，得 $\alpha = \arctan y'$，微分得 $d\alpha = \frac{y''}{1 + y'^2} dx$. 代入 $ds = \sqrt{1 + y'^2} dx$，得到显式方程曲率计算公式：
+      </p>
+      <p style="text-align: center; margin: 12px 0;">
+        $$K = \frac{|y''|}{(1 + y'^2)^{3/2}}$$
+      </p>
+      <p>
+        曲率倒数 $\rho = \frac{1}{K}$ 称为<strong>曲率半径</strong>（Radius of Curvature）. 在曲线凹侧沿法线方向取距离为 $\rho$ 的点 $C$ 为圆心，以 $\rho$ 为半径作圆，称为曲线在该点处的<strong>曲率圆</strong>（Osculating Circle），圆心 $C$ 称为<strong>曲率中心</strong>（图 3-31 至图 3-37）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_31.webp" alt="图 3-31 抛物线各点曲率半径与曲率圆形态" loading="lazy">
+          <figcaption>图 3-31 抛物线各点曲率半径与曲率圆形态</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_32.webp" alt="图 3-32 椭圆顶点处最大与最小曲率半径" loading="lazy">
+          <figcaption>图 3-32 椭圆顶点处最大与最小曲率半径</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_33.webp" alt="图 3-33 曲线上动点的密切圆几何定义" loading="lazy">
+          <figcaption>图 3-33 曲线上动点的密切圆几何定义</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_34.webp" alt="图 3-34 凸轮磨削加工内表面砂轮最大允许半径校核" loading="lazy">
+          <figcaption>图 3-34 凸轮磨削加工内表面砂轮最大允许半径校核</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_35.webp" alt="图 3-35 铁路缓和曲线曲率连续渐变设计" loading="lazy">
+          <figcaption>图 3-35 铁路缓和曲线曲率连续渐变设计</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_36.webp" alt="图 3-36 渐屈线与渐伸线的曲率对应规律" loading="lazy">
+          <figcaption>图 3-36 渐屈线与渐伸线的曲率对应规律</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_37.webp" alt="图 3-37 汽车越过拱桥顶部的离心力与桥面法向压力计算" loading="lazy">
+          <figcaption>图 3-37 汽车越过拱桥顶部的离心力与桥面法向压力计算</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第八节 -->
+      <h2>第八节 方程的近似解</h2>
+      <p>
+        在工程实际中，大量非线性超越方程 $f(x) = 0$ 无法求出精确的代数解析根. 必须采用数值算法求解根的近似值.
+      </p>
+
+      <h3>一、二分法</h3>
+      <p>
+        若连续函数 $f(x)$ 在区间 $[a, b]$ 端点异号：$f(a)f(b) < 0$，由零点定理必有实根（图 3-38）. 取中点 $c = \frac{a + b}{2}$，每次将区间缩小一半，经过 $n$ 次二分，误差不超过 $\frac{b - a}{2^n}$.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_38.webp" alt="图 3-38 二分法逐步缩小零点区间的四种情形" loading="lazy">
+          <figcaption>图 3-38 二分法逐步缩小零点区间的四种情形</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、牛顿切线法</h3>
+      <p>
+        <strong>切线法核心思想</strong>：用曲线切线的零点近似曲线本身的零点（图 3-39、图 3-40）. 设初始近似根为 $x_0$，曲线在点 $(x_0, f(x_0))$ 处的切线方程为：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$y - f(x_0) = f'(x_0)(x - x_0)$$
+      </p>
+      <p>
+        令 $y = 0$，解得切线与 $x$ 轴的交点作为第一次修正值 $x_1$：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$x_1 = x_0 - \frac{f(x_0)}{f'(x_0)}$$
+      </p>
+      <p>重复此过程，得到<strong>牛顿切线法迭代递推公式</strong>：</p>
+      <p style="text-align: center; margin: 12px 0;">
+        $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)} \quad (n = 0, 1, 2, \dots)$$
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_3_39.webp" alt="图 3-39 牛顿切线法的几何构造与快速收敛" loading="lazy">
+          <figcaption>图 3-39 牛顿切线法的几何构造与快速收敛</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_3_40.webp" alt="图 3-40 初始点选择不当引起迭代发散的几何分析" loading="lazy">
+          <figcaption>图 3-40 初始点选择不当引起迭代发散的几何分析</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题三 -->
+      <h2>总习题三</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 证明不等式：当 $x > 0$ 时，$\frac{x}{1 + x} < \ln(1 + x) < x$.</p>
+        <p><em>证</em>：设 $f(t) = \ln(1 + t)$. 在闭区间 $[0, x]$ 上应用拉格朗日中值定理，存在 $\xi \in (0, x)$ 使得 $\frac{\ln(1 + x) - \ln 1}{x - 0} = \frac{1}{1 + \xi}$. 因为 $0 < \xi < x$，所以 $\frac{1}{1 + x} < \frac{1}{1 + \xi} < 1$. 两边乘以 $x > 0$，即得证.</p>
+
+        <p><strong>2.</strong> 求极限：$\lim_{x \to 0} \frac{\cos x - e^{-\frac{x^2}{2}}}{x^4}$.</p>
+        <p><em>解</em>：应用麦克劳林公式展开到 $x^4$ 项：<br>
+        $\cos x = 1 - \frac{x^2}{2} + \frac{x^4}{24} + o(x^4)$；<br>
+        $e^{-\frac{x^2}{2}} = 1 + \left(-\frac{x^2}{2}\right) + \frac{1}{2}\left(-\frac{x^2}{2}\right)^2 + o(x^4) = 1 - \frac{x^2}{2} + \frac{x^4}{8} + o(x^4)$.<br>
+        分子 $= \left(\frac{1}{24} - \frac{1}{8}\right)x^4 + o(x^4) = -\frac{1}{12}x^4 + o(x^4)$.<br>
+        故原极限 $= \lim_{x \to 0} \frac{-\frac{1}{12}x^4 + o(x^4)}{x^4} = -\frac{1}{12}$.</p>
+
+        <p><strong>3.</strong> 设抛物线 $y = x^2$，求其在顶点 $(0, 0)$ 处的曲率 $K$ 及曲率圆方程.</p>
+        <p><em>解</em>：$y' = 2x, y'' = 2$. 在原点 $(0, 0)$ 处：$y'(0) = 0, y''(0) = 2$.<br>
+        曲率 $K = \frac{|y''|}{(1 + y'^2)^{3/2}} = \frac{2}{(1 + 0)^{3/2}} = 2$.<br>
+        曲率半径 $\rho = \frac{1}{K} = \frac{1}{2}$. 曲率中心在法线上（$y$ 轴正方向），坐标为 $(0, \frac{1}{2})$.<br>
+        曲率圆方程为：$x^2 + \left(y - \frac{1}{2}\right)^2 = \frac{1}{4}$.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="02_第二章_导数与微分.html" class="nav-btn">← 上一章: 第二章 导数与微分</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="04_第四章_不定积分.html" class="nav-btn primary">下一章: 第四章 不定积分 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

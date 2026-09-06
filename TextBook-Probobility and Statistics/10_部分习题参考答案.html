@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>部分习题参考答案 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="09_附录.html" class="nav-btn">← 上一章: 附录</a>
+      <a href="index.html" class="nav-btn primary">返回全书总目录 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>部分习题参考答案与提示</h1>
+      <p class="chapter-intro">
+        本章收录全书第一章至第八章重要习题及各章测试题的参考答案与解题推导步骤.
+      </p>
+
+      <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <h2>第一章 随机事件与概率 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>习题 1-1</strong></p>
+        <p>1. (1) $\Omega = \{HHH, HHT, HTH, THH, HTT, THT, TTH, TTT\}$；$A = \{HHH, HHT, HTH, THH\}$.</p>
+        <p><strong>习题 1-2</strong></p>
+        <p>1. $P(A) = 0.6, P(B) = 0.7, P(A \cup B) = 0.9 \implies P(AB) = P(A) + P(B) - P(A \cup B) = 0.4$.</p>
+        <p>2. $P(A - B) = P(A) - P(AB) = 0.6 - 0.4 = 0.2$.</p>
+        <p><strong>测试题一</strong></p>
+        <p>1. $P(\bar{A} \cup \bar{B}) = P(\overline{AB}) = 1 - P(AB)$. 由 $P(A-B) = P(A) - P(AB) = 0.3 \implies P(AB) = 0.4$；故答案为 $1 - 0.4 = 0.6$.</p>
+      </div>
+
+      <h2>第二章 随机变量及其分布 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>习题 2-1</strong>：利用分布函数的右连续性及极限条件求解待定常数.</p>
+        <p><strong>习题 2-3</strong>：$X \sim N(3, 4)$，则 $P(2 < X < 5) = \Phi(\frac{5-3}{2}) - \Phi(\frac{2-3}{2}) = \Phi(1) - \Phi(-0.5) = \Phi(1) + \Phi(0.5) - 1 = 0.8413 + 0.6915 - 1 = 0.5328$.</p>
+      </div>
+
+      <h2>第三章 多维随机变量及其分布 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>测试题三</strong>：二维正态变量独立等价于 $\rho = 0$. 两独立正态之和仍为正态，均值和方差分别相加.</p>
+      </div>
+
+      <h2>第四章 随机变量的数字特征 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>核心公式</strong>：$D(X) = E(X^2) - [E(X)]^2$；$\mathrm{Cov}(X, Y) = E(XY) - E(X)E(Y)$；$\rho_{XY} = \frac{\mathrm{Cov}(X, Y)}{\sqrt{D(X)D(Y)}}$.</p>
+      </div>
+
+      <h2>第五章 大数定律及中心极限定理 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>中心极限定理应用</strong>：利用 $Z = \frac{\sum X_i - n\mu}{\sqrt{n}\sigma} \approx N(0, 1)$ 标准化后查标准正态分布表.</p>
+      </div>
+
+      <h2>第六章 统计量和抽样分布 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>定理应用</strong>：单正态样本方差 $\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$；$\frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t(n-1)$.</p>
+      </div>
+
+      <h2>第七章 参数估计 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>矩估计与似然估计</strong>：对于正态总体，矩估计与极大似然估计均值均为 $\bar{X}$；方差的矩估计与似然估计为 $B_2 = \frac{1}{n}\sum (X_i - \bar{X})^2$，而无偏估计为 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$.</p>
+      </div>
+
+      <h2>第八章 假设检验 习题解答</h2>
+      <div class="callout callout-example">
+        <p><strong>检验判决</strong>：$\sigma$ 未知时用 $t$ 检验，若统计量落在拒绝域 $|t| \ge t_{\alpha/2}(n-1)$ 则拒绝原假设 $H_0$.</p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

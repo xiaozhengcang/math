@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第一章 函数与极限 - 高等数学（上册）纯文本与公式版</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="../js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 高等数学 (上册) · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-btn">全书总入口</a>
+      <a href="index.html" class="nav-btn">全书目录</a>
+      <a href="00_前言与目录.html" class="nav-btn">← 上一章: 前言与目录</a>
+      <a href="02_第二章_导数与微分.html" class="nav-btn primary">下一章: 第二章 导数与微分 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+
+<h1>第一章 函数与极限</h1>
+      <p class="chapter-intro">
+        初等数学的研究对象基本上是不变量，而高等数学的研究对象则是变动的量. 所谓函数关系就是变量之间的一种依赖关系，极限方法是研究变量的一种基本方法. 本章将介绍映射、函数、极限和函数的连续性等基本概念以及它们的一些性质.
+      </p>
+
+      <h2>第一节 映射与函数</h2>
+      <p>
+        映射是现代数学中的一个基本概念，而函数是微积分的研究对象，也是映射的一种. 本节主要介绍映射、函数及有关概念，函数的性质与运算等.
+      </p>
+
+      <h3>一、映射</h3>
+      <h4>1. 映射概念</h4>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 (映射)</div>
+        <p>
+          设 $X, Y$ 是两个非空集合，如果存在一个法则 $f$，使得对 $X$ 中每个元素 $x$，按法则 $f$，在 $Y$ 中有唯一确定的元素 $y$ 与之对应，那么称 $f$ 为从 $X$ 到 $Y$ 的<strong>映射</strong>，记作
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$f: X \to Y$$
+        </p>
+        <p>
+          其中 $y$ 称为元素 $x$（在映射 $f$ 下）的<strong>像</strong>，并记作 $f(x)$，即
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$y = f(x)$$
+        </p>
+        <p>
+          而元素 $x$ 称为元素 $y$（在映射 $f$ 下）的一个<strong>原像</strong>；集合 $X$ 称为映射 $f$ 的<strong>定义域</strong>，记作 $D_f$，即 $D_f = X$；$X$ 中所有元素的像所组成的集合称为映射 $f$ 的<strong>值域</strong>，记作 $R_f$ 或 $f(X)$，即
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$R_f = f(X) = \{f(x) \mid x \in X\}$$
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📘 映射定义的要点说明</div>
+        <p>(1) 构成一个映射必须具备以下三个要素：集合 $X$，即定义域 $D_f = X$；集合 $Y$，即值域 $R_f \subset Y$ 的范围；对应法则 $f$，使得对每个 $x \in X$，有唯一确定的 $y = f(x)$ 与之对应.</p>
+        <p>(2) 对每个 $x \in X$，元素 $x$ 的像 $y$ 是唯一的；而对每个 $y \in R_f$，元素 $y$ 的原像不一定是唯一的；映射 $f$ 的值域 $R_f$ 是 $Y$ 的一个子集，即 $R_f \subset Y$，不一定 $R_f = Y$.</p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 1</div>
+        <p>
+          设 $f: \mathbf{R} \to \mathbf{R}$，对每个 $x \in \mathbf{R}$，$f(x) = x^2$. 显然，$f$ 是一个映射，$f$ 的定义域 $D_f = \mathbf{R}$，值域 $R_f = \{y \mid y \ge 0\}$，它是 $\mathbf{R}$ 的一个真子集. 对于 $R_f$ 中的元素 $y$，除 $y = 0$ 外，它的原像不是唯一的. 如 $y = 4$ 的原像就有 $x = 2$ 和 $x = -2$ 两个.
+        </p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 2</div>
+        <p>
+          设 $X = \{(x, y) \mid x^2 + y^2 = 1\}$，$Y = \{(x, 0) \mid |x| \le 1\}$，$f: X \to Y$，对每个 $(x, y) \in X$，有唯一确定的 $(x, 0) \in Y$ 与之对应. 显然 $f$ 是一个映射，$f$ 的定义域 $D_f = X$，值域 $R_f = Y$. 在几何上，这个映射表示将平面上一个圆心在原点的单位圆周上的点投影到 $x$ 轴的区间 $[-1, 1]$ 上.
+        </p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 3</div>
+        <p>
+          设 $f: [-\frac{\pi}{2}, \frac{\pi}{2}] \to [-1, 1]$，对每个 $x \in [-\frac{\pi}{2}, \frac{\pi}{2}]$，$f(x) = \sin x$. $f$ 是一个映射，其定义域 $D_f = [-\frac{\pi}{2}, \frac{\pi}{2}]$，值域 $R_f = [-1, 1]$.
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 满射、单射与双射（一一映射）</div>
+        <p>设 $f$ 是从集合 $X$ 到集合 $Y$ 的映射：</p>
+        <ul>
+          <li>若 $R_f = Y$，即 $Y$ 中任一元素 $y$ 都是 $X$ 中某元素的像，则称 $f$ 为从 $X$ 到 $Y$ 上的映射或<strong>满射</strong>；</li>
+          <li>若对 $X$ 中任意两个不同元素 $x_1 \ne x_2$，它们的像 $f(x_1) \ne f(x_2)$，则称 $f$ 为从 $X$ 到 $Y$ 的<strong>单射</strong>；</li>
+          <li>若映射 $f$ 既是单射，又是满射，则称 $f$ 为<strong>一一映射（或双射）</strong>.</li>
+        </ul>
+        <p style="margin-top: 8px;">
+          在上面例 1 中的映射既非单射又非满射；例 2 中的映射不是单射，是满射；例 3 中的映射既是单射又是满射，因此是一一映射.
+        </p>
+      </div>
+
+      <p>
+        映射又称为<strong>算子</strong>. 从非空集合 $X$ 到数集 $Y$ 的映射又称为 $X$ 上的<strong>泛函</strong>；从非空集合 $X$ 到它自身的映射又称为 $X$ 上的<strong>变换</strong>；从实数集（或其子集）$X$ 到实数集 $Y$ 的映射通常称为定义在 $X$ 上的<strong>函数</strong>.
+      </p>
+
+      <h4>2. 逆映射与复合映射</h4>
+      <p>
+        设 $f$ 是 $X$ 到 $Y$ 的单射，则对每个 $y \in R_f$，有唯一的 $x \in X$，满足 $f(x) = y$. 于是可定义一个从 $R_f$ 到 $X$ 的新映射 $g$，即 $g: R_f \to X$. 对每个 $y \in R_f$，规定 $g(y) = x$. 这个映射 $g$ 称为 $f$ 的<strong>逆映射</strong>，记作 $f^{-1}$，其定义域 $D_{f^{-1}} = R_f$，值域 $R_{f^{-1}} = X$.
+      </p>
+      <p>
+        按上述定义，只有单射才存在逆映射. 例如例 3 中映射 $f(x) = \sin x$ 存在逆映射，即反正弦函数的主值：
+      </p>
+      <p style="text-align: center; margin: 12px 0;">
+        $$f^{-1}(x) = \arcsin x, \quad x \in [-1, 1], \quad R_{f^{-1}} = [-\frac{\pi}{2}, \frac{\pi}{2}]$$
+      </p>
+
+      <p>
+        设有连个映射 $g: X \to Y_1, f: Y_2 \to Z$，其中 $Y_1 \subset Y_2$，则将每个 $x \in X$ 映射成 $f[g(x)] \in Z$，记作 $f \circ g$，称为<strong>复合映射</strong>：
+      </p>
+      <p style="text-align: center; margin: 12px 0;">
+        $$(f \circ g)(x) = f[g(x)], \quad x \in X$$
+      </p>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 4</div>
+        <p>
+          设 $g: \mathbf{R} \to [-1, 1], g(x) = \sin x$；映射 $f: [-1, 1] \to [0, 1], f(u) = \sqrt{1 - u^2}$，则复合映射为：
+        </p>
+        <p style="text-align: center; margin: 8px 0;">
+          $$(f \circ g)(x) = f[g(x)] = \sqrt{1 - \sin^2 x} = |\cos x|$$
+        </p>
+      </div>
+
+      <h3>二、函数</h3>
+      <h4>1. 函数的概念</h4>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 (函数)</div>
+        <p>
+          设数集 $D \subset \mathbf{R}$，则称映射 $f: D \to \mathbf{R}$ 为定义在 $D$ 上的<strong>函数</strong>，通常简记为
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$y = f(x), \quad x \in D$$
+        </p>
+        <p>
+          其中 $x$ 称为<strong>自变量</strong>，$y$ 称为<strong>因变量</strong>，$D$ 称为<strong>定义域</strong>，记作 $D_f$，即 $D_f = D$. 函数值全体组成的集合称为<strong>值域</strong>：
+        </p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$R_f = f(D) = \{y \mid y = f(x), x \in D\}$$
+        </p>
+      </div>
+
+      <p>
+        构成函数的要素是：<strong>定义域 $D_f$</strong> 及 <strong>对应法则 $f$</strong>. 如果两个函数的定义域相同，对应法则也相同，那么这两个函数就是相同的.
+      </p>
+      <p>
+        在坐标平面上，点集 $\{P(x, y) \mid y = f(x), x \in D\}$ 称为函数 $y = f(x)$ 的图形.
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_1.webp" alt="图 1-1 函数图形与值域" loading="lazy">
+          <figcaption>图 1-1 函数图形与值域</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_2.webp" alt="图 1-2 常数函数 y=2" loading="lazy">
+          <figcaption>图 1-2 常数函数 $y = 2$</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 5 (常数函数)</div>
+        <p>函数 $y = 2$ 的定义域 $D = (-\infty, +\infty)$，值域 $W = \{2\}$，图形是一条平行于 $x$ 轴的直线（如图 1-2 所示）.</p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 6 (绝对值函数)</div>
+        <p>函数 $$y = |x| = \begin{cases} -x, & x < 0 \\ x, & x \ge 0 \end{cases}$$，定义域 $D = (-\infty, +\infty)$，值域 $R_f = [0, +\infty)$，图形如图 1-3 所示.</p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 7 (符号函数)</div>
+        <p>
+          函数 $$y = \operatorname{sgn} x = \begin{cases} -1, & x < 0 \\ 0, & x = 0 \\ 1, & x > 0 \end{cases}$$，定义域 $D = (-\infty, +\infty)$，值域 $R_f = \{-1, 0, 1\}$，图形如图 1-4 所示.
+        </p>
+        <p>对于任何实数 $x$，恒有 $x = \operatorname{sgn} x \cdot |x|$.</p>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_3.webp" alt="图 1-3 绝对值函数" loading="lazy">
+          <figcaption>图 1-3 绝对值函数</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_4.webp" alt="图 1-4 符号函数" loading="lazy">
+          <figcaption>图 1-4 符号函数</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 8 (取整函数与阶梯曲线)</div>
+        <p>设 $x$ 为任一实数，不超过 $x$ 的最大整数称为 $x$ 的整数部分，记作 $[x]$. 函数 $y = [x]$ 的定义域为 $\mathbf{R}$，值域为 $\mathbf{Z}$，图形如图 1-5 所示.</p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 9 (分段函数)</div>
+        <p>
+          函数 $$y = f(x) = \begin{cases} 2\sqrt{x}, & 0 \le x \le 1 \\ 1 + x, & x > 1 \end{cases}$$ 是一个分段函数，图形如图 1-6 所示.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_5.webp" alt="图 1-5 取整函数" loading="lazy">
+          <figcaption>图 1-5 取整函数</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_6.webp" alt="图 1-6 分段函数" loading="lazy">
+          <figcaption>图 1-6 分段函数</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. 函数的几种特性</h4>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 (1) 函数的有界性</div>
+        <p>
+          设函数 $f(x)$ 的定义域为 $D$，$X \subset D$. 若存在数 $K_1$，使 $f(x) \le K_1$ 对任一 $x \in X$ 成立，则称 $f(x)$ 在 $X$ 上<strong>有上界</strong>；若存在数 $K_2$，使 $f(x) \ge K_2$ 成立，则称<strong>有下界</strong>.
+        </p>
+        <p>
+          若存在正数 $M$，使得对任一 $x \in X$，恒有 $|f(x)| \le M$，则称 $f(x)$ 在 $X$ 上<strong>有界</strong>. 充要条件是：它在 $X$ 上既有上界又有下界.
+        </p>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 (2) 函数的单调性</div>
+        <p>设函数 $y = f(x)$ 在区间 $I$ 上，对任意两点 $x_1 < x_2$：</p>
+        <ul>
+          <li>恒有 $f(x_1) < f(x_2)$，则称函数在 $I$ 上是<strong>单调增加</strong>的（图 1-7）；</li>
+          <li>恒有 $f(x_1) > f(x_2)$，则称函数在 $I$ 上是<strong>单调减少</strong>的（图 1-8）.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_7.webp" alt="图 1-7 单调增加" loading="lazy">
+          <figcaption>图 1-7 单调增加</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_8.webp" alt="图 1-8 单调减少" loading="lazy">
+          <figcaption>图 1-8 单调减少</figcaption>
+        </figure>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_9.webp" alt="图 1-9 y=x^2" loading="lazy">
+          <figcaption>图 1-9 $y = x^2$</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_10.webp" alt="图 1-10 y=x^3" loading="lazy">
+          <figcaption>图 1-10 $y = x^3$</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 (3) 函数的奇偶性</div>
+        <p>设 $f(x)$ 的定义域 $D$ 关于原点对称：</p>
+        <ul>
+          <li>若 $f(-x) = f(x)$ 恒成立，则称 $f(x)$ 为<strong>偶函数</strong>，其图形关于 $y$ 轴对称（图 1-11）；</li>
+          <li>若 $f(-x) = -f(x)$ 恒成立，则称 $f(x)$ 为<strong>奇函数</strong>，其图形关于坐标原点对称（图 1-12）.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_11.webp" alt="图 1-11 偶函数对称性" loading="lazy">
+          <figcaption>图 1-11 偶函数对称性</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_12.webp" alt="图 1-12 奇函数对称性" loading="lazy">
+          <figcaption>图 1-12 奇函数对称性</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 (4) 函数的周期性</div>
+        <p>
+          若存在非零常数 $l$，使对任一 $x \in D$，恒有 $f(x + l) = f(x)$，则称 $f(x)$ 为<strong>周期函数</strong>，$l$ 称为周期（通常指最小正周期）.
+        </p>
+        <p>例如 $\sin x, \cos x$ 周期为 $2\pi$；$\tan x$ 周期为 $\pi$. 狄利克雷函数 $D(x)$ 无最小正周期.</p>
+      </div>
+
+      <h4>3. 反函数与复合函数</h4>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 1 (反函数的存在性与单调性)</div>
+        <p>
+          若函数 $y = f(x)$ 在区间 $I$ 上单调增加（或单调减少），则它在区间 $I$ 上一定存在单调增加（或单调减少）的反函数 $y = f^{-1}(x)$.
+        </p>
+        <p>
+          直接函数 $y = f(x)$ 与其反函数 $y = f^{-1}(x)$ 的图形关于直线 $y = x$ 对称（如图 1-14 所示）.
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: center; margin: 20px 0;">
+        <figure class="book-figure">
+          <img src="images/fig_1_14.webp" alt="图 1-14 反函数图形对称于 y=x" loading="lazy">
+          <figcaption>图 1-14 反函数图形对称于 $y = x$</figcaption>
+        </figure>
+      </div>
+
+      <h4>4. 初等函数与双曲函数</h4>
+      <p>
+        <strong>五大基本初等函数</strong>：幂函数 $y = x^\mu$、指数函数 $y = a^x$、对数函数 $y = \log_a x$、三角函数与反三角函数. 由它们经有限次四则运算与复合构成的函数称为<strong>初等函数</strong>.
+      </p>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📘 常用双曲函数与恒等式</div>
+        <p>
+          双曲正弦：$\operatorname{sh} x = \frac{e^x - e^{-x}}{2}$；&nbsp;&nbsp;
+          双曲余弦：$\operatorname{ch} x = \frac{e^x + e^{-x}}{2}$；&nbsp;&nbsp;
+          双曲正切：$\operatorname{th} x = \frac{\operatorname{sh} x}{\operatorname{ch} x} = \frac{e^x - e^{-x}}{e^x + e^{-x}}$.
+        </p>
+        <p style="margin-top: 8px;">
+          基本恒等式：$$\operatorname{ch}^2 x - \operatorname{sh}^2 x = 1, \quad \operatorname{sh} 2x = 2\operatorname{sh} x \operatorname{ch} x, \quad \operatorname{ch} 2x = \operatorname{ch}^2 x + \operatorname{sh}^2 x$$
+        </p>
+      </div>
+
+      <div style="display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; margin: 24px 0;">
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_15.webp" alt="图 1-15 双曲正弦与双曲余弦" loading="lazy">
+          <figcaption>图 1-15 双曲正弦与双曲余弦</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_16.webp" alt="图 1-16 双曲正切" loading="lazy">
+          <figcaption>图 1-16 双曲正切</figcaption>
+        </figure>
+        <figure class="book-figure" style="margin: 0;">
+          <img src="images/fig_1_17.webp" alt="图 1-17 反双曲正弦" loading="lazy">
+          <figcaption>图 1-17 反双曲正弦</figcaption>
+        </figure>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 反双曲函数及其对数表达公式</div>
+        <p>反双曲正弦：$y = \operatorname{arsh} x = \ln(x + \sqrt{x^2 + 1}), \quad x \in (-\infty, +\infty)$</p>
+        <p>反双曲余弦：$y = \operatorname{arch} x = \ln(x + \sqrt{x^2 - 1}), \quad x \ge 1$</p>
+        <p>反双曲正切：$y = \operatorname{arth} x = \frac{1}{2}\ln\frac{1 + x}{1 - x}, \quad |x| < 1$</p>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <h2>习题 1-1</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 求下列函数的自然定义域：</p>
+        <p>(1) $y = \frac{1}{\sqrt{x + 2}}$； &nbsp;&nbsp; (2) $y = \sqrt{4 - x^2}$； &nbsp;&nbsp; (3) $y = \ln(x - 1)$； &nbsp;&nbsp; (4) $y = \arcsin\frac{x - 1}{2}$.</p>
+        <p><strong>2.</strong> 下列各组函数中，哪两个函数是相同的？为什么？</p>
+        <p>(1) $f(x) = x, g(x) = \sqrt{x^2}$； &nbsp;&nbsp; (2) $f(x) = \frac{x^2}{x}, g(x) = x$； &nbsp;&nbsp; (3) $f(x) = \sqrt{x - 1}\sqrt{x + 1}, g(x) = \sqrt{x^2 - 1}$.</p>
+        <p><strong>3.</strong> 设 $f(x) = \frac{x - 1}{x + 1}$，求 $f(0), f(1), f(-x), f(x + 1), f(\frac{1}{x}), \frac{1}{f(x)}$.</p>
+        <p><strong>4.</strong> 作出下列函数的图形：</p>
+        <p>(1) $y = |x - 2|$； &nbsp;&nbsp; (2) $y = \begin{cases} x, & x \le 0 \\ x^2, & x > 0 \end{cases}$； &nbsp;&nbsp; (3) $y = \operatorname{sgn}(x - 1)$.</p>
+        <p><strong>5.</strong> 判断下列函数的奇偶性与单调性：</p>
+        <p>(1) $y = x^3 - x$； &nbsp;&nbsp; (2) $y = \ln(x + \sqrt{1 + x^2})$； &nbsp;&nbsp; (3) $y = \frac{e^x - e^{-x}}{e^x + e^{-x}}$.</p>
+      </div>
+
+      <hr style="margin: 45px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 数列的极限</h2>
+
+      <h3>一、数列极限的定义</h3>
+      <p>
+        如果在自然数集 $\mathbf{N}^*$ 与实数集之间存在一个对应法则，对于每一个正整数 $n$，都有唯一确定的实数 $x_n$ 与之对应，那么按次序排成的一列数：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$x_1, x_2, x_3, \dots, x_n, \dots$$
+      </p>
+      <p>称为<strong>数列</strong>，简记为 $\{x_n\}$，其中 $x_n$ 称为数列的<strong>通项</strong>（或一般项）.</p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 1 ($\varepsilon\text{-}N$ 数列极限定义)</div>
+        <p>
+          设 $\{x_n\}$ 为一数列，$a$ 为常数. 如果对于任意给定的正数 $\varepsilon$（不论它多么小），总存在正整数 $N$，使得对于所有大于 $N$ 的项下标 $n$（即当 $n > N$ 时），不等式
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$|x_n - a| < \varepsilon$$
+        </p>
+        <p>都恒成立，那么称常数 $a$ 是数列 $\{x_n\}$ 当 $n \to \infty$ 时的<strong>极限</strong>，并称数列 $\{x_n\}$ <strong>收敛</strong>于 $a$，记作：</p>
+        <p style="text-align: center; margin: 12px 0;">
+          $$\lim_{n \to \infty} x_n = a \quad \text{或} \quad x_n \to a \quad (n \to \infty)$$
+        </p>
+        <p>如果极限不存在，则称数列 $\{x_n\}$ <strong>发散</strong>.</p>
+      </div>
+
+      <p>
+        <strong>几何直观</strong>：不等式 $|x_n - a| < \varepsilon$ 等价于 $a - \varepsilon < x_n < a + \varepsilon$，即点 $x_n$ 落在以 $a$ 为中心、以 $\varepsilon$ 为半径的开邻域 $U(a, \varepsilon)$ 之内. 定义表明：不论邻域多么狭窄，只要从某一项 $N$ 之后，数列中<strong>所有的点 $x_n$ 无一例外全部掉入这个邻域之内</strong>，而邻域外面的点最多只有有限个（至多 $N$ 个）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_21.webp" alt="图 1-21 数列极限的 ε-N 几何邻域图解" loading="lazy">
+          <figcaption>图 1-21 数列极限的 ε-N 几何邻域图解</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_22.webp" alt="图 1-22 摆动衰减数列向极限值逼近的过程" loading="lazy">
+          <figcaption>图 1-22 摆动衰减数列向极限值逼近的过程</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、收敛数列的基本性质</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 收敛数列四大核心性质</div>
+        <ol>
+          <li><strong>唯一性</strong>：如果数列 $\{x_n\}$ 收敛，那么它的极限是<strong>唯一</strong>的；</li>
+          <li><strong>有界性</strong>：如果数列 $\{x_n\}$ 收敛，那么数列 $\{x_n\}$ 必为<strong>有界数列</strong>（即存在正数 $M$，对一切 $n$ 有 $|x_n| \le M$）；</li>
+          <li><strong>保号性</strong>：如果 $\lim_{n \to \infty} x_n = a$，且 $a > 0$（或 $a < 0$），则存在正整数 $N$，当 $n > N$ 时，恒有 $x_n > 0$（或 $x_n < 0$）；</li>
+          <li><strong>子数列收敛性</strong>：如果数列 $\{x_n\}$ 收敛于 $a$，那么它的任何子数列 $\{x_{n_k}\}$ 也收敛于同一个极限 $a$.（常用于通过构造两个极限不等的子数列来证明原数列发散）.</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 函数的极限</h2>
+
+      <h3>一、自变量趋于有限值时函数的极限</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2 ($\varepsilon\text{-}\delta$ 函数极限定义)</div>
+        <p>
+          设函数 $f(x)$ 在点 $x_0$ 的某个去心邻域 $\mathring{U}(x_0, \delta_0)$ 内有定义. 如果对于任意给定的正数 $\varepsilon$（不论它多么小），总存在正数 $\delta$ ($0 < \delta \le \delta_0$)，使得对适合不等式
+        </p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$0 < |x - x_0| < \delta$$
+        </p>
+        <p>的一切 $x$，对应的函数值都满足：</p>
+        <p style="text-align: center; margin: 10px 0;">
+          $$|f(x) - A| < \varepsilon$$
+        </p>
+        <p>那么常数 $A$ 称为函数 $f(x)$ 当 $x \to x_0$ 时的<strong>极限</strong>，记作 $\lim_{x \to x_0} f(x) = A$（图 1-23、图 1-24）.</p>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_23.webp" alt="图 1-23 函数极限的 ε-δ 几何图解" loading="lazy">
+          <figcaption>图 1-23 函数极限的 ε-δ 几何图解</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_24.webp" alt="图 1-24 去心邻域中函数值落在水平带形区域内" loading="lazy">
+          <figcaption>图 1-24 去心邻域中函数值落在水平带形区域内</figcaption>
+        </figure>
+      </div>
+
+      <p>
+        <strong>单侧极限</strong>：
+      </p>
+      <ul>
+        <li><strong>左极限</strong>：$\lim_{x \to x_0^-} f(x) = f(x_0^-)$，限制自变量在 $x_0 - \delta < x < x_0$；</li>
+        <li><strong>右极限</strong>：$\lim_{x \to x_0^+} f(x) = f(x_0^+)$，限制自变量在 $x_0 < x < x_0 + \delta$.</li>
+      </ul>
+      <p><strong>定理</strong>：$\lim_{x \to x_0} f(x) = A \iff f(x_0^-) = f(x_0^+) = A$.</p>
+
+      <h3>二、自变量趋于无穷大时函数的极限</h3>
+      <p>
+        当 $x \to +\infty, x \to -\infty$ 或 $x \to \infty$ 时，若对任意 $\varepsilon > 0$，总存在大正数 $X$，当 $|x| > X$ 时恒有 $|f(x) - A| < \varepsilon$，记作 $\lim_{x \to \infty} f(x) = A$（图 1-25 至图 1-29）. 几何上，直线 $y = A$ 为曲线 $y = f(x)$ 的<strong>水平渐近线</strong>.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_25.webp" alt="图 1-25 函数在 x 趋于无穷大时的水平渐近线逼近" loading="lazy">
+          <figcaption>图 1-25 函数在 x 趋于无穷大时的水平渐近线逼近</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_26.webp" alt="图 1-26 分段连续曲线左右极限综合判别图" loading="lazy">
+          <figcaption>图 1-26 分段连续曲线左右极限综合判别图</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_27.webp" alt="图 1-27 极限存在性与单侧极限一致性判断例题" loading="lazy">
+          <figcaption>图 1-27 极限存在性与单侧极限一致性判断例题</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_28.webp" alt="图 1-28 函数极限不存在的跳跃型图形" loading="lazy">
+          <figcaption>图 1-28 函数极限不存在的跳跃型图形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_29.webp" alt="图 1-29 衰减阻尼函数振荡趋于水平渐近线" loading="lazy">
+          <figcaption>图 1-29 衰减阻尼函数振荡趋于水平渐近线</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节与第五节 -->
+      <h2>第四节与第五节 无穷小、无穷大与极限运算法则</h2>
+      <p>
+        如果函数 $\alpha(x)$ 当 $x \to x_0$ 时的极限等于零，称 $\alpha(x)$ 为当 $x \to x_0$ 时的<strong>无穷小量</strong>. 类似地，若 $|f(x)|$ 无限增大，则称 $f(x)$ 为<strong>无穷大量</strong>.
+      </p>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 极限与无穷小的关系及运算法则</div>
+        <ol>
+          <li>$\lim f(x) = A \iff f(x) = A + \alpha(x)$（其中 $\alpha(x)$ 为无穷小）；</li>
+          <li>有限个无穷小的和与积仍为无穷小；有界函数与无穷小的积仍为无穷小；</li>
+          <li>四则运算法则：若 $\lim f(x) = A, \lim g(x) = B$，则 $\lim [f(x) \pm g(x)] = A \pm B, \lim [f(x)g(x)] = AB, \lim \frac{f(x)}{g(x)} = \frac{A}{B} \quad (B \ne 0)$.</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第六节 -->
+      <h2>第六节 极限存在准则 两个重要极限</h2>
+
+      <h3>一、夹逼准则与单调有界收敛准则</h3>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 准则 Ⅰ (夹逼准则 Squeeze Theorem)</div>
+        <p>
+          如果函数 $f(x), g(x), h(x)$ 在点 $x_0$ 的某去心邻域内满足 $g(x) \le f(x) \le h(x)$，且 $\lim_{x \to x_0} g(x) = \lim_{x \to x_0} h(x) = A$，那么必有 $\lim_{x \to x_0} f(x) = A$.
+        </p>
+      </div>
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 准则 Ⅱ (单调有界准则)</div>
+        <p>单调增加有上界（或单调减少有下界）的数列必有极限.</p>
+      </div>
+
+      <h3>二、两个重要极限</h3>
+
+      <h4>1. 第一个重要极限：$\lim_{x \to 0} \frac{\sin x}{x} = 1$</h4>
+      <p>
+        在单位圆中（图 1-30、图 1-31），设圆心角为 $x \in (0, \frac{\pi}{2})$. 比较 $\triangle OAB$ 面积、扇形 $OAB$ 面积与 $\triangle OAC$ 面积：
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\frac{1}{2}\sin x < \frac{1}{2}x < \frac{1}{2}\tan x \quad \implies \quad \cos x < \frac{\sin x}{x} < 1$$
+      </p>
+      <p>由夹逼准则，当 $x \to 0$ 时 $\cos x \to 1$，故得证.</p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_30.webp" alt="图 1-30 单位圆中扇形与三角形面积几何夹逼图" loading="lazy">
+          <figcaption>图 1-30 单位圆中扇形与三角形面积几何夹逼图</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_31.webp" alt="图 1-31 函数 y = sin x / x 在原点处的连续平滑极限" loading="lazy">
+          <figcaption>图 1-31 函数 y = sin x / x 在原点处的连续平滑极限</figcaption>
+        </figure>
+      </div>
+
+      <h4>2. 第二个重要极限：$\lim_{x \to \infty} \left(1 + \frac{1}{x}\right)^x = e$</h4>
+      <p>
+        利用单调有界准则证明数列 $x_n = (1 + \frac{1}{n})^n$ 单调递增且有上界 $3$（图 1-32），收敛极限记为欧拉自然常数 $e \approx 2.718281828459...$ 等价形式：$\lim_{\alpha \to 0} (1 + \alpha)^{\frac{1}{\alpha}} = e$.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_32.webp" alt="图 1-32 数列 (1 + 1/n)ⁿ 单调递增逼近极限 e" loading="lazy">
+          <figcaption>图 1-32 数列 (1 + 1/n)ⁿ 单调递增逼近极限 e</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 无穷小的比较</h2>
+      <p>设 $\alpha, \beta$ 是自变量同一趋向下的无穷小，且 $\beta \ne 0$：</p>
+      <ul>
+        <li>若 $\lim \frac{\alpha}{\beta} = 0$，称 $\alpha$ 是比 $\beta$ <strong>高阶的无穷小</strong>，记作 $\alpha = o(\beta)$；</li>
+        <li>若 $\lim \frac{\alpha}{\beta} = \infty$，称 $\alpha$ 是比 $\beta$ <strong>低阶的无穷小</strong>；</li>
+        <li>若 $\lim \frac{\alpha}{\beta} = c \ne 0$，称 $\alpha$ 与 $\beta$ 是<strong>同阶无穷小</strong>；若 $c = 1$，称 $\alpha$ 与 $\beta$ 是<strong>等价无穷小</strong>，记作 $\alpha \sim \beta$.</li>
+      </ul>
+      <p><strong>常用等价无穷小（当 $x \to 0$ 时）</strong>：</p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$\sin x \sim x, \quad \tan x \sim x, \quad \arcsin x \sim x, \quad \arctan x \sim x, \quad 1 - \cos x \sim \frac{1}{2}x^2$$
+      </p>
+      <p style="text-align: center; margin: 10px 0;">
+        $$e^x - 1 \sim x, \quad \ln(1 + x) \sim x, \quad (1 + x)^\alpha - 1 \sim \alpha x$$
+      </p>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第八节与第九节 -->
+      <h2>第八节与第九节 函数的连续性与间断点</h2>
+
+      <h3>一、连续性的定义</h3>
+      <p>
+        若 $\lim_{\Delta x \to 0} \Delta y = \lim_{\Delta x \to 0}[f(x_0 + \Delta x) - f(x_0)] = 0$，即 $\lim_{x \to x_0} f(x) = f(x_0)$，则称函数在点 $x_0$ 处<strong>连续</strong>（图 1-33）.
+      </p>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_33.webp" alt="图 1-33 函数连续性的增量极限几何解释" loading="lazy">
+          <figcaption>图 1-33 函数连续性的增量极限几何解释</figcaption>
+        </figure>
+      </div>
+
+      <h3>二、函数的间断点及其分类</h3>
+      <p>如果函数在点 $x_0$ 处不连续，称 $x_0$ 为函数的<strong>间断点</strong>（图 1-34 至图 1-39）：</p>
+      <ul>
+        <li><strong>第一类间断点</strong>（左、右极限都存在）：
+          <ul>
+            <li><strong>可去间断点</strong>：$f(x_0^-) = f(x_0^+) \ne f(x_0)$（图 1-36、图 1-37）；</li>
+            <li><strong>跳跃间断点</strong>：$f(x_0^-) \ne f(x_0^+)$（图 1-38）.</li>
+          </ul>
+        </li>
+        <li><strong>第二类间断点</strong>（左、右极限中至少有一个不存在）：
+          <ul>
+            <li><strong>无穷间断点</strong>：极限趋于无穷大（图 1-34）；</li>
+            <li><strong>振荡间断点</strong>：如 $y = \sin\frac{1}{x}$ 当 $x \to 0$ 时在 $[-1, 1]$ 之间无限振荡（图 1-35）.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_34.webp" alt="图 1-34 无穷间断点渐近线图形" loading="lazy">
+          <figcaption>图 1-34 无穷间断点渐近线图形</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_35.webp" alt="图 1-35 振荡间断点 y = sin(1/x) 在原点附近的剧烈密集波动" loading="lazy">
+          <figcaption>图 1-35 振荡间断点 y = sin(1/x) 在原点附近的剧烈密集波动</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_36.webp" alt="图 1-36 可去间断点（挖空单个孤立点）" loading="lazy">
+          <figcaption>图 1-36 可去间断点（挖空单个孤立点）</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_37.webp" alt="图 1-37 重新补充定义后消除间断变为连续" loading="lazy">
+          <figcaption>图 1-37 重新补充定义后消除间断变为连续</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_38.webp" alt="图 1-38 跳跃间断点左右极限不相等阶梯跳跃" loading="lazy">
+          <figcaption>图 1-38 跳跃间断点左右极限不相等阶梯跳跃</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_39.webp" alt="图 1-39 包含多种间断点的分段函数综合图形" loading="lazy">
+          <figcaption>图 1-39 包含多种间断点的分段函数综合图形</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第十节 -->
+      <h2>第十节 闭区间上连续函数的性质</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 闭区间连续函数四大定理</div>
+        <ol>
+          <li><strong>有界性与最大值最小值定理</strong>：在闭区间 $[a, b]$ 上连续的函数必在该区间上有界，且必能取得它的最大值 $M$ 和最小值 $m$（图 1-40）；</li>
+          <li><strong>介值定理</strong>：设 $f(x)$ 在闭区间 $[a, b]$ 上连续，且 $f(a) \ne f(b)$. 那么对于介于 $f(a)$ 与 $f(b)$ 之间的任一实数 $C$，在开区间 $(a, b)$ 内至少存在一点 $\xi$，使得 $f(\xi) = C$（图 1-41）；</li>
+          <li><strong>零点定理</strong>：设 $f(x)$ 在闭区间 $[a, b]$ 上连续，且端点异号 $f(a) \cdot f(b) < 0$，则在开区间 $(a, b)$ 内至少存在一点 $\xi$，使得 $f(\xi) = 0$（即方程 $f(x) = 0$ 在 $(a, b)$ 内至少有一个实根，图 1-42、图 1-43）.</li>
+        </ol>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_40.webp" alt="图 1-40 闭区间上最大值与最小值点必定可达" loading="lazy">
+          <figcaption>图 1-40 闭区间上最大值与最小值点必定可达</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_41.webp" alt="图 1-41 介值定理几何意义：水平线 y = C 与连续曲线必相交" loading="lazy">
+          <figcaption>图 1-41 介值定理几何意义：水平线 y = C 与连续曲线必相交</figcaption>
+        </figure>
+      </div>
+
+      <div class="figure-container">
+        <figure class="book-figure">
+          <img src="images/fig_1_42.webp" alt="图 1-42 零点定理几何直观：曲线穿过 x 轴" loading="lazy">
+          <figcaption>图 1-42 零点定理几何直观：曲线穿过 x 轴</figcaption>
+        </figure>
+        <figure class="book-figure">
+          <img src="images/fig_1_43.webp" alt="图 1-43 端点异号保证连续曲线在区间内至少存在一个零点" loading="lazy">
+          <figcaption>图 1-43 端点异号保证连续曲线在区间内至少存在一个零点</figcaption>
+        </figure>
+      </div>
+
+      <hr style="margin: 40px 0; border: none; border-top: 2px dashed var(--border-color);">
+
+      <!-- 总习题一 -->
+      <h2>总习题一</h2>
+      <div class="exercise-block">
+        <p><strong>1.</strong> 求极限：$\lim_{x \to 0} \frac{\sqrt{1 + x\sin x} - \cos x}{x^2}$.</p>
+        <p><em>解</em>：分子加上 1 减去 1 拆项：<br>
+        $\lim_{x \to 0} \frac{(\sqrt{1 + x\sin x} - 1) + (1 - \cos x)}{x^2} = \lim_{x \to 0} \frac{\frac{1}{2}x\sin x + \frac{1}{2}x^2}{x^2} = \frac{1}{2} + \frac{1}{2} = 1$.</p>
+
+        <p><strong>2.</strong> 设函数 $f(x) = \begin{cases} \frac{\ln(1 + ax)}{x}, & x > 0 \\ b, & x = 0 \\ \frac{\sin 2x}{x}, & x < 0 \end{cases}$ 在 $x = 0$ 处连续，求常数 $a$ 和 $b$.</p>
+        <p><em>解</em>：计算单侧极限：<br>
+        $f(0^+) = \lim_{x \to 0^+} \frac{\ln(1 + ax)}{x} = a$；<br>
+        $f(0^-) = \lim_{x \to 0^-} \frac{\sin 2x}{x} = 2$；<br>
+        因 $f(x)$ 在 $x = 0$ 处连续，$f(0^+) = f(0^-) = f(0) = b \implies a = 2, b = 2$.</p>
+
+        <p><strong>3.</strong> 证明方程 $x = a\sin x + b$ ($a > 0, b > 0$) 至少有一个不超过 $a + b$ 的正实根.</p>
+        <p><em>证</em>：设 $F(x) = x - a\sin x - b$. $F(x)$ 在 $[0, a + b]$ 上连续.<br>
+        $F(0) = -b < 0$；<br>
+        $F(a + b) = a + b - a\sin(a + b) - b = a(1 - \sin(a + b)) \ge 0$.<br>
+        由零点定理，必存在 $\xi \in (0, a + b]$ 使得 $F(\xi) = 0$，即得证.</p>
+      </div>
+
+
+      <nav class="bottom-nav" style="margin-top: 40px;">
+        <a href="00_前言与目录.html" class="nav-btn">← 上一章: 前言与目录</a>
+        <a href="index.html" class="nav-btn">返回目录</a>
+        <a href="02_第二章_导数与微分.html" class="nav-btn primary">下一章: 第二章 导数与微分 →</a>
+      </nav>
+
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>同济大学数学系《高等数学》（第八版）纯文本与公式数字化重构版 · 保留全部定义、定理、例题与独立矢量插图</p>
+  </footer>
+
+</body>
+</html>

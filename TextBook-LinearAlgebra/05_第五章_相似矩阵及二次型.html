@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第五章 相似矩阵及二次型 - 工程数学 线性代数 (第七版)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📐</span> 工程数学 线性代数 (第七版) · 数字化重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="04_第四章_向量组的线性相关性.html" class="nav-btn">← 上一章: 向量组线性相关性</a>
+      <a href="06_第六章_线性空间与线性变换.html" class="nav-btn primary">下一章: 线性空间与线性变换 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第五章 相似矩阵及二次型</h1>
+      <p class="chapter-intro">
+        本章是线性代数理论与工程应用的集大成者。从几何上看，同一线性变换在不同的空间基底（坐标系）下具有不同的矩阵表示，这些矩阵彼此“相似”；那么是否存在一组最优基底，使得变换矩阵简化为最理想的<strong>对角矩阵</strong>？从代数与解析上看，多变量二次函数（二次型）描述了物理中的动能、势能极值、多元微积分极值判别以及二次曲面的空间形态，如何通过坐标轴的旋转将其化为纯平方项的“标准形”？本章将系统建立内积空间与正交理论、特征值与特征向量、相似对角化、实对称矩阵正交对角化、二次型标准形及正定性理论。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 向量的内积、长度及正交性</h2>
+
+      <h3>一、向量内积的公理化定义与性质</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.1 向量的内积</div>
+        <p>
+          设有 $n$ 维实向量 $\boldsymbol{x} = (x_1, x_2, \dots, x_n)^T$ 与 $\boldsymbol{y} = (y_1, y_2, \dots, y_n)^T$。数：
+        </p>
+        $$[\boldsymbol{x}, \boldsymbol{y}] = \boldsymbol{x}^T \boldsymbol{y} = \sum_{i=1}^n x_i y_i = x_1 y_1 + x_2 y_2 + \cdots + x_n y_n$$
+        <p>
+          称为向量 $\boldsymbol{x}$ 与 $\boldsymbol{y}$ 的<strong>内积 (Inner Product)</strong>（或点积）。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 内积满足的四条基本公理</div>
+        <ol>
+          <li><strong>对称性</strong>：$[\boldsymbol{x}, \boldsymbol{y}] = [\boldsymbol{y}, \boldsymbol{x}]$；</li>
+          <li><strong>齐次性</strong>：$[\lambda \boldsymbol{x}, \boldsymbol{y}] = \lambda [\boldsymbol{x}, \boldsymbol{y}]$ ($\lambda \in \mathbb{R}$)；</li>
+          <li><strong>可加性</strong>：$[\boldsymbol{x} + \boldsymbol{y}, \boldsymbol{z}] = [\boldsymbol{x}, \boldsymbol{z}] + [\boldsymbol{y}, \boldsymbol{z}]$；</li>
+          <li><strong>非负正定性</strong>：$[\boldsymbol{x}, \boldsymbol{x}] \ge 0$，且 $[\boldsymbol{x}, \boldsymbol{x}] = 0 \iff \boldsymbol{x} = \boldsymbol{0}$。</li>
+        </ol>
+      </div>
+
+      <h3>二、向量的长度（范数）与柯西-许瓦茨不等式</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.2 向量长度与夹角</div>
+        <p>
+          非负实数：
+        </p>
+        $$\|\boldsymbol{x}\| = \sqrt{[\boldsymbol{x}, \boldsymbol{x}]} = \sqrt{\sum_{i=1}^n x_i^2} = \sqrt{x_1^2 + x_2^2 + \cdots + x_n^2}$$
+        <p>
+          称为 $n$ 维向量 $\boldsymbol{x}$ 的<strong>长度 (Length)</strong>（或范数 Norm）。长度为 1 的向量称为<strong>单位向量</strong>。非零向量除以其自身长度得到单位向量的过程 $\boldsymbol{x}_0 = \frac{\boldsymbol{x}}{\|\boldsymbol{x}\|}$ 称为<strong>单位化</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 柯西-许瓦茨 (Cauchy-Schwarz) 不等式与三角不等式</div>
+        <p><strong>1. 柯西-许瓦茨不等式</strong>：对任意实向量 $\boldsymbol{x}, \boldsymbol{y}$，恒有：</p>
+        $$|[\boldsymbol{x}, \boldsymbol{y}]| \le \|\boldsymbol{x}\| \|\boldsymbol{y}\| \quad \left(\text{即 } \left(\sum_{i=1}^n x_i y_i\right)^2 \le \left(\sum_{i=1}^n x_i^2\right)\left(\sum_{i=1}^n y_i^2\right)\right),$$
+        <p>等号成立当且仅当 $\boldsymbol{x}$ 与 $\boldsymbol{y}$ 线性相关（共线）。</p>
+        <p><strong>2. 夹角定义</strong>：因为 $\frac{|[\boldsymbol{x}, \boldsymbol{y}]|}{\|\boldsymbol{x}\| \|\boldsymbol{y}\|} \le 1$，故对非零向量 $\boldsymbol{x}, \boldsymbol{y}$，可唯一确定角 $\theta \in [0, \pi]$ 使得：</p>
+        $$\cos \theta = \frac{[\boldsymbol{x}, \boldsymbol{y}]}{\|\boldsymbol{x}\| \|\boldsymbol{y}\|}.$$
+        <p>$\theta$ 称为向量 $\boldsymbol{x}$ 与 $\boldsymbol{y}$ 的<strong>夹角</strong>。</p>
+        <p><strong>3. 三角不等式</strong>：$\|\boldsymbol{x} + \boldsymbol{y}\| \le \|\boldsymbol{x}\| + \|\boldsymbol{y}\|$。</p>
+      </div>
+
+      <h3>三、正交性与施密特正交化过程</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.3 正交与标准正交基</div>
+        <p>
+          若 $[\boldsymbol{x}, \boldsymbol{y}] = 0$，则称向量 $\boldsymbol{x}$ 与 $\boldsymbol{y}$ <strong>正交 (Orthogonal)</strong>（或垂直），记作 $\boldsymbol{x} \perp \boldsymbol{y}$。零向量与任意向量正交。
+        </p>
+        <p>
+          若向量组 $\boldsymbol{e}_1, \boldsymbol{e}_2, \dots, \boldsymbol{e}_r$ 满足：
+        </p>
+        $$[\boldsymbol{e}_i, \boldsymbol{e}_j] = \delta_{ij} = \begin{cases} 1, & i = j \\ 0, & i \ne j \end{cases}$$
+        <p>
+          则称该向量组为一个<strong>标准正交向量组</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 5.1 正交向量组的线性无关性</div>
+        <p>
+          由<strong>非零向量组成的任意正交向量组，必定线性无关！</strong>
+        </p>
+        <p><em>证明</em>：设正交向量组 $\boldsymbol{\beta}_1, \dots, \boldsymbol{\beta}_m$ 满足两两内积为 0。设 $k_1 \boldsymbol{\beta}_1 + \dots + k_m \boldsymbol{\beta}_m = \boldsymbol{0}$。
+        两端分别与 $\boldsymbol{\beta}_i$ 作内积：</p>
+        $$k_i [\boldsymbol{\beta}_i, \boldsymbol{\beta}_i] = 0 \implies k_i \|\boldsymbol{\beta}_i\|^2 = 0.$$
+        <p>因为 $\boldsymbol{\beta}_i \ne \boldsymbol{0} \implies \|\boldsymbol{\beta}_i\| > 0$，故必有 $k_i = 0$ ($i=1,\dots,m$)。证毕。</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 施密特 (Gram-Schmidt) 正交化与单位化过程</div>
+        <p>
+          设 $\boldsymbol{\alpha}_1, \boldsymbol{\alpha}_2, \dots, \boldsymbol{\alpha}_m$ 是线性无关的向量组。按如下两阶段构造标准正交向量组：
+        </p>
+        <p><strong>阶段一：正交化（投影修正消去同向投影分量）</strong>：</p>
+        $$\begin{aligned}
+        \boldsymbol{\beta}_1 &= \boldsymbol{\alpha}_1, \\
+        \boldsymbol{\beta}_2 &= \boldsymbol{\alpha}_2 - \frac{[\boldsymbol{\alpha}_2, \boldsymbol{\beta}_1]}{\|\boldsymbol{\beta}_1\|^2} \boldsymbol{\beta}_1, \\
+        \boldsymbol{\beta}_3 &= \boldsymbol{\alpha}_3 - \frac{[\boldsymbol{\alpha}_3, \boldsymbol{\beta}_1]}{\|\boldsymbol{\beta}_1\|^2} \boldsymbol{\beta}_1 - \frac{[\boldsymbol{\alpha}_3, \boldsymbol{\beta}_2]}{\|\boldsymbol{\beta}_2\|^2} \boldsymbol{\beta}_2, \\
+        &\;\vdots \\
+        \boldsymbol{\beta}_m &= \boldsymbol{\alpha}_m - \sum_{k=1}^{m-1} \frac{[\boldsymbol{\alpha}_m, \boldsymbol{\beta}_k]}{\|\boldsymbol{\beta}_k\|^2} \boldsymbol{\beta}_k.
+        \end{aligned}$$
+        <p><strong>阶段二：单位化（归一化）</strong>：</p>
+        $$\boldsymbol{e}_i = \frac{\boldsymbol{\beta}_i}{\|\boldsymbol{\beta}_i\|} \quad (i = 1, 2, \dots, m).$$
+      </div>
+
+      <h3>四、正交矩阵与正交变换</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.4 正交矩阵</div>
+        <p>
+          如果 $n$ 阶实方阵 $A$ 满足：
+        </p>
+        $$A^T A = E \quad (\text{或 } A A^T = E),$$
+        <p>
+          则称 $A$ 为<strong>正交矩阵 (Orthogonal Matrix)</strong>。即正交矩阵的逆矩阵等于其转置矩阵：$A^{-1} = A^T$。
+        </p>
+        <p><strong>等价充要条件</strong>：方阵 $A$ 是正交矩阵 $\iff A$ 的列向量组（或行向量组）是 $\mathbb{R}^n$ 的标准正交基。</p>
+        <p><strong>性质</strong>：</p>
+        <ul>
+          <li>行列式：$|A^T A| = |A|^2 = 1 \implies |A| = 1 \text{ 或 } -1$；</li>
+          <li>正交矩阵的积与逆矩阵仍为正交矩阵；</li>
+          <li><strong>正交变换保内积与长度</strong>：设 $\boldsymbol{y} = A\boldsymbol{x}$ 为正交变换，则：
+            $$[\boldsymbol{y}_1, \boldsymbol{y}_2] = (A\boldsymbol{x}_1)^T (A\boldsymbol{x}_2) = \boldsymbol{x}_1^T (A^T A) \boldsymbol{x}_2 = \boldsymbol{x}_1^T E \boldsymbol{x}_2 = [\boldsymbol{x}_1, \boldsymbol{x}_2].$$
+            特别地，$\|\boldsymbol{y}\| = \|\boldsymbol{x}\|$，即正交变换完全保持两点间距离和夹角不变（空间刚体旋转或镜像反射）。
+          </li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 方阵的特征值与特征向量</h2>
+
+      <h3>一、特征值与特征向量的严格定义与几何直观</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.5 特征值与特征向量</div>
+        <p>
+          设 $A$ 是 $n$ 阶方阵。如果存在实数（或复数）$\lambda$ 和<strong>非零列向量 $\boldsymbol{x}$</strong>，使得：
+        </p>
+        $$A \boldsymbol{x} = \lambda \boldsymbol{x},$$
+        <p>
+          则称数 $\lambda$ 为方阵 $A$ 的<strong>特征值 (Eigenvalue)</strong>，非零向量 $\boldsymbol{x}$ 称为方阵 $A$ 对应于特征值 $\lambda$ 的<strong>特征向量 (Eigenvector)</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 几何意义：保持方向不变的纯伸缩轴</div>
+        <p>
+          矩阵 $A$ 作用在普通向量上，通常会同时改变向量的长度与方向。然而，<strong>特征向量是极其特殊的“主轴方向”</strong>——变换 $A$ 作用在其上完全不改变其空间方向（或反向），仅仅将其纯粹地拉伸或压缩 $\lambda$ 倍！
+        </p>
+      </div>
+
+      <h3>二、特征方程与计算方法</h3>
+      <p>
+        将方程 $A\boldsymbol{x} = \lambda \boldsymbol{x}$ 移项整理为齐次线性方程组形式：
+      </p>
+      $$(\lambda E - A)\boldsymbol{x} = \boldsymbol{0} \quad \text{或} \quad (A - \lambda E)\boldsymbol{x} = \boldsymbol{0}.$$
+      <p>
+        根据第三章定理，该齐次线性方程组存在非零解 $\boldsymbol{x}$ 的<strong>充分必要条件是系数行列式等于 0</strong>：
+      </p>
+      $$|A - \lambda E| = 0 \quad (\text{或 } |\lambda E - A| = 0).$$
+      <div class="callout callout-def">
+        <div class="callout-title">📌 特征多项式与特征方程</div>
+        <ul>
+          <li>多项式 $f(\lambda) = |\lambda E - A| = \lambda^n - \mathrm{tr}(A)\lambda^{n-1} + \dots + (-1)^n |A|$ 称为方阵 $A$ 的<strong>特征多项式</strong>；</li>
+          <li>方程 $|\lambda E - A| = 0$ 称为方阵 $A$ 的<strong>特征方程</strong>；</li>
+          <li>特征方程在复数域内的 $n$ 个根（重根按重数计算）$\lambda_1, \lambda_2, \dots, \lambda_n$ 就是方阵 $A$ 的全部特征值；</li>
+          <li>代入某个特征值 $\lambda_i$，求解齐次线性方程组 $(A - \lambda_i E)\boldsymbol{x} = \boldsymbol{0}$ 的基础解系，其全部非零解即为属于 $\lambda_i$ 的全部特征向量。</li>
+        </ul>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 特征值的代数性质定理</div>
+        <p>设 $n$ 阶方阵 $A$ 的 $n$ 个特征值为 $\lambda_1, \lambda_2, \dots, \lambda_n$，则：</p>
+        <ol>
+          <li><strong>迹等于特征值之和</strong>：$\sum_{i=1}^n \lambda_i = \mathrm{tr}(A) = \sum_{i=1}^n a_{ii}$；</li>
+          <li><strong>行列式等于特征值之积</strong>：$\prod_{i=1}^n \lambda_i = |A|$；<br>
+            <em>推论</em>：$A$ 可逆 $\iff |A| \ne 0 \iff$ 所有的特征值全不为零！
+          </li>
+          <li>若 $\lambda$ 是 $A$ 的特征值，则：
+            <ul>
+              <li>$\lambda^m$ 是 $A^m$ 的特征值；</li>
+              <li>任意多项式 $f(\lambda)$ 是矩阵多项式 $f(A)$ 的特征值；</li>
+              <li>当 $A$ 可逆时，$\lambda^{-1}$ 是 $A^{-1}$ 的特征值，$\frac{|A|}{\lambda}$ 是伴随矩阵 $A^*$ 的特征值；</li>
+              <li>$A^T$ 与 $A$ 拥有完全相同的特征值（因为 $|A^T - \lambda E| = |(A - \lambda E)^T| = |A - \lambda E|$）。</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 5.2 互异特征值对应特征向量线性无关定理</div>
+        <p>
+          <strong>核心定理</strong>：设 $\lambda_1, \lambda_2, \dots, \lambda_m$ 是方阵 $A$ 的 $m$ 个<strong>各不相同的特征值</strong>，$\boldsymbol{p}_1, \boldsymbol{p}_2, \dots, \boldsymbol{p}_m$ 分别是属于这些特征值的特征向量，则向量组 $\boldsymbol{p}_1, \boldsymbol{p}_2, \dots, \boldsymbol{p}_m$ <strong>必定线性无关</strong>！
+        </p>
+        <p><strong>严谨数学归纳法证明</strong>：</p>
+        <p>
+          1. 当 $m=1$ 时，$\boldsymbol{p}_1 \ne \boldsymbol{0}$，单个非零向量显然线性无关。
+        </p>
+        <p>
+          2. 假设当向量个数为 $m-1$ 时定理成立。设有常数 $k_i$ 使得：
+          $$k_1 \boldsymbol{p}_1 + k_2 \boldsymbol{p}_2 + \dots + k_m \boldsymbol{p}_m = \boldsymbol{0}. \quad (*)$$
+          两边同时左乘矩阵 $A$，利用 $A\boldsymbol{p}_i = \lambda_i \boldsymbol{p}_i$：
+          $$k_1 \lambda_1 \boldsymbol{p}_1 + k_2 \lambda_2 \boldsymbol{p}_2 + \dots + k_m \lambda_m \boldsymbol{p}_m = \boldsymbol{0}. \quad (**)$$
+          式 $(*)$ 两端同乘以标量 $\lambda_m$：
+          $$k_1 \lambda_m \boldsymbol{p}_1 + k_2 \lambda_m \boldsymbol{p}_2 + \dots + k_m \lambda_m \boldsymbol{p}_m = \boldsymbol{0}. \quad (***)$$
+          由 $(**) - (***)$ 消去末项 $\boldsymbol{p}_m$：
+          $$k_1(\lambda_1 - \lambda_m)\boldsymbol{p}_1 + k_2(\lambda_2 - \lambda_m)\boldsymbol{p}_2 + \dots + k_{m-1}(\lambda_{m-1} - \lambda_m)\boldsymbol{p}_{m-1} = \boldsymbol{0}.$$
+          由归纳假设，$\boldsymbol{p}_1, \dots, \boldsymbol{p}_{m-1}$ 线性无关，故各项系数全为 0：
+          $$k_i(\lambda_i - \lambda_m) = 0 \quad (i = 1, 2, \dots, m-1).$$
+          因为已知特征值两两互异，$\lambda_i - \lambda_m \ne 0$，因此必有 $k_1 = k_2 = \dots = k_{m-1} = 0$。代回原式 $(*)$ 得 $k_m \boldsymbol{p}_m = \boldsymbol{0} \implies k_m = 0$。
+          所有系数全为零，故 $m$ 个向量线性无关。证毕。
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 相似矩阵</h2>
+
+      <h3>一、相似关系的定义与不变量</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.6 相似矩阵</div>
+        <p>
+          设 $A, B$ 都是 $n$ 阶方阵。如果存在一个<strong>可逆矩阵 $P$</strong>，使得：
+        </p>
+        $$P^{-1} A P = B,$$
+        <p>
+          则称矩阵 $A$ 与矩阵 $B$ <strong>相似 (Similar)</strong>，记作 $A \sim B$。称变换 $P^{-1} A P$ 为对 $A$ 进行的<strong>相似变换</strong>，可逆矩阵 $P$ 称为<strong>相似变换矩阵</strong>。
+        </p>
+        <p>相似关系具有等价性：反身性 $A \sim A$、对称性 $A \sim B \implies B \sim A$、传递性 $A \sim B, B \sim C \implies A \sim C$。</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 相似矩阵的核心共同不变量定理</div>
+        <p>若方阵 $A$ 与 $B$ 相似（$A \sim B$），则它们具有完全相同的：</p>
+        <ol>
+          <li><strong>特征多项式与特征值</strong>：
+            $$|\lambda E - B| = |\lambda E - P^{-1}AP| = |P^{-1}(\lambda E - A)P| = |P^{-1}| |\lambda E - A| |P| = |\lambda E - A|;$$
+          </li>
+          <li><strong>行列式</strong>：$|A| = |B|$；</li>
+          <li><strong>迹</strong>：$\mathrm{tr}(A) = \mathrm{tr}(B)$；</li>
+          <li><strong>秩</strong>：$R(A) = R(B)$；</li>
+          <li><strong>可逆性</strong>：$A$ 可逆 $\iff B$ 可逆。</li>
+        </ol>
+      </div>
+
+      <h3>二、矩阵与对角阵相似（可对角化）的充要条件</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 5.3 矩阵相似对角化充要条件</div>
+        <p>
+          $n$ 阶方阵 $A$ 与对角矩阵相似（即存在可逆矩阵 $P$ 使得 $P^{-1}AP = \Lambda = \mathrm{diag}(\lambda_1, \dots, \lambda_n)$）的<strong>充分必要条件是</strong>：
+        </p>
+        <p style="text-align: center; font-size: 1.1rem; font-weight: 600; color: #b45309;">
+          方阵 $A$ 拥有 $n$ 个线性无关的特征向量！
+        </p>
+        <p><strong>严谨证明</strong>：</p>
+        <p>
+          设 $P = (\boldsymbol{p}_1, \boldsymbol{p}_2, \dots, \boldsymbol{p}_n)$。则：
+          $$AP = A(\boldsymbol{p}_1, \dots, \boldsymbol{p}_n) = (A\boldsymbol{p}_1, \dots, A\boldsymbol{p}_n).$$
+          若 $P^{-1}AP = \Lambda = \mathrm{diag}(\lambda_1, \dots, \lambda_n) \iff AP = P\Lambda$：
+          $$P\Lambda = (\boldsymbol{p}_1, \dots, \boldsymbol{p}_n)\begin{pmatrix} \lambda_1 & & \\ & \ddots & \\ & & \lambda_n \end{pmatrix} = (\lambda_1 \boldsymbol{p}_1, \dots, \lambda_n \boldsymbol{p}_n).$$
+          两式相等，当且仅当对于每一列有 $A\boldsymbol{p}_i = \lambda_i \boldsymbol{p}_i$ ($i = 1, \dots, n$)。
+          且 $P$ 可逆当且仅当其 $n$ 个列向量 $\boldsymbol{p}_1, \dots, \boldsymbol{p}_n$ 线性无关。证毕。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 可对角化的两个实用判据</div>
+        <ol>
+          <li><strong>充分条件</strong>：若 $n$ 阶方阵 $A$ 拥有 $n$ 个<strong>两两互异的特征值</strong>，则由定理 5.2，$A$ 的 $n$ 个特征向量必线性无关，因此 <strong>$A$ 必可对角化</strong>！</li>
+          <li><strong>重根情形的几何重数充要判据</strong>：若特征方程含有重根，设 $\lambda_i$ 是 $k_i$ 重特征值，则 $A$ 可对角化 $\iff$ 对应齐次方程组 $(A - \lambda_i E)\boldsymbol{x} = \boldsymbol{0}$ 的基础解系向量个数（几何重数）严格等于代数重数：
+            $$n - R(A - \lambda_i E) = k_i.$$
+          </li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 对称矩阵的对角化</h2>
+
+      <p>
+        普通矩阵不一定能对角化，但<strong>实对称矩阵 ($A^T = A$)</strong> 具有极其优越的几何对称性与完美的代数性质，它是工程数学中最重要的矩阵类别。
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 实对称矩阵的三大核心定理</div>
+        <p><strong>定理 5.4</strong>：实对称矩阵的特征值全部是<strong>实数</strong>（无虚根）。</p>
+        <p><strong>定理 5.5</strong>：实对称矩阵对应于<strong>不同特征值的特征向量必定正交</strong>！</p>
+        <p><em>证明</em>：设 $A\boldsymbol{p}_1 = \lambda_1 \boldsymbol{p}_1$，$A\boldsymbol{p}_2 = \lambda_2 \boldsymbol{p}_2$，且 $\lambda_1 \ne \lambda_2$。因 $A$ 为实对称矩阵：</p>
+        $$\lambda_1 [\boldsymbol{p}_1, \boldsymbol{p}_2] = [\lambda_1 \boldsymbol{p}_1, \boldsymbol{p}_2] = [A\boldsymbol{p}_1, \boldsymbol{p}_2] = (A\boldsymbol{p}_1)^T \boldsymbol{p}_2 = \boldsymbol{p}_1^T A^T \boldsymbol{p}_2 = \boldsymbol{p}_1^T (A\boldsymbol{p}_2) = \boldsymbol{p}_1^T (\lambda_2 \boldsymbol{p}_2) = \lambda_2 [\boldsymbol{p}_1, \boldsymbol{p}_2].$$
+        $$(\lambda_1 - \lambda_2)[\boldsymbol{p}_1, \boldsymbol{p}_2] = 0.$$
+        <p>因 $\lambda_1 \ne \lambda_2$，故必有 $[\boldsymbol{p}_1, \boldsymbol{p}_2] = 0$，即两特征向量必定正交！证毕。</p>
+        <p><strong>定理 5.6 (谱定理 Spectral Theorem)</strong>：</p>
+        <p>
+          对于任意一个 $n$ 阶实对称矩阵 $A$，<strong>必定存在正交矩阵 $P$</strong>，使得：
+        </p>
+        $$P^{-1} A P = P^T A P = \Lambda = \begin{pmatrix} \lambda_1 & & \\ & \ddots & \\ & & \lambda_n \end{pmatrix}.$$
+        <p>其中对角矩阵的主对角元就是 $A$ 的 $n$ 个实特征值。</p>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 实对称矩阵正交相似对角化四步标准流程</div>
+        <ol>
+          <li><strong>求特征值</strong>：解特征方程 $|A - \lambda E| = 0$，求出所有特征值及其重数；</li>
+          <li><strong>求特征向量</strong>：对每个特征值 $\lambda_i$，求解齐次线性方程组 $(A - \lambda_i E)\boldsymbol{x} = \boldsymbol{0}$ 的基础解系；</li>
+          <li><strong>正交化与单位化</strong>：
+            <ul>
+              <li>不同特征值对应的特征向量已自动正交（定理 5.5）；</li>
+              <li>同一重特征值对应的特征向量若不垂直，应用<strong>施密特正交化</strong>将其化为正交向量组；</li>
+              <li>将所有得到的正交特征向量进行<strong>单位化</strong>；</li>
+            </ul>
+          </li>
+          <li><strong>构造正交矩阵 $P$</strong>：以这组标准正交向量作为列构成矩阵 $P = (\boldsymbol{e}_1, \dots, \boldsymbol{e}_n)$，则必有 $P^T P = E$ 且 $P^T A P = \Lambda$。</li>
+        </ol>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五、六节 -->
+      <h2>第五节 二次型及其标准形与配方法</h2>
+
+      <h3>一、二次型与对称矩阵</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.7 二次型与矩阵表示</div>
+        <p>
+          含有 $n$ 个变量 $x_1, x_2, \dots, x_n$ 的二次齐次多项式：
+        </p>
+        $$f(x_1, \dots, x_n) = a_{11}x_1^2 + 2a_{12}x_1 x_2 + \cdots + 2a_{1n}x_1 x_n + a_{22}x_2^2 + \cdots + a_{nn}x_n^2$$
+        <p>
+          称为实数域上的 <strong>$n$ 元二次型</strong>。记交叉项系数为对称形式 $a_{ij} = a_{ji}$，则二次型可以写成矩阵乘积：
+        </p>
+        $$f = \boldsymbol{x}^T A \boldsymbol{x},$$
+        <p>
+          其中 $\boldsymbol{x} = (x_1, \dots, x_n)^T$，$A = (a_{ij})$ 为 $n$ 阶<strong>实对称矩阵</strong>，称为二次型 $f$ 的矩阵。方阵 $A$ 的秩称为二次型 $f$ 的<strong>秩</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.8 矩阵的合同 (Congruence)</div>
+        <p>
+          令可逆线性变量替换 $\boldsymbol{x} = C\boldsymbol{y}$（其中 $C$ 为可逆矩阵）。代入二次型：
+        </p>
+        $$f = \boldsymbol{x}^T A \boldsymbol{x} = (C\boldsymbol{y})^T A (C\boldsymbol{y}) = \boldsymbol{y}^T (C^T A C) \boldsymbol{y} = \boldsymbol{y}^T B \boldsymbol{y}.$$
+        <p>
+          若存在可逆矩阵 $C$，使得 $B = C^T A C$，则称实对称矩阵 $A$ 与 $B$ <strong>合同 (Congruent)</strong>，记作 $A \simeq B$。合同变换保持矩阵的对称性与秩不变（$R(B) = R(A)$）。
+        </p>
+      </div>
+
+      <h3>二、标准形与化简的两大方法</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.9 二次型的标准形与规范形</div>
+        <p>
+          只含有变量平方项的二次型：
+        </p>
+        $$f = d_1 y_1^2 + d_2 y_2^2 + \cdots + d_r y_r^2 \quad (r = R(A))$$
+        <p>
+          称为二次型的<strong>标准形 (Canonical Form)</strong>。若平方项系数仅取 $+1, -1, 0$，称为<strong>规范形</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 化二次型为标准形的两大经典方法</div>
+        <p><strong>方法 1：正交变换法（几何保距主轴旋转法）</strong></p>
+        <p>
+          由谱定理，对实对称矩阵 $A$，必存在正交矩阵 $P$ 使得 $P^T A P = \Lambda = \mathrm{diag}(\lambda_1, \dots, \lambda_n)$。
+          做正交变量变换 $\boldsymbol{x} = P\boldsymbol{y}$，二次型化为标准形：
+        </p>
+        $$f = \lambda_1 y_1^2 + \lambda_2 y_2^2 + \cdots + \lambda_n y_n^2.$$
+        <p><em>核心优势</em>：正交变换不改变空间的几何度量与形状，在解析几何中对应于椭圆、双曲面的主轴旋转。</p>
+
+        <p><strong>方法 2：拉格朗日配方法（初等代数配平法）</strong></p>
+        <ul>
+          <li><strong>含平方项</strong>：若含 $x_1^2$，将含 $x_1$ 的所有项合并配方：$a_{11}x_1^2 + 2a_{12}x_1 x_2 + \dots = a_{11}\left(x_1 + \frac{a_{12}}{a_{11}}x_2 + \dots\right)^2 + \text{余项}$，令 $y_1 = x_1 + \frac{a_{12}}{a_{11}}x_2 + \dots$；</li>
+          <li><strong>无平方项</strong>：若所有 $a_{ii} = 0$，但存在 $a_{12} \ne 0$，先作初等可逆代换 $x_1 = t_1 + t_2, x_2 = t_1 - t_2$，则 $x_1 x_2 = t_1^2 - t_2^2$，人工创造出平方项后再实施配方。</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第七节 -->
+      <h2>第七节 正定二次型</h2>
+
+      <h3>一、惯性定理与正定定义</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 5.7 惯性定理 (Sylvester's Law of Inertia)</div>
+        <p>
+          任何实二次型无论选用何种可逆线性变换化为标准形，其<strong>正平方项的项数 $p$（正惯性指数）和负平方项的项数 $q$（负惯性指数）是唯一确定的，与所用的坐标变换无关！</strong>
+          差数 $p - q$ 称为二次型的符号差。
+        </p>
+      </div>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 5.10 正定二次型与正定矩阵</div>
+        <p>
+          设二次型 $f(\boldsymbol{x}) = \boldsymbol{x}^T A \boldsymbol{x}$。对于任意<strong>非零向量 $\boldsymbol{x} \ne \boldsymbol{0}$</strong>：
+        </p>
+        <ul>
+          <li>若恒有 $\boldsymbol{x}^T A \boldsymbol{x} > 0$，则称二次型 $f$ 为<strong>正定二次型</strong>，其对称矩阵 $A$ 称为<strong>正定矩阵</strong>；</li>
+          <li>若恒有 $\boldsymbol{x}^T A \boldsymbol{x} < 0$，则称 $f$ 为<strong>负定二次型</strong>，$A$ 为<strong>负定矩阵</strong>；</li>
+          <li>若恒有 $\boldsymbol{x}^T A \boldsymbol{x} \ge 0$，称为<strong>半正定</strong>；$\le 0$ 称为<strong>半负定</strong>；</li>
+          <li>若既能取正值又能取负值，称为<strong>不定</strong>。</li>
+        </ul>
+      </div>
+
+      <h3>二、正定性的四大判定准则</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 5.8 正定矩阵判定四大充要条件</div>
+        <p>设 $A$ 为 $n$ 阶实对称矩阵，以下各条件等价：</p>
+        <ol>
+          <li>$A$ 是正定矩阵；</li>
+          <li>二次型 $f$ 的<strong>正惯性指数等于阶数 $p = n$</strong>（规范形为 $y_1^2 + y_2^2 + \dots + y_n^2$）；</li>
+          <li>$A$ 的<strong>所有特征值严格全部大于零</strong>：$\lambda_i > 0$ ($i = 1, \dots, n$)；</li>
+          <li>$A$ <strong>合同于单位矩阵 $E$</strong>：存在可逆方阵 $C$ 使得 $A = C^T C$；</li>
+          <li><strong>赫尔维茨准则 (Hurwitz's Criterion)</strong>：矩阵 $A$ 的<strong>各阶顺序主子式全为正数</strong>：
+            $$D_1 = a_{11} > 0, \quad D_2 = \begin{vmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{vmatrix} > 0, \quad \dots, \quad D_n = |A| > 0.$$
+          </li>
+        </ol>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 负定矩阵判定法则</div>
+        <p>
+          实对称矩阵 $A$ 为<strong>负定矩阵</strong> $\iff -A$ 为正定矩阵 $\iff$ <strong>各阶顺序主子式正负相间（奇数阶负，偶数阶正）</strong>：
+          $$(-1)^k D_k > 0 \implies D_1 < 0, \; D_2 > 0, \; D_3 < 0, \; D_4 > 0, \dots$$
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题五 -->
+      <h2>习题五 精选题解与综合演练</h2>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 5.1 实对称矩阵正交变换化二次型为标准形</div>
+        <p><strong>题目</strong>：求一个正交变换 $\boldsymbol{x} = P\boldsymbol{y}$，化二次型为标准形：</p>
+        $$f = 2x_1^2 + 3x_2^2 + 3x_3^2 + 4x_2 x_3.$$
+        <p><strong>解答与解析</strong>：</p>
+        <p>写出二次型的实对称矩阵：</p>
+        $$A = \begin{pmatrix} 2 & 0 & 0 \\ 0 & 3 & 2 \\ 0 & 2 & 3 \end{pmatrix}.$$
+        <p>计算特征多项式：</p>
+        $$|A - \lambda E| = \begin{vmatrix} 2-\lambda & 0 & 0 \\ 0 & 3-\lambda & 2 \\ 0 & 2 & 3-\lambda \end{vmatrix} = (2-\lambda)[(3-\lambda)^2 - 4] = (2-\lambda)(\lambda-1)(\lambda-5) = 0.$$
+        <p>特征值为 $\lambda_1 = 1, \lambda_2 = 2, \lambda_3 = 5$（互不相同）。</p>
+        <p>分别求属于各特征值的单位特征向量：</p>
+        <ul>
+          <li>对应 $\lambda_1 = 1$：解 $(A - E)\boldsymbol{x} = \boldsymbol{0}$，得基础解系 $\boldsymbol{p}_1 = (0, 1, -1)^T$，单位化得：$\boldsymbol{e}_1 = \left(0, \frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}\right)^T$；</li>
+          <li>对应 $\lambda_2 = 2$：解 $(A - 2E)\boldsymbol{x} = \boldsymbol{0}$，得基础解系 $\boldsymbol{p}_2 = (1, 0, 0)^T$，自身已是单位向量：$\boldsymbol{e}_2 = (1, 0, 0)^T$；</li>
+          <li>对应 $\lambda_3 = 5$：解 $(A - 5E)\boldsymbol{x} = \boldsymbol{0}$，得基础解系 $\boldsymbol{p}_3 = (0, 1, 1)^T$，单位化得：$\boldsymbol{e}_3 = \left(0, \frac{1}{\sqrt{2}}, \frac{1}{\sqrt{2}}\right)^T$。</li>
+        </ul>
+        <p>构造正交矩阵：</p>
+        $$P = (\boldsymbol{e}_1, \boldsymbol{e}_2, \boldsymbol{e}_3) = \begin{pmatrix}
+        0 & 1 & 0 \\
+        \frac{1}{\sqrt{2}} & 0 & \frac{1}{\sqrt{2}} \\
+        -\frac{1}{\sqrt{2}} & 0 & \frac{1}{\sqrt{2}}
+        \end{pmatrix}.$$
+        <p>正交变换为 $\boldsymbol{x} = P\boldsymbol{y}$，化得的标准形为：</p>
+        $$f = y_1^2 + 2y_2^2 + 5y_3^2.$$
+      </div>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 5.2 含参数二次型的正定性判定</div>
+        <p><strong>题目</strong>：设二次型 $f(x_1, x_2, x_3) = x_1^2 + x_2^2 + 5x_3^2 + 2t x_1 x_2 - 2x_1 x_3 + 4x_2 x_3$ 正定，求参数 $t$ 的取值范围。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p>二次型矩阵为：</p>
+        $$A = \begin{pmatrix} 1 & t & -1 \\ t & 1 & 2 \\ -1 & 2 & 5 \end{pmatrix}.$$
+        <p>应用赫尔维茨准则，计算各阶顺序主子式：</p>
+        <ul>
+          <li>一阶顺序主子式：$D_1 = 1 > 0$（恒成立）；</li>
+          <li>二阶顺序主子式：$D_2 = \begin{vmatrix} 1 & t \\ t & 1 \end{vmatrix} = 1 - t^2 > 0 \implies t^2 < 1 \iff -1 < t < 1$；</li>
+          <li>三阶顺序主子式：$D_3 = |A| = 1(5 - 4) - t(5t + 2) - 1(2t + 1) = 1 - 5t^2 - 2t - 2t - 1 = -5t^2 - 4t > 0$。
+            $$-t(5t + 4) > 0 \implies t(5t + 4) < 0 \iff -\frac{4}{5} < t < 0.$$
+          </li>
+        </ul>
+        <p>求不等式组的交集：</p>
+        $$\begin{cases} -1 < t < 1, \\ -\frac{4}{5} < t < 0 \end{cases} \implies -\frac{4}{5} < t < 0.$$
+        <p>故当且仅当 $-\frac{4}{5} < t < 0$ 时，该二次型为正定二次型。</p>
+      </div>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <a href="04_第四章_向量组的线性相关性.html" class="nav-btn">← 上一章: 第四章 向量组线性相关性</a>
+        <a href="06_第六章_线性空间与线性变换.html" class="nav-btn primary">下一章: 第六章 线性空间与变换 →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>工程数学 线性代数 (第七版) · 同济大学数学科学学院 编 · 数字化重构版</p>
+    <p>全离线矢量 MathJax 3 引擎 · 纯语义 HTML5 架构 · 无任何外部网络依赖</p>
+  </footer>
+
+</body>
+</html>

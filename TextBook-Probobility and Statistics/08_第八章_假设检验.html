@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第八章 假设检验 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="07_第七章_参数估计.html" class="nav-btn">← 上一章: 参数估计</a>
+      <a href="09_附录.html" class="nav-btn primary">下一章: 附录 (常用统计表) →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第八章 假设检验</h1>
+      <p class="chapter-intro">
+        在实际生产与科学研究中，我们常常需要对总体的某些性质做出明智的推断与决策. 例如：某种新型药物的疗效是否显著优于传统药物？新引进的一批流水线加工零件的平均尺寸是否达到设计公差要求？两个不同机床生产的产品精度是否有显著差异？某随机变量是否服从正态分布？解决这一类决策问题的统计方法就是<strong>假设检验</strong>（Hypothesis Testing）.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 检验的基本原理</h2>
+
+      <h3>一、假设检验的基本思想（小概率反证法）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 假设检验的核心逻辑：小概率原理与统计反证法</div>
+        <p><strong>小概率原理</strong>：发生概率很小的事件（如概率小于等于 $\alpha = 0.05$ 或 $0.01$），在一次抽样试验中被认为实际上是<strong>几乎不可能发生的</strong>.</p>
+        <p><strong>假设检验的操作逻辑</strong>：</p>
+        <ol>
+          <li>先对总体的参数或分布形式提出一个初始假定，称为<strong>原假设</strong>（Null Hypothesis），记作 $H_0$；同时设立对立的主张，称为<strong>备择假设</strong>（Alternative Hypothesis），记作 $H_1$；</li>
+          <li>假定原假设 $H_0$ 真实成立的前提下，构造一个检验统计量；</li>
+          <li>如果在由实际抽样得到的这一组样本中，竟然发生了在 $H_0$ 假定下属于“小概率”的极端异常结果，我们就根据小概率原理有充分理由<strong>怀疑并拒绝原假设 $H_0$</strong>，接受备择假设 $H_1$；</li>
+          <li>反之，若未出现异常小概率结果，则称没有充分证据推翻 $H_0$，只能<strong>接受（或不拒绝）原假设 $H_0$</strong>.</li>
+        </ol>
+      </div>
+
+      <h3>二、两类错误与显著性水平</h3>
+      <p>
+        因为结论完全依据部分抽样样本做出，推断必然存在犯错的风险. 假设检验中存在两种互斥性质的错误：
+      </p>
+
+      <div style="text-align:center; margin: 15px 0;">
+        <table style="margin: 0 auto; border-collapse: collapse; border: 1px solid var(--border-color); background: #fff;">
+          <tr style="background: #f1f5f9; border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">真实状态 \ 检验决策</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">接受 $H_0$</th>
+            <th style="padding: 8px 18px; border: 1px solid var(--border-color);">拒绝 $H_0$</th>
+          </tr>
+          <tr>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); font-weight:bold;">$H_0$ 实际上为真</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); color: #15803d;">正确决策 (概率 $1-\alpha$)</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); color: #b91c1c; font-weight:bold;">第一类错误（弃真，概率 $\alpha$）</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); font-weight:bold;">$H_0$ 实际上为假</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); color: #b91c1c; font-weight:bold;">第二类错误（取伪，概率 $\beta$）</td>
+            <td style="padding: 8px 18px; border: 1px solid var(--border-color); color: #15803d;">正确决策 (检验功效 $1-\beta$)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📘 显著性检验原则（Neyman-Pearson 原则）</div>
+        <p>在样本容量 $n$ 固定的情况下，不可能同时使两类错误的概率 $\alpha$ 和 $\beta$ 都无限变小（减少一类错误必然增大另一类错误）. 统计学家奈曼与皮尔逊提出经典处理策略：<strong>控制第一类错误的概率 $\alpha$ 不超过事先给定的容许上限（称为显著性水平 $\alpha$）</strong>，在此前提下尽量使第二类错误 $\beta$ 最小. 这种检验称为<strong>显著性检验</strong>.</p>
+      </div>
+
+      <h3>三、$p$ 值与 $p$ 值检验法</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 8.1：$p$ 值（P-value）</div>
+        <p>在原假设 $H_0$ 为真的前提下，检验统计量取得与当前样本观测值<strong>一样极端或比当前观测值更加极端</strong>的概率，称为<strong>$p$ 值</strong>（又称观测到的显著性水平）.</p>
+        <p><strong>$p$ 值决策准则（现代统计软件统一输出标准）</strong>：</p>
+        <ul>
+          <li>若 $p \le \alpha$：拒绝原假设 $H_0$（观测结果高度显著，不可能发生的结果发生了）；</li>
+          <li>若 $p > \alpha$：接受原假设 $H_0$（数据没有提供足够证据推翻 $H_0$）.</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 正态总体参数的假设检验</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 正态总体参数假设检验大全（全书最核心决策表格）</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; border:1px solid var(--border-color); font-size:13px;">
+            <tr style="background:#f1f5f9; border-bottom:2px solid var(--border-color);">
+              <th style="padding:6px; border:1px solid var(--border-color);">检验问题</th>
+              <th style="padding:6px; border:1px solid var(--border-color);">未知与条件</th>
+              <th style="padding:6px; border:1px solid var(--border-color);">检验统计量</th>
+              <th style="padding:6px; border:1px solid var(--border-color);">双侧检验拒绝域 $H_1: \ne$</th>
+              <th style="padding:6px; border:1px solid var(--border-color);">右侧检验拒绝域 $H_1: >$</th>
+              <th style="padding:6px; border:1px solid var(--border-color);">左侧检验拒绝域 $H_1: <$</th>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding:6px; border:1px solid var(--border-color); font-weight:bold;">单均值 $\mu$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\sigma^2$ 已知 ($Z$ 检验)</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U = \frac{\bar{X}-\mu_0}{\sigma/\sqrt{n}}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$|U| \ge u_{\alpha/2}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U \ge u_\alpha$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U \le -u_\alpha$</td>
+            </tr>
+            <tr>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\sigma^2$ 未知 ($t$ 检验)</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T = \frac{\bar{X}-\mu_0}{S/\sqrt{n}}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$|T| \ge t_{\alpha/2}(n-1)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T \ge t_\alpha(n-1)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T \le -t_\alpha(n-1)$</td>
+            </tr>
+            <tr>
+              <td style="padding:6px; border:1px solid var(--border-color); font-weight:bold;">单方差 $\sigma^2$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\mu$ 未知 ($\chi^2$ 检验)</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\chi^2 = \frac{(n-1)S^2}{\sigma_0^2}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\chi^2 \le \chi_{1-\alpha/2}^2$ 或 $\chi^2 \ge \chi_{\alpha/2}^2$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\chi^2 \ge \chi_\alpha^2(n-1)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\chi^2 \le \chi_{1-\alpha}^2(n-1)$</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding:6px; border:1px solid var(--border-color); font-weight:bold;">双均值差 $\mu_1 - \mu_2$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\sigma_1^2, \sigma_2^2$ 已知</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U = \frac{\bar{X}-\bar{Y}-\delta}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$|U| \ge u_{\alpha/2}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U \ge u_\alpha$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$U \le -u_\alpha$</td>
+            </tr>
+            <tr>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\sigma_1^2 = \sigma_2^2$ 未知</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T = \frac{\bar{X}-\bar{Y}-\delta}{S_w\sqrt{1/n_1 + 1/n_2}}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$|T| \ge t_{\alpha/2}(n_1+n_2-2)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T \ge t_\alpha(n_1+n_2-2)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$T \le -t_\alpha(n_1+n_2-2)$</td>
+            </tr>
+            <tr>
+              <td style="padding:6px; border:1px solid var(--border-color); font-weight:bold;">双方差比 $\sigma_1^2 / \sigma_2^2$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$\mu_1, \mu_2$ 未知 ($F$ 检验)</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$F = \frac{S_1^2}{S_2^2}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$F \ge F_{\alpha/2}$ 或 $F \le F_{1-\alpha/2}$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$F \ge F_\alpha(n_1-1, n_2-1)$</td>
+              <td style="padding:6px; border:1px solid var(--border-color);">$F \le F_{1-\alpha}(n_1-1, n_2-1)$</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 拟合优度检验（$\chi^2$ 检验）</h2>
+      <p>
+        前面两节讨论的是已知总体分布形式时针对未知数值参数的假设检验；但在很多情况下，总体究竟服从什么类型的概率分布本身也是未知的. 检验总体是否服从某种特定分布（如是否服从正态分布、泊松分布等）的方法称为<strong>拟合优度检验</strong>（Goodness of Fit Test）.
+      </p>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 定理 8.1：皮尔逊 $\chi^2$ 拟合优度检验定理</div>
+        <p>设总体的实际样本观测频数为 $f_1, f_2, \dots, f_k$（满足 $\sum f_i = n$），在假设总体分布成立下的理论概率为 $p_i$，理论频数为 $n p_i$. 构造皮尔逊检验统计量：
+          $$\chi^2 = \sum_{i=1}^k \frac{(f_i - n p_i)^2}{n p_i}$$
+          当样本容量 $n \to \infty$ 时，该统计量渐近服从自由度为 $k - r - 1$ 的卡方分布：
+          $$\chi^2 \xrightarrow{d} \chi^2(k - r - 1)$$
+          其中 $k$ 为样本分组数，$r$ 为由样本数据估计的未知参数个数.
+        </p>
+        <p>拒绝域形式为单侧右端：$$\chi^2 \ge \chi_\alpha^2(k - r - 1)$$</p>
+        <p><em>应用经验准则</em>：每组的理论频数要求 $n p_i \ge 5$，若某组理论频数偏小，可将相邻组进行合并后再进行统计计算.</p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与测试题八</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 本章核心要点脉络</div>
+        <p>1. <strong>小概率原理与反证法</strong>：原假设 $H_0$ 在被充足证据推翻前被视为真实；</p>
+        <p>2. <strong>两类错误区分</strong>：第一类错误是“弃真（以假为真定罪无辜）”，第二类错误是“取伪（放走罪犯）”；</p>
+        <p>3. <strong>$p$ 值检验准则</strong>：$p \le \alpha$ 拒绝 $H_0$；</p>
+        <p>4. <strong>三大正态参数检验</strong>：$Z$ 检验（方差已知）、$t$ 检验（方差未知）、$\chi^2$ 检验（单方差）、$F$ 检验（双方差比）.</p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>

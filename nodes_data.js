@@ -13,6 +13,7 @@ const KNOWLEDGE_NODES = [
     mathTools: "矩阵微积分、SVD 分解 $(\\mathbf{A} = \\mathbf{U}\\mathbf{\\Sigma}\\mathbf{V}^T)$、特征谱分析、矩阵诱导范数 $\|\\mathbf{A}\|_p$、低秩投影定理 (Eckart-Young Theorem)",
     description: "构建高维向量空间与变换的直觉底座。深入理解矩阵作为线性算子对几何空间的旋转、拉伸与投影作用，掌握奇异值分解 (SVD) 与低秩拟合原理，为大模型的特征投影与权重量化提供直接数学支撑。",
     books: [
+      { title: "工程数学 线性代数 (第七版 数字化重构教材)", author: "同济大学数学科学学院 编" },
       { title: "Linear Algebra and Learning from Data", author: "Gilbert Strang" },
       { title: "Matrix Computations (4th Edition)", author: "Gene H. Golub & Charles F. Van Loan" }
     ],
@@ -22,6 +23,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "轻量化与微调（LoRA 低秩微调 $W = W_0 + B A$、模型量化 FP4/INT8 SVD 剪枝、KV Cache 压缩、向量检索相似度度量）",
     localLinks: [
+      { name: "📚 数字化教材: 工程数学·线性代数 (第七版)", url: "TextBook-LinearAlgebra/index.html" },
       { name: "N01 入门教程: LinearAlgebraTutorial 8 大模块交互指南", url: "N01_LinearAlgebraTutorial/index.html" },
       { name: "Week 1: 代数与运算底座 (Vector & Matrix)", url: "algebra1.html" },
       { name: "Week 2: 空间与几何投影 (Orthogonal Projection)", url: "week2_geometric_projection.html" },
@@ -38,6 +40,7 @@ const KNOWLEDGE_NODES = [
     mathTools: "梯度向量 $\\nabla f$、Jacobian 矩阵 $\\mathbf{J}$、Hessian 矩阵 $\\mathbf{H}$、方向导数、散度与旋度、多元泰勒展开 $\\Delta f \\approx \\nabla f^T \\mathbf{dx} + \\frac{1}{2} \\mathbf{dx}^T \\mathbf{H} \\mathbf{dx}$",
     description: "神经网络参数更新与流形微分的代数基底。从一阶梯度的最速下降方向，到二阶 Hessian 矩阵描绘的能量曲面曲率，全面支撑反向传播算法与连续流模型的构建。",
     books: [
+      { title: "高等数学 (第八版·全两册 数字化重构教材)", author: "同济大学数学系 编" },
       { title: "Principles of Mathematical Analysis", author: "Walter Rudin" },
       { title: "Vector Calculus, Linear Algebra, and Differential Forms", author: "J. H. Hubbard" }
     ],
@@ -47,6 +50,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "自动微分引擎（PyTorch/JAX 算子链式微分与 VJP/JVP 映射、神经流曲率剪枝、反向传播优化）",
     localLinks: [
+      { name: "📚 数字化教材: 高等数学 (第八版·全两册)", url: "TextBook-Advanced%20Mathematics/index.html" },
       { name: "N02 入门教程: 多元微积分与微分分析", url: "N02_MultivariableCalculus/index.html" },
       { name: "2D 变换与平面映射", url: "plane_translation.html" }
     ]
@@ -61,6 +65,7 @@ const KNOWLEDGE_NODES = [
     mathTools: "条件概率 $P(A|B)$、联合分布、贝叶斯定理 $P(\\theta|x) \\propto P(x|\\theta)P(\\theta)$、期望与协方差矩阵、大数定律 (LLN)、中心极限定理 (CLT)",
     description: "刻画 AI 随机性与不确定性的基石。理解数据生成的概率机制、极大似然估计 (MLE) 与最大后验估计 (MAP)，为变分推断与 LLM 采样解码奠定概率基础。",
     books: [
+      { title: "概率论与数理统计 (纯文本数字化重构教材)", author: "同济大学数学系 编" },
       { title: "Introduction to Probability", author: "Dimitri P. Bertsekas" },
       { title: "All of Statistics: A Concise Course in Statistical Inference", author: "Larry Wasserman" }
     ],
@@ -70,6 +75,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "概率判别与采样（贝叶斯推断、高斯混合模型 GMM、LLM 采样解码 Top-p/Top-k 与 Temperature 缩放）",
     localLinks: [
+      { name: "📚 数字化教材: 概率论与数理统计 (纯文本重构版)", url: "TextBook-Probobility%20and%20Statistics/index.html" },
       { name: "N03 入门教程: 初等概率论与数理统计", url: "N03_ProbabilityAndStatistics/index.html" }
     ]
   },

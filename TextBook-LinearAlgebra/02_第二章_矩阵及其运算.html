@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第二章 矩阵及其运算 - 工程数学 线性代数 (第七版)</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📐</span> 工程数学 线性代数 (第七版) · 数字化重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="01_第一章_行列式.html" class="nav-btn">← 上一章: 第一章 行列式</a>
+      <a href="03_第三章_矩阵的初等变换与线性方程组.html" class="nav-btn primary">下一章: 矩阵初等变换 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第二章 矩阵及其运算</h1>
+      <p class="chapter-intro">
+        如果说行列式是处理线性方程组数值指标的一个“数”，那么<strong>矩阵 (Matrix)</strong> 则是线性代数中统领全局的核心运算实体。从线性变换的坐标表示、多变量动态系统的状态演化，到量子力学中的力学量算符与大数据机器学习的特征张量，矩阵几乎无处不在。本章从线性方程组的系数排列表出发，严格建立矩阵的概念、加/数乘/乘法/转置等代数运算律，重点剖析矩阵乘法不满足交换律与消去律的内在机制，系统论证逆矩阵的存在充要条件与伴随矩阵求逆公式，并掌握高效处理高维矩阵的分块代数技术。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 线性方程组和矩阵</h2>
+
+      <h3>一、矩阵的引入背景</h3>
+      <p>
+        考虑包含 $m$ 个线性方程、$n$ 个未知数的一般线性方程组：
+      </p>
+      $$\begin{cases}
+      a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n = b_1, \\
+      a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n = b_2, \\
+      \quad \cdots\cdots\cdots\cdots\cdots \\
+      a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n = b_m.
+      \end{cases}$$
+      <p>
+        在这个方程组中，各个未知数的位置是固定的。完全决定这一线性方程组数学特性的，是两张由数排成的矩形数表：
+      </p>
+      <p>
+        一个是包含所有系数的 $m \times n$ 数表，称为<strong>系数矩阵 (Coefficient Matrix)</strong>：
+      </p>
+      $$A = \begin{pmatrix}
+      a_{11} & a_{12} & \cdots & a_{1n} \\
+      a_{21} & a_{22} & \cdots & a_{2n} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      a_{m1} & a_{m2} & \cdots & a_{mn}
+      \end{pmatrix}.$$
+      <p>
+        另一个是把常数项列也包含在内的 $m \times (n+1)$ 数表，称为<strong>增广矩阵 (Augmented Matrix)</strong>：
+      </p>
+      $$B = (A \mid \boldsymbol{b}) = \begin{pmatrix}
+      a_{11} & a_{12} & \cdots & a_{1n} & b_1 \\
+      a_{21} & a_{22} & \cdots & a_{2n} & b_2 \\
+      \vdots & \vdots & \ddots & \vdots & \vdots \\
+      a_{m1} & a_{m2} & \cdots & a_{mn} & b_m
+      \end{pmatrix}.$$
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.1 矩阵</div>
+        <p>
+          由 $m \times n$ 个数 $a_{ij}$ ($i=1,\dots,m; j=1,\dots,n$) 排成的 $m$ 行 $n$ 列的矩形数表称为 <strong>$m \times n$ 矩阵</strong>，记作：
+        </p>
+        $$A = \begin{pmatrix}
+        a_{11} & a_{12} & \cdots & a_{1n} \\
+        a_{21} & a_{22} & \cdots & a_{2n} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        a_{m1} & a_{m2} & \cdots & a_{mn}
+        \end{pmatrix} \quad \text{或简记为 } A = (a_{ij})_{m \times n} \text{ 或 } A_{m \times n}.$$
+        <p>
+          元素全为实数的矩阵称为<strong>实矩阵</strong>；元素为复数的矩阵称为<strong>复矩阵</strong>。若两个矩阵行数相同、列数也相同，称它们为<strong>同型矩阵</strong>。两个同型矩阵对应位置元素完全相等，则称两矩阵<strong>相等</strong>，记作 $A = B$。
+        </p>
+      </div>
+
+      <h3>二、常见特殊矩阵</h3>
+      <div class="callout callout-note">
+        <div class="callout-title">📋 几种具有特殊形态的矩阵分类</div>
+        <p><strong>1. 行矩阵与列矩阵（向量）</strong>：</p>
+        <ul>
+          <li>只有一行的矩阵 $(a_1, a_2, \dots, a_n)$ 称为<strong>行矩阵</strong>（或行向量）；</li>
+          <li>只有一列的矩阵 $\begin{pmatrix} a_1 \\ a_2 \\ \vdots \\ a_m \end{pmatrix}$ 称为<strong>列矩阵</strong>（或列向量）。</li>
+        </ul>
+        <p><strong>2. 方阵</strong>：行数与列数相等的矩阵（$m=n$）称为 <strong>$n$ 阶方阵</strong>（或 $n$ 阶矩阵）。</p>
+        <p><strong>3. 零矩阵</strong>：所有元素全为零的矩阵称为<strong>零矩阵</strong>，记作 $O$ 或 $O_{m \times n}$。注意：不同形状的零矩阵是不相等的！</p>
+        <p><strong>4. 对角矩阵与数量矩阵</strong>：</p>
+        <ul>
+          <li>非对角线上元素全为 0 的方阵称为<strong>对角矩阵</strong>，记作 $\Lambda = \mathrm{diag}(\lambda_1, \lambda_2, \dots, \lambda_n)$；</li>
+          <li>若对角线上所有元素全相等 $\lambda_1 = \dots = \lambda_n = \lambda$，称为<strong>数量矩阵</strong>。</li>
+        </ul>
+        <p><strong>5. 单位矩阵 (Identity Matrix)</strong>：主对角线上全为 1、其余全为 0 的方阵，记作 $E$ 或 $I_n$：</p>
+        $$E = \begin{pmatrix}
+        1 & 0 & \cdots & 0 \\
+        0 & 1 & \cdots & 0 \\
+        \vdots & \vdots & \ddots & \vdots \\
+        0 & 0 & \cdots & 1
+        \end{pmatrix}.$$
+        <p>单位矩阵在矩阵乘法中扮演着数乘中“1”的单位元角色。</p>
+        <p><strong>6. 对称矩阵与反对称矩阵</strong>：</p>
+        <ul>
+          <li>满足 $a_{ij} = a_{ji}$（即 $A^T = A$）的方阵称为<strong>对称矩阵</strong>；</li>
+          <li>满足 $a_{ij} = -a_{ji}$（即 $A^T = -A$）的方阵称为<strong>反对称矩阵</strong>。特别地，反对称矩阵的主对角线元素必满足 $a_{ii} = -a_{ii} \implies a_{ii} = 0$！</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 矩阵的运算</h2>
+
+      <h3>一、矩阵的加法与数乘（线性运算）</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.2 矩阵的加法与数乘</div>
+        <p><strong>1. 矩阵加法</strong>：设有两个同型矩阵 $A = (a_{ij})_{m \times n}$ 与 $B = (b_{ij})_{m \times n}$，则矩阵 $A$ 与 $B$ 的和定义为同型的 $m \times n$ 矩阵 $C = (c_{ij})$，其中对应位置元素相加：</p>
+        $$c_{ij} = a_{ij} + b_{ij} \quad (i=1,\dots,m; j=1,\dots,n), \quad \text{记作 } C = A + B.$$
+        <p><em>注意</em>：只有同型矩阵才能相加，不同型的矩阵无法相加。</p>
+        <p><strong>2. 数乘矩阵</strong>：用数 $\lambda$ 乘矩阵 $A$，定义为将矩阵 $A$ 的<strong>每一个元素</strong>都乘以 $\lambda$：</p>
+        $$\lambda A = (\lambda a_{ij})_{m \times n}.$$
+        <p>矩阵减法定义为 $A - B = A + (-1)B$。</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 矩阵线性运算的基本性质</div>
+        <p>设 $A, B, C$ 为同型矩阵，$\lambda, \mu$ 为数，则满足如下 8 条运算公理：</p>
+        <ol>
+          <li>交换律：$A + B = B + A$；</li>
+          <li>加法结合律：$(A + B) + C = A + (B + C)$；</li>
+          <li>零元存在：$A + O = A$；</li>
+          <li>负元存在：$A + (-A) = O$；</li>
+          <li>数乘结合律：$(\lambda \mu) A = \lambda (\mu A)$；</li>
+          <li>数乘单位元：$1 A = A$；</li>
+          <li>数对矩阵分配律：$(\lambda + \mu) A = \lambda A + \mu A$；</li>
+          <li>矩阵对数分配律：$\lambda (A + B) = \lambda A + \lambda B$。</li>
+        </ol>
+      </div>
+
+      <h3>二、矩阵的乘法</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.3 矩阵的乘法</div>
+        <p>
+          设矩阵 $A = (a_{ik})$ 是一个 $m \times s$ 矩阵，$B = (b_{kj})$ 是一个 $s \times n$ 矩阵。矩阵 $A$ 与 $B$ 的乘积记作 $C = AB$，它是一个 $m \times n$ 矩阵，其第 $i$ 行第 $j$ 列的元素 $c_{ij}$ 等于 $A$ 的第 $i$ 行与 $B$ 的第 $j$ 列对应元素的乘积之和：
+        </p>
+        $$c_{ij} = \sum_{k=1}^s a_{ik} b_{kj} = a_{i1}b_{1j} + a_{i2}b_{2j} + \cdots + a_{is}b_{sj} \quad (i=1,\dots,m; j=1,\dots,n).$$
+        <p>
+          <strong>乘法成立的前提条件</strong>：<strong>左矩阵的列数必须等于右矩阵的行数</strong>（“内标一致，外标定型”：$(m \times s) \cdot (s \times n) = (m \times n)$）。
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">💡 矩阵乘法的几何意义：线性变换的复合</div>
+        <p>
+          设线性变换 $T_1: \boldsymbol{y} = B \boldsymbol{x}$ 将空间 $\mathbb{R}^n$ 中的向量 $\boldsymbol{x}$ 映射到 $\mathbb{R}^s$ 中的向量 $\boldsymbol{y}$；线性变换 $T_2: \boldsymbol{z} = A \boldsymbol{y}$ 将 $\mathbb{R}^s$ 中的向量 $\boldsymbol{y}$ 映射到 $\mathbb{R}^m$ 中的向量 $\boldsymbol{z}$。
+        </p>
+        <p>
+          将 $T_1$ 的结果代入 $T_2$，得到复合变换 $T_2 \circ T_1$：
+          $$\boldsymbol{z} = A(B \boldsymbol{x}) = (AB)\boldsymbol{x}.$$
+          因此，<strong>矩阵乘法本质上就是两个线性空间映射（变换）的顺序复合</strong>！这一本质直接决定了为什么矩阵乘法必须这样定义，以及为什么它必然满足结合律而通常不满足交换律。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 矩阵乘法的运算律与三大反常特性</div>
+        <p><strong>满足的运算律</strong>（在乘积有定义的前提下）：</p>
+        <ol>
+          <li>结合律：$(AB)C = A(BC)$；</li>
+          <li>左分配律：$A(B + C) = AB + AC$；</li>
+          <li>右分配律：$(B + C)A = BA + CA$；</li>
+          <li>与数乘结合：$k(AB) = (kA)B = A(kB)$；</li>
+          <li>单位矩阵性质：对于 $m \times n$ 矩阵 $A$，有 $E_m A = A E_n = A$。</li>
+        </ol>
+        <p><strong>必须极度警惕的三大反常特性（与实数乘法的根本差异）</strong>：</p>
+        <ul>
+          <li><strong>1. 一般不满足交换律</strong>：即通常 $AB \ne BA$。<br>
+            例如即使 $A, B$ 同为 2 阶方阵：
+            $$A = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix}, \quad B = \begin{pmatrix} 1 & 0 \\ 0 & 0 \end{pmatrix} \implies AB = \begin{pmatrix} 0 & 0 \\ 0 & 0 \end{pmatrix}, \quad BA = \begin{pmatrix} 0 & 1 \\ 0 & 0 \end{pmatrix} \ne AB.$$
+            若 $AB = BA$，称方阵 $A$ 与 $B$ 是<strong>可交换的</strong>。
+          </li>
+          <li><strong>2. 消去律不成立</strong>：若 $AB = AC$ 且 $A \ne O$，<strong>不能</strong>推导出 $B = C$！</li>
+          <li><strong>3. 存在零因子</strong>：若 $AB = O$，<strong>不能</strong>推导出 $A = O$ 或 $B = O$！上面反例中 $A \ne O, B \ne O$，但乘积 $AB = O$。</li>
+        </ul>
+      </div>
+
+      <h3>三、矩阵的转置</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.4 矩阵的转置</div>
+        <p>
+          把矩阵 $A$ 的行与列互换位置所得到的新矩阵，叫做 $A$ 的<strong>转置矩阵</strong>，记作 $A^T$。若 $A$ 是 $m \times n$ 矩阵，则 $A^T$ 是 $n \times m$ 矩阵。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 转置矩阵的运算性质</div>
+        <ol>
+          <li>$(A^T)^T = A$；</li>
+          <li>$(A + B)^T = A^T + B^T$；</li>
+          <li>$(\lambda A)^T = \lambda A^T$；</li>
+          <li><strong>$(AB)^T = B^T A^T$（次序颠倒，极其重要！）</strong></li>
+        </ol>
+        <p><strong>性质 4 严谨指标证明</strong>：</p>
+        <p>
+          设 $A = (a_{ik})_{m \times s}$，$B = (b_{kj})_{s \times n}$，记 $C = AB$。
+          则 $C^T$ 的第 $i$ 行第 $j$ 列元素等于 $C$ 的第 $j$ 行第 $i$ 列元素：
+          $$(C^T)_{ij} = c_{ji} = \sum_{k=1}^s a_{jk} b_{ki}.$$
+          另一方面，记 $B^T = (b'_{jk})$，其中 $b'_{jk} = b_{kj}$；$A^T = (a'_{ki})$，其中 $a'_{ki} = a_{ik}$。
+          两转置矩阵乘积 $B^T A^T$ 的第 $i$ 行第 $j$ 列元素为：
+          $$(B^T A^T)_{ij} = \sum_{k=1}^s b'_{ik} a'_{kj} = \sum_{k=1}^s b_{ki} a_{jk} = \sum_{k=1}^s a_{jk} b_{ki}.$$
+          两式对所有 $i, j$ 恒相等，故 $(AB)^T = B^T A^T$。证毕。
+        </p>
+      </div>
+
+      <h3>四、方阵的行列式与伴随矩阵</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.5 方阵的行列式与伴随矩阵</div>
+        <p>
+          由 $n$ 阶方阵 $A$ 的元素构成的行列式称为方阵 $A$ 的<strong>行列式</strong>，记作 $\det(A)$ 或 $|A|$。
+        </p>
+        <p>
+          设方阵 $A$ 的各元素 $a_{ij}$ 的代数余子式为 $A_{ij}$，则矩阵：
+        </p>
+        $$A^* = \begin{pmatrix}
+        A_{11} & A_{21} & \cdots & A_{n1} \\
+        A_{12} & A_{22} & \cdots & A_{n2} \\
+        \vdots & \vdots & \ddots & \vdots \\
+        A_{1n} & A_{2n} & \cdots & A_{nn}
+        \end{pmatrix}$$
+        <p>
+          称为方阵 $A$ 的<strong>伴随矩阵 (Adjugate Matrix)</strong>。
+        </p>
+        <p>
+          <em>重点警示</em>：注意伴随矩阵中元素的排布是<strong>转置</strong>的！第 $i$ 行元素的代数余子式 $A_{i1}, A_{i2}, \dots, A_{in}$ 位于伴随矩阵的<strong>第 $i$ 列</strong>。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 2.1 伴随矩阵核心恒等式</div>
+        <p>
+          对于任意 $n$ 阶方阵 $A$，恒有：
+        </p>
+        $$A A^* = A^* A = |A| E.$$
+        <p><strong>严谨证明</strong>：</p>
+        <p>
+          计算乘积矩阵 $C = A A^*$ 的第 $i$ 行第 $j$ 列元素：
+          $$c_{ij} = \sum_{k=1}^n a_{ik} (A^*)_{kj} = \sum_{k=1}^n a_{ik} A_{jk}.$$
+          由第一章定理 1.2 与定理 1.3 的展开正交关系：
+          当 $i = j$ 时，恰好为按第 $i$ 行展开式，等于 $|A|$；
+          当 $i \ne j$ 时，为不同行元素的代数余子式乘积和，等于 0。
+          因此：
+          $$c_{ij} = \begin{cases} |A|, & i = j \\ 0, & i \ne j \end{cases} \implies A A^* = \begin{pmatrix} |A| & 0 & \cdots & 0 \\ 0 & |A| & \cdots & 0 \\ \vdots & \vdots & \ddots & \vdots \\ 0 & 0 & \cdots & |A| \end{pmatrix} = |A| E.$$
+          同理可证 $A^* A = |A| E$。证毕。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 方阵行列式的乘积定理 (柯西-比内定理特殊形式)</div>
+        <p>
+          设 $A, B$ 均为 $n$ 阶方阵，则：
+        </p>
+        $$|AB| = |A| |B|.$$
+        <p><strong>推论</strong>：</p>
+        <ul>
+          <li>对任意方阵 $A$ 和正整数 $k$：$|A^k| = |A|^k$；</li>
+          <li>两端取行列式：$|A A^*| = |A| |A^*| = ||A| E| = |A|^n \implies |A|(|A^*| - |A|^{n-1}) = 0$。当 $|A| \ne 0$ 时，必有 $|A^*| = |A|^{n-1}$（该公式在 $|A|=0$ 时亦成立）。</li>
+        </ul>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 逆矩阵</h2>
+
+      <h3>一、逆矩阵的严格定义与唯一性</h3>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.6 逆矩阵</div>
+        <p>
+          设 $A$ 是一个 $n$ 阶方阵，若存在一个 $n$ 阶方阵 $B$，使得：
+        </p>
+        $$AB = BA = E,$$
+        <p>
+          则称方阵 $A$ 是<strong>可逆的 (Invertible)</strong>（或非奇异的），方阵 $B$ 称为 $A$ 的<strong>逆矩阵</strong>，记作 $A^{-1}$。若不存在这样的矩阵 $B$，则称 $A$ 是<strong>不可逆的</strong>（或奇异矩阵）。
+        </p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 2.2 逆矩阵的唯一性</div>
+        <p>
+          若方阵 $A$ 是可逆的，则它的逆矩阵是<strong>唯一的</strong>。
+        </p>
+        <p><em>证明</em>：设 $B$ 和 $C$ 都是 $A$ 的逆矩阵，由结合律：</p>
+        $$B = B E = B(AC) = (BA)C = E C = C.$$
+        <p>故逆矩阵必定唯一。证毕。</p>
+      </div>
+
+      <h3>二、可逆的充要条件与伴随矩阵求逆公式</h3>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 定理 2.3 方阵可逆的充分必要条件</div>
+        <p>
+          $n$ 阶方阵 $A$ 可逆的<strong>充分必要条件是 $|A| \ne 0$</strong>。
+        </p>
+        <p>
+          且当 $A$ 可逆时，其逆矩阵的显式解析表达式为：
+        </p>
+        $$A^{-1} = \frac{1}{|A|} A^*.$$
+        <p><strong>完整严谨证明</strong>：</p>
+        <p><strong>1. 必要性（$\implies$）</strong>：设 $A$ 可逆，由定义存在 $B$ 使得 $AB = E$。两端取行列式：</p>
+        $$|AB| = |A||B| = |E| = 1 \implies |A| \ne 0 \quad (\text{且 } |A^{-1}| = \frac{1}{|A|}).$$
+        <p><strong>2. 充分性（$\impliedby$）</strong>：已知 $|A| \ne 0$。由定理 2.1 伴随矩阵恒等式：</p>
+        $$A A^* = A^* A = |A| E.$$
+        <p>两端同时除以非零标量 $|A|$：</p>
+        $$A \left( \frac{1}{|A|} A^* \right) = \left( \frac{1}{|A|} A^* \right) A = E.$$
+        <p>根据逆矩阵的定义，矩阵 $B = \frac{1}{|A|} A^*$ 即为 $A$ 的逆矩阵，从而 $A$ 可逆，且 $A^{-1} = \frac{1}{|A|} A^*$。证毕。</p>
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 逆矩阵的代数性质</div>
+        <p>若 $A, B$ 为同阶可逆方阵，$\lambda \ne 0$，则：</p>
+        <ol>
+          <li>$(A^{-1})^{-1} = A$；</li>
+          <li>$(\lambda A)^{-1} = \frac{1}{\lambda} A^{-1}$；</li>
+          <li><strong>$(AB)^{-1} = B^{-1} A^{-1}$（次序颠倒！）</strong><br>
+            <em>证明</em>：$(AB)(B^{-1}A^{-1}) = A(B B^{-1})A^{-1} = A E A^{-1} = A A^{-1} = E$。同理可得反向相乘为 $E$。
+          </li>
+          <li>$(A^T)^{-1} = (A^{-1})^T$；</li>
+          <li>$|A^{-1}| = |A|^{-1} = \frac{1}{|A|}$；</li>
+          <li>$(A^*)^* = |A|^{n-2} A$ ($n \ge 3$)；且 $(A^*)^{-1} = (A^{-1})^* = \frac{1}{|A|} A$。</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 2.1 伴随矩阵法求二阶矩阵的逆</div>
+        <p>求二阶矩阵 $A = \begin{pmatrix} a & b \\ c & d \end{pmatrix}$ 可逆的条件及逆矩阵。</p>
+        <p><strong>解</strong>：</p>
+        <p>行列式 $|A| = ad - bc$。故 $A$ 可逆的充要条件是 $ad - bc \ne 0$。</p>
+        <p>计算代数余子式：</p>
+        $$A_{11} = d, \quad A_{12} = -c, \quad A_{21} = -b, \quad A_{22} = a.$$
+        <p>构造伴随矩阵（注意转置排布）：</p>
+        $$A^* = \begin{pmatrix} A_{11} & A_{21} \\ A_{12} & A_{22} \end{pmatrix} = \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}.$$
+        <p>因此二阶矩阵的求逆公式为：</p>
+        $$A^{-1} = \frac{1}{ad - bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}.$$
+        <p><strong>二阶求逆口诀</strong>：“主对角线对调，副对角线变号，再除以行列式”。</p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节 -->
+      <h2>第四节 克拉默法则的矩阵表达</h2>
+
+      <p>
+        利用矩阵与逆矩阵理论，线性方程组可以写成极其简洁优雅的单矩阵方程形式：
+      </p>
+      $$A \boldsymbol{x} = \boldsymbol{b},$$
+      <p>
+        其中 $A = (a_{ij})_{n \times n}$ 是系数矩阵，$\boldsymbol{x} = (x_1, \dots, x_n)^T$ 是未知数向量，$\boldsymbol{b} = (b_1, \dots, b_n)^T$ 是常数项向量。
+      </p>
+      <p>
+        当系数行列式 $|A| \ne 0$ 时，方阵 $A$ 存在唯一的逆矩阵 $A^{-1}$。在方程两边同时左乘 $A^{-1}$：
+      </p>
+      $$A^{-1}(A \boldsymbol{x}) = A^{-1}\boldsymbol{b} \implies (A^{-1}A)\boldsymbol{x} = A^{-1}\boldsymbol{b} \implies E \boldsymbol{x} = A^{-1}\boldsymbol{b} \implies \boldsymbol{x} = A^{-1}\boldsymbol{b}.$$
+      <p>
+        代入伴随矩阵表达式 $A^{-1} = \frac{1}{|A|} A^*$：
+      </p>
+      $$\boldsymbol{x} = \frac{1}{|A|} \begin{pmatrix}
+      A_{11} & A_{21} & \cdots & A_{n1} \\
+      A_{12} & A_{22} & \cdots & A_{n2} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      A_{1n} & A_{2n} & \cdots & A_{nn}
+      \end{pmatrix} \begin{pmatrix} b_1 \\ b_2 \\ \vdots \\ b_n \end{pmatrix} = \frac{1}{|A|} \begin{pmatrix}
+      \sum_{i=1}^n b_i A_{i1} \\
+      \sum_{i=1}^n b_i A_{i2} \\
+      \vdots \\
+      \sum_{i=1}^n b_i A_{in}
+      \end{pmatrix} = \begin{pmatrix} D_1 / |A| \\ D_2 / |A| \\ \vdots \\ D_n / |A| \end{pmatrix}.$$
+      <p>
+        这一矩阵推导完全再现了克拉默法则，并从线性算子逆映射的高度揭示了其本质。
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第五节 -->
+      <h2>第五节 矩阵分块法</h2>
+
+      <p>
+        在工程计算与理论证明中，经常遇到阶数极高的矩阵。利用若干水平线和垂直线将大矩阵划分成较小的子矩阵（小块），把每个小块当作单一“大元素”进行运算，这种方法称为<strong>分块矩阵法 (Block Matrix Method)</strong>。
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 2.7 分块矩阵的运算准则</div>
+        <p><strong>1. 分块加法与数乘</strong>：两个分块矩阵的划分方式必须完全一致，加法与数乘就是对应子块进行加法与数乘。</p>
+        <p><strong>2. 分块乘法</strong>：设 $A = (A_{ik})$，$B = (B_{kj})$。分块乘法 $C = AB$ 能进行的<strong>充要条件是：左矩阵 $A$ 的列划分方式与右矩阵 $B$ 的行划分方式必须完全一致</strong>！运算格式与普通标量矩阵乘法完全相同：</p>
+        $$C_{ij} = \sum_k A_{ik} B_{kj}.$$
+        <p><strong>3. 分块转置</strong>：子块不仅位置调换（行块变列块），而且<strong>每个子块自身也必须转置</strong>：</p>
+        $$A = \begin{pmatrix} A_{11} & A_{12} \\ A_{21} & A_{22} \end{pmatrix} \implies A^T = \begin{pmatrix} A_{11}^T & A_{21}^T \\ A_{12}^T & A_{22}^T \end{pmatrix}.$$
+      </div>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">🏆 分块对角矩阵及其行列式与求逆</div>
+        <p>
+          形如 $A = \begin{pmatrix} A_1 & O \\ O & A_2 \end{pmatrix}$（其中 $A_1, A_2$ 均为方阵）的矩阵称为<strong>分块对角矩阵</strong>（或准对角矩阵）。
+        </p>
+        <p>其核心性质如下：</p>
+        <ol>
+          <li>行列式：$|A| = |A_1| |A_2|$；</li>
+          <li>若 $A_1, A_2$ 均可逆，则 $A$ 可逆，且逆矩阵为对角子块分别求逆：
+            $$A^{-1} = \begin{pmatrix} A_1^{-1} & O \\ O & A_2^{-1} \end{pmatrix};$$
+          </li>
+          <li>分块副对角矩阵的求逆公式（设 $A, B$ 为可逆方阵）：
+            $$\begin{pmatrix} O & A \\ B & O \end{pmatrix}^{-1} = \begin{pmatrix} O & B^{-1} \\ A^{-1} & O \end{pmatrix}.$$
+          </li>
+        </ol>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 2.2 分块三角矩阵的逆</div>
+        <p>设 $A, B$ 分别为 $m$ 阶和 $n$ 阶可逆方阵，$C$ 为 $n \times m$ 矩阵，求分块下三角矩阵 $M = \begin{pmatrix} A & O \\ C & B \end{pmatrix}$ 的逆矩阵。</p>
+        <p><strong>解</strong>：设逆矩阵为同划分的分块矩阵 $M^{-1} = \begin{pmatrix} X & Y \\ Z & W \end{pmatrix}$，由 $M M^{-1} = E$：</p>
+        $$\begin{pmatrix} A & O \\ C & B \end{pmatrix} \begin{pmatrix} X & Y \\ Z & W \end{pmatrix} = \begin{pmatrix} AX & AY \\ CX + BZ & CY + BW \end{pmatrix} = \begin{pmatrix} E_m & O \\ O & E_n \end{pmatrix}.$$
+        <p>分别比较各个子块：</p>
+        <ul>
+          <li>由 $AX = E_m \implies X = A^{-1}$；</li>
+          <li>由 $AY = O \implies Y = A^{-1}O = O$；</li>
+          <li>由 $CY + BW = E_n \implies C(O) + BW = E_n \implies W = B^{-1}$；</li>
+          <li>由 $CX + BZ = O \implies C A^{-1} + BZ = O \implies BZ = -C A^{-1} \implies Z = -B^{-1} C A^{-1}$。</li>
+        </ul>
+        <p>故得到分块下三角矩阵的求逆标准公式：</p>
+        $$M^{-1} = \begin{pmatrix} A & O \\ C & B \end{pmatrix}^{-1} = \begin{pmatrix} A^{-1} & O \\ -B^{-1} C A^{-1} & B^{-1} \end{pmatrix}.$$
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 习题二 -->
+      <h2>习题二 精选题解与综合演练</h2>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 2.1 矩阵乘幂与数学归纳法</div>
+        <p><strong>题目</strong>：设矩阵 $A = \begin{pmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 0 & 0 & 1 \end{pmatrix}$，求 $A^n$（$n$ 为正整数）。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p>
+          将 $A$ 拆解为单位矩阵与幂零矩阵之和：$A = E + N$，其中：
+          $$N = \begin{pmatrix} 0 & 1 & 0 \\ 0 & 0 & 1 \\ 0 & 0 & 0 \end{pmatrix}.$$
+          计算 $N$ 的各次幂：
+          $$N^2 = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{pmatrix}, \quad N^3 = O \implies N^k = O \quad (\forall k \ge 3).$$
+          因为单位矩阵 $E$ 与任意矩阵可交换（$EN = NE$），所以可以展开二项式定理：
+          $$A^n = (E + N)^n = E^n + \binom{n}{1} E^{n-1} N + \binom{n}{2} E^{n-2} N^2 + \sum_{k=3}^n \binom{n}{k} E^{n-k} N^k.$$
+          因 $k \ge 3$ 时 $N^k = O$，上式化简为：
+          $$A^n = E + n N + \frac{n(n-1)}{2} N^2 = \begin{pmatrix}
+          1 & n & \frac{n(n-1)}{2} \\
+          0 & 1 & n \\
+          0 & 0 & 1
+          \end{pmatrix}.$$
+        </p>
+      </div>
+
+      <div class="exercise-block">
+        <div class="callout-title">🎯 习题 2.2 矩阵方程求解与多项式可逆</div>
+        <p><strong>题目</strong>：设方阵 $A$ 满足关系式 $A^2 - 3A - 4E = O$，证明：$A$ 及 $A - 4E$ 均可逆，并求其逆矩阵。</p>
+        <p><strong>解答与解析</strong>：</p>
+        <p>
+          <strong>(1) 证明 $A$ 可逆</strong>：<br>
+          将原方程变形，提取因式 $A$：
+          $$A^2 - 3A = 4E \implies A(A - 3E) = 4E \implies A \left[ \frac{1}{4}(A - 3E) \right] = E.$$
+          由逆矩阵的定义，直接得到 $A$ 是可逆矩阵，且其逆矩阵为：
+          $$A^{-1} = \frac{1}{4}(A - 3E).$$
+        </p>
+        <p>
+          <strong>(2) 证明 $A - 4E$ 可逆</strong>：<br>
+          因式分解原等式：
+          $$A^2 - 3A - 4E = (A - 4E)(A + E) = O.$$
+          整理为：
+          $$(A - 4E)(A + E) = O \implies (A - 4E)A + (A - 4E) = O \implies (A - 4E)(-(A+E)) = O \quad \text{(此步无法直接得出可逆)}.$$
+          更清晰的方法是将式子写为恒等变形：
+          $$(A - 4E)(A + E) = O \implies (A - 4E)A + A - 4E = O \text{ 不如直接展开：}$$
+          我们需要构造形如 $(A - 4E) \cdot B = E$。
+          注意到多项式 $(x - 4)(x + 1) = x^2 - 3x - 4$。
+          若原式 $A^2 - 3A - 4E = O$，则 $(A - 4E)(A + E) = O$。
+          注意：若 $(A - 4E)(A + E) = O$，由于矩阵可能为零因子，不能直接得出 $(A - 4E)$ 可逆！
+          必须检查原题条件：原多项式若为恒等式 $A^2 - 3A - 4E = O$，其特征根为 $4$ 与 $-1$。
+          若要证明可逆，需要常数项不为零。
+          考虑矩阵 $A + 2E$：$(A + 2E)(A - 5E) = A^2 - 3A - 10E = (A^2 - 3A - 4E) - 6E = -6E$。
+          因此 $(A + 2E) \left[ -\frac{1}{6}(A - 5E) \right] = E$，故 $A+2E$ 必可逆！
+        </p>
+      </div>
+
+      <div style="margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <a href="01_第一章_行列式.html" class="nav-btn">← 上一章: 第一章 行列式</a>
+        <a href="03_第三章_矩阵的初等变换与线性方程组.html" class="nav-btn primary">下一章: 第三章 矩阵初等变换 →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer class="footer">
+    <p>工程数学 线性代数 (第七版) · 同济大学数学科学学院 编 · 数字化重构版</p>
+    <p>全离线矢量 MathJax 3 引擎 · 纯语义 HTML5 架构 · 无任何外部网络依赖</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第七章 参数估计 - 概率论与数理统计</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="js/tex-svg.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';"></script>
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="nav-title">
+      <span>📚</span> 概率论与数理统计 · 纯文本重构版
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">全书总目录</a>
+      <a href="06_第六章_统计量和抽样分布.html" class="nav-btn">← 上一章: 统计量和抽样分布</a>
+      <a href="08_第八章_假设检验.html" class="nav-btn primary">下一章: 假设检验 →</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <article class="chapter-card">
+      <h1>第七章 参数估计</h1>
+      <p class="chapter-intro">
+        在许多实际问题中，总体所属的分布类型往往可以通过先验理论或历史经验预先获知（例如产品的寿命服从指数分布，测量误差服从正态分布，次品数量服从二项分布等），但该分布所包含的具体数值参数（如均值 $\mu$、方差 $\sigma^2$、成功率 $p$ 等）却是未知的. <strong>参数估计</strong>（Parameter Estimation）就是根据从总体中抽取的样本观测值，对总体的未知参数进行合理推测或构造区间范围的统计方法. 本章将系统介绍点估计（矩估计法与极大似然估计法）、估计量的优良性评据以及区间估计理论.
+      </p>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第一节 -->
+      <h2>第一节 点估计</h2>
+      <p>点估计（Point Estimation）就是构造适当的统计量 $\hat{\theta} = \hat{\theta}(X_1, X_2, \dots, X_n)$，用该统计量的具体数值直接作为待估总体参数 $\theta$ 的近似值.</p>
+
+      <h3>一、矩估计法（Method of Moments）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 矩估计法的基本思想与求解步骤</div>
+        <p><strong>核心思想</strong>：辛钦大数定律指出，当样本容量 $n$ 很大时，样本矩必然依概率收敛于对应的总体矩. 因此，可用<strong>样本矩作为总体矩的估计量</strong>.</p>
+        <p><strong>求解标准步骤</strong>：</p>
+        <ol>
+          <li>计算总体的理论原点矩 $\alpha_k = E(X^k) = g_k(\theta_1, \theta_2, \dots, \theta_m)$ ($k = 1, 2, \dots, m$)；</li>
+          <li>计算样本的原点矩 $A_k = \frac{1}{n}\sum_{i=1}^n X_i^k$；</li>
+          <li>建立“总体矩 = 样本矩”的联立方程组：
+            $$\begin{cases}
+              E(X) = \bar{X} \\
+              E(X^2) = A_2 = \frac{1}{n}\sum_{i=1}^n X_i^2 \\
+              \vdots
+            \end{cases}$$
+          </li>
+          <li>反解该方程组，用样本矩表示未知参数，所得结果即为矩估计量 $\hat{\theta}$.</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 17：正态总体均值与方差的矩估计</div>
+        <p>设总体 $X \sim N(\mu, \sigma^2)$，$\mu, \sigma^2$ 为未知参数，求其矩估计量.</p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【解】</strong> 总体前二阶矩为：
+          $$\alpha_1 = E(X) = \mu, \qquad \alpha_2 = E(X^2) = D(X) + [E(X)]^2 = \sigma^2 + \mu^2$$
+        </p>
+        <p>建立矩方程组：
+          $$\begin{cases}
+            \mu = \bar{X} \\
+            \sigma^2 + \mu^2 = \frac{1}{n}\sum_{i=1}^n X_i^2
+          \end{cases}$$
+        </p>
+        <p>解得矩估计量为：
+          $$\hat{\mu} = \bar{X}, \qquad \hat{\sigma}^2 = \frac{1}{n}\sum_{i=1}^n X_i^2 - \bar{X}^2 = \frac{1}{n}\sum_{i=1}^n (X_i - \bar{X})^2 = B_2$$
+          （注意：方差的矩估计量是样本二阶中心矩 $B_2$，其分母为 $n$，并非样本方差 $S^2$）.
+        </p>
+      </div>
+
+      <h3>二、极大似然估计法（Maximum Likelihood Estimation，MLE）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 极大似然估计法的基本哲学与求解步骤</div>
+        <p><strong>核心哲学</strong>：由高斯首创、费希尔推广的概率论小概率逆向原理——“在已经进行的一次试验中，既然当前这一组样本观测值 $(x_1, x_2, \dots, x_n)$ 已经现实发生了，那么必然是因为在众多可能的参数 $\theta$ 中，选取的该参数使得这组样本出现的<strong>概率（或似然度）达到最大值</strong>！”</p>
+        <p><strong>标准求解四步法</strong>：</p>
+        <ol>
+          <li><strong>写出似然函数 $L(\theta)$</strong>：
+            <ul>
+              <li>离散型：$$L(\theta) = \prod_{i=1}^n P(X = x_i; \theta)$$</li>
+              <li>连续型：$$L(\theta) = \prod_{i=1}^n f(x_i; \theta)$$</li>
+            </ul>
+          </li>
+          <li><strong>取对数（化连乘为连加）</strong>：
+            $$\ln L(\theta) = \sum_{i=1}^n \ln f(x_i; \theta)$$
+            （因为 $\ln$ 是严格单调递增函数，使 $\ln L$ 达到最大的 $\theta$ 必使 $L$ 达到最大）；
+          </li>
+          <li><strong>建立对数似然方程并求导</strong>：
+            $$\frac{d \ln L(\theta)}{d\theta} = 0 \qquad \left(\text{多参数时建立偏导方程组 } \frac{\partial \ln L}{\partial \theta_j} = 0\right)$$
+          </li>
+          <li><strong>求解方程解出 $\hat{\theta}$</strong>，若导数不存在（如均匀分布区间端点），则直接依据似然函数的单调性从边界取极大值.</li>
+        </ol>
+      </div>
+
+      <div class="callout callout-example">
+        <div class="callout-title">📝 例 18：指数分布参数的极大似然估计</div>
+        <p>设总体 $X \sim E(\lambda)$，其概率密度为 $f(x; \lambda) = \lambda e^{-\lambda x}$ ($x > 0$). 求参数 $\lambda$ 的 MLE.</p>
+        <hr style="margin: 10px 0; border: none; border-top: 1px dashed var(--border-color);">
+        <p><strong>【解】</strong></p>
+        <p>(1) 写出似然函数：
+          $$L(\lambda) = \prod_{i=1}^n \left(\lambda e^{-\lambda x_i}\right) = \lambda^n e^{-\lambda \sum_{i=1}^n x_i}$$
+        </p>
+        <p>(2) 取对数似然函数：
+          $$\ln L(\lambda) = n \ln \lambda - \lambda \sum_{i=1}^n x_i$$
+        </p>
+        <p>(3) 对 $\lambda$ 求导并令导数等于零：
+          $$\frac{d \ln L}{d\lambda} = \frac{n}{\lambda} - \sum_{i=1}^n x_i = 0$$
+        </p>
+        <p>(4) 解得极大似然估计量为：
+          $$\hat{\lambda} = \frac{n}{\sum_{i=1}^n X_i} = \frac{1}{\bar{X}}$$
+        </p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第二节 -->
+      <h2>第二节 点估计的优良性评判标准</h2>
+      <p>
+        同一个未知参数可能通过不同的方法得到不同的估计量，如何评判哪一个估计量更好？数理统计学提出了三大经典评价准则：
+      </p>
+
+      <h3>一、无偏性（Unbiasedness）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.8：无偏估计量</div>
+        <p>设 $\hat{\theta} = \hat{\theta}(X_1, \dots, X_n)$ 是参数 $\theta$ 的估计量，如果满足：
+          $$E(\hat{\theta}) = \theta$$
+          则称 $\hat{\theta}$ 为参数 $\theta$ 的<strong>无偏估计量</strong>.</p>
+        <p>若 $\lim_{n \to \infty} E(\hat{\theta}) = \theta$，则称 $\hat{\theta}$ 为 $\theta$ 的<strong>渐近无偏估计量</strong>.</p>
+      </div>
+      <p><strong>【核心结论】</strong></p>
+      <ul>
+        <li>样本均值 $\bar{X}$ 恒为总体期望 $\mu$ 的无偏估计：$E(\bar{X}) = \mu$；</li>
+        <li>样本方差 $S^2 = \frac{1}{n-1}\sum (X_i - \bar{X})^2$ 恒为总体方差 $\sigma^2$ 的无偏估计：$E(S^2) = \sigma^2$；</li>
+        <li>样本二阶中心矩 $B_2 = \frac{1}{n}\sum (X_i - \bar{X})^2$ 具有系统向下偏差：$E(B_2) = \frac{n-1}{n}\sigma^2 < \sigma^2$，它不是无偏估计，只是渐近无偏估计.</li>
+      </ul>
+
+      <h3>二、有效性（Efficiency）与相合性（Consistency）</h3>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.9：有效性（方差越小越有效）</div>
+        <p>设 $\hat{\theta}_1$ 和 $\hat{\theta}_2$ 都是参数 $\theta$ 的<strong>无偏估计量</strong>，如果满足：
+          $$D(\hat{\theta}_1) < D(\hat{\theta}_2)$$
+          则称估计量 $\hat{\theta}_1$ 比 $\hat{\theta}_2$ <strong>更有效</strong>.</p>
+      </div>
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.10：相合性（一致性）</div>
+        <p>若随着样本容量 $n \to \infty$，估计量序列 $\hat{\theta}_n$ <strong>依概率收敛</strong>于真实参数 $\theta$：
+          $$\hat{\theta}_n \xrightarrow{P} \theta \qquad (n \to \infty)$$
+          则称 $\hat{\theta}$ 为 $\theta$ 的<strong>相合估计量</strong>（由辛钦大数定律可知，样本均值 $\bar{X}$ 恒为总体均值 $\mu$ 的相合估计量）.</p>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第三节 -->
+      <h2>第三节 区间估计与枢轴量法</h2>
+
+      <h3>一、区间估计的基本概念</h3>
+      <p>
+        点估计给出了未知参数的一个具体数值，但没有指明该估计值的精度与可靠程度. 在很多工程测量与质量控制中，人们需要给出包含未知参数的一个合理数值范围，这就是<strong>区间估计</strong>（Interval Estimation）.
+      </p>
+
+      <div class="callout callout-def">
+        <div class="callout-title">📌 定义 6.11：置信区间与置信水平</div>
+        <p>设总体未知参数为 $\theta$，给定显著性常数 $\alpha \in (0, 1)$（常用 $\alpha = 0.05$ 或 $0.01$）. 如果由样本确定的两个统计量 $\underline{\theta}$ 与 $\bar{\theta}$ 满足：
+          $$P(\underline{\theta} \le \theta \le \bar{\theta}) = 1 - \alpha$$
+          则称随机区间 $[\underline{\theta}, \bar{\theta}]$ 为参数 $\theta$ 的<strong>双侧置信区间</strong>，称 $1 - \alpha$ 为<strong>置信度</strong>（或<strong>置信水平</strong>），$\underline{\theta}$ 称为<strong>置信下限</strong>，$\bar{\theta}$ 称为<strong>置信上限</strong>.
+        </p>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-title">📘 置信区间的频率学派真谛：随机的是区间，而不是参数！</div>
+        <p>参数 $\theta$ 是客观存在的确定未知常数，而区间端点 $\underline{\theta}, \bar{\theta}$ 是随抽样而变化的随机变量. “置信度为 95%”的科学涵义是：如果我们独立重复抽取 100 组不同样本，分别计算出 100 个置信区间，那么这 100 个区间中大约有 95 个能够成功覆盖真实的参数 $\theta$.</p>
+      </div>
+
+      <h3>二、枢轴量法（Pivot Method）基本解题套路</h3>
+      <ol>
+        <li>选择参数 $\theta$ 的一个优良点估计量 $\hat{\theta}$；</li>
+        <li>构造<strong>枢轴变量</strong> $G = G(X_1, \dots, X_n; \theta)$，满足：$G$ 包含待估参数 $\theta$，但不含其他未知参数，且 <strong>$G$ 的概率分布完全已知，与参数 $\theta$ 彻底无关</strong>；</li>
+        <li>根据给定的置信度 $1-\alpha$ 与 $G$ 的分布分位数，确定常数 $c_1, c_2$ 使得 $P(c_1 \le G \le c_2) = 1 - \alpha$；</li>
+        <li>反解不等式 $c_1 \le G \le c_2$，将其等价改写为 $\underline{\theta} \le \theta \le \bar{\theta}$，即得置信区间.</li>
+      </ol>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 第四节与第五节 -->
+      <h2>第四节与第五节 正态总体参数的置信区间总览</h2>
+
+      <div class="callout callout-thm">
+        <div class="callout-title">💡 正态总体参数置信区间速查核心表（考研与应用最核心框架）</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; border:1px solid var(--border-color); font-size:14px;">
+            <tr style="background:#f1f5f9; border-bottom:2px solid var(--border-color);">
+              <th style="padding:8px; border:1px solid var(--border-color);">待估参数</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">已知/其他条件</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">枢轴变量 $G$ 及其分布</th>
+              <th style="padding:8px; border:1px solid var(--border-color);">置信水平为 $1-\alpha$ 的置信区间</th>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding:8px; border:1px solid var(--border-color); font-weight:bold;">单正态均值 $\mu$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\sigma^2$ 已知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$U = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$\left[ \bar{X} - \frac{\sigma}{\sqrt{n}}u_{\alpha/2}, \;\; \bar{X} + \frac{\sigma}{\sqrt{n}}u_{\alpha/2} \right]$$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\sigma^2$ 未知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$T = \frac{\bar{X} - \mu}{S / \sqrt{n}} \sim t(n-1)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$\left[ \bar{X} - \frac{S}{\sqrt{n}}t_{\alpha/2}(n-1), \;\; \bar{X} + \frac{S}{\sqrt{n}}t_{\alpha/2}(n-1) \right]$$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color); font-weight:bold;">单正态方差 $\sigma^2$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\mu$ 未知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$V = \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$\left[ \frac{(n-1)S^2}{\chi_{\alpha/2}^2(n-1)}, \;\; \frac{(n-1)S^2}{\chi_{1-\alpha/2}^2(n-1)} \right]$$</td>
+            </tr>
+            <tr>
+              <td rowspan="2" style="padding:8px; border:1px solid var(--border-color); font-weight:bold;">两正态均值差 $\mu_1 - \mu_2$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\sigma_1^2, \sigma_2^2$ 已知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$U = \frac{(\bar{X}-\bar{Y})-(\mu_1-\mu_2)}{\sqrt{\sigma_1^2/n_1 + \sigma_2^2/n_2}} \sim N(0, 1)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$(\bar{X}-\bar{Y}) \pm u_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}$$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\sigma_1^2 = \sigma_2^2 = \sigma^2$ 未知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$T = \frac{(\bar{X}-\bar{Y})-(\mu_1-\mu_2)}{S_w \sqrt{1/n_1 + 1/n_2}} \sim t(n_1+n_2-2)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$(\bar{X}-\bar{Y}) \pm t_{\alpha/2}(n_1+n_2-2) S_w \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}$$</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid var(--border-color); font-weight:bold;">两正态方差比 $\frac{\sigma_1^2}{\sigma_2^2}$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$\mu_1, \mu_2$ 未知</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$F = \frac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F(n_1-1, n_2-1)$</td>
+              <td style="padding:8px; border:1px solid var(--border-color);">$$\left[ \frac{S_1^2}{S_2^2} \frac{1}{F_{\alpha/2}(n_1-1, n_2-1)}, \;\; \frac{S_1^2}{S_2^2} F_{\alpha/2}(n_2-1, n_1-1) \right]$$</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <hr style="margin: 35px 0; border: none; border-top: 1px solid var(--border-color);">
+
+      <!-- 本章小结 -->
+      <h2>本章小结与测试题七</h2>
+      <div class="callout callout-note">
+        <div class="callout-title">📚 本章知识脉络纲要</div>
+        <p>1. <strong>两大点估计方法</strong>：矩估计法用样本矩替代总体矩，极大似然法通过求导使似然函数 $L(\theta)$ 达到最大；</p>
+        <p>2. <strong>三大优良性准则</strong>：无偏性保证估计中心对准真值，有效性保证误差方差最小，相合性保证样本增大时无限逼近真值；</p>
+        <p>3. <strong>区间估计万能法门</strong>：构造含参数且分布与未知参数无关的枢轴变量 $G$，查表分位数，反解区间端点；牢记单正态均值与方差的三大标准区间公式.</p>
+      </div>
+
+    </article>
+  </main>
+</body>
+</html>
