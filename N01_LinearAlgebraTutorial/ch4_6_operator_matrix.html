@@ -894,6 +894,86 @@ print(f"矩阵幂 A^50 快速算法精度误差: {np.max(np.abs(A_50_fast - A_50
         </div>
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 6. 讲义经典课后习题精选与严密题解 (Exercise 4-5 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 📖 讲义经典课后习题精选与严密题解 (Exercise 4-5 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 4-5 全部经典核心习题</strong>（题号 63, 64, 95, 96, 97, 81, 73, 51），包含单位算子/零算子基无关性、相似矩阵基底配对、空间镜像与正交投影算子的矩阵化构造。
+    </p>
+
+    <!-- Problem 63 & 64 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 63 & 64：单位算子与零算子在任意基底下的普适矩阵表示</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 63】</strong> 设 $I$ 为 $\mathbb{R}^n$ 上的恒等算子，$\mathcal{B} = \{\mathbf{b}_1, \dots, \mathbf{b}_n\}$ 为任意基底。求 $[I]_\mathcal{B}$。<br>
+        <strong>【题解 63】</strong> 考查第 $j$ 列：$[I(\mathbf{b}_j)]_\mathcal{B} = [\mathbf{b}_j]_\mathcal{B} = \mathbf{e}_j$（在自己的基底体系下，第 $j$ 根基向量的坐标必然是第 $j$ 个分量为 1、其余为 0）。将各列拼装：$[I]_\mathcal{B} = \begin{bmatrix} \mathbf{e}_1 \dots \mathbf{e}_n \end{bmatrix} = I_n$。<strong>恒等算子在任何基底下的面具都是相同的单位方阵</strong>！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 64】</strong> 设 $T$ 为零算子，$T(\mathbf{v}) = \mathbf{0}$。求 $[T]_\mathcal{B}$。<br>
+        <strong>【题解 64】</strong> 对任意基向量 $[T(\mathbf{b}_j)]_\mathcal{B} = [\mathbf{0}]_\mathcal{B} = \mathbf{0}$。所有列全为 0 向量，故 $[T]_\mathcal{B} = O$（在任意基底下的矩阵表示恒为零矩阵）。
+      </p>
+    </div>
+
+    <!-- Problem 95, 96 & 97 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 95, 96 & 97：相似矩阵的几何基底还原与反射算子行列式</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 95 & 96】</strong> 设 $A$ 与 $B$ 相似（即存在可逆矩阵 $P$ 使 $B = P^{-1}AP$）。设 $T_A(\mathbf{x}) = A\mathbf{x}$ 为标准基下的算子。如何找到基底 $\mathcal{W}$ 使得 $[T_A]_\mathcal{W} = B$？<br>
+        <strong>【题解 95 & 96】</strong><br>
+        取标准基 $\mathcal{E}$，已知 $[T_A]_\mathcal{E} = A$。根据相似矩阵黄金公式：
+        $$[T_A]_\mathcal{W} = P_{\mathcal{W} \leftarrow \mathcal{E}} [T_A]_\mathcal{E} P_{\mathcal{E} \leftarrow \mathcal{W}}$$
+        对照已知等式 $B = P^{-1} A P$，只需令过渡矩阵 $P_{\mathcal{E} \leftarrow \mathcal{W}} = P$ 即可！<br>
+        由定义，$P_{\mathcal{E} \leftarrow \mathcal{W}} = \begin{bmatrix} [\mathbf{w}_1]_\mathcal{E} & \dots & [\mathbf{w}_n]_\mathcal{E} \end{bmatrix}$。因此只需<strong>直接将可逆矩阵 $P$ 的列向量选作新基底 $\mathcal{W}$</strong>，同一个客观算子在基底 $\mathcal{W}$ 下的矩阵表示就会精准呈现为 $B$！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 97】</strong> 证明：若 $A$ 是 $\mathbb{R}^2$ 中关于任意通过原点的直线 $L$ 的镜像反射算子的标准矩阵，则 $\det(A) = -1$ 恒成立。<br>
+        <strong>【证明 97】</strong><br>
+        选取适应几何的特征基 $\mathcal{B} = \{\mathbf{u}_1, \mathbf{u}_2\}$：其中 $\mathbf{u}_1$ 是直线 $L$ 上的方向向量，$\mathbf{u}_2$ 是垂直于直线 $L$ 的法线向量。<br>
+        在基底 $\mathcal{B}$ 下观察反射算子的作用：<br>
+        • $T(\mathbf{u}_1) = \mathbf{u}_1$（轴上向量镜像后完全不动）$\implies [T(\mathbf{u}_1)]_\mathcal{B} = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$；<br>
+        • $T(\mathbf{u}_2) = -\mathbf{u}_2$（法线向量镜像后彻底反向）$\implies [T(\mathbf{u}_2)]_\mathcal{B} = \begin{bmatrix} 0 \\ -1 \end{bmatrix}$。<br>
+        因此在新基下的矩阵极为纯粹对角：$[T]_\mathcal{B} = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$。<br>
+        由于标准矩阵 $A$ 与 $[T]_\mathcal{B}$ 相似，二者行列式严格相等：
+        $$\det(A) = \det([T]_\mathcal{B}) = 1 \times (-1) = -1$$
+        证毕！这证明了反射操作必然翻转空间的方向定向（右手系变成左手系）。
+      </p>
+    </div>
+
+    <!-- Problem 81, 73 & 51 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 81, 73 & 51：空间平面正交投影、反射算子与逆算子矩阵化</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 81 & 73】</strong> 设平面 $W$ 的方程为 $x + 2y - 3z = 0$。<br>
+        (a) 求正交投影算子 $U_W: \mathbb{R}^3 \to \mathbb{R}^3$ 在特征基下的对角形式；<br>
+        (b) 求平面反射算子 $T_W: \mathbb{R}^3 \to \mathbb{R}^3$ 的矩阵化解析结构。<br>
+        <strong>【题解 81 & 73】</strong><br>
+        法向量为 $\mathbf{n} = \begin{bmatrix} 1 \\ 2 \\ -3 \end{bmatrix}$。解 $x + 2y - 3z = 0$ 得到平面内的两个正交基向量 $\mathbf{w}_1 = \begin{bmatrix} -2 \\ 1 \\ 0 \end{bmatrix}, \mathbf{w}_2 = \begin{bmatrix} 3 \\ 0 \\ 1 \end{bmatrix}$。<br>
+        构建专属特征基底 $\mathcal{B} = \{\mathbf{w}_1, \mathbf{w}_2, \mathbf{n}\}$：<br>
+        • <strong>正交投影算子</strong>：平面内向量保留，法向分量归零，矩阵表示为极简对角形式 $[U_W]_\mathcal{B} = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 0 \end{bmatrix}$；<br>
+        • <strong>镜像反射算子</strong>：平面内向量保留，法向分量反向，矩阵表示为 $[T_W]_\mathcal{B} = \begin{bmatrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & -1 \end{bmatrix}$。<br>
+        令过渡矩阵 $P = \begin{bmatrix} \mathbf{w}_1 & \mathbf{w}_2 & \mathbf{n} \end{bmatrix}$，其标准笛卡尔基矩阵直接由相似变换求得：$[U_W] = P [U_W]_\mathcal{B} P^{-1}$。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 51（逆算子矩阵定理）】</strong> 设 $T$ 是可逆线性算子，$\mathcal{B}$ 为任意基底。证明：$[T^{-1}]_\mathcal{B} = ([T]_\mathcal{B})^{-1}$。<br>
+        <strong>【证明 51】</strong> 根据算子复合与矩阵乘积同态性质：
+        $$[T \circ T^{-1}]_\mathcal{B} = [T]_\mathcal{B} [T^{-1}]_\mathcal{B}$$
+        而复合算子 $T \circ T^{-1} = I$ 为单位算子。由题 63 结论，$[I]_\mathcal{B} = I_n$。因此：
+        $$[T]_\mathcal{B} [T^{-1}]_\mathcal{B} = I_n$$
+        由逆矩阵唯一性，必定有 $[T^{-1}]_\mathcal{B} = ([T]_\mathcal{B})^{-1}$！算子的逆在矩阵化后严格对应方阵求逆。
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch4_5_coordinate_system.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

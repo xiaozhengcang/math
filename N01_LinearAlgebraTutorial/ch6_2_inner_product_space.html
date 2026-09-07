@@ -392,6 +392,68 @@
                 </div>
               </details>
             </div>
+
+            <!-- 1.3 讲义经典反例辨析与 1.4 连续函数标准内积 (Slide 39) -->
+            <div class="example-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(244, 63, 94, 0.05); border-left: 4px solid var(--accent-rose); border-radius: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h4 style="color: var(--accent-rose); margin: 0;">
+                  ⚠️ 1.3 讲义经典反例辨析：$\langle f, g \rangle = f(0)g(0)$ 为何绝不能构成内积？(Slide 39)
+                </h4>
+                <span style="background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold;">期末避坑陷阱</span>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                在连续函数空间 $C[-1, 1]$ 或一次多项式空间 $\mathcal{P}_1$ 中，若定义运算 $\langle f, g \rangle = f(0)g(0)$，它能否构成合法的内积？
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-green);">看似完美的前 3 条公理：</strong>
+                  <ul style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-left: 1rem; margin-top: 0.3rem;">
+                    <li><strong>对称性</strong>：$f(0)g(0) = g(0)f(0) = \langle g, f \rangle$ ✅</li>
+                    <li><strong>可加性</strong>：$(f+h)(0)g(0) = f(0)g(0) + h(0)g(0) = \langle f, g \rangle + \langle h, g \rangle$ ✅</li>
+                    <li><strong>齐次性</strong>：$(cf)(0)g(0) = c(f(0)g(0)) = c\langle f, g \rangle$ ✅</li>
+                  </ul>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                  <strong style="color: var(--accent-rose);">公理 4（正定性）惨遭致命击穿：</strong>
+                  <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.3rem;">
+                    计算自内积：$\langle f, f \rangle = (f(0))^2 \ge 0$。<br>
+                    <strong>漏洞所在：</strong> 若 $\langle f, f \rangle = 0$，只能推出 $f(0) = 0$。<br>
+                    <strong>反例实证：</strong> 取函数 $f(t) = t$。显然 $f(t)$ 不是零函数（$f \neq \mathbf{0}$），但因为 $f(0) = 0$，导致其自内积模长：
+                    $$\langle f, f \rangle = (f(0))^2 = 0^2 = 0$$
+                    <strong>非零函数具有零长度模长！</strong> 这彻底破坏了“$\langle \mathbf{u}, \mathbf{u} \rangle = 0 \iff \mathbf{u} = \mathbf{0}$”的正定性铁律。故该运算<strong>不是合法内积</strong>！
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.4 连续函数标准积分内积与奇偶正交性 (Slides 39-40) -->
+            <div class="theorem-box" style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 8px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+                🌊 1.4 连续函数空间 $C[-1, 1]$ 的合法标准积分内积与奇偶正交性初探
+              </h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                要在函数空间上建立无懈可击的度量几何，标准做法是采用定积分遍历定义域上的所有点：
+                $$\langle f, g \rangle = \int_{-1}^1 f(t)g(t) \, dt$$
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-green);">正定性成立的微积分依据：</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    若连续函数 $f(t)$ 满足 $\int_{-1}^1 f(t)^2 dt = 0$，由于被积函数非负且连续，如果存在某点 $f(t_1) \neq 0$，由保号性其邻域积分必大于零产生矛盾。因此必有 $f(t) \equiv 0$！正定性完备成立！
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-purple);">奇偶正交性检验实测：</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    测试常数函数 $f_0(t) = 1$ 与线性函数 $f_1(t) = t$ 的内积：
+                    $$\langle 1, t \rangle = \int_{-1}^1 1 \cdot t \, dt = \left[ \frac{t^2}{2} \right]_{-1}^1 = \frac{1}{2} - \frac{1}{2} = 0$$
+                    内积为 0，说明在对称区间 $[-1, 1]$ 上，常数函数与一次函数<strong>天生相互正交垂直</strong>！
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -574,43 +636,127 @@
         <!-- 4. 函数空间 Gram-Schmidt 与勒让德多项式 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-amber); color: #000;">算法应用</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">4. 函数空间正交化实战：手工打造勒让德多项式 (Legendre)</h2>
+            <span class="badge" style="background: var(--accent-amber); color: #000;">算法巅峰</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 函数空间正交化实战：手工打造勒让德多项式族 (Slides 40-44)</h2>
           </div>
           <div class="card-body">
             <p>
-              在多项式空间 $P_2[-1, 1]$ 中，单项式基 $\{1, x, x^2\}$ 极其直观，但它们彼此<strong>并不正交</strong>（例如 $\langle 1, x^2 \rangle = \int_{-1}^1 x^2 dx = \frac{2}{3} \neq 0$）。
-              用不正交的基做曲线拟合会导致著名的<strong>希尔伯特病态矩阵 (Hilbert Matrix)</strong>，数值条件数极度恶化。
+              在多项式空间 $\mathcal{P}_2[-1, 1]$ 中，单项式基 $\{1, x, x^2\}$ 极其直观，但它们彼此<strong>并不正交</strong>（例如 $\langle 1, x^2 \rangle = \int_{-1}^1 x^2 dx = \frac{2}{3} \neq 0$）。
+              如果使用这组不正交的幂基底做最小二乘连续曲线拟合，其正规方程矩阵是数值分析中臭名昭著的<strong>希尔伯特病态矩阵 (Hilbert Matrix)</strong>，条件数随阶数指数级爆炸，求逆计算极易崩溃。
             </p>
             <p>
-              现在，我们在区间 $[-1, 1]$ 上利用内积 $\langle f, g \rangle = \int_{-1}^1 f(x)g(x)dx$，对标准基 $\{v_0 = 1, v_1 = x, v_2 = x^2\}$ 执行标准的 <strong>Gram-Schmidt 正交化算法</strong>：
+              <strong>解决方案：</strong>在区间 $[-1, 1]$ 上利用内积 $\langle f, g \rangle = \int_{-1}^1 f(t)g(t)dt$，对幂基底 $\{u_1 = 1, u_2 = x, u_3 = x^2\}$ 执行标准的 <strong>Gram-Schmidt 正交化算法</strong>，打造现代科学求积基石——<strong>勒让德多项式族 (Legendre Polynomials)</strong>！
             </p>
 
-            <div class="example-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(251, 191, 36, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
-              <h4 style="color: var(--accent-amber);">✍️ 步骤剖析：前三阶勒让德正交基的手工推导</h4>
-              
-              <div style="margin-top: 0.75rem; line-height: 1.9; font-size: 0.92rem;">
-                <p><strong>① 第一个基向量：</strong></p>
-                $$P_0(x) = v_0(x) = 1, \quad \|P_0\|^2 = \int_{-1}^1 1^2 dx = 2$$
-
-                <p><strong>② 第二个基向量（投影消除）：</strong></p>
-                $$P_1(x) = v_1(x) - \frac{\langle v_1, P_0 \rangle}{\|P_0\|^2} P_0(x)$$
-                <p>由于 $\langle x, 1 \rangle = \int_{-1}^1 x dx = 0$（奇函数在对称区间积分），所以分子为 0！</p>
-                $$P_1(x) = x - 0 = x, \quad \|P_1\|^2 = \int_{-1}^1 x^2 dx = \left[\frac{x^3}{3}\right]_{-1}^1 = \frac{2}{3}$$
-
-                <p><strong>③ 第三个基向量（消除在 $P_0$ 和 $P_1$ 上的投影分量）：</strong></p>
-                $$P_2(x) = v_2(x) - \frac{\langle v_2, P_0 \rangle}{\|P_0\|^2} P_0(x) - \frac{\langle v_2, P_1 \rangle}{\|P_1\|^2} P_1(x)$$
-                <p>计算各内积项：</p>
-                <ul>
-                  <li>$\langle v_2, P_0 \rangle = \int_{-1}^1 x^2 \cdot 1 dx = \frac{2}{3}$</li>
-                  <li>$\langle v_2, P_1 \rangle = \int_{-1}^1 x^2 \cdot x dx = \int_{-1}^1 x^3 dx = 0$（奇函数积分）</li>
-                </ul>
-                <p>代入公式：</p>
-                $$P_2(x) = x^2 - \frac{2/3}{2} \cdot 1 - 0 \cdot x = x^2 - \frac{1}{3}$$
-                <p style="color: var(--text-muted); font-size: 0.88rem;">
-                  （数学界传统习惯将端点值标准化为 $P_n(1) = 1$，乘以比例常数 $\frac{3}{2}$ 即得标准型 $\frac{1}{2}(3x^2 - 1)$）。
-                </p>
+            <!-- 预备内积计算表 -->
+            <div class="concept-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(15, 23, 42, 0.5); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">
+                📋 预备积分核算：幂基底元素间的两两内积表 (Slide 40)
+              </h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                在对称区间 $[-1, 1]$ 上，奇次幂积分为 0，偶次幂积分为 $2/(k+1)$：
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; font-size: 0.9rem;">
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle 1, 1 \rangle = \int_{-1}^1 1 dt = 2$
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle x, 1 \rangle = \int_{-1}^1 x dt = 0$
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle x, x \rangle = \int_{-1}^1 x^2 dt = \frac{2}{3}$
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle x^2, 1 \rangle = \int_{-1}^1 x^2 dt = \frac{2}{3}$
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle x^2, x \rangle = \int_{-1}^1 x^3 dt = 0$
+                </div>
+                <div style="background: rgba(30, 41, 59, 0.6); padding: 0.6rem; border-radius: 4px; text-align: center;">
+                  $\langle x^2, x^2 \rangle = \int_{-1}^1 x^4 dt = \frac{2}{5}$
+                </div>
               </div>
+            </div>
+
+            <!-- Gram-Schmidt 算法推导卡片 -->
+            <div class="example-box" style="margin: 1.25rem 0; padding: 1.5rem; background: rgba(251, 191, 36, 0.06); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.75rem;">
+                ✍️ 讲义精算：前三阶勒让德正交基与单位正交基完整推导 (Slides 41-44)
+              </h4>
+              
+              <div style="line-height: 1.9; font-size: 0.92rem;">
+                <!-- 步骤 1 -->
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-blue);">第 1 步：取第一个正交基向量 $v_1$</strong>
+                  <p style="margin: 0.4rem 0;">
+                    $$v_1(x) = u_1(x) = 1, \quad \|v_1\|^2 = \langle 1, 1 \rangle = 2$$
+                  </p>
+                </div>
+
+                <!-- 步骤 2 -->
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-purple);">第 2 步：消除 $u_2 = x$ 在 $v_1$ 方向上的投影分量</strong>
+                  <p style="margin: 0.4rem 0;">
+                    $$v_2(x) = u_2(x) - \frac{\langle u_2, v_1 \rangle}{\|v_1\|^2} v_1(x) = x - \frac{\langle x, 1 \rangle}{2} \cdot 1 = x - \frac{0}{2} \cdot 1 = x$$
+                  </p>
+                  <p style="font-size: 0.86rem; color: var(--text-muted); margin: 0.2rem 0;">
+                    因奇偶对称性分子为 0，一次项与常数项天然正交！其范数平方为：
+                    $$\|v_2\|^2 = \langle x, x \rangle = \int_{-1}^1 x^2 dx = \frac{2}{3}$$
+                  </p>
+                </div>
+
+                <!-- 步骤 3 -->
+                <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 6px; margin-bottom: 1rem; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-amber);">第 3 步：消除 $u_3 = x^2$ 在 $v_1$ 与 $v_2$ 两个正交基上的投影分量</strong>
+                  <p style="margin: 0.4rem 0;">
+                    $$\begin{aligned}
+                    v_3(x) &= u_3(x) - \frac{\langle u_3, v_1 \rangle}{\|v_1\|^2} v_1(x) - \frac{\langle u_3, v_2 \rangle}{\|v_2\|^2} v_2(x) \\
+                    &= x^2 - \frac{\langle x^2, 1 \rangle}{2} \cdot 1 - \frac{\langle x^2, x \rangle}{2/3} \cdot x \\
+                    &= x^2 - \frac{2/3}{2} \cdot 1 - \frac{0}{2/3} \cdot x \\
+                    &= x^2 - \frac{1}{3}
+                    \end{aligned}$$
+                  </p>
+                  <p style="margin: 0.4rem 0;">
+                    <strong>严密核算 $v_3$ 的模长平方 $\|v_3\|^2$（讲义 Slide 43）：</strong>
+                    $$\begin{aligned}
+                    \|v_3\|^2 &= \int_{-1}^1 \left( x^2 - \frac{1}{3} \right)^2 dx = \int_{-1}^1 \left( x^4 - \frac{2}{3}x^2 + \frac{1}{9} \right) dx \\
+                    &= \left[ \frac{x^5}{5} - \frac{2x^3}{9} + \frac{x}{9} \right]_{-1}^1 = 2 \left( \frac{1}{5} - \frac{2}{9} + \frac{1}{9} \right) \\
+                    &= 2 \left( \frac{1}{5} - \frac{1}{9} \right) = 2 \cdot \frac{4}{45} = \frac{8}{45}
+                    \end{aligned}$$
+                  </p>
+                </div>
+
+                <!-- 正交基归一化 -->
+                <div style="background: rgba(52, 211, 153, 0.08); padding: 1rem; border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                  <strong style="color: var(--accent-green);">第 4 步：单位化生成标准正交基 (Orthonormal Basis $\{q_1, q_2, q_3\}$) (Slide 44)</strong>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.5rem;">
+                    <div>
+                      $$q_1(x) = \frac{v_1}{\|v_1\|} = \frac{1}{\sqrt{2}}$$
+                    </div>
+                    <div>
+                      $$q_2(x) = \frac{v_2}{\|v_2\|} = \frac{x}{\sqrt{2/3}} = \sqrt{\frac{3}{2}} x$$
+                    </div>
+                    <div>
+                      $$q_3(x) = \frac{v_3}{\|v_3\|} = \frac{x^2 - 1/3}{\sqrt{8/45}} = \frac{\sqrt{10}}{4} (3x^2 - 1)$$
+                    </div>
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 0.5rem;">
+                    <em>（传统经典勒让德多项式 $P_n(x)$ 将端点值标准化为 $P_n(1) = 1$：$P_0(x) = 1, \; P_1(x) = x, \; P_2(x) = \frac{1}{2}(3x^2 - 1)$，二者仅相差常数比例因子！）</em>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 正交基正交投影威力 -->
+            <div class="theorem-box" style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 8px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">
+                🎯 正交基的降维威力：函数最佳平方二次逼近无需矩阵求逆！
+              </h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                有了正交基 $\{v_1 = 1, \; v_2 = x, \; v_3 = x^2 - \frac{1}{3}\}$，任意复杂连续函数 $f(t) \in C[-1, 1]$（例如 $f(t) = \cos(\pi t)$ 或 $e^t$）在二次多项式子空间 $\mathcal{P}_2$ 上的<strong>最佳逼近二次多项式</strong>，直接由独立的 3 个定积分投影相加得到：
+                $$\operatorname{proj}_{\mathcal{P}_2}(f) = \frac{\langle f, v_1 \rangle}{\|v_1\|^2} v_1 + \frac{\langle f, v_2 \rangle}{\|v_2\|^2} v_2 + \frac{\langle f, v_3 \rangle}{\|v_3\|^2} v_3 = \frac{\int_{-1}^1 f(t)dt}{2} \cdot 1 + \frac{\int_{-1}^1 t f(t)dt}{2/3} \cdot x + \frac{\int_{-1}^1 (t^2 - 1/3) f(t)dt}{8/45} \cdot \left(x^2 - \frac{1}{3}\right)$$
+                <strong>完全不需要列写庞大的正规方程组，更不需要求任何逆矩阵！</strong> 这与傅里叶级数的独立正交投影在代数本质上是完全同构的！
+              </p>
             </div>
           </div>
         </div>
@@ -910,6 +1056,38 @@ reconstructed_energy = 0.5 * (a0**2) + np.sum(an**2 + bn**2)
 print(f"\n=== 帕塞瓦尔能量守恒对比 ===")
 print(f"原时域信号能量: {total_energy:.4f}")
 print(f"前 5 阶频域谐波能量累加: {reconstructed_energy:.4f} (能量捕获率: {reconstructed_energy/total_energy * 100:.2f}%)")
+
+# ==========================================
+# 4. SymPy 符号积分：勒让德多项式 Gram-Schmidt 正交化验证
+# ==========================================
+import sympy as sp
+t = sp.Symbol('t')
+# 定义在 [-1, 1] 上的单项式基底
+u1, u2, u3 = sp.Integer(1), t, t**2
+
+def ip(f, g):
+    """定义在 [-1, 1] 上的实函数内积 ⟨f, g⟩ = ∫ f(t)g(t) dt"""
+    return sp.integrate(f * g, (t, -1, 1))
+
+# Gram-Schmidt 算法正交化
+v1 = u1
+v2 = u2 - (ip(u2, v1) / ip(v1, v1)) * v1
+v3 = u3 - (ip(u3, v1) / ip(v1, v1)) * v1 - (ip(u3, v2) / ip(v2, v2)) * v2
+
+print(f"\n=== SymPy 勒让德正交基 ===")
+print(f"v1: {v1}, ||v1||^2 = {ip(v1, v1)}")
+print(f"v2: {v2}, ||v2||^2 = {ip(v2, v2)}")
+print(f"v3: {v3}, ||v3||^2 = {ip(v3, v3)}")
+
+# 标准正交基单位化
+q1 = v1 / sp.sqrt(ip(v1, v1))
+q2 = v2 / sp.sqrt(ip(v2, v2))
+q3 = v3 / sp.sqrt(ip(v3, v3))
+print(f"\n=== 标准正交基 (Orthonormal Basis) ===")
+print(f"q1: {q1}")
+print(f"q2: {q2}")
+print(f"q3: {sp.simplify(q3)}")
+print(f"内积验证 ⟨q1, q3⟩ = {ip(q1, q3)}, ⟨q2, q3⟩ = {ip(q2, q3)}, ⟨q3, q3⟩ = {ip(q3, q3)}")
 </code></pre>
           </div>
         </div>

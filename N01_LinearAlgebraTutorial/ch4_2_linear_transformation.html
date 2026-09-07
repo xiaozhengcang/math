@@ -394,6 +394,87 @@ print("复合变换矩阵:\n", np.round(T, 4))</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 6. 台大讲义深化：单射、满射、双射与几何变换标准矩阵全谱系 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-purple); color: #000;">讲义核心进阶</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 🌐 映射分类学：单射 (One-to-One)、满射 (Onto) 与四大几何变换代数矩阵闭环</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      线性变换 $T: \mathbb{R}^n \to \mathbb{R}^m$ 其标准矩阵为 $A = [T(\mathbf{e}_1) \dots T(\mathbf{e}_n)] \in M_{m \times n}$。台大讲义系统总结了矩阵形态、秩与映射分类的完备对应：
+    </p>
+
+    <!-- 单射满射对比 -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.25rem 0;">
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔹 单射 (Injective / One-to-One)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+          • <strong>本质</strong>：不同的输入必定映射到不同的输出（不发生降维重叠）。<br>
+          • <strong>充要等价条件</strong>：<br>
+          ① $\text{Null}(T) = \{\mathbf{0}\}$（核空间只有零向量）；<br>
+          ② $A$ 的列向量线性无关；<br>
+          ③ $\text{rank}(A) = n$（满列秩）；<br>
+          ④ 必须满足 $n \le m$（瘦高或方阵）。
+        </p>
+      </div>
+
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🔹 满射 (Surjective / Onto)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+          • <strong>本质</strong>：目标空间中每一个点都至少有一个原象（值域铺满全空间）。<br>
+          • <strong>充要等价条件</strong>：<br>
+          ① $\text{Col}(T) = \mathbb{R}^m$（值域等于整个目标空间）；<br>
+          ② $A$ 的列向量张成 $\mathbb{R}^m$；<br>
+          ③ $\text{rank}(A) = m$（满行秩）；<br>
+          ④ 必须满足 $m \le n$（扁平或方阵）。
+        </p>
+      </div>
+    </div>
+
+    <!-- 2D 几何矩阵表 -->
+    <div style="overflow-x: auto; margin: 1.5rem 0;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem 1rem; color: var(--accent-blue);">变换类型</th>
+            <th style="padding: 0.75rem 1rem; color: var(--accent-purple);">标准矩阵 $[T]$</th>
+            <th style="padding: 0.75rem 1rem;">基向量象 $T(\mathbf{e}_1), T(\mathbf{e}_2)$</th>
+            <th style="padding: 0.75rem 1rem;">行列式 $\det$ 与几何效应</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">平面旋转 $\theta$</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">$[\cos\theta, \sin\theta]^T, [-\sin\theta, \cos\theta]^T$</td>
+            <td style="padding: 0.75rem 1rem;">$\det = 1$（保持距离与定向的正交变换）</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">关于 $x$ 轴反射</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">$\mathbf{e}_1, -\mathbf{e}_2$</td>
+            <td style="padding: 0.75rem 1rem;">$\det = -1$（保持面积，但反转右手系定向）</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">水平错切 (Shear)</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 1 & k \\ 0 & 1 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">$\mathbf{e}_1, [k, 1]^T$</td>
+            <td style="padding: 0.75rem 1rem;">$\det = 1$（保持面积不变，卡瓦列里原理）</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">各向同性缩放</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} c & 0 \\ 0 & c \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">$c\mathbf{e}_1, c\mathbf{e}_2$</td>
+            <td style="padding: 0.75rem 1rem;">$\det = c^2$（面积缩放 $c^2$ 倍）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch4_1_span_independence.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

@@ -379,6 +379,137 @@ print("Col(A) 的基底列向量:", col_basis)</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 历史寻根与列对应定理 (CCT) 深度证明 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">历史与前沿定理</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 📜 《九章算术》分离系数历史源流与列对应定理严格代数推导</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      高斯消元法的代数思想早在公元一世纪的中国古代数学名著<strong>《九章算术》第八章“方程”篇</strong>中就已完整成型——用算筹将联立方程的未知数分离，仅排列未知数系数与常数项，通过“以少减多”消除未知数，与今天的增广矩阵行化简完全同构。
+    </p>
+
+    <!-- CCT 定理与证明 -->
+    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 列对应定理 (Column Correspondence Theorem, CCT) 深入代数证明</h4>
+      <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-main);">
+        设 $A = \begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \dots & \mathbf{a}_n \end{bmatrix}$，其简化行阶梯形为 $R = \begin{bmatrix} \mathbf{r}_1 & \mathbf{r}_2 & \dots & \mathbf{r}_n \end{bmatrix}$。若 $A$ 的列向量满足某个线性组合关系：
+        $$\mathbf{a}_j = c_1 \mathbf{a}_{i_1} + c_2 \mathbf{a}_{i_2} + \dots + c_k \mathbf{a}_{i_k}$$
+        则 $R$ 的对应列向量必满足<strong>完全相同的线性组合与权重系数</strong>：
+        $$\mathbf{r}_j = c_1 \mathbf{r}_{i_1} + c_2 \mathbf{r}_{i_2} + \dots + c_k \mathbf{r}_{i_k}$$
+      </p>
+      <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-radius: 4px; margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+        <strong>严密证明</strong>：将线性依赖关系移项，记为齐次方程形式：
+        $$c_1 \mathbf{a}_{i_1} + \dots + c_k \mathbf{a}_{i_k} - \mathbf{a}_j = \mathbf{0} \iff A\mathbf{x} = \mathbf{0}$$
+        其中向量 $\mathbf{x}$ 的第 $i_1, \dots, i_k$ 项为 $c_1, \dots, c_k$，第 $j$ 项为 $-1$，其余分量全为 0。<br>
+        由于初等行变换等价于左乘可逆初等矩阵序列 $P$，使得 $R = PA$。因此齐次方程 $A\mathbf{x} = \mathbf{0}$ 与 $R\mathbf{x} = \mathbf{0}$ 的<strong>解空间完全一致</strong>（$\text{Null}(A) = \text{Null}(R)$）。<br>
+        这意味着同一个向量 $\mathbf{x}$ 也必然是 $R\mathbf{x} = \mathbf{0}$ 的解！展开即得：
+        $$c_1 \mathbf{r}_{i_1} + \dots + c_k \mathbf{r}_{i_k} - \mathbf{r}_j = \mathbf{0} \iff \mathbf{r}_j = c_1 \mathbf{r}_{i_1} + \dots + c_k \mathbf{r}_{i_k}$$
+        证毕。
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 讲义经典课后习题精选与严密题解 (Exercise 1-4 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 📖 讲义经典课后习题精选与严密题解 (Exercise 1-4 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 1-4 全部经典习题</strong>（题号 73, 74, 79, 81, 82, 83, 84, 85, 86），提供全套严密解答与知识升华。
+    </p>
+
+    <!-- Problem 73 & 79 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 73 & 79：矩阵秩的极值与零度界限</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 73】</strong> 描述一个秩为 0 的 $m \times n$ 矩阵。<br>
+        <strong>【题解 73】</strong> 矩阵的秩等于非零行数（或主元数）。若 $\text{rank}(A) = 0$，说明其 RREF 中没有任何非零行，因此原矩阵 $A$ 中所有元素必须全为 0。即<strong>唯一的零秩矩阵是全零矩阵 $O_{m \times n}$</strong>。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 79】</strong> 一个 $m \times n$ 矩阵的最大可能秩是多少？最小可能零度 (Nullity) 是多少？<br>
+        <strong>【题解 79】</strong><br>
+        1. <strong>最大可能秩</strong>：由于每行至多一个主元且每列至多一个主元，因此 $\text{rank}(A) \le \min(m, n)$。最大可能秩即为 $\min(m, n)$。<br>
+        2. <strong>最小可能零度</strong>：根据秩-零度定理，$\text{nullity}(A) = n - \text{rank}(A)$。当秩取最大值 $\min(m, n)$ 时，零度取最小值：
+        $$\min \text{nullity}(A) = n - \min(m, n) = \max(0, n - m)$$
+        （即当 $n \le m$ 时最小零度为 0；当 $n > m$ 时最小零度为 $n - m$）。
+      </p>
+    </div>
+
+    <!-- Problem 82, 83, 84 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 82, 83 & 84：解的唯一性与欠定/超定系统</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 82】</strong> 设 $A$ 是 $m \times n$ 矩阵，$\mathbf{b} \in \mathbb{R}^m$。若方程 $A\mathbf{x} = \mathbf{b}$ 拥有唯一解，关于矩阵 $A$ 的秩可以得出什么确定结论？<br>
+        <strong>【题解 82】</strong> 方程有唯一解意味着：① 必须相容（无矛盾行）；② 必须<strong>没有任何自由变量</strong>（自由变量数为 0）。因此自由变量数 $\text{nullity}(A) = n - \text{rank}(A) = 0 \implies \mathbf{\text{rank}(A) = n}$（列满秩，所有列向量线性无关）。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 83】</strong> 欠定方程组（方程个数少于未知数个数，$m < n$）的解的数目有何规律？<br>
+        <strong>【题解 83】</strong> 自由变量数 $n - \text{rank}(A) \ge n - m > 0$。因此自由变量至少有 $n-m$ 个。若方程组相容，必定拥有<strong>无穷多解</strong>；若方程组不相容，则<strong>无解</strong>。欠定方程组<strong>绝不可能有唯一解</strong>。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 84】</strong> 超定方程组（方程个数多于未知数个数，$m > n$）的解的数目有何规律？<br>
+        <strong>【题解 84】</strong> 三种可能均可出现：① 若增广行出现 $[0 \dots 0 \mid b_i 
+eq 0]$ 则<strong>无解</strong>（绝大多数现实工科情况）；② 若系统相容且 $\text{rank}(A) = n$（满列秩），则有<strong>唯一解</strong>；③ 若系统相容但 $\text{rank}(A) < n$，则有<strong>无穷多解</strong>。
+      </p>
+    </div>
+
+    <!-- Problem 85, 86, 81 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 85, 86 & 81：满行秩相容性与鲁歇-卡佩里判定定理</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 85】</strong> 证明：若 $m \times n$ 矩阵 $A$ 的秩为 $m$，则对任意 $\mathbf{b} \in \mathbb{R}^m$，方程 $A\mathbf{x} = \mathbf{b}$ 恒相容。<br>
+        <strong>【证明 85】</strong> 当 $\text{rank}(A) = m$ 时，行阶梯形中拥有 $m$ 个主元，即每一行都有一个领先主元 1。因此增广矩阵 $[A \mid \mathbf{b}]$ 的消元结果中不可能出现形如 $\begin{bmatrix} 0 & 0 & \dots & 0 & \mid & d \end{bmatrix}$ ($d 
+eq 0$) 的矛盾行。故方程组对任意 $\mathbf{b}$ 恒有解。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 86（鲁歇-卡佩里定理 Rouché-Capelli Theorem）】</strong> 证明：矩阵方程 $A\mathbf{x} = \mathbf{b}$ 相容当且仅当 $\text{rank}(A) = \text{rank}([A \mid \mathbf{b}])$。<br>
+        <strong>【证明 86】</strong><br>
+        • ($\implies$) 若方程有解，则 $\mathbf{b} = x_1 \mathbf{a}_1 + \dots + x_n \mathbf{a}_n \in \text{Span}(\text{columns of } A)$。向列向量集合中添加一个已属于该张成空间的冗余向量 $\mathbf{b}$，列空间的张成维数不变，故 $\text{rank}([A \mid \mathbf{b}]) = \text{rank}(A)$。<br>
+        • ($\impliedby$) 若 $\text{rank}(A) = \text{rank}([A \mid \mathbf{b}])$，说明增广矩阵化为 RREF 后，最后一列（$\mathbf{b}$ 对应列）绝不可能成为主元列（否则秩将增加 1）。没有矛盾行，方程必然相容。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 81】</strong> 设 $A$ 是一个 $4 \times 3$ 矩阵。方程 $A\mathbf{x} = \mathbf{b}$ 是否可能对每一个 $\mathbf{b} \in \mathbb{R}^4$ 均有解？<br>
+        <strong>【题解 81】</strong> <strong>绝不可能</strong>。因为矩阵最多有 3 列，主元数量 $\text{rank}(A) \le \min(4, 3) = 3$。化简为 RREF 后，至少有 $4 - 3 = 1$ 个全零行。列向量最多只能张成 $\mathbb{R}^4$ 中的一个 3 维超平面，无法铺满整个 4 维空间。只要选取不在该超平面上的 $\mathbf{b}$，方程立即无解。
+      </p>
+    </div>
+
+    <!-- Problem 74 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 74：矩阵变换后 RREF 形式逆推全景</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 74】</strong> 设 $m \times n$ 矩阵 $A$ 的简化行阶梯形为 $R$。求下列各派生矩阵的 RREF 形式：<br>
+        (a) $\begin{bmatrix} A & \mathbf{0} \end{bmatrix}$；<br>
+        (b) $\begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \dots & \mathbf{a}_k \end{bmatrix}$ (其中 $k < n$)；<br>
+        (c) $cA$ (其中 $c$ 为非零常数)；<br>
+        (d) $\begin{bmatrix} I_m & A \end{bmatrix}$；<br>
+        (e) $\begin{bmatrix} A & cA \end{bmatrix}$ (其中 $c$ 为任意常数)。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题解 74】</strong><br>
+        • <strong>(a)</strong> 初等行变换对零列没有任何改变，因此 $\text{RREF}([A \mid \mathbf{0}]) = \begin{bmatrix} R & \mathbf{0} \end{bmatrix}$。<br>
+        • <strong>(b)</strong> 行化简过程完全逐列向前推进，截取前 $k$ 列做同样行变换，结果等于 $R$ 的前 $k$ 列，即 $\begin{bmatrix} \mathbf{r}_1 & \dots & \mathbf{r}_k \end{bmatrix}$。<br>
+        • <strong>(c)</strong> 当 $c 
+eq 0$ 时，第一步可施加行缩放操作将每一行除以 $c$ 变回 $A$，后续行变换完全相同，故 $\text{RREF}(cA) = R$。<br>
+        • <strong>(d)</strong> $\begin{bmatrix} I_m & A \end{bmatrix}$ 的前 $m$ 列已经是由领先 1 构成的标准基列，且每列除主元外全为 0，这已经严格满足了 RREF 的全部 4 大法则！因此其自身已经是 RREF，结果即为 $\begin{bmatrix} I_m & A \end{bmatrix}$。<br>
+        • <strong>(e)</strong> 对 $[A \mid cA]$ 施加将 $A$ 化为 $R$ 的同一套初等行变换序列 $P$（即 $PA = R$）。右侧块为 $P(cA) = c(PA) = cR$。此时 $[R \mid cR]$ 已经满足所有阶梯条件与主元唯一非零条件，故 $\text{RREF}([A \mid cA]) = \begin{bmatrix} R & cR \end{bmatrix}$。
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch1_5_solution.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

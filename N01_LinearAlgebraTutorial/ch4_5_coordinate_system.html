@@ -373,6 +373,46 @@ print("P_{C <- B} 矩阵:\n", P_C_B)</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 讲义经典课后习题精选与严密题解 (Exercise 4-4 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 📖 讲义经典课后习题精选与严密题解 (Exercise 4-4 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 4-4 全部经典习题</strong>（题号 95, 97, 102），涵盖基底尺度缩放下的坐标反比定律与基变换过渡矩阵 $P_{\mathcal{A} \leftarrow \mathcal{B}}$ 严格构建。
+    </p>
+
+    <!-- Problem 95, 97 & 102 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 95, 97 & 102：基底数乘的坐标反比法则与双基底过渡转换</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 95 & 97】</strong> 设 $\mathcal{A} = \{\mathbf{u}_1, \dots, \mathbf{u}_n\}$ 是 $\mathbb{R}^n$ 的基底，$c_1, \dots, c_n$ 为非零标量。已知 $\mathcal{B} = \{c_1 \mathbf{u}_1, \dots, c_n \mathbf{u}_n\}$ 亦为 $\mathbb{R}^n$ 的一组基。<br>
+        若某向量在基 $\mathcal{A}$ 下的坐标为 $[\mathbf{v}]_\mathcal{A} = \begin{bmatrix} x_1 \\ \vdots \\ x_n \end{bmatrix}$，求其在基 $\mathcal{B}$ 下的坐标向量 $[\mathbf{v}]_\mathcal{B}$。<br>
+        <strong>【题解 95 & 97】</strong> 根据坐标的线性组合定义：
+        $$\mathbf{v} = x_1 \mathbf{u}_1 + x_2 \mathbf{u}_2 + \dots + x_n \mathbf{u}_n$$
+        我们需要用新基底向量 $\mathbf{b}_i = c_i \mathbf{u}_i$ 来表达 $\mathbf{v}$。因为 $c_i \neq 0$，直接进行代数恒等变形：
+        $$\mathbf{v} = \frac{x_1}{c_1} (c_1 \mathbf{u}_1) + \frac{x_2}{c_2} (c_2 \mathbf{u}_2) + \dots + \frac{x_n}{c_n} (c_n \mathbf{u}_n)$$
+        根据新基底 $\mathcal{B}$ 下坐标的唯一性，新坐标的每一个分量恰为：
+        $$[\mathbf{v}]_\mathcal{B} = \begin{bmatrix} x_1 / c_1 \\ x_2 / c_2 \\ \vdots \\ x_n / c_n \end{bmatrix}$$
+        <strong>直觉法则（反变定律）</strong>：<strong>基底尺子放大 $c_i$ 倍，量出来的坐标数值反向缩小为 $1/c_i$</strong>！这正是物理学中“协变与反变 (Covariant & Contravariant)”的数学源头。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 102】</strong> 设 $\mathcal{A}$ 与 $\mathcal{B}$ 为 $\mathbb{R}^n$ 的两组任意基底。试用过渡矩阵将坐标 $[\mathbf{v}]_\mathcal{A}$ 用 $[\mathbf{v}]_\mathcal{B}$ 表示。<br>
+        <strong>【题解 102】</strong> 设基底列向量矩阵分别为 $A = \begin{bmatrix} \mathbf{a}_1 \dots \mathbf{a}_n \end{bmatrix}$ 与 $B = \begin{bmatrix} \mathbf{b}_1 \dots \mathbf{b}_n \end{bmatrix}$。<br>
+        由客观向量绝对不变性：$\mathbf{v} = A [\mathbf{v}]_\mathcal{A} = B [\mathbf{v}]_\mathcal{B}$。<br>
+        因为 $A$ 是基底矩阵必可逆，两端左乘 $A^{-1}$ 得出：
+        $$[\mathbf{v}]_\mathcal{A} = A^{-1} B [\mathbf{v}]_\mathcal{B} = P_{\mathcal{A} \leftarrow \mathcal{B}} [\mathbf{v}]_\mathcal{B}$$
+        其中过渡矩阵 $P_{\mathcal{A} \leftarrow \mathcal{B}} = A^{-1} B = \begin{bmatrix} [\mathbf{b}_1]_\mathcal{A} & [\mathbf{b}_2]_\mathcal{A} & \dots & [\mathbf{b}_n]_\mathcal{A} \end{bmatrix}$，即把旧基 $\mathcal{B}$ 的每根向量在目标基 $\mathcal{A}$ 下写出坐标，按列拼装即得！
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch4_4_basis_dimension.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

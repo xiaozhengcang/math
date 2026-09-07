@@ -402,6 +402,61 @@ print("零空间基向量 Null(A):", null_basis)</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 台大讲义深度拓展：超定/欠定方程分类与满行秩恒相容定理 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-rose); color: #000;">讲义核心进阶</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 📐 超定方程、欠定方程与满行秩恒相容定理全景</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      在台大讲义中，方程组根据方程个数 $m$ 与未知数个数 $n$ 的对比，被严密划分为<strong>超定系统 (Overdetermined)</strong> 与<strong>欠定系统 (Underdetermined)</strong>，并给出了关于“对任意 $\mathbf{b}$ 恒有解”的充要条件。
+    </p>
+
+    <!-- 对比网格 -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin: 1.25rem 0;">
+      <!-- 欠定方程 -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">🔸 欠定方程组 (Underdetermined, $m < n$)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+          • <strong>特征</strong>：方程少、未知数多（扁平矩阵，Wide Matrix）。<br>
+          • <strong>自由度分析</strong>：主元列数量 $\text{rank}(A) \le m < n$。因此自由变量个数 $\text{nullity}(A) = n - \text{rank}(A) \ge n - m > 0$。<br>
+          • <strong>解的可能数目</strong>：<strong>绝不可能有唯一解！</strong>只有两种可能：<strong>无解</strong>（矛盾方程）或<strong>无穷多解</strong>（只要相容，必有自由度）。
+        </p>
+      </div>
+
+      <!-- 超定方程 -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔹 超定方程组 (Overdetermined, $m > n$)</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+          • <strong>特征</strong>：方程多、未知数少（瘦高矩阵，Tall Matrix）。<br>
+          • <strong>空间几何</strong>：$n$ 根列向量在 $m$ 维高维空间中最多张成一个 $n$ 维子平面。<br>
+          • <strong>解的可能数目</strong>：现实工程数据中绝大多数情况下<strong>无解</strong>（目标 $\mathbf{b}$ 偏离列张成空间）；若恰好相容，当列向量无关时有<strong>唯一解</strong>；若列向量相关则有<strong>无穷多解</strong>。<br>
+          • <strong>工程归宿</strong>：无解时通过最小二乘法 (Least Squares, Ch 7) 求最佳逼近。
+        </p>
+      </div>
+    </div>
+
+    <!-- 满行秩恒相容定理 -->
+    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">👑 满行秩方程恒相容定理 (Always Consistent Theorem)</h4>
+      <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-main);">
+        设 $A$ 是一个 $m \times n$ 矩阵。以下命题在逻辑上<strong>完全等价</strong>：
+      </p>
+      <ol style="padding-left: 1.5rem; line-height: 1.8; font-size: 0.9rem; color: var(--text-muted);">
+        <li>对 $\mathbb{R}^m$ 中的<strong>任意向量 $\mathbf{b}$</strong>，方程组 $A\mathbf{x} = \mathbf{b}$ <strong>恒有解 (Always Consistent)</strong>；</li>
+        <li>$\mathbb{R}^m$ 中的每个向量 $\mathbf{b}$ 都在矩阵 $A$ 的列张成空间中，即 $\text{Span}(\mathbf{a}_1, \dots, \mathbf{a}_n) = \mathbb{R}^m$；</li>
+        <li>矩阵 $A$ 拥有<strong>满行秩 (Full Row Rank)</strong>，即 $\text{rank}(A) = m$；</li>
+        <li>$A$ 的简化行阶梯形 $\text{RREF}(A)$ 的<strong>每一行都包含一个主元 1</strong>（不存在全零行）。</li>
+      </ol>
+      <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-radius: 4px; margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+        <strong>直觉反推</strong>：如果 $\text{rank}(A) < m$，则 $\text{RREF}(A)$ 的最后一行必定是全零行 $\begin{bmatrix} 0 & \dots & 0 \end{bmatrix}$。只要在增广向量 $\mathbf{b}$ 的对应位置制造非零值，就会出现 $[0 \dots 0 \mid 1]$ 矛盾行导致无解！因此，只有当主元铺满所有行时，系统才能免疫任何 $\mathbf{b}$ 的扰动。
+      </div>
+    </div>
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch1_4_matrix.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

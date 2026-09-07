@@ -595,7 +595,38 @@
           </div>
         </div>
 
-        <!-- 核心板块 2: 代数重数 vs 几何重数与亏损矩阵 -->
+            <!-- 1.3 讲义深度拓展：特征多项式的零点常数项、负矩阵变换与首项系数 -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">📐 1.3 讲义深度拓展：特征多项式的零点常数项、负矩阵变换与首项系数</h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; font-size: 0.88rem; line-height: 1.7;">
+        <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px;">
+          <strong style="color: var(--accent-blue);">① 零点常数项法则 ($f(0)$ 的几何意义)</strong>
+          <p style="color: var(--text-muted); margin-top: 0.25rem;">
+            若特征多项式定义为 $f(t) = \det(A - tI)$，令 $t = 0$，立得：
+            $$f(0) = \det(A - 0I) = \det(A)$$
+            若定义为 $p(t) = \det(tI - A)$，则 $p(0) = \det(-A) = (-1)^n \det(A)$。<br>
+            <strong>核心价值</strong>：多项式的常数项在无需任何因式分解的情况下，直接等于矩阵的行列式（或其相反数），瞬间连接了代数多项式与高维几何超体积！
+          </p>
+        </div>
+        <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px;">
+          <strong style="color: var(--accent-purple);">② 负矩阵 $-A$ 的特征多项式变换律</strong>
+          <p style="color: var(--text-muted); margin-top: 0.25rem;">
+            设 $A$ 的特征多项式为 $f_A(t) = a_n t^n + a_{n-1} t^{n-1} + \dots + a_1 t + a_0$。求 $-A$ 的特征多项式：
+            $$f_{-A}(t) = \det((-A) - tI) = \det(-(A + tI)) = (-1)^n \det(A - (-t)I) = (-1)^n f_A(-t)$$
+            代入展开式后，奇数次项系数反号，偶数次项系数保号。这一规律在物理对称性（宇称变换）中至关重要。
+          </p>
+        </div>
+        <div style="padding: 0.75rem; background: var(--bg-secondary); border-radius: 4px;">
+          <strong style="color: var(--accent-green);">③ 最高次项 $t^n$ 的系数规范</strong>
+          <p style="color: var(--text-muted); margin-top: 0.25rem;">
+            • 对于定义 $f(t) = \det(A - tI)$：由行列式主对角线展开，最高次项来自 $\prod_{i=1}^n (a_{ii} - t)$，其 $t^n$ 系数严格为 $(-1)^n$；<br>
+            • 对于首一多项式定义 $p(t) = \det(tI - A)$：其最高次项 $t^n$ 系数恒为 $+1$。<br>
+            在学术文献与不同教材中切换时，首项符号差异正是源于这两种等价定义的约定。
+          </p>
+        </div>
+      </div>
+    </div>
+<!-- 核心板块 2: 代数重数 vs 几何重数与亏损矩阵 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-rose); color: #fff;">核心理论 2</span>
@@ -804,7 +835,45 @@
           </div>
         </div>
 
-        <!-- 核心板块 4: 凯莱-哈密顿定理与极小多项式 -->
+            <!-- 3.3 深入剖析：标量乘 cB、转置矩阵 B^T 与相似变换下的特征空间同构 -->
+    <div style="margin: 2rem 0; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.75rem; font-size: 1.05rem;">
+        🧬 3.3 深入剖析：标量乘 $cB$、转置矩阵 $B^T$ 与相似变换下特征子空间的同构映射
+      </h4>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
+        <!-- 标量乘 cB -->
+        <div style="padding: 1rem; background: rgba(56, 189, 248, 0.05); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+          <strong style="color: var(--accent-blue);">⚡ 标量数乘 $cB$ ($c \neq 0$)</strong>
+          <p style="color: var(--text-muted); margin-top: 0.4rem;">
+            若 $B\mathbf{v} = \lambda \mathbf{v}$，则对任意非零常数 $c$：
+            $$(cB)\mathbf{v} = c(B\mathbf{v}) = c(\lambda\mathbf{v}) = (c\lambda)\mathbf{v}$$
+            • <strong>特征值</strong>：全部精确等比例缩放为 $c\lambda$；<br>
+            • <strong>特征向量</strong>：<strong>完全不变</strong>！方向轴没有任何偏转；特征空间的基底保持完全一致。
+          </p>
+        </div>
+
+        <!-- 转置矩阵 B^T -->
+        <div style="padding: 1rem; background: rgba(52, 211, 153, 0.05); border-left: 3px solid var(--accent-green); border-radius: 6px;">
+          <strong style="color: var(--accent-green);">🔄 转置矩阵 $B^T$ (左右特征向量)</strong>
+          <p style="color: var(--text-muted); margin-top: 0.4rem;">
+            依行列式转置不变性：$\det(B^T - \lambda I) = \det((B - \lambda I)^T) = \det(B - \lambda I)$。<br>
+            • <strong>特征值与代数重数</strong>：$B$ 与 $B^T$ 的特征多项式完全恒等，特征值完全相同！<br>
+            • <strong>特征向量不同</strong>：$(B - \lambda I)\mathbf{v} = \mathbf{0}$ 为右特征向量（列零空间）；$(B^T - \lambda I)\mathbf{w} = \mathbf{0} \iff \mathbf{w}^T B = \lambda \mathbf{w}^T$ 为左特征向量。除非 $B$ 是对称矩阵，否则左右特征向量在空间中指向截然不同的方向！
+          </p>
+        </div>
+
+        <!-- 相似变换下的同构 -->
+        <div style="padding: 1rem; background: rgba(192, 132, 252, 0.05); border-left: 3px solid var(--accent-purple); border-radius: 6px;">
+          <strong style="color: var(--accent-purple);">🛡️ 相似变换下的特征空间同构映射</strong>
+          <p style="color: var(--text-muted); margin-top: 0.4rem;">
+            若 $B = P^{-1}AP$，则 $A$ 对应 $\lambda$ 的特征子空间 $E_A(\lambda)$ 与 $B$ 对应 $\lambda$ 的特征子空间 $E_B(\lambda)$ 之间存在<strong>线性同构 (Isomorphism)</strong>：
+            $$\mathbf{v} \in E_A(\lambda) \iff P^{-1}\mathbf{v} \in E_B(\lambda)$$
+            因此，基变换矩阵 $P^{-1}$ 将 $E_A(\lambda)$ 的基底一一映射为 $E_B(\lambda)$ 的基底，从而保证<strong>几何重数在相似变换下绝对不变：$\dim E_A(\lambda) = \dim E_B(\lambda)$</strong>！
+          </p>
+        </div>
+      </div>
+    </div>
+<!-- 核心板块 4: 凯莱-哈密顿定理与极小多项式 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-indigo); color: #fff;">核心理论 4</span>
@@ -1092,11 +1161,168 @@ print("直接求逆结果对比一致性:", C_inv_ch == C.inv())</code></pre>
           </div>
         </div>
 
-        <!-- 核心板块 8: 思考探究与自我检测关卡 -->
+        <!-- 讲义经典习题精选与严密题解 (Exercise 5-2 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(192, 132, 252, 0.1), rgba(56, 189, 248, 0.1));">
+    <span class="badge" style="background: var(--accent-purple); color: #fff;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">8. 📖 讲义经典课后习题精选与严密题解 (Exercise 5-2 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 5-2 全部核心习题</strong>（题号 74, 75, 76, 77, 78, 81, 83, 84），涵盖特征多项式代数反推、重数不等式逆向求解及相似子空间同构映射的完整严密解答。
+    </p>
+
+    <!-- Problem 74, 75, 76 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 74, 75 & 76：特征多项式展开项系数与负矩阵变换</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 74】</strong> 若 $f(t)$ 是方阵 $A$ 的特征多项式，求 $f(0)$ 的值。<br>
+        <strong>【题解 74】</strong> 依定义 $f(t) = \det(A - tI)$，令 $t = 0$，得到：
+        $$f(0) = \det(A - 0I) = \det(A)$$
+        （注：若教材采用 $p(t) = \det(tI - A)$ 定义，则 $p(0) = \det(-A) = (-1)^n \det(A)$）。特征多项式在 $t=0$ 处的值直接给出矩阵的行列式。</p>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+
+        <p><strong>【题目 75】</strong> 设 $n \times n$ 矩阵 $A$ 的特征多项式为 $f(t) = a_n t^n + a_{n-1} t^{n-1} + \dots + a_1 t + a_0$。求负矩阵 $-A$ 的特征多项式。<br>
+        <strong>【题解 75】</strong> 计算 $-A$ 的特征多项式定义式：
+        $$f_{-A}(t) = \det((-A) - tI) = \det(-(A + tI)) = (-1)^n \det(A - (-t)I) = (-1)^n f_A(-t)$$
+        将 $f_A(-t) = a_n (-t)^n + a_{n-1} (-t)^{n-1} + \dots + a_1 (-t) + a_0$ 代入，得到：
+        $$f_{-A}(t) = a_n t^n - a_{n-1} t^{n-1} + a_{n-2} t^{n-2} - a_{n-3} t^{n-3} + \dots + (-1)^n a_0$$
+        即：$t$ 的同奇偶次项系数与原多项式相比，若 $n - k$ 为奇数则反号，为偶数则保持不变！</p>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+
+        <p><strong>【题目 76】</strong> $n \times n$ 矩阵的特征多项式中，$t^n$ 项的系数是什么？<br>
+        <strong>【题解 76】</strong> 若多项式定义为 $\det(A - tI)$，展开主对角线乘积 $\prod_{i=1}^n (a_{ii} - t) = (-t)^n + \dots$，因此 $t^n$ 的系数为 <strong>$(-1)^n$</strong>；若定义为 $\det(tI - A)$，主对角线乘积为 $\prod_{i=1}^n (t - a_{ii}) = t^n + \dots$，其系数严格为 <strong>$1$</strong>。</p>
+      </div>
+    </div>
+
+    <!-- Problem 77 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 77：四阶方阵特征多项式在几何重数约束下的逆推分析</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 77】</strong> 设 $A$ 是一个 $4 \times 4$ 矩阵，没有非实数特征值，且恰有两个不同的实特征值：$5$ 和 $-9$。设 $W_1$ 和 $W_2$ 分别是对应于 $5$ 和 $-9$ 的特征子空间。已知 $\dim W_2 = 1$。写出所有与上述条件相符的可能的特征多项式 $f(t)$。<br>
+        <strong>【严密分析与题解】</strong><br>
+        1. <strong>代数重数之和约束</strong>：因为矩阵是 $4 \times 4$ 阶且无非实特征值，所以全体特征值的代数重数之和必等于 4：
+        $$m_1 + m_2 = 4 \quad (m_1 = \text{AM}(5), \; m_2 = \text{AM}(-9))$$
+        2. <strong>特征值存在性与几何重数下界约束</strong>：<br>
+        • 因为 5 是特征值，必有 $m_1 \ge 1$；<br>
+        • 关键定理约束：$1 \le \dim W_2 \le \text{AM}(-9) = m_2$。已知 $\dim W_2 = 1$，因此 $m_2$ 必须满足 $m_2 \ge 1$ 且 $m_2 \le 4 - 1 = 3$！<br>
+        3. <strong>分类讨论所有合法整数解 $(m_1, m_2)$</strong>：<br>
+        • <strong>情形 1：$m_2 = 1$</strong>，则 $m_1 = 4 - 1 = 3$。对应特征多项式为：
+        $$f_1(t) = (t - 5)^3 (t + 9) \quad \text{或} \quad (5 - t)^3 (-9 - t)$$
+        • <strong>情形 2：$m_2 = 2$</strong>，则 $m_1 = 4 - 2 = 2$。对应特征多项式为：
+        $$f_2(t) = (t - 5)^2 (t + 9)^2 \quad \text{或} \quad (5 - t)^2 (-9 - t)^2$$
+        • <strong>情形 3：$m_2 = 3$</strong>，则 $m_1 = 4 - 3 = 1$。对应特征多项式为：
+        $$f_3(t) = (t - 5)(t + 9)^3 \quad \text{或} \quad (5 - t)(-9 - t)^3$$
+        <strong>结论</strong>：满足已知条件的特征多项式恰好有上述 <strong>3 种可能</strong>！
+      </div>
+    </div>
+
+    <!-- Problem 78 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 78：五阶方阵特征多项式的唯一性判定</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 78】</strong> 设 $A$ 是一个 $5 \times 5$ 矩阵，没有非实特征值，且恰有三个不同的实特征值：$4, 6, 7$。设 $W_1, W_2, W_3$ 分别是对应于 $4, 6, 7$ 的特征子空间。已知 $\dim W_2 = 2$ 且 $\dim W_3 = 2$。写出所有可能的特征多项式。<br>
+        <strong>【严密分析与题解】</strong><br>
+        1. 设特征值 $4, 6, 7$ 的代数重数分别为 $m_1, m_2, m_3$。总阶数为 5，故：
+        $$m_1 + m_2 + m_3 = 5$$
+        2. 由几何重数不超过代数重数的基本不等式 $\dim W_i \le m_i$：<br>
+        • 对特征值 6：$m_2 \ge \dim W_2 = 2$；<br>
+        • 对特征值 7：$m_3 \ge \dim W_3 = 2$；<br>
+        • 对特征值 4：因为 4 是特征值，其特征向量非零，故 $\dim W_1 \ge 1 \implies m_1 \ge 1$。<br>
+        3. 累加不等式下界：
+        $$m_1 + m_2 + m_3 \ge 1 + 2 + 2 = 5$$
+        因为等式两端刚好相等，所有不等式必须<strong>同时取等号</strong>！<br>
+        $$m_1 = 1, \quad m_2 = 2, \quad m_3 = 2$$
+        <strong>结论</strong>：特征多项式被<strong>唯一确定</strong>，不存在第二种可能！
+        $$f(t) = -(t - 4)(t - 6)^2 (t - 7)^2 \quad \text{或首一形式} \quad p(t) = (t - 4)(t - 6)^2 (t - 7)^2$$
+      </div>
+    </div>
+
+    <!-- Problem 81 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">📝 习题 81：矩阵数乘 $cB$ 对特征值与特征子空间基底的影响</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 81】</strong><br>
+        (a) 确定 $A = \begin{bmatrix} 3 & 2 \\ -1 & 0 \end{bmatrix}$ 每个特征子空间的基底；<br>
+        (b) 确定 $-3A$ 每个特征子空间的基底；(c) 确定 $5A$ 每个特征子空间的基底；<br>
+        (d) 建立任意方阵 $B$ 与 $cB$ ($c \neq 0$) 特征向量之间的关系；(e) 建立特征值之间的关系。<br>
+        <strong>【完整解答】</strong><br>
+        • <strong>解答 (a)</strong>：特征方程 $\det(A - tI) = (3 - t)(-t) - (-2) = t^2 - 3t + 2 = (t - 1)(t - 2) = 0$。<br>
+          - 当 $\lambda_1 = 1$ 时：$A - I = \begin{bmatrix} 2 & 2 \\ -1 & -1 \end{bmatrix}$，解得基底 $\mathbf{v}_1 = \begin{bmatrix} -1 \\ 1 \end{bmatrix}$；<br>
+          - 当 $\lambda_2 = 2$ 时：$A - 2I = \begin{bmatrix} 1 & 2 \\ -1 & -2 \end{bmatrix}$，解得基底 $\mathbf{v}_2 = \begin{bmatrix} -2 \\ 1 \end{bmatrix}$。<br>
+        • <strong>解答 (b) & (c)</strong>：<br>
+          - 对 $-3A$：特征值为 $-3(1) = -3$ 与 $-3(2) = -6$。特征子空间基底<strong>完全不变</strong>，仍分别为 $\begin{bmatrix} -1 \\ 1 \end{bmatrix}$ 和 $\begin{bmatrix} -2 \\ 1 \end{bmatrix}$；<br>
+          - 对 $5A$：特征值为 $5$ 与 $10$。基底依然保持为 $\begin{bmatrix} -1 \\ 1 \end{bmatrix}$ 和 $\begin{bmatrix} -2 \\ 1 \end{bmatrix}$。<br>
+        • <strong>解答 (d) & (e) 通用定理</strong>：对任意非零标量 $c \neq 0$：<br>
+          - <strong>特征值关系</strong>：若 $\lambda$ 是 $B$ 的特征值，则 $c\lambda$ 必定是 $cB$ 的特征值；<br>
+          - <strong>特征向量关系</strong>：$B$ 与 $cB$ 对应相同主轴的特征向量<strong>完全相同</strong>，特征子空间完全重合！
+      </div>
+    </div>
+
+    <!-- Problem 83 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 83：转置矩阵 $A^T$ 与 $A$ 的特征多项式、特征值与特征向量全解析</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 83】</strong><br>
+        (a) 求 $A^T$ 的特征多项式，其中 $A = \begin{bmatrix} 5 & -2 \\ 1 & 8 \end{bmatrix}$；<br>
+        (b) 建立任意方阵 $B$ 与 $B^T$ 特征多项式的普遍代数关系；<br>
+        (c) 这对特征值意味着什么？ (d) 特征向量之间是否存在必然相同关系？<br>
+        <strong>【严密证明与深度剖析】</strong><br>
+        • <strong>解答 (a)</strong>：$A^T = \begin{bmatrix} 5 & 1 \\ -2 & 8 \end{bmatrix}$。其特征多项式为：
+        $$\det(A^T - tI) = (5 - t)(8 - t) - (1)(-2) = t^2 - 13t + 40 + 2 = t^2 - 13t + 42 = (t - 6)(t - 7)$$
+        与 $A$ 的特征多项式完全恒等！<br>
+        • <strong>解答 (b) 普遍关系</strong>：由行列式性质“转置矩阵行列式不变”（$\det(M^T) = \det M$），对任意标量 $t$：
+        $$\det(B^T - tI) = \det((B^T - tI^T)) = \det((B - tI)^T) = \det(B - tI)$$
+        因此，$B$ 与 $B^T$ 的特征多项式<strong>完全恒等</strong>！<br>
+        • <strong>解答 (c) 特征值关系</strong>：因为特征多项式恒等，所以 $B$ 与 $B^T$ 具有<strong>完全相同的特征值谱与完全相同的代数重数</strong>。<br>
+        • <strong>解答 (d) 特征向量辨析</strong>：<strong>特征向量通常完全不同！</strong><br>
+        验证：对上述 $A$，对应 $\lambda = 6$：
+        $$(A - 6I)\mathbf{v} = \begin{bmatrix} -1 & -2 \\ 1 & 2 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{v} = \begin{bmatrix} -2 \\ 1 \end{bmatrix}$$
+        但对 $A^T$ 对应 $\lambda = 6$：
+        $$(A^T - 6I)\mathbf{w} = \begin{bmatrix} -1 & 1 \\ -2 & 2 \end{bmatrix}\mathbf{w} = \mathbf{0} \implies \mathbf{w} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
+        显然 $\begin{bmatrix} -2 \\ 1 \end{bmatrix}$ 与 $\begin{bmatrix} 1 \\ 1 \end{bmatrix}$ 方向完全不同！只有当矩阵是对称矩阵（$B = B^T$）或正规矩阵时，特征向量才会重合或保持特定对偶关系。
+      </div>
+    </div>
+
+    <!-- Problem 84 (核心压轴定理) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-indigo); margin-bottom: 0.5rem;">👑 习题 84 (核心压轴定理)：相似矩阵特征子空间的同构与几何重数守恒证明</h4>
+      <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <p><strong>【题目 84】</strong> 设 $A$ 和 $B$ 是 $n \times n$ 相似矩阵，满足 $B = P^{-1}AP$（$P$ 为可逆矩阵）。设 $\lambda$ 是 $A$（因而也是 $B$）的一个特征值。证明以下结果：<br>
+        (a) 向量 $\mathbf{v} \in \mathbb{R}^n$ 在 $A$ 对应于 $\lambda$ 的特征子空间中，当且仅当 $P^{-1}\mathbf{v}$ 在 $B$ 对应于 $\lambda$ 的特征子空间中；<br>
+        (b) 若 $\{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$ 是 $A$ 对应 $\lambda$ 的特征空间的基底，则 $\{P^{-1}\mathbf{v}_1, P^{-1}\mathbf{v}_2, \dots, P^{-1}\mathbf{v}_k\}$ 是 $B$ 对应 $\lambda$ 的特征空间的基底；<br>
+        (c) $A$ 和 $B$ 对应于相同特征值的特征子空间<strong>具有完全相同的维数（几何重数完全相等）</strong>。<br>
+        <strong>【三部曲严密推导】</strong><br>
+        • <strong>证明 (a)</strong>：<br>
+        $\mathbf{v} \in E_A(\lambda) \iff A\mathbf{v} = \lambda \mathbf{v}$。<br>
+        因为 $B = P^{-1}AP \iff A = P B P^{-1}$，代入得：
+        $$(P B P^{-1})\mathbf{v} = \lambda \mathbf{v}$$
+        两端同时左乘可逆矩阵 $P^{-1}$：
+        $$P^{-1}(P B P^{-1}\mathbf{v}) = P^{-1}(\lambda \mathbf{v}) \implies B(P^{-1}\mathbf{v}) = \lambda (P^{-1}\mathbf{v})$$
+        记向量 $\mathbf{w} = P^{-1}\mathbf{v}$，上式即 $B\mathbf{w} = \lambda \mathbf{w}$，这正是 $\mathbf{w} = P^{-1}\mathbf{v} \in E_B(\lambda)$ 的充要条件！充分必要性证毕。<br>
+        • <strong>证明 (b)</strong>：<br>
+        由 (a) 可知映射 $T(\mathbf{x}) = P^{-1}\mathbf{x}$ 是从 $E_A(\lambda)$ 到 $E_B(\lambda)$ 的线性变换。<br>
+        1. <strong>线性无关性保持</strong>：设标量使得 $c_1 (P^{-1}\mathbf{v}_1) + \dots + c_k (P^{-1}\mathbf{v}_k) = \mathbf{0}$。提取线性算子：
+        $$P^{-1}(c_1\mathbf{v}_1 + \dots + c_k\mathbf{v}_k) = \mathbf{0}$$
+        两端左乘 $P$ 得 $c_1\mathbf{v}_1 + \dots + c_k\mathbf{v}_k = \mathbf{0}$。因已知 $\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 是基底（线性无关），必有 $c_1 = \dots = c_k = 0$！故新向量组必定线性无关。<br>
+        2. <strong>张成性保持</strong>：对任意 $\mathbf{w} \in E_B(\lambda)$，令 $\mathbf{u} = P\mathbf{w}$，由 (a) 知 $\mathbf{u} \in E_A(\lambda)$。因为 $\{\mathbf{v}_i\}$ 张成 $E_A(\lambda)$，存在系数使得 $\mathbf{u} = \sum d_i \mathbf{v}_i$。两边乘 $P^{-1}$ 得 $\mathbf{w} = \sum d_i (P^{-1}\mathbf{v}_i)$。故新向量组张成 $E_B(\lambda)$。<br>
+        因此，$\{P^{-1}\mathbf{v}_1, \dots, P^{-1}\mathbf{v}_k\}$ 严格构成 $E_B(\lambda)$ 的一组基底！<br>
+        • <strong>证明 (c)</strong>：<br>
+        由 (b) 结论，$E_B(\lambda)$ 基底所含向量的个数严格等于 $E_A(\lambda)$ 基底所含向量的个数（均为 $k$）。<br>
+        因此：
+        $$\dim(E_A(\lambda)) = \dim(E_B(\lambda)) \quad \Longleftrightarrow \quad \text{GM}_A(\lambda) = \text{GM}_B(\lambda)$$
+        <strong>大一统结论</strong>：<strong>相似矩阵不仅特征值完全相同、代数重数完全相同，其几何重数也绝对完全相同！相似变换在几何上是空间的无损刚性映射，完好保全了所有的特征子空间维度骨架！</strong>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 核心板块 8: 思考探究与自我检测关卡 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-rose); color: #fff;">自测挑战</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">8. 🎯 概念深度检测与思考题</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">9. 🎯 概念深度检测与思考题</h2>
           </div>
           <div class="card-body">
             
@@ -1110,7 +1336,7 @@ print("直接求逆结果对比一致性:", C_inv_ch == C.inv())</code></pre>
                   <li>$\lambda_1 + \lambda_2 + \lambda_3 = \text{tr}(A) \implies 1 + \lambda_2 + \lambda_3 = 6 \implies \lambda_2 + \lambda_3 = 5$</li>
                   <li>$\lambda_1 \cdot \lambda_2 \cdot \lambda_3 = \det(A) \implies 1 \cdot (\lambda_2 \lambda_3) = 8 \implies \lambda_2 \lambda_3 = 8$</li>
                 </ul>
-                <p>构造一元二次方程 $t^2 - 5t + 8 = 0$。判别式 $\Delta = 25 - 32 = -7 &lt; 0$。</p>
+                <p>构造一元二次方程 $t^2 - 5t + 8 = 0$。判别式 $\Delta = 25 - 32 = -7 < 0$。</p>
                 <p>解得共轭复特征值：$\lambda_{2,3} = \frac{5 \pm i\sqrt{7}}{2}$。完全确定，无需知道矩阵的具体数值！</p>
               </div>
             </div>

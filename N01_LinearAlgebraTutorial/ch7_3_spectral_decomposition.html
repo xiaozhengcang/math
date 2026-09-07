@@ -307,34 +307,62 @@
         </div>
 
         <!-- 1. 谱定理严密证明与几何意义 -->
+        <!-- 1. 正交矩阵与实对称矩阵谱定理 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-blue); color: #000;">核心丰碑</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">1. 实对称矩阵谱定理 (Spectral Theorem) 及其极美证明</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交矩阵等价性质体系与实对称矩阵谱定理 (Spectral Theorem)</h2>
           </div>
           <div class="card-body">
-            <div class="theorem-box" style="padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
-              <h4 style="color: var(--accent-blue); font-size: 1.1rem; margin-bottom: 0.75rem;">
+            
+            <!-- 1.1 正交矩阵 7 大等价判定条件 -->
+            <h3 style="color: var(--accent-blue); margin-top: 0.5rem;">1.1 正交矩阵 (Orthogonal Matrix) 的 7 大等价充要判据与几何特性</h3>
+            <p>
+              设 $Q \in \mathbb{R}^{n \times n}$ 为实方阵。以下 7 条性质<strong>在数学上彼此完全等价</strong>（满足其一即满足全部）：
+            </p>
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <ol style="margin-left: 1.5rem; line-height: 2; font-size: 0.9rem; color: #f8fafc;">
+                <li>$Q$ 是方阵且满足 $Q^T Q = I_n$。</li>
+                <li>$Q Q^T = I_n$（转置与逆相互重合）。</li>
+                <li>$Q$ 可逆且 $Q^{-1} = Q^T$（求逆操作瞬间完成，零算力消耗！）。</li>
+                <li>$Q$ 的各<strong>列向量</strong>构成 $\mathbb{R}^n$ 的标准正交基（Orthonormal Basis）。</li>
+                <li>$Q$ 的各<strong>行向量</strong>构成 $\mathbb{R}^n$ 的标准正交基。</li>
+                <li><strong>保持内积不变：</strong>对任意 $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$，恒有 $(Q\mathbf{u}) \cdot (Q\mathbf{v}) = \mathbf{u} \cdot \mathbf{v}$。</li>
+                <li><strong>保持模长不变（等距同构 Isometry）：</strong>对任意 $\mathbf{u} \in \mathbb{R}^n$，恒有 $\|Q\mathbf{u}\| = \|\mathbf{u}\|$。</li>
+              </ol>
+              <hr style="border:0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+              <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;">
+                • <strong>行列式必为 $\pm 1$：</strong>由 $\det(Q^T Q) = \det(Q^T)\det(Q) = (\det Q)^2 = \det(I) = 1$，必有 $\det Q = \pm 1$。其中 $\det Q = +1$ 代表<strong>刚体纯旋转 (Rotation)</strong>，$\det Q = -1$ 代表<strong>镜像反射 (Reflection)</strong>。<br>
+                • <strong>乘积仍为正交矩阵：</strong>若 $P, Q$ 均正交，则 $(PQ)^T (PQ) = Q^T (P^T P) Q = Q^T I Q = I$。<br>
+                • <strong>基映射定理 (Exercise 7-4 Prob 54 & 55)：</strong>线性算子 $T$ 为正交算子 $\iff$ $T$ 将标准正交基映射为标准正交基！对 $\mathbb{R}^n$ 中的任意两组标准正交基，存在唯一正交算子在这两组基之间实现刚性转换。
+              </div>
+            </div>
+
+            <!-- 1.2 实对称矩阵谱定理 -->
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">1.2 实对称矩阵谱定理 (Spectral Theorem) 及其极美证明</h3>
+            <div class="theorem-box" style="padding: 1.5rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.2);">
+              <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.75rem;">
                 👑 实对称矩阵谱定理 (Spectral Theorem for Symmetric Matrices)
               </h4>
               <p style="font-size: 0.95rem; line-height: 1.8;">
-                设 $A \in \mathbb{R}^{n \times n}$ 为实对称矩阵（$A = A^T$），则：
+                设 $A \in \mathbb{R}^{n \times n}$ 为实对称矩阵（$A = A^T$），则享有以下三大数学特权：
               </p>
               <ol style="margin-left: 1.5rem; line-height: 2;">
-                <li>$A$ 的所有特征值 $\lambda_1, \lambda_2, \dots, \lambda_n$ <strong>必定全部为实数</strong>。</li>
+                <li>$A$ 的所有特征值 $\lambda_1, \lambda_2, \dots, \lambda_n$ <strong>必定全部为纯实数</strong>。</li>
                 <li>属于不同特征值的特征向量<strong>彼此严格正交</strong>。</li>
-                <li>存在正交矩阵 $Q$（满足 $Q^T Q = I$），使得 $A$ <strong>正交对角化</strong>：
-                  <div style="font-size: 1.25rem; text-align: center; margin: 0.5rem 0; color: var(--accent-blue);">
+                <li>存在正交矩阵 $Q$（满足 $Q^T Q = I$），使得 $A$ <strong>可正交对角化</strong>：
+                  <div style="font-size: 1.25rem; text-align: center; margin: 0.5rem 0; color: var(--accent-purple);">
                     $$A = Q \Lambda Q^T = Q \begin{bmatrix} \lambda_1 & & 0 \\ & \ddots & \\ 0 & & \lambda_n \end{bmatrix} Q^T$$
                   </div>
+                  且充要条件成立：<strong>实方阵 $A$ 可正交对角化 $\iff$ $A$ 是实对称矩阵！</strong>
                 </li>
               </ol>
 
               <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1rem 0;">
 
-              <h5 style="color: var(--accent-green); margin-bottom: 0.5rem;">✍️ 性质 1 严谨证明：特征值必为实数</h5>
+              <h5 style="color: var(--accent-green); margin-bottom: 0.5rem;">✍️ 性质 1 严谨证明：特征值必为纯实数 (80_Ch07_04 Slide 15)</h5>
               <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
-                设 $\lambda \in \mathbb{C}$ 为 $A$ 的特征值，$\mathbf{x} \in \mathbb{C}^n$ 为对应的非零特征向量（$A\mathbf{x} = \lambda \mathbf{x}$）。
+                设 $\lambda \in \mathbb{C}$ 为 $A$ 的特征值，$\mathbf{x} \in \mathbb{C}^n$ 为对应的非零特征向量（$A\mathbf{x} = \lambda \mathbf{x}$）。<br>
                 考虑复共轭转置内积 $\mathbf{x}^* A \mathbf{x}$（其中 $\mathbf{x}^* = \bar{\mathbf{x}}^T$）：
                 $$\mathbf{x}^* (A\mathbf{x}) = \mathbf{x}^* (\lambda \mathbf{x}) = \lambda (\mathbf{x}^* \mathbf{x}) = \lambda \|\mathbf{x}\|^2$$
                 另一方面，由于 $A$ 是实对称矩阵，满足 $A^* = \bar{A}^T = A^T = A$：
@@ -342,25 +370,46 @@
                 两式相减得 $(\lambda - \bar{\lambda}) \|\mathbf{x}\|^2 = 0$。由于 $\mathbf{x} \neq \mathbf{0}$，必有 $\lambda = \bar{\lambda}$，即虚部为 0，<strong>$\lambda \in \mathbb{R}$ 必为纯实数</strong>！$\blacksquare$
               </p>
 
-              <h5 style="color: var(--accent-purple); margin-top: 1rem; margin-bottom: 0.5rem;">✍️ 性质 2 严谨证明：互异特征值特征向量正交</h5>
+              <h5 style="color: var(--accent-purple); margin-top: 1rem; margin-bottom: 0.5rem;">✍️ 性质 2 严谨证明：互异特征值特征向量严格垂直 (80_Ch07_04 Slide 17)</h5>
               <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
                 设 $A\mathbf{v}_1 = \lambda_1 \mathbf{v}_1$，$A\mathbf{v}_2 = \lambda_2 \mathbf{v}_2$，且 $\lambda_1 \neq \lambda_2$。计算点积项：
-                $$\lambda_1 (\mathbf{v}_1^T \mathbf{v}_2) = (\lambda_1 \mathbf{v}_1)^T \mathbf{v}_2 = (A\mathbf{v}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T (A^T \mathbf{v}_2)$$
-                由于对称性 $A^T = A$，右边变为：
-                $$\mathbf{v}_1^T (A \mathbf{v}_2) = \mathbf{v}_1^T (\lambda_2 \mathbf{v}_2) = \lambda_2 (\mathbf{v}_1^T \mathbf{v}_2)$$
-                整理得：
-                $$(\lambda_1 - \lambda_2) (\mathbf{v}_1 \cdot \mathbf{v}_2) = 0$$
-                因为 $\lambda_1 \neq \lambda_2$，括号内差值非零，故必须且只能是 <strong>$\mathbf{v}_1 \cdot \mathbf{v}_2 = 0$</strong>！特征向量天生垂直！$\blacksquare$
+                $$\lambda_1 (\mathbf{v}_1 \cdot \mathbf{v}_2) = (\lambda_1 \mathbf{v}_1)^T \mathbf{v}_2 = (A\mathbf{v}_1)^T \mathbf{v}_2 = \mathbf{v}_1^T (A^T \mathbf{v}_2)$$
+                由于实对称性 $A^T = A$，右边变为：
+                $$\mathbf{v}_1^T (A \mathbf{v}_2) = \mathbf{v}_1^T (\lambda_2 \mathbf{v}_2) = \lambda_2 (\mathbf{v}_1 \cdot \mathbf{v}_2)$$
+                整理得 $(\lambda_1 - \lambda_2) (\mathbf{v}_1 \cdot \mathbf{v}_2) = 0$。因为 $\lambda_1 \neq \lambda_2$，差值非零，故必有 <strong>$\mathbf{v}_1 \cdot \mathbf{v}_2 = 0$</strong>！特征向量天生垂直！$\blacksquare$
+              </p>
+
+              <h5 style="color: var(--accent-blue); margin-top: 1rem; margin-bottom: 0.5rem;">✍️ 性质 3 充要性证明：可正交对角化 $\iff$ 实对称矩阵</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                <strong>充分性：</strong>若 $A$ 为实对称矩阵，特征值全实且代数重数等于几何重数，重根空间经 Gram-Schmidt 正交化后可拼成全空间标准正交基，故存在正交矩阵 $P$ 满足 $P^T A P = D \iff A = P D P^T$。<br>
+                <strong>必要性：</strong>若 $A = P D P^T$（其中 $P^T P = I, D$ 为对角阵），对其求转置：
+                $$A^T = (P D P^T)^T = (P^T)^T D^T P^T = P D P^T = A$$
+                因此 $A$ <strong>必须且只能是实对称矩阵</strong>！$\blacksquare$
+              </p>
+            </div>
+
+            <!-- 讲义经典 2x2 正交对角化例题 -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <span style="color: var(--accent-blue); font-weight: bold;">📖 讲义经典例题：2×2 对称矩阵的正交对角化 (80_Ch07_04 Slide 22)</span>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
+                设对称矩阵 $A = \begin{bmatrix} 2 & -2 \\ -2 & 5 \end{bmatrix}$：<br>
+                • 特征方程：$\det(A - \lambda I) = (2-\lambda)(5-\lambda) - 4 = \lambda^2 - 7\lambda + 6 = (\lambda - 6)(\lambda - 1) = 0$。求得特征值 $\lambda_1 = 6, \lambda_2 = 1$。<br>
+                • 特征子空间：<br>
+                对于 $\lambda_1 = 6$：$(A - 6I)\mathbf{v} = \begin{bmatrix} -4 & -2 \\ -2 & -1 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{v}_1 = \begin{bmatrix} -1 \\ 2 \end{bmatrix} \implies \mathbf{q}_1 = \frac{1}{\sqrt{5}}\begin{bmatrix} -1 \\ 2 \end{bmatrix}$<br>
+                对于 $\lambda_2 = 1$：$(A - I)\mathbf{v} = \begin{bmatrix} 1 & -2 \\ -2 & 4 \end{bmatrix}\mathbf{v} = \mathbf{0} \implies \mathbf{v}_2 = \begin{bmatrix} 2 \\ 1 \end{bmatrix} \implies \mathbf{q}_2 = \frac{1}{\sqrt{5}}\begin{bmatrix} 2 \\ 1 \end{bmatrix}$<br>
+                • 验证垂直：$\mathbf{v}_1 \cdot \mathbf{v}_2 = -1(2) + 2(1) = 0$ ✓<br>
+                • 正交对角化形式：
+                $$P = \frac{1}{\sqrt{5}}\begin{bmatrix} -1 & 2 \\ 2 & 1 \end{bmatrix}, \quad D = \begin{bmatrix} 6 & 0 \\ 0 & 1 \end{bmatrix}, \quad A = P D P^T$$
               </p>
             </div>
           </div>
         </div>
 
-        <!-- 2. 谱分解与外积视角 -->
+        <!-- 2. 谱分解与算子多项式 (Exercise 7-5 深度融合) -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-purple); color: #fff;">空间解构</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">2. 谱分解 (Spectral Decomposition)：矩阵的外积投影原子化</h2>
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">空间解构与算子函数</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 谱分解 (Spectral Decomposition)：矩阵的外积投影原子化与矩阵函数</h2>
           </div>
           <div class="card-body">
             <p>
@@ -373,15 +422,56 @@
               $$A = \sum_{i=1}^n \lambda_i P_i \quad \text{其中 } P_i = \mathbf{q}_i \mathbf{q}_i^T$$
             </div>
 
+            <!-- 谱分解原子性质 -->
             <div class="intuition-box" style="margin-top: 1rem;">
-              <strong style="color: var(--accent-green);">🌌 谱分解的深刻物理与几何图像</strong>
+              <strong style="color: var(--accent-green);">🌌 谱分解的四大原子算子定律 (Exercise 7-5 Prob 43)</strong>
               <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.4rem;">
-                每一个矩阵 $P_i = \mathbf{q}_i \mathbf{q}_i^T$ 都是一个<strong>秩为 1 的正交投影算子</strong>，它精确地将向量投射到第 $i$ 根主轴上：
-                <br>• $P_i^2 = P_i, \quad P_i^T = P_i$（标准对称幂等投影矩阵）
-                <br>• $P_i P_j = \mathbf{q}_i (\mathbf{q}_i^T \mathbf{q}_j) \mathbf{q}_j^T = \mathbf{0} \ (i \neq j)$（各投影算子彼此正交隔离、零干扰）
-                <br>• $\sum_{i=1}^n P_i = I$（投影完全覆盖，全空间恒等分解）
-                <br><strong>结论：</strong>任何实对称矩阵变换，本质上不过是<strong>将向量分别投影到 $n$ 根垂直正交的坐标轴上，分别放大 $\lambda_i$ 倍，再线性叠加起来</strong>！
+                每一个矩阵 $P_i = \mathbf{q}_i \mathbf{q}_i^T$ 都是一个<strong>秩为 1 的标准对称正交投影矩阵</strong>：
+                <br>• $P_i^T = (\mathbf{q}_i \mathbf{q}_i^T)^T = \mathbf{q}_i \mathbf{q}_i^T = P_i$（严格对称）
+                <br>• $P_i^2 = (\mathbf{q}_i \mathbf{q}_i^T)(\mathbf{q}_i \mathbf{q}_i^T) = \mathbf{q}_i (\mathbf{q}_i^T \mathbf{q}_i) \mathbf{q}_i^T = \mathbf{q}_i (1) \mathbf{q}_i^T = P_i$（幂等投影，投射至 $\text{Span}\{\mathbf{q}_i\}$）
+                <br>• $P_i P_j = \mathbf{q}_i (\mathbf{q}_i^T \mathbf{q}_j) \mathbf{q}_j^T = \mathbf{0} \ (i \neq j)$（各投影算子彼此正交隔离、相互湮灭）
+                <br>• $\sum_{i=1}^n P_i = I_n$（投影完全覆盖，全空间恒等分解）
               </p>
+            </div>
+
+            <!-- 讲义经典谱分解例题 (Slide 28) -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <span style="color: var(--accent-green); font-weight: bold;">📖 讲义经典范例：2×2 矩阵谱分解展开手算 (80_Ch07_04 Slide 28)</span>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
+                设对称矩阵 $A = \begin{bmatrix} 3 & -4 \\ -4 & -3 \end{bmatrix}$。特征方程为 $\lambda^2 - 25 = 0$，特征值为 $\lambda_1 = 5, \lambda_2 = -5$。<br>
+                单位正交特征基为：$\mathbf{q}_1 = \frac{1}{\sqrt{5}}\begin{bmatrix} -2 \\ 1 \end{bmatrix}$，$\mathbf{q}_2 = \frac{1}{\sqrt{5}}\begin{bmatrix} 1 \\ 2 \end{bmatrix}$。<br>
+                计算秩 1 投影原子：
+                $$P_1 = \mathbf{q}_1 \mathbf{q}_1^T = \frac{1}{5}\begin{bmatrix} -2 \\ 1 \end{bmatrix} \begin{bmatrix} -2 & 1 \end{bmatrix} = \begin{bmatrix} 4/5 & -2/5 \\ -2/5 & 1/5 \end{bmatrix}$$
+                $$P_2 = \mathbf{q}_2 \mathbf{q}_2^T = \frac{1}{5}\begin{bmatrix} 1 \\ 2 \end{bmatrix} \begin{bmatrix} 1 & 2 \end{bmatrix} = \begin{bmatrix} 1/5 & 2/5 \\ 2/5 & 4/5 \end{bmatrix}$$
+                线性组合验证：
+                $$\lambda_1 P_1 + \lambda_2 P_2 = 5 \begin{bmatrix} 4/5 & -2/5 \\ -2/5 & 1/5 \end{bmatrix} - 5 \begin{bmatrix} 1/5 & 2/5 \\ 2/5 & 4/5 \end{bmatrix} = \begin{bmatrix} 4 - 1 & -2 - 2 \\ -2 - 2 & 1 - 4 \end{bmatrix} = \begin{bmatrix} 3 & -4 \\ -4 & -3 \end{bmatrix} = A \quad \text{✓ 完美吻合！}$$
+              </p>
+            </div>
+
+            <!-- 矩阵幂次、开方与多项式 (Exercise 7-5 Prob 53, 54, 55) -->
+            <div style="background: rgba(192, 132, 252, 0.05); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.3); margin: 1rem 0;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">⚡ 谱分解高阶威力：矩阵高次幂、任意开方与算子多项式 (Exercise 7-5)</h4>
+              <div style="font-size: 0.88rem; color: #f8fafc; line-height: 1.9;">
+                <p><strong>1. 矩阵高次幂极速计算 (Prob 53)：</strong><br>
+                  利用 $P_i^2 = P_i$ 且 $P_i P_j = \mathbf{O}$，计算对称矩阵的任意正整数次幂 $A^s$：
+                  $$A^s = (\lambda_1 P_1 + \dots + \lambda_n P_n)^s = \lambda_1^s P_1 + \lambda_2^s P_2 + \dots + \lambda_n^s P_n$$
+                  无需任何矩阵连乘，直接对标量特征值做幂运算即可！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>2. 寻找矩阵的 $k$ 次方根 (如求 $C^3 = A$, Prob 54)：</strong><br>
+                  设 $A$ 的特征值均有意义，令 $C = \sum_{i=1}^n \lambda_i^{1/3} P_i$。验证：
+                  $$C^3 = \sum_{i=1}^n (\lambda_i^{1/3})^3 P_i = \sum_{i=1}^n \lambda_i P_i = A$$
+                  谱分解为矩阵开方与指数映射提供了无与伦比的解析表达！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>3. 算子多项式与实对称矩阵的 Cayley-Hamilton 定理 (Prob 55)：</strong><br>
+                  对任意标量多项式 $g(t) = a_m t^m + \dots + a_0$，定义矩阵多项式 $g(A) = a_m A^m + \dots + a_0 I_n$。由谱分解：
+                  $$g(A) = \sum_{i=1}^n g(\lambda_i) P_i$$
+                  特别地，若 $f(t) = \det(tI - A)$ 是 $A$ 的特征多项式，因每个特征值满足 $f(\lambda_i) = 0$，直接代入即得：
+                  $$f(A) = \sum_{i=1}^n f(\lambda_i) P_i = \sum_{i=1}^n 0 \cdot P_i = \mathbf{O}$$
+                  由此对实对称矩阵一举给出了 <strong>Cayley-Hamilton 定理（矩阵必定满足自身的特征方程）</strong>的最精炼证明！
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -486,6 +576,79 @@
                 $$\lambda_{\min} \le \frac{\mathbf{x}^T A \mathbf{x}}{\mathbf{x}^T \mathbf{x}} \le \lambda_{\max}$$
                 当 $\mathbf{x}$ 沿着最大特征向量 $\mathbf{q}_{\max}$ 时取最大值 $\lambda_{\max}$！这一性质是现代主成分分析 (PCA) 与图谱聚类算法寻找第一主成分的核心数学来源！
               </p>
+            </div>
+
+            <!-- 3.3 正定性与半正定性理论专题 (Exercise 7-5 核心证明群) -->
+            <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.04); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">
+                📚 正定性与半正定性严密证明体系 (Exercise 7-5 讲义真题专题)
+              </h4>
+              <div style="font-size: 0.88rem; color: #f8fafc; line-height: 1.9;">
+                <p>
+                  <strong>核心定义辨析：</strong>实矩阵 $C$ 称为<strong>正定 (Positive Definite, $C \succ 0$)</strong>，若 $C$ 对称且对任意非零向量 $\mathbf{v} \neq \mathbf{0}$，恒有 $\mathbf{v}^T C \mathbf{v} > 0$；称为<strong>半正定 (Positive Semidefinite, $C \succeq 0$)</strong>，若 $C$ 对称且对任意 $\mathbf{v}$，恒有 $\mathbf{v}^T C \mathbf{v} \ge 0$。
+                </p>
+                <p style="color: var(--text-muted); font-size: 0.84rem; background: rgba(15, 23, 42, 0.6); padding: 0.5rem 0.8rem; border-radius: 4px; margin: 0.5rem 0;">
+                  ⚠️ <strong>特别注意：为什么必须强调对称性？</strong>（讲义 Slide 2 思考题）<br>
+                  考虑非对称矩阵 $C = \begin{bmatrix} 1 & 1 \\ -1 & 1 \end{bmatrix}$，对任意非零 $\mathbf{v} = [x, y]^T \neq \mathbf{0}$：
+                  $$\mathbf{v}^T C \mathbf{v} = [x, y] \begin{bmatrix} x+y \\ -x+y \end{bmatrix} = x(x+y) + y(-x+y) = x^2 + xy - xy + y^2 = x^2 + y^2 > 0$$
+                  虽然二次型恒为正，但 $C$ 的特征值为共轭复数 $1 \pm i$！二次型 $\mathbf{v}^T C \mathbf{v} = \mathbf{v}^T (\frac{C + C^T}{2}) \mathbf{v}$ 完全由其对称部分决定（反对称部分在二次型中恒为 0）。因此在标准线性代数与数值优化中，<strong>正定性与半正定性在定义上严格绑定实对称矩阵</strong>！
+                </p>
+
+                <!-- 定理 1 -->
+                <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                  <strong style="color: var(--accent-green);">定理 1（特征值与正定充要条件，Prob 59）：</strong>实对称矩阵 $A$ 正定 $\iff$ $A$ 的全部特征值 $\lambda_i > 0$；半正定 $\iff \lambda_i \ge 0$。
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                    <strong>证明：</strong><br>
+                    • <strong>必要性 ($\implies$)：</strong>若 $A$ 正定，设 $\lambda$ 为 $A$ 的任意实特征值，$\mathbf{v} \neq \mathbf{0}$ 为对应特征向量。则 $A\mathbf{v} = \lambda \mathbf{v}$。于是 $\mathbf{v}^T A \mathbf{v} = \mathbf{v}^T (\lambda \mathbf{v}) = \lambda \|\mathbf{v}\|^2$。由正定性知 $\mathbf{v}^T A \mathbf{v} > 0$，又因 $\|\mathbf{v}\|^2 > 0$，必有 $\lambda = \frac{\mathbf{v}^T A \mathbf{v}}{\|\mathbf{v}\|^2} > 0$。<br>
+                    • <strong>充分性 ($\impliedby$)：</strong>若 $A$ 是对称矩阵且全部 $\lambda_i > 0$。由谱定理，$A = Q D Q^T$（其中 $Q$ 正交，$D = \text{diag}(\lambda_1, \dots, \lambda_n)$）。对任意非零向量 $\mathbf{v} \neq \mathbf{0}$，令 $\mathbf{y} = Q^T \mathbf{v} = [y_1, \dots, y_n]^T$。因 $Q$ 可逆，$\mathbf{y} \neq \mathbf{0}$（至少某个分量 $y_k \neq 0$）。则：
+                    $$\mathbf{v}^T A \mathbf{v} = \mathbf{v}^T (Q D Q^T) \mathbf{v} = (Q^T \mathbf{v})^T D (Q^T \mathbf{v}) = \mathbf{y}^T D \mathbf{y} = \sum_{i=1}^n \lambda_i y_i^2 > 0$$
+                    因此 $A$ 严格正定。半正定同理（不等号换为 $\ge$）。$\blacksquare$
+                  </div>
+                </div>
+
+                <!-- 定理 2 -->
+                <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                  <strong style="color: var(--accent-purple);">定理 2（正交合同/相似保正定性，Prob 66）：</strong>设 $A = Q B Q^T$，其中 $Q$ 为正交矩阵，$B$ 为正定矩阵。则 $A$ 必为正定矩阵。
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                    <strong>证明：</strong><br>
+                    ① 对称性：$A^T = (Q B Q^T)^T = (Q^T)^T B^T Q^T = Q B Q^T = A$（因 $B$ 对称）。<br>
+                    ② 二次型正性：对任意非零向量 $\mathbf{v} \neq \mathbf{0}$，记 $\mathbf{w} = Q^T \mathbf{v}$。因为 $Q$ 正交可逆且 $\mathbf{v} \neq \mathbf{0}$，故 $\mathbf{w} \neq \mathbf{0}$。
+                    代入二次型得：
+                    $$\mathbf{v}^T A \mathbf{v} = \mathbf{v}^T (Q B Q^T) \mathbf{v} = (Q^T \mathbf{v})^T B (Q^T \mathbf{v}) = \mathbf{w}^T B \mathbf{w}$$
+                    由于 $B$ 是正定矩阵且 $\mathbf{w} \neq \mathbf{0}$，必有 $\mathbf{w}^T B \mathbf{w} > 0$。因此 $\mathbf{v}^T A \mathbf{v} > 0$，$A$ 必为正定矩阵。$\blacksquare$
+                  </div>
+                </div>
+
+                <!-- 定理 3 -->
+                <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                  <strong style="color: var(--accent-amber);">定理 3（正定矩阵之逆矩阵必正定，Prob 61）：</strong>若实对称矩阵 $A$ 可逆且正定，则 $A^{-1}$ 也必正定。
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                    <strong>证明：</strong><br>
+                    <strong>法一（代数直接法）：</strong>$(A^{-1})^T = (A^T)^{-1} = A^{-1}$，故 $A^{-1}$ 保持对称。对任意非零向量 $\mathbf{v} \neq \mathbf{0}$，令 $\mathbf{u} = A^{-1} \mathbf{v}$。因 $A^{-1}$ 可逆，$\mathbf{u} \neq \mathbf{0}$ 且 $\mathbf{v} = A \mathbf{u}$。
+                    代入二次型：
+                    $$\mathbf{v}^T A^{-1} \mathbf{v} = (A \mathbf{u})^T A^{-1} (A \mathbf{u}) = \mathbf{u}^T A^T A^{-1} A \mathbf{u} = \mathbf{u}^T A \mathbf{u} > 0$$
+                    故 $A^{-1}$ 正定。$\blacksquare$<br>
+                    <strong>法二（特征值法）：</strong>$A$ 正定 $\implies$ $A$ 的特征值 $\lambda_i > 0$。$A^{-1}$ 的特征值为 $1/\lambda_i$。显然 $1/\lambda_i > 0$，且 $A^{-1}$ 对称，由定理 1 即得 $A^{-1}$ 正定。$\blacksquare$
+                  </div>
+                </div>
+
+                <!-- 定理 4 -->
+                <div style="margin-top: 1rem; border-top: 1px dashed var(--border-color); padding-top: 0.75rem;">
+                  <strong style="color: var(--accent-rose);">定理 4（格拉姆矩阵 $A^T A$ 与 $A A^T$ 的半正定与正定判据，Prob 72 & 73 —— SVD 的理论基石）：</strong><br>
+                  (1) 对任意 $m \times n$ 实矩阵 $A$，$A^T A$（$n \times n$）与 $A A^T$（$m \times m$）<strong>恒为实对称半正定矩阵</strong>。<br>
+                  (2) $A^T A$ 是严格<strong>正定矩阵</strong> $\iff A$ 的各列向量线性无关（即 $\text{Null}(A) = \{\mathbf{0}\}$，列满秩 $\text{rank}(A) = n$）。
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.25rem;">
+                    <strong>证明：</strong><br>
+                    • 对称性：$(A^T A)^T = A^T (A^T)^T = A^T A$。同理 $(A A^T)^T = A A^T$。<br>
+                    • 半正定性：对任意 $\mathbf{v} \in \mathbb{R}^n$：
+                    $$\mathbf{v}^T (A^T A) \mathbf{v} = (A \mathbf{v})^T (A \mathbf{v}) = \|A \mathbf{v}\|^2 \ge 0$$
+                    对任意 $\mathbf{u} \in \mathbb{R}^m$：$\mathbf{u}^T (A A^T) \mathbf{u} = (A^T \mathbf{u})^T (A^T \mathbf{u}) = \|A^T \mathbf{u}\|^2 \ge 0$。故两者恒为半正定矩阵！<br>
+                    • 正定充要性：$\mathbf{v}^T (A^T A) \mathbf{v} = \|A \mathbf{v}\|^2 = 0 \iff A \mathbf{v} = \mathbf{0} \iff \mathbf{v} \in \text{Null}(A)$。<br>
+                    因此，对任意 $\mathbf{v} \neq \mathbf{0}$ 都有 $\mathbf{v}^T (A^T A) \mathbf{v} > 0 \iff \text{Null}(A) = \{\mathbf{0}\} \iff A$ 的各列线性无关！$\blacksquare$
+                  </div>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>

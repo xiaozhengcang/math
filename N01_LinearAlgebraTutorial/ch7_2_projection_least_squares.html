@@ -307,13 +307,131 @@
           </div>
         </div>
 
-        <!-- 1. 正交投影算子推导与四大基本子空间对偶 -->
+        <!-- 1. 正交补空间、正交投影算子与四大基本子空间对偶 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-blue); color: #000;">几何与代数奠基</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交投影算子推导：从一维直线到高维子空间的对偶几何</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 正交补空间 (Orthogonal Complement)、正交分解与四大子空间对偶</h2>
           </div>
           <div class="card-body">
+            
+            <!-- 1.1 正交补空间完整理论体系与习题集定理 -->
+            <h3 style="color: var(--accent-blue); margin-top: 0.5rem;">1.1 正交补空间 (Orthogonal Complement $S^\perp$) 的核心公理与经典定理集</h3>
+            <p>
+              设 $S$ 是欧氏空间 $\mathbb{R}^n$ 的一个非空子集。所有与 $S$ 中<strong>每一个向量都垂直</strong>的向量构成的集合，称为 $S$ 的<strong>正交补空间 (Orthogonal Complement)</strong>，记作 $S^\perp$：
+            </p>
+            <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0; color: var(--accent-blue);">
+              $$S^\perp = \left\{ \mathbf{v} \in \mathbb{R}^n : \mathbf{v} \cdot \mathbf{u} = 0, \ \forall \mathbf{u} \in S \right\}$$
+            </div>
+
+            <!-- 正交补 7 大黄金定理 -->
+            <div class="theorem-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">👑 正交补空间必须恪守的 7 大经典定理 (讲义与 Exercise 7-3 核心)</h4>
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                
+                <p><strong>定理 1：$S^\perp$ 永远是 $\mathbb{R}^n$ 的子空间（哪怕 $S$ 本身不是子空间！）</strong><br>
+                  <span style="color: var(--text-muted);">证明：(1) $\mathbf{0} \cdot \mathbf{u} = 0 \implies \mathbf{0} \in S^\perp$；(2) 若 $\mathbf{v}_1, \mathbf{v}_2 \in S^\perp$，则 $(\mathbf{v}_1 + \mathbf{v}_2)\cdot \mathbf{u} = \mathbf{v}_1 \cdot \mathbf{u} + \mathbf{v}_2 \cdot \mathbf{u} = 0$；(3) $(c\mathbf{v})\cdot \mathbf{u} = c(\mathbf{v}\cdot\mathbf{u}) = 0$。三公理全部满足！</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 2：$(\text{Span } S)^\perp = S^\perp$（Exercise 7-3 Prob 57）</strong><br>
+                  <span style="color: var(--text-muted);">证明：若 $\mathbf{v} \in (\text{Span } S)^\perp$，由于 $S \subseteq \text{Span } S$，显然 $\mathbf{v} \in S^\perp$。反之，若 $\mathbf{v} \in S^\perp$，对任意 $\mathbf{w} = \sum c_i \mathbf{s}_i \in \text{Span } S$，有 $\mathbf{v} \cdot \mathbf{w} = \sum c_i (\mathbf{v} \cdot \mathbf{s}_i) = 0$，故 $\mathbf{v} \in (\text{Span } S)^\perp$。双向包含成立！</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 3：基底正交等价性</strong><br>
+                  <span style="color: var(--text-muted);">设 $B = \{\mathbf{w}_1, \dots, \mathbf{w}_k\}$ 是子空间 $W$ 的一组基，则 $\mathbf{v} \in W^\perp \iff \mathbf{v} \cdot \mathbf{w}_i = 0 \ (i = 1, \dots, k) \iff W^\perp = B^\perp$。</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 4：交集仅含零向量 $W \cap W^\perp = \{\mathbf{0}\}$（Exercise 7-3 Prob 65）</strong><br>
+                  <span style="color: var(--text-muted);">证明：若 $\mathbf{x} \in W \cap W^\perp$，则 $\mathbf{x} \in W$ 且 $\mathbf{x} \in W^\perp$。因此 $\mathbf{x}$ 与自身点积必为 0：$\mathbf{x} \cdot \mathbf{x} = \|\mathbf{x}\|^2 = 0$。根据范数正定性，必有 $\mathbf{x} = \mathbf{0}$！</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 5：维数互补定理 $\dim W + \dim W^\perp = n$ 的双重视角证明</strong><br>
+                  <span style="color: var(--text-muted);">
+                    • <strong>视角一（基并集证明，Exercise 7-3 Prob 58）：</strong>取 $W$ 的基 $B_1 = \{\mathbf{w}_1, \dots, \mathbf{w}_k\}$ 与 $W^\perp$ 的基 $B_2 = \{\mathbf{z}_1, \dots, \mathbf{z}_{n-k}\}$。若 $\sum c_i \mathbf{w}_i + \sum d_j \mathbf{z}_j = \mathbf{0}$，移项得 $\sum c_i \mathbf{w}_i = -\sum d_j \mathbf{z}_j \in W \cap W^\perp = \{\mathbf{0}\}$。由基底线性无关性，所有 $c_i = 0, d_j = 0$。故 $B_1 \cup B_2$ 线性无关且张成全空间，$\dim W + \dim W^\perp = n$。<br>
+                    • <strong>视角二（秩-零化度定理证明，Exercise 7-3 Prob 64）：</strong>设 $A \in \mathbb{R}^{k \times n}$ 以 $W$ 的基底为行向量，则 $W = \text{Row}(A)$，故 $W^\perp = (\text{Row } A)^\perp = \text{Null}(A)$。由秩-零度定理：$\text{rank}(A) + \text{nullity}(A) = n \implies \dim W + \dim W^\perp = n$！
+                  </span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 6：双重正交补恒等式 $(W^\perp)^\perp = W$（Exercise 7-3 Prob 60）</strong><br>
+                  <span style="color: var(--text-muted);">由内积对称性，易知 $W \subseteq (W^\perp)^\perp$。又 $\dim (W^\perp)^\perp = n - \dim W^\perp = n - (n - \dim W) = \dim W$。维数相等且子空间包含，必有 $(W^\perp)^\perp = W$。</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>定理 7：四大基本子空间正交互补关系（Exercise 7-3 Prob 61）</strong><br>
+                  <span style="color: var(--accent-blue); font-weight: bold;">$(\text{Row } A)^\perp = \text{Null}(A) \quad \text{与} \quad (\text{Col } A)^\perp = \text{Null}(A^T)$</span><br>
+                  <span style="color: var(--text-muted);">证明：$\mathbf{x} \in \text{Null}(A) \iff A\mathbf{x} = \mathbf{0} \iff \text{row}_i(A) \cdot \mathbf{x} = 0 \ (\forall i) \iff \mathbf{x} \perp \text{Row}(A) \iff \mathbf{x} \in (\text{Row } A)^\perp$。对 $A^T$ 应用同理即得列空间正交补！</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- 讲义经典例题：求四维子空间的正交补基底 -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <span style="color: var(--accent-purple); font-weight: bold;">📖 讲义经典范例：四维空间子空间的正交补基底求解 (77_Ch07_03 Slide 8)</span>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
+                设 $W = \text{Span}\{\mathbf{u}_1, \mathbf{u}_2\} \subset \mathbb{R}^4$，其中 $\mathbf{u}_1 = \begin{bmatrix} 1 \\ 1 \\ -1 \\ 4 \end{bmatrix}, \mathbf{u}_2 = \begin{bmatrix} 1 \\ -1 \\ 1 \\ 2 \end{bmatrix}$。<br>
+                根据定义，$\mathbf{v} = [x_1, x_2, x_3, x_4]^T \in W^\perp \iff \mathbf{u}_1 \cdot \mathbf{v} = 0$ 且 $\mathbf{u}_2 \cdot \mathbf{v} = 0$，即齐次线性方程组：
+                $$\begin{cases} x_1 + x_2 - x_3 + 4x_4 = 0 \\ x_1 - x_2 + x_3 + 2x_4 = 0 \end{cases} \iff A\mathbf{v} = \mathbf{0} \quad \text{其中 } A = \begin{bmatrix} 1 & 1 & -1 & 4 \\ 1 & -1 & 1 & 2 \end{bmatrix}$$
+                消元化为 RREF：
+                $$\begin{bmatrix} 1 & 0 & 0 & 3 \\ 0 & 1 & -1 & 1 \end{bmatrix} \implies \begin{cases} x_1 = -3x_4 \\ x_2 = x_3 - x_4 \end{cases}$$
+                分离自由变量 $x_3, x_4$：
+                $$\mathbf{v} = x_3 \begin{bmatrix} 0 \\ 1 \\ 1 \\ 0 \end{bmatrix} + x_4 \begin{bmatrix} -3 \\ -1 \\ 0 \\ 1 \end{bmatrix}$$
+                故正交补空间 $W^\perp$ 的一组基为 $\mathcal{B}_{W^\perp} = \left\{ \begin{bmatrix} 0 \\ 1 \\ 1 \\ 0 \end{bmatrix}, \ \begin{bmatrix} -3 \\ -1 \\ 0 \\ 1 \end{bmatrix} \right\}$，且 $\dim W + \dim W^\perp = 2 + 2 = 4$ 完美闭环！
+              </p>
+            </div>
+
+            <!-- 1.2 正交投影唯一分解与最佳逼近定理 -->
+            <h3 style="color: var(--accent-green); margin-top: 1.5rem;">1.2 正交投影唯一分解定理、最佳逼近定理与一维直线投影</h3>
+            
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.05); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">👑 正交分解定理 (Unique Orthogonal Decomposition Theorem)</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8;">
+                设 $W$ 是 $\mathbb{R}^n$ 的任意子空间。对空间中的<strong>任意向量 $\mathbf{u} \in \mathbb{R}^n$</strong>，存在<strong>唯一的一对向量 $\mathbf{w}, \mathbf{z}$</strong>，使得：
+              </p>
+              <div style="font-size: 1.2rem; text-align: center; color: var(--accent-green); margin: 0.5rem 0;">
+                $$\mathbf{u} = \mathbf{w} + \mathbf{z}, \quad \text{其中 } \mathbf{w} \in W, \ \mathbf{z} \in W^\perp$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                称 $\mathbf{w}$ 为向量 $\mathbf{u}$ 在子空间 $W$ 上的<strong>正交投影 (Orthogonal Projection)</strong>，记作 $\mathbf{w} = \text{proj}_W(\mathbf{u}) = P_W \mathbf{u}$；称 $\mathbf{z} = \mathbf{u} - \mathbf{w}$ 为垂直残差分量。<br>
+                <strong>唯一性严密证明：</strong>若存在两组分解 $\mathbf{u} = \mathbf{w}_1 + \mathbf{z}_1 = \mathbf{w}_2 + \mathbf{z}_2$，移项得：
+                $$\mathbf{w}_1 - \mathbf{w}_2 = \mathbf{z}_2 - \mathbf{z}_1$$
+                等式左侧 $\mathbf{w}_1 - \mathbf{w}_2 \in W$；等式右侧 $\mathbf{z}_2 - \mathbf{z}_1 \in W^\perp$。因此差向量同时属于 $W \cap W^\perp$。<br>
+                由定理 4 知 $W \cap W^\perp = \{\mathbf{0}\}$，故必有 $\mathbf{w}_1 - \mathbf{w}_2 = \mathbf{0}$ 且 $\mathbf{z}_2 - \mathbf{z}_1 = \mathbf{0}$，即 $\mathbf{w}_1 = \mathbf{w}_2, \mathbf{z}_1 = \mathbf{z}_2$！分解全局唯一！$\blacksquare$
+              </p>
+            </div>
+
+            <!-- 最佳逼近定理 -->
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(251, 191, 36, 0.05); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+              <h4 style="color: #fbbf24; margin-bottom: 0.5rem;">🎯 最佳逼近定理 (Closest Vector Property)</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8;">
+                在子空间 $W$ 的所有向量中，<strong>距离向量 $\mathbf{u}$ 最近的点，正是其正交投影 $\mathbf{w} = \text{proj}_W(\mathbf{u})$</strong>！<br>
+                对任意不同于 $\mathbf{w}$ 的点 $\mathbf{w}' \in W$（$\mathbf{w}' \neq \mathbf{w}$），恒有：
+              </p>
+              <div style="font-size: 1.15rem; text-align: center; color: #fbbf24; margin: 0.5rem 0;">
+                $$\|\mathbf{u} - \mathbf{w}'\| > \|\mathbf{u} - \mathbf{w}\|$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                <strong>✍️ 勾股定理极美证明 (77_Ch07_03 Slide 14)：</strong><br>
+                将差向量拆分为垂直残差与平面内位移两部分：
+                $$\mathbf{u} - \mathbf{w}' = (\mathbf{u} - \mathbf{w}) + (\mathbf{w} - \mathbf{w}')$$
+                由于 $\mathbf{u} - \mathbf{w} = \mathbf{z} \in W^\perp$，而 $\mathbf{w} - \mathbf{w}' \in W$，两部分严格互相垂直！由勾股定理：
+                $$\|\mathbf{u} - \mathbf{w}'\|^2 = \|\mathbf{u} - \mathbf{w}\|^2 + \|\mathbf{w} - \mathbf{w}'\|^2$$
+                因为 $\mathbf{w}' \neq \mathbf{w}$，位移量模长严格大于零（$\|\mathbf{w} - \mathbf{w}'\|^2 > 0$），故 $\|\mathbf{u} - \mathbf{w}'\|^2 > \|\mathbf{u} - \mathbf{w}\|^2$。正交投影是无可替代的最近点！$\blacksquare$
+              </p>
+            </div>
+
+            <!-- 一维直线投影与讲义算例 -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <span style="color: var(--accent-blue); font-weight: bold;">📐 一维直线正交投影公式与讲义算例 (77_Ch07_03 Slide 17-18)</span>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
+                当子空间为过原点的一维直线 $L = \text{Span}\{\mathbf{u}\}$ 时，任意向量 $\mathbf{v}$ 在直线上的正交投影标量倍数为 $c = \frac{\mathbf{v} \cdot \mathbf{u}}{\|\mathbf{u}\|^2}$，投影向量为：
+                $$\mathbf{w} = \text{proj}_L(\mathbf{v}) = \frac{\mathbf{v} \cdot \mathbf{u}}{\|\mathbf{u}\|^2} \mathbf{u}$$
+                <strong>📖 讲义算例：</strong>直线方程为 $y = \frac{1}{2}x$，基向量为 $\mathbf{u} = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$，求点 $\mathbf{v} = \begin{bmatrix} 4 \\ 1 \end{bmatrix}$ 在该直线上的投影与垂直残差：<br>
+                • 计算点积与模长平方：$\mathbf{v} \cdot \mathbf{u} = 4(2) + 1(1) = 9$；$\|\mathbf{u}\|^2 = 2^2 + 1^2 = 5$<br>
+                • 正交投影：$\mathbf{w} = \frac{9}{5} \begin{bmatrix} 2 \\ 1 \end{bmatrix} = \begin{bmatrix} 18/5 \\ 9/5 \end{bmatrix}$<br>
+                • 垂直残差：$\mathbf{z} = \mathbf{v} - \mathbf{w} = \begin{bmatrix} 4 - 18/5 \\ 1 - 9/5 \end{bmatrix} = \begin{bmatrix} 2/5 \\ -4/5 \end{bmatrix}$<br>
+                • 验证垂直性：$\mathbf{z} \cdot \mathbf{u} = \frac{2}{5}(2) + \left(-\frac{4}{5}\right)(1) = \frac{4 - 4}{5} = 0$ ✓
+              </p>
+            </div>
+
             <!-- SVG Graphic: 3D Orthogonal Projection onto Subspace Plane -->
             <div style="text-align:center; margin: 1.5rem 0;">
               <svg width="620" height="240" viewBox="0 0 620 240" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
@@ -367,96 +485,149 @@
               </svg>
             </div>
 
-            <h3 style="color: var(--accent-blue); margin-top: 1rem;">1.1 正交投影矩阵 $P$ 的严密代数推导</h3>
+            <!-- 1.3 正交投影矩阵 P 的严密代数推导与可逆性证明 -->
+            <h3 style="color: var(--accent-blue); margin-top: 1rem;">1.3 高维子空间正交投影矩阵 $P_W$ 的严密代数推导与可逆性证明</h3>
             <p>
-              设矩阵 $A \in \mathbb{R}^{m \times n}$ 具有线性无关的各列（列满秩，$\text{rank}(A) = n \le m$）。列空间 $\text{Col}(A)$ 是由 $A$ 的列张成的 $n$ 维子空间。
-              将任意目标向量 $\mathbf{b} \in \mathbb{R}^m$ 投射到 $\text{Col}(A)$ 上，其投影向量必可由 $A$ 的列线性表出，故记作：
+              设矩阵 $C \in \mathbb{R}^{n \times k}$ 各列构成子空间 $W$ 的一组基（列满秩，$\text{rank}(C) = k \le n$）。
+              将任意目标向量 $\mathbf{u} \in \mathbb{R}^n$ 投射到 $W = \text{Col}(C)$ 上，设其投影向量为 $\mathbf{w} = C \mathbf{b}$。
             </p>
-            <div style="font-size: 1.1rem; text-align: center; margin: 0.5rem 0;">
-              $$\mathbf{p} = A \hat{\mathbf{x}}$$
-            </div>
             <p>
-              几何关键：误差残差向量 $\mathbf{e} = \mathbf{b} - \mathbf{p} = \mathbf{b} - A\hat{\mathbf{x}}$ 必须垂直于平面 $\text{Col}(A)$ 中的<strong>每一根基向量</strong>（即 $A$ 的所有列向量 $\mathbf{a}_1, \dots, \mathbf{a}_n$）：
+              由于残差 $\mathbf{u} - \mathbf{w} \in W^\perp = \text{Null}(C^T)$，故垂直于 $C$ 的所有列：
             </p>
             <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; font-size: 1.15rem; text-align: center; margin: 0.75rem 0; border: 1px solid rgba(56, 189, 248, 0.25);">
-              $$\begin{cases}
-              \mathbf{a}_1^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0 \\
-              \mathbf{a}_2^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0 \\
-              \quad \vdots \\
-              \mathbf{a}_n^T (\mathbf{b} - A\hat{\mathbf{x}}) = 0
-              \end{cases} \implies A^T (\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0}$$
+              $$C^T (\mathbf{u} - C\mathbf{b}) = \mathbf{0} \iff C^T C \mathbf{b} = C^T \mathbf{u}$$
             </div>
-            <p>移项展开，便得到了线性代数中震撼世界的<strong>正规方程 (Normal Equations)</strong>：</p>
-            <div style="font-size: 1.25rem; text-align: center; font-weight: bold; margin: 0.75rem 0; color: var(--accent-blue);">
-              $$A^T A \hat{\mathbf{x}} = A^T \mathbf{b}$$
-            </div>
-            <p>
-              由于 $A$ 列满秩，方阵 $A^T A \in \mathbb{R}^{n \times n}$ 严格对称正定，因而<strong>必可逆</strong>！两边同时左乘 $(A^T A)^{-1}$：
-            </p>
-            <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
-              $$\hat{\mathbf{x}} = (A^T A)^{-1} A^T \mathbf{b}$$
-            </div>
-            <p>将其代回投影向量 $\mathbf{p} = A \hat{\mathbf{x}}$，即得：</p>
-            <div style="font-size: 1.3rem; text-align: center; color: var(--accent-green); margin: 0.75rem 0;">
-              $$\mathbf{p} = \underbrace{A (A^T A)^{-1} A^T}_{P} \mathbf{b} \implies P = A (A^T A)^{-1} A^T$$
+            
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1rem; background: rgba(56, 189, 248, 0.05); border-left: 3px solid var(--accent-blue); border-radius: 6px;">
+              <h5 style="color: var(--accent-blue); margin-bottom: 0.3rem;">✍️ 关键定理：若 $C$ 各列线性无关，则方阵 $C^T C \in \mathbb{R}^{k \times k}$ 必严格可逆！(77_Ch07_03 Slide 20)</h5>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                <strong>证明：</strong>只需证明齐次方程 $C^T C \mathbf{x} = \mathbf{0}$ 只有零解 $\mathbf{x} = \mathbf{0}$。<br>
+                在等式两边左乘 $\mathbf{x}^T$：
+                $$\mathbf{x}^T (C^T C \mathbf{x}) = (C\mathbf{x})^T (C\mathbf{x}) = \|C\mathbf{x}\|^2 = 0$$
+                根据范数性质，必有 $C\mathbf{x} = \mathbf{0}$。<br>
+                因为 $C$ 的列向量线性无关（零空间仅含零向量），$C\mathbf{x} = \mathbf{0} \implies \mathbf{x} = \mathbf{0}$！<br>
+                因此 $C^T C$ 的零空间为 $\{\mathbf{0}\}$，作为 $k \times k$ 方阵，<strong>$C^T C$ 必然严格可逆</strong>！$\blacksquare$
+              </p>
             </div>
 
-            <div class="intuition-box" style="margin-top: 1rem;">
-              <strong style="color: var(--accent-purple);">🌟 特例：当列向量为标准正交基 $Q$ 时的极致化简</strong>
-              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.25rem;">
-                若 $A = Q$（各列标准正交，满足 $Q^T Q = I$），代入公式：
-                $$P = Q (Q^T Q)^{-1} Q^T = Q I^{-1} Q^T = Q Q^T = \sum_{i=1}^n \mathbf{q}_i \mathbf{q}_i^T$$
-                这与离散傅里叶展开完全统一！求逆项彻底蒸发，正交基让投影矩阵化为各基底外积投影之和！
+            <p>两边同时左乘 $(C^T C)^{-1}$，解出基底展开系数：</p>
+            <div style="font-size: 1.2rem; text-align: center; margin: 0.75rem 0;">
+              $$\mathbf{b} = (C^T C)^{-1} C^T \mathbf{u}$$
+            </div>
+            <p>代回投影向量 $\mathbf{w} = C \mathbf{b}$，即得高维子空间的正交投影矩阵公式：</p>
+            <div style="font-size: 1.3rem; text-align: center; color: var(--accent-green); margin: 0.75rem 0;">
+              $$\mathbf{w} = \underbrace{C (C^T C)^{-1} C^T}_{P_W} \mathbf{u} \implies P_W = C (C^T C)^{-1} C^T$$
+            </div>
+
+            <!-- 讲义经典例题：三维平面投影矩阵计算 -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <span style="color: var(--accent-purple); font-weight: bold;">📖 讲义经典例题：三维平面投影矩阵计算 (77_Ch07_03 Slide 21)</span>
+              <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
+                设 $W$ 是 $\mathbb{R}^3$ 中方程为 $x_1 - x_2 + 2x_3 = 0$ 的二维平面子空间。求其正交投影矩阵 $P_W$：<br>
+                • 选取平面的一组基：令 $x_2 = 1, x_3 = 0 \implies x_1 = 1$；令 $x_2 = 0, x_3 = 1 \implies x_1 = -2$。构造矩阵 $C$：
+                $$C = \begin{bmatrix} 1 & -2 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}$$
+                • 计算 $C^T C$ 及其逆矩阵：
+                $$C^T C = \begin{bmatrix} 1 & 1 & 0 \\ -2 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 & -2 \\ 1 & 0 \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 2 & -2 \\ -2 & 5 \end{bmatrix} \implies (C^T C)^{-1} = \frac{1}{6} \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix}$$
+                • 计算投影矩阵 $P_W = C (C^T C)^{-1} C^T$：
+                $$P_W = \frac{1}{6} \begin{bmatrix} 1 & -2 \\ 1 & 0 \\ 0 & 1 \end{bmatrix} \begin{bmatrix} 5 & 2 \\ 2 & 2 \end{bmatrix} \begin{bmatrix} 1 & 1 & 0 \\ -2 & 0 & 1 \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 5 & 1 & -2 \\ 1 & 5 & 2 \\ -2 & 2 & 2 \end{bmatrix}$$
+                • 验证性质：显然 $P_W^T = P_W$，$\text{tr}(P_W) = \frac{5+5+2}{6} = 2 = \dim W$！
               </p>
             </div>
           </div>
         </div>
 
-        <!-- 2. 正交投影矩阵 P 的四大黄金性质 -->
+        <!-- 2. 正交投影矩阵代数铁律与空间镜面反射算子 (Exercise 7-3 & 7-4 深度融合) -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-purple); color: #fff;">算子特性</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">2. 正交投影矩阵 $P$ 的四大黄金代数与几何铁律</h2>
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">算子特性与反射</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 正交投影矩阵代数全览、正交补互补定理与空间镜面反射算子</h2>
           </div>
           <div class="card-body">
-            <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.2);">
-              <h4 style="color: var(--accent-purple); margin-bottom: 0.75rem;">👑 投影算子必须恪守的 4 大判定公理</h4>
+            
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.75rem;">👑 投影算子必须恪守的 5 大代数铁律 (Exercise 7-3 核心定理)</h4>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
                 <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
-                  <strong style="color: var(--accent-blue);">① 幂等性 (Idempotent: $P^2 = P$)</strong>
+                  <strong style="color: var(--accent-blue);">① 幂等性 ($P_W^2 = P_W$, Prob 67a)</strong>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                    $P^2 = A(A^TA)^{-1}A^T \cdot A(A^TA)^{-1}A^T = A(A^TA)^{-1}A^T = P$。<br>
-                    <strong>几何直觉：</strong>既然已经投射到了子空间平面上，再投射一次它依然纹丝不动！
+                    $P_W^2 = C(C^TC)^{-1}C^T C(C^TC)^{-1}C^T = P_W$。<br>
+                    <strong>几何直觉：</strong>已经投射到平面上的向量，再次投射位置恒定不变。
                   </p>
                 </div>
                 <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
-                  <strong style="color: var(--accent-purple);">② 对称性 (Symmetric: $P^T = P$)</strong>
+                  <strong style="color: var(--accent-purple);">② 对称性 ($P_W^T = P_W$, Prob 67b)</strong>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                    $P^T = (A(A^TA)^{-1}A^T)^T = A ((A^TA)^{-1})^T A^T = A(A^TA)^{-1}A^T = P$。<br>
-                    <strong>核心意义：</strong>对称性是<strong>“正交”</strong>投影区别于“斜投影 (Oblique Projection)”的唯一分水岭！
+                    $P_W^T = (C(C^TC)^{-1}C^T)^T = C(C^TC)^{-1}C^T = P_W$。<br>
+                    <strong>核心意义：</strong>对称性是<strong>正交投影</strong>区别于斜投影的唯一充要代数判据！
                   </p>
                 </div>
                 <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
-                  <strong style="color: var(--accent-green);">③ 特征值只能是 0 或 1</strong>
+                  <strong style="color: var(--accent-green);">③ 正交补互补恒等式 (Prob 73)</strong>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                    由 $P\mathbf{v} = \lambda \mathbf{v}$ 及 $P^2 = P$ 得 $\lambda^2 \mathbf{v} = \lambda \mathbf{v} \implies \lambda(\lambda - 1) = 0$。<br>
-                    特征值 $\lambda=1$ 对应平面内的向量，$\lambda=0$ 对应垂直于平面的向量。
+                    $P_{W^\perp} = I_n - P_W \iff P_W + P_{W^\perp} = I_n$。<br>
+                    任何向量 $\mathbf{u} = P_W \mathbf{u} + P_{W^\perp}\mathbf{u}$，全空间由互补算子完美拼合！
                   </p>
                 </div>
                 <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
-                  <strong style="color: var(--accent-amber);">④ 矩阵的迹等于投影空间维数</strong>
+                  <strong style="color: #ef4444;">④ 投影算子相互湮灭 (Prob 72)</strong>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
-                    利用迹的循环置换律：<br>
-                    $\text{tr}(P) = \text{tr}(A(A^TA)^{-1}A^T) = \text{tr}((A^TA)^{-1}A^TA) = \text{tr}(I_n) = n = \text{rank}(A)$。
+                    $P_W P_{W^\perp} = P_W(I - P_W) = P_W - P_W^2 = \mathbf{O}$。<br>
+                    同理 $P_{W^\perp} P_W = \mathbf{O}$，两空间正交隔离，交叉投影输出纯零矩阵！
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-amber);">⑤ 谱特征与迹等于维数</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    由 $P_W^2 = P_W$ 得特征值 $\lambda \in \{0, 1\}$。<br>
+                    $\text{tr}(P_W) = \text{rank}(P_W) = \dim W$，1 的重数正好等于子空间维数。
                   </p>
                 </div>
               </div>
+            </div>
 
-              <hr style="border:0; border-top:1px solid var(--border-color); margin: 1rem 0;">
-              <h5 style="color: #f8fafc; margin-bottom: 0.4rem;">🛡️ 互补投影矩阵 (Complementary Projector: $I - P$)</h5>
-              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
-                残差向量为 $\mathbf{e} = \mathbf{b} - \mathbf{p} = (I - P)\mathbf{b}$。易证矩阵 $I - P$ 同样是对称幂等矩阵，它精确地将向量投射到<strong>正交补子空间</strong> $\text{Col}(A)^\perp = \text{Null}(A^T)$ 上！全空间被正交分解为：$I = P + (I - P)$。
+            <!-- 2.3 空间镜面反射算子 (Reflection Operator) 与 Householder 反射 (Exercise 7-4) -->
+            <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">🪞 空间镜面反射算子 (Reflection Operator) 与正交变换 (Exercise 7-4 核心专题)</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8;">
+                设 $W$ 是 $\mathbb{R}^n$ 的子空间，对任意向量 $\mathbf{v} = \mathbf{w} + \mathbf{z}$（$\mathbf{w} \in W, \mathbf{z} \in W^\perp$），定义<strong>关于子空间 $W$ 的镜面反射算子 $T: \mathbb{R}^n \to \mathbb{R}^n$</strong> 为：
               </p>
+              <div style="font-size: 1.2rem; text-align: center; color: var(--accent-blue); margin: 0.5rem 0;">
+                $$T(\mathbf{v}) = \mathbf{w} - \mathbf{z}$$
+              </div>
+
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc; margin-top: 0.75rem;">
+                <p><strong>1. 证明 $T$ 是正交算子 (Orthogonal Operator, Prob 44a)：</strong><br>
+                  利用勾股定理计算长度：
+                  $$\|T(\mathbf{v})\|^2 = \|\mathbf{w} - \mathbf{z}\|^2 = \|\mathbf{w}\|^2 + \|-\mathbf{z}\|^2 = \|\mathbf{w}\|^2 + \|\mathbf{z}\|^2 = \|\mathbf{w} + \mathbf{z}\|^2 = \|\mathbf{v}\|^2$$
+                  因为保持向量模长严格不变（$\|T(\mathbf{v})\| = \|\mathbf{v}\|$），故 $T$ 是严格等距的<strong>正交算子</strong>！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>2. 导出反射的标准矩阵 $Q_W$ (Householder 反射矩阵, Prob 53)：</strong><br>
+                  将 $\mathbf{w} = P_W \mathbf{v}, \mathbf{z} = (I - P_W)\mathbf{v}$ 代入：
+                  $$T(\mathbf{v}) = P_W \mathbf{v} - (I - P_W)\mathbf{v} = (2P_W - I_n)\mathbf{v}$$
+                  因此反射的标准矩阵为：
+                  <div style="font-size: 1.15rem; text-align: center; color: var(--accent-green); margin: 0.4rem 0;">
+                    $$Q_W = 2P_W - I_n$$
+                  </div>
+                  • <strong>对称性：</strong> $Q_W^T = (2P_W - I)^T = 2P_W^T - I = 2P_W - I = Q_W$。<br>
+                  • <strong>对合性 (Involution)：</strong> $Q_W^2 = (2P_W - I)(2P_W - I) = 4P_W^2 - 4P_W + I = 4P_W - 4P_W + I = I$（镜面反射两次回到自身！）。<br>
+                  • <strong>正交矩阵：</strong> $Q_W^T Q_W = Q_W Q_W = Q_W^2 = I$，因此 $Q_W$ 是无可挑剔的对称正交矩阵！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>3. 二维平面倾角 $\theta$ 直线的投影与反射矩阵：</strong><br>
+                  在 $\mathbb{R}^2$ 中，设直线 $W$ 与 $x$ 轴夹角为 $\theta$，方向单位向量为 $\mathbf{u} = [\cos\theta, \sin\theta]^T$：<br>
+                  • 投影矩阵为外积：$P_W = \mathbf{u}\mathbf{u}^T = \begin{bmatrix} \cos^2\theta & \cos\theta\sin\theta \\ \cos\theta\sin\theta & \sin^2\theta \end{bmatrix}$<br>
+                  • 反射矩阵为：
+                  $$Q_W = 2P_W - I = \begin{bmatrix} 2\cos^2\theta - 1 & 2\cos\theta\sin\theta \\ 2\cos\theta\sin\theta & 2\sin^2\theta - 1 \end{bmatrix} = \begin{bmatrix} \cos 2\theta & \sin 2\theta \\ \sin 2\theta & -\cos 2\theta \end{bmatrix}$$
+                  注意到 $\det(Q_W) = -\cos^2 2\theta - \sin^2 2\theta = -1$，完美的几何镜像反射！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>4. 正交矩阵实特征值必为 $\pm 1$ 定理 (Exercise 7-4 Prob 49)：</strong><br>
+                  设 $Q$ 是正交矩阵，$\lambda \in \mathbb{R}$ 为其实特征值，$Q\mathbf{x} = \lambda \mathbf{x}$ ($\mathbf{x} \neq \mathbf{0}$)。<br>
+                  两边取模长：$\|Q\mathbf{x}\| = \|\lambda \mathbf{x}\| = |\lambda| \|\mathbf{x}\|$。<br>
+                  由正交矩阵保模长性，$\|Q\mathbf{x}\| = \|\mathbf{x}\|$，故有 $|\lambda| \|\mathbf{x}\| = \|\mathbf{x}\| \implies |\lambda| = 1 \implies \lambda = \pm 1$！$\blacksquare$
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -517,6 +688,49 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            <!-- 3.3 最小二乘高次拟合与多元回归模型 (讲义 Slide 31-35) -->
+            <h3 style="color: var(--accent-blue); margin-top: 1.5rem;">3.3 最小二乘高次多项式拟合、多元回归与讲义工业算例</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              最小二乘法绝不仅限于拟合直线！无论是二次抛物线、任意高阶多项式还是多个特征的多元回归，只要参数是线性的，均能统一纳入正交投影矩阵框架 $C\mathbf{a} = \mathbf{y}$！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <!-- 工业算例 1：线性回归 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <span style="color: var(--accent-blue); font-weight: bold;">📊 讲义工业算例 1：铸件粗重与净重线性预测 (Slide 31)</span>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  给定 5 组工业粗重 $x$ 与成品净重 $y$ 观测对：
+                  $$(2.60, 2.00), (2.72, 2.10), (2.75, 2.10), (2.67, 2.03), (2.68, 2.04)$$
+                  构建设计矩阵与观测向量：
+                  $$C = \begin{bmatrix} 1 & 2.60 \\ 1 & 2.72 \\ 1 & 2.75 \\ 1 & 2.67 \\ 1 & 2.68 \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} 2.00 \\ 2.10 \\ 2.10 \\ 2.03 \\ 2.04 \end{bmatrix}$$
+                  由正规方程 $\mathbf{a} = (C^T C)^{-1} C^T \mathbf{y}$ 解得：
+                  $$\begin{bmatrix} a_0 \\ a_1 \end{bmatrix} \approx \begin{bmatrix} 0.056 \\ 0.745 \end{bmatrix} \implies y = 0.056 + 0.745x$$
+                  <strong>预测：</strong>当粗重为 $x = 2.65$ 时，成品重预测值为 $0.056 + 0.745(2.65) = 2.030$。
+                </p>
+              </div>
+
+              <!-- 算例 2：二次曲线拟合 -->
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <span style="color: var(--accent-green); font-weight: bold;">📈 讲义实算 2：二次多项式最佳拟合 (Slide 32-34)</span>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  拟合抛物线 $y = a_0 + a_1 x + a_2 x^2$ 穿过 5 个观测点：
+                  $$(0, 100), \ (1, 118), \ (2, 92), \ (3, 48), \ (3.5, 7)$$
+                  构造 Vandermonde 矩阵各列为 $1, x, x^2$：
+                  $$C = \begin{bmatrix} 1 & 0 & 0 \\ 1 & 1 & 1 \\ 1 & 2 & 4 \\ 1 & 3 & 9 \\ 1 & 3.5 & 12.25 \end{bmatrix}, \quad \mathbf{y} = \begin{bmatrix} 100 \\ 118 \\ 92 \\ 48 \\ 7 \end{bmatrix}$$
+                  解正规方程 $(C^T C)\hat{\mathbf{a}} = C^T \mathbf{y}$，即可求出最佳二次回归曲线：
+                  $$y = 101.00 + 29.77x - 16.11x^2$$
+                </p>
+              </div>
+            </div>
+
+            <!-- 多元回归 -->
+            <div style="background: rgba(192, 132, 252, 0.05); padding: 1rem; border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.25); margin-top: 1rem;">
+              <h5 style="color: var(--accent-purple); margin-bottom: 0.3rem;">🌐 多元最小二乘回归扩展 (Multivariable Least Squares, Slide 35)</h5>
+              <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                当目标受多个自变量影响时，如 $y = a_0 + a_1 x_1 + a_2 x_2 + \dots + a_p x_p$，设计矩阵 $C$ 的每一行对应一个样本的特征向量 $[1, x_{i1}, x_{i2}, \dots, x_{ip}]$。几何上，这是将高维空间的观测向量 $\mathbf{y}$ 正交投影到由截距列与各特征列张成的超平面上，残差向量 $\mathbf{e} \perp \text{Col}(C)$，最小化总误差平方和 $E = \|\mathbf{y} - C\mathbf{a}\|^2$！
+              </p>
             </div>
           </div>
         </div>

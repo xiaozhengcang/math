@@ -411,7 +411,77 @@
       </table>
     </div>
 
-    <!-- 1.5 四大易错辨析避坑指南 -->
+        <!-- 1.4.1 讲义经典透视：四大基本二维几何变换的特征行为对照表 -->
+    <h3 style="color: var(--accent-blue); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🎨</span> 1.4.1 讲义经典透视：四大基本二维几何变换的特征行为对照
+    </h3>
+    <p>
+      在台大李宏毅教授《Linear Algebra》讲义中，特别以二维平面中的四大经典几何变换为例，生动展现了特征值与特征向量在空间形变中的几何存在形态：
+    </p>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+      <!-- 变换 1: 错切 Shear -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; border-top: 3px solid var(--accent-blue);">
+        <strong style="color: var(--accent-blue); font-size: 1rem;">📐 ① 错切变换 (Shear Transform)</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.6;">
+          代数方程：$\begin{bmatrix} x' \\ y' \end{bmatrix} = \begin{bmatrix} 1 & k \\ 0 & 1 \end{bmatrix}\begin{bmatrix} x \\ y \end{bmatrix} = \begin{bmatrix} x + ky \\ y \end{bmatrix}$<br>
+          • <strong>几何行为</strong>：水平线高度不变，越往上方水平剪切位移越大。<br>
+          • <strong>特征主轴</strong>：水平 $x$ 轴上的任意点 $(x, 0)$ 映射后仍为 $(x, 0)$，方向完全不变！<br>
+          • <strong>特征分析</strong>：唯一的特征值为 $\lambda = 1$；对应的特征向量为所有形如 $\begin{bmatrix} c \\ 0 \end{bmatrix}$ ($c \neq 0$) 的水平向量。全平面<strong>仅有这一条特征主轴</strong>！
+        </p>
+      </div>
+
+      <!-- 变换 2: 镜像反射 Reflection -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; border-top: 3px solid var(--accent-purple);">
+        <strong style="color: var(--accent-purple); font-size: 1rem;">🪞 ② 直线镜像反射 (Reflection about $y = \frac{1}{2}x$)</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.6;">
+          考虑关于直线 $y = \frac{1}{2}x$ 的轴对称反射算子 $T$：<br>
+          • <strong>平行镜面轴</strong>：沿对称轴方向的向量 $\mathbf{b}_1 = \begin{bmatrix} 2 \\ 1 \end{bmatrix}$，反射后位置不变：$T(\mathbf{b}_1) = \mathbf{b}_1$，特征值 $\lambda_1 = 1$！<br>
+          • <strong>垂直镜面轴</strong>：与对称轴垂直的法线向量 $\mathbf{b}_2 = \begin{bmatrix} -1 \\ 2 \end{bmatrix}$，反射后 $180^\circ$ 反向：$T(\mathbf{b}_2) = -\mathbf{b}_2$，特征值 $\lambda_2 = -1$！<br>
+          • <strong>几何启示</strong>：反射算子拥有两个互相垂直的正交特征主轴，特征值恰为 $1$ 与 $-1$。
+        </p>
+      </div>
+
+      <!-- 变换 3: 纯拉伸/压缩 Expansion & Compression -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; border-top: 3px solid var(--accent-green);">
+        <strong style="color: var(--accent-green); font-size: 1rem;">🔍 ③ 均匀缩放 (Expansion & Compression)</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.6;">
+          矩阵为标量阵 $A = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}$ 或 $A = \begin{bmatrix} 0.5 & 0 \\ 0 & 0.5 \end{bmatrix}$：<br>
+          • <strong>几何行为</strong>：对任意向量 $\mathbf{v} \in \mathbb{R}^2$，均有 $A\mathbf{v} = 2\mathbf{v}$（或 $0.5\mathbf{v}$）。<br>
+          • <strong>特征分析</strong>：空间中<strong>每一个非零向量全都是特征向量</strong>！特征子空间是整个全空间 $\mathbb{R}^2$，几何重数等于代数重数等于 2。
+        </p>
+      </div>
+
+      <!-- 变换 4: 纯旋转 Rotation -->
+      <div style="padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; border-top: 3px solid var(--accent-rose);">
+        <strong style="color: var(--accent-rose); font-size: 1rem;">🔄 ④ 二维纯旋转 (Rotation by $90^\circ$)</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.6;">
+          标准变换矩阵为 $R_{90^\circ} = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$：<br>
+          • 特征方程为 $\det(A - tI) = \det\begin{bmatrix} -t & -1 \\ 1 & -t \end{bmatrix} = t^2 + 1 = 0$。<br>
+          • <strong>实数域无解</strong>：在实数空间 $\mathbb{R}^2$ 中，没有任何非零向量能在逆时针旋转 $90^\circ$ 后仍保持原直线方向！<br>
+          • <strong>重要结论</strong>：在实数域内，并非所有方阵都存在实特征值与实特征向量；但在复数域 $\mathbb{C}$ 内，其复特征值为 $\lambda = \pm i$。
+        </p>
+      </div>
+    </div>
+
+    <!-- 1.4.2 特征映射对应两大铁律 -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">⚖️ 1.4.2 讲义核心结论：特征向量与特征值的“唯一性与多重性”铁律</h4>
+      <ul style="margin: 0.5rem 0 0.5rem 1.5rem; line-height: 1.8; font-size: 0.92rem;">
+        <li><strong>铁律一（特征向量对应特征值的唯一性）</strong>：矩阵 $A$ 的任一给定特征向量 $\mathbf{v}$，<strong>只能对应唯一的特征值</strong>！<br>
+          <span style="color: var(--text-muted); font-size: 0.85rem;">严密证明：设 $A\mathbf{v} = \lambda_1 \mathbf{v}$ 且 $A\mathbf{v} = \lambda_2 \mathbf{v}$。两式相减得 $(\lambda_1 - \lambda_2)\mathbf{v} = \mathbf{0}$。因为定义明确要求特征向量 $\mathbf{v} \neq \mathbf{0}$，所以必有标量差值 $\lambda_1 - \lambda_2 = 0$，即 $\lambda_1 = \lambda_2$。</span>
+        </li>
+        <li><strong>铁律二（特征值对应特征向量的无穷性）</strong>：矩阵 $A$ 的一个特征值 $\lambda$，<strong>必定对应无穷多个特征向量</strong>！只要 $\mathbf{v} \in \text{Null}(A - \lambda I)$ 是非零解，对任意非零标量 $c \neq 0$，$c\mathbf{v}$ 也必然是特征向量。此外，当几何重数大于 1 时，还可以张成高维特征子空间。</li>
+      </ul>
+      <div style="background: var(--bg-secondary); padding: 0.75rem 1rem; border-radius: 4px; margin-top: 0.75rem; font-size: 0.88rem;">
+        <span style="color: var(--accent-blue); font-weight: bold;">📖 讲义特征验证算例 (Slide 12)：</span>
+        设 $A = \begin{bmatrix} 2 & 0 & 0 & 0 \\ 4 & 1 & 2 & 2 \\ -1 & 2 & 0 & 1 \\ 0 & 0 & 2 & 3 \end{bmatrix}$，检验 $\mathbf{u}_1 = \begin{bmatrix} 0 \\ 1 \\ -1 \\ 0 \end{bmatrix}$ 与 $\mathbf{u}_2 = \begin{bmatrix} 1 \\ 0 \\ 0 \\ -1 \end{bmatrix}$ 是否为特征向量：<br>
+        • 计算 $A\mathbf{u}_1 = \begin{bmatrix} 0 \\ 1(1)+2(-1) \\ 2(1)+0(-1) \\ 2(-1) \end{bmatrix} = \begin{bmatrix} 0 \\ -1 \\ 2 \\ -2 \end{bmatrix} \neq \lambda \mathbf{u}_1$（各分量倍数不一致，不是特征向量）；<br>
+        • 计算 $A\mathbf{v}$，若找到某非零向量严格满足 $A\mathbf{v} = \lambda\mathbf{v}$，方能确认为属于该主轴的特征向量。
+      </div>
+    </div>
+
+<!-- 1.5 四大易错辨析避坑指南 -->
     <div style="margin-top: 1.5rem; padding: 1.25rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px;">
       <h4 style="color: var(--accent-amber); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
         <span>⚠️</span> 1.5 避坑指南：特征值与特征向量的 4 大高频易错辨析
@@ -628,6 +698,94 @@
   </div>
 </div>
 
+    <!-- 2.6 标量是否为特征值的检验法则与讲义手算算例 -->
+    <h3 style="color: var(--accent-green); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+      <span>🔍</span> 2.6 判定标量 $\lambda$ 是否为特征值的零空间检验法则
+    </h3>
+    <p>
+      在实际工程与考题中，常常需要判断一个给定的常数 $\lambda_0$ <strong>是否为矩阵 $A$ 的特征值</strong>，而无需从头求解复杂的 $n$ 次特征方程。
+      依据可逆矩阵等价定理，判据极其简洁：
+    </p>
+    <div class="theorem-box" style="padding: 1rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1rem 0;">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">⚡ 标量检验黄金法则 (Checking Eigenvalue Rule)</h4>
+      <p style="margin: 0; font-size: 0.95rem;">
+        标量 $\lambda_0$ 是矩阵 $A$ 的特征值 $\iff \text{Null}(A - \lambda_0 I) \neq \{\mathbf{0}\} \iff \dim\text{Null}(A - \lambda_0 I) \ge 1$（即齐次方程 $(A - \lambda_0 I)\mathbf{x} = \mathbf{0}$ 存在非零解）。
+      </p>
+    </div>
+
+    <!-- 讲义经典算例 1: 2D 算子特征值检验 -->
+    <div style="background: rgba(56, 189, 248, 0.05); border-left: 3px solid var(--accent-blue); padding: 1.25rem; border-radius: 6px; margin: 1rem 0;">
+      <span style="color: var(--accent-blue); font-weight: bold; font-size: 1rem;">📖 讲义经典范例 1 (Slide 17)：检验 3 和 -2 是否为二维线性算子的特征值</span>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted); line-height: 1.8;">
+        设线性算子 $T: \mathbb{R}^2 \to \mathbb{R}^2$ 定义为 $T\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = \begin{bmatrix} -2x_2 \\ -3x_1 + x_2 \end{bmatrix}$。其标准矩阵为 $A = \begin{bmatrix} 0 & -2 \\ -3 & 1 \end{bmatrix}$。<br>
+        • <strong>检验 $\lambda = 3$</strong>：构造矩阵 $A - 3I = \begin{bmatrix} -3 & -2 \\ -3 & -2 \end{bmatrix}$。其第二行是第一行的完全复制，化为 RREF 为 $\begin{bmatrix} 1 & 2/3 \\ 0 & 0 \end{bmatrix}$。主元数为 1，自由变量数为 $2 - 1 = 1 > 0$。因此 $\dim\text{Null}(A - 3I) = 1$，<strong>3 确实是特征值</strong>，对应特征向量为 $\mathbf{v}_1 = \begin{bmatrix} -2 \\ 3 \end{bmatrix}$。<br>
+        • <strong>检验 $\lambda = -2$</strong>：构造矩阵 $A - (-2)I = A + 2I = \begin{bmatrix} 2 & -2 \\ -3 & 3 \end{bmatrix}$。第二行为第一行的 $-1.5$ 倍，两行线性相关，RREF 为 $\begin{bmatrix} 1 & -1 \\ 0 & 0 \end{bmatrix}$。自由变量数为 $1 > 0$。因此 $\dim\text{Null}(A + 2I) = 1$，<strong>-2 也是特征值</strong>，对应特征向量为 $\mathbf{v}_2 = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$。
+      </p>
+    </div>
+
+    <!-- 讲义经典算例 2: 3D 矩阵检验并提取特征空间基底 -->
+    <div style="background: rgba(192, 132, 252, 0.05); border-left: 3px solid var(--accent-purple); padding: 1.25rem; border-radius: 6px; margin: 1rem 0;">
+      <span style="color: var(--accent-purple); font-weight: bold; font-size: 1rem;">📖 讲义经典范例 2 (Slide 18)：检验 3 是否为三阶方阵 $B$ 的特征值并求特征基底</span>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted); line-height: 1.8;">
+        设 $B = \begin{bmatrix} 3 & 0 & 0 \\ 0 & 1 & 2 \\ 0 & 2 & 1 \end{bmatrix}$。检验 $\lambda = 3$ 并确定对应特征子空间的维数与基底：<br>
+        <strong>步骤</strong>：构造 $B - 3I = \begin{bmatrix} 3-3 & 0 & 0 \\ 0 & 1-3 & 2 \\ 0 & 2 & 1-3 \end{bmatrix} = \begin{bmatrix} 0 & 0 & 0 \\ 0 & -2 & 2 \\ 0 & 2 & -2 \end{bmatrix}$。<br>
+        初等行变换消元求 RREF：
+        $$\begin{bmatrix} 0 & -2 & 2 \\ 0 & 2 & -2 \\ 0 & 0 & 0 \end{bmatrix} \xrightarrow{r_1 \div (-2)} \begin{bmatrix} 0 & 1 & -1 \\ 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix}$$
+        分析主元与自由变量：<br>
+        • 主元列为第 2 列（对应 $x_2$）；自由变量为 $x_1$ 和 $x_3$（共 <strong>2 个自由变量</strong>）！<br>
+        • 方程给出约束：$x_2 - x_3 = 0 \implies x_2 = x_3$。<br>
+        • 通解向量形式：$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \end{bmatrix} = \begin{bmatrix} x_1 \\ x_3 \\ x_3 \end{bmatrix} = x_1 \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} + x_3 \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix}$。<br>
+        <strong>结论</strong>：$\dim\text{Null}(B - 3I) = 2$。3 确实是特征值，其特征子空间为二维平面，基底为 $\left\{ \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 1 \end{bmatrix} \right\}$。
+      </p>
+    </div>
+
+    <!-- 2.7 3D 线性算子手算完整剖析与几何重数亏损 -->
+    <div style="background: rgba(251, 191, 36, 0.05); border-left: 3px solid var(--accent-amber); padding: 1.25rem; border-radius: 6px; margin: 1rem 0;">
+      <span style="color: var(--accent-amber); font-weight: bold; font-size: 1rem;">📖 讲义经典范例 3 (Slide 23)：三维线性算子的特征求解与几何重数不足</span>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem; color: var(--text-muted); line-height: 1.8;">
+        考虑线性算子 $T: \mathbb{R}^3 \to \mathbb{R}^3$，定义为 $T\begin{pmatrix} x_1 \\ x_2 \\ x_3 \end{pmatrix} = \begin{bmatrix} -x_1 \\ 2x_1 - x_2 - x_3 \\ -x_3 \end{bmatrix}$。<br>
+        1. <strong>求标准矩阵</strong>：$A = \begin{bmatrix} -1 & 0 & 0 \\ 2 & -1 & -1 \\ 0 & 0 & -1 \end{bmatrix}$。<br>
+        2. <strong>特征多项式</strong>：注意 $A$ 是下三角矩阵！对角线元素全为 $-1$，因此其特征多项式直接为：
+        $$\det(A - tI) = (-1 - t)(-1 - t)(-1 - t) = -(t + 1)^3 = 0$$
+        得到唯一实特征值 $\lambda = -1$，其<strong>代数重数 (Algebraic Multiplicity, AM) 为 3</strong>。<br>
+        3. <strong>求解特征子空间 $\text{Null}(A - (-1)I) = \text{Null}(A + I)$</strong>：
+        $$A + I = \begin{bmatrix} 0 & 0 & 0 \\ 2 & 0 & -1 \\ 0 & 0 & 0 \end{bmatrix}$$
+        方程约束为 $2x_1 - x_3 = 0 \implies x_3 = 2x_1$，而 $x_2$ 是完全自由的！通解为：
+        $$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ 2x_1 \end{bmatrix} = x_1 \begin{bmatrix} 1 \\ 0 \\ 2 \end{bmatrix} + x_2 \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix}$$
+        特征空间的基底只有 2 个向量：$\left\{ \begin{bmatrix} 1 \\ 0 \\ 2 \end{bmatrix}, \begin{bmatrix} 0 \\ 1 \\ 0 \end{bmatrix} \right\}$。<br>
+        <strong>核心启示</strong>：该特征值的<strong>几何重数 (GM) 为 2</strong>，严格小于代数重数 3（$\text{GM} = 2 < \text{AM} = 3$）！这表明该算子缺少 1 个线性无关的特征向量，在三维空间中无法张成完整的特征基，是典型的<strong>亏损矩阵 (Defective Matrix)</strong>，无法进行对角化。
+      </p>
+    </div>
+
+    <!-- 2.8 三角矩阵特征值即对角线元素定理 -->
+    <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px; margin: 1.5rem 0;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 2.8 三角矩阵特征值定理 (Eigenvalues of Triangular Matrices)</h4>
+      <p style="font-size: 0.95rem; line-height: 1.8;">
+        <strong>定理内容</strong>：若 $A$ 是一个 $n \times n$ 的<strong>上三角矩阵、下三角矩阵或对角矩阵</strong>，则 $A$ 的特征值<strong>严格等于其主对角线上的元素</strong>：$a_{11}, a_{22}, \dots, a_{nn}$。
+      </p>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.7;">
+        <strong>证明思路 (Slide 29)</strong>：由于上三角或下三角矩阵减去 $\lambda I$ 之后，得到的矩阵 $A - \lambda I$ 仍然是三角矩阵。由第 3 章行列式基本定理可知，三角矩阵的行列式恒等于其主对角线元素的乘积：
+        $$\det(A - \lambda I) = (a_{11} - \lambda)(a_{22} - \lambda) \cdots (a_{nn} - \lambda) = 0$$
+        因此特征方程的多项式根恰为 $\lambda_1 = a_{11}, \lambda_2 = a_{22}, \dots, \lambda_n = a_{nn}$。这一性质在 Schur 分解与 QR 算法中扮演着核心引擎角色！
+      </p>
+    </div>
+
+    <!-- 2.9 关键警示：A 与 RREF(A) 绝不可混淆 -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 6px;">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">🚨 2.9 高频认知大坑警示：A 与 RREF(A) 的特征多项式完全不同！</h4>
+      <div style="font-size: 0.9rem; line-height: 1.8;">
+        <p>
+          在初学者中极其常见的一个致命误区是：<em>“我先把矩阵 $A$ 用高斯消元化为行最简形 $\text{RREF}(A)$，再求特征值会不会更简单？”</em>
+        </p>
+        <p style="color: var(--accent-rose); font-weight: bold;">
+          答案是：绝对错误！初等行变换会彻底粉碎并篡改矩阵原有的特征多项式与特征值！
+        </p>
+        <ul style="color: var(--text-muted); margin: 0.5rem 0 0.5rem 1.5rem;">
+          <li><strong>为什么初等行变换破坏特征值？</strong> 初等行变换保持的是齐次方程 $A\mathbf{x} = \mathbf{0}$ 的解空间（即 $\text{Null}(A)$ 不变），但特征方程求解的是 $(A - \lambda I)\mathbf{x} = \mathbf{0}$。如果先对 $A$ 做行变换得到 $R = EA$，显然 $(EA - \lambda I) \neq E(A - \lambda I)$，因此行变换改变了特征方程！</li>
+          <li><strong>对比：什么变换才能保持特征值不变？</strong> 只有<strong>相似变换 (Similarity Transformation)</strong> $B = P^{-1}AP$ 才能完美保持特征多项式与特征值完全不变（$\det(P^{-1}AP - \lambda I) = \det(A - \lambda I)$）！</li>
+        </ul>
+      </div>
+    </div>
 <!-- 新增：迹 TRACE 的深度剖析与跨学科作用卡片 -->
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">
@@ -960,7 +1118,155 @@ print("行列式乘积验证:", np.isclose(np.prod(eigenvalues), np.linalg.det(A
 </div>
 
 
-        <!-- Page Navigation Buttons -->
+        <!-- 7. 讲义经典课后习题精选与严密题解 (Exercise 5-1 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">7. 📖 讲义经典课后习题精选与严密题解 (Exercise 5-1 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 5-1 全部 9 道经典习题</strong>（题号 61, 62, 65, 66, 67, 68, 69, 72, 73, 74），提供从问题本质分析、代数证明推导到几何直觉的全套权威解答。
+    </p>
+
+    <!-- Problem 61 & 62 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 61 & 62：单位算子与零算子的特征值与特征子空间</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 61】</strong> 求 $\mathbb{R}^n$ 上单位算子 $I$ (Identity Operator) 的所有特征值，并描述每个特征子空间。<br>
+        <strong>【题解 61】</strong> 对 $\mathbb{R}^n$ 中的任意向量 $\mathbf{v}$，均有 $I\mathbf{v} = 1\mathbf{v}$。因此单位算子<strong>唯一的特征值为 $\lambda = 1$</strong>。因为对所有非零向量 $\mathbf{v} \in \mathbb{R}^n$ 均满足定义，故其特征子空间 $E_1 = \text{Null}(I - 1I) = \text{Null}(O) = \mathbb{R}^n$（整个 $n$ 维全空间，维数为 $n$）。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 62】</strong> 求 $\mathbb{R}^n$ 上零算子 $O$ (Zero Operator) 的所有特征值，并描述每个特征子空间。<br>
+        <strong>【题解 62】</strong> 对任意向量 $\mathbf{v}$，均有 $O\mathbf{v} = \mathbf{0} = 0\mathbf{v}$。因此零算子<strong>唯一的特征值为 $\lambda = 0$</strong>。所有非零向量均保持共线（被压缩至原点），特征子空间 $E_0 = \text{Null}(O - 0I) = \text{Null}(O) = \mathbb{R}^n$（整个全空间，维数为 $n$）。
+      </p>
+    </div>
+
+    <!-- Problem 65 & 66 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 65 & 66：零特征值与可逆性等价定理</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 65】</strong> 假设 0 是矩阵 $A$ 的一个特征值，请给出对应于特征值 0 的特征子空间的另一个常用名字。<br>
+        <strong>【题解 65】</strong> 依定义，对应于 $\lambda = 0$ 的特征子空间为 $E_0 = \text{Null}(A - 0I) = \text{Null}(A)$，即<strong>矩阵 $A$ 的零空间 (Null Space / Kernel)</strong>！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 66】</strong> 证明：方阵 $A$ 是可逆矩阵，当且仅当 0 不是 $A$ 的特征值。<br>
+        <strong>【严密证明】</strong> 采用双向充要性论证：<br>
+        • ($\Rightarrow$ 充分性) 设 $A$ 可逆。反证法：若 0 是 $A$ 的特征值，则存在非零向量 $\mathbf{v} \neq \mathbf{0}$ 使得 $A\mathbf{v} = 0\mathbf{v} = \mathbf{0}$。两边左乘 $A^{-1}$，得 $A^{-1}(A\mathbf{v}) = A^{-1}\mathbf{0} \implies I\mathbf{v} = \mathbf{0} \implies \mathbf{v} = \mathbf{0}$，这与 $\mathbf{v} \neq \mathbf{0}$ 矛盾！因此 0 绝不能是 $A$ 的特征值。<br>
+        • ($\Leftarrow$ 必要性) 设 0 不是 $A$ 的特征值。这意味着不存在非零向量 $\mathbf{v} \neq \mathbf{0}$ 满足 $A\mathbf{v} = 0\mathbf{v} = \mathbf{0}$，即齐次方程 $A\mathbf{x} = \mathbf{0}$ 只有唯一平凡解 $\mathbf{x} = \mathbf{0}$。由可逆矩阵等价定理 (IMT)，$\text{Null}(A) = \{\mathbf{0}\}$ 充分必要于 $A$ 是可逆矩阵。<br>
+        • <strong>行列式视角印证</strong>：$\det(A) = \prod_{i=1}^n \lambda_i$。矩阵可逆 $\iff \det(A) \neq 0 \iff$ 全体特征值乘积非零 $\iff$ 没有任何特征值为 0！
+      </p>
+    </div>
+
+    <!-- Problem 67 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 67：可逆矩阵逆矩阵的特征值倒数性质</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 67】</strong> 证明：若 $\lambda$ 是可逆矩阵 $A$ 的一个特征值，则 $\lambda \neq 0$，且 $1/\lambda$ 是逆矩阵 $A^{-1}$ 的特征值。<br>
+        <strong>【严密证明】</strong><br>
+        1. 由习题 66 已证定理，因为 $A$ 可逆，所以其全部特征值均不为零，故必有 $\lambda \neq 0$。<br>
+        2. 设 $\mathbf{v}$ 是对应于 $\lambda$ 的特征向量，满足 $\mathbf{v} \neq \mathbf{0}$ 且 $A\mathbf{v} = \lambda \mathbf{v}$。<br>
+        3. 在等式两边同时左乘逆矩阵 $A^{-1}$：
+        $$A^{-1}(A\mathbf{v}) = A^{-1}(\lambda\mathbf{v}) \implies (A^{-1}A)\mathbf{v} = \lambda(A^{-1}\mathbf{v}) \implies I\mathbf{v} = \lambda(A^{-1}\mathbf{v}) \implies \mathbf{v} = \lambda(A^{-1}\mathbf{v})$$<br>
+        4. 因为 $\lambda \neq 0$，两边同除以标量 $\lambda$：
+        $$A^{-1}\mathbf{v} = \frac{1}{\lambda}\mathbf{v}$$
+        上式严格满足特征方程定义！因此，$1/\lambda$ 是逆矩阵 $A^{-1}$ 的特征值，且其对应的特征向量恰好就是原矩阵的特征向量 $\mathbf{v}$！
+      </p>
+    </div>
+
+    <!-- Problem 68 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">📝 习题 68：等行和矩阵的特征值与全 1 特征向量</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 68】</strong> 设 $A$ 是一个方阵，其中每一行的所有元素之和均等于同一个常数标量 $r$。证明 $r$ 是 $A$ 的一个特征值，并求出一个对应的特征向量。<br>
+        <strong>【严密证明】</strong><br>
+        设全 1 列向量 $\mathbf{1} = \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix} \in \mathbb{R}^n$。显然 $\mathbf{1} \neq \mathbf{0}$。<br>
+        计算矩阵乘法 $A\mathbf{1}$：依矩阵乘法行向量视角，结果向量的第 $i$ 个分量为：
+        $$(A\mathbf{1})_i = \sum_{j=1}^n a_{ij} \cdot 1 = \sum_{j=1}^n a_{ij}$$
+        依题设，每一行的元素之和均严格等于常数 $r$，因此结果向量的每一个分量都等于 $r$：
+        $$A\mathbf{1} = \begin{bmatrix} r \\ r \\ \vdots \\ r \end{bmatrix} = r \begin{bmatrix} 1 \\ 1 \\ \vdots \\ 1 \end{bmatrix} = r \mathbf{1}$$
+        严格符合定义 $A\mathbf{v} = \lambda \mathbf{v}$！因此标量 $r$ 必定是矩阵 $A$ 的一个特征值，全 1 向量 $\mathbf{1}$ 就是对应于 $r$ 的特征向量。<br>
+        <span style="color: var(--accent-amber); font-weight: bold;">💡 工业应用直觉</span>：马尔可夫转移矩阵、图论正则图邻接矩阵、PageRank 随机游走矩阵均广泛具备行和或列和为常数的特性，全 1 向量即为天然的稳态解。
+      </p>
+    </div>
+
+    <!-- Problem 69 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 69：矩阵高阶幂与多项式的谱映射定理</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 69】</strong> 证明：若 $\lambda$ 是矩阵 $A$ 的特征值，则 $\lambda^2$ 是 $A^2$ 的特征值；推广至 $A^k$ 与多项式 $p(A)$。<br>
+        <strong>【严密证明】</strong><br>
+        1. 设 $\mathbf{v} \neq \mathbf{0}$ 满足 $A\mathbf{v} = \lambda\mathbf{v}$。<br>
+        2. 两边左乘 $A$：$A^2\mathbf{v} = A(A\mathbf{v}) = A(\lambda\mathbf{v}) = \lambda(A\mathbf{v}) = \lambda(\lambda\mathbf{v}) = \lambda^2\mathbf{v}$。故 $\lambda^2$ 是 $A^2$ 的特征值。<br>
+        3. <strong>数学归纳法推广至 $A^k$</strong>：假设 $A^{k-1}\mathbf{v} = \lambda^{k-1}\mathbf{v}$ 成立，则 $A^k\mathbf{v} = A(A^{k-1}\mathbf{v}) = A(\lambda^{k-1}\mathbf{v}) = \lambda^{k-1}(A\mathbf{v}) = \lambda^k\mathbf{v}$。归纳成立！<br>
+        4. <strong>广义谱映射定理 (Spectral Mapping Theorem)</strong>：对任意多项式 $p(t) = c_m t^m + \dots + c_1 t + c_0$，均有：
+        $$p(A)\mathbf{v} = (c_m A^m + \dots + c_1 A + c_0 I)\mathbf{v} = (c_m \lambda^m + \dots + c_1 \lambda + c_0)\mathbf{v} = p(\lambda)\mathbf{v}$$
+        即多项式矩阵 $p(A)$ 的特征值恰好就是标量多项式值 $p(\lambda)$，且共享相同的特征向量 $\mathbf{v}$！
+      </p>
+    </div>
+
+    <!-- Problem 72 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-indigo); margin-bottom: 0.5rem;">📝 习题 72：幂零矩阵 (Nilpotent Matrix) 的唯一特征值</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 72】</strong> 若方阵 $A$ 满足存在正整数 $k$ 使得 $A^k = O$（其中 $O$ 为零矩阵），则称 $A$ 为<strong>幂零矩阵 (Nilpotent)</strong>。证明：0 是幂零矩阵的<strong>唯一特征值</strong>。<br>
+        <strong>【严密证明】</strong><br>
+        • <strong>第一步：证明 0 必是其特征值</strong>：<br>
+        因为 $A^k = O$，取行列式得 $\det(A^k) = (\det A)^k = \det O = 0$，故 $\det A = 0$。由习题 66 可逆性定理，$\det A = 0$ 意味着 $A$ 不可逆，因此 0 必定是 $A$ 的一个特征值。<br>
+        • <strong>第二步：证明不存在除 0 以外的任何其它特征值</strong>：<br>
+        设 $\lambda$ 是 $A$ 的任意一个特征值，对应特征向量为 $\mathbf{v} \neq \mathbf{0}$，满足 $A\mathbf{v} = \lambda\mathbf{v}$。<br>
+        由习题 69 结论可知，$A^k\mathbf{v} = \lambda^k\mathbf{v}$。<br>
+        但已知 $A^k = O$，故 $A^k\mathbf{v} = O\mathbf{v} = \mathbf{0}$。两式结合：
+        $$\lambda^k\mathbf{v} = \mathbf{0}$$
+        因为依据定义特征向量 $\mathbf{v} \neq \mathbf{0}$，所以必须是标量部分为零：$\lambda^k = 0$。<br>
+        在复数域内，代数方程 $\lambda^k = 0$ 的唯一复根为 $\lambda = 0$！<br>
+        • <strong>结论</strong>：幂零矩阵的所有特征值必然全为 0（即代数重数等于 $n$），没有任何其他可能。
+      </p>
+    </div>
+
+    <!-- Problem 73 & 74 (Theorem 5.3) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 习题 73 & 74 (定理 5.3)：互异特征值对应的特征向量必定线性无关</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 73】</strong> 设 $\mathbf{v}_1, \mathbf{v}_2$ 分别是对应于互不相同特征值 $\lambda_1 \neq \lambda_2$ 的特征向量。证明 $\{\mathbf{v}_1, \mathbf{v}_2\}$ 线性无关。<br>
+        <strong>【证明 (双向量基础版)】</strong><br>
+        设标量组合使得 $c_1\mathbf{v}_1 + c_2\mathbf{v}_2 = \mathbf{0}$ &nbsp;&nbsp;&nbsp;<strong>(式 1)</strong>。<br>
+        在式 1 两边同时左乘矩阵 $A$：
+        $$c_1 A\mathbf{v}_1 + c_2 A\mathbf{v}_2 = \mathbf{0} \implies c_1 \lambda_1 \mathbf{v}_1 + c_2 \lambda_2 \mathbf{v}_2 = \mathbf{0} \quad \text{(式 2)}$$
+        将式 1 两端同时乘以标量 $\lambda_2$：
+        $$c_1 \lambda_2 \mathbf{v}_1 + c_2 \lambda_2 \mathbf{v}_2 = \mathbf{0} \quad \text{(式 3)}$$
+        用 (式 2) 减去 (式 3)，消去 $\mathbf{v}_2$ 项：
+        $$c_1(\lambda_1 - \lambda_2)\mathbf{v}_1 = \mathbf{0}$$
+        因为已知 $\lambda_1 \neq \lambda_2$（即 $\lambda_1 - \lambda_2 \neq 0$），且 $\mathbf{v}_1$ 是特征向量（$\mathbf{v}_1 \neq \mathbf{0}$），所以必有 $c_1 = 0$！<br>
+        代回式 1 得 $c_2\mathbf{v}_2 = \mathbf{0}$，由 $\mathbf{v}_2 \neq \mathbf{0}$ 可知 $c_2 = 0$。因此向量组 $\{\mathbf{v}_1, \mathbf{v}_2\}$ 严格线性无关！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 74 (定理 5.3 通用版)】</strong> 设 $\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k$ 是对应于两两互异特征值 $\lambda_1, \lambda_2, \dots, \lambda_k$ 的特征向量。证明它们线性无关。<br>
+        <strong>【数学归纳法严密证明】</strong><br>
+        • <strong>奠基步</strong>：当 $k=1$ 时，特征向量 $\mathbf{v}_1 \neq \mathbf{0}$，单个非零向量显然线性无关。<br>
+        • <strong>归纳假设</strong>：假设当有 $k-1$ 个特征向量时结论成立，即 $\{\mathbf{v}_1, \dots, \mathbf{v}_{k-1}\}$ 线性无关。<br>
+        • <strong>归纳递推</strong>：考虑 $k$ 个向量的零线性组合：
+        $$c_1\mathbf{v}_1 + c_2\mathbf{v}_2 + \dots + c_{k-1}\mathbf{v}_{k-1} + c_k\mathbf{v}_k = \mathbf{0} \quad \text{(式 A)}$$
+        两边同乘矩阵 $A$：
+        $$c_1\lambda_1\mathbf{v}_1 + c_2\lambda_2\mathbf{v}_2 + \dots + c_{k-1}\lambda_{k-1}\mathbf{v}_{k-1} + c_k\lambda_k\mathbf{v}_k = \mathbf{0} \quad \text{(式 B)}$$
+        将式 A 两端同乘以标量 $\lambda_k$：
+        $$c_1\lambda_k\mathbf{v}_1 + c_2\lambda_k\mathbf{v}_2 + \dots + c_{k-1}\lambda_k\mathbf{v}_{k-1} + c_k\lambda_k\mathbf{v}_k = \mathbf{0} \quad \text{(式 C)}$$
+        两式相减 (式 B - 式 C)，消去最后一项 $c_k\mathbf{v}_k$：
+        $$c_1(\lambda_1 - \lambda_k)\mathbf{v}_1 + c_2(\lambda_2 - \lambda_k)\mathbf{v}_2 + \dots + c_{k-1}(\lambda_{k-1} - \lambda_k)\mathbf{v}_{k-1} = \mathbf{0}$$
+        由归纳假设，前 $k-1$ 个特征向量线性无关，因此上式中每个系数必须全为 0：
+        $$c_i(\lambda_i - \lambda_k) = 0 \quad (\forall i = 1, 2, \dots, k-1)$$
+        因为所有特征值两两互异，$\lambda_i - \lambda_k \neq 0$，所以必有 $c_1 = c_2 = \dots = c_{k-1} = 0$！<br>
+        将它们代回式 A，得到 $c_k\mathbf{v}_k = \mathbf{0}$。由于 $\mathbf{v}_k \neq \mathbf{0}$，必有 $c_k = 0$。<br>
+        至此证明了所有系数 $c_1 = c_2 = \dots = c_k = 0$，由数学归纳法，定理对任意正整数 $k$ 恒成立！<br>
+        <span style="color: var(--accent-blue); font-weight: bold;">💎 终极意义</span>：若一个 $n \times n$ 矩阵拥有 $n$ 个两两互异的特征值，则它<strong>必定拥有 $n$ 个线性无关的特征向量，必定能够对角化！</strong>
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Page Navigation Buttons -->
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch4_6_operator_matrix.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

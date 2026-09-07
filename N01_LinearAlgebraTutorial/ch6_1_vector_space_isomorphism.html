@@ -544,6 +544,149 @@
                 <em>（等价单步检验法：对任意 $c, d \in \mathbb{F}$ 及 $\mathbf{u}, \mathbf{v} \in W$，只需证明线性组合 $c\mathbf{u} + d\mathbf{v} \in W$ 即可！）</em>
               </p>
             </div>
+
+            <!-- 2.3 讲义同款：子空间判别六题深度检验套件 -->
+            <div class="example-box" style="margin-top: 1.75rem; padding: 1.5rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 8px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                <h4 style="color: var(--accent-blue); font-size: 1.1rem; margin: 0;">
+                  🧪 2.3 讲义精选：子空间判别六题深度检验套件 (The 6-Problem Subspace Suite)
+                </h4>
+                <span style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold;">MIT & 讲义 Slide 11 原题</span>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                以下 6 个集合全部来自经典讲义与期末高频题，请用“子空间三步准则”逐项审判：
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1rem;">
+                <!-- 题 1 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: #38bdf8;">① 定点零值函数集合</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.82rem;">✅ 是子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $S = \{f \in \mathcal{F}(\mathbb{R}, \mathbb{R}) \mid f(t_0) = 0\}$（$t_0 \in \mathbb{R}$ 为固定实数）
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>严密核验：</strong><br>
+                    • 零元：恒零函数满足 $0(t_0) = 0 \in S$。<br>
+                    • 加法：若 $f, g \in S$，$(f+g)(t_0) = f(t_0) + g(t_0) = 0+0 = 0 \in S$。<br>
+                    • 数乘：对标量 $c$，$(cf)(t_0) = c \cdot f(t_0) = c \cdot 0 = 0 \in S$。全部满足！
+                  </p>
+                </div>
+
+                <!-- 题 2 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: #c084fc;">② 迹为 0 的方阵集合</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.82rem;">✅ 是子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $S = \{A \in \mathcal{M}_{n \times n}(\mathbb{R}) \mid \operatorname{tr}(A) = 0\}$
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>严密核验：</strong><br>
+                    • 零矩阵：$\operatorname{tr}(O_{n \times n}) = 0 \in S$。<br>
+                    • 迹具有线性性质：$\operatorname{tr}(A+B) = \operatorname{tr}(A) + \operatorname{tr}(B) = 0+0 = 0 \in S$。<br>
+                    • $\operatorname{tr}(cA) = c \operatorname{tr}(A) = c \cdot 0 = 0 \in S$。封闭性无懈可击！
+                  </p>
+                </div>
+
+                <!-- 题 3 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: #34d399;">③ 代数结构矩阵集合</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.82rem;">✅ 是子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $S = \left\{ \begin{bmatrix} a & a+b \\ b & 0 \end{bmatrix} \;\middle|\; a, b \in \mathbb{R} \right\} \subset \mathcal{M}_{2 \times 2}$
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>严密核验：</strong><br>
+                    • 取 $a=b=0$ 即得零矩阵 $\begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} \in S$。<br>
+                    • 任意线性组合 $c_1 M(a_1, b_1) + c_2 M(a_2, b_2) = M(c_1 a_1 + c_2 a_2, c_1 b_1 + c_2 b_2)$，右上角元素恒等于左上角与左下角之和，结构完全保持！
+                  </p>
+                </div>
+
+                <!-- 题 4 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: #fbbf24;">④ 闭区间连续函数集合</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.82rem;">✅ 是子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $C[a, b] \subset \mathcal{F}[a, b]$（全实函数空间）
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>严密核验：</strong><br>
+                    • 零函数 $f(x) \equiv 0$ 处处连续。<br>
+                    • 数学分析基本定理保证：连续函数之和仍连续，连续函数的常数倍仍连续。故 $C[a, b]$ 是全函数空间的合法子空间！
+                  </p>
+                </div>
+
+                <!-- 题 5 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: var(--accent-rose);">⑤ 严格 $n$ 次多项式集合</strong>
+                    <span style="color: var(--accent-rose); font-weight: bold; font-size: 0.82rem;">❌ 非子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $S = \{p \in \mathcal{P} \mid \deg(p) = n\}$（$n \ge 1$）
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>致死漏洞：</strong><br>
+                    • 零多项式没有确定的正整数次数（$\deg(0) = -\infty$ 或未定义），$\mathbf{0} \notin S$！<br>
+                    • 加法不封闭：取 $p(x) = x^n + 1 \in S, q(x) = -x^n \in S$，两式相加得到常数 $1$（次数为 0，而非 $n$），飞出集合！
+                  </p>
+                </div>
+
+                <!-- 题 6 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: #38bdf8;">⑥ 次数不超过 $n$ 的多项式空间</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.82rem;">✅ 是子空间</span>
+                  </div>
+                  <p style="font-size: 0.85rem; margin-top: 0.4rem; color: var(--text-main);">
+                    $\mathcal{P}_n = \{p \in \mathcal{P} \mid \deg(p) \le n\} \cup \{\mathbf{0}\}$
+                  </p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.3rem;">
+                    <strong>严密核验：</strong><br>
+                    • 明确规定包含零多项式。<br>
+                    • 两个不超过 $n$ 次的多项式相加或数乘，最高次项系数即使抵消也只会降低次数，结果次数必定仍 $\le n$，运算严格封闭！
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2.4 生成空间 (Span) 与抽象空间维数 -->
+            <div class="theorem-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 8px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.75rem;">
+                🌱 2.4 生成空间 (Span)、基底生成与无穷维概念 (Slides 13-14)
+              </h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                设 $S = \{\mathbf{v}_1, \mathbf{v}_2, \dots, \mathbf{v}_k\}$ 是向量空间 $V$ 中的非空子集，由这些向量的所有可能线性组合构成的集合称为 $S$ 的<strong>生成子空间 (Span)</strong>：
+                $$\operatorname{Span}(S) = \left\{ c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2 + \dots + c_k \mathbf{v}_k \;\middle|\; c_i \in \mathbb{R} \right\}$$
+              </p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-purple);">案例 A：生成迹为 0 的 $2 \times 2$ 矩阵子空间</strong>
+                  <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                    考虑向量组 $S = \left\{ \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}, \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}, \begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix} \right\}$。其线性组合为：
+                    $$a \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix} + b \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} + c \begin{bmatrix} 0 & 0 \\ 1 & 0 \end{bmatrix} = \begin{bmatrix} a & b \\ c & -a \end{bmatrix}$$
+                    其主对角线和为 $a + (-a) = 0$。这表明 $\operatorname{Span}(S)$ 恰好精确生成了全空间中<strong>所有迹为 0 的 $2 \times 2$ 矩阵</strong>，且该子空间的维数为 $3$！
+                  </p>
+                </div>
+
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px;">
+                  <strong style="color: var(--accent-blue);">案例 B：有限维多项式 $\mathcal{P}_3$ vs 无穷维全多项式 $\mathcal{P}$</strong>
+                  <p style="font-size: 0.86rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                    • $\operatorname{Span}\{1, x, x^2, x^3\} = \mathcal{P}_3$：只需 4 个基底元素即可完全张成，$\dim(\mathcal{P}_3) = 4$。<br>
+                    • $\operatorname{Span}\{1, x, x^2, \dots, x^k, \dots\} = \mathcal{P}$：全多项式空间需要无穷多个单项式才能张成！因为对任意有限多项式集合，必定存在一个最高次数 $N$，任何线性组合都不可能生成 $x^{N+1}$！故<strong>多项式全空间是不可逾越的无穷维向量空间</strong>（$\dim(\mathcal{P}) = \infty$）。
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -561,6 +704,61 @@
               <li>向量组 $\{\mathbf{b}_1, \mathbf{b}_2, \dots, \mathbf{b}_n\}$ <strong>线性无关</strong>，当且仅当方程 $c_1 \mathbf{b}_1 + c_2 \mathbf{b}_2 + \dots + c_n \mathbf{b}_n = \mathbf{0}$ 仅有全零平凡解 $c_1 = c_2 = \dots = c_n = 0$。</li>
               <li>若该向量组既线性无关又能<strong>张成全空间 ($\operatorname{Span}\{\mathbf{b}_1, \dots, \mathbf{b}_n\} = V$)</strong>，则称它为空间 $V$ 的一组<strong>基底 (Basis)</strong> $\mathcal{B}$，向量数量 $n$ 称为空间的<strong>维数 (Dimension)</strong>，记作 $\dim(V) = n$。</li>
             </ul>
+
+            <!-- 3.1 线性相关/无关深度判别案例 (讲义 Slides 23-24) -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 8px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                🔬 3.1 抽象空间线性相关与无关深度判别案例 (Slides 23-24)
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                在抽象向量空间中，“线性无关”不再仅仅是几何箭头的夹角，而是函数或多项式在定义域内能否被彼此线性抵消。以下是两道极具代表性的判别范式：
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 1.25rem;">
+                <!-- 案例 1: P2 中多项式相关性 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: var(--accent-amber);">案例 1：多项式空间 $\mathcal{P}_2$ 中的相关性判别</strong>
+                    <span style="color: var(--accent-rose); font-weight: bold; font-size: 0.8rem;">🚨 线性相关</span>
+                  </div>
+                  <p style="font-size: 0.86rem; margin-top: 0.5rem;">
+                    给定多项式集合 $S = \{v_1, v_2, v_3\} \subset \mathcal{P}_2$：
+                    $$v_1 = x^2 - 3x + 2, \quad v_2 = 3x^2 - 5x, \quad v_3 = 2x - 3$$
+                  </p>
+                  <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                    <strong>解法（待定系数与矩阵法）：</strong><br>
+                    设立方程 $c_1 v_1 + c_2 v_2 + c_3 v_3 = 0$。分离同类项系数：
+                    $$\begin{cases} x^2: & 1c_1 + 3c_2 + 0c_3 = 0 \\ x: & -3c_1 - 5c_2 + 2c_3 = 0 \\ 1: & 2c_1 + 0c_2 - 3c_3 = 0 \end{cases}$$
+                    计算系数矩阵的行列式：
+                    $$\det \begin{bmatrix} 1 & 3 & 0 \\ -3 & -5 & 2 \\ 2 & 0 & -3 \end{bmatrix} = 1(15 - 0) - 3(9 - 4) = 15 - 15 = 0$$
+                    行列式为 0，说明存在非零解！解得 $c_1 = 3, c_2 = -1, c_3 = 2$。验证：
+                    $$3(x^2 - 3x + 2) - (3x^2 - 5x) + 2(2x - 3) = 0$$
+                    故 $S$ 在 $\mathcal{P}_2$ 中<strong>线性相关</strong>！
+                  </p>
+                </div>
+
+                <!-- 案例 2: 指数函数族线性无关性 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1.2rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong style="color: var(--accent-blue);">案例 2：指数函数族 $\{e^t, e^{2t}, e^{3t}\}$ 的线性无关性</strong>
+                    <span style="color: var(--accent-green); font-weight: bold; font-size: 0.8rem;">✅ 严格线性无关</span>
+                  </div>
+                  <p style="font-size: 0.86rem; margin-top: 0.5rem;">
+                    在光滑函数空间 $C^\infty(\mathbb{R})$ 中，判断向量组 $S = \{e^t, e^{2t}, e^{3t}\}$ 是否线性无关。
+                  </p>
+                  <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                    <strong>解法（朗斯基微分与范德蒙德行列式法）：</strong><br>
+                    设对<strong>所有实数 $t$ 恒成立</strong>：
+                    $$c_1 e^t + c_2 e^{2t} + c_3 e^{3t} = 0$$
+                    分别对 $t$ 求一阶导数、二阶导数：
+                    $$\begin{aligned} c_1 e^t + 2c_2 e^{2t} + 3c_3 e^{3t} &= 0 \\ c_1 e^t + 4c_2 e^{2t} + 9c_3 e^{3t} &= 0 \end{aligned}$$
+                    由于等式对任意 $t$ 恒成立，令 $t = 0$，得到代数方程组：
+                    $$\begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \\ 1 & 4 & 9 \end{bmatrix} \begin{bmatrix} c_1 \\ c_2 \\ c_3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \\ 0 \end{bmatrix}$$
+                    其系数矩阵恰为 $3 \times 3$ 范德蒙德矩阵 (Vandermonde Matrix)！其行列式为 $(2-1)(3-1)(3-2) = 2 \neq 0$。由克莱姆法则，该方程组<strong>只有唯一全零平凡解 $c_1 = c_2 = c_3 = 0$</strong>，故指数函数族在实数轴上<strong>严格线性无关</strong>！
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <!-- 坐标映射定义 -->
             <div class="theorem-box" style="padding: 1.25rem; background: rgba(52, 211, 153, 0.08); border-left: 4px solid var(--accent-green); border-radius: 6px; margin: 1.5rem 0;">
@@ -642,6 +840,39 @@
                 结论：坐标映射是一个双射线性映射 —— 这正是代数学中“同构 (Isomorphism)”的严格定义！
               </p>
             </div>
+
+            <!-- 3.2 同构保持线性无关性定理 (Slide 25) -->
+            <div class="theorem-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 8px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">
+                🛡️ 3.2 同构定理前哨：同构映射保线性结构定理 (Theorem on Isomorphism & Independence)
+              </h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                设 $T: V \to W$ 是从向量空间 $V$ 到 $W$ 的一个<strong>线性同构 (Isomorphism)</strong>（即可逆双射线性映射）。则 $T$ 严格保持所有的核心代数拓扑结构：
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-green);">① 保持线性无关性</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    $\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 在 $V$ 中线性无关 $\iff \{T(\mathbf{v}_1), \dots, T(\mathbf{v}_k)\}$ 在 $W$ 中线性无关。
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-purple);">② 保持生成子空间</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    $\operatorname{Span}\{\mathbf{v}_1, \dots, \mathbf{v}_k\} = V \iff \operatorname{Span}\{T(\mathbf{v}_1), \dots, T(\mathbf{v}_k)\} = W$。
+                  </p>
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-amber);">③ 基底一一映射</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                    $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ 是 $V$ 的一组基底 $\iff \{T(\mathbf{v}_1), \dots, T(\mathbf{v}_n)\}$ 是 $W$ 的一组基底。
+                  </p>
+                </div>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-dim); margin-top: 0.75rem;">
+                <strong>核心价值：</strong> 这条定理彻底解放了数学家与工程师！若想检验抽象函数或多项式是否线性无关，<strong>只需通过坐标映射 $[\cdot]_\mathcal{B}$ 将它们拍成普通列向量，然后计算行列式或化阶梯形即可</strong>，结论 100% 绝对成立！
+              </p>
+            </div>
           </div>
         </div>
 
@@ -694,6 +925,84 @@
                   <p>
                     计算机只懂存储浮点数数组（列向量），根本不懂什么是连续函数。我们在计算机中处理多项式拟合、图像滤波、量子计算时，正是<strong>第一步取基底将抽象对象编码为列向量 $\mathbf{x} \mapsto [\mathbf{x}]_\mathcal{B}$</strong>，在 CPU/GPU 中用高效的 BLAS 矩阵乘法和高斯消元计算完，<strong>最后一步通过逆同构解码还原回现实世界</strong>！
                   </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4.1 抽象线性变换族谱、核与值域及维数定理 (Slides 15-19) -->
+            <div class="card" style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color);">
+              <div class="card-header" style="background: transparent; border-bottom: 1px solid var(--border-color); padding: 1rem 1.25rem;">
+                <h3 style="color: var(--accent-amber); font-size: 1.15rem; margin: 0;">
+                  📐 4.1 抽象线性变换族谱：核 (Kernel)、值域 (Range) 与维数定理判别实战 (Slides 15-19)
+                </h3>
+              </div>
+              <div class="card-body" style="padding: 1.25rem;">
+                <p style="font-size: 0.92rem; line-height: 1.8;">
+                  设 $T: V \to W$ 是抽象向量空间之间的线性变换（满足 $T(\mathbf{u}+\mathbf{v}) = T(\mathbf{u}) + T(\mathbf{v})$ 及 $T(c\mathbf{u}) = cT(\mathbf{u})$）。变换的两大核心空间为：
+                </p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 0.75rem 0;">
+                  <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                    <strong style="color: var(--accent-blue);">核空间 (Kernel / Null Space)</strong>
+                    <div style="font-size: 1.05rem; margin: 0.3rem 0; color: #38bdf8;">$$\operatorname{Ker}(T) = \{\mathbf{v} \in V \mid T(\mathbf{v}) = \mathbf{0}_W\} \subset V$$</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">$T$ 是一对一（单射 Injective）$\iff \operatorname{Ker}(T) = \{\mathbf{0}_V\}$。</p>
+                  </div>
+                  <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                    <strong style="color: var(--accent-purple);">值域空间 (Range / Image)</strong>
+                    <div style="font-size: 1.05rem; margin: 0.3rem 0; color: #c084fc;">$$\operatorname{Range}(T) = \{T(\mathbf{v}) \mid \mathbf{v} \in V\} \subset W$$</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">$T$ 是映上（满射 Surjective）$\iff \operatorname{Range}(T) = W$。</p>
+                  </div>
+                </div>
+
+                <div class="theorem-box" style="margin: 1rem 0; padding: 1rem; background: rgba(251, 191, 36, 0.06); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+                  <strong style="color: var(--accent-amber);">👑 抽象维数定理 (Dimension Theorem / Rank-Nullity Theorem)：</strong>
+                  <div style="font-size: 1.15rem; text-align: center; margin: 0.4rem 0;">
+                    $$\dim(\operatorname{Ker}(T)) + \dim(\operatorname{Range}(T)) = \dim(V)$$
+                  </div>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0;">
+                    变换吃掉的维数（被压缩映射到零的自由度）加上存活的维数（值域维度），恒等于出发定义域的原生总维数！若 $\dim(V) = \dim(W)$，则单射、满射与同构三者完全等价！
+                  </p>
+                </div>
+
+                <!-- 三大经典算子全景对比表格 -->
+                <div style="overflow-x: auto; margin-top: 1rem;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+                    <thead>
+                      <tr style="border-bottom: 2px solid var(--border-highlight); background: rgba(255,255,255,0.03);">
+                        <th style="padding: 10px; color: var(--accent-blue);">变换算子 $T$</th>
+                        <th style="padding: 10px; color: var(--accent-blue);">定义域与目标域</th>
+                        <th style="padding: 10px; color: var(--accent-blue);">核空间 $\operatorname{Ker}(T)$</th>
+                        <th style="padding: 10px; color: var(--accent-blue);">值域 $\operatorname{Range}(T)$</th>
+                        <th style="padding: 10px; color: var(--accent-blue);">单射 / 满射性</th>
+                        <th style="padding: 10px; color: var(--accent-blue);">是否同构？</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 10px; font-weight: 600;">矩阵转置 $U(A) = A^T$</td>
+                        <td style="padding: 10px;">$\mathcal{M}_{m \times n} \to \mathcal{M}_{n \times m}$</td>
+                        <td style="padding: 10px;">$\{O\}$ (仅零矩阵)</td>
+                        <td style="padding: 10px;">全空间 $\mathcal{M}_{n \times m}$</td>
+                        <td style="padding: 10px; color: var(--accent-green);">既是单射又是满射</td>
+                        <td style="padding: 10px; color: var(--accent-green); font-weight: bold;">✅ 是同构 ($\mathcal{M}_{m \times n} \cong \mathcal{M}_{n \times m}$)</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 10px; font-weight: 600;">多项式求导 $D(p) = p'$</td>
+                        <td style="padding: 10px;">$\mathcal{P}_3 \to \mathcal{P}_3$</td>
+                        <td style="padding: 10px;">常数多项式 $\mathcal{P}_0$ ($\dim=1$)</td>
+                        <td style="padding: 10px;">二次多项式 $\mathcal{P}_2$ ($\dim=3$)</td>
+                        <td style="padding: 10px; color: var(--accent-rose);">非单射、非满射</td>
+                        <td style="padding: 10px; color: var(--accent-rose); font-weight: bold;">❌ 非同构 (导数降阶且常数求导归零)</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 10px; font-weight: 600;">定积分泛函 $I(f) = \int_a^b f(t)dt$</td>
+                        <td style="padding: 10px;">$C[a, b] \to \mathbb{R}$</td>
+                        <td style="padding: 10px;">有向净面积为 0 的函数子空间</td>
+                        <td style="padding: 10px;">全实数标量域 $\mathbb{R}$ ($\dim=1$)</td>
+                        <td style="padding: 10px; color: var(--accent-amber);">非单射、满射</td>
+                        <td style="padding: 10px; color: var(--accent-rose); font-weight: bold;">❌ 非同构 (无穷维压缩至 1 维线性泛函)</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -873,6 +1182,108 @@
               </ol>
             </div>
 
+            <!-- 范例 5: 微分算子矩阵求逆与不定积分 (讲义 Slides 27-31) -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h4 style="color: var(--accent-blue); margin: 0;">
+                  🌟 范例 5：微积分降维打击——利用微分算子矩阵求逆计算反导数（不定积分）(Slides 27-31)
+                </h4>
+                <span style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold;">高阶技巧</span>
+              </div>
+              <p>
+                在多项式空间中，求导矩阵是幂零且不可逆的。然而，在许多重要的函数子空间中，<strong>求导算子竟然是严格可逆的双射同构</strong>！这为我们提供了一种完全无需“分部积分法”的颠覆性反导数（不定积分）计算捷径。
+              </p>
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; margin: 0.75rem 0;">
+                <strong style="color: var(--accent-amber);">问题情景：</strong> 考虑由函数族生成的二维函数子空间 $\mathcal{F} = \operatorname{Span}\{f_1(t) = e^t \cos t, \; f_2(t) = e^t \sin t\}$。
+                设基底为 $\mathcal{B} = \{f_1, f_2\}$。求微积分中极易算错的两个著名不定积分：
+                $$\int e^t \cos t \, dt \quad \text{与} \quad \int e^t \sin t \, dt$$
+              </div>
+              <ol style="margin-left: 1.5rem; line-height: 1.9;">
+                <li>
+                  <strong>计算基函数的导数并在基底 $\mathcal{B}$ 下坐标化：</strong><br>
+                  利用乘积求导法则：
+                  $$D(f_1) = (e^t \cos t)' = e^t \cos t - e^t \sin t = 1 \cdot f_1(t) - 1 \cdot f_2(t) \implies [D(f_1)]_\mathcal{B} = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$$
+                  $$D(f_2) = (e^t \sin t)' = e^t \sin t + e^t \cos t = 1 \cdot f_1(t) + 1 \cdot f_2(t) \implies [D(f_2)]_\mathcal{B} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
+                </li>
+                <li>
+                  <strong>拼装求导算子的矩阵表示 $[D]_\mathcal{B}$ 并检验可逆性：</strong><br>
+                  $$[D]_\mathcal{B} = \begin{bmatrix} 1 & 1 \\ -1 & 1 \end{bmatrix}$$
+                  计算行列式：$\det([D]_\mathcal{B}) = 1 \times 1 - (-1) \times 1 = 1 + 1 = 2 \neq 0$！<br>
+                  在该函数子空间上，求导算子 $D$ 是严格可逆的！
+                </li>
+                <li>
+                  <strong>求逆矩阵以获得“不定积分算子（反导数）”：</strong><br>
+                  求导的逆运算即为不定积分：$D^{-1} = \int (\cdot) \, dt$。其矩阵表示即为逆矩阵：
+                  $$[D^{-1}]_\mathcal{B} = ([D]_\mathcal{B})^{-1} = \frac{1}{2} \begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix}$$
+                </li>
+                <li>
+                  <strong>纯矩阵乘法秒杀经典不定积分：</strong><br>
+                  • <strong>求解 $\int e^t \cos t \, dt$</strong>：被积函数 $f_1 = e^t \cos t$ 在基底下的坐标为 $\begin{bmatrix} 1 \\ 0 \end{bmatrix}$。积分结果的坐标为：
+                  $$[D^{-1}]_\mathcal{B} \begin{bmatrix} 1 \\ 0 \end{bmatrix} = \frac{1}{2} \begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 1 \\ 0 \end{bmatrix} = \begin{bmatrix} 1/2 \\ 1/2 \end{bmatrix}$$
+                  通过逆同构解码还原为函数：
+                  $$\int e^t \cos t \, dt = \frac{1}{2} f_1(t) + \frac{1}{2} f_2(t) + C = \frac{1}{2} e^t (\cos t + \sin t) + C$$
+                  • <strong>求解 $\int e^t \sin t \, dt$</strong>：被积函数 $f_2 = e^t \sin t$ 在基底下的坐标为 $\begin{bmatrix} 0 \\ 1 \end{bmatrix}$。积分结果坐标为：
+                  $$[D^{-1}]_\mathcal{B} \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \frac{1}{2} \begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix} \begin{bmatrix} 0 \\ 1 \end{bmatrix} = \begin{bmatrix} -1/2 \\ 1/2 \end{bmatrix}$$
+                  解码还原：
+                  $$\int e^t \sin t \, dt = -\frac{1}{2} f_1(t) + \frac{1}{2} f_2(t) + C = \frac{1}{2} e^t (\sin t - \cos t) + C$$
+                </li>
+              </ol>
+              <p style="margin-top: 0.5rem; color: var(--accent-green); font-weight: 600;">
+                💡 震撼洞察：微积分中令人头疼的两次分部积分、循环移项解方程，在抽象线性代数中不过是求一个 $2 \times 2$ 矩阵的逆并做一次矩阵向量乘法！
+              </p>
+            </div>
+
+            <!-- 范例 6: 抽象算子的特征值与特征向量 (讲义 Slides 32-35) -->
+            <div class="example-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.06); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+                <h4 style="color: var(--accent-purple); margin: 0;">
+                  🌟 范例 6：抽象算子的特征值与特征空间全景解构 (Slides 32-35)
+                </h4>
+                <span style="background: rgba(192, 132, 252, 0.2); color: var(--accent-purple); font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; font-weight: bold;">期末核心压轴</span>
+              </div>
+              <p>
+                在第五章中，我们研究了矩阵的特征值 $A\mathbf{v} = \lambda\mathbf{v}$。对于抽象向量空间上的线性算子 $T: V \to V$，特征方程同样定义为：
+                $$T(\mathbf{v}) = \lambda \mathbf{v} \quad (\mathbf{v} \neq \mathbf{0})$$
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1rem;">
+                <!-- 算子 A: 微分算子特征值 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1.2rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-blue); font-size: 1rem;">探究 A：全光滑函数空间上求导算子 $D = \frac{d}{dt}$ 的特征值</strong>
+                  <p style="font-size: 0.88rem; margin-top: 0.5rem; line-height: 1.8;">
+                    设 $D(f) = \lambda f$。在微积分中，这对应于微分方程：
+                    $$\frac{df}{dt} = \lambda f(t)$$
+                    由一阶齐次微分方程通解公式：
+                    $$f(t) = C e^{\lambda t} \quad (C \neq 0)$$
+                  </p>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    <strong>代数哲学启示：</strong><br>
+                    • <strong>每一个实数（或复数）$\lambda$ 全都是求导算子的特征值！</strong>（特征谱是全实数轴 $\mathbb{R}$！）<br>
+                    • 对应的特征向量（特征函数）正是自然指数函数 $e^{\lambda t}$！<br>
+                    • 这完美揭示了为什么自然界中所有线性微分系统（热传导、RLC电路、机械阻尼、放射衰变）的本征解必然是指数函数形式！
+                  </p>
+                </div>
+
+                <!-- 算子 B: 矩阵转置算子特征值 -->
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1.2rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--accent-purple); font-size: 1rem;">探究 B：矩阵转置算子 $T(A) = A^T$ 在 $\mathcal{M}_{2 \times 2}$ 上的特征值</strong>
+                  <p style="font-size: 0.88rem; margin-top: 0.5rem; line-height: 1.8;">
+                    特征方程为 $T(A) = \lambda A \iff A^T = \lambda A$ ($A \neq O$)。<br>
+                    连续作用两次算子：$T(T(A)) = (A^T)^T = A$。而代数上：
+                    $$T(T(A)) = T(\lambda A) = \lambda T(A) = \lambda^2 A$$
+                    由此必有 $\lambda^2 A = A \implies (\lambda^2 - 1) A = O$。由于 $A \neq O$，故：
+                    $$\lambda^2 = 1 \implies \lambda = 1 \quad \text{或} \quad \lambda = -1$$
+                  </p>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    <strong>两大特征子空间的几何本质：</strong><br>
+                    • <strong>当 $\lambda = 1$ 时</strong>：$A^T = A$，特征子空间恰好是<strong>对称矩阵空间 $\mathcal{S}_2$</strong>！基底为 $\{E_{11}, E_{22}, E_{12}+E_{21}\}$，几何重数（维数）为 3。<br>
+                    • <strong>当 $\lambda = -1$ 时</strong>：$A^T = -A$，特征子空间恰好是<strong>反对称矩阵空间 $\mathcal{A}_2$</strong>！基底为 $\{E_{12}-E_{21}\}$，几何重数（维数）为 1。<br>
+                    • 矩阵表示特征多项式为 $p(\lambda) = (\lambda - 1)^3 (\lambda + 1) = 0$，转置算子完全可对角化！
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
 
@@ -884,7 +1295,7 @@
           </div>
           <div class="card-body">
             <p>
-              使用 Python 符号计算库 SymPy，我们可以直接在计算机中构建抽象多项式向量空间、自动提取基底坐标并实现算子矩阵化：
+              使用 Python 符号计算库 SymPy，我们可以直接在计算机中构建抽象多项式向量空间、自动提取基底坐标并实现算子矩阵化、矩阵求逆反导数与算子特征谱分析：
             </p>
 
             <pre class="code-block" style="background: #0f172a; padding: 1.25rem; border-radius: 8px; overflow-x: auto; color: #f8fafc; font-family: var(--font-mono); font-size: 0.9rem; line-height: 1.6;"><code>import sympy as sp
@@ -940,7 +1351,47 @@ print("SymPy diff 真实导数:", sp.diff(test_poly, x))
 # 计算微分算子的零空间（常数多项式）
 null_space = D_matrix.nullspace()
 print("\n求导矩阵的零空间基底 (对应常数函数空间):")
-sp.pprint(null_space)</code></pre>
+sp.pprint(null_space)
+
+print("\n=== 3. 指数三角基底下的可逆微分算子与矩阵求逆算反导数 ===")
+t = sp.Symbol('t')
+f1 = sp.exp(t) * sp.cos(t)
+f2 = sp.exp(t) * sp.sin(t)
+# 求导矩阵 [D]_B:
+# d/dt [f1] = 1*f1 - 1*f2
+# d/dt [f2] = 1*f1 + 1*f2
+D_trig = sp.Matrix([[1, 1], [-1, 1]])
+print("指数三角基底求导矩阵 [D]_B:")
+sp.pprint(D_trig)
+print("行列式 det([D]_B):", D_trig.det())
+
+D_trig_inv = D_trig.inv()
+print("反导数（积分）算子矩阵 [D]^-1:")
+sp.pprint(D_trig_inv)
+
+# 求 ∫ exp(t)*cos(t) dt，坐标为 [1, 0]^T
+coord_cos = sp.Matrix([1, 0])
+integral_cos_coord = D_trig_inv * coord_cos
+print("∫ exp(t)*cos(t) dt 的坐标解:", integral_cos_coord.T)
+print("还原解析解:", integral_cos_coord[0]*f1 + integral_cos_coord[1]*f2)
+print("SymPy integrate 结果:", sp.integrate(f1, t))
+
+print("\n=== 4. 2x2 矩阵空间转置算子 T(A) = A^T 特征值与特征子空间 ===")
+# 在标准基 E11, E12, E21, E22 下
+# T(E11)=E11, T(E12)=E21, T(E21)=E12, T(E22)=E22
+T_matrix = sp.Matrix([
+    [1, 0, 0, 0],
+    [0, 0, 1, 0],
+    [0, 1, 0, 0],
+    [0, 0, 0, 1]
+])
+print("转置算子矩阵表示 [T]:")
+sp.pprint(T_matrix)
+eigen_data = T_matrix.eigenvects()
+for val, mult, vects in eigen_data:
+    print(f"特征值 lambda = {val} (代数重数={mult}, 几何重数={len(vects)}):")
+    for v in vects:
+        print("  特征向量:", v.T)</code></pre>
           </div>
         </div>
 

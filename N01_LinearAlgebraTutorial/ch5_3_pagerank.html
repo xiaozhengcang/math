@@ -485,7 +485,58 @@
       </p>
     </div>
 
-    <!-- 5. Comparison Table -->
+        <!-- 讲义核心经典：4 节点网络拓扑联立方程手算与打分推导 -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">📖 讲义经典范例 (Slide 11-13)：四节点互联网络重要性联立方程与解析解</h4>
+      <p style="font-size: 0.92rem; line-height: 1.7; color: var(--text-color);">
+        台大讲义中给出了一个经典的 4 节点网络拓扑：
+        <br>• <strong>节点 1</strong>：出链指向 2, 3, 4（出度 $c_1 = 3$，各分配 $1/3$ 权重）；
+        <br>• <strong>节点 2</strong>：出链指向 3, 4（出度 $c_2 = 2$，各分配 $1/2$ 权重）；
+        <br>• <strong>节点 3</strong>：出链指向 1（出度 $c_3 = 1$，向节点 1 分配 $1$ 权重）；
+        <br>• <strong>节点 4</strong>：出链指向 1, 3（出度 $c_4 = 2$，各分配 $1/2$ 权重）。
+      </p>
+      
+      <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-cyan);">Step 1: 建立重要性联立方程组</strong>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem;">每个节点的总重要性等于所有入链贡献之和：</p>
+        $$\begin{cases}
+        x_1 = x_3 + \frac{1}{2} x_4 \\
+        x_2 = \frac{1}{3} x_1 \\
+        x_3 = \frac{1}{3} x_1 + \frac{1}{2} x_2 + \frac{1}{2} x_4 \\
+        x_4 = \frac{1}{3} x_1 + \frac{1}{2} x_2
+        \end{cases}$$
+      </div>
+
+      <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-purple);">Step 2: 构建列随机转移矩阵 $M$</strong>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem;">写成矩阵形式 $M\mathbf{x} = \mathbf{x}$，其中第 $j$ 列表示节点 $j$ 的出链转移概率：</p>
+        $$M = \begin{bmatrix}
+        0 & 0 & 1 & 1/2 \\
+        1/3 & 0 & 0 & 0 \\
+        1/3 & 1/2 & 0 & 1/2 \\
+        1/3 & 1/2 & 0 & 0
+        \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{bmatrix}$$
+        <p style="font-size: 0.88rem; color: var(--text-muted);">
+          检验列和：第 1 列 $0 + 1/3 + 1/3 + 1/3 = 1$；第 2 列 $0 + 0 + 1/2 + 1/2 = 1$；第 3 列 $1 + 0 + 0 + 0 = 1$；第 4 列 $1/2 + 0 + 1/2 + 0 = 1$。四列之和均为 1，严格为<strong>列随机矩阵</strong>！
+        </p>
+      </div>
+
+      <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-green);">Step 3: 求解齐次方程 $(M - I)\mathbf{x} = \mathbf{0}$ 并求归一化排名</strong>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem;">
+          执行高斯消元，可解得该特征子空间的基础解系整数解：
+        </p>
+        $$\mathbf{x} = c \begin{bmatrix} 12 \\ 4 \\ 9 \\ 6 \end{bmatrix} \quad (c > 0)$$
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0.25rem 0 0.5rem;">
+          代入概率全和归一化条件 $\sum_{i=1}^4 x_i = 12c + 4c + 9c + 6c = 31c = 1 \implies c = \frac{1}{31}$：
+        </p>
+        $$\mathbf{x}^* = \begin{bmatrix} 12/31 \\ 4/31 \\ 9/31 \\ 6/31 \end{bmatrix} \approx \begin{bmatrix} 0.387 \\ 0.129 \\ 0.290 \\ 0.194 \end{bmatrix} = \begin{bmatrix} 38.7\% \\ 12.9\% \\ 29.0\% \\ 19.4\% \end{bmatrix}$$
+        <p style="font-size: 0.92rem; color: var(--accent-green); font-weight: bold; margin-top: 0.5rem;">
+          🏆 终极 PageRank 排名：节点 1 (38.7%) &gt; 节点 3 (29.0%) &gt; 节点 4 (19.4%) &gt; 节点 2 (12.9%)！
+        </p>
+      </div>
+    </div>
+<!-- 5. Comparison Table -->
     <div class="definition-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
       <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">📊 PageRank 概念与马尔可夫链 / 线性代数映射全览</h4>
       <div style="overflow-x: auto;">
@@ -549,7 +600,35 @@
       </div>
     </div>
 
-    <div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
+        <!-- 讲义核心洞察：排名唯一性困境与孤立子图灾难 -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(244, 63, 94, 0.06); border-left: 4px solid var(--accent-rose); border-radius: 6px;">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">🚨 讲义深潜 (Slide 15-17)：排名“唯一性”大危机（当 $\lambda = 1$ 的特征空间维数 $> 1$ 时）</h4>
+      <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-color);">
+        我们求解出的 PageRank 真的能够给出<strong>绝对唯一确定的排名</strong>吗？<br>
+        • 若 $\dim\text{Null}(M - I) = 1$：特征子空间是一维直线，加上非负和 $\sum x_i = 1$ 的约束，稳态解 $\mathbf{x}^*$ <strong>绝对唯一</strong>，排位权威可信！<br>
+        • 但若 $\dim\text{Null}(M - I) > 1$：<strong>排名将彻底崩溃失效！</strong>
+      </p>
+
+      <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px; margin: 0.75rem 0;">
+        <strong style="color: var(--accent-amber);">讲义反例剖析：非连通孤立网络的排名任意性 (Slide 16-17)</strong>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.7;">
+          设全网包含 5 个网页：节点 1 和 2 互相链接（形成孤立子图 A）；节点 4 和 5 互相链接（形成孤立子图 B）；节点 3 独立。<br>
+          此时系统转移矩阵具有分块对角形态：对应 $\lambda = 1$ 的特征子空间<strong>维数恰好为 2</strong>！<br>
+          基础解系包含两组基底向量：
+          $$\mathbf{v}_1 = \begin{bmatrix} 1/2 \\ 1/2 \\ 0 \\ 0 \\ 0 \end{bmatrix}, \quad \mathbf{v}_2 = \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1/2 \\ 1/2 \end{bmatrix}$$
+          任意线性组合 $\mathbf{x} = c_1 \mathbf{v}_1 + c_2 \mathbf{v}_2$（$c_1 + c_2 = 1, c_1, c_2 \ge 0$）全都是合法的稳态解！<br>
+          • 若选取 $c_1 = 0.8, c_2 = 0.2$，则节点 1 的得分为 0.4，远高于节点 4 的 0.1；<br>
+          • 若选取 $c_1 = 0.2, c_2 = 0.8$，则节点 4 的得分为 0.4，反超节点 1 的 0.1！<br>
+          <strong>排名结果完全取决于算法随机构建的基底系数！这在商业搜索引擎中是绝对致命的！</strong>
+        </p>
+      </div>
+
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+        <strong>数学破局钥匙：Perron-Frobenius 强定理</strong><br>
+        定理指出：如果一个列随机矩阵是<strong>严格正矩阵 (Positive Matrix，即所有元素 $G_{ij} > 0$)</strong>，那么对应于最大特征值 $\lambda = 1$ 的特征子空间<strong>维数严格等于 1</strong>，且稳态特征向量的所有分量全部严格大于零！这正是为什么 Google 必须引入随机游走阻尼修正！
+      </p>
+    </div>
+<div class="theorem-box" style="padding: 1.25rem; background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px;">
       <h4 style="color: var(--accent-purple);">👑 阻尼因子 (Damping Factor) 与 Google 矩阵</h4>
       <p>引入<strong>随机传送机制（以 $d \approx 0.85$ 概率沿链接跳转，以 $1-d$ 概率随机传送至全网任意网页）</strong>：</p>
       <div style="font-size: 1.15rem; text-align: center; margin: 0.75rem 0;">
@@ -562,6 +641,14 @@
   </div>
 </div>
 
+    <!-- 讲义前沿进阶：非均匀随机跳转与个性化 PageRank -->
+    <div style="margin: 1.5rem 0; padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">🌐 进阶思考 (Slide 18)：随机传送概率向量可以是非均匀的吗？(Personalized PageRank)</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+        在经典 Google 矩阵 $G = (1-m)M + m \mathbf{v}_{\text{teleport}} \mathbf{e}^T$ 中，默认的随机传送向量是均匀分布 $\mathbf{v}_{\text{teleport}} = [1/n, 1/n, \dots, 1/n]^T$。<br>
+        <strong>个性化 PageRank (Personalized PageRank)</strong>：若根据用户的兴趣画像（如偏好科技类、体育类网页）赋予特定网页更高的跳转权重，使得 $\mathbf{v}_{\text{teleport}}$ 具有特定偏向，系统依然是合法的正随机矩阵，但收敛出的排名将千人千面，成为现代个性化推荐系统的数学基石！
+      </p>
+    </div>
 <!-- Section 5: Hand Calculation Examples -->
 <div class="card" style="margin-top: 2rem;">
   <div class="card-header">

@@ -5,6 +5,8 @@
 > *An Interactive, Visual, and Mathematically Rigorous Linear Algebra Course based on NTU Prof. Hung-yi Lee's LA 2022 Fall Lectures.*
 >
 > 课程参考来源：[Linear Algebra 2022 Fall (NTU Hung-yi Lee)](https://googly-mingto.github.io/LA_2022_fall/2022-fall.html)
+>
+> 📑 **讲义与课件全量对照表**：[REFERENCE_MAPPING.md](REFERENCE_MAPPING.md)（已建立 39 个 HTML 课件与 84 份原始讲义 PDF 的双向精确映射）
 
 ---
 

@@ -985,6 +985,74 @@ print(f"det(A) = {det_val:.4f}") # 9.0000</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 讲义经典课后习题精选与严密题解 (Chapter 3 Review 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 📖 讲义经典课后习题精选与严密题解 (Chapter 3 Review 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Chapter 3 全章复习 4 道经典习题</strong>（题号 80, 71, 42, 72），涵盖分块矩阵行列式、相似矩阵行列式不变性、对角化行列式及幂零矩阵谱特征。
+    </p>
+
+    <!-- Problem 80 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 80：反对角分块单位矩阵的行列式</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 80】</strong> 计算 $(m+n) \times (m+n)$ 分块矩阵 $M = \begin{bmatrix} O & I_m \\ I_n & O \end{bmatrix}$ 的行列式。<br>
+        <strong>【题解 80】</strong><br>
+        我们通过初等行变换（行对换）将矩阵化为标准的单位阵 $I_{m+n} = \begin{bmatrix} I_n & O \\ O & I_m \end{bmatrix}$：<br>
+        矩阵下半部分包含 $I_n$ 的 $n$ 个行向量。为了将这 $n$ 行全部移至最顶部，需要让这 $n$ 行依次跨越上面的 $m$ 个行向量。<br>
+        • 每一行向下或向上跨越 $m$ 行，需要进行 $m$ 次相邻行对换，行列式乘以 $(-1)^m$；<br>
+        • 共需要将 $n$ 个行向量全部移动到上方，因此总共进行了 $m \times n$ 次两行对换！<br>
+        换行完成后，矩阵变为标准单位矩阵 $I_{m+n}$，其行列式为 1。因此：
+        $$\det \begin{bmatrix} O & I_m \\ I_n & O \end{bmatrix} = (-1)^{mn} \det(I_{m+n}) = (-1)^{mn}$$
+        <strong>结论</strong>：当 $m$ 与 $n$ 均为奇数时，行列式为 $-1$；只要 $m$ 或 $n$ 中有一个为偶数，行列式为 $1$。
+      </p>
+    </div>
+
+    <!-- Problem 71 & 42 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 71 & 42：相似矩阵行列式守恒与对角化乘积定理</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 71】</strong> 设 $A$ 与 $B$ 是 $n \times n$ 矩阵，且 $B$ 可逆。证明：$\det(B^{-1}AB) = \det(A)$。<br>
+        <strong>【证明 71】</strong> 利用矩阵乘积的行列式可乘定理 $\det(XY) = \det(X)\det(Y)$：
+        $$\det(B^{-1}AB) = \det(B^{-1}) \cdot \det(A) \cdot \det(B)$$
+        由于实数标量乘法满足交换律，且 $\det(B^{-1}) = \frac{1}{\det(B)}$（由 $B^{-1}B=I \implies \det(B^{-1})\det(B)=1$ 导出）：
+        $$\det(B^{-1}AB) = \frac{1}{\det(B)} \cdot \det(B) \cdot \det(A) = 1 \cdot \det(A) = \det(A)$$
+        <strong>几何升华</strong>：相似变换本质上是基底视角的转换。物体无论从哪套基底去测量，其<strong>有向体积缩放率是客观恒定不变的</strong>！故行列式是绝对的相似不变量。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 42】</strong> 设 $n \times n$ 矩阵可表示为 $A = PDP^{-1}$，其中 $P$ 可逆，$D$ 为对角矩阵。证明：$\det(A)$ 等于 $D$ 的主对角线元素的乘积。<br>
+        <strong>【证明 42】</strong> 由题 71 的结论：$\det(A) = \det(PDP^{-1}) = \det(D)$。<br>
+        由于 $D$ 是对角矩阵，其非对角线元素全为 0。根据三角矩阵行列式定理，其行列式严格等于主对角线元素的乘积：
+        $$\det(D) = d_{11} d_{22} \dots d_{nn} = \prod_{i=1}^n d_{ii}$$
+        因此 $\det(A) = \prod_{i=1}^n d_{ii}$！这提前揭示了第 5 章的核心结论：方阵的行列式恒等于其全部特征值之积。
+      </p>
+    </div>
+
+    <!-- Problem 72 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 72：幂零矩阵 (Nilpotent Matrix) 的行列式必为零</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 72】</strong> 一个 $n \times n$ 矩阵 $A$ 称为幂零矩阵，如果存在某个正整数 $k$ 使得 $A^k = O$。证明：$\det(A) = 0$。<br>
+        <strong>【证明 72】</strong><br>
+        在已知等式 $A^k = O$ 的两端同时取行列式：
+        $$\det(A^k) = \det(O)$$
+        由矩阵乘积行列式性质，$\det(A^k) = \det(A \cdot A \dots A) = (\det A)^k$。而全零矩阵的行列式显然为 0（零行导致体积为 0）：
+        $$(\det A)^k = 0$$
+        由于 $\det(A)$ 是一个实数（或复数），任意数的有限正整数次方等于 0，该数自身必须严格为 0！故：
+        $$\det(A) = 0$$
+        <strong>推论</strong>：任何幂零矩阵都<strong>必定不可逆（奇异矩阵）</strong>，其零空间必非平凡（$\dim\text{Null}(A) > 0$），空间在多次迭代后必彻底坍缩为原点。
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch2_2_matrix_inverse.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

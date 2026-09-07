@@ -310,9 +310,19 @@
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-blue); color: #000;">终极定理</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">1. 奇异值分解定理：几何三步曲与超球面变形机制</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 奇异值分解定理 (SVD)：从对角化局限到宇宙级普适构造</h2>
           </div>
           <div class="card-body">
+            
+            <!-- 1.1 对角化与 SVD 的宏观分野 -->
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🌌 宏观视野：对角化与 SVD 的本质分野 (82_Ch07_05 Slide 2)</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                • <strong>特征值对角化 $A = P D P^{-1}$：</strong> 仅能施加于<strong>部分方阵</strong>！必须满足矩阵具有 $n$ 个线性无关的特征向量（亏损矩阵如 Jordan 块直接失效），对于更广阔的非方阵（$m \neq n$ 长方矩阵、数据特征矩阵）更是完全束手无策。<br>
+                • <strong>奇异值分解 SVD ($A = U \Sigma V^T$)：</strong> 线性代数至高无上的普适法则——<strong>对任意形状、任意尺寸、任意秩的实矩阵 $A \in \mathbb{R}^{m \times n}$，SVD 永远无条件成立！</strong>
+              </p>
+            </div>
+
             <!-- SVG Graphic: SVD 3-step Transformation Diagram -->
             <div style="text-align:center; margin: 1.5rem 0;">
               <svg width="640" height="210" viewBox="0 0 640 210" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
@@ -372,38 +382,117 @@
               </svg>
             </div>
 
+            <!-- SVD 定理陈述 -->
             <div class="theorem-box" style="padding: 1.5rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
               <h4 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">
                 👑 奇异值分解定理 (Singular Value Decomposition Theorem)
               </h4>
               <p style="font-size: 0.95rem; line-height: 1.8;">
-                任意实数矩阵 $A \in \mathbb{R}^{m \times n}$（秩 $\text{rank}(A) = r$），均可唯一分解为三个基础算子的乘积：
+                任意实数矩阵 $A \in \mathbb{R}^{m \times n}$（秩 $\text{rank}(A) = k$），均存在正交矩阵 $U \in \mathbb{R}^{m \times m}$ 与 $V \in \mathbb{R}^{n \times n}$，以及矩形对角矩阵 $\Sigma \in \mathbb{R}^{m \times n}$，使得：
               </p>
               <div style="font-size: 1.35rem; text-align: center; margin: 0.75rem 0; color: var(--accent-blue); font-weight: bold;">
-                $$A = U \Sigma V^T = \sum_{i=1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+                $$A = U \Sigma V^T = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
               </div>
               <ul style="margin-left: 1.5rem; line-height: 2;">
-                <li><strong>$U \in \mathbb{R}^{m \times m}$（左奇异矩阵）</strong>：正交方阵（$U^T U = I_m$），各列向量 $\mathbf{u}_i$ 称为<strong>左奇异向量</strong>。它们是半轴方向，满足对称矩阵 $A A^T \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i$。</li>
-                <li><strong>$\Sigma \in \mathbb{R}^{m \times n}$（奇异值矩形对角矩阵）</strong>：除主对角线前 $r$ 项为严格正数 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_r > 0$ 外，其余元素全为 0。每个 $\sigma_i = \sqrt{\lambda_i(A^T A)}$ 称为<strong>奇异值</strong>。</li>
-                <li><strong>$V \in \mathbb{R}^{n \times n}$（右奇异矩阵）</strong>：正交方阵（$V^T V = I_n$），各列向量 $\mathbf{v}_i$ 称为<strong>右奇异向量</strong>。它们满足对称矩阵 $A^T A \mathbf{v}_i = \sigma_i^2 \mathbf{v}_i$。</li>
+                <li><strong>$U = [\mathbf{u}_1, \dots, \mathbf{u}_m] \in \mathbb{R}^{m \times m}$（左奇异矩阵）</strong>：满足 $U^T U = I_m$。列向量 $\mathbf{u}_i$ 称为<strong>左奇异向量</strong>，构成 $\mathbb{R}^m$ 的标准正交基，且满足 $A A^T \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i$。</li>
+                <li><strong>$\Sigma \in \mathbb{R}^{m \times n}$（奇异值矩形对角矩阵）</strong>：主对角线前 $k$ 个元素为降序严格正数 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_k > 0$，其余元素全为 0。每个 $\sigma_i = \sqrt{\lambda_i(A^T A)}$ 称为<strong>奇异值</strong>。</li>
+                <li><strong>$V = [\mathbf{v}_1, \dots, \mathbf{v}_n] \in \mathbb{R}^{n \times n}$（右奇异矩阵）</strong>：满足 $V^T V = I_n$。列向量 $\mathbf{v}_i$ 称为<strong>右奇异向量</strong>，构成 $\mathbb{R}^n$ 的标准正交基，且满足 $A^T A \mathbf{v}_i = \sigma_i^2 \mathbf{v}_i$。</li>
               </ul>
-              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem;">
-                <strong>核心映射关系：</strong> 对每个非零奇异分量，必满足 $A \mathbf{v}_i = \sigma_i \mathbf{u}_i$！输入正交轴 $\mathbf{v}_i$ 经 $A$ 作用后，不仅保持了与其它轴的严格正交，且长度被精确缩放了 $\sigma_i$ 倍，指向 $\mathbf{u}_i$ 方向！
-              </p>
             </div>
+
+            <!-- 1.2 严密构造性数学证明 (讲义 82_Ch07_05 Slide 10-12) -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(192, 132, 252, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.2);">
+              <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.75rem;">
+                ✍️ SVD 定理严密构造性数学证明 (82_Ch07_05 Slide 10-12 深度还原)
+              </h4>
+              <div style="font-size: 0.88rem; color: #f8fafc; line-height: 1.9;">
+                <p><strong>步骤一：构造并分析对称半正定算子 $A^T A$</strong><br>
+                  考察 $n \times n$ 矩阵 $A^T A$。显然 $(A^T A)^T = A^T A$，为实对称矩阵。<br>
+                  对任意 $\mathbf{x} \in \mathbb{R}^{n}$，$\mathbf{x}^T (A^T A) \mathbf{x} = \|A\mathbf{x}\|^2 \ge 0$，故 $A^T A$ 恒为半正定矩阵（所有特征值 $\lambda \ge 0$）。<br>
+                  且 $\text{Null}(A^T A) = \text{Null}(A)$（因 $A^T A \mathbf{x} = \mathbf{0} \implies \|A\mathbf{x}\|^2 = \mathbf{x}^T A^T A \mathbf{x} = 0 \implies A\mathbf{x} = \mathbf{0}$）。<br>
+                  由秩-零度定理：$\text{rank}(A^T A) = n - \text{nullity}(A^T A) = n - \text{nullity}(A) = \text{rank}(A) = k$。
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤二：由实对称谱定理获取标准正交右奇异基 $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$</strong><br>
+                  由实对称矩阵谱定理，存在 $\mathbb{R}^n$ 的标准正交基 $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ 满足：
+                  $$A^T A \mathbf{v}_i = \lambda_i \mathbf{v}_i \quad (i=1, \dots, n)$$
+                  特征值降序排列：$\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_k > 0$ 且 $\lambda_{k+1} = \dots = \lambda_n = 0$。<br>
+                  定义非零奇异值：$\sigma_i = \sqrt{\lambda_i} > 0 \ (1 \le i \le k)$。
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤三：构造向量族 $\{\mathbf{u}_1, \dots, \mathbf{u}_k\}$ 并证明其严格标准正交性</strong><br>
+                  对每个 $1 \le i \le k$，定义 $\mathbb{R}^m$ 中的向量：
+                  $$\mathbf{u}_i = \frac{1}{\sigma_i} A \mathbf{v}_i$$
+                  计算两两内积 $\mathbf{u}_i \cdot \mathbf{u}_j$（其中 $1 \le i, j \le k$）：
+                  $$\mathbf{u}_i^T \mathbf{u}_j = \left(\frac{1}{\sigma_i} A \mathbf{v}_i\right)^T \left(\frac{1}{\sigma_j} A \mathbf{v}_j\right) = \frac{1}{\sigma_i \sigma_j} \mathbf{v}_i^T (A^T A \mathbf{v}_j) = \frac{1}{\sigma_i \sigma_j} \mathbf{v}_i^T (\lambda_j \mathbf{v}_j) = \frac{\lambda_j}{\sigma_i \sigma_j} (\mathbf{v}_i^T \mathbf{v}_j)$$
+                  由于 $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ 是标准正交基：
+                  • 当 $i \neq j$ 时，$\mathbf{v}_i^T \mathbf{v}_j = 0 \implies \mathbf{u}_i^T \mathbf{u}_j = 0$（严格正交垂直！）；<br>
+                  • 当 $i = j$ 时，$\mathbf{u}_i^T \mathbf{u}_i = \frac{\lambda_i}{\sigma_i^2} (\mathbf{v}_i^T \mathbf{v}_i) = \frac{\lambda_i}{\lambda_i} (1) = 1$（单位模长！）。<br>
+                  故 $\{\mathbf{u}_1, \dots, \mathbf{u}_k\}$ 构成 $\mathbb{R}^m$ 中一组完美的标准正交向量族！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤四：Gram-Schmidt 扩充与矩阵方程组装</strong><br>
+                  若 $k < m$，利用 Gram-Schmidt 正交化过程，将 $\{\mathbf{u}_1, \dots, \mathbf{u}_k\}$ 扩充为 $\mathbb{R}^m$ 的完整标准正交基 $\{\mathbf{u}_1, \dots, \mathbf{u}_k, \mathbf{u}_{k+1}, \dots, \mathbf{u}_m\}$。令正交矩阵 $U = [\mathbf{u}_1, \dots, \mathbf{u}_m] \in \mathbb{R}^{m \times m}$。<br>
+                  现在计算矩阵乘积 $A V$：
+                  $$A V = A [\mathbf{v}_1, \dots, \mathbf{v}_k, \mathbf{v}_{k+1}, \dots, \mathbf{v}_n] = [A \mathbf{v}_1, \dots, A \mathbf{v}_k, A \mathbf{v}_{k+1}, \dots, A \mathbf{v}_n]$$
+                  对于 $i \le k$，由定义 $A \mathbf{v}_i = \sigma_i \mathbf{u}_i$；<br>
+                  对于 $i > k$，因 $\lambda_i = 0$，有 $\|A \mathbf{v}_i\|^2 = \mathbf{v}_i^T A^T A \mathbf{v}_i = \lambda_i = 0 \implies A \mathbf{v}_i = \mathbf{0}$。<br>
+                  因此：
+                  $$A V = [\sigma_1 \mathbf{u}_1, \dots, \sigma_k \mathbf{u}_k, \mathbf{0}, \dots, \mathbf{0}] = U \Sigma$$
+                  两边同时右乘正交矩阵 $V^T$（因 $V V^T = I_n$），即得证：
+                  $$A = U \Sigma V^T \quad \blacksquare$$
+                </p>
+
+                <p style="margin-top: 0.5rem; color: var(--accent-green);"><strong>补充验证：证明 $\mathbf{u}_i$ 必为 $A A^T$ 的特征向量 (Slide 12)</strong><br>
+                  对 $1 \le i \le k$：
+                  $$(A A^T) \mathbf{u}_i = (A A^T) \left(\frac{1}{\sigma_i} A \mathbf{v}_i\right) = \frac{1}{\sigma_i} A (A^T A \mathbf{v}_i) = \frac{1}{\sigma_i} A (\lambda_i \mathbf{v}_i) = \lambda_i \left(\frac{1}{\sigma_i} A \mathbf{v}_i\right) = \lambda_i \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i$$
+                  即左奇异向量 $\mathbf{u}_i$ 确实是 $A A^T$ 的特征向量，对应特征值同为 $\lambda_i = \sigma_i^2$！
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- 2. SVD 与四大基本子空间大一统 -->
+        <!-- 2. 完全 SVD、紧致 SVD 与四大基本子空间大一统 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-purple); color: #fff;">几何宏图</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">2. 四大基本子空间终极大统一：SVD 的正交基直通车</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 完全 SVD、紧致 SVD (Compact SVD) 与四大子空间大一统</h2>
           </div>
           <div class="card-body">
+
+            <!-- 2.1 紧致 SVD 与矩阵秩的不变性定理 -->
+            <h3 style="color: var(--accent-blue); margin-top: 0.5rem;">2.1 完全 SVD vs 紧致 SVD (Compact SVD) 与矩阵秩的不变性 (Slide 4-5)</h3>
             <p>
-              在 Ch 4.3 中，我们震撼见识了 Strang 教授提出的“四大基本子空间”。当时寻找各空间的基底需要经历冗长的高斯消元与自由变量分离。
-              而现在，<strong>SVD 一次性直接打包赋予了四大空间无可挑剔的标准正交基</strong>！
+              完全 SVD 将矩阵分解为包含零空间补全的正交方阵：$A = U_{m \times m} \Sigma_{m \times n} V^T_{n \times n}$。
+              然而，$\Sigma$ 中包含大量的零行和零列，这些零行零列乘以 $U$ 和 $V^T$ 的多余部分没有任何实质贡献。
+            </p>
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">✂️ 紧致 SVD (Compact / Reduced SVD)</h4>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                若仅保留前 $k = \text{rank}(A)$ 个非零奇异值所对应的块，则有无损等价表示：
+                <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0; color: var(--accent-purple); font-weight: bold;">
+                  $$A = U_k \Sigma_k V_k^T$$
+                </div>
+                其中 $U_k \in \mathbb{R}^{m \times k}$ 满足 $U_k^T U_k = I_k$（列正交），$\Sigma_k = \text{diag}(\sigma_1, \dots, \sigma_k) \in \mathbb{R}^{k \times k}$ 为严格正定对角阵，$V_k \in \mathbb{R}^{n \times k}$ 满足 $V_k^T V_k = I_k$。
+              </p>
+              <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+              <div style="font-size: 0.88rem; color: #f8fafc; line-height: 1.8;">
+                <strong>矩阵乘积秩的不等式与不变性判据 (82_Ch07_05 Slide 4)：</strong><br>
+                • 对任意矩阵乘积，必满足 $\text{rank}(AB) \le \min(\text{rank} A, \text{rank} B)$。<br>
+                • <strong>乘满秩可逆矩阵保秩定理：</strong>若 $P$ 是 $m \times m$ 可逆阵，$Q$ 是 $n \times n$ 可逆阵，则 $\text{rank}(P A Q) = \text{rank}(A)$。<br>
+                • <strong>推论：</strong>由于完全 SVD 中 $U$ 和 $V^T$ 均为正交方阵（绝对满秩可逆），因此：
+                $$\text{rank}(A) = \text{rank}(U \Sigma V^T) = \text{rank}(\Sigma) = k$$
+                <strong>矩阵 $A$ 的代数秩，在数值上严格等于其非零奇异值的总个数！</strong>
+              </div>
+            </div>
+
+            <!-- 2.2 四大基本子空间大一统 -->
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">2.2 四大基本子空间终极大统一：SVD 的正交基直通车</h3>
+            <p>
+              在 Ch 4.3 中，我们见识了 Strang 教授的“四大基本子空间”。当时寻找各空间的基底需要经历冗长的高斯消元与自由变量分离。
+              而现在，<strong>SVD 一次性直接赋予了四大空间无可挑剔的标准正交基</strong>：
             </p>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
@@ -411,8 +500,8 @@
               <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3);">
                 <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📥 输入空间 $\mathbb{R}^n$ 的正交解耦（右奇异向量 $V$）</h4>
                 <ul style="font-size: 0.88rem; line-height: 1.9; margin-left: 1.25rem; color: var(--text-muted);">
-                  <li><strong style="color: #f8fafc;">行空间 $\text{Row}(A)$：</strong>由前 $r$ 个向量 $\mathbf{v}_1, \dots, \mathbf{v}_r$ 张成。这些向量跨越非零奇异值，被 $A$ 忠实映射到列空间！</li>
-                  <li><strong style="color: #f8fafc;">零空间 $\text{Null}(A)$：</strong>由剩余 $n - r$ 个向量 $\mathbf{v}_{r+1}, \dots, \mathbf{v}_n$ 张成。因为对应 $\sigma_j = 0$，它们被 $A$ 彻底压缩为零向量：$A\mathbf{v}_j = \mathbf{0}$！</li>
+                  <li><strong style="color: #f8fafc;">行空间 $\text{Row}(A)$：</strong>由前 $k$ 个向量 $\mathbf{v}_1, \dots, \mathbf{v}_k$ 张成。这些向量跨越非零奇异值，被 $A$ 忠实映射到列空间！</li>
+                  <li><strong style="color: #f8fafc;">零空间 $\text{Null}(A)$：</strong>由剩余 $n - k$ 个向量 $\mathbf{v}_{k+1}, \dots, \mathbf{v}_n$ 张成。因为对应 $\sigma_j = 0$，它们被 $A$ 彻底压缩为零向量：$A\mathbf{v}_j = \mathbf{0}$！</li>
                 </ul>
               </div>
 
@@ -420,8 +509,8 @@
               <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.3);">
                 <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📤 输出空间 $\mathbb{R}^m$ 的正交解耦（左奇异向量 $U$）</h4>
                 <ul style="font-size: 0.88rem; line-height: 1.9; margin-left: 1.25rem; color: var(--text-muted);">
-                  <li><strong style="color: #f8fafc;">列空间 $\text{Col}(A)$：</strong>由前 $r$ 个向量 $\mathbf{u}_1, \dots, \mathbf{u}_r$ 张成。它们是实际输出信号的完美标准正交基！</li>
-                  <li><strong style="color: #f8fafc;">左零空间 $\text{Null}(A^T)$：</strong>由剩余 $m - r$ 个向量 $\mathbf{u}_{r+1}, \dots, \mathbf{u}_m$ 张成。构成列空间的正交补平面，不可达区域！</li>
+                  <li><strong style="color: #f8fafc;">列空间 $\text{Col}(A)$：</strong>由前 $k$ 个向量 $\mathbf{u}_1, \dots, \mathbf{u}_k$ 张成。它们是实际输出信号的完美标准正交基！</li>
+                  <li><strong style="color: #f8fafc;">左零空间 $\text{Null}(A^T)$：</strong>由剩余 $m - k$ 个向量 $\mathbf{u}_{k+1}, \dots, \mathbf{u}_m$ 张成。构成列空间的正交补平面，不可达区域！</li>
                 </ul>
               </div>
             </div>
@@ -431,8 +520,8 @@
               <h5 style="color: #fbbf24; margin-bottom: 0.3rem;">📊 矩阵条件数 (Condition Number) 的 SVD 终极定义</h5>
               <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
                 在数值分析中，矩阵的 $L_2$ 条件数精确等于最大奇异值与最小奇异值之比：
-                $$\kappa_2(A) = \|A\|_2 \|A^{-1}\|_2 = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\sigma_1}{\sigma_r}$$
-                几何含义：超椭球最长半轴与最短半轴的畸变扁平比！若 $\sigma_r \approx 0$，椭球被压扁成纸片，求逆必然引发灾难性的误差爆炸！
+                $$\kappa_2(A) = \|A\|_2 \|A^{-1}\|_2 = \frac{\sigma_{\max}}{\sigma_{\min}} = \frac{\sigma_1}{\sigma_k}$$
+                几何含义：超椭球最长半轴与最短半轴的畸变扁平比！若 $\sigma_k \approx 0$，椭球被压扁成纸片，求逆必然引发灾难性的误差爆炸！
               </p>
             </div>
           </div>
@@ -445,23 +534,39 @@
             <h2 class="card-title" style="margin-top: 0.5rem;">3. Eckart-Young 低秩逼近定理与 Moore-Penrose 广义伪逆</h2>
           </div>
           <div class="card-body">
-            <h3 style="color: var(--accent-green);">3.1 Eckart-Young-Mirsky 最优低秩截断定理</h3>
+            <h3 style="color: var(--accent-green);">3.1 Eckart-Young-Mirsky 最优低秩截断定理与图像压缩存储分析 (82_Ch07_05 Slide 6-7)</h3>
             <p>
-              若将 SVD 展开式仅截取前 $k$ 个最大奇异项（$k < r$）：
+              若将矩阵的奇异值外积展开式仅截取前 $r$ 个最大奇异项（$r < k = \text{rank}(A)$）：
             </p>
-            <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0; color: var(--accent-green);">
-              $$A_k = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$
+            <div style="font-size: 1.25rem; text-align: center; margin: 0.75rem 0; color: var(--accent-green); font-weight: bold;">
+              $$A_r = \sum_{i=1}^r \sigma_i \mathbf{u}_i \mathbf{v}_i^T = U_r \Sigma_r V_r^T$$
             </div>
-            <p>
-              <strong>Eckart-Young-Mirsky 定理：</strong>在所有秩不超过 $k$ 的矩阵集合中，$A_k$ 是原矩阵 $A$ 在谱范数与 Frobenius 范数意义下的<strong>绝对全局最佳逼近</strong>！其逼近截断残差恰好由被舍弃的尾部奇异值精确掌控：
-            </p>
+            
+            <div class="intuition-box" style="margin: 1rem 0;">
+              <strong style="color: var(--accent-green);">🤔 讲义核心问答 (Slide 6)：$A_r$ 的秩是多少？为什么舍弃尾部奇异值是最优的？</strong>
+              <div style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.35rem;">
+                • <strong>$A_r$ 的秩严格等于 $r$：</strong>因为 $\Sigma_r = \text{diag}(\sigma_1, \dots, \sigma_r)$ 是 $r \times r$ 满秩矩阵，且 $U_r, V_r$ 的列向量彼此标准正交（线性无关），由秩定理知 $\text{rank}(A_r) = r$。<br>
+                • <strong>Eckart-Young-Mirsky 最优逼近定理：</strong>在全空间中所有秩不超过 $r$ 的矩阵集合 $\mathcal{M}_r = \{B \in \mathbb{R}^{m \times n} : \text{rank}(B) \le r\}$ 中，$A_r$ 是原矩阵 $A$ 在<strong>谱范数（$L_2$ 范数）与 Frobenius 范数意义下的绝对全局唯一最优解</strong>！
+                $$A_r = \arg\min_{\text{rank}(B) \le r} \|A - B\|_F = \arg\min_{\text{rank}(B) \le r} \|A - B\|_2$$
+              </div>
+            </div>
+
             <div style="background: rgba(15, 23, 42, 0.4); padding: 0.85rem; border-radius: 6px; font-size: 1.1rem; text-align: center; margin: 0.75rem 0;">
-              $$\|A - A_k\|_2 = \sigma_{k+1}, \quad \|A - A_k\|_F = \sqrt{\sum_{j=k+1}^r \sigma_j^2}$$
+              $$\|A - A_r\|_2 = \sigma_{r+1}, \quad \|A - A_r\|_F = \sqrt{\sum_{j=r+1}^k \sigma_j^2}$$
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">
-              <strong>图像与权重压缩原理：</strong>原始图像矩阵需要存储 $m \times n$ 个浮点数。而截断矩阵 $A_k$ 只需要存储 $k$ 个左向量 $\mathbf{u}_i$、$k$ 个右向量 $\mathbf{v}_i$ 和 $k$ 个标量 $\sigma_i$，总参数量骤降为 <strong>$k(m + n + 1)$</strong>！
-              当 $k \ll \min(m, n)$ 时，压缩比可高达数十倍，而画面细节依然高度保真！
-            </p>
+            
+            <!-- 图像与权重压缩原理 -->
+            <div style="background: rgba(56, 189, 248, 0.05); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25); margin-top: 1rem;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">💾 图像与大模型低秩压缩的存储量临界公式 (82_Ch07_05 Slide 7)</h4>
+              <p style="font-size: 0.88rem; color: #f8fafc; line-height: 1.8;">
+                设输入图像或网络权重矩阵为 $m \times n$：<br>
+                • <strong>原始完整存储量：</strong> $m \times n$ 个浮点数。<br>
+                • <strong>秩-$r$ 截断存储量：</strong> 只需要存储 $U_r$ 的 $m \times r$ 个元素、$\Sigma_r$ 的 $r$ 个奇异值、以及 $V_r^T$ 的 $r \times n$ 个元素，总存储量为：
+                $$\text{Storage}(A_r) = r(m + n + 1)$$
+                • <strong>压缩收益临界条件：</strong>只要满足 $r(m + n + 1) < mn \iff r < \frac{mn}{m + n + 1} \approx \frac{mn}{m + n}$，就能实现空间节省！<br>
+                • <strong>工业实测案例：</strong>对于一张 $1024 \times 1024$ 的高清灰度图，原始像素量为 $1,048,576$（约 105 万参数）。取截断秩 $r = 50$ 时，只需存储 $50 \times (1024 + 1024 + 1) = 102,450$（约 10 万参数），<strong>节省高达 90.2% 的存储带宽</strong>，而人眼感知画面主体结构依然极其锐利！这也是 LoRA（低秩适配）微调大语言模型的核心数学根基！
+              </p>
+            </div>
 
             <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 Moore-Penrose 广义伪逆 ($A^+$)</h3>
             <p>
@@ -469,7 +574,7 @@
               借助 SVD，我们可以定义宇宙通用的<strong>广义逆矩阵 (Pseudoinverse, $A^+$)</strong>：
             </p>
             <div style="font-size: 1.3rem; text-align: center; margin: 0.75rem 0; color: var(--accent-purple); font-weight: bold;">
-              $$A^+ = V \Sigma^+ U^T = \sum_{i=1}^r \frac{1}{\sigma_i} \mathbf{v}_i \mathbf{u}_i^T$$
+              $$A^+ = V \Sigma^+ U^T = \sum_{i=1}^k \frac{1}{\sigma_i} \mathbf{v}_i \mathbf{u}_i^T = V_k \Sigma_k^{-1} U_k^T$$
             </div>
             <p>
               其中 $\Sigma^+$ 极其朴素直观：将每一个非零奇异值取倒数 $\frac{1}{\sigma_i}$，而为零的奇异值保留为 0，最后进行转置。
@@ -543,31 +648,40 @@
           <div class="card-body">
             <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
               <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
-                【题目】求矮胖形长方矩阵 $A = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix}$ 的 SVD 分解与广义伪逆 $A^+$。
+                【题目】求矮胖形长方矩阵 $A = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix}$ 的 SVD 完全分解、紧致分解与广义伪逆 $A^+$。
               </h4>
               <div style="line-height: 1.9;">
-                <p><strong>第一步：计算 $A A^T$（$2 \times 2$ 实对称矩阵）并求左奇异向量 $U$</strong></p>
+                <p><strong>第一步：计算对称矩阵 $A A^T$（$2 \times 2$）并求左奇异矩阵 $U$</strong></p>
                 $$A A^T = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} = \begin{bmatrix} 9+4+4 & 6+6-4 \\ 6+6-4 & 4+9+4 \end{bmatrix} = \begin{bmatrix} 17 & 8 \\ 8 & 17 \end{bmatrix}$$
-                <p>特征多项式：$(17 - \lambda)^2 - 8^2 = (25 - \lambda)(9 - \lambda) = 0$。</p>
+                <p>特征多项式：$\det(A A^T - \lambda I) = (17 - \lambda)^2 - 8^2 = (17 - \lambda - 8)(17 - \lambda + 8) = (9 - \lambda)(25 - \lambda) = 0$。</p>
                 <p>求得特征值：$\lambda_1 = 25, \lambda_2 = 9$。</p>
                 <p><strong>奇异值：</strong> $\sigma_1 = \sqrt{25} = 5, \quad \sigma_2 = \sqrt{9} = 3$。</p>
-                <p>求特征向量得 $U$：</p>
+                <p>求解特征向量求得左奇异基 $U$：</p>
                 $$\lambda_1 = 25 \implies \begin{bmatrix} -8 & 8 \\ 8 & -8 \end{bmatrix}\mathbf{u}_1 = \mathbf{0} \implies \mathbf{u}_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix}$$
                 $$\lambda_2 = 9 \implies \begin{bmatrix} 8 & 8 \\ 8 & 8 \end{bmatrix}\mathbf{u}_2 = \mathbf{0} \implies \mathbf{u}_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix}$$
                 $$U = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}$$
 
-                <p style="margin-top: 0.75rem;"><strong>第二步：利用 $\mathbf{v}_i = \frac{1}{\sigma_i} A^T \mathbf{u}_i$ 极速求右奇异向量 $\mathbf{v}_1, \mathbf{v}_2$</strong></p>
+                <p style="margin-top: 0.75rem;"><strong>第二步：利用核心公式 $\mathbf{v}_i = \frac{1}{\sigma_i} A^T \mathbf{u}_i$ 极速求右奇异向量 $\mathbf{v}_1, \mathbf{v}_2$</strong></p>
                 $$\mathbf{v}_1 = \frac{1}{5} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \end{bmatrix} = \frac{1}{5\sqrt{2}} \begin{bmatrix} 5 \\ 5 \\ 0 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix}$$
-                $$\mathbf{v}_2 = \frac{1}{3} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix} = \frac{1}{3\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} = \frac{1}{3\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix}$$
-                <p>零空间基底 $\mathbf{v}_3$ 与 $\mathbf{v}_1, \mathbf{v}_2$ 正交（取叉乘或解方程）：$\mathbf{v}_3 = \frac{1}{3} \begin{bmatrix} 2 \\ -2 \\ -1 \end{bmatrix}$。</p>
+                $$\mathbf{v}_2 = \frac{1}{3} \begin{bmatrix} 3 & 2 \\ 2 & 3 \\ 2 & -2 \end{bmatrix} \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \end{bmatrix} = \frac{1}{3\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix}$$
+                <p>检验正交性：$\mathbf{v}_1 \cdot \mathbf{v}_2 = \frac{1}{6}(1(1) + 1(-1) + 0(4)) = 0$ ✓。模长均归一化为 1。</p>
+                <p>求零空间 $\text{Null}(A)$ 的单位正交向量 $\mathbf{v}_3$（由叉乘或解 $A\mathbf{v} = \mathbf{0}$）：$\mathbf{v}_3 = \frac{1}{3} \begin{bmatrix} 2 \\ -2 \\ -1 \end{bmatrix}$。</p>
 
-                <p style="margin-top: 0.75rem;"><strong>第三步：整合输出 SVD 终极矩阵</strong></p>
+                <p style="margin-top: 0.75rem;"><strong>第三步：整合输出完全 SVD 与紧致 SVD</strong></p>
+                <p>• <strong>紧致 SVD (Compact SVD, $A = U_2 \Sigma_2 V_2^T$)：</strong></p>
+                $$A = \underbrace{\frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}}_{U_2 (2 \times 2)} \underbrace{\begin{bmatrix} 5 & 0 \\ 0 & 3 \end{bmatrix}}_{\Sigma_2 (2 \times 2)} \underbrace{\begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\ \frac{1}{3\sqrt{2}} & -\frac{1}{3\sqrt{2}} & \frac{4}{3\sqrt{2}} \end{bmatrix}}_{V_2^T (2 \times 3)}$$
+                <p>• <strong>完全 SVD (Full SVD, $A = U \Sigma V^T$)：</strong></p>
                 $$A = \underbrace{\frac{1}{\sqrt{2}} \begin{bmatrix} 1 & 1 \\ 1 & -1 \end{bmatrix}}_{U (2 \times 2)} \underbrace{\begin{bmatrix} 5 & 0 & 0 \\ 0 & 3 & 0 \end{bmatrix}}_{\Sigma (2 \times 3)} \underbrace{\begin{bmatrix} \frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} & 0 \\ \frac{1}{3\sqrt{2}} & -\frac{1}{3\sqrt{2}} & \frac{4}{3\sqrt{2}} \\ \frac{2}{3} & -\frac{2}{3} & -\frac{1}{3} \end{bmatrix}}_{V^T (3 \times 3)}$$
 
-                <p style="margin-top: 0.75rem;"><strong>第四步：计算广义伪逆 $A^+$</strong></p>
-                $$A^+ = V \Sigma^+ U^T = \frac{1}{5} \mathbf{v}_1 \mathbf{u}_1^T + \frac{1}{3} \mathbf{v}_2 \mathbf{u}_2^T = \frac{1}{90} \begin{bmatrix} 11 & 7 \\ 7 & 11 \\ 20 & -20 \end{bmatrix}$$
-                <p style="color: var(--accent-green); font-weight: bold;">
-                  ✓ 检验：计算 $A A^+ = I_2$！因为 $A$ 行满秩，伪逆正是完美的右逆！
+                <p style="margin-top: 0.75rem;"><strong>第四步：精确求解广义逆矩阵 $A^+$</strong></p>
+                $$A^+ = V_2 \Sigma_2^{-1} U_2^T = \frac{1}{5} \mathbf{v}_1 \mathbf{u}_1^T + \frac{1}{3} \mathbf{v}_2 \mathbf{u}_2^T$$
+                $$\frac{1}{5} \mathbf{v}_1 \mathbf{u}_1^T = \frac{1}{10} \begin{bmatrix} 1 \\ 1 \\ 0 \end{bmatrix} \begin{bmatrix} 1 & 1 \end{bmatrix} = \frac{1}{90} \begin{bmatrix} 9 & 9 \\ 9 & 9 \\ 0 & 0 \end{bmatrix}$$
+                $$\frac{1}{3} \mathbf{v}_2 \mathbf{u}_2^T = \frac{1}{18} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} \begin{bmatrix} 1 & -1 \end{bmatrix} = \frac{1}{90} \begin{bmatrix} 5 & -5 \\ -5 & 5 \\ 20 & -20 \end{bmatrix}$$
+                $$A^+ = \frac{1}{90} \begin{bmatrix} 9+5 & 9-5 \\ 9-5 & 9+5 \\ 0+20 & 0-20 \end{bmatrix} = \frac{1}{90} \begin{bmatrix} 14 & 4 \\ 4 & 14 \\ 20 & -20 \end{bmatrix} = \frac{1}{45} \begin{bmatrix} 7 & 2 \\ 2 & 7 \\ 10 & -10 \end{bmatrix}$$
+                <p style="color: var(--accent-green); font-weight: bold; margin-top: 0.5rem;">
+                  ✓ 严密验算：计算乘积 $A A^+$：
+                  $$A A^+ = \begin{bmatrix} 3 & 2 & 2 \\ 2 & 3 & -2 \end{bmatrix} \frac{1}{45} \begin{bmatrix} 7 & 2 \\ 2 & 7 \\ 10 & -10 \end{bmatrix} = \frac{1}{45} \begin{bmatrix} 21+4+20 & 6+14-20 \\ 14+6-20 & 4+21+20 \end{bmatrix} = \frac{1}{45} \begin{bmatrix} 45 & 0 \\ 0 & 45 \end{bmatrix} = I_2$$
+                  因为 $A$ 具有行满秩，伪逆正是完美的右逆算子！
                 </p>
               </div>
             </div>

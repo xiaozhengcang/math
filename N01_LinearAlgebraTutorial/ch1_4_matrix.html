@@ -396,6 +396,83 @@ print("两者是否完全一致:", np.allclose(y, y_col))</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 台大讲义深度拓展：特殊矩阵词典与同作用矩阵唯一性定理 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-indigo); color: #fff;">讲义核心进阶</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 📖 有名有姓的特殊矩阵与同作用矩阵判同定理</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      台大讲义中特别归纳了线性代数中“有名有姓”的矩阵体系及其代数运算规律，并提出了一个高频考试定理：<strong>如果两个矩阵对所有输入的线性作用完全一致，能否断言这两个矩阵必定相等？</strong>
+    </p>
+
+    <!-- 特殊矩阵家族表 -->
+    <div style="overflow-x: auto; margin: 1.25rem 0;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+        <thead>
+          <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color);">
+            <th style="padding: 0.75rem 1rem; color: var(--accent-blue);">矩阵名称</th>
+            <th style="padding: 0.75rem 1rem; color: var(--accent-purple);">数学定义 / 符号</th>
+            <th style="padding: 0.75rem 1rem;">典型矩阵范例</th>
+            <th style="padding: 0.75rem 1rem;">核心几何代数特性</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">对角矩阵 (Diagonal)</td>
+            <td style="padding: 0.75rem 1rem;">非对角线元素全为 0，记为 $D$</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 2 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 5 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">坐标轴独立缩放，计算乘幂极速解耦</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">单位矩阵 (Identity)</td>
+            <td style="padding: 0.75rem 1rem;">主对角全 1，其余全 0，记为 $I_n$</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">恒等变换算子，$I\mathbf{x} = \mathbf{x}$；是特殊的对角阵</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">零矩阵 (Zero)</td>
+            <td style="padding: 0.75rem 1rem;">所有元素均为 0，记为 $O_{m\times n}$</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 0 & 0 & 0 \\ 0 & 0 & 0 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">加法单位元，将任意向量压扁至原点 $\mathbf{0}$</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border-color);">
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">上三角 / 下三角</td>
+            <td style="padding: 0.75rem 1rem;">主对角线以下全 0 / 以上全 0</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 2 & 3 & 5 \\ 0 & 1 & -1 \\ 0 & 0 & 1 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">高斯消元目标形态，特征值直接等于对角元素</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.75rem 1rem; font-weight: bold;">对称矩阵 (Symmetric)</td>
+            <td style="padding: 0.75rem 1rem;">$A^T = A$（关于主对角线轴对称）</td>
+            <td style="padding: 0.75rem 1rem;">$\begin{bmatrix} 1 & 4 \\ 4 & 5 \end{bmatrix}$</td>
+            <td style="padding: 0.75rem 1rem;">特征值必为实数，特征向量相互正交（Ch 7 谱定理）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 同作用矩阵判定定理 -->
+    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 同作用矩阵判同定理 (Identity of Linear Actions)</h4>
+      <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-main);">
+        设 $A$ 与 $B$ 均为 $m \times n$ 矩阵。若对于 $\mathbb{R}^n$ 中的<strong>每一个向量 $\mathbf{w}$</strong>，均有：
+        $$A\mathbf{w} = B\mathbf{w}$$
+        则必有 <strong>$A = B$</strong>（即两矩阵所有对应位置元素完全相同）。
+      </p>
+      <div style="padding: 0.75rem 1rem; background: var(--bg-secondary); border-radius: 4px; margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+        <strong>证明思路（基底探测法）</strong>：<br>
+        分别取标准单位向量 $\mathbf{w} = \mathbf{e}_j = \begin{bmatrix} 0 \\ \vdots \\ 1 \\ \vdots \\ 0 \end{bmatrix}$（仅第 $j$ 位为 1）。根据列组合视角：
+        $$A\mathbf{e}_j = 0 \cdot \mathbf{a}_1 + \dots + 1 \cdot \mathbf{a}_j + \dots + 0 \cdot \mathbf{a}_n = \mathbf{a}_j \quad (\text{矩阵 } A \text{ 的第 } j \text{ 列})$$
+        同理 $B\mathbf{e}_j = \mathbf{b}_j$（矩阵 $B$ 的第 $j$ 列）。<br>
+        由已知条件 $A\mathbf{e}_j = B\mathbf{e}_j$，直接得出 $\mathbf{a}_j = \mathbf{b}_j$ 对所有 $j=1,\dots,n$ 成立。因此 $A$ 与 $B$ 的每一列均相同，故 $A = B$！证毕。
+      </div>
+    </div>
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch1_3_system_of_equations.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

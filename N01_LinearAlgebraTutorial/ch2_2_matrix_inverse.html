@@ -392,6 +392,95 @@ print("长瘦矩阵的左逆验证 (A_left_inv @ A_tall):\n", np.round(A_left_in
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 6. 讲义经典课后习题精选与严密题解 (Exercise 2-3 & 2-4 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 📖 讲义经典课后习题精选与严密题解 (Exercise 2-3 & 2-4 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 2-3 与 Exercise 2-4 核心精选题集</strong>（题号 57, 62, 66, 84, 68, 69, 70, 71, 87），涵盖可逆保无关性、分块矩阵逆元、初等矩阵求逆、乘积秩不等式群及转置保秩定理。
+    </p>
+
+    <!-- Problem 57 & 66 (from 2-3) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 57 & 66：可逆变换保持线性无关性与分块矩阵可逆性</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 57】</strong> 设 $Q$ 是 $n \times n$ 可逆矩阵。证明：向量集合 $\{\mathbf{u}_1, \mathbf{u}_2, \dots, \mathbf{u}_k\} \subseteq \mathbb{R}^n$ 线性无关 $\iff$ 变换后的集合 $\{Q\mathbf{u}_1, Q\mathbf{u}_2, \dots, Q\mathbf{u}_k\}$ 线性无关。<br>
+        <strong>【证明 57】</strong><br>
+        • ($\implies$) 设 $c_1 (Q\mathbf{u}_1) + \dots + c_k (Q\mathbf{u}_k) = \mathbf{0}$。提取公因式矩阵得 $Q (c_1 \mathbf{u}_1 + \dots + c_k \mathbf{u}_k) = \mathbf{0}$。由于 $Q$ 可逆，左乘 $Q^{-1}$ 得到 $c_1 \mathbf{u}_1 + \dots + c_k \mathbf{u}_k = \mathbf{0}$。由原向量组无关性，立即得出 $c_1 = \dots = c_k = 0$。因此 $\{Q\mathbf{u}_i\}$ 必定线性无关。<br>
+        • ($\impliedby$) 将上述结论应用到可逆矩阵 $Q^{-1}$ 及向量组 $\{Q\mathbf{u}_i\}$ 上，由于 $Q^{-1}(Q\mathbf{u}_i) = \mathbf{u}_i$，同理可推得原向量组线性无关。证毕。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 66】</strong> 设分块对角矩阵 $M = \begin{bmatrix} A & O \\ O & B \end{bmatrix}$，其中 $A$ 与 $B$ 均为方阵。证明：$M$ 可逆 $\iff A$ 与 $B$ 均可逆，且求出 $M^{-1}$。<br>
+        <strong>【证明 66】</strong> 若 $A, B$ 均可逆，直接构造逆矩阵候选 $N = \begin{bmatrix} A^{-1} & O \\ O & B^{-1} \end{bmatrix}$。根据分块乘法：
+        $$MN = \begin{bmatrix} A & O \\ O & B \end{bmatrix} \begin{bmatrix} A^{-1} & O \\ O & B^{-1} \end{bmatrix} = \begin{bmatrix} A A^{-1} & O \\ O & B B^{-1} \end{bmatrix} = \begin{bmatrix} I & O \\ O & I \end{bmatrix} = I$$
+        同理 $NM = I$。由逆矩阵唯一性，$M$ 必可逆且 $M^{-1} = \begin{bmatrix} A^{-1} & O \\ O & B^{-1} \end{bmatrix}$。反之，若任一分块奇异，必存在非零向量使 $M\mathbf{x} = \mathbf{0}$，导致不可逆。
+      </p>
+    </div>
+
+    <!-- Problem 84 (from 2-3) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 84：逆矩阵列向量解析与唯一性推导</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 84】</strong> 设 $A$ 是 $n \times n$ 可逆矩阵，$\mathbf{e}_j$ 为第 $j$ 个标准单位向量。<br>
+        (a) 证明：$A^{-1}$ 的第 $j$ 列是方程组 $A\mathbf{x} = \mathbf{e}_j$ 的唯一解；<br>
+        (b) 为什么 (a) 的结论能够直接证明逆矩阵 $A^{-1}$ 的唯一性？<br>
+        (c) 为什么 (a) 的结论能够证明 $\text{rank}(A) = n$？<br>
+        <strong>【题解 84】</strong><br>
+        • <strong>(a)</strong> 记 $A^{-1} = \begin{bmatrix} \mathbf{x}_1 & \dots & \mathbf{x}_n \end{bmatrix}$。由 $A A^{-1} = I$ 展开得：
+        $$A \begin{bmatrix} \mathbf{x}_1 & \dots & \mathbf{x}_n \end{bmatrix} = \begin{bmatrix} A\mathbf{x}_1 & \dots & A\mathbf{x}_n \end{bmatrix} = \begin{bmatrix} \mathbf{e}_1 & \dots & \mathbf{e}_n \end{bmatrix}$$
+        比较第 $j$ 列，必有 $A\mathbf{x}_j = \mathbf{e}_j$！故 $A^{-1}$ 的第 $j$ 列正是该方程的解。<br>
+        • <strong>(b)</strong> 由于 $A$ 可逆，$A\mathbf{x} = \mathbf{0}$ 仅有零解，因此每个非齐次方程 $A\mathbf{x} = \mathbf{e}_j$ 的解 $\mathbf{x}_j$ 是代数唯一的。由于 $A^{-1}$ 的每一列都被唯一锁定，整个逆矩阵 $A^{-1}$ 自然是<strong>全局唯一的</strong>！<br>
+        • <strong>(c)</strong> 对所有 $j=1,\dots,n$，标准基 $\mathbf{e}_j$ 均可被表示为 $A$ 的列向量组合。因此 $A$ 的列张成整个 $\mathbb{R}^n$，即 $\text{Col}(A) = \mathbb{R}^n$，故 $\text{rank}(A) = n$。
+      </p>
+    </div>
+
+    <!-- Problem 68, 69, 70 (from 2-4: The Rank Inequalities) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 68, 69 & 70：可逆乘法保秩与矩阵乘积秩不等式全家桶</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【定理 68 & 70（可逆矩阵保秩）】</strong> 证明：若 $A$ 是 $m \times n$ 矩阵，$P$ 是 $m \times m$ 可逆矩阵，$Q$ 是 $n \times n$ 可逆矩阵，则：
+        $$\text{rank}(PA) = \text{rank}(A) = \text{rank}(AQ)$$
+        <strong>【证明】</strong><br>
+        由于初等行变换不改变矩阵的秩，而任何可逆矩阵 $P$ 均可分解为有限个初等矩阵的乘积 $P = E_k \dots E_1$。因此左乘 $P$ 对应一系列初等行变换，$\text{rank}(PA) = \text{rank}(A)$。<br>
+        亦可用双向夹逼：$\text{rank}(PA) \le \text{rank}(A)$，而 $\text{rank}(A) = \text{rank}(P^{-1}(PA)) \le \text{rank}(PA)$，迫使两秩完全相等！右乘 $Q$ 的证明完全同理。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【定理 69（矩阵乘积秩上界定理）】</strong> 证明：对任意相容矩阵 $A$ 与 $B$，恒有 $\text{rank}(AB) \le \min(\text{rank}(A), \text{rank}(B))$。<br>
+        <strong>【证明】</strong><br>
+        • <strong>视角 1（列空间包含）</strong>：$AB$ 的每一列都是 $A$ 的列向量的线性组合，因此 $\text{Col}(AB) \subseteq \text{Col}(A)$。子空间的维数必然不超过母空间，故 $\text{rank}(AB) = \dim\text{Col}(AB) \le \dim\text{Col}(A) = \text{rank}(A)$。<br>
+        • <strong>视角 2（行空间包含）</strong>：$AB$ 的每一行都是 $B$ 的行向量的线性组合，同理 $\text{Row}(AB) \subseteq \text{Row}(B) \implies \text{rank}(AB) \le \text{rank}(B)$。<br>
+        综合两者，立即得到著名不等式：$\text{rank}(AB) \le \min(\text{rank}(A), \text{rank}(B))$。
+      </p>
+    </div>
+
+    <!-- Problem 71 & 87 (from 2-4) -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 71 & 87：转置矩阵保秩定理与相似不变量初探</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 71】</strong> 证明：对任意矩阵 $A$，恒有 $\text{rank}(A^T) = \text{rank}(A)$。<br>
+        <strong>【证明 71】</strong><br>
+        矩阵 $A$ 的秩定义为主元列的数量，由列对应定理知其等于列空间的维数 $\dim\text{Col}(A)$。而 $A^T$ 的列向量恰好是 $A$ 的行向量，因此 $\text{rank}(A^T) = \dim\text{Row}(A)$。<br>
+        设将 $A$ 化简为简化行阶梯形 $R$。由于行变换不改变行空间，$\text{Row}(A) = \text{Row}(R)$。在 $R$ 中，所有非零行向量的主元 1 位于不同列，彼此线性无关，构成 $\text{Row}(R)$ 的一组基！因此非零行数量恰好等于 $\dim\text{Row}(R) = \text{rank}(A)$。<br>
+        这证明了矩阵的“行秩”永远等于“列秩”，即 $\mathbf{\text{rank}(A^T) = \text{rank}(A)}$！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 87】</strong> 设 $A$ 与 $B$ 相似（即存在可逆矩阵 $P$ 使 $B = P^{-1}AP$）。证明：$\text{rank}(B) = \text{rank}(A)$。<br>
+        <strong>【证明 87】</strong> 根据定理 68（可逆矩阵保秩）：<br>
+        $\text{rank}(B) = \text{rank}(P^{-1}(AP)) = \text{rank}(AP) = \text{rank}(A)$。<br>
+        因此相似变换在基底转换过程中绝对保持矩阵的秩不变！
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch2_1_matrix_multiplication.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

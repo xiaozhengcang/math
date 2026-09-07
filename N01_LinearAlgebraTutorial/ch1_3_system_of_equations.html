@@ -416,6 +416,49 @@ print("是否等于 b:", np.allclose(col_comb, b))</code></pre>
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 台大讲义本质升华：线性系统与矩阵方程的等价构造定理 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">核心定理推导</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 🌟 为什么“线性系统”等价于“多元一次方程组”？构造性严格证明</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      很多初学者会产生疑问：我们在 Ch 1.1 讨论的是抽象的输入-输出系统 $S$，为什么到了 Ch 1.3 就可以理所当然地用矩阵方程 $A\mathbf{x} = \mathbf{b}$ 来全面代指？台大讲义中给出了极其精妙的<strong>标准基拆解构造证明</strong>。
+    </p>
+
+    <div class="theorem-box" style="margin: 1.5rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">👑 线性系统的基底响应唯一决定定理</h4>
+      <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-main);">
+        设 $S: \mathbb{R}^n \to \mathbb{R}^m$ 是一个线性系统。将 $n$ 维空间的标准单位向量记为 $\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \\ \vdots \\ 0 \end{bmatrix}, \mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \\ \vdots \\ 0 \end{bmatrix}, \dots, \mathbf{e}_n = \begin{bmatrix} 0 \\ 0 \\ \vdots \\ 1 \end{bmatrix}$。<br>
+        若已知系统对各个基底的输出向量分别为 $\mathbf{a}_1 = S(\mathbf{e}_1), \mathbf{a}_2 = S(\mathbf{e}_2), \dots, \mathbf{a}_n = S(\mathbf{e}_n) \in \mathbb{R}^m$，则对<strong>全空间任意输入向量 $\mathbf{x} \in \mathbb{R}^n$</strong>，系统的输出必完全由矩阵乘积给出：
+      </p>
+      <div style="font-size: 1.2rem; text-align: center; margin: 1rem 0; color: var(--accent-blue); font-weight: bold;">
+        $$S(\mathbf{x}) = A\mathbf{x} = \begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \dots & \mathbf{a}_n \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix} = x_1 \mathbf{a}_1 + x_2 \mathbf{a}_2 + \dots + x_n \mathbf{a}_n$$
+      </div>
+    </div>
+
+    <!-- 证明推导卡片 -->
+    <div style="padding: 1.25rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">✍️ 简明两步证明</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>步骤 1（输入基底展开）</strong>：任意输入向量 $\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_n \end{bmatrix}$ 均可唯一写为标准基的线性组合：
+        $$\mathbf{x} = x_1 \mathbf{e}_1 + x_2 \mathbf{e}_2 + \dots + x_n \mathbf{e}_n$$
+        <strong>步骤 2（应用系统线性公理）</strong>：利用可加性与齐次性，算子 $S$ 可以直接穿透线性组合符号：
+        $$S(\mathbf{x}) = S(x_1 \mathbf{e}_1 + \dots + x_n \mathbf{e}_n) = x_1 S(\mathbf{e}_1) + x_2 S(\mathbf{e}_2) + \dots + x_n S(\mathbf{e}_n) = x_1 \mathbf{a}_1 + \dots + x_n \mathbf{a}_n$$
+        这正是矩阵 $A = \begin{bmatrix}\mathbf{a}_1 & \dots & \mathbf{a}_n\end{bmatrix}$ 与列向量 $\mathbf{x}$ 的乘积定义！证毕。
+      </p>
+    </div>
+
+    <div class="intuition-box" style="padding: 1rem; background: rgba(245, 158, 11, 0.08); border-left: 4px solid var(--accent-amber); border-radius: 4px;">
+      <p style="margin: 0; font-size: 0.92rem; color: var(--text-main); line-height: 1.8;">
+        💡 <strong>几何物理大贯通</strong>：这个定理告诉我们，一个线性黑盒无论内部多么错综复杂，只要我们在它的 $n$ 个输入端分别输入一个脉冲信号（单位基底 $\mathbf{e}_j$），记录下 $n$ 个输出响应列向量 $\mathbf{a}_j$，拼在一起得到方阵 $A$，我们就<strong>彻底洞察了该系统的全部行为</strong>！
+      </p>
+    </div>
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch1_2_vector.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">

@@ -421,6 +421,150 @@ print("向量 [1, 0] 逆时针旋转 90 度:", np.round(v_rot, 4)) # [0, 1]</cod
 
 
         <!-- Page Navigation Buttons -->
+        
+<!-- 5. 突破传统：DeepMind AlphaTensor 发现全新快速矩阵乘法算法 -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-blue); color: #000;">前沿突破专题</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">5. 🚀 50 年算法僵局的打破：DeepMind AlphaTensor 与矩阵乘法复杂度革命</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+      矩阵乘法是现代深度学习、大语言模型（Transformer 注意力机制与全连接层）、科学计算与图形学中最频繁调用的算子。长期以来，人类一直在追求减少乘法次数的极致算法：
+    </p>
+
+    <!-- 演进时间线卡片 -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">古典标准算法：$O(n^3)$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin: 0;">
+          计算两个 $2 \times 2$ 矩阵相乘需要 <strong>8 次标量乘法</strong> 和 4 次加法。对于 $n \times n$ 方阵，标准行列内积算法复杂度为 $O(n^3)$。
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">1969 施特拉森算法：$O(n^{2.807})$</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin: 0;">
+          德国数学家 Volker Strassen 震惊学界地发现：利用巧妙的中间线性组合，计算 $2 \times 2$ 矩阵只需 <strong>7 次乘法</strong>！将矩阵乘法复杂度降至 $O(n^{\log_2 7}) \approx O(n^{2.807})$。
+        </p>
+      </div>
+
+      <div style="padding: 1rem; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border-color);">
+        <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">2022 AlphaTensor：AI 发现新算法</h4>
+        <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin: 0;">
+          DeepMind 将寻找矩阵乘法算法建模为 3D 张量分解博弈游戏，AlphaTensor 在人类未曾探索的高维搜索空间中找到了在有限域 $\mathbb{Z}_2$ 上仅需 <strong>47 次乘法</strong> 计算 $4 \times 4$ 矩阵的算法（打破了 Strassen 保持 50 年的 49 次纪录）！
+        </p>
+      </div>
+    </div>
+
+    <div class="intuition-box" style="padding: 1rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <p style="margin: 0; font-size: 0.92rem; color: var(--text-main); line-height: 1.8;">
+        💡 <strong>代数几何本质</strong>：矩阵乘法本质上是一个固定的三维结构张量 $T \in \mathbb{R}^{n^2 \times n^2 \times n^2}$。寻找最少乘法次数的算法，等价于寻找该张量的<strong>极小秩外积分解 (Tensor Rank Decomposition)</strong>：$T = \sum_{r=1}^R \mathbf{u}_r \otimes \mathbf{v}_r \otimes \mathbf{w}_r$。线性代数的外积视角在此展现出了无与伦比的深远威力。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 6. 讲义经典课后习题精选与严密题解 (Exercise 2-1 全集) -->
+<div class="card" style="margin-top: 2rem;">
+  <div class="card-header" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(192, 132, 252, 0.1));">
+    <span class="badge" style="background: var(--accent-green); color: #000;">台大讲义习题全集</span>
+    <h2 class="card-title" style="margin-top: 0.5rem;">6. 📖 讲义经典课后习题精选与严密题解 (Exercise 2-1 全集)</h2>
+  </div>
+  <div class="card-body">
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      以下完整收录台大《线性代数》讲义配套 <strong>Exercise 2-1 全部 10 道核心习题</strong>（题号 58, 59, 60, 61, 62, 63, 64, 65, 66, 68），涵盖几何变换复合、三角矩阵乘法封闭性、零因子构造、迹的循环性质与对称矩阵乘积。
+    </p>
+
+    <!-- Problem 58 & 60 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📝 习题 58 & 60：几何复合变换与对角矩阵乘积</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 58】</strong> 设 $A = \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix}$ 为逆时针旋转 $180^\circ$ 矩阵，$B = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$ 为关于 $x$ 轴反射矩阵。计算 $BA$，并从几何上解释一个向量 $\mathbf{v}$ 在该复合变换下的效应。<br>
+        <strong>【题解 58】</strong><br>
+        $$BA = \begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix} \begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix} = \begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix}$$
+        对任意向量 $\mathbf{v} = \begin{bmatrix} x \\ y \end{bmatrix}$，有 $BA\mathbf{v} = \begin{bmatrix} -x \\ y \end{bmatrix}$。其几何效应是将向量的横坐标取反、纵坐标保持不变，即<strong>关于 $y$ 轴的镜像反射 (Reflection about the y-axis)</strong>。先旋转 $180^\circ$ 再关于横轴反射，等价于直接关于纵轴反射！
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 60】</strong> 设 $A$ 和 $B$ 均为 $n \times n$ 对角矩阵，证明 $AB$ 仍是对角矩阵，且其第 $j$ 列为 $a_{jj} b_{jj} \mathbf{e}_j$。<br>
+        <strong>【题解 60】</strong> 对角矩阵元素满足当 $i \neq j$ 时 $a_{ij} = 0, b_{ij} = 0$。由矩阵乘法定义：
+        $$(AB)_{ij} = \sum_{k=1}^n a_{ik} b_{kj} = a_{ii} b_{ij} = 0 \quad (\text{当 } i \neq j)$$
+        当 $i = j$ 时，$(AB)_{jj} = a_{jj} b_{jj}$。因此非对角线位置全为 0，主对角线位置恰为对应元素乘积 $a_{jj} b_{jj}$，列向量表示即为 $a_{jj} b_{jj} \mathbf{e}_j$。且显然对角矩阵相乘满足交换律：$AB = BA$。
+      </p>
+    </div>
+
+    <!-- Problem 59 & 61 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">📝 习题 59 & 61：三角矩阵乘法的代数封闭性定理</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 59 & 61】</strong> 证明：若 $A$ 与 $B$ 均为 $n \times n$ 下三角矩阵（即当 $i < j$ 时 $a_{ij}=0$），则 $AB$ 亦为下三角矩阵；若二者均为上三角矩阵，则 $AB$ 亦为上三角矩阵。<br>
+        <strong>【证明】</strong> 以<strong>上三角矩阵</strong>为例（当 $i > j$ 时 $a_{ij}=0, b_{ij}=0$）：<br>
+        考察乘积矩阵在 $i > j$ 处的任意元素：
+        $$(AB)_{ij} = \sum_{k=1}^n a_{ik} b_{kj} = \sum_{k=1}^{i-1} a_{ik} b_{kj} + a_{ii} b_{ij} + \sum_{k=i+1}^n a_{ik} b_{kj}$$
+        • 当 $k \le i - 1 < i$ 时，由于 $A$ 是上三角矩阵，若要 $a_{ik} \neq 0$ 必须 $i \le k$，矛盾！故当 $k < i$ 时必有 $a_{ik} = 0$；<br>
+        • 当 $k \ge i > j$ 时，在项 $b_{kj}$ 中，下标满足 $k > j$。由于 $B$ 亦为上三角矩阵，当行标大于列标时必有 $b_{kj} = 0$！<br>
+        因此求和式中的每一项均为 0，即当 $i > j$ 时 $(AB)_{ij} = 0$。这严格证明了<strong>两个上三角矩阵之积必为上三角矩阵</strong>，且主对角线元素恰为 $(AB)_{ii} = a_{ii} b_{ii}$。下三角矩阵的证明完全同理对称。
+      </p>
+    </div>
+
+    <!-- Problem 62, 63, 64 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">📝 习题 62, 63 & 64：零因子构造与乘积秩的不对称性</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 62】</strong> 设 $A = \begin{bmatrix} 1 & -1 & 2 & -1 \\ -2 & 1 & -1 & 3 \\ -1 & -1 & 4 & 3 \\ -5 & 3 & -4 & 7 \end{bmatrix}$。寻找一个秩为 2 的非零 $4 \times 2$ 矩阵 $B$ 使得 $AB = O$。<br>
+        <strong>【题解 62】</strong> 设 $B = \begin{bmatrix} \mathbf{b}_1 & \mathbf{b}_2 \end{bmatrix}$。则 $AB = O \iff A\mathbf{b}_1 = \mathbf{0} \text{ 且 } A\mathbf{b}_2 = \mathbf{0}$。因此 $B$ 的两列必须是齐次线性方程组 $A\mathbf{x} = \mathbf{0}$ 的线性无关解（零空间 $\text{Null}(A)$ 的基向量）！<br>
+        对 $A$ 进行行化简求得 RREF：
+        $$\text{RREF}(A) = \begin{bmatrix} 1 & 0 & -1 & -2 \\ 0 & 1 & -3 & -1 \\ 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 \end{bmatrix}$$
+        主元在第 1、2 列，自由变量为 $x_3, x_4$。导出基础解系：
+        $$\mathbf{b}_1 = \begin{bmatrix} 1 \\ 3 \\ 1 \\ 0 \end{bmatrix}, \quad \mathbf{b}_2 = \begin{bmatrix} 2 \\ 1 \\ 0 \\ 1 \end{bmatrix}$$
+        构造矩阵 $B = \begin{bmatrix} 1 & 2 \\ 3 & 1 \\ 1 & 0 \\ 0 & 1 \end{bmatrix}$。两列线性无关故 $\text{rank}(B) = 2$，且精确满足 $AB = O$。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 63 & 64】</strong> 证明或举反例：$\text{rank}(AB)$ 是否必定等于 $\text{rank}(BA)$？构造 $AB = O$ 但 $BA \neq O$ 的反例。<br>
+        <strong>【题解】</strong> <strong>结论：不相等！</strong><br>
+        构造反例：取 $A = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$，$B = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$。<br>
+        计算乘积：
+        $$AB = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} = O \implies \text{rank}(AB) = 0$$
+        而反向相乘：
+        $$BA = \begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix} \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix} \neq O \implies \text{rank}(BA) = 1$$
+        该反例同时证明了：① $AB = O$ 绝不意味着 $BA = O$；② $\text{rank}(AB)$ 与 $\text{rank}(BA)$ 可以完全不相等！
+      </p>
+    </div>
+
+    <!-- Problem 65, 66, 68 -->
+    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 1.25rem; border: 1px solid var(--border-color);">
+      <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📝 习题 65, 66 & 68：迹的循环置换、单元素矩阵与对称乘积</h4>
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 65】</strong> 证明：对任意 $m \times n$ 矩阵 $A$ 和 $n \times m$ 矩阵 $B$，恒有 $\text{tr}(AB) = \text{tr}(BA)$。<br>
+        <strong>【证明 65】</strong> 设 $C = AB$（$m \times m$ 方阵），其迹为对角元之和：
+        $$\text{tr}(AB) = \sum_{i=1}^m C_{ii} = \sum_{i=1}^m \sum_{j=1}^n a_{ij} b_{ji}$$
+        设 $D = BA$（$n \times n$ 方阵），其迹为：
+        $$\text{tr}(BA) = \sum_{j=1}^n D_{jj} = \sum_{j=1}^n \sum_{i=1}^m b_{ji} a_{ij} = \sum_{i=1}^m \sum_{j=1}^n a_{ij} b_{ji}$$
+        两式求和项完全相同，故 $\text{tr}(AB) = \text{tr}(BA)$ 恒成立！注意：即使 $A$ 与 $B$ 不是方阵（维度互换），该恒等式依然严格成立。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 66】</strong> 设 $E_{rs}$ 是仅在第 $r$ 行第 $s$ 列为 1、其余全为 0 的 $n \times n$ 矩阵。描述 $E_{rs}B$ 的形态。<br>
+        <strong>【题解 66】</strong> $E_{rs}B$ 的第 $r$ 行等于矩阵 $B$ 的第 $s$ 行，且 $E_{rs}B$ 的所有其他行（非第 $r$ 行）全为零行。这是初等行变换矩阵代数分析的基本积木。
+      </p>
+      <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+        <strong>【题目 68】</strong> 设 $A$ 和 $B$ 是同阶对称矩阵（$A^T=A, B^T=B$）。<br>
+        (a) 证明：$AB$ 是对称矩阵 $\iff AB = BA$；<br>
+        (b) 寻找对称矩阵 $A, B$ 使得 $AB \neq BA$ 的反例。<br>
+        <strong>【证明与反例】</strong><br>
+        • <strong>(a) 证明</strong>：根据转置分配律，$(AB)^T = B^T A^T = BA$。<br>
+        因此 $AB$ 为对称矩阵 $\iff (AB)^T = AB \iff BA = AB$。即对称矩阵乘积对称当且仅当二者可交换！<br>
+        • <strong>(b) 反例</strong>：取 $A = \begin{bmatrix} 1 & 0 \\ 0 & 2 \end{bmatrix}$（对角阵必对称），$B = \begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$（显然对称）。<br>
+        计算：$AB = \begin{bmatrix} 0 & 1 \\ 2 & 0 \end{bmatrix}$，而 $BA = \begin{bmatrix} 0 & 2 \\ 1 & 0 \end{bmatrix}$。显然 $AB \neq BA$，且 $AB$ 绝非对称矩阵！
+      </p>
+    </div>
+
+  </div>
+</div>
+
         <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
           <div>
             <a href="ch1_6_rref.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
