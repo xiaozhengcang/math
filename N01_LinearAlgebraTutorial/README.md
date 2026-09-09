@@ -139,6 +139,13 @@
   - 奇异值与特征值的联系 (Aᵀ A 与 A Aᵀ)
   - 截断 SVD 低秩逼近 (Low-Rank Approximation) 与图像压缩/降维
 
+### 📌 Chapter 8: 附录与工业实战 (Appendix: Industry Applications)
+- **1. OLS 股票市场涨跌归因与全景图谱 ([ch8_1_ols_applications.html](ch8_1_ols_applications.html))**:
+  - 量化金融痛点：风格风险 Beta vs 主动选股 Alpha 收益解耦
+  - 核心算法：时间序列 OLS 回归与 Barra 截面纯因子收益估计
+  - 代数本质：超定方程正交投影 P = X(XᵀX)⁻¹Xᵀ、四大基本子空间直和分解与方差分解 SST = SSR + SSE
+  - 贯穿 Ch 1 ~ Ch 7 的全书核心定理立体映射网络与工业级 NumPy 实战
+
 ---
 
 ## 💻 编程作业与上机实验 (Hands-on Homeworks)

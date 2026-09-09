@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 8.1 (附录): 最小二乘法 (OLS) 工业与金融实战 —— 股票市场多因子收益与涨跌归因全景 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        <a href="ch1_2_vector.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        <a href="ch1_3_system_of_equations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        <a href="ch1_4_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        <a href="ch1_5_solution.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        <a href="ch1_6_rref.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 1</span>
+          <span>二维面积推导与法向量底蕴</span>
+        </a>
+        <a href="ch3_1_supplement_leibniz_formula.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
+          <span>莱布尼茨公式与全景本质意义</span>
+        </a>
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+        <a href="ch4_1_span_independence.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>线性组合、Span 与线性无关</span>
+        </a>
+        <a href="ch4_2_linear_transformation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换几何本质与标准矩阵</span>
+        </a>
+        <a href="ch4_3_subspaces_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间、四大空间与秩-零度定理</span>
+        </a>
+        <a href="ch4_4_basis_dimension.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数与子空间判定</span>
+        </a>
+        <a href="ch4_5_coordinate_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基变换与转移矩阵</span>
+        </a>
+        <a href="ch4_6_operator_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        <a href="ch5_3_pagerank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        <a href="ch5_4_diagonalization.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        <a href="ch6_2_inner_product_space.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        <a href="ch7_2_projection_least_squares.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        <a href="ch7_4_svd_low_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 8: 附录与工业实战
+        </div>
+        <a href="ch8_1_ols_applications.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">Ch 8.1</span>
+          <span>OLS 股票市场涨跌归因与全景图谱</span>
+        </a>
+
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="#">Chapter 8: 附录与工业实战</a> / <span>Ch 8.1: OLS 股票市场涨跌归因与全景图谱</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="hero" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.05) 100%); border-left: 4px solid var(--accent-green); padding: 2rem; border-radius: 12px; margin-bottom: 2rem;">
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
+            <span class="badge" style="background: var(--accent-green); color: #000; font-weight: 700;">附录 · 工业与金融实战</span>
+            <span class="badge" style="background: rgba(56, 189, 248, 0.2); color: var(--accent-blue);">多因子归因与 Barra 模型</span>
+            <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">正交投影与四大空间贯通</span>
+          </div>
+          <h1 style="font-size: 2.2rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.75rem; line-height: 1.3;">
+            Ch 8.1: 最小二乘法 (OLS) 股票市场涨跌归因算法与全课程知识图谱
+          </h1>
+          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; max-width: 960px;">
+            在量化金融中，如何把投资组合或单只股票的当日/历史涨跌，严密拆解为<strong>公共风格因子（市场、市值、估值、动量）的贡献</strong>与<strong>特质选股超额 Alpha</strong>？本章揭秘普通最小二乘法（OLS）在资产归因中的数学推导、算法全貌与工业级 Python 实战，并深度剖析其与全书 8 大模块底层定理的血脉相通之处。
+          </p>
+          <div style="display: flex; gap: 1.5rem; margin-top: 1.25rem; font-size: 0.88rem; color: var(--text-muted); flex-wrap: wrap;">
+            <span>🎯 <strong>核心算法</strong>：时间序列回归 / Barra 截面纯因子收益估计</span>
+            <span>📐 <strong>代数本质</strong>：超定方程正交投影 $P = X(X^T X)^{-1}X^T$</span>
+            <span>📊 <strong>几何解释</strong>：勾股定理驱动方差分解 $SST = SSR + SSE$</span>
+          </div>
+        </div>
+
+        <!-- 1. 现实工程与量化金融痛点 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">金融实战痛点</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 现实工程痛点：股票每日盈亏究竟从何而来？</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              在资产管理（对冲基金、公募基金、主权财富基金）行业，投资经理每天收盘后都会面临投资人灵魂拷问：
+              <strong>“今天基金赚了 2.5%，这究竟是因为赶上了大盘暴涨、抱团小盘股的风格红利，还是基金经理真正具备逆势选股的 Alpha 实力？”</strong>
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-blue);">
+                <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.4rem;">🌊 系统性风格收益 (Beta)</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  由于暴露在市场宏观风险（如大盘贝塔、市值因子 SMB、价值因子 HML、动量因子 MOM）上所随波逐流获取的收益。这是“靠风口赚的钱”，可被廉价的指数 ETF 轻易复制。
+                </p>
+              </div>
+
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-green);">
+                <div style="font-weight: 700; color: var(--accent-green); margin-bottom: 0.4rem;">💎 主动管理超额 (Alpha)</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  剥离所有公共因子风格影响后，资产表现中无法被因子解释的纯正特质收益。这是基金经理“靠自身投研核心能力赚的钱”，值得支付高额管理费。
+                </p>
+              </div>
+
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-rose);">
+                <div style="font-weight: 700; color: var(--accent-rose); margin-bottom: 0.4rem;">🎲 特质波动与噪声 (Residual)</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  个股突发利好、黑天鹅事件或微观流动性冲击导致的随机残差扰动，在统计上均值为 0，且在几何上严格正交于所有因子张成的超平面。
+                </p>
+              </div>
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.08); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.25);">
+              <span style="color: var(--accent-green); font-weight: 700;">💡 线性代数的救赎：</span>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.8;">
+                直觉指标无法解耦交织在一起的各类风格敞口。唯有利用线性代数的<strong>正交投影矩阵（Orthogonal Projection Matrix）</strong>与<strong>四大基本子空间的正交直和分解</strong>，我们才能将多维资产收益空间无损、无重叠地拆解为彼此垂直的各个独立成分，这正是 <strong>普通最小二乘法 (OLS) 归因算法</strong> 的底层物理基石！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 数学全景推导与几何正交视角 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #fff;">理论精讲</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. OLS 数学建模、正规方程推导与几何正交性</h2>
+          </div>
+          <div class="card-body">
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">2.1 超定方程组建模 (Overdetermined System)</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              设我们考察资产在 $T$ 个时间截面（如 250 个交易日）的超额收益率序列，选取了 $K$ 个风险因子（$T \gg K$）：
+            </p>
+            <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
+              $$\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+              $$\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_T \end{bmatrix} = \begin{bmatrix} 1 & f_{1,1} & f_{1,2} & \dots & f_{1,K} \\ 1 & f_{2,1} & f_{2,2} & \dots & f_{2,K} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & f_{T,1} & f_{T,2} & \dots & f_{T,K} \end{bmatrix} \begin{bmatrix} \alpha \\ \beta_1 \\ \beta_2 \\ \vdots \\ \beta_K \end{bmatrix} + \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_T \end{bmatrix}$$
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              其中设计矩阵 $X \in \mathbb{R}^{T \times (K+1)}$：第一列为全 1 的常数截距向量（用于捕捉超额 Alpha $\alpha$），后 $K$ 列为各个公共因子收益率序列；$\boldsymbol{\beta} \in \mathbb{R}^{K+1}$ 为因子敏感度载荷（Exposure/Beta）；$\mathbf{y} \in \mathbb{R}^T$ 为实际观测收益。
+            </p>
+
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.2 几何视角：误差垂直与正规方程组推导</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              由于样本期数远超因子数（$T > K+1$），实际收益向量 $\mathbf{y}$ 几乎绝不可能恰好落在 $X$ 的列空间 $\text{Col}(X)$ 内，方程 $X\boldsymbol{\beta} = \mathbf{y}$ 无精确解（Inconsistent System）。OLS 的目标是在 $\text{Col}(X)$ 中寻找一个与 $\mathbf{y}$ 距离最近的拟合向量 $\hat{\mathbf{y}} = X\hat{\boldsymbol{\beta}}$：
+            </p>
+            <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
+              $$\min_{\boldsymbol{\beta}} \|\mathbf{e}\|^2 = \|\mathbf{y} - X\boldsymbol{\beta}\|^2 = (\mathbf{y} - X\boldsymbol{\beta})^T (\mathbf{y} - X\boldsymbol{\beta})$$
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              <strong>几何正交条件 (Orthogonality Condition)</strong>：根据最佳逼近定理，残差向量 $\mathbf{e} = \mathbf{y} - X\hat{\boldsymbol{\beta}}$ 必须<strong>正交于 $X$ 的列空间所包含的任意基向量</strong>，即垂直于 $X$ 的每一个列向量：
+            </p>
+            <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05rem; margin: 1rem 0; color: var(--accent-green);">
+              $$X^T \mathbf{e} = \mathbf{0} \implies X^T (\mathbf{y} - X\hat{\boldsymbol{\beta}}) = \mathbf{0} \implies (X^T X)\hat{\boldsymbol{\beta}} = X^T \mathbf{y}$$
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              这便是著名的<strong>正规方程 (Normal Equations)</strong>。当设计矩阵 $X$ 列满秩时，$X^T X$ 保证可逆，得出解析解：
+            </p>
+            <div class="math-block" style="background: rgba(56, 189, 248, 0.08); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 1.1rem; text-align: center; color: var(--accent-blue);">
+              $$\hat{\boldsymbol{\beta}} = (X^T X)^{-1} X^T \mathbf{y}$$
+            </div>
+
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.3 投影矩阵 $P$ 与方差分解定理 (ANOVA)</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              将解 $\hat{\boldsymbol{\beta}}$ 代回拟合值：
+              $$\hat{\mathbf{y}} = X\hat{\boldsymbol{\beta}} = X(X^T X)^{-1}X^T \mathbf{y} = P \mathbf{y}$$
+              投影矩阵 $P = X(X^T X)^{-1}X^T$ 具备两大公理化性质：
+            </p>
+            <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 1.5rem;">
+              <li><strong>对称性</strong>：$P^T = (X(X^T X)^{-1}X^T)^T = X ((X^T X)^{-1})^T X^T = P$；</li>
+              <li><strong>幂等性</strong>：$P^2 = P \cdot P = X(X^T X)^{-1}(X^T X)(X^T X)^{-1}X^T = X(X^T X)^{-1}X^T = P$（投射两次与投射一次相同）。</li>
+            </ul>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.75rem;">
+              残差投影算子为 $I - P$，且有 $\mathbf{e} = (I - P)\mathbf{y}$。由勾股定理（因为 $\hat{\mathbf{y}} \perp \mathbf{e}$）：
+            </p>
+            <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
+              $$\|\mathbf{y} - \bar{y}\mathbf{1}\|^2 = \|\hat{\mathbf{y}} - \bar{y}\mathbf{1}\|^2 + \|\mathbf{e}\|^2 \iff \text{SST} = \text{SSR} + \text{SSE}$$
+              $$R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}$$
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+              <strong>金融物理含义</strong>：$R^2$（决定系数）衡量了该股票涨跌<strong>有多少比例被已知市场公共风格完全主导</strong>；而 $1 - R^2$ 则衡量了<strong>特异性风险 (Idiosyncratic Risk) 占比</strong>！
+            </p>
+          </div>
+        </div>
+
+        <!-- 3. 股票市场归因的两大应用范式 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">算法工程范式</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 股票市场 OLS 归因的两大工业范式详解</h2>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
+              
+              <!-- 范式 1: 时间序列 -->
+              <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                  <h4 style="color: var(--accent-blue); margin: 0; font-size: 1.1rem;">范式一：时间序列归因 (Time-Series)</h4>
+                  <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">CAPM / Fama-French 框架</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  <strong>适用对象</strong>：评估<strong>单只股票或特定投资组合/基金产品</strong>在历史 $T$ 个交易日中的长期选股能力与风格偏好。
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.88rem; font-family: var(--font-mono);">
+                  r_t - r_{f,t} = α + β_MKT · f_{MKT,t} + β_SMB · f_{SMB,t} + β_HML · f_{HML,t} + ε_t
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  <strong>涨跌分解算法</strong>：
+                  <ol style="padding-left: 1.25rem; margin-top: 0.4rem;">
+                    <li>将目标时序回归到基准因子序列，估计求得 $\hat{\alpha}$ 与各因子载荷 $\hat{\beta}_j$；</li>
+                    <li>在任一交易日 $t$，将实际收益 $r_t$ 拆解为：
+                      $$\text{市场风格贡献} = \sum_{j=1}^K \hat{\beta}_j f_{j,t}$$
+                      $$\text{Alpha 选股贡献} = \hat{\alpha}$$
+                      $$\text{特质扰动残差} = e_t = r_t - (\hat{\alpha} + \sum_{j=1}^K \hat{\beta}_j f_{j,t})$$
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+              <!-- 范式 2: 截面归因 -->
+              <div style="background: var(--bg-secondary); padding: 1.5rem; border-radius: 10px; border: 1px solid var(--border-color);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+                  <h4 style="color: var(--accent-green); margin: 0; font-size: 1.1rem;">范式二：截面纯因子归因 (Cross-Sectional)</h4>
+                  <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">Barra 结构化风险体系</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  <strong>适用对象</strong>：在<strong>单日截面</strong>上，对全市场 $N$ 只股票（$N \approx 5000$ 远大于因子数 $K \approx 30$）解出当日纯因子收益率。
+                </p>
+                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.88rem; font-family: var(--font-mono);">
+                  \mathbf{R}_t = X_t \mathbf{f}_t + \boldsymbol{\varepsilon}_t \quad (N \times 1 = N \times K \cdot K \times 1 + N \times 1)
+                </div>
+                <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  <strong>纯因子收益求解与组合归因</strong>：
+                  <ol style="padding-left: 1.25rem; margin-top: 0.4rem;">
+                    <li>已知各股票预先计算的因子暴露 $X_t$（如标准化市值、市盈率、行业哑变量）；</li>
+                    <li>通过 OLS（或加权最小二乘 WLS）解出当日各因子的<strong>纯因子收益向量</strong>：
+                      $$\hat{\mathbf{f}}_t = (X_t^T X_t)^{-1} X_t^T \mathbf{R}_t$$
+                    </li>
+                    <li>对持仓权重为 $\mathbf{w}$ 的投资组合，当日涨跌归因为：
+                      $$r_p = \mathbf{w}^T \mathbf{R}_t = (\mathbf{w}^T X_t)\hat{\mathbf{f}}_t + \mathbf{w}^T \mathbf{e}_t = \sum_{j=1}^K (\text{组合因子暴露}_j \cdot \hat{f}_{j,t}) + \text{特质收益}$$
+                    </li>
+                  </ol>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 全书各章节知识点深度贯通与超链接图谱 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-cyan); color: #000;">知识网络大贯通</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🗺️ 全书知识点映射图谱：OLS 与全教程 8 大模块的深度血脉</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              许多初学者以为 OLS 只是统计学中的一个孤立公式，然而从线性代数的视角审视，<strong>OLS 几乎是前 7 个章节所有核心几何公理与矩阵分解大一统集大成者</strong>！以下为您全面梳理各步骤与对应章节的精确映射：
+            </p>
+
+            <div style="overflow-x: auto; margin-top: 1.5rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; line-height: 1.7;">
+                <thead>
+                  <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.8rem; color: var(--text-main); min-width: 140px;">归因算法步骤</th>
+                    <th style="padding: 0.8rem; color: var(--text-main); min-width: 170px;">对应代数与几何概念</th>
+                    <th style="padding: 0.8rem; color: var(--text-main); min-width: 200px;">金融归因中的具体物理意义</th>
+                    <th style="padding: 0.8rem; color: var(--accent-blue); min-width: 170px;">本教程对应章节与超链接</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Row 1 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">1. 因子合成 $\hat{\mathbf{y}} = X\boldsymbol{\beta}$</td>
+                    <td style="padding: 0.8rem;">矩阵相乘的<strong>列组合视角</strong></td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">拟合收益本质上就是将 $X$ 的各因子收益基向量，以系数 $\boldsymbol{\beta}$ 为权重做线性加权组合。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch1_4_matrix.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.4: 矩阵 Ax 列组合视角</a><br>
+                      <a href="ch2_1_matrix_multiplication.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.1: 矩阵乘法 4 大视角</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 2 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">2. 不存在精确解 $\mathbf{y} \notin \text{Col}(X)$</td>
+                    <td style="padding: 0.8rem;"><strong>超定方程组</strong>与不相容相容性条件</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">样本期数 $T$ 远大于因子数 $K$。因为特质选股噪声存在，真实股票收益向量必然偏离纯因子空间。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch1_5_solution.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.5: 相容性与解结构</a><br>
+                      <a href="ch1_6_rref.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.6: RREF 与无解判定</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 3 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">3. 因子体系列满秩 $\text{Rank}(X)=K+1$</td>
+                    <td style="padding: 0.8rem;"><strong>线性无关性</strong>与基底判定</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">入选的多因子体系必须线性无关。如果选入了高度冗余因子（如同时放入总市值与对数市值），将产生多重共线性灾难。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch4_1_span_independence.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.1: Span 与线性无关</a><br>
+                      <a href="ch4_4_basis_dimension.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.4: 基底与维数判定</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 4 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">4. 正规方程可逆 $(X^T X)^{-1}$</td>
+                    <td style="padding: 0.8rem;"><strong>逆矩阵存在性</strong>与行列式 $\det \neq 0$</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">保证 OLS 拥有唯一稳定数值解。若因子高度共线，$\det(X^T X) \approx 0$，条件数暴涨，参数估计剧烈震荡。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch2_2_matrix_inverse.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.2: 逆矩阵与可逆等价定理</a><br>
+                      <a href="ch3_1_determinant.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 3.1: 行列式几何体积判定</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 5 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">5. 系统收益与特质残差空间划分</td>
+                    <td style="padding: 0.8rem;"><strong>四大基本子空间</strong>正交直和分解<br>$\mathbb{R}^T = \text{Col}(X) \oplus \text{Null}(X^T)$</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">
+                      • $\text{Col}(X)$：所有系统性因子能解释的收益超平面；<br>
+                      • $\text{Null}(X^T)$：与所有因子完全正交的纯特质残差空间。二者互补且垂直！
+                    </td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch4_3_subspaces_rank.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.3: 四大子空间与秩-零度</a><br>
+                      <a href="ch7_1_orthogonality_gram_schmidt.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.1: 正交补空间 (Col A)ᵧ=Null(Aᵀ)</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 6 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">6. 拟合与残差分解 $P$ 与 $(I-P)$</td>
+                    <td style="padding: 0.8rem;"><strong>正交投影矩阵</strong>与欧氏最近逼近</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">将真实涨跌投影到因子子空间，投影向量即为最佳解释收益；残差向量与子空间垂直，保证无信息遗漏。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch7_2_projection_least_squares.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.2: 正交投影与最小二乘</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 7 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">7. 方差分解与 $R^2$ 衡量解释度</td>
+                    <td style="padding: 0.8rem;"><strong>抽象内积与勾股定理</strong><br>$\|y\|^2 = \|\hat{y}\|^2 + \|e\|^2$</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">SST = SSR + SSE，正是毕达哥拉斯几何定理在收益方差空间中的投影反映，以此科学划分风格风险比例。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch6_2_inner_product_space.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.2: 抽象内积空间公理</a><br>
+                      <a href="ch7_1_orthogonality_gram_schmidt.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.1: 点积正交与勾股定理</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 8 -->
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">8. 因子协方差矩阵对角化分析</td>
+                    <td style="padding: 0.8rem;"><strong>实对称矩阵正交对角化</strong>与谱分解</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">因子协方差矩阵 $\Sigma = \frac{1}{T}X^T X$ 必为实对称半正定矩阵，特征值代表各主风险方向的方差贡献。</td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3: 实对称矩阵谱分解</a>
+                    </td>
+                  </tr>
+
+                  <!-- Row 9 -->
+                  <tr>
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">9. 统计因子挖掘与共线性解决</td>
+                    <td style="padding: 0.8rem;"><strong>奇异值分解 SVD、低秩逼近与伪逆</strong></td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">
+                      • PCA 主成分分析提取互相正交的统计隐式因子；<br>
+                      • 伪逆 $X^+ = V \Sigma^+ U^T$ 稳定求解奇异/高度共线模型。
+                    </td>
+                    <td style="padding: 0.8rem;">
+                      <a href="ch7_4_svd_low_rank.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.4: SVD 奇异值分解与伪逆</a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. 交互实验台：股票单日多因子归因模拟器 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🧪 交互实验台：股票单日涨跌多因子归因瀑布模拟器</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              调节下方滑块，模拟某股票在各个公共风险因子上的<strong>暴露载荷（Beta）</strong>与各因子当天的<strong>实际涨跌幅</strong>。观察右侧如何通过投影公式，实时将总拟合涨跌拆解为各因子分量与超额 Alpha！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+              <!-- Left: Sliders -->
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-blue); margin-bottom: 1rem; font-size: 1rem;">🎛️ 调节因子敞口与市场行情</h4>
+                
+                <!-- Factor 1: Market -->
+                <div style="margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                    <span>大盘市场因子 (MKT): <strong id="valMktRet" style="color:var(--accent-blue);">+1.50%</strong></span>
+                    <span>股票载荷 β₁: <strong id="valMktBeta" style="color:var(--accent-green);">1.20</strong></span>
+                  </div>
+                  <input type="range" id="sliderMktRet" min="-5" max="5" step="0.1" value="1.5" style="width: 100%;">
+                  <input type="range" id="sliderMktBeta" min="0" max="2.5" step="0.05" value="1.2" style="width: 100%; margin-top: 4px;">
+                </div>
+
+                <!-- Factor 2: Size -->
+                <div style="margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                    <span>小市值因子 (SMB): <strong id="valSmbRet" style="color:var(--accent-blue);">+0.80%</strong></span>
+                    <span>股票载荷 β₂: <strong id="valSmbBeta" style="color:var(--accent-green);">-0.50</strong></span>
+                  </div>
+                  <input type="range" id="sliderSmbRet" min="-5" max="5" step="0.1" value="0.8" style="width: 100%;">
+                  <input type="range" id="sliderSmbBeta" min="-2" max="2" step="0.05" value="-0.5" style="width: 100%; margin-top: 4px;">
+                </div>
+
+                <!-- Factor 3: Value -->
+                <div style="margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                    <span>价值风格因子 (HML): <strong id="valHmlRet" style="color:var(--accent-blue);">-0.60%</strong></span>
+                    <span>股票载荷 β₃: <strong id="valHmlBeta" style="color:var(--accent-green);">0.80</strong></span>
+                  </div>
+                  <input type="range" id="sliderHmlRet" min="-5" max="5" step="0.1" value="-0.6" style="width: 100%;">
+                  <input type="range" id="sliderHmlBeta" min="-2" max="2" step="0.05" value="0.8" style="width: 100%; margin-top: 4px;">
+                </div>
+
+                <!-- Alpha & Residual -->
+                <div style="margin-bottom: 0.5rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.3rem;">
+                    <span>日度主动 Alpha: <strong id="valAlpha" style="color:var(--accent-purple);">+0.25%</strong></span>
+                    <span>特质残差 e_t: <strong id="valResid" style="color:var(--accent-rose);">+0.40%</strong></span>
+                  </div>
+                  <input type="range" id="sliderAlpha" min="-1" max="1" step="0.05" value="0.25" style="width: 100%;">
+                  <input type="range" id="sliderResid" min="-3" max="3" step="0.1" value="0.4" style="width: 100%; margin-top: 4px;">
+                </div>
+              </div>
+
+              <!-- Right: Live Waterfall Breakdown -->
+              <div style="background: #090d16; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <h4 style="color: var(--accent-green); margin-bottom: 0.75rem; font-size: 1rem;">📊 归因瀑布流拆解 (Waterfall Breakdown)</h4>
+                  <div style="font-family: var(--font-mono); font-size: 0.88rem; line-height: 2.1; color: #f8fafc;">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 市场因子贡献 (β₁·f₁):</span>
+                      <strong id="outMkt" style="color:#38bdf8;">+1.80%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 市值因子贡献 (β₂·f₂):</span>
+                      <strong id="outSmb" style="color:#f43f5e;">-0.40%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 价值因子贡献 (β₃·f₃):</span>
+                      <strong id="outHml" style="color:#f43f5e;">-0.48%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 因子总解释收益 (ŷ):</span>
+                      <strong id="outFactorSum" style="color:#4ade80;">+0.92%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 主动选股 Alpha (α):</span>
+                      <strong id="outAlpha" style="color:#c084fc;">+0.25%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.08);">
+                      <span>• 特质非系统扰动 (e_t):</span>
+                      <strong id="outResid" style="color:#fbbf24;">+0.40%</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 1.25rem; background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.3); text-align: center;">
+                  <div style="font-size: 0.85rem; color: var(--text-muted);">📈 该股票当日最终实际涨跌幅</div>
+                  <div id="outTotalReturn" style="font-size: 1.8rem; font-weight: 800; color: var(--accent-green); margin-top: 0.2rem;">+1.57%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Python / NumPy 工业实操代码 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">NumPy 工业实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python / NumPy 工业级多因子归因与共线性求解</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              在量化机构生产环境中，直接调用 <code>inv(X.T @ X)</code> 会使矩阵条件数平方化（$\kappa(X^T X) = [\kappa(X)]^2$），导致精度损耗。工业界标准做法是使用 <code>np.linalg.lstsq</code>（内部基于奇异值分解 SVD 或 QR 分解）进行稳健求解。以下代码展示了全套工业级流程：
+            </p>
+
+            <pre style="background: #090d16; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); overflow-x: auto; font-family: var(--font-mono); font-size: 0.85rem; color: #e2e8f0; line-height: 1.7;">
+import numpy as np
+
+# ==============================================================================
+# 1. 模拟行情数据：T=250 个交易日，K=3 个已知公共风险因子 (市场 MKT, 规模 SMB, 估值 HML)
+# ==============================================================================
+np.random.seed(42)
+T = 250
+# 生成因子收益率时序 (T x 3)
+F = np.random.randn(T, 3) * 0.012
+
+# 构造真实资产参数: Alpha = 0.0003 (日频超额), Beta = [1.15, -0.45, 0.70]
+true_params = np.array([0.0003, 1.15, -0.45, 0.70])
+
+# 构造设计矩阵 X (T x 4), 第 1 列为全 1 常数截距项 (对应 Ch 1.4 列组合视角)
+X = np.column_stack([np.ones(T), F])
+
+# 生成真实收益向量 y = X * beta + 纯特质随机噪声 (对应 Ch 1.5 超定不相容系统)
+noise = np.random.randn(T) * 0.006
+y = X @ true_params + noise
+
+# ==============================================================================
+# 2. 最小二乘法求解 (两种方式对比：正规方程 vs 工业级 lstsq)
+# ==============================================================================
+# 方式 A: 严格依据正规方程 beta = (X^T X)^(-1) X^T y (对应 Ch 7.2)
+XtX = X.T @ X
+Xty = X.T @ y
+beta_normal = np.linalg.solve(XtX, Xty) # 比 inv 稍好，但仍依赖 XtX
+
+# 方式 B: 工业级推荐 lstsq (基于 SVD/QR 分解，数值鲁棒，对应 Ch 7.4)
+beta_hat, residuals, rank, s = np.linalg.lstsq(X, y, rcond=None)
+
+print("=" * 60)
+print("【参数估计对比】")
+print(f"真实参数:  Alpha={true_params[0]:.6f}, Betas={np.round(true_params[1:], 4)}")
+print(f"OLS估计值: Alpha={beta_hat[0]:.6f}, Betas={np.round(beta_hat[1:], 4)}")
+print(f"设计矩阵秩: {rank} (列满秩 Rank=4 保证解唯一，对应 Ch 4.3)")
+
+# ==============================================================================
+# 3. 构造正交投影与四大基本子空间检验 (对应 Ch 4.3 & Ch 7.1)
+# ==============================================================================
+y_hat = X @ beta_hat      # 因子拟合解释收益 (落在 Col(X) 空间)
+e = y - y_hat             # 特质残差向量 (落在 Null(X^T) 空间)
+
+# 验证核心定理：残差必须严格正交于所有因子！X^T @ e == 0
+orthogonality_check = np.max(np.abs(X.T @ e))
+print(f"\n【正交性公理检验】 max(|X^T @ e|) = {orthogonality_check:.2e} (在浮点误差内严格为0)")
+
+# 验证勾股定理：SST = SSR + SSE (方差分解定理)
+sst = np.sum((y - np.mean(y)) ** 2)
+ssr = np.sum((y_hat - np.mean(y)) ** 2)
+sse = np.sum(e ** 2)
+r_squared = ssr / sst
+print(f"总平方和 SST={sst:.6f}, 解释平方和 SSR={ssr:.6f}, 残差 SSE={sse:.6f}")
+print(f"决定系数 R^2 = {r_squared:.4f} (说明系统性因子解释了 {r_squared*100:.2f}% 的波动)")
+
+# ==============================================================================
+# 4. 单日收盘涨跌归因瀑布分解 (以最近第 250 个交易日为例)
+# ==============================================================================
+t_idx = -1
+today_actual = y[t_idx]
+contrib_alpha = beta_hat[0]
+contrib_mkt = beta_hat[1] * F[t_idx, 0]
+contrib_smb = beta_hat[2] * F[t_idx, 1]
+contrib_hml = beta_hat[3] * F[t_idx, 2]
+contrib_idio = e[t_idx]
+
+print("\n" + "=" * 60)
+print(f"【第 {T} 交易日股票涨跌归因报告】")
+print(f"实际涨跌幅:        {today_actual * 100:+.3f}%")
+print(f"  ├─ 主动 Alpha:    {contrib_alpha * 100:+.3f}%")
+print(f"  ├─ 市场因子贡献:  {contrib_mkt * 100:+.3f}% (β_mkt={beta_hat[1]:.2f}, Ret={F[t_idx,0]*100:+.2f}%)")
+print(f"  ├─ 市值因子贡献:  {contrib_smb * 100:+.3f}% (β_smb={beta_hat[2]:.2f}, Ret={F[t_idx,1]*100:+.2f}%)")
+print(f"  ├─ 价值因子贡献:  {contrib_hml * 100:+.3f}% (β_hml={beta_hat[3]:.2f}, Ret={F[t_idx,2]*100:+.2f}%)")
+print(f"  └─ 特质残差扰动:  {contrib_idio * 100:+.3f}%")
+</pre>
+          </div>
+        </div>
+
+        <!-- 7. 交互自测题 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">深度自测</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：OLS 归因与子空间几何挑战</h2>
+          </div>
+          <div class="card-body">
+            <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">
+              
+              <!-- Quiz 1 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  1. 在股票多因子 OLS 归因中，特质残差向量 $\mathbf{e}$ 落在设计矩阵 $X$ 的哪一个基本子空间中？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 列空间 $\text{Col}(X)$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 左零空间 $\text{Null}(X^T)$（即 $\text{Col}(X)$ 的正交补空间）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 行空间 $\text{Row}(X)$</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 零空间 $\text{Null}(X)$</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 2 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  2. 若某量化团队不小心将“股票流通市值”与“2倍流通市值”作为两个独立因子同时放入回归矩阵 $X$，会导致什么后果？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 回归结果精度翻倍</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 导致 $X$ 列线性相关，$\text{Rank}(X) < K+1$，$X^T X$ 不可逆（行列式为0），OLS 无唯一确定解</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 投影矩阵 $P$ 变为斜投影</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. $R^2$ 必然强制等于 1</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+              <!-- Quiz 3 -->
+              <div class="quiz-item" style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <div style="font-weight: 600; margin-bottom: 0.75rem; color: #f8fafc;">
+                  3. 为什么回归总变异可以严格分解为 $\text{SST} = \text{SSR} + \text{SSE}$？它的底层几何定理是什么？
+                </div>
+                <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 代数基本定理</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 勾股定理（因为因子拟合值向量 $\hat{\mathbf{y}}-\bar{y}\mathbf{1}$ 与残差向量 $\mathbf{e}$ 严格正交，点积为 0）</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 凯莱-哈密顿定理</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. 莱布尼茨交错级数定理</button>
+                </div>
+                <div class="quiz-feedback" style="display: none; margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; font-size: 0.88rem;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Page Navigation Buttons -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <a href="ch7_4_svd_low_rank.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
+                <div style="font-weight: 600;">Ch 7.4: 奇异值分解 SVD、伪逆与低秩逼近</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回课程总览目录
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // 动态交互实验台逻辑
+    (function initWaterfallLab() {
+      const sliderMktRet = document.getElementById('sliderMktRet');
+      const sliderMktBeta = document.getElementById('sliderMktBeta');
+      const sliderSmbRet = document.getElementById('sliderSmbRet');
+      const sliderSmbBeta = document.getElementById('sliderSmbBeta');
+      const sliderHmlRet = document.getElementById('sliderHmlRet');
+      const sliderHmlBeta = document.getElementById('sliderHmlBeta');
+      const sliderAlpha = document.getElementById('sliderAlpha');
+      const sliderResid = document.getElementById('sliderResid');
+
+      function update() {
+        const mktR = parseFloat(sliderMktRet.value);
+        const mktB = parseFloat(sliderMktBeta.value);
+        const smbR = parseFloat(sliderSmbRet.value);
+        const smbB = parseFloat(sliderSmbBeta.value);
+        const hmlR = parseFloat(sliderHmlRet.value);
+        const hmlB = parseFloat(sliderHmlBeta.value);
+        const alpha = parseFloat(sliderAlpha.value);
+        const resid = parseFloat(sliderResid.value);
+
+        // Update labels
+        document.getElementById('valMktRet').innerText = (mktR >= 0 ? '+' : '') + mktR.toFixed(2) + '%';
+        document.getElementById('valMktBeta').innerText = mktB.toFixed(2);
+        document.getElementById('valSmbRet').innerText = (smbR >= 0 ? '+' : '') + smbR.toFixed(2) + '%';
+        document.getElementById('valSmbBeta').innerText = smbB.toFixed(2);
+        document.getElementById('valHmlRet').innerText = (hmlR >= 0 ? '+' : '') + hmlR.toFixed(2) + '%';
+        document.getElementById('valHmlBeta').innerText = hmlB.toFixed(2);
+        document.getElementById('valAlpha').innerText = (alpha >= 0 ? '+' : '') + alpha.toFixed(2) + '%';
+        document.getElementById('valResid').innerText = (resid >= 0 ? '+' : '') + resid.toFixed(2) + '%';
+
+        // Calculate contributions
+        const cMkt = mktB * mktR;
+        const cSmb = smbB * smbR;
+        const cHml = hmlB * hmlR;
+        const factorSum = cMkt + cSmb + cHml;
+        const total = factorSum + alpha + resid;
+
+        // Render outputs
+        formatContr('outMkt', cMkt);
+        formatContr('outSmb', cSmb);
+        formatContr('outHml', cHml);
+        formatContr('outFactorSum', factorSum);
+        formatContr('outAlpha', alpha);
+        formatContr('outResid', resid);
+
+        const totalEl = document.getElementById('outTotalReturn');
+        totalEl.innerText = (total >= 0 ? '+' : '') + total.toFixed(2) + '%';
+        totalEl.style.color = total >= 0 ? 'var(--accent-green)' : 'var(--accent-rose)';
+      }
+
+      function formatContr(id, val) {
+        const el = document.getElementById(id);
+        el.innerText = (val >= 0 ? '+' : '') + val.toFixed(2) + '%';
+        el.style.color = val >= 0 ? '#4ade80' : '#f43f5e';
+      }
+
+      const inputs = [sliderMktRet, sliderMktBeta, sliderSmbRet, sliderSmbBeta, sliderHmlRet, sliderHmlBeta, sliderAlpha, sliderResid];
+      inputs.forEach(input => input.addEventListener('input', update));
+      update();
+    })();
+
+    // 交互自测题
+    document.addEventListener('DOMContentLoaded', () => {
+      const quizItems = document.querySelectorAll('.quiz-item');
+      quizItems.forEach(item => {
+        const buttons = item.querySelectorAll('.quiz-opt');
+        const feedback = item.querySelector('.quiz-feedback');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            buttons.forEach(b => {
+              b.style.borderColor = 'transparent';
+              b.style.opacity = '0.6';
+            });
+            btn.style.opacity = '1';
+
+            if (isCorrect) {
+              btn.style.borderColor = 'var(--accent-green)';
+              btn.style.background = 'rgba(52, 211, 153, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(52, 211, 153, 0.1)';
+              feedback.style.border = '1px solid var(--accent-green)';
+              feedback.style.color = 'var(--accent-green)';
+              feedback.innerHTML = '<strong>🎉 回答正确！</strong> ' + getQuizExplanation8(item, true);
+            } else {
+              btn.style.borderColor = 'var(--accent-rose)';
+              btn.style.background = 'rgba(244, 63, 94, 0.15)';
+              feedback.style.display = 'block';
+              feedback.style.background = 'rgba(244, 63, 94, 0.1)';
+              feedback.style.border = '1px solid var(--accent-rose)';
+              feedback.style.color = 'var(--accent-rose)';
+              feedback.innerHTML = '<strong>❌ 答案不正确。</strong> ' + getQuizExplanation8(item, false);
+            }
+          });
+        });
+      });
+
+      function getQuizExplanation8(item, isCorrect) {
+        const text = item.querySelector('div').innerText;
+        if (text.includes('特质残差向量')) {
+          return '选项 B 正确。根据正规方程 Xᵀ e = 0，残差 e 垂直于 X 的所有列向量，因此 e 严格位于左零空间 Null(Xᵀ) = (Col(X))ᵧ 中！这是四大基本子空间正交直和分解的核心定理。';
+        } else if (text.includes('流通市值')) {
+          return '选项 B 正确。若两个因子成倍数关系，设计矩阵的列不再线性无关，秩 Rank(X) 下降，使得 XᵀX 为奇异矩阵（行列式为0不可逆），OLS 方程出现无穷多解，数值求解将彻底崩溃。';
+        } else if (text.includes('SST = SSR + SSE')) {
+          return '选项 B 正确。由于投影向量 ŷ 落在 Col(X) 空间，残差 e 落在 Null(Xᵀ) 空间，二者正交补互斥，点积严格为零，因此高维欧氏范数满足勾股定理：‖y - ȳ1‖² = ‖ŷ - ȳ1‖² + ‖e‖²。';
+        }
+        return '';
+      }
+    });
+  </script>
+
+</body>
+</html>
