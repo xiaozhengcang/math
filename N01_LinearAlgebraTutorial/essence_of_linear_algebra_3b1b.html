@@ -1,0 +1,2818 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3Blue1Brown《线性代数的本质》全景图解指南 | Essence of Linear Algebra</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <style>
+    /* 专属增强样式：3B1B 沉浸式风格 */
+    :root {
+      --b1b-blue: #38bdf8;
+      --b1b-green: #34d399;
+      --b1b-yellow: #fbbf24;
+      --b1b-rose: #f43f5e;
+      --b1b-purple: #a855f7;
+    }
+    .hero-3b1b {
+      background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.18) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(244, 63, 94, 0.15) 0%, transparent 50%),
+                  linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-badge-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-grant {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38bdf8;
+      border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .badge-essence {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+    }
+    .hero-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      line-height: 1.25;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 850px;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 1.5rem;
+    }
+    .stat-item h4 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-blue);
+      margin-bottom: 0.25rem;
+      font-family: var(--font-mono);
+    }
+    .stat-item p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    /* 章节卡片导航网格 */
+    .chapter-quick-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .nav-card {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(8px);
+    }
+    .nav-card:hover {
+      transform: translateY(-3px);
+      background: rgba(51, 65, 85, 0.6);
+      border-color: var(--accent-blue);
+      box-shadow: 0 10px 20px -5px rgba(56, 189, 248, 0.15);
+    }
+    .nav-card-num {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(168, 85, 247, 0.2));
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--accent-blue);
+      flex-shrink: 0;
+    }
+    .nav-card-body h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.2rem;
+    }
+    .nav-card-body p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* 章节主体布局 */
+    .chapter-section {
+      background: rgba(30, 41, 59, 0.35);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2.25rem;
+      margin-bottom: 3.5rem;
+      position: relative;
+      transition: border-color 0.3s ease;
+    }
+    .chapter-section:hover {
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+    .chapter-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .chapter-title-group h2 {
+      font-size: 1.75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.35rem;
+      color: var(--text-main);
+    }
+    .chapter-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      font-weight: 700;
+    }
+    .chapter-en-title {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* 核心金句 / 3B1B 洞见卡片 */
+    .quote-card {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.06) 100%);
+      border-left: 4px solid var(--accent-purple);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      font-size: 0.98rem;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+    .quote-author {
+      display: block;
+      margin-top: 0.6rem;
+      font-size: 0.82rem;
+      color: var(--accent-purple);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* 内容板块网格 */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.75rem;
+      align-items: start;
+    }
+    @media (max-width: 1024px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .text-column {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      font-size: 0.96rem;
+      line-height: 1.75;
+      color: #cbd5e1;
+    }
+    .text-column h3 {
+      font-size: 1.2rem;
+      color: #f8fafc;
+      font-weight: 700;
+      margin-top: 0.5rem;
+      border-left: 3px solid var(--accent-blue);
+      padding-left: 0.6rem;
+    }
+    .text-column p strong {
+      color: #f1f5f9;
+    }
+
+    /* SVG 矢量画廊卡片 */
+    .visual-card {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.7);
+    }
+    .visual-header {
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding: 0.65rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+    }
+    .visual-badge {
+      color: var(--accent-blue);
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+    .visual-title {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+    .svg-wrapper {
+      padding: 1.25rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #0a0f1d;
+    }
+    .svg-wrapper svg {
+      width: 100%;
+      height: auto;
+      max-height: 380px;
+    }
+    .visual-caption {
+      padding: 0.75rem 1rem;
+      background: rgba(15, 23, 42, 0.7);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.5;
+    }
+
+    /* 要点清单 */
+    .key-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 1rem 0;
+    }
+    .key-points li {
+      position: relative;
+      padding-left: 1.6rem;
+    }
+    .key-points li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: var(--accent-blue);
+      font-size: 0.85rem;
+    }
+
+    /* 公式高亮展示卡片 */
+    .formula-box {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin: 0.75rem 0;
+      text-align: center;
+    }
+
+    /* 章节底部导航 */
+    .chapter-footer-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.08);
+      font-size: 0.88rem;
+    }
+    .chapter-footer-nav a {
+      color: var(--accent-blue);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.2s;
+    }
+    .chapter-footer-nav a:hover {
+      color: #7dd3fc;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>🎬</span> 3B1B 线性代数全景
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">快速导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>返回课程主页</span>
+        </a>
+        <a href="#hero" class="nav-item active">
+          <span class="nav-icon">✨</span>
+          <span>系列导读与哲学</span>
+        </a>
+
+        <div class="nav-section-title">3B1B 完整 15 讲目录</div>
+        <a href="#ch0" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 0</span><span>什么是向量？</span></a>
+        <a href="#ch1" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 1</span><span>线性组合、张成空间与基</span></a>
+        <a href="#ch2" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 2</span><span>矩阵与线性变换</span></a>
+        <a href="#ch3" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 3</span><span>矩阵乘法与复合变换</span></a>
+        <a href="#ch4" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 4</span><span>三维空间中的线性变换</span></a>
+        <a href="#ch5" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 5</span><span>行列式的几何本质</span></a>
+        <a href="#ch6" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 6</span><span>逆矩阵、列空间与零空间</span></a>
+        <a href="#ch7" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 7</span><span>非方阵：跨维度的变换</span></a>
+        <a href="#ch8" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 8</span><span>点积与对偶性</span></a>
+        <a href="#ch9" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 9</span><span>叉积初探</span></a>
+        <a href="#ch10" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 10</span><span>线性变换视角下的叉积</span></a>
+        <a href="#ch11" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 11</span><span>基变换与相似矩阵</span></a>
+        <a href="#ch12" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 12</span><span>特征向量与特征值</span></a>
+        <a href="#ch13" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 13</span><span>抽象向量空间</span></a>
+        <a href="#ch14" class="nav-item"><span style="color:var(--accent-blue);font-weight:700;font-size:0.8rem;min-width:32px;">Ch 14</span><span>克莱姆法则的几何解释</span></a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem;">
+
+
+      <!-- Hero Section -->
+      <section id="hero" class="hero-3b1b">
+        <div class="hero-badge-group">
+          <span class="hero-badge badge-grant">🎬 Grant Sanderson (3Blue1Brown) 原创精髓</span>
+          <span class="hero-badge badge-essence">✨ 15 讲全章节深度全景拆解</span>
+          <span class="hero-badge" style="background:rgba(52, 211, 153, 0.15);color:#34d399;border:1px solid rgba(52,211,153,0.35);">📐 交互几何矢量全配图</span>
+        </div>
+        <h1 class="hero-title">3Blue1Brown《线性代数的本质》<br>全景交互与几何直觉图解指南</h1>
+        <p class="hero-subtitle">
+          “计算往往简单枯燥，但几何直觉却深刻璀璨。”
+          本指南严格按照 YouTube 传世神作<strong>《Essence of Linear Algebra》</strong>全系列 15 个章节次序，系统性拆解基底追踪、网格变形、行列式面积、点积与叉积对偶性、特征向量主轴与克莱姆法则等核心哲学。
+          摆脱机械式行乘列加，建立牢不可破的几何思维图景！
+        </p>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h4>15 讲</h4>
+            <p>官方完整章节无漏覆盖</p>
+          </div>
+          <div class="stat-item">
+            <h4>15 幅</h4>
+            <p>纯原生定制 SVG 几何矢量图</p>
+          </div>
+          <div class="stat-item">
+            <h4>100%</h4>
+            <p>几何直觉与严谨代数统一</p>
+          </div>
+          <div class="stat-item">
+            <h4>0 依赖</h4>
+            <p>离线高保真矢量自适应排版</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Chapter Navigation Grid -->
+      <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div>
+          <h3 style="font-size: 1.3rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.25rem;">📑 系列章节全景矩阵</h3>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">点击任意章节卡片，即可平滑定位至对应详解模块与矢量图解：</p>
+        </div>
+      </div>
+      <div class="chapter-quick-nav">
+        
+        <a href="#ch0" class="nav-card">
+          <div class="nav-card-num">Ch 0</div>
+          <div class="nav-card-body">
+            <h4>什么是向量？</h4>
+            <p>物理箭头、计算机数组与数学公理</p>
+          </div>
+        </a>
+        
+        <a href="#ch1" class="nav-card">
+          <div class="nav-card-num">Ch 1</div>
+          <div class="nav-card-body">
+            <h4>线性组合、张成空间与基</h4>
+            <p>向量放缩加和与空间维度的生成</p>
+          </div>
+        </a>
+        
+        <a href="#ch2" class="nav-card">
+          <div class="nav-card-num">Ch 2</div>
+          <div class="nav-card-body">
+            <h4>矩阵与线性变换</h4>
+            <p>原点固定与网格平行的几何铁律</p>
+          </div>
+        </a>
+        
+        <a href="#ch3" class="nav-card">
+          <div class="nav-card-num">Ch 3</div>
+          <div class="nav-card-body">
+            <h4>矩阵乘法与复合变换</h4>
+            <p>连续几何变换的流水线复合</p>
+          </div>
+        </a>
+        
+        <a href="#ch4" class="nav-card">
+          <div class="nav-card-num">Ch 4</div>
+          <div class="nav-card-body">
+            <h4>三维线性变换</h4>
+            <p>3×3 矩阵与三维空间网格扭曲</p>
+          </div>
+        </a>
+        
+        <a href="#ch5" class="nav-card">
+          <div class="nav-card-num">Ch 5</div>
+          <div class="nav-card-body">
+            <h4>行列式的几何本质</h4>
+            <p>空间面积/体积缩放因子与定向</p>
+          </div>
+        </a>
+        
+        <a href="#ch6" class="nav-card">
+          <div class="nav-card-num">Ch 6</div>
+          <div class="nav-card-body">
+            <h4>逆矩阵、列空间与零空间</h4>
+            <p>降维坍缩、值域与原点压缩核</p>
+          </div>
+        </a>
+        
+        <a href="#ch7" class="nav-card">
+          <div class="nav-card-num">Ch 7</div>
+          <div class="nav-card-body">
+            <h4>非方阵：跨维度的变换</h4>
+            <p>升维嵌入与降维压缩的矩阵法则</p>
+          </div>
+        </a>
+        
+        <a href="#ch8" class="nav-card">
+          <div class="nav-card-num">Ch 8</div>
+          <div class="nav-card-body">
+            <h4>点积与对偶性</h4>
+            <p>投影几何与 1×2 矩阵的终极对偶</p>
+          </div>
+        </a>
+        
+        <a href="#ch9" class="nav-card">
+          <div class="nav-card-num">Ch 9</div>
+          <div class="nav-card-body">
+            <h4>叉积初探</h4>
+            <p>正交法向量、面积与右手定则</p>
+          </div>
+        </a>
+        
+        <a href="#ch10" class="nav-card">
+          <div class="nav-card-num">Ch 10</div>
+          <div class="nav-card-body">
+            <h4>线性变换视角下的叉积</h4>
+            <p>体积函数与 Riesz 对偶严密证明</p>
+          </div>
+        </a>
+        
+        <a href="#ch11" class="nav-card">
+          <div class="nav-card-num">Ch 11</div>
+          <div class="nav-card-body">
+            <h4>基变换与相似矩阵</h4>
+            <p>坐标语言翻译与 P⁻¹AP 环路</p>
+          </div>
+        </a>
+        
+        <a href="#ch12" class="nav-card">
+          <div class="nav-card-num">Ch 12</div>
+          <div class="nav-card-body">
+            <h4>特征向量与特征值</h4>
+            <p>变换中方向不变的特殊主轴</p>
+          </div>
+        </a>
+        
+        <a href="#ch13" class="nav-card">
+          <div class="nav-card-num">Ch 13</div>
+          <div class="nav-card-body">
+            <h4>抽象向量空间</h4>
+            <p>多项式与函数的微积分矩阵化</p>
+          </div>
+        </a>
+        
+        <a href="#ch14" class="nav-card">
+          <div class="nav-card-num">Ch 14</div>
+          <div class="nav-card-body">
+            <h4>克莱姆法则的几何解释</h4>
+            <p>平行四边形面积缩放比的奇迹</p>
+          </div>
+        </a>
+        
+      </div>
+    
+
+    <section id="ch0" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 0</span> 什么是向量？从空间箭头到数字列表</h2>
+          <div class="chapter-en-title">Vectors, what even are they?</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “物理学家认为向量是空间中的箭头；计算机科学家认为向量是有序的数字列表；而数学家则试图将这两者结合起来，指出：只要两个对象可以相加、可以与数相乘，它们就是向量。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 三重视角的大一统</h3>
+          <p>
+            几乎所有线性代数初学者在刚入门时都会面临一个困惑：为什么教科书一会儿把向量画成带有箭头的物理位移，一会儿又把它当成一列冷冰冰的数据表格？
+          </p>
+          <ul class="key-points">
+            <li><strong>物理学家视角：</strong>向量是空间中具有<strong>大小（Magnitude）</strong>与<strong>方向（Direction）</strong>的自由箭头。只要长度和朝向不变，它平移到空间的任何位置都代表同一个向量。</li>
+            <li><strong>计算机科学视角：</strong>向量是一串<strong>有序的数字列表（Array / List）</strong>。例如房屋特征向量 $[面积, 房间数, 价格]^T$，它代表高维特征空间中的一个样本点。</li>
+            <li><strong>数学家视角：</strong>数学家超越了具体的物理或数据具象，关注运算规则。只要一个集合内的元素满足<strong>向量加法</strong>和<strong>标量数乘</strong>的八大代数公理，它就构成了向量空间。</li>
+          </ul>
+
+          <h3>2. 坐标系的本质：人为设定的标尺</h3>
+          <p>
+            在数学中，为了将“空间中的几何箭头”与“有序数字列表”无缝连接，我们引入了<strong>笛卡尔坐标系</strong>。
+            我们选定一个固定的<strong>原点 $O$</strong>，并规定两条垂直的基准轴。
+            空间中任何一个向量 $\vec{v} = \begin{bmatrix} x \\ y \end{bmatrix}$，其数字 $x$ 和 $y$ 本质上是一套<strong>步数指令</strong>：从原点出发，沿横轴走 $x$ 步，再沿纵轴走 $y$ 步。
+          </p>
+
+          <h3>3. 基础运算的几何直觉</h3>
+          <p>
+            <strong>向量加法 $\vec{v} + \vec{w}$：</strong>采用<strong>首尾相接（Tip-to-Tail）</strong>或平行四边形法则。将向量 $\vec{w}$ 的起点平移到 $\vec{v}$ 的终点，从最初起点指向最终终点的箭头就是它们的和。代数上对应坐标分量分别相加。
+          </p>
+          <p>
+            <strong>标量数乘 $c \cdot \vec{v}$：</strong>标量（Scalar）的作用就是<strong>缩放（Scaling）</strong>！当 $c = 2$ 时将向量拉长到两倍；当 $c = -1$ 时将向量沿原方向完全反向。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">基向量与二维坐标展开</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-rose" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/>
+    </marker>
+    <marker id="arrow-yellow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#fbbf24"/>
+    </marker>
+    <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <!-- Background Grid -->
+  <rect width="500" height="320" fill="url(#grid-pattern)"/>
+  <!-- Axes -->
+  <line x1="40" y1="260" x2="460" y2="260" stroke="#475569" stroke-width="2"/>
+  <line x1="100" y1="290" x2="100" y2="30" stroke="#475569" stroke-width="2"/>
+  <text x="470" y="265" fill="#94a3b8" font-family="monospace" font-size="12">x</text>
+  <text x="95" y="22" fill="#94a3b8" font-family="monospace" font-size="12">y</text>
+  <!-- Origin -->
+  <circle cx="100" cy="260" r="4" fill="#f8fafc"/>
+  <text x="85" y="278" fill="#94a3b8" font-size="12">O(0,0)</text>
+
+  <!-- Base vectors -->
+  <!-- i-hat (1,0) -> 40px -->
+  <line x1="100" y1="260" x2="140" y2="260" stroke="#34d399" stroke-width="4" marker-end="url(#arrow-green)"/>
+  <text x="115" y="250" fill="#34d399" font-weight="bold" font-size="13">î [1, 0]</text>
+
+  <!-- j-hat (0,1) -> 40px up -->
+  <line x1="100" y1="260" x2="100" y2="220" stroke="#f43f5e" stroke-width="4" marker-end="url(#arrow-rose)"/>
+  <text x="60" y="235" fill="#f43f5e" font-weight="bold" font-size="13">ĵ [0, 1]</text>
+
+  <!-- Scaled components: 3*i and 2*j -->
+  <!-- 3*i along x: from (100, 260) to (220, 260) -->
+  <line x1="100" y1="260" x2="220" y2="260" stroke="#34d399" stroke-width="2" stroke-dasharray="4"/>
+  <line x1="220" y1="260" x2="220" y2="180" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4"/>
+
+  <!-- Target vector v = [3, 2]^T -> x=100+3*40=220, y=260-2*40=180 -->
+  <line x1="100" y1="260" x2="218" y2="182" stroke="#38bdf8" stroke-width="4" marker-end="url(#arrow-blue)"/>
+  <circle cx="220" cy="180" r="5" fill="#38bdf8"/>
+  <text x="230" y="175" fill="#38bdf8" font-weight="bold" font-size="15">v = 3î + 2ĵ = [3, 2]ᵀ</text>
+
+  <!-- Another vector w = [-1, 2] -> x=100-40=60, y=260-80=180 -->
+  <line x1="100" y1="260" x2="62" y2="182" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrow-yellow)"/>
+  <text x="25" y="170" fill="#fbbf24" font-weight="bold" font-size="12">w = [-1, 2]ᵀ</text>
+
+  <!-- Vector Addition Tip-to-Tail demo -->
+  <line x1="220" y1="180" x2="182" y2="102" stroke="#fbbf24" stroke-width="2" stroke-dasharray="3" marker-end="url(#arrow-yellow)"/>
+  <line x1="100" y1="260" x2="180" y2="102" stroke="#c084fc" stroke-width="3" marker-end="url(#arrow-blue)"/>
+  <text x="188" y="95" fill="#c084fc" font-weight="bold" font-size="13">v + w = [2, 4]ᵀ</text>
+
+  <!-- Legend -->
+  <rect x="290" y="20" width="195" height="95" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="#334155"/>
+  <text x="305" y="42" fill="#f8fafc" font-weight="bold" font-size="12">三重视角统一：</text>
+  <text x="305" y="62" fill="#38bdf8" font-size="11">● 物理学：空间的位移与方向</text>
+  <text x="305" y="80" fill="#34d399" font-size="11">● 计算机：有序数值数组 [3, 2]</text>
+  <text x="305" y="98" fill="#fbbf24" font-size="11">● 数学：加法与数乘公理之客体</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 任何向量 $[3, 2]^T$ 都是标准基向量 $\hat{i}$ 与 $\hat{j}$ 的线性缩放合成：$3\hat{i} + 2\hat{j}$。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-blue);font-weight:700;margin-bottom:0.5rem;">核心数学表述</div>
+            $$\vec{v} = \begin{bmatrix} x \\ y \end{bmatrix} = x \hat{i} + y \hat{j} = x \begin{bmatrix} 1 \\ 0 \end{bmatrix} + y \begin{bmatrix} 0 \\ 1 \end{bmatrix}$$
+            $$\vec{v} + \vec{w} = \begin{bmatrix} v_1 + w_1 \\ v_2 + w_2 \end{bmatrix}, \quad c\vec{v} = \begin{bmatrix} cv_1 \\ cv_2 \end{bmatrix}$$
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <span style="color:var(--text-dim);">起点：Chapter 0</span>
+        <a href="#ch1">下一讲：Chapter 1 线性组合、张成空间与基 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch1" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 1</span> 线性组合、张成空间与基</h2>
+          <div class="chapter-en-title">Linear combinations, span, and basis vectors</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “当你缩放两个向量并将它们相加时，你所做的一切可能结果的集合被称为它们的张成空间（Span）。线性代数很大程度上就是在探讨：什么时候这些向量能够填满整个空间，什么时候它们会发生退化坍缩。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 线性组合 (Linear Combination)</h3>
+          <p>
+            如果有若干个向量 $\vec{v}_1, \vec{v}_2, \dots, \vec{v}_n$，我们分别用任意实数标量 $c_1, c_2, \dots, c_n$ 对它们进行缩放并相加：
+          </p>
+          <div class="formula-box">
+            $$\vec{v} = c_1 \vec{v}_1 + c_2 \vec{v}_2 + \dots + c_n \vec{v}_n$$
+          </div>
+          <p>
+            这个过程就被称作这组向量的<strong>线性组合</strong>。“线性”二字正源于你只能进行两种最基本的运算：数乘缩放与首尾相加，绝不允许出现乘方、开方或正弦等非线性操作。
+          </p>
+
+          <h3>2. 张成空间 (Span) 的空间演化</h3>
+          <p>
+            所有可能线性组合构成的终点集合，称为这组向量所<strong>张成的空间（Span）</strong>。让我们观察维度的跃迁：
+          </p>
+          <ul class="key-points">
+            <li><strong>单个非零向量 $\vec{v}$：</strong>通过标量 $c\vec{v}$ 自由缩放，其终点能扫过一条穿过原点的<strong>一维直线</strong>。</li>
+            <li><strong>两个不共线的向量 $\vec{v}, \vec{w}$：</strong>通过改变两个系数 $c_1, c_2$，我们可以像控制操纵杆一样，将终点送达整个平面的任意角落——张成<strong>二维平面 $\mathbb{R}^2$</strong>！</li>
+            <li><strong>两个共线向量：</strong>如果 $\vec{w} = k\vec{v}$，那么引入 $\vec{w}$ 并没有带来新的方向探索自由度，二者张成的空间仍然退化为那条<strong>一维直线</strong>！</li>
+            <li><strong>三维空间中的三向量：</strong>若三个向量不在同一个平面上，它们将张成整个三维空间 $\mathbb{R}^3$；若共面，则退化为一个薄薄的二维平面。</li>
+          </ul>
+
+          <h3>3. 线性相关与线性无关</h3>
+          <p>
+            当集合中存在某个向量是多余的（剔除它不会减小 Span 的维度），称这组向量<strong>线性相关（Linearly Dependent）</strong>；反之，若每一个向量都开辟了独一无二的新维度，则称它们<strong>线性无关（Linearly Independent）</strong>。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">张成空间与共线退化对比</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow-span-v" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-span-w" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/>
+    </marker>
+  </defs>
+  <rect width="500" height="320" fill="#090d16"/>
+  <!-- Oblique Grid representing the span of two independent vectors -->
+  <g opacity="0.3" stroke="#38bdf8" stroke-width="1">
+    <!-- parallel to w line series -->
+    <line x1="20" y1="280" x2="380" y2="40"/>
+    <line x1="70" y1="300" x2="430" y2="60"/>
+    <line x1="120" y1="320" x2="480" y2="80"/>
+    <line x1="-30" y1="260" x2="330" y2="20"/>
+  </g>
+  <g opacity="0.3" stroke="#f43f5e" stroke-width="1">
+    <!-- parallel to v line series -->
+    <line x1="50" y1="120" x2="450" y2="180"/>
+    <line x1="50" y1="170" x2="450" y2="230"/>
+    <line x1="50" y1="220" x2="450" y2="280"/>
+    <line x1="50" y1="70" x2="450" y2="130"/>
+  </g>
+  <!-- Full span plane fill indication -->
+  <polygon points="100,240 240,260 380,140 240,120" fill="rgba(56, 189, 248, 0.12)" stroke="rgba(56, 189, 248, 0.3)" stroke-dasharray="3"/>
+
+  <!-- Origin -->
+  <circle cx="170" cy="210" r="5" fill="#f8fafc"/>
+  <text x="155" y="230" fill="#94a3b8" font-size="12">O</text>
+
+  <!-- Vector v -->
+  <line x1="170" y1="210" x2="270" y2="225" stroke="#38bdf8" stroke-width="4" marker-end="url(#arrow-span-v)"/>
+  <text x="280" y="230" fill="#38bdf8" font-weight="bold" font-size="14">v</text>
+
+  <!-- Vector w -->
+  <line x1="170" y1="210" x2="220" y2="120" stroke="#f43f5e" stroke-width="4" marker-end="url(#arrow-span-w)"/>
+  <text x="225" y="115" fill="#f43f5e" font-weight="bold" font-size="14">w</text>
+
+  <!-- Linear combination sample: 1.5v + 0.8w -->
+  <line x1="170" y1="210" x2="320" y2="232" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3"/>
+  <line x1="320" y1="232" x2="360" y2="160" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3"/>
+  <circle cx="360" cy="160" r="5" fill="#fbbf24"/>
+  <text x="370" y="165" fill="#fbbf24" font-weight="bold" font-size="13">c₁v + c₂w</text>
+
+  <!-- Degenerate Case inset -->
+  <g transform="translate(320, 20)">
+    <rect width="165" height="95" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="#475569"/>
+    <text x="12" y="22" fill="#fbbf24" font-weight="bold" font-size="12">退化情况：线性相关</text>
+    <line x1="20" y1="70" x2="145" y2="40" stroke="#64748b" stroke-width="1" stroke-dasharray="2"/>
+    <line x1="50" y1="62" x2="100" y2="50" stroke="#38bdf8" stroke-width="3"/>
+    <line x1="50" y1="62" x2="135" y2="42" stroke="#f43f5e" stroke-width="2"/>
+    <text x="12" y="86" fill="#f43f5e" font-size="11">Span 退化为一条线 (1D)</text>
+  </g>
+
+  <text x="25" y="35" fill="#38bdf8" font-size="13" font-weight="bold">Span(v, w) = 所有线性组合 { c₁v + c₂w | c₁, c₂ ∈ ℝ }</text>
+  <text x="25" y="55" fill="#94a3b8" font-size="11">当 v, w 不共线时，张成完整的 2D 整个平面空间！</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 只要两个向量方向不平行，网格就能像织布一样无限铺满整个 2D 平面；一旦共线，空间便塌缩为一条直线。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-green);font-weight:700;margin-bottom:0.5rem;">基底 (Basis) 的严谨定义</div>
+            <p style="font-size:0.88rem;line-height:1.6;color:#cbd5e1;">
+              向量空间 $V$ 的一组<strong>基（Basis）</strong>是满足以下两点的向量集合：<br>
+              1. 它们相互<strong>线性无关</strong>（无冗余向量）；<br>
+              2. 它们<strong>张成（Span）</strong>整个空间 $V$。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch0">← 上一讲：Chapter 0 什么是向量？</a>
+        <a href="#ch2">下一讲：Chapter 2 矩阵与线性变换 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch2" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 2</span> 矩阵与线性变换</h2>
+          <div class="chapter-en-title">Linear transformations and matrices</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “矩阵不是一组随意排列的数字，它是一个几何变换！更美妙的是：你只需要盯住基向量 $\hat{i}$ 和 $\hat{j}$ 变换后落在了哪里，就能完全掌握空间中每一个向量的命运。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 什么是“变换”？什么是“线性”？</h3>
+          <p>
+            “变换”本质上就是一种<strong>函数（Function）</strong>：输入一个向量，输出一个新的向量。之所以用“变换”这个几何词汇，是为了暗示我们要在脑海中动态想象整个空间网格的运动与变形。
+          </p>
+          <p>
+            但并不是所有空间变形都是线性的。“线性变换”必须恪守两条铁律：
+          </p>
+          <ul class="key-points">
+            <li><strong>铁律一：直线在变换后仍保持为直线</strong>，绝不允许弯曲或折断。</li>
+            <li><strong>铁律二：原点必须固定不动</strong>，原点不可发生任何位移。</li>
+          </ul>
+          <p>
+            这两条铁律带来了一个极其直观的视觉推论：<strong>整个坐标网格线在变换后必须保持平行且等距分布！</strong>
+          </p>
+
+          <h3>2. 为什么基向量决定了一切？</h3>
+          <p>
+            空间中任意一个向量都可以表示为：$\vec{v} = x\hat{i} + y\hat{j}$。根据线性变换的定义：
+          </p>
+          <div class="formula-box">
+            $$T(\vec{v}) = T(x\hat{i} + y\hat{j}) = x T(\hat{i}) + y T(\hat{j})$$
+          </div>
+          <p>
+            看到了吗？变换后的向量 $T(\vec{v})$，依然是以原始坐标 $x$ 和 $y$ 为系数，对变换后的新基底 $T(\hat{i})$ 与 $T(\hat{j})$ 进行线性组合！
+            因此，<strong>我们只需要记录 $T(\hat{i})$ 和 $T(\hat{j})$ 的两个落点坐标，就能推导出整个宇宙中所有向量的最终位置！</strong>
+          </p>
+
+          <h3>3. 矩阵的诞生与几何构造</h3>
+          <p>
+            假设 $\hat{i}$ 变换后落在 $\begin{bmatrix} a \\ c \end{bmatrix}$，$\hat{j}$ 变换后落在 $\begin{bmatrix} b \\ d \end{bmatrix}$。
+            把这两列数据拼在一起，就构成了 $2 \times 2$ 矩阵：
+          </p>
+          <div class="formula-box">
+            $$A = \begin{bmatrix} a & b \\ c & d \end{bmatrix} = \begin{bmatrix} \mid & \mid \\ T(\hat{i}) & T(\hat{j}) \\ \mid & \mid \end{bmatrix}$$
+            $$A \vec{v} = \begin{bmatrix} a & b \\ c & d \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = x \begin{bmatrix} a \\ c \end{bmatrix} + y \begin{bmatrix} b \\ d \end{bmatrix} = \begin{bmatrix} ax + by \\ cx + dy \end{bmatrix}$$
+          </div>
+          <p>
+            矩阵与向量的乘法，绝不是枯燥的“行乘列加”，它的几何真谛是：<strong>以输入坐标作为权重，对变换后的基向量进行线性缩放组合！</strong>
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">剪切变换 (Shear) 下的网格倾斜</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-g" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/></marker>
+    <marker id="arr-r" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/></marker>
+    <marker id="arr-t" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="520" height="320" fill="#090d16"/>
+  
+  <!-- LEFT: Before Transformation -->
+  <g transform="translate(40, 40)">
+    <text x="60" y="-10" fill="#94a3b8" font-size="13" font-weight="bold">变换前：标准正交网格</text>
+    <!-- Grid -->
+    <g stroke="#1e293b" stroke-width="1.5">
+      <line x1="0" y1="0" x2="160" y2="0"/><line x1="0" y1="40" x2="160" y2="40"/><line x1="0" y1="80" x2="160" y2="80"/><line x1="0" y1="120" x2="160" y2="120"/><line x1="0" y1="160" x2="160" y2="160"/><line x1="0" y1="200" x2="160" y2="200"/>
+      <line x1="0" y1="0" x2="0" y2="200"/><line x1="40" y1="0" x2="40" y2="200"/><line x1="80" y1="0" x2="80" y2="200"/><line x1="120" y1="0" x2="120" y2="200"/><line x1="160" y1="0" x2="160" y2="200"/>
+    </g>
+    <!-- Unit square -->
+    <rect x="40" y="80" width="40" height="40" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8"/>
+    <!-- Axes -->
+    <line x1="0" y1="120" x2="160" y2="120" stroke="#64748b" stroke-width="2"/>
+    <line x1="40" y1="0" x2="40" y2="200" stroke="#64748b" stroke-width="2"/>
+    <circle cx="40" cy="120" r="4" fill="#fff"/>
+    <!-- i-hat & j-hat -->
+    <line x1="40" y1="120" x2="80" y2="120" stroke="#34d399" stroke-width="3" marker-end="url(#arr-g)"/>
+    <text x="60" y="112" fill="#34d399" font-weight="bold" font-size="12">î [1,0]</text>
+    <line x1="40" y1="120" x2="40" y2="80" stroke="#f43f5e" stroke-width="3" marker-end="url(#arr-r)"/>
+    <text x="15" y="95" fill="#f43f5e" font-weight="bold" font-size="12">ĵ [0,1]</text>
+  </g>
+
+  <!-- MIDDLE: Transition arrow -->
+  <g transform="translate(225, 120)">
+    <path d="M 0 20 Q 30 0 60 20" fill="none" stroke="#fbbf24" stroke-width="3" marker-end="url(#arr-t)"/>
+    <text x="5" y="-5" fill="#fbbf24" font-weight="bold" font-size="12">矩阵线性变换 A</text>
+    <text x="8" y="45" fill="#94a3b8" font-family="monospace" font-size="11">[[1, 1], [0, 1]]</text>
+  </g>
+
+  <!-- RIGHT: After Transformation (Shear) -->
+  <g transform="translate(320, 40)">
+    <text x="40" y="-10" fill="#38bdf8" font-size="13" font-weight="bold">变换后：剪切网格 (Shear)</text>
+    <!-- Sheared Grid: x' = x + y, y' = y -->
+    <g stroke="#1e293b" stroke-width="1.5">
+      <line x1="120" y1="0" x2="280" y2="0"/><line x1="80" y1="40" x2="240" y2="40"/><line x1="40" y1="80" x2="200" y2="80"/><line x1="0" y1="120" x2="160" y2="120"/><line x1="-40" y1="160" x2="120" y2="160"/><line x1="-80" y1="200" x2="80" y2="200"/>
+      <line x1="0" y1="120" x2="120" y2="0"/><line x1="40" y1="120" x2="160" y2="0"/><line x1="80" y1="120" x2="200" y2="0"/><line x1="-40" y1="120" x2="80" y2="0"/>
+    </g>
+    <!-- Transformed Unit square (Parallelogram) -->
+    <polygon points="40,120 80,120 120,80 80,80" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="2"/>
+    <!-- Axes -->
+    <line x1="-20" y1="120" x2="160" y2="120" stroke="#64748b" stroke-width="2"/>
+    <circle cx="40" cy="120" r="4" fill="#fff"/>
+    <!-- T(i-hat) stays [1,0] -->
+    <line x1="40" y1="120" x2="80" y2="120" stroke="#34d399" stroke-width="3" marker-end="url(#arr-g)"/>
+    <text x="50" y="138" fill="#34d399" font-weight="bold" font-size="11">T(î) = [1, 0]</text>
+    <!-- T(j-hat) moves to [1,1] -> x=40+40+40=80, y=80 -->
+    <line x1="40" y1="120" x2="78" y2="82" stroke="#f43f5e" stroke-width="3" marker-end="url(#arr-r)"/>
+    <text x="85" y="80" fill="#f43f5e" font-weight="bold" font-size="11">T(ĵ) = [1, 1]</text>
+  </g>
+
+  <!-- Bottom Core Takeaway -->
+  <rect x="40" y="260" width="440" height="45" rx="6" fill="rgba(30, 41, 59, 0.7)" stroke="#334155"/>
+  <text x="55" y="288" fill="#f8fafc" font-size="12">⚡ <tspan fill="#fbbf24" font-weight="bold">核心真谛：</tspan>基向量 î 与 ĵ 变换后的落点坐标，就是矩阵的第一列与第二列！</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 观察水平剪切：$\hat{i}$ 保持在 $[1, 0]^T$ 不动，$\hat{j}$ 被推移到 $[1, 1]^T$。因此矩阵就是 $[[1, 1], [0, 1]]$。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-amber);font-weight:700;margin-bottom:0.5rem;">经典几何变换矩阵一览</div>
+            <ul style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;list-style:none;">
+              <li>• <strong>逆时针旋转 $\theta$：</strong>$\begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$</li>
+              <li>• <strong>水平剪切 (Shear)：</strong>$\begin{bmatrix} 1 & k \\ 0 & 1 \end{bmatrix}$</li>
+              <li>• <strong>等比缩放 $k$ 倍：</strong>$\begin{bmatrix} k & 0 \\ 0 & k \end{bmatrix}$</li>
+              <li>• <strong>关于 $y$ 轴反射：</strong>$\begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix}$</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch1">← 上一讲：Chapter 1 线性组合与基</a>
+        <a href="#ch3">下一讲：Chapter 3 矩阵乘法与复合变换 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch3" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 3</span> 矩阵乘法与复合变换</h2>
+          <div class="chapter-en-title">Matrix multiplication as composition</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “不要把矩阵乘法看作是一道代数运算工序，它是在物理时间线上连续施加的两个几何变换。正是这种几何复合的本质，赋予了它不可交换性与结合律的美妙对称。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 复合变换 (Composition of Transformations)</h3>
+          <p>
+            假设我们对空间先施加一个旋转变换 $A$，紧接着再施加一个剪切变换 $B$。
+            整个流水线作用在一个向量 $\vec{v}$ 上，写成函数形式是：
+          </p>
+          <div class="formula-box">
+            $$\text{最终向量} = B(A(\vec{v})) = (BA)\vec{v}$$
+          </div>
+          <p>
+            我们希望找到一个单一的矩阵 $C$，能够一步到位地直接实现这两步连续操作。这个矩阵 $C$ 就是矩阵乘积 $BA$！
+            <strong>请务必注意阅读顺序：从右往左！</strong>因为 $A$ 紧贴着向量 $\vec{v}$，所以 $A$ 最先发生作用，然后才是 $B$。
+          </p>
+
+          <h3>2. 为什么矩阵乘法不满足交换律？($AB \neq BA$)</h3>
+          <p>
+            在普通实数乘法中，$2 \times 3 = 3 \times 2$ 是恒成立的。但在矩阵世界中，<strong>$AB$ 绝大多数时候不等于 $BA$！</strong>
+          </p>
+          <p>
+            几何直觉一秒看透：拿出一本书，先将其沿水平方向剪切，再逆时针旋转 90°；现在换个顺序，先逆时针旋转 90°，再沿水平方向剪切。
+            这两次操作得到的空间网格形状截然不同！变换的先后顺序决定了空间拉伸的相对参照物，因此交换律必然失效。
+          </p>
+
+          <h3>3. 为什么结合律恒成立？($(AB)C = A(BC)$)</h3>
+          <p>
+            代数上证明矩阵乘法结合律需要密密麻麻的三个求和下标 $\sum_j \sum_k$，极度繁琐乏味。
+            但 3Blue1Brown 给出的几何直觉极其纯粹：
+          </p>
+          <p>
+            不论你把括号加在哪里，$(AB)C$ 与 $A(BC)$ 都代表着<strong>先施加变换 $C$，再施加变换 $B$，最后施加变换 $A$</strong>。
+            空间变形的流水线顺序完全一致，宇宙网格的最终构型必然一模一样！因此结合律天然恒真。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">连续两次几何网格变形流水线</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="pipe-arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+  <rect width="520" height="300" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">矩阵乘法 = 几何变换的复合 (Composition of Transformations)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">计算向量在连续两次几何扭曲后的最终坐标：注意运算顺序从右向左阅读！</text>
+
+  <!-- Stage 1: Original Space -->
+  <g transform="translate(30, 75)">
+    <rect width="110" height="110" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="25" y="25" fill="#94a3b8" font-size="11" font-weight="bold">① 原始网格</text>
+    <line x1="20" y1="80" x2="90" y2="80" stroke="#64748b"/>
+    <line x1="40" y1="20" x2="40" y2="95" stroke="#64748b"/>
+    <line x1="40" y1="80" x2="70" y2="80" stroke="#34d399" stroke-width="2.5"/>
+    <line x1="40" y1="80" x2="40" y2="50" stroke="#f43f5e" stroke-width="2.5"/>
+    <text x="50" y="75" fill="#34d399" font-size="10">î</text>
+    <text x="28" y="60" fill="#f43f5e" font-size="10">ĵ</text>
+    <text x="25" y="102" fill="#cbd5e1" font-family="monospace" font-size="10">x</text>
+  </g>
+
+  <!-- Step 1 Arrow: Transform A (Rotation 90 deg) -->
+  <g transform="translate(150, 120)">
+    <line x1="0" y1="10" x2="35" y2="10" stroke="#38bdf8" stroke-width="3" marker-end="url(#pipe-arrow)"/>
+    <text x="-5" y="-5" fill="#38bdf8" font-size="10" font-weight="bold">先施加 A</text>
+    <text x="-10" y="32" fill="#94a3b8" font-size="9">逆时针 90°</text>
+  </g>
+
+  <!-- Stage 2: After A -->
+  <g transform="translate(195, 75)">
+    <rect width="110" height="110" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="25" y="25" fill="#38bdf8" font-size="11" font-weight="bold">② 经变换 A</text>
+    <line x1="20" y1="80" x2="90" y2="80" stroke="#64748b"/>
+    <line x1="55" y1="20" x2="55" y2="95" stroke="#64748b"/>
+    <!-- î rotated to [0, 1] -->
+    <line x1="55" y1="80" x2="55" y2="50" stroke="#34d399" stroke-width="2.5"/>
+    <!-- ĵ rotated to [-1, 0] -->
+    <line x1="55" y1="80" x2="25" y2="80" stroke="#f43f5e" stroke-width="2.5"/>
+    <text x="60" y="60" fill="#34d399" font-size="10">A·î</text>
+    <text x="25" y="75" fill="#f43f5e" font-size="10">A·ĵ</text>
+    <text x="25" y="102" fill="#cbd5e1" font-family="monospace" font-size="10">A·x</text>
+  </g>
+
+  <!-- Step 2 Arrow: Transform B (Shear) -->
+  <g transform="translate(315, 120)">
+    <line x1="0" y1="10" x2="35" y2="10" stroke="#fbbf24" stroke-width="3" marker-end="url(#pipe-arrow)"/>
+    <text x="-5" y="-5" fill="#fbbf24" font-size="10" font-weight="bold">再施加 B</text>
+    <text x="-5" y="32" fill="#94a3b8" font-size="9">水平剪切</text>
+  </g>
+
+  <!-- Stage 3: After B(A) -->
+  <g transform="translate(360, 75)">
+    <rect width="130" height="110" rx="8" fill="rgba(30, 41, 59, 0.8)" stroke="#fbbf24"/>
+    <text x="20" y="25" fill="#fbbf24" font-size="11" font-weight="bold">③ 最终结果 B(Ax)</text>
+    <line x1="20" y1="80" x2="110" y2="80" stroke="#64748b"/>
+    <!-- sheared & rotated -->
+    <line x1="50" y1="80" x2="75" y2="50" stroke="#34d399" stroke-width="2.5"/>
+    <line x1="50" y1="80" x2="20" y2="80" stroke="#f43f5e" stroke-width="2.5"/>
+    <text x="75" y="45" fill="#34d399" font-size="10">BA·î</text>
+    <text x="15" y="75" fill="#f43f5e" font-size="10">BA·ĵ</text>
+    <text x="20" y="102" fill="#fbbf24" font-family="monospace" font-size="10">(BA)·x</text>
+  </g>
+
+  <!-- Order comparison banner -->
+  <g transform="translate(30, 210)">
+    <rect width="460" height="65" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="20" y="28" fill="#f43f5e" font-weight="bold" font-size="13">⚠️ 不可交换性 (AB ≠ BA) 的几何本质：</text>
+    <text x="20" y="48" fill="#cbd5e1" font-size="12">“先剪切再旋转”与“先旋转再剪切”，空间网格的最终变形形态截然不同！</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 从左向右看：原始网格先被 A 逆时针旋转，再被 B 水平剪切。复合矩阵 BA 记录了整个过程基向量的终点。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-purple);font-weight:700;margin-bottom:0.5rem;">代数计算的几何溯源</div>
+            $$\begin{bmatrix} e & f \\ g & h \end{bmatrix} \begin{bmatrix} a & b \\ c & d \end{bmatrix} = \begin{bmatrix} B \begin{bmatrix} a \\ c \end{bmatrix} & B \begin{bmatrix} b \\ d \end{bmatrix} \end{bmatrix} = \begin{bmatrix} ea + fc & eb + fd \\ ga + hc & gb + hd \end{bmatrix}$$
+            <p style="font-size:0.8rem;color:#94a3b8;margin-top:0.4rem;">
+              第一列是矩阵 $B$ 作用在基向量 $T_A(\hat{i})$ 上的新落点；第二列是 $B$ 作用在 $T_A(\hat{j})$ 上的新落点。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch2">← 上一讲：Chapter 2 矩阵与线性变换</a>
+        <a href="#ch4">下一讲：Chapter 4 三维空间中的线性变换 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch4" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 4</span> 三维空间中的线性变换</h2>
+          <div class="chapter-en-title">Three-dimensional linear transformations</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “从二维迈向三维，我们只是增加了一个基向量 $\hat{k}$。所有的几何思想——追踪基向量去向、线性组合、网格扭曲——在更高维度中毫发无损地完美延续。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 升维的自然延拓</h3>
+          <p>
+            在三维空间 $\mathbb{R}^3$ 中，我们的坐标基准不再是两个正交向量，而是三个：
+          </p>
+          <ul class="key-points">
+            <li>$\hat{i} = [1, 0, 0]^T$：沿 $x$ 轴正方向的单位基底；</li>
+            <li>$\hat{j} = [0, 1, 0]^T$：沿 $y$ 轴正方向的单位基底；</li>
+            <li>$\hat{k} = [0, 0, 1]^T$：沿 $z$ 轴竖直向上的单位基底。</li>
+          </ul>
+          <p>
+            三维线性变换依然要求：网格线在变换后保持平行且等距，原点坚守不动。
+            整个三维空间的运动完全由 $\hat{i}, \hat{j}, \hat{k}$ 变换后的终点坐标所唯一锁定。
+          </p>
+
+          <h3>2. 3×3 矩阵的几何列装配</h3>
+          <p>
+            我们把它们各自变换后的新坐标 $T(\hat{i}), T(\hat{j}), T(\hat{k})$ 分别作为矩阵的第一列、第二列与第三列，便组装出了 $3 \times 3$ 的变换矩阵：
+          </p>
+          <div class="formula-box">
+            $$A = \begin{bmatrix} \mid & \mid & \mid \\ T(\hat{i}) & T(\hat{j}) & T(\hat{k}) \\ \mid & \mid & \mid \end{bmatrix} = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix}$$
+          </div>
+          <p>
+            当这个矩阵乘以任意三维向量 $\vec{v} = [x, y, z]^T$ 时，它依然是在执行线性组合：
+            $$A\vec{v} = x \cdot T(\hat{i}) + y \cdot T(\hat{j}) + z \cdot T(\hat{k})$$
+          </p>
+
+          <h3>3. 三维经典几何变换</h3>
+          <p>
+            <strong>绕 $z$ 轴旋转 $\theta$：</strong>此时 $\hat{k}$ 依然保持在 $[0, 0, 1]^T$ 纹丝不动，而在 $xy$ 平面内的 $\hat{i}$ 与 $\hat{j}$ 经历标准的二维旋转：
+            $$R_z(\theta) = \begin{bmatrix} \cos\theta & -\sin\theta & 0 \\ \sin\theta & \cos\theta & 0 \\ 0 & 0 & 1 \end{bmatrix}$$
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">三维单位立方体在 3×3 矩阵下的倾斜变形</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-3d-x" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/></marker>
+    <marker id="arr-3d-y" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+    <marker id="arr-3d-z" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/></marker>
+  </defs>
+  <rect width="500" height="300" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">三维空间中的线性变换：3×3 矩阵的几何化</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">三个基向量 î, ĵ, k̂ 在 3D 变换后的终点，对应 3×3 矩阵的三列</text>
+
+  <!-- 3D Coordinate axes in isometric projection -->
+  <!-- Origin at (160, 200) -->
+  <!-- x axis: down-left (-40, 25) -->
+  <!-- y axis: right (60, 0) -->
+  <!-- z axis: up (0, -70) -->
+  <g transform="translate(160, 190)">
+    <!-- Axes lines -->
+    <line x1="0" y1="0" x2="-90" y2="55" stroke="#475569" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="120" y2="0" stroke="#475569" stroke-width="1.5"/>
+    <line x1="0" y1="0" x2="0" y2="-120" stroke="#475569" stroke-width="1.5"/>
+    
+    <!-- Unit Cube in 3D (Transformed Parallelepiped) -->
+    <!-- Front face -->
+    <polygon points="0,0 -50,30 20,30 70,0" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="1"/>
+    <!-- Top face -->
+    <polygon points="0,-70 -50,-40 20,-40 70,-70" fill="rgba(168, 85, 247, 0.15)" stroke="#c084fc" stroke-width="1"/>
+    <!-- Side face -->
+    <polygon points="70,0 20,30 20,-40 70,-70" fill="rgba(52, 211, 153, 0.15)" stroke="#34d399" stroke-width="1"/>
+
+    <!-- Basis vectors -->
+    <!-- i-hat: along x-axis -->
+    <line x1="0" y1="0" x2="-45" y2="28" stroke="#34d399" stroke-width="3.5" marker-end="url(#arr-3d-x)"/>
+    <text x="-80" y="40" fill="#34d399" font-weight="bold" font-size="12">î [1,0,0]ᵀ</text>
+
+    <!-- j-hat: along y-axis -->
+    <line x1="0" y1="0" x2="65" y2="0" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arr-3d-y)"/>
+    <text x="75" y="15" fill="#38bdf8" font-weight="bold" font-size="12">ĵ [0,1,0]ᵀ</text>
+
+    <!-- k-hat: along z-axis -->
+    <line x1="0" y1="0" x2="0" y2="-65" stroke="#f43f5e" stroke-width="3.5" marker-end="url(#arr-3d-z)"/>
+    <text x="8" y="-70" fill="#f43f5e" font-weight="bold" font-size="12">k̂ [0,0,1]ᵀ</text>
+
+    <circle cx="0" cy="0" r="4" fill="#fff"/>
+  </g>
+
+  <!-- Right side Matrix mapping formula card -->
+  <g transform="translate(310, 70)">
+    <rect width="170" height="180" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="#334155"/>
+    <text x="15" y="28" fill="#fbbf24" font-weight="bold" font-size="12">3×3 矩阵列排布：</text>
+    
+    <g transform="translate(20, 50)" font-family="monospace" font-size="12">
+      <text x="0" y="20" fill="#cbd5e1">[</text>
+      <text x="12" y="20" fill="#34d399">T(î)₁</text>
+      <text x="50" y="20" fill="#38bdf8">T(ĵ)₁</text>
+      <text x="88" y="20" fill="#f43f5e">T(k̂)₁</text>
+      <text x="125" y="20" fill="#cbd5e1">]</text>
+
+      <text x="0" y="45" fill="#cbd5e1">[</text>
+      <text x="12" y="45" fill="#34d399">T(î)₂</text>
+      <text x="50" y="45" fill="#38bdf8">T(ĵ)₂</text>
+      <text x="88" y="45" fill="#f43f5e">T(k̂)₂</text>
+      <text x="125" y="45" fill="#cbd5e1">]</text>
+
+      <text x="0" y="70" fill="#cbd5e1">[</text>
+      <text x="12" y="70" fill="#34d399">T(î)₃</text>
+      <text x="50" y="70" fill="#38bdf8">T(ĵ)₃</text>
+      <text x="88" y="70" fill="#f43f5e">T(k̂)₃</text>
+      <text x="125" y="70" fill="#cbd5e1">]</text>
+    </g>
+    <text x="15" y="150" fill="#94a3b8" font-size="11">每个列向量是对应的基向量在 3D 中的落点！</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 三个基向量 $\hat{i}, \hat{j}, \hat{k}$ 围成的单位立方体，在变换后演化为一个空间平行六面体。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-blue);font-weight:700;margin-bottom:0.4rem;">💡 3B1B 空间想象建议</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              不要试图在脑海中追踪三维空间中全部数以亿计的点，只需要牢牢盯住 $\hat{i}, \hat{j}, \hat{k}$ 这三个小箭头在空间中的姿态翻转与拉伸，其余所有点都将如同被磁铁吸引的铁屑一样随之共舞。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch3">← 上一讲：Chapter 3 矩阵乘法与复合</a>
+        <a href="#ch5">下一讲：Chapter 5 行列式的几何本质 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch5" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 5</span> 行列式的几何本质：空间缩放因子</h2>
+          <div class="chapter-en-title">The determinant</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “行列式绝不是繁琐的对角线交叉相乘公式。在几何上，它度量的是线性变换对空间‘面积’或‘体积’的缩放比例！如果行列式为 0，说明空间被残忍地压扁降维了。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 什么是行列式？(Scaling Factor of Area)</h3>
+          <p>
+            在二维平面上，考虑以基向量 $\hat{i}$ 与 $\hat{j}$ 为邻边的单位正方形，其面积显然为 $1$。
+            经过一个矩阵 $A$ 变换后，这个正方形被拉伸或剪切成了一个平行四边形，其邻边分别为 $A\hat{i}$ 和 $A\hat{j}$。
+          </p>
+          <p>
+            这个新平行四边形的面积，就是矩阵行列式的绝对值：<strong>$|\det(A)|$</strong>！
+            更重要的是，因为线性变换的网格等距均匀性，空间中<strong>任何形状</strong>（圆形、猫咪轮廓、复杂多边形）在经过变换后，其面积都会严格按照<strong>相同的比例 $\det(A)$</strong> 被等比放大或缩小！
+          </p>
+
+          <h3>2. 行列式的正负号：定向 (Orientation) 是否翻转？</h3>
+          <p>
+            为什么行列式有时候会出现负数？面积明明不可能是负的！
+          </p>
+          <p>
+            3Blue1Brown 给出了极为精妙的直觉：<strong>负号反映了空间的“定向（Orientation）”被颠倒了！</strong>
+            在二维平面中，基向量 $\hat{j}$ 原本位于 $\hat{i}$ 的逆时针方向（左侧）。如果某个变换将纸张“翻了个面”，使得 $T(\hat{j})$ 落在了 $T(\hat{i})$ 的顺时针方向（右侧），那么空间定向便发生了反转，行列式就带上了负号。
+            在三维空间中，负行列式对应着右手坐标系被翻转成了左手坐标系。
+          </p>
+
+          <h3>3. 行列式为 0 的致命几何真相：空间坍缩！</h3>
+          <p>
+            当 $\det(A) = 0$ 时，意味着原本具有面积的二维平面，被变换压缩成了一条<strong>一维直线</strong>，甚至缩减为孤立的<strong>原点 (0维)</strong>！
+            一条线在二维平面中的面积恒等于零。这直接解释了为什么 $\det(A) = 0$ 的矩阵不可逆：<strong>一旦降维，被压扁的信息无法无中生有地逆向还原！</strong>
+          </p>
+
+          <h3>4. 为什么 $\det(AB) = \det(A)\det(B)$？</h3>
+          <p>
+            若用代数公式证明这一性质，需要展开庞大的代数余子式或排列逆序数。
+            然而在几何视角下一目了然：先进行变换 $B$，面积放大了 $\det(B)$ 倍；紧接着进行变换 $A$，现有的面积再放大 $\det(A)$ 倍。
+            总缩放倍数自然就是二者的乘积 $\det(A) \cdot \det(B)$！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">单位正方形至平行四边形的面积缩放</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-det-v1" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+    <marker id="arr-det-v2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">行列式的几何本质：空间缩放因子 (Scaling Factor of Area)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">单位正方形经过线性变换后，变为底和高决定的平行四边形，面积放大为 |det(A)| 倍</text>
+
+  <!-- Left: Unit Area = 1 -->
+  <g transform="translate(45, 80)">
+    <text x="25" y="-10" fill="#94a3b8" font-size="12" font-weight="bold">变换前：基底单位正方形</text>
+    <line x1="0" y1="120" x2="130" y2="120" stroke="#475569" stroke-width="1.5"/>
+    <line x1="20" y1="140" x2="20" y2="20" stroke="#475569" stroke-width="1.5"/>
+    <!-- 1x1 square (size 60x60) -->
+    <rect x="20" y="60" width="60" height="60" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.5"/>
+    <circle cx="20" cy="120" r="3" fill="#fff"/>
+    <line x1="20" y1="120" x2="80" y2="120" stroke="#34d399" stroke-width="3"/>
+    <line x1="20" y1="120" x2="20" y2="60" stroke="#f43f5e" stroke-width="3"/>
+    <text x="35" y="95" fill="#f8fafc" font-weight="bold" font-size="13">面积 = 1</text>
+    <text x="45" y="135" fill="#34d399" font-size="11">î (1,0)</text>
+    <text x="-5" y="85" fill="#f43f5e" font-size="11">ĵ (0,1)</text>
+  </g>
+
+  <!-- Center Arrow: det(A) scaling -->
+  <g transform="translate(195, 130)">
+    <path d="M 0 15 Q 25 0 50 15" fill="none" stroke="#fbbf24" stroke-width="2.5"/>
+    <polygon points="53,17 45,12 47,19" fill="#fbbf24"/>
+    <text x="0" y="-5" fill="#fbbf24" font-weight="bold" font-size="12">det(A) 倍放大</text>
+  </g>
+
+  <!-- Right: Transformed Parallelogram -->
+  <g transform="translate(270, 70)">
+    <text x="30" y="0" fill="#38bdf8" font-size="12" font-weight="bold">变换后：平行四边形</text>
+    <line x1="0" y1="130" x2="210" y2="130" stroke="#475569" stroke-width="1.5"/>
+    <line x1="30" y1="150" x2="30" y2="10" stroke="#475569" stroke-width="1.5"/>
+    <!-- Parallelogram: (30,130), (120, 130), (160, 40), (70, 40) -->
+    <polygon points="30,130 130,130 180,40 80,40" fill="rgba(244, 63, 94, 0.25)" stroke="#f43f5e" stroke-width="2"/>
+    <line x1="30" y1="130" x2="128" y2="130" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arr-det-v1)"/>
+    <line x1="30" y1="130" x2="78" y2="42" stroke="#f43f5e" stroke-width="3.5" marker-end="url(#arr-det-v2)"/>
+    <text x="75" y="90" fill="#fbbf24" font-weight="bold" font-size="14">面积 = |det(A)|</text>
+    <text x="60" y="148" fill="#38bdf8" font-size="11">A·î = [3, 0]ᵀ</text>
+    <text x="35" y="35" fill="#f43f5e" font-size="11">A·ĵ = [1.5, 2.5]ᵀ</text>
+  </g>
+
+  <!-- Bottom: Det=0 & Orientation explanation -->
+  <g transform="translate(30, 240)">
+    <rect width="460" height="55" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="15" y="22" fill="#fbbf24" font-weight="bold" font-size="11">⚡ 正负号与降维本质：</text>
+    <text x="15" y="40" fill="#cbd5e1" font-size="11">● <tspan fill="#f43f5e">det(A) &lt; 0</tspan>：空间发生翻转（定向改变，基底从右手系变成左手系）</text>
+    <text x="250" y="40" fill="#cbd5e1" font-size="11">● <tspan fill="#38bdf8">det(A) = 0</tspan>：空间发生降维坍缩（面压成线，不可逆！）</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 单位正方形（面积 1）变换后的平行四边形面积就是 $|\det(A)|$。若基向量手性相反，则 $\det(A) < 0$。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-rose);font-weight:700;margin-bottom:0.4rem;">二维行列式代数公式</div>
+            $$\det \begin{bmatrix} a & b \\ c & d \end{bmatrix} = ad - bc$$
+            <p style="font-size:0.82rem;color:#cbd5e1;margin-top:0.4rem;">
+              $ad$ 代表主对角线构成的矩形面积，$bc$ 代表剪切倾斜带来的抵消项。当且仅当两列线性相关（共线）时，$ad - bc = 0$。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch4">← 上一讲：Chapter 4 三维线性变换</a>
+        <a href="#ch6">下一讲：Chapter 6 逆矩阵、列空间与零空间 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch6" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 6</span> 逆矩阵、列空间与零空间</h2>
+          <div class="chapter-en-title">Inverse matrices, column space and null space</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “求解线性方程组 $A\vec{x} = \vec{v}$，在几何上相当于在问：空间中原本哪个向量 $\vec{x}$，在经历矩阵 $A$ 的网格扭曲后，恰好落在了 $\vec{v}$ 的位置？”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 逆矩阵的几何真谛：倒带还原</h3>
+          <p>
+            如果变换 $A$ 顺时针旋转了 90°，那么它的<strong>逆变换 $A^{-1}$</strong> 就是逆时针旋转 90°；
+            如果 $A$ 将空间向右水平剪切，那么 $A^{-1}$ 就向左反向剪切。
+            二者相乘 $A^{-1}A = I$，代表空间在一番折腾后回到了最初的原貌。
+          </p>
+          <p>
+            如果 $\det(A) \neq 0$，空间没有被降维，每一个输入点与输出点一一对应，逆变换 $A^{-1}$ 必然存在，方程有唯一解 $\vec{x} = A^{-1}\vec{v}$。
+          </p>
+
+          <h3>2. 为什么降维不可逆？</h3>
+          <p>
+            如果 $\det(A) = 0$，二维平面被压扁成了一条线。
+            现在给你线上的一点 $\vec{v}$，问原本是哪一个点变换过来的？
+            答案是有无数个！整条与投影垂直的直线上的所有点都被压缩重叠到了这个点上。
+            你无法将一维的线“解压”还原为二维的面，就像你无法把被踩扁的易拉罐无损吹回原形一样。
+          </p>
+
+          <h3>3. 列空间 (Column Space) 与秩 (Rank)</h3>
+          <p>
+            矩阵所有列向量张成的空间被称为<strong>列空间 $\text{Col}(A)$</strong>。
+            列向量代表基底变换后的落点，因此列空间就是<strong>变换所有可能输出向量的集合（值域）</strong>。
+          </p>
+          <p>
+            <strong>秩（Rank）：</strong>输出空间的实际维度。
+            如果变换后输出依然铺满二维平面，则 $\text{Rank} = 2$（满秩）；如果被压成一条线，则 $\text{Rank} = 1$；如果全部压成原点，则 $\text{Rank} = 0$。
+          </p>
+
+          <h3>4. 零空间 / 核 (Null Space / Kernel)</h3>
+          <p>
+            在发生降维时，必然会有一些非零向量在变换后被无情地压缩映射到了<strong>原点 $\vec{0}$</strong>！
+            所有满足 $A\vec{x} = \vec{0}$ 的输入向量 $\vec{x}$ 构成的集合，就称为矩阵的<strong>零空间 $\text{Null}(A)$</strong>。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">降维坍缩：零空间投影至原点</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-map" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">降维坍缩、列空间与零空间 (Null Space & Column Space)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">当 det(A)=0 时，空间被压扁。输出空间为列空间，坍缩到原点的所有点构成零空间。</text>
+
+  <!-- Left: Domain (2D Plane) with Null Space highlighted -->
+  <g transform="translate(40, 75)">
+    <rect width="180" height="170" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#475569"/>
+    <text x="15" y="22" fill="#94a3b8" font-weight="bold" font-size="11">输入空间 ℝ² (定义域)</text>
+    <!-- Axes -->
+    <line x1="20" y1="95" x2="160" y2="95" stroke="#64748b" stroke-width="1"/>
+    <line x1="90" y1="25" x2="90" y2="160" stroke="#64748b" stroke-width="1"/>
+    <!-- Null Space line: y = -x (all vectors mapped to 0) -->
+    <line x1="40" y1="145" x2="140" y2="45" stroke="#f43f5e" stroke-width="3"/>
+    <circle cx="90" cy="95" r="4" fill="#fff"/>
+    <!-- Samples on Null space line -->
+    <circle cx="65" cy="120" r="3" fill="#f43f5e"/>
+    <circle cx="115" cy="70" r="3" fill="#f43f5e"/>
+    <text x="100" y="50" fill="#f43f5e" font-weight="bold" font-size="11">零空间 Null(A)</text>
+    <text x="35" y="155" fill="#f43f5e" font-size="10">整条线上的向量经过变换后全部被压碎成原点！</text>
+  </g>
+
+  <!-- Middle transition -->
+  <g transform="translate(235, 140)">
+    <line x1="0" y1="10" x2="40" y2="10" stroke="#c084fc" stroke-width="3" marker-end="url(#arr-map)"/>
+    <text x="-5" y="-5" fill="#c084fc" font-size="11" font-weight="bold">矩阵 A 变换</text>
+    <text x="0" y="32" fill="#94a3b8" font-size="10">det(A)=0</text>
+  </g>
+
+  <!-- Right: Codomain / Target with 1D Column Space -->
+  <g transform="translate(290, 75)">
+    <rect width="190" height="170" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#475569"/>
+    <text x="15" y="22" fill="#38bdf8" font-weight="bold" font-size="11">输出空间 (值域)</text>
+    <!-- Axes -->
+    <line x1="20" y1="95" x2="170" y2="95" stroke="#64748b" stroke-width="1"/>
+    <line x1="95" y1="25" x2="95" y2="160" stroke="#64748b" stroke-width="1"/>
+    <!-- Output line: Column Space (Rank = 1) -->
+    <line x1="30" y1="145" x2="160" y2="45" stroke="#38bdf8" stroke-width="3.5"/>
+    <circle cx="95" cy="95" r="5" fill="#f43f5e"/>
+    <text x="105" y="105" fill="#f43f5e" font-weight="bold" font-size="11">O (原点)</text>
+    <text x="80" y="40" fill="#38bdf8" font-weight="bold" font-size="11">列空间 Col(A) = 1D 直线</text>
+    <text x="30" y="155" fill="#34d399" font-size="10">Rank(A) = 1 (输出空间维数)</text>
+  </g>
+
+  <!-- Bottom theorem banner -->
+  <g transform="translate(40, 260)">
+    <rect width="440" height="40" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="20" y="25" fill="#fbbf24" font-size="11">✦ <tspan font-weight="bold">秩-零度定理直觉：</tspan>输入空间维数 (2) = 列空间维数 Rank (1) + 零空间维数 Nullity (1)</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 输入平面中的整条红线（零空间）被压为输出空间的原点；而所有输出向量集中在一条倾斜直线上（列空间，Rank=1）。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-amber);font-weight:700;margin-bottom:0.4rem;">秩-零度定理 (Rank-Nullity Theorem)</div>
+            $$\dim(\text{Domain}) = \text{Rank}(A) + \text{Nullity}(A)$$
+            <p style="font-size:0.82rem;color:#cbd5e1;margin-top:0.4rem;">
+              出发空间的自由度（列数 $n$）= 输出维数（被保留的维度 $\text{Rank}$）+ 坍缩至原点的维数（被摧毁的维度 $\text{Nullity}$）。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch5">← 上一讲：Chapter 5 行列式的几何本质</a>
+        <a href="#ch7">下一讲：Chapter 7 非方阵：跨维度的变换 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch7" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 7</span> 非方阵：跨维度的线性变换</h2>
+          <div class="chapter-en-title">Nonsquare matrices as transformations between dimensions</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “矩阵不一定必须是正方形。非方阵代表着空间维度的跃迁：它可以是将二维平面嵌入三维世界，也可以是将三维实体强行压平到二维画布。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 为什么会有非方阵？</h3>
+          <p>
+            我们之前讨论的都是 $2 \times 2$ 或 $3 \times 3$ 的方阵，它们的输入与输出空间维度相同。
+            但在现实科学与机器学习中，数据经常在不同维度之间流转：例如将 100 维的图像特征压缩至 10 维的隐空间。
+            这种<strong>跨维度的几何映射</strong>正是由非方阵实现的。
+          </p>
+
+          <h3>2. 3×2 矩阵：升维映射 (2D 到 3D)</h3>
+          <p>
+            考虑一个 $3 \times 2$ 的矩阵：
+          </p>
+          <div class="formula-box">
+            $$A = \begin{bmatrix} 2 & 0 \\ -1 & 1 \\ 3 & 2 \end{bmatrix}$$
+          </div>
+          <p>
+            观察它的结构：<strong>它有 2 列，每列有 3 个坐标数字。</strong>
+          </p>
+          <ul class="key-points">
+            <li><strong>列数 = 2：</strong>意味着输入空间有两个基向量 $\hat{i}, \hat{j}$，出发地是<strong>二维平面 $\mathbb{R}^2$</strong>！</li>
+            <li><strong>行数 = 3：</strong>意味着基向量变换后的落点需要 3 个坐标来描述，目的地是<strong>三维空间 $\mathbb{R}^3$</strong>！</li>
+            <li><strong>几何图像：</strong>它将平坦的二维平面输入，映射为三维空间中一片穿过原点的<strong>倾斜二维薄板（平面）</strong>！</li>
+          </ul>
+
+          <h3>3. 2×3 矩阵：降维映射 (3D 到 2D)</h3>
+          <p>
+            反过来，一个 $2 \times 3$ 矩阵拥有 3 列（输入空间是三维），但只有 2 行（输出在二维平面）。
+            这相当于把三维空间中的三条基向量 $\hat{i}, \hat{j}, \hat{k}$ 全部拍扁压射到一个平面上，就像在 2D 电脑屏幕上投射 3D 阴影一样。
+            三维到二维的映射必然会发生信息坍缩，因此存在不可避免的非平凡零空间。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">3×2 矩阵将 2D 平面嵌入 3D 空间</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-dim" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect width="520" height="300" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">非方阵：跨维度的线性变换 (3×2 矩阵：升维映射)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">输入是 2 维坐标，输出落在 3 维空间中；列数表示输入维度，行数表示输出维度</text>
+
+  <!-- Left: 2D Input Space -->
+  <g transform="translate(40, 75)">
+    <rect width="150" height="150" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="15" y="22" fill="#34d399" font-weight="bold" font-size="11">输入空间：ℝ² (2 个基向量)</text>
+    <line x1="20" y1="110" x2="130" y2="110" stroke="#64748b"/>
+    <line x1="40" y1="20" x2="40" y2="135" stroke="#64748b"/>
+    <!-- î and ĵ -->
+    <line x1="40" y1="110" x2="90" y2="110" stroke="#34d399" stroke-width="3" marker-end="url(#arr-dim)"/>
+    <line x1="40" y1="110" x2="40" y2="60" stroke="#f43f5e" stroke-width="3" marker-end="url(#arr-dim)"/>
+    <circle cx="40" cy="110" r="3" fill="#fff"/>
+    <text x="65" y="102" fill="#34d399" font-size="10">î</text>
+    <text x="25" y="80" fill="#f43f5e" font-size="10">ĵ</text>
+    <text x="15" y="140" fill="#94a3b8" font-size="10">输入向量 [x, y]ᵀ</text>
+  </g>
+
+  <!-- Middle Matrix banner -->
+  <g transform="translate(205, 125)">
+    <line x1="0" y1="15" x2="45" y2="15" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-dim)"/>
+    <text x="-5" y="0" fill="#fbbf24" font-weight="bold" font-size="11">3×2 矩阵变换</text>
+    <text x="-15" y="40" fill="#94a3b8" font-family="monospace" font-size="10">[3行 × 2列]</text>
+  </g>
+
+  <!-- Right: 3D Embedded Sheet Plane -->
+  <g transform="translate(275, 70)">
+    <rect width="210" height="160" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="15" y="22" fill="#38bdf8" font-weight="bold" font-size="11">输出空间：ℝ³ 中的一片斜切平面</text>
+    <!-- 3D Axes -->
+    <line x1="80" y1="110" x2="30" y2="140" stroke="#64748b"/>
+    <line x1="80" y1="110" x2="160" y2="110" stroke="#64748b"/>
+    <line x1="80" y1="110" x2="80" y2="35" stroke="#64748b"/>
+    <circle cx="80" cy="110" r="3" fill="#fff"/>
+    <!-- Floating tilted 2D Plane Sheet inside 3D -->
+    <polygon points="50,130 150,110 170,55 70,75" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.5"/>
+    <line x1="80" y1="110" x2="120" y2="102" stroke="#34d399" stroke-width="3"/>
+    <line x1="80" y1="110" x2="75" y2="85" stroke="#f43f5e" stroke-width="3"/>
+    <text x="80" y="65" fill="#38bdf8" font-size="10">T(ℝ²) = 2D 嵌入平面</text>
+    <text x="25" y="152" fill="#94a3b8" font-size="10">列数 (2) = 输入自由度；行数 (3) = 所在环境空间</text>
+  </g>
+
+  <!-- Bottom Rule -->
+  <rect x="40" y="245" width="445" height="40" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+  <text x="55" y="270" fill="#f8fafc" font-size="11">🔑 规律记忆：<tspan fill="#34d399">列数</tspan> 是出发空间的维数，<tspan fill="#38bdf8">行数</tspan> 是到达空间的维度坐标分量数。</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 2D 的两个基向量通过 3×2 矩阵映射为 3D 空间中的两个空间向量，张成一片浮空的斜切平面。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-blue);font-weight:700;margin-bottom:0.4rem;">🔑 3B1B 黄金法则：行与列的物理意义</div>
+            <ul style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;list-style:none;">
+              <li>• <strong>矩阵列数（Columns）：</strong>输入空间的维度（我们有多少个基底需要追踪？）。</li>
+              <li>• <strong>矩阵行数（Rows）：</strong>输出空间的维度（每个基底落点需要几个坐标描述？）。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch6">← 上一讲：Chapter 6 逆矩阵与零空间</a>
+        <a href="#ch8">下一讲：Chapter 8 点积与对偶性 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch8" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 8</span> 点积与对偶性：代数与几何的终极桥梁</h2>
+          <div class="chapter-en-title">Dot products and duality</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “为什么‘分量相乘再相加’的代数点积，恰好等于‘投影长度乘以模长’的几何点积？答案藏在深邃的对偶性（Duality）之中：每一个高维向一维数轴的线性投影变换，都唯一潜伏着一个对偶向量！”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 传统教学中的巨大割裂</h3>
+          <p>
+            中学数学通常抛给我们两个看似风马牛不相及的点积定义：
+          </p>
+          <div class="formula-box">
+            $$\vec{u} \cdot \vec{v} = u_1 v_1 + u_2 v_2 \quad \Longleftrightarrow \quad \vec{u} \cdot \vec{v} = \|\vec{u}\| \|\vec{v}\| \cos\theta$$
+          </div>
+          <p>
+            一个只是机械地把数字乘起来加在一起，另一个却涉及几何投影与夹角余弦。为什么这两者会神奇地完全相等？
+          </p>
+
+          <h3>2. 二维降为一维的线性变换</h3>
+          <p>
+            3Blue1Brown 引导我们换一个视角：考虑一个从二维平面映射到一维数轴的线性变换 $T: \mathbb{R}^2 \to \mathbb{R}^1$。
+            根据 Chapter 2 的原理，任何线性变换都可以用矩阵表示。
+            由于输出只有 1 个维度（数轴上的一个标量），而输入有 2 个维度，因此这个变换矩阵必定是 <strong>$1 \times 2$ 的单行矩阵</strong>：
+          </p>
+          <div class="formula-box">
+            $$T(\vec{v}) = \begin{bmatrix} u_x & u_y \end{bmatrix} \begin{bmatrix} x \\ y \end{bmatrix} = u_x x + u_y y$$
+          </div>
+
+          <h3>3. 几何投影本身就是一个线性变换！</h3>
+          <p>
+            在平面上任意选定一条穿过原点的数轴，并将一个<strong>单位向量 $\hat{u}$</strong> 放置在其上。
+            现在把空间中所有向量<strong>正交垂直投影</strong>到这条数轴上。
+            容易验证：如果一条直线上的点等距分布，投影到数轴后依然等距分布，原点依然落在 0。
+            这意味着：<strong>向单位向量 $\hat{u}$ 的正交投影，是一个百分之百纯正的线性变换！</strong>
+          </p>
+
+          <h3>4. 对偶性 (Duality) 揭开谜底</h3>
+          <p>
+            既然正交投影是一个线性变换，它就必定有一个对应的 $1 \times 2$ 矩阵。
+            这个矩阵的第一项是 $\hat{i}$ 投影到数轴上的数值，第二项是 $\hat{j}$ 投影到数轴上的数值。
+            由对称性可知，$\hat{i}$ 投影到 $\hat{u}$ 上的长度，正好等于 $\hat{u}$ 的横坐标 $u_x$！同理第二项正是 $u_y$！
+          </p>
+          <p>
+            于是，正交投影的变换矩阵就是 $[u_x, u_y]$。
+            代数点积 $u_x x + u_y y$ 根本不是什么随机的运算法则，它<strong>本质上就是投影变换矩阵乘以向量的几何计算！</strong>
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">向斜数轴正交投影与 1×2 对偶矩阵</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-u" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/></marker>
+    <marker id="arr-v" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">点积与对偶性：投影几何与 1×2 矩阵的统一</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">任何将 2D 降为 1D 的线性变换，都唯一对应一个向量；点积就是该对偶变换矩阵的作用！</text>
+
+  <!-- Main Coordinate Area -->
+  <g transform="translate(60, 75)">
+    <!-- Origin at (50, 140) -->
+    <circle cx="50" cy="140" r="4" fill="#fff"/>
+    <text x="35" y="155" fill="#94a3b8" font-size="11">O</text>
+
+    <!-- Slanted Number line in direction of unit vector u -->
+    <line x1="-10" y1="170" x2="320" y2="40" stroke="#475569" stroke-width="2"/>
+    <!-- Ticks on slanted number line -->
+    <circle cx="50" cy="140" r="3" fill="#64748b"/>
+    <circle cx="110" cy="115" r="3" fill="#64748b"/>
+    <circle cx="170" cy="90" r="3" fill="#64748b"/>
+    <circle cx="230" cy="65" r="3" fill="#64748b"/>
+    <text x="105" y="132" fill="#64748b" font-size="10">1</text>
+    <text x="165" y="107" fill="#64748b" font-size="10">2</text>
+    <text x="225" y="82" fill="#64748b" font-size="10">3</text>
+    <text x="310" y="35" fill="#34d399" font-weight="bold" font-size="11">投影轴 u</text>
+
+    <!-- Unit vector u -->
+    <line x1="50" y1="140" x2="108" y2="116" stroke="#34d399" stroke-width="4" marker-end="url(#arr-u)"/>
+    <text x="75" y="112" fill="#34d399" font-weight="bold" font-size="12">û (单位向量)</text>
+
+    <!-- Vector v -->
+    <line x1="50" y1="140" x2="160" y2="30" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arr-v)"/>
+    <text x="168" y="28" fill="#38bdf8" font-weight="bold" font-size="13">v [x, y]ᵀ</text>
+
+    <!-- Perpendicular projection line from v to line of u -->
+    <!-- Proj point on line: (150, 98) approx -->
+    <line x1="160" y1="30" x2="148" y2="100" stroke="#fbbf24" stroke-width="2" stroke-dasharray="4"/>
+    <circle cx="148" cy="100" r="4" fill="#fbbf24"/>
+    <!-- Right angle symbol -->
+    <path d="M 144 80 L 158 84 L 152 98" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+
+    <!-- Projection Length Bracket/Highlight -->
+    <line x1="50" y1="140" x2="148" y2="100" stroke="#fbbf24" stroke-width="3"/>
+    <text x="75" y="160" fill="#fbbf24" font-weight="bold" font-size="12">投影长度 = u · v</text>
+  </g>
+
+  <!-- Right side Duality Explanation Card -->
+  <g transform="translate(320, 95)">
+    <rect width="175" height="150" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="15" y="25" fill="#a855f7" font-weight="bold" font-size="11">对偶性 (Duality)：</text>
+    <text x="15" y="48" fill="#cbd5e1" font-size="10">2D 到 1D 线性映射 T(v)</text>
+    <text x="15" y="66" fill="#cbd5e1" font-size="10">对应 1×2 矩阵：</text>
+    <g transform="translate(20, 80)" font-family="monospace" font-size="12">
+      <text x="0" y="12" fill="#34d399">[ u_x </text>
+      <text x="50" y="12" fill="#34d399">u_y ]</text>
+      <text x="90" y="12" fill="#38bdf8">[ x ]</text>
+      <text x="90" y="28" fill="#38bdf8">[ y ]</text>
+    </g>
+    <text x="15" y="130" fill="#fbbf24" font-weight="bold" font-size="11">= u_x · x + u_y · y</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 将向量垂直投影到单位向量 $\hat{u}$ 所在的数轴上，投影刻度正好等于对偶行矩阵 $[u_x, u_y]$ 乘 $[x, y]^T$。</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-green);font-weight:700;margin-bottom:0.4rem;">对偶原理 (Riesz Duality)</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              对于任何将向量空间 $V$ 压缩至一维标量的线性泛函 $T(\vec{v})$，在空间中都<strong>必然存在唯一的向量 $\vec{u}$</strong>，使得：
+              $$T(\vec{v}) = \vec{u} \cdot \vec{v}$$
+              向量与线性变换，在点积的透镜下互为对偶表里。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch7">← 上一讲：Chapter 7 非方阵变换</a>
+        <a href="#ch9">下一讲：Chapter 9 叉积初探 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch9" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 9</span> 叉积初探：有向面积与空间正交</h2>
+          <div class="chapter-en-title">Cross products</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “点积将两个向量融合成一个标量；而叉积则让两个三维向量结合，诞生出一个全新的正交向量。它的模长记录着它们拥抱的面积，它的指向守护着右手定则的尊严。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 二维伪叉积：有向平行四边形面积</h3>
+          <p>
+            在进入三维之前，我们先考察二维。两个向量 $\vec{v} = [v_1, v_2]^T$ 与 $\vec{w} = [w_1, w_2]^T$ 所围成的平行四边形面积，
+            直接等于由它们构成的矩阵行列式：
+          </p>
+          <div class="formula-box">
+            $$\text{面积} = \det \begin{bmatrix} v_1 & w_1 \\ v_2 & w_2 \end{bmatrix} = v_1 w_2 - v_2 w_1$$
+          </div>
+          <p>
+            如果 $\vec{v}$ 在 $\vec{w}$ 的顺时针方向，行列式为正；若为逆时针，行列式为负。
+          </p>
+
+          <h3>2. 三维真正的叉积：$\vec{v} \times \vec{w}$</h3>
+          <p>
+            在三维空间中，两个向量 $\vec{v}$ 和 $\vec{w}$ 叉乘的结果是一个<strong>全新的三维向量 $\vec{p} = \vec{v} \times \vec{w}$</strong>。
+            这个新向量由三大几何特征完全锁定：
+          </p>
+          <ul class="key-points">
+            <li><strong>特征一（模长）：</strong>$\|\vec{v} \times \vec{w}\| = \|\vec{v}\| \|\vec{w}\| \sin\theta$。其长度恰好等于 $\vec{v}$ 和 $\vec{w}$ 张成的平行四边形的实际几何面积！</li>
+            <li><strong>特征二（方向）：</strong>$\vec{v} \times \vec{w}$ 必须<strong>同时垂直于 $\vec{v}$ 和 $\vec{w}$</strong>，即垂直于它们所在的底面！</li>
+            <li><strong>特征三（定向）：</strong>遵循<strong>右手定则（Right-hand Rule）</strong>。右手四指由 $\vec{v}$ 弯向 $\vec{w}$，大拇指坚决竖起所指的方向就是叉积的朝向。</li>
+          </ul>
+
+          <h3>3. 教科书上的神秘代数技巧</h3>
+          <p>
+            所有教材都会教你用一个“伪行列式”来记忆计算：
+          </p>
+          <div class="formula-box">
+            $$\vec{v} \times \vec{w} = \det \begin{bmatrix} \hat{i} & \hat{j} & \hat{k} \\ v_1 & v_2 & v_3 \\ w_1 & w_2 & w_3 \end{bmatrix} = \begin{bmatrix} v_2 w_3 - v_3 w_2 \\ v_3 w_1 - v_1 w_3 \\ v_1 w_2 - v_2 w_1 \end{bmatrix}$$
+          </div>
+          <p>
+            为什么能把基向量 $\hat{i}, \hat{j}, \hat{k}$ 当作数字塞进第一行？这究竟是一个无厘头的巧合记忆法，还是背后有极其深邃的数学必然？3Blue1Brown 在下一讲将为您彻底掀开面纱！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">三维叉积：底面平行四边形与垂直法向量</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-cross-res" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/></marker>
+    <marker id="arr-cross-v" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+    <marker id="arr-cross-w" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">叉积初探 (Cross Products)：正交向量与右手定则</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">v × w 生成同时垂直于二者的三维向量，模长等于它们所围平行四边形的面积</text>
+
+  <!-- 3D Perspective of Cross Product -->
+  <g transform="translate(140, 190)">
+    <!-- Base Plane Parallelogram defined by v and w -->
+    <!-- Origin (0,0) -->
+    <!-- v = (120, 20), w = (-60, -40) -->
+    <polygon points="0,0 120,20 60,-20 -60,-40" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.5"/>
+    
+    <!-- Vector v -->
+    <line x1="0" y1="0" x2="116" y2="19" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#arr-cross-v)"/>
+    <text x="125" y="30" fill="#38bdf8" font-weight="bold" font-size="13">v</text>
+
+    <!-- Vector w -->
+    <line x1="0" y1="0" x2="-58" y2="-38" stroke="#34d399" stroke-width="3.5" marker-end="url(#arr-cross-w)"/>
+    <text x="-80" y="-45" fill="#34d399" font-weight="bold" font-size="13">w</text>
+
+    <!-- Area label in parallelogram -->
+    <text x="20" y="-8" fill="#fbbf24" font-weight="bold" font-size="12">底面积 = |v × w|</text>
+
+    <!-- Result Vector: v x w pointing straight up -->
+    <line x1="0" y1="0" x2="0" y2="-125" stroke="#f43f5e" stroke-width="4.5" marker-end="url(#arr-cross-res)"/>
+    <text x="12" y="-120" fill="#f43f5e" font-weight="bold" font-size="15">v × w</text>
+
+    <!-- Right angle symbols indicating perpendicularity to both v and w -->
+    <path d="M 0 -20 L 15 -18 L 15 2" fill="none" stroke="#f43f5e" stroke-width="1.5"/>
+    <path d="M 0 -20 L -12 -24 L -12 -5" fill="none" stroke="#f43f5e" stroke-width="1.5"/>
+
+    <circle cx="0" cy="0" r="4" fill="#fff"/>
+  </g>
+
+  <!-- Right Side: 3 Rules of Cross Product -->
+  <g transform="translate(325, 75)">
+    <rect width="170" height="180" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="#334155"/>
+    <text x="15" y="25" fill="#fbbf24" font-weight="bold" font-size="12">叉积三大黄金法则：</text>
+    <g transform="translate(15, 45)" font-size="11" line-height="1.5">
+      <text x="0" y="0" fill="#f43f5e" font-weight="bold">1. 长度 (模长)：</text>
+      <text x="10" y="18" fill="#cbd5e1">|v × w| = |v||w|sin θ</text>
+      <text x="10" y="34" fill="#94a3b8">(张成平行四边形面积)</text>
+
+      <text x="0" y="58" fill="#38bdf8" font-weight="bold">2. 方向：</text>
+      <text x="10" y="74" fill="#cbd5e1">同时垂直于 v 与 w</text>
+
+      <text x="0" y="98" fill="#34d399" font-weight="bold">3. 定向 (右手定则)：</text>
+      <text x="10" y="114" fill="#cbd5e1">四指由 v 卷向 w，</text>
+      <text x="10" y="130" fill="#cbd5e1">大拇指指向 v × w</text>
+    </g>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 $\vec{v} \times \vec{w}$ 垂直竖起，模长精确等于底面阴影平行四边形的面积，朝向由右手定则支配。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-rose);font-weight:700;margin-bottom:0.4rem;">⚠️ 叉积的反交换律</div>
+            $$\vec{w} \times \vec{v} = -(\vec{v} \times \vec{w})$$
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.5;">
+              交换顺序会导致右手四指弯曲方向相反，大拇指被迫指向反面。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch8">← 上一讲：Chapter 8 点积与对偶性</a>
+        <a href="#ch10">下一讲：Chapter 10 线性变换视角下的叉积 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch10" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 10</span> 线性变换视角下的叉积：深层对偶性解析</h2>
+          <div class="chapter-en-title">Cross products in the light of linear transformations</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “教科书上把 $\hat{i}, \hat{j}, \hat{k}$ 塞进行列式的做法看起来像是一种黑魔法。但通过构建一个体积函数并诉诸对偶性，你会发现：叉积不仅是合理的，它甚至是宇宙为了平衡几何与代数而写下的必然篇章。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 破除黑魔法：构建体积变换函数</h3>
+          <p>
+            给定三维空间中两个固定的向量 $\vec{v}$ 和 $\vec{w}$。
+            现在我们构造一个数学函数 $f(\vec{x})$，它的输入是任意一个三维待测向量 $\vec{x} = [x, y, z]^T$，输出是将 $\vec{x}$ 与给定的 $\vec{v}, \vec{w}$ 拼成一个矩阵后的行列式：
+          </p>
+          <div class="formula-box">
+            $$f(\vec{x}) = \det \begin{bmatrix} x & v_1 & w_1 \\ y & v_2 & w_2 \\ z & v_3 & w_3 \end{bmatrix}$$
+          </div>
+          <p>
+            几何上，$f(\vec{x})$ 度量的是这三个向量所围成的<strong>三维平行六面体的有向体积</strong>！
+            由于行列式具有对第一列的多线性（线性可加性与数乘齐次性），这个函数 $f$ 是一个从 $\mathbb{R}^3$ 映射到一维实数标量 $\mathbb{R}^1$ 的<strong>严格线性变换</strong>！
+          </p>
+
+          <h3>2. 召唤对偶定理 (Riesz Duality)</h3>
+          <p>
+            回顾我们在 Chapter 8 领悟的对偶原理：
+            <strong>任何从 $\mathbb{R}^3$ 到 $\mathbb{R}^1$ 的线性变换，都必然唯一对应着三维空间中的某个特定向量 $\vec{p}$，使得该变换等价于与 $\vec{p}$ 做点积！</strong>
+          </p>
+          <div class="formula-box">
+            $$f(\vec{x}) = \vec{p} \cdot \vec{x} = p_1 x + p_2 y + p_3 z$$
+          </div>
+          <p>
+            现在问题变成了：<strong>这个神奇的对偶向量 $\vec{p}$ 究竟是谁？它长什么样？</strong>
+          </p>
+
+          <h3>3. 几何破案：寻找向量 $\vec{p}$</h3>
+          <p>
+            从立体几何知道，平行六面体的体积等于：<strong>底面积 $\times$ 高</strong>！
+          </p>
+          <ul class="key-points">
+            <li>底面是由固定向量 $\vec{v}$ 和 $\vec{w}$ 张成的平行四边形，其面积为 $\text{Area}(\vec{v}, \vec{w})$；</li>
+            <li>高 $h$ 是待测向量 $\vec{x}$ 在垂直于底面的法线方向上的<strong>正交投影长度</strong>！</li>
+          </ul>
+          <p>
+            再看点积的几何定义：$\vec{p} \cdot \vec{x} = \|\vec{p}\| \cdot (\vec{x} \text{ 在 } \vec{p} \text{ 上的投影长度})$。
+            为了让点积数值在任意 $\vec{x}$ 下都严格等于这个平行六面体的体积，向量 $\vec{p}$ 必须同时满足：
+          </p>
+          <ul class="key-points">
+            <li>$\vec{p}$ 的方向必须<strong>垂直于 $\vec{v}$ 和 $\vec{w}$ 构成的底面</strong>（这样投影长度才等于高 $h$）；</li>
+            <li>$\vec{p}$ 的模长 $\|\vec{p}\|$ 必须<strong>精确等于底面积</strong> $\text{Area}(\vec{v}, \vec{w})$！</li>
+            <li>$\vec{p}$ 的指向必须满足右手定则，使有向体积符号一致。</li>
+          </ul>
+          <p>
+            <strong>这三个条件，完完全全就是三维叉积 $\vec{v} \times \vec{w}$ 的定义！</strong>
+            由此，代数行列式与几何正交性通过对偶性完成了天衣无缝的逻辑闭环！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">平行六面体体积分解与对偶向量 p</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-c10-p" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#fbbf24"/></marker>
+    <marker id="arr-c10-x" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">以线性变换视角看叉积：体积函数与对偶性证明</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">构造体积函数 f(x) = det([x, v, w])。由对偶定理，必定存在向量 p 使得 f(x) = p · x！</text>
+
+  <!-- Parallelepiped 3D illustration -->
+  <g transform="translate(130, 200)">
+    <!-- Base parallelogram (v and w) -->
+    <polygon points="0,0 100,20 40,-20 -60,-40" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.5"/>
+    
+    <!-- Top parallelogram (shifted by x) -->
+    <!-- x = (40, -100) -->
+    <polygon points="40,-100 140,-80 80,-120 -20,-140" fill="rgba(168, 85, 247, 0.2)" stroke="#c084fc" stroke-width="1" stroke-dasharray="3"/>
+
+    <!-- Connecting edges -->
+    <line x1="0" y1="0" x2="40" y2="-100" stroke="#38bdf8" stroke-width="2"/>
+    <line x1="100" y1="20" x2="140" y2="-80" stroke="#64748b" stroke-width="1" stroke-dasharray="2"/>
+    <line x1="40" y1="-20" x2="80" y2="-120" stroke="#64748b" stroke-width="1" stroke-dasharray="2"/>
+    <line x1="-60" y1="-40" x2="-20" y2="-140" stroke="#64748b" stroke-width="1" stroke-dasharray="2"/>
+
+    <!-- Vector x -->
+    <line x1="0" y1="0" x2="38" y2="-96" stroke="#38bdf8" stroke-width="3" marker-end="url(#arr-c10-x)"/>
+    <text x="48" y="-95" fill="#38bdf8" font-weight="bold" font-size="13">x (待测向量)</text>
+
+    <!-- Normal vector p (Cross product) -->
+    <line x1="0" y1="0" x2="0" y2="-110" stroke="#fbbf24" stroke-width="4" marker-end="url(#arr-c10-p)"/>
+    <text x="-70" y="-105" fill="#fbbf24" font-weight="bold" font-size="13">对偶向量 p = v × w</text>
+
+    <!-- Projection height of x onto p -->
+    <line x1="40" y1="-100" x2="0" y2="-100" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3"/>
+    <circle cx="0" cy="-100" r="3" fill="#f43f5e"/>
+    <text x="-45" y="-60" fill="#f43f5e" font-size="11">投影高 h</text>
+
+    <text x="10" y="2" fill="#38bdf8" font-size="11">底面 (v, w)</text>
+    <circle cx="0" cy="0" r="4" fill="#fff"/>
+  </g>
+
+  <!-- Right side Step-by-Step Logic Card -->
+  <g transform="translate(290, 75)">
+    <rect width="205" height="200" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="15" y="25" fill="#fbbf24" font-weight="bold" font-size="12">3B1B 惊艳的几何闭环证明：</text>
+    
+    <g transform="translate(15, 45)" font-size="11" line-height="1.5">
+      <text x="0" y="0" fill="#38bdf8">1. 定义函数 f(x) = det([x, v, w])</text>
+      <text x="15" y="16" fill="#94a3b8">这是 3D 到 1D 的严格线性变换</text>
+
+      <text x="0" y="38" fill="#c084fc">2. 根据线性代数对偶原理：</text>
+      <text x="15" y="54" fill="#cbd5e1">必然存在唯一三维向量 p，使得：</text>
+      <text x="15" y="70" fill="#fbbf24" font-weight="bold">f(x) = p · x</text>
+
+      <text x="0" y="92" fill="#34d399">3. 体积公式：</text>
+      <text x="15" y="108" fill="#cbd5e1">体积 = 底面积 × 高 h</text>
+      <text x="15" y="124" fill="#cbd5e1">= (|v × w|) × (x 在法向投影)</text>
+
+      <text x="0" y="146" fill="#f43f5e" font-weight="bold">结论：p 必定垂直于底面，</text>
+      <text x="0" y="162" fill="#f43f5e" font-weight="bold">且长度正好等于底面积！</text>
+    </g>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 体积 = 底面积 $\times$ 高。由于高是 $\vec{x}$ 在法线上的投影，对偶向量 $\vec{p}$ 必定模长等于底面积且方向正交！</span>
+            </div>
+          </div>
+
+          <div class="formula-box" style="margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-amber);font-weight:700;margin-bottom:0.4rem;">代数行列式的第一行展开</div>
+            $$\det \begin{bmatrix} x & v_1 & w_1 \\ y & v_2 & w_2 \\ z & v_3 & w_3 \end{bmatrix} = x(v_2 w_3 - v_3 w_2) + y(v_3 w_1 - v_1 w_3) + z(v_1 w_2 - v_2 w_1)$$
+            <p style="font-size:0.82rem;color:#cbd5e1;margin-top:0.4rem;">
+              对比 $\vec{p} \cdot \vec{x} = p_1 x + p_2 y + p_3 z$，括号内的三项自然就是对偶向量 $\vec{p}$ 的分量，也正是把 $\hat{i}, \hat{j}, \hat{k}$ 塞进第一行得到的代数结果！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch9">← 上一讲：Chapter 9 叉积初探</a>
+        <a href="#ch11">下一讲：Chapter 11 基变换与相似矩阵 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch11" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 11</span> 基变换：坐标语言翻译与相似矩阵</h2>
+          <div class="chapter-en-title">Change of basis</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “空间中的几何向量是客观存在的物理实体，而坐标只是我们人类选择某种基底后描述它的‘方言’。基变换矩阵就是这两种方言之间的无损翻译器；而相似矩阵表达式 $P^{-1}AP$ 则描绘了戴着别人眼镜看世界的全过程。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 詹妮弗（Jennifer）的坐标系</h3>
+          <p>
+            假设我们使用的是标准基底 $\hat{i} = [1, 0]^T$ 和 $\hat{j} = [0, 1]^T$。
+            但我们的朋友詹妮弗选择了另外两个线性无关的向量 $\vec{b}_1$ 和 $\vec{b}_2$ 作为她世界里的基底。
+          </p>
+          <p>
+            同一个空间几何向量 $\vec{v}$，在詹妮弗眼中写为 $[\vec{v}]_B = \begin{bmatrix} c_1 \\ c_2 \end{bmatrix}$，
+            这意味着她眼中的向量是 $c_1 \vec{b}_1 + c_2 \vec{b}_2$。
+          </p>
+
+          <h3>2. 基变换矩阵 $P$：语言翻译机</h3>
+          <p>
+            我们如何把詹妮弗的语言翻译成我们的语言？
+            我们在自己的坐标系下测量詹妮弗的两个基向量，得到坐标 $\vec{b}_1 = \begin{bmatrix} p_{11} \\ p_{21} \end{bmatrix}$ 和 $\vec{b}_2 = \begin{bmatrix} p_{12} \\ p_{22} \end{bmatrix}$。
+            将这两列拼成矩阵 $P$：
+          </p>
+          <div class="formula-box">
+            $$P = \begin{bmatrix} \vec{b}_1 & \vec{b}_2 \end{bmatrix} \implies \vec{v} = P [\vec{v}]_B$$
+          </div>
+          <p>
+            只要詹妮弗报出她坐标系下的数字 $[\vec{v}]_B$，乘以矩阵 $P$，就能瞬间翻译为我们坐标系下的向量 $\vec{v}$！
+            反之，若想把我们的坐标翻译成詹妮弗的坐标，只需乘以逆矩阵：$[\vec{v}]_B = P^{-1} \vec{v}$。
+          </p>
+
+          <h3>3. 相似矩阵 $P^{-1} M P$ 的终极心法</h3>
+          <p>
+            现在考虑一个几何变换（例如将空间逆时针旋转 90°）。
+            在我们的标准坐标系下，这个旋转由矩阵 $M$ 表示。
+            詹妮弗也想在她的世界里执行<strong>物理上完全相同的旋转变换</strong>，她该如何用自己的基底构造矩阵 $[M]_B$？
+          </p>
+          <p>
+            3Blue1Brown 提出了经典的<strong>“三步环路心法”</strong>（从右往左执行）：
+          </p>
+          <ul class="key-points">
+            <li><strong>第一步（乘 $P$）：</strong>拿到詹妮弗世界里的坐标向量，先乘以 $P$ 翻译成我们世界的语言；</li>
+            <li><strong>第二步（乘 $M$）：</strong>在我们的世界中施加旋转矩阵 $M$，让空间发生真实几何变形；</li>
+            <li><strong>第三步（乘 $P^{-1}$）：</strong>最后乘以 $P^{-1}$，把变形后的向量翻译回詹妮弗世界的语言！</li>
+          </ul>
+          <p>
+            连贯起来，在詹妮弗眼中的变换矩阵就是：
+          </p>
+          <div class="formula-box">
+            $$[M]_B = P^{-1} M P$$
+          </div>
+          <p>
+            这正是线性代数中最为核心的概念——<strong>相似矩阵（Similar Matrices）</strong>！它揭示：$P^{-1}MP$ 与 $M$ 代表的是<strong>宇宙中完全相同的同一个几何操作</strong>，只是通过不同坐标系（基底）的透镜观察得到的结果。
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">基变换与相似矩阵翻译环路</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-cob" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#38bdf8"/></marker>
+    <marker id="arr-cob-p" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">基变换与相似矩阵：坐标语言翻译闭环 (P⁻¹AP)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">坐标系是人类的方言；同一个物理变换在不同基底下表现为相似矩阵：翻译 → 执行 → 翻回！</text>
+
+  <!-- Cycle diagram -->
+  <!-- Top Left: Jennifer's coordinates [v]_B -->
+  <g transform="translate(60, 85)">
+    <rect width="140" height="60" rx="8" fill="rgba(168, 85, 247, 0.2)" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="15" y="25" fill="#c084fc" font-weight="bold" font-size="11">詹妮弗的世界 [v]_B</text>
+    <text x="15" y="45" fill="#94a3b8" font-size="10">非标准倾斜基 (b₁, b₂)</text>
+  </g>
+
+  <!-- Arrow Right: Translation by P -->
+  <g transform="translate(205, 100)">
+    <line x1="0" y1="15" x2="105" y2="15" stroke="#fbbf24" stroke-width="3" marker-end="url(#arr-cob-p)"/>
+    <text x="20" y="5" fill="#fbbf24" font-weight="bold" font-size="12">× P (基变换矩阵)</text>
+    <text x="15" y="35" fill="#94a3b8" font-size="10">翻译为我们的语言</text>
+  </g>
+
+  <!-- Top Right: Our World Coordinates v -->
+  <g transform="translate(320, 85)">
+    <rect width="140" height="60" rx="8" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="20" y="25" fill="#38bdf8" font-weight="bold" font-size="11">我们的世界 v</text>
+    <text x="20" y="45" fill="#94a3b8" font-size="10">标准正交基 (î, ĵ)</text>
+  </g>
+
+  <!-- Arrow Down on Right: Apply our transformation M -->
+  <g transform="translate(380, 150)">
+    <line x1="10" y1="0" x2="10" y2="50" stroke="#38bdf8" stroke-width="3" marker-end="url(#arr-cob)"/>
+    <text x="25" y="30" fill="#38bdf8" font-weight="bold" font-size="12">× M (变换)</text>
+  </g>
+
+  <!-- Bottom Right: Transformed in our world M·v -->
+  <g transform="translate(320, 205)">
+    <rect width="140" height="60" rx="8" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="1.5"/>
+    <text x="20" y="25" fill="#38bdf8" font-weight="bold" font-size="11">我们的变换后 M·v</text>
+    <text x="20" y="45" fill="#94a3b8" font-size="10">如逆时针旋转 90°</text>
+  </g>
+
+  <!-- Arrow Left on Bottom: Translate back with P^-1 -->
+  <g transform="translate(205, 220)">
+    <line x1="105" y1="15" x2="5" y2="15" stroke="#fbbf24" stroke-width="3" marker-end="url(#arr-cob-p)"/>
+    <text x="15" y="5" fill="#fbbf24" font-weight="bold" font-size="12">× P⁻¹ (逆翻译)</text>
+    <text x="10" y="35" fill="#94a3b8" font-size="10">翻回詹妮弗的语言</text>
+  </g>
+
+  <!-- Bottom Left: Result in Jennifer's coordinates [M·v]_B -->
+  <g transform="translate(60, 205)">
+    <rect width="140" height="60" rx="8" fill="rgba(168, 85, 247, 0.2)" stroke="#c084fc" stroke-width="1.5"/>
+    <text x="15" y="25" fill="#c084fc" font-weight="bold" font-size="11">詹妮弗眼中的结果</text>
+    <text x="15" y="45" fill="#fbbf24" font-weight="bold" font-size="11">[ M ]_B = P⁻¹ M P</text>
+  </g>
+
+  <!-- Arrow Down on Left: The direct transformed matrix [M]_B -->
+  <g transform="translate(120, 150)">
+    <line x1="10" y1="0" x2="10" y2="50" stroke="#c084fc" stroke-width="2.5" stroke-dasharray="3" marker-end="url(#arr-cob)"/>
+    <text x="-40" y="30" fill="#c084fc" font-size="10">直接等价变换</text>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 坐标语言闭环：通过 $P$ 翻译至我们世界，施加变换 $M$，再通过 $P^{-1}$ 翻回，构成 $P^{-1}MP$。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-purple);font-weight:700;margin-bottom:0.4rem;">相似不变量 (Invariants)</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              既然相似矩阵代表同一物理变换，它们的<strong>行列式（面积缩放比）</strong>、<strong>迹（对角线和）</strong>与<strong>特征值</strong>必然完全相同！
+              $$\det(P^{-1}AP) = \det(P^{-1})\det(A)\det(P) = \det(A)$$
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch10">← 上一讲：Chapter 10 叉积与对偶性</a>
+        <a href="#ch12">下一讲：Chapter 12 特征向量与特征值 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch12" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 12</span> 特征向量与特征值：空间变换的不变主轴</h2>
+          <div class="chapter-en-title">Eigenvectors and eigenvalues</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “当线性变换扭曲空间时，绝大多数向量都被甩离了原来的直线。但总有那么几个极其傲慢的特殊向量，依然留在自己所张成的直线上，仅仅经历了拉伸、缩短或反向。它们就是特征向量，那缩放的倍数就是特征值。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 寻找变换中的“不动轴”</h3>
+          <p>
+            对空间施加一个线性变换 $A$（如倾斜拉伸或水平剪切），空间中几乎所有的向量不仅长度发生了改变，而且方向也发生了偏转。
+          </p>
+          <p>
+            然而，仔细观察会发现某些特殊的非零向量 $\vec{v}$：在变换 $A$ 作用之后，它的落点仍然严格躺在它<strong>原本所张成的那条穿过原点的直线上</strong>！
+            数学上，这意味着 $A\vec{v}$ 的方向与 $\vec{v}$ 完全共线，仅仅相差一个纯数缩放因子 $\lambda$：
+          </p>
+          <div class="formula-box">
+            $$A\vec{v} = \lambda\vec{v}$$
+          </div>
+          <p>
+            这个特殊的向量 $\vec{v}$ 被称为<strong>特征向量（Eigenvector）</strong>，而对应的标量倍数 $\lambda$ 则称为<strong>特征值（Eigenvalue）</strong>。
+          </p>
+
+          <h3>2. 为什么特征方程是 $\det(A - \lambda I) = 0$？</h3>
+          <p>
+            将特征方程改写为：
+          </p>
+          <div class="formula-box">
+            $$A\vec{v} - \lambda\vec{v} = \vec{0} \implies (A - \lambda I)\vec{v} = \vec{0}$$
+          </div>
+          <p>
+            我们寻找的是一个<strong>非零的特征向量 $\vec{v} \neq \vec{0}$</strong>。
+            如果矩阵 $(A - \lambda I)$ 的行列式不为零，那么它就是可逆的，方程两边同时乘以逆矩阵只会得到无趣的零解 $\vec{v} = \vec{0}$。
+          </p>
+          <p>
+            因此，为了让空间中存在某些非零向量在 $(A - \lambda I)$ 的作用下被压缩坍缩为原点，<strong>这个矩阵变换必须把空间压扁降维！</strong>
+            结合 Chapter 5 的结论，空间降维的充要条件就是：<strong>行列式必须为零！</strong>
+          </p>
+          <div class="formula-box">
+            $$\det(A - \lambda I) = 0$$
+          </div>
+          <p>
+            这不再是一句冰冷的代数结论，而是空间坍缩的几何宣言！
+          </p>
+
+          <h3>3. 特征基 (Eigenbasis) 与对角化</h3>
+          <p>
+            如果一个 $n \times n$ 矩阵拥有 $n$ 个线性无关的特征向量，我们就可以<strong>以这些特征向量作为基底</strong>来观察空间！
+            根据 Chapter 11 的基变换理论，在新基底的世界里，矩阵将呈现为纯粹的<strong>对角矩阵（Diagonal Matrix）</strong>：
+          </p>
+          <div class="formula-box">
+            $$A = PDP^{-1}, \quad D = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{bmatrix}$$
+          </div>
+          <p>
+            在特征基的视角下，各个坐标轴之间完全解耦，没有任何相互干扰的剪切交叉项，空间只是纯粹地沿着特征轴各自独立缩放。
+            这在计算高阶矩阵幂 $A^{100} = P D^{100} P^{-1}$、求解微分方程组与动力系统稳态时具有降维打击般的威力！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">特征向量的不变轴与普通向量偏转对比</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-eig-v" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#34d399"/></marker>
+    <marker id="arr-eig-non" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b"/></marker>
+    <marker id="arr-eig-non2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#f43f5e"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">特征向量与特征值：空间变换的不变主轴 (Av = λv)</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">大多数向量在变换后都会偏离原来的方向；唯独特征向量留在自身所张成的直线上！</text>
+
+  <!-- Visual Coordinate Area -->
+  <g transform="translate(50, 75)">
+    <!-- Origin (120, 120) -->
+    <circle cx="120" cy="120" r="4" fill="#fff"/>
+    <text x="105" y="135" fill="#94a3b8" font-size="11">O</text>
+
+    <!-- Eigenvector 1 Line (Horizontal axis: y=0) -->
+    <line x1="20" y1="120" x2="270" y2="120" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4"/>
+    <line x1="120" y1="120" x2="190" y2="120" stroke="#34d399" stroke-width="3"/>
+    <text x="150" y="112" fill="#34d399" font-size="11">v₁</text>
+    <!-- Scaled: Av1 -->
+    <line x1="120" y1="120" x2="250" y2="120" stroke="#34d399" stroke-width="4" marker-end="url(#arr-eig-v)"/>
+    <text x="200" y="140" fill="#34d399" font-weight="bold" font-size="12">Av₁ = 2v₁ (特征值 λ₁=2)</text>
+
+    <!-- Eigenvector 2 Line (Slanted line: y = x/2) -->
+    <line x1="40" y1="160" x2="250" y2="55" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4"/>
+    <line x1="120" y1="120" x2="160" y2="100" stroke="#fbbf24" stroke-width="3"/>
+    <!-- Scaled: Av2 with lambda=1.5 -->
+    <line x1="120" y1="120" x2="216" y2="72" stroke="#fbbf24" stroke-width="4" marker-end="url(#arr-eig-v)"/>
+    <text x="175" y="65" fill="#fbbf24" font-weight="bold" font-size="12">Av₂ = λ₂v₂</text>
+
+    <!-- Ordinary vector (deflected) -->
+    <line x1="120" y1="120" x2="120" y2="50" stroke="#64748b" stroke-width="2" stroke-dasharray="3" marker-end="url(#arr-eig-non)"/>
+    <text x="85" y="80" fill="#64748b" font-size="11">原向量 u</text>
+    <!-- Deflected Au -->
+    <line x1="120" y1="120" x2="190" y2="40" stroke="#f43f5e" stroke-width="2.5" marker-end="url(#arr-eig-non2)"/>
+    <text x="195" y="45" fill="#f43f5e" font-weight="bold" font-size="11">Au (偏离原直线！)</text>
+  </g>
+
+  <!-- Right Side: Characteristic Equation Card -->
+  <g transform="translate(325, 75)">
+    <rect width="170" height="190" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+    <text x="15" y="25" fill="#fbbf24" font-weight="bold" font-size="12">特征方程几何洞见：</text>
+    
+    <g transform="translate(15, 45)" font-size="11" line-height="1.5">
+      <text x="0" y="0" fill="#cbd5e1">1. 代数形式：</text>
+      <text x="10" y="16" fill="#38bdf8" font-weight="bold" font-family="monospace">Av = λv</text>
+      <text x="10" y="32" fill="#38bdf8" font-weight="bold" font-family="monospace">(A - λI)v = 0</text>
+
+      <text x="0" y="55" fill="#cbd5e1">2. 寻找非零解 v：</text>
+      <text x="10" y="72" fill="#94a3b8">矩阵 (A - λI) 必须将</text>
+      <text x="10" y="88" fill="#94a3b8">空间压扁降维！</text>
+
+      <text x="0" y="112" fill="#fbbf24" font-weight="bold">3. 几何降维判据：</text>
+      <text x="10" y="130" fill="#f43f5e" font-weight="bold" font-size="12" font-family="monospace">det(A - λI) = 0</text>
+    </g>
+  </g>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 观察绿色与金色虚线轴：轴上的特征向量仅拉伸不偏转；而普通向量（灰色/粉色）则被剧烈旋转甩离原方向。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-blue);font-weight:700;margin-bottom:0.4rem;">没有实特征值的几何变换？</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              比如二维逆时针旋转 90°：每个向量都会转动 90°，没有任何一条非零直线能够保持不动！
+              代数上解特征多项式 $\lambda^2 + 1 = 0$ 会得到虚数 $\lambda = \pm i$。复特征值几何上本质上就对应着<strong>旋转因子</strong>！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch11">← 上一讲：Chapter 11 基变换与相似矩阵</a>
+        <a href="#ch13">下一讲：Chapter 13 抽象向量空间 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch13" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 13</span> 抽象向量空间：函数也是向量</h2>
+          <div class="chapter-en-title">Abstract vector spaces</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “当你意识到多项式函数也是向量，微积分中的求导算子其实只是一个无穷阶矩阵乘法时，线性代数就不再仅仅是关于箭头和数组的游戏，它蜕变为了现代数学与量子物理共同通用的普适语言。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 向量的抽象公理系统</h3>
+          <p>
+            我们在 Chapter 0 中指出，数学家对“向量究竟是什么”持有最高维度的抽象观点。
+            数学家并不在乎一个对象具体是一个有物理朝向的箭头，还是一行存储在磁盘里的浮点数。
+            只要一个集合 $V$ 上的元素，定义了<strong>加法</strong>与<strong>标量数乘</strong>，且满足严密的<strong>八大代数公理</strong>（交换律、结合律、存在零元、存在负元、数乘分配律等），这组对象就被正式承认为<strong>向量空间</strong>！
+          </p>
+
+          <h3>2. 震撼启示：函数也是向量！</h3>
+          <p>
+            让我们检验多项式函数集合：
+          </p>
+          <ul class="key-points">
+            <li>两个函数可以相加：$(f + g)(x) = f(x) + g(x)$，满足加法交换律与结合律；</li>
+            <li>函数可以乘以常数标量：$(c \cdot f)(x) = c \cdot f(x)$，满足分配律；</li>
+            <li>存在零函数 $f(x) = 0$，对加法充当零元。</li>
+          </ul>
+          <p>
+            这完全符合向量空间的全部定义！<strong>函数就是活生生的向量！</strong>
+            在多项式空间 $P_2$（最高二次）中，我们可以选取自然基底 $\{ 1, x, x^2 \}$。
+            任何函数 $f(x) = 3 + 2x - 5x^2$ 都可以完全等价于一个三维坐标向量 $[3, 2, -5]^T$！
+          </p>
+
+          <h3>3. 微积分求导算子就是矩阵！</h3>
+          <p>
+            求导运算 $\frac{d}{dx}$ 满足极其严格的线性法则：
+          </p>
+          <div class="formula-box">
+            $$\frac{d}{dx}(f + g) = \frac{df}{dx} + \frac{dg}{dx}, \quad \frac{d}{dx}(c f) = c \frac{df}{dx}$$
+          </div>
+          <p>
+            因此，<strong>求导运算是一个纯正的线性变换！</strong>
+            我们可以追踪基函数的去向来构建“求导矩阵”：
+            $\frac{d}{dx}(1) = 0$，$\frac{d}{dx}(x) = 1$，$\frac{d}{dx}(x^2) = 2x$。
+            把这些落点写成列向量，便得到了求导算子在基底下的矩阵表示：
+          </p>
+          <div class="formula-box">
+            $$D = \begin{bmatrix} 0 & 1 & 0 \\ 0 & 0 & 2 \\ 0 & 0 & 0 \end{bmatrix} \implies D \begin{bmatrix} a_0 \\ a_1 \\ a_2 \end{bmatrix} = \begin{bmatrix} a_1 \\ 2a_2 \\ 0 \end{bmatrix}$$
+          </div>
+          <p>
+            微积分中繁复的求导运算，竟然可以用最普通的矩阵乘向量来瞬间完成！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">函数坐标向量化与微分矩阵运算</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-poly" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#a855f7"/></marker>
+  </defs>
+  <rect width="520" height="300" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">抽象向量空间：函数与微积分的矩阵化</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">只要满足加法与数乘八大公理，函数就是向量，求导运算就是线性变换矩阵！</text>
+
+  <!-- Function Vector -->
+  <g transform="translate(40, 80)">
+    <rect width="180" height="150" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="15" y="25" fill="#34d399" font-weight="bold" font-size="11">多项式空间 P₂ 中的函数：</text>
+    <text x="15" y="48" fill="#cbd5e1" font-size="11">f(x) = a₀ + a₁x + a₂x²</text>
+    
+    <text x="15" y="75" fill="#94a3b8" font-size="10">自然基底：{ 1, x, x² }</text>
+    <g transform="translate(25, 90)" font-family="monospace" font-size="12">
+      <text x="0" y="15" fill="#38bdf8">[ a₀ ]</text>
+      <text x="0" y="30" fill="#38bdf8">[ a₁ ]</text>
+      <text x="0" y="45" fill="#38bdf8">[ a₂ ]</text>
+    </g>
+    <text x="75" y="125" fill="#38bdf8" font-size="11">坐标向量</text>
+  </g>
+
+  <!-- Derivative Operator -->
+  <g transform="translate(230, 135)">
+    <line x1="0" y1="15" x2="45" y2="15" stroke="#a855f7" stroke-width="3" marker-end="url(#arr-poly)"/>
+    <text x="-5" y="0" fill="#a855f7" font-weight="bold" font-size="11">求导 d/dx</text>
+    <text x="-12" y="35" fill="#94a3b8" font-size="10">微分算子矩阵 D</text>
+  </g>
+
+  <!-- Result Function -->
+  <g transform="translate(290, 80)">
+    <rect width="195" height="150" rx="8" fill="rgba(30, 41, 59, 0.6)" stroke="#475569"/>
+    <text x="15" y="25" fill="#fbbf24" font-weight="bold" font-size="11">求导后的函数 f'(x)：</text>
+    <text x="15" y="48" fill="#cbd5e1" font-size="11">f'(x) = a₁ + 2a₂x + 0x²</text>
+
+    <!-- Derivative Matrix D -->
+    <g transform="translate(15, 75)" font-family="monospace" font-size="10">
+      <text x="0" y="15" fill="#a855f7">[ 0  1  0 ]</text>
+      <text x="0" y="30" fill="#a855f7">[ 0  0  2 ]</text>
+      <text x="0" y="45" fill="#a855f7">[ 0  0  0 ]</text>
+    </g>
+
+    <g transform="translate(85, 75)" font-family="monospace" font-size="10">
+      <text x="0" y="15" fill="#38bdf8">[ a₀ ]</text>
+      <text x="0" y="30" fill="#38bdf8">[ a₁ ]</text>
+      <text x="0" y="45" fill="#38bdf8">[ a₂ ]</text>
+    </g>
+
+    <text x="130" y="105" fill="#fbbf24" font-size="12">=</text>
+    <g transform="translate(145, 75)" font-family="monospace" font-size="10">
+      <text x="0" y="15" fill="#fbbf24">[ a₁ ]</text>
+      <text x="0" y="30" fill="#fbbf24">[ 2a₂]</text>
+      <text x="0" y="45" fill="#fbbf24">[ 0  ]</text>
+    </g>
+  </g>
+
+  <!-- Bottom Axiom Note -->
+  <rect x="40" y="245" width="445" height="40" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+  <text x="55" y="270" fill="#cbd5e1" font-size="11">✨ 抽象的威力：向量概念的升华使得线性代数成为微积分、量子力学与现代物理的通用基石！</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 将多项式系数打包为坐标向量，求导算子化身为上三角伴随矩阵，矩阵乘法输出导数的新系数。</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-green);font-weight:700;margin-bottom:0.4rem;">广阔天地：无穷维希尔伯特空间</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              若多项式次数没有上限，空间便拥有可数无穷维基底 $\{ 1, x, x^2, x^3, \dots \}$；在量子力学中，波函数构成了复内积希尔伯特空间，可观测量就是厄米特矩阵算子，能级就是它的特征值！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch12">← 上一讲：Chapter 12 特征向量与特征值</a>
+        <a href="#ch14">下一讲：Chapter 14 克莱姆法则的几何解释 →</a>
+      </div>
+    </section>
+    
+
+    <section id="ch14" class="chapter-section">
+      <div class="chapter-header">
+        <div class="chapter-title-group">
+          <h2><span class="chapter-tag">Chapter 14</span> 克莱姆法则的几何解释：面积缩放的奇迹</h2>
+          <div class="chapter-en-title">Cramer's rule, explained geometrically</div>
+        </div>
+      </div>
+
+      <div class="quote-card">
+        “克莱姆法则在代数教科书里常被描绘为一种冗长繁琐的计算技巧。然而 3Blue1Brown 用极其惊艳的几何观察，让我们看清了那个行列式之比的物理真相——它不过是同一片平行四边形面积在经历矩阵拉伸前后的无损投影对比。”
+        <span class="quote-author">— Grant Sanderson (3Blue1Brown)</span>
+      </div>
+
+      <div class="content-grid">
+        <div class="text-column">
+          <h3>1. 克莱姆法则 (Cramer's Rule) 代数谜题</h3>
+          <p>
+            求解线性方程组 $A\vec{x} = \vec{b}$ 时，克莱姆法则指出解的分量等于将矩阵第 $i$ 列替换为结果向量 $\vec{b}$ 后的行列式，除以原矩阵行列式：
+          </p>
+          <div class="formula-box">
+            $$x_i = \frac{\det(A_i)}{\det(A)}$$
+          </div>
+          <p>
+            一百多年来，无数学生死记硬背这个公式，却对其几何成因一无所知。为什么把 $\vec{b}$ 替换进某一列，就能神奇地解出未知数 $x_i$？
+          </p>
+
+          <h3>2. 变换前空间的精巧面积构造</h3>
+          <p>
+            考虑我们要求解的二维未知向量 $\vec{x} = [x_1, x_2]^T$。
+            在变换前的原始未扭曲空间中，考察由<strong>未知向量 $\vec{x}$</strong> 与<strong>标准基向量 $\hat{j} = [0, 1]^T$</strong> 构成的平行四边形。
+          </p>
+          <p>
+            它的面积是多少？
+            平行四边形的一条垂直边是 $\hat{j}$，底边长为 $1$；
+            而垂直于这条底边的高，正是未知向量 $\vec{x}$ 的横坐标 $x_1$！
+          </p>
+          <div class="formula-box">
+            $$\text{变换前面积} = \det \begin{bmatrix} x_1 & 0 \\ x_2 & 1 \end{bmatrix} = x_1 \cdot 1 - 0 \cdot x_2 = x_1$$
+          </div>
+          <p>
+            <strong>这个平行四边形的面积，恰好不多不少正是我们朝思暮想的未知数 $x_1$！</strong>
+          </p>
+
+          <h3>3. 矩阵变换与面积缩放放大镜</h3>
+          <p>
+            现在，我们对整个空间施加矩阵 $A$ 的线性变换！根据线性代数铁律：
+          </p>
+          <ul class="key-points">
+            <li>未知输入向量 $\vec{x}$ 经过变换，变成了输出结果向量 $A\vec{x} = \vec{b}$！</li>
+            <li>基向量 $\hat{j}$ 经过变换，变成了矩阵 $A$ 的第二列 $\text{col}_2(A)$！</li>
+            <li>根据 Chapter 5 的核心结论：<strong>矩阵变换将空间中所有的面积，严格放大 $\det(A)$ 倍！</strong></li>
+          </ul>
+          <p>
+            于是，变换后由 $\vec{b}$ 与 $\text{col}_2(A)$ 所围成的平行四边形面积，必须满足：
+          </p>
+          <div class="formula-box">
+            $$\text{变换后面积} = \det \begin{bmatrix} \vec{b} & \text{col}_2(A) \end{bmatrix} = \det(A_1) = x_1 \cdot \det(A)$$
+          </div>
+          <p>
+            两边同时除以 $\det(A)$，克莱姆法则瞬间水落石出：
+          </p>
+          <div class="formula-box" style="border: 2px solid var(--accent-blue);">
+            $$x_1 = \frac{\det(A_1)}{\det(A)} = \frac{\det \begin{bmatrix} \vec{b} & \text{col}_2(A) \end{bmatrix}}{\det(A)}$$
+          </div>
+          <p>
+            没有复杂的代数裂项，没有冗长晦涩的归纳证明。克莱姆法则纯粹就是<strong>同一块面积在经历矩阵空间缩放前后的比例关系</strong>！
+          </p>
+        </div>
+
+        <div class="visual-column">
+          <div class="visual-card">
+            <div class="visual-header">
+              <span class="visual-badge">GEOMETRIC VISUAL</span>
+              <span class="visual-title">变换前后平行四边形面积对比</span>
+            </div>
+            <div class="svg-wrapper">
+              <svg viewBox="0 0 520 310" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arr-cram-t" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="520" height="310" fill="#090d16"/>
+  
+  <text x="25" y="30" fill="#38bdf8" font-size="14" font-weight="bold">克莱姆法则的几何解释 (Cramer's Rule)：面积缩放的奇迹</text>
+  <text x="25" y="50" fill="#94a3b8" font-size="12">未变换空间中面积为 x₁ 的平行四边形，经矩阵 A 变换后被缩放 det(A) 倍，恰好变为 det(A₁)！</text>
+
+  <!-- Left: Before Transformation (Area = x1) -->
+  <g transform="translate(45, 80)">
+    <rect width="180" height="150" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#475569"/>
+    <text x="15" y="22" fill="#94a3b8" font-size="11" font-weight="bold">变换前空间：底 1，高 x₁</text>
+    <line x1="20" y1="120" x2="160" y2="120" stroke="#64748b"/>
+    <line x1="40" y1="20" x2="40" y2="140" stroke="#64748b"/>
+    <!-- Parallelogram spanned by (x, j-hat): x = (100, 60), j = (40, 70) -->
+    <!-- (40,120), (40,70), (100,10), (100,60) -->
+    <polygon points="40,120 40,70 100,10 100,60" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.5"/>
+    <line x1="40" y1="120" x2="40" y2="70" stroke="#f43f5e" stroke-width="3"/>
+    <line x1="40" y1="120" x2="100" y2="60" stroke="#34d399" stroke-width="2.5"/>
+    <text x="15" y="95" fill="#f43f5e" font-size="10">ĵ [0,1]</text>
+    <text x="95" y="60" fill="#34d399" font-size="10">x [x₁, x₂]</text>
+    <text x="50" y="70" fill="#fbbf24" font-weight="bold" font-size="12">面积 = x₁</text>
+  </g>
+
+  <!-- Middle Matrix Scaling Arrow -->
+  <g transform="translate(235, 135)">
+    <line x1="0" y1="15" x2="45" y2="15" stroke="#fbbf24" stroke-width="3" marker-end="url(#arr-cram-t)"/>
+    <text x="-5" y="0" fill="#fbbf24" font-weight="bold" font-size="11">经矩阵 A 变换</text>
+    <text x="-5" y="32" fill="#94a3b8" font-size="10">面积放大 det(A)</text>
+  </g>
+
+  <!-- Right: After Transformation (Area = det(A1)) -->
+  <g transform="translate(290, 80)">
+    <rect width="190" height="150" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#475569"/>
+    <text x="15" y="22" fill="#38bdf8" font-size="11" font-weight="bold">变换后空间：张成平行四边形</text>
+    <line x1="20" y1="120" x2="170" y2="120" stroke="#64748b"/>
+    <!-- Transformed: j-hat becomes col2(A), x becomes b -->
+    <polygon points="30,120 70,60 150,40 110,100" fill="rgba(244, 63, 94, 0.25)" stroke="#f43f5e" stroke-width="1.5"/>
+    <line x1="30" y1="120" x2="70" y2="60" stroke="#f43f5e" stroke-width="3"/>
+    <line x1="30" y1="120" x2="110" y2="100" stroke="#34d399" stroke-width="2.5"/>
+    <text x="45" y="55" fill="#f43f5e" font-size="10">A·ĵ = col₂(A)</text>
+    <text x="115" y="105" fill="#34d399" font-size="10">Ax = b</text>
+    <text x="65" y="90" fill="#fbbf24" font-weight="bold" font-size="11">面积 = det(A₁)</text>
+  </g>
+
+  <!-- Bottom: Elegant formula conclusion -->
+  <rect x="45" y="245" width="435" height="50" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+  <text x="60" y="265" fill="#cbd5e1" font-size="11">因线性变换按 det(A) 比例缩放所有面积：<tspan fill="#fbbf24" font-weight="bold">det(A₁) = x₁ · det(A)</tspan></text>
+  <text x="60" y="285" fill="#38bdf8" font-weight="bold" font-size="12">推导得出克莱姆法则百年之秘：x₁ = det(A₁) / det(A)</text>
+</svg>
+            </div>
+            <div class="visual-caption">
+              <span>💡 变换前面积为 $x_1$；经变换放大 $\det(A)$ 倍后变为 $\det(A_1)$。两者相除立刻得到克莱姆法则！</span>
+            </div>
+          </div>
+
+          <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:1rem;margin-top:1.25rem;">
+            <div style="font-size:0.85rem;color:var(--accent-rose);font-weight:700;margin-bottom:0.4rem;">高维与实用性总结</div>
+            <p style="font-size:0.82rem;color:#cbd5e1;line-height:1.6;">
+              该几何证明可无缝推广至三维（平行六面体体积比值）乃至 $n$ 维超体积。尽管克莱姆法则在工业界由于高阶行列式复杂度高达 $O(n!)$ 而不适合数值求解大规模稀疏方程，但它在解析推导、灵敏度分析与理论洞察上具有不可替代的美学巅峰地位！
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-footer-nav">
+        <a href="#ch13">← 上一讲：Chapter 13 抽象向量空间</a>
+        <a href="#hero">回到顶部：系列总览与导读 ↑</a>
+      </div>
+    </section>
+    
+
+      <!-- Global Summary & Thinking Model -->
+      <section class="chapter-section" style="background: linear-gradient(180deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid var(--accent-blue);">
+        <div class="chapter-header">
+          <div class="chapter-title-group">
+            <h2><span class="chapter-tag" style="background:rgba(168,85,247,0.2);color:#c084fc;border-color:rgba(168,85,247,0.4);">Core Mindset</span> 3Blue1Brown 线性代数核心思维模型总揽</h2>
+            <div class="chapter-en-title">The Unified Geometric Philosophy</div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="text-column">
+            <h3>从基底到特征值的统一视界</h3>
+            <p>
+              回顾整个 3Blue1Brown 的系列，所有的概念并非孤立的零散工具，而是一张环环相扣的几何网络：
+            </p>
+            <ul class="key-points">
+              <li><strong>基向量是锚点：</strong>任何空间状态都是基向量的线性组合。矩阵就是记录基底落点的笔记本。</li>
+              <li><strong>矩阵乘法是复合：</strong>连续的时间演变等于网格变形的依次施加，不可交换但天然结合。</li>
+              <li><strong>行列式是缩放率：</strong>它度量空间体积放缩的幅度，det=0 代表维度坍缩，信息不可逆丢失。</li>
+              <li><strong>对偶性是暗号：</strong>降维变换与向量点积互为表里，点积与叉积在对偶性的光芒下彻底褪去代数巧合的神秘面纱。</li>
+              <li><strong>基变换是翻译官：</strong>$P^{-1}AP$ 告诉我们：矩阵是带有主观视角的，但背后的空间变换是客观同一的。</li>
+              <li><strong>特征向量是不动轴：</strong>通过对角化 $A = PDP^{-1}$ 找到变换的内在主轴，解耦复杂动力系统。</li>
+            </ul>
+          </div>
+
+          <div class="visual-column">
+            <div style="background:rgba(15,23,42,0.85);border:1px solid rgba(56,189,248,0.3);border-radius:var(--radius-md);padding:1.5rem;">
+              <h4 style="font-size:1.1rem;color:var(--accent-blue);font-weight:700;margin-bottom:0.75rem;">🌟 学习与致敬</h4>
+              <p style="font-size:0.88rem;color:#cbd5e1;line-height:1.7;margin-bottom:1rem;">
+                本图文课件旨在将 Grant Sanderson (3Blue1Brown) 的经典视频教程进行系统化文献整理与交互图文沉淀。
+                强烈建议读者前往 YouTube 观看原版动画视频，领略原汁原味的动态空间美学！
+              </p>
+              <div style="font-size:0.82rem;color:var(--text-muted);border-top:1px dashed rgba(255,255,255,0.1);padding-top:0.75rem;">
+                • YouTube 官方频道：<strong>3Blue1Brown</strong><br>
+                • 官方播放列表：<strong>Essence of Linear Algebra</strong><br>
+                • 动画渲染引擎：<strong>Manim (Mathematical Animation Engine)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      </div><!-- End content-wrapper -->
+    </main>
+  </div><!-- End app-container -->
+
+  <script>
+    // 平滑滚动监听与侧边栏高亮
+    document.addEventListener('DOMContentLoaded', () => {
+      const navLinks = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+      const sections = document.querySelectorAll('.chapter-section, .hero-3b1b');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(sec => {
+          const top = sec.offsetTop - 120;
+          if (window.pageYOffset >= top) {
+            current = sec.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
