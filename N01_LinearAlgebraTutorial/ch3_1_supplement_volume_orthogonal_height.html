@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 3.1 专题拓展: 体积的几何本质——正交高度乘积与剪切不变性 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script>
+    if (location.protocol === 'file:' || (typeof navigator !== 'undefined' && !navigator.onLine)) {
+      var mjScript = document.getElementById('MathJax-script');
+      if (mjScript) {
+        mjScript.src = 'js/tex-svg.js';
+      }
+    }
+  </script>
+  <script src="js/main.js" defer></script>
+  <style>
+    /* Custom Styling for Interactive Laboratories */
+    .lab-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin: 1.75rem 0;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(12px);
+    }
+
+    .lab-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .lab-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 400px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    .controls-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .control-val {
+      font-family: var(--font-mono);
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .slider-input {
+      width: 100%;
+      accent-color: var(--accent-blue);
+      height: 6px;
+      border-radius: 3px;
+      background: var(--border-color);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .btn-preset {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-preset:hover {
+      background: var(--border-highlight);
+      border-color: var(--accent-blue);
+      color: var(--accent-blue);
+    }
+
+    .metric-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .metric-header {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .val-green { color: var(--accent-green); }
+    .val-blue { color: var(--accent-blue); }
+    .val-purple { color: var(--accent-purple); }
+    .val-amber { color: var(--accent-amber); }
+    .val-rose { color: var(--accent-rose); }
+
+    .insight-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+    }
+
+    .formula-box {
+      background: rgba(15, 23, 42, 0.6);
+      border-left: 4px solid var(--accent-blue);
+      padding: 1rem 1.25rem;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 1.25rem 0;
+      font-size: 0.95rem;
+    }
+
+    .qr-step-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .qr-step-card:hover {
+      border-color: var(--accent-purple);
+      transform: translateY(-2px);
+    }
+
+    .quiz-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      background: rgba(15, 23, 42, 0.4);
+    }
+
+    .quiz-option:hover {
+      border-color: var(--accent-blue);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .quiz-option.correct {
+      border-color: var(--accent-green);
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--accent-green);
+      font-weight: 600;
+    }
+
+    .quiz-option.wrong {
+      border-color: var(--accent-rose);
+      background: rgba(244, 63, 94, 0.15);
+      color: var(--accent-rose);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+<div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+        <a href="essence_of_linear_algebra_3b1b.html" class="nav-item" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); margin-top: 4px;">
+          <span class="nav-icon">🎬</span>
+          <span style="color: var(--accent-purple); font-weight: 700;">3B1B 线性代数的本质 (15讲全景)</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 1</span>
+          <span>二维面积推导、减法直觉与法向量底蕴</span>
+        </a>
+
+        <a href="ch3_1_supplement_leibniz_formula.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
+          <span>莱布尼茨公式与全景本质意义</span>
+        </a>
+
+        <a href="ch3_1_supplement_volume_orthogonal_height.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 3</span>
+          <span>正交高度乘积与剪切不变性</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+
+        <a href="ch3_2_supplement_cross_product.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-cyan, #06b6d4);">拓展 4</span>
+          <span>三维向量叉积 (Cross Product) 全景指南</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+
+        <a href="ch5_1_supplement_complex_numbers_foundation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 1</span>
+          <span>高中数学复数完全基石指南</span>
+        </a>
+
+        <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 2</span>
+          <span>代数基本定理与三维马鞍面</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+            
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        
+        <a href="ch6_2_inner_product_space.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+            
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        
+        <a href="ch7_2_projection_least_squares.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        
+        <a href="ch7_4_svd_low_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 8: 附录与工业实战
+        </div>
+
+        <a href="ch8_1_ols_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">Ch 8.1</span>
+          <span>OLS 股票市场涨跌归因与全景图谱</span>
+        </a>
+        
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="content-wrapper">
+        
+        <!-- Header Section -->
+        <header class="content-header" style="margin-bottom: 2rem;">
+          <div class="breadcrumb" style="display: flex; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+            <span>Chapter 3</span> <span>/</span>
+            <span>行列式专题拓展</span> <span>/</span>
+            <span style="color: var(--accent-green);">正交高度与剪切不变性</span>
+          </div>
+          <h1 style="font-size: 2.2rem; font-weight: 800; line-height: 1.25; margin-bottom: 1rem; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            体积的几何本质：正交高度乘积与剪切不变性
+          </h1>
+          <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 860px;">
+            为什么决定多面体体积的不是矩阵里的某几个固定格子？从卡瓦列里原理、剪切不变性到施密特正交化与 QR 分解，揭示线性代数中体积测度的终极几何直觉。
+          </p>
+        </header>
+
+        <!-- Core Golden Insight Banner -->
+        <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.12) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 2.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <span style="font-size: 1.4rem;">💡</span>
+            <span style="font-size: 1.05rem; font-weight: 700; color: var(--accent-blue); text-transform: uppercase; letter-spacing: 0.05em;">几何核心洞察</span>
+          </div>
+          <p style="font-size: 1.15rem; font-weight: 600; color: var(--text-main); margin: 0; line-height: 1.6;">
+            “决定体积的不是某几个固定的矩阵格子，而是变换在几何上沿各个正交维度的实际独立垂直高度的乘积。”
+          </p>
+        </div>
+
+        <!-- Section 1: The Matrix Grid Illusion -->
+        <section id="grid-illusion" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>1.</span> 破除迷思：矩阵格子只是“外在的人为投影”
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            初学者常有一种直觉误区：“主对角线上的数值就是图形各维度的长宽高，只有对角线才决定体积”。然而，矩阵格子里的每一个数值，都严重依赖于<strong>人为选取的坐标基底</strong>。
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div class="insight-badge" style="color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.3); background: rgba(244, 63, 94, 0.1); margin-bottom: 0.75rem;">
+                反例 A：对角积为 0，体积为 1
+              </div>
+              <div style="font-family: var(--font-mono); background: rgba(15, 23, 42, 0.8); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.75rem;">
+                A = [[0, 1], [1, 0]]
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">
+                主对角线乘积 $0 \times 0 = 0$。但向量为 $(0,1)$ 和 $(1,0)$，张成单位正方形，行列式 $\det(A) = -1$，真实面积为 $1$。真正撑起空间的是非对角线！
+              </p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div class="insight-badge" style="color: var(--accent-amber); border-color: rgba(251, 191, 36, 0.3); background: rgba(251, 191, 36, 0.1); margin-bottom: 0.75rem;">
+                反例 B：对角线不变，体积被压塌
+              </div>
+              <div style="font-family: var(--font-mono); background: rgba(15, 23, 42, 0.8); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.75rem;">
+                B = [[1, 1], [1, 1]]
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">
+                主对角线仍为 $1 \times 1 = 1$。但非对角线破坏了两列的独立性，两向量完全重合共线，平行四边形压扁成一条线段，体积塌缩为 $\det(B) = 0$！
+              </p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div class="insight-badge" style="color: var(--accent-green); border-color: rgba(52, 211, 153, 0.3); background: rgba(52, 211, 153, 0.1); margin-bottom: 0.75rem;">
+                反例 C：纯正交旋转，格子全变
+              </div>
+              <div style="font-family: var(--font-mono); background: rgba(15, 23, 42, 0.8); padding: 0.6rem; border-radius: 4px; margin-bottom: 0.75rem;">
+                R(45°) = [[√2/2, -√2/2], [√2/2, √2/2]]
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">
+                图形只是在空间转了 45°，面积严格为 1。但对角线乘积变成了 $0.5$。非对角线项通过 $-(-0.5)$ 补全了被倾斜坐标轴掩盖的真实面积。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Interactive Lab 1 - Cavalieri & Shear Invariance -->
+        <section id="cavalieri-shear" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>2.</span> 交互实验室 1：卡瓦列里原理与剪切不变性 (Shear Invariance)
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            <strong>卡瓦列里原理（祖暅原理）</strong>指出：“幂势既同，则积不容异”（底面积与高度相同，体积必相等）。在线性代数中，给一个向量加上另一个向量的若干倍 $v_2 \to v_2 + k v_1$，本质上就是<strong>沿着底边方向的水平滑动（剪切）</strong>。
+          </p>
+
+          <div class="lab-container">
+            <div class="lab-grid">
+              <!-- Canvas Area -->
+              <div class="canvas-wrapper">
+                <canvas id="shearCanvas" width="600" height="420"></canvas>
+              </div>
+
+              <!-- Controls & Live Readouts -->
+              <div class="controls-panel">
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                  🎛️ 动态控制与度量
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>剪切滑动量 $k$ (沿着 $v_1$ 方向)</span>
+                    <span id="kVal" class="control-val">0.00</span>
+                  </div>
+                  <input type="range" id="kSlider" class="slider-input" min="-2.5" max="2.5" step="0.05" value="0">
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>垂直高度 $h_2$ (法向独立高度)</span>
+                    <span id="h2Val" class="control-val">3.00</span>
+                  </div>
+                  <input type="range" id="h2Slider" class="slider-input" min="1.0" max="4.0" step="0.1" value="3.0">
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>底边长度 $h_1 = \|v_1\|$</span>
+                    <span id="h1Val" class="control-val">3.50</span>
+                  </div>
+                  <input type="range" id="h1Slider" class="slider-input" min="1.5" max="4.5" step="0.1" value="3.5">
+                </div>
+
+                <div class="btn-group" style="margin-top: 0.25rem;">
+                  <button class="btn-preset" id="btnResetShear">复位矩形 (k=0)</button>
+                  <button class="btn-preset" id="btnShear1">剪切 (k=1.2)</button>
+                  <button class="btn-preset" id="btnShearNeg">反向 (k=-1.5)</button>
+                </div>
+
+                <!-- Live Metrics -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+                  <div class="metric-card">
+                    <span class="metric-header">底边 $h_1$</span>
+                    <span id="metricH1" class="metric-value val-blue">3.50</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-header">垂直高 $h_2$</span>
+                    <span id="metricH2" class="metric-value val-green">3.00</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-header">斜边长 $\|v_2\|$</span>
+                    <span id="metricV2" class="metric-value val-rose">3.00</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-header">夹角 $\theta$ 与 $\sin(\theta)$</span>
+                    <span id="metricTheta" class="metric-value val-amber" style="font-size: 0.88rem;">90.0° (1.00)</span>
+                  </div>
+                  <div class="metric-card" style="grid-column: span 2; background: rgba(251, 191, 36, 0.08); border-color: rgba(251, 191, 36, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-amber);">对冲验证：$\|v_2\| \times \sin(\theta)$ (严格锁定垂直高)</span>
+                    <span id="metricTrig" class="metric-value val-amber">3.00 (= h2)</span>
+                  </div>
+                  <div class="metric-card" style="grid-column: span 2; background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-green);">真实面积 ($h_1 \times h_2 = |\det(A)|$)</span>
+                    <span id="metricArea" class="metric-value val-green" style="font-size: 1.35rem;">10.50</span>
+                  </div>
+                  <div class="metric-card" style="grid-column: span 2; background: rgba(244, 63, 94, 0.08); border-color: rgba(244, 63, 94, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-rose);">主对角线乘积 ($a_{11} \times a_{22}$)</span>
+                    <span id="metricDiag" class="metric-value val-rose">10.50</span>
+                  </div>
+                </div>
+
+                <div id="shearAlert" style="font-size: 0.78rem; color: var(--accent-green); background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem; line-height: 1.4;">
+                  ✨ 观察提示：拖动滑块 $k$ 时，平行四边形被强烈拉斜，主对角线乘积发生剧变，但<strong>垂直高 $h_2$ 与面积 $\det(A)$ 严格保持恒定</strong>！
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deep Dive Subsection on Angle vs Volume -->
+          <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-amber); border-radius: 0 var(--radius-md) var(--radius-md) 0; padding: 1.5rem; margin-top: 1.75rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+              <span style="font-size: 1.3rem;">🤔</span>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--accent-amber); margin: 0;">
+                深度追问：剪切明明改变了向量夹角 $\theta$，为什么面积和体积却完全不变？
+              </h3>
+            </div>
+            <p style="color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem;">
+              很多同学在学到这里时都会产生直觉冲突：高中数学告诉我们，平行四边形面积公式是 $\text{Area} = \|v_1\| \cdot \|v_2\| \cdot \sin(\theta)$。
+              当向量 $v_2$ 发生剪切滑动时，两向量之间的夹角 $\theta$ 明显变尖锐了，$\sin(\theta)$ 变小了。按理说面积应该减小，为什么行列式却宣称面积分毫不变？
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem;">
+                <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.4rem;">
+                  1. 边长拉长与正弦缩小的“精准抵消”
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  当剪切让 $v_2$ 变倾斜时，$\sin(\theta)$ 确实缩小了；<strong>但与此同时，$v_2$ 的斜边长度 $\|v_2\|$ 被迫拉长了</strong>！
+                  在直角三角形中，斜边长 $\times \sin(\theta)$ 正好等于垂直高 $h_2$。边长增大的倍数与正弦缩小的倍数严格相等，二者相乘始终恒等于垂直高度：
+                  $$\text{Area} = \|v_1\| \cdot \underbrace{\left( \|v_2\| \cdot \sin(\theta) \right)}_{\text{恒等于垂直高 } h_2} = h_1 \cdot h_2$$
+                </p>
+              </div>
+
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem;">
+                <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.4rem;">
+                  2. 垂直高被两条平行导轨锁死
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  底边向量 $v_1$ 躺在基准线上，长度 $h_1$ 固定。剪切操作 $v_2 \to v_2 + k v_1$ 限制了 $v_2$ 的终点只能在平行于底边的水平导轨上左右滑动。
+                  无论终点滑到哪里，导轨间的垂直距离 $h_2$ 永远不变！根据初中几何“同底等高面积相等”，面积绝对不会变。
+                </p>
+              </div>
+
+              <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem;">
+                <div style="font-weight: 700; color: var(--accent-rose); margin-bottom: 0.4rem;">
+                  3. 辨析：剪切变形 vs 框架压扁
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin: 0; line-height: 1.6;">
+                  很多人脑海中想象的是<strong>活动木框</strong>：固定四根木棍的长度去推它，垂直高变矮，面积确实缩水；
+                  但<strong>剪切相当于一叠扑克牌的层间滑动</strong>：每一张扑克牌的厚度和宽度都未变，为了维持原有层高，侧边被迫拉伸变长，微元总体积严格守恒。
+                </p>
+              </div>
+            </div>
+
+            <div style="font-family: var(--font-mono); background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 4px; padding: 0.75rem 1rem; font-size: 0.88rem; color: var(--text-main); margin-top: 0.75rem;">
+              <span style="color: var(--accent-green); font-weight: 700;">代数一剑封喉：</span>
+              $\det \begin{bmatrix} b & x + kb \\ 0 & h \end{bmatrix} = b \cdot h - 0 \cdot (x + kb) = b \cdot h$。
+              因为底向量的垂直高度是 0，所以在交叉相乘展开时，哪怕水平倾斜项 $x + kb$ 变成一万，也会被这个 0 当场乘死！
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: Interactive Lab 2 - Dual Off-Diagonal Coupling & Shear Collapse -->
+        <section id="dual-coupling" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>3.</span> 交互实验室 2：双非对角元的耦合对撞——为什么单独变保面积，同时变却改变面积？
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            许多学习者在这里会提出一个极其深刻的疑问：<strong>“在二维单位矩阵中，若 $a_{21}=0$，变 $a_{12}$ 面积完全不变；若 $a_{12}=0$，变 $a_{21}$ 面积也完全不变。为什么一旦 $a_{12} \neq 0$ 之后，再去改变 $a_{21}$ 面积就会剧烈改变？这与纯剪切的差异究竟在哪里？”</strong>
+          </p>
+
+          <div class="lab-container">
+            <div class="lab-grid">
+              <!-- Canvas Area -->
+              <div class="canvas-wrapper">
+                <canvas id="couplingCanvas" width="600" height="420"></canvas>
+              </div>
+
+              <!-- Controls & Live Readouts -->
+              <div class="controls-panel">
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                  🎛️ 非对角元交互滑块
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>水平分量 $a_{12}$ (让 $v_2$ 水平倾斜)</span>
+                    <span id="a12Val" class="control-val">0.00</span>
+                  </div>
+                  <input type="range" id="a12Slider" class="slider-input" min="-2.0" max="2.0" step="0.05" value="0">
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>垂直分量 $a_{21}$ (让 $v_1$ 垂直抬升)</span>
+                    <span id="a21Val" class="control-val">0.00</span>
+                  </div>
+                  <input type="range" id="a21Slider" class="slider-input" min="-2.0" max="2.0" step="0.05" value="0">
+                </div>
+
+                <!-- Mode Switch: Standard vs Real Shear Composition -->
+                <div class="control-group" style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--text-main);">
+                    变换模式切换：
+                  </div>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; cursor: pointer; margin-bottom: 0.3rem;">
+                    <input type="radio" name="coupleMode" id="modeStandard" value="standard" checked>
+                    <span>普通矩阵 $A = \begin{bmatrix} 1 & a_{12} \\ a_{21} & 1 \end{bmatrix}$ (无补偿)</span>
+                  </label>
+                  <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; cursor: pointer;">
+                    <input type="radio" name="coupleMode" id="modeCompensated" value="compensated">
+                    <span>真·复合剪切 $S_2 S_1 = \begin{bmatrix} 1 & a_{12} \\ a_{21} & 1 + a_{21}a_{12} \end{bmatrix}$</span>
+                  </label>
+                </div>
+
+                <div class="btn-group">
+                  <button class="btn-preset" id="btnPresetSingleH">单水平剪切 (a12=1, a21=0)</button>
+                  <button class="btn-preset" id="btnPresetSingleV">单垂直剪切 (a12=0, a21=1)</button>
+                  <button class="btn-preset" id="btnPresetCrash">对撞压扁 (a12=1, a21=1)</button>
+                  <button class="btn-preset" id="btnPresetResetCouple">重置为单位阵 (I)</button>
+                </div>
+
+                <!-- Matrix Box -->
+                <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.6rem 0.8rem;">
+                  <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.25rem;">
+                    实时变换矩阵
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.95rem;">
+                    <span style="font-size: 1.8rem; font-weight: 300;">[</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 1.2rem; text-align: right;">
+                      <span class="val-blue">1.00</span>
+                      <span id="matBoxA12" class="val-purple">0.00</span>
+                      <span id="matBoxA21" class="val-amber">0.00</span>
+                      <span id="matBoxA22" class="val-blue">1.00</span>
+                    </div>
+                    <span style="font-size: 1.8rem; font-weight: 300;">]</span>
+                  </div>
+                </div>
+
+                <!-- Live Metrics -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <div class="metric-card">
+                    <span class="metric-header">向量 $v_1$ 坐标</span>
+                    <span id="metricV1Coord" class="metric-value val-blue" style="font-size: 0.88rem;">(1.00, 0.00)</span>
+                  </div>
+                  <div class="metric-card">
+                    <span class="metric-header">向量 $v_2$ 坐标</span>
+                    <span id="metricV2Coord" class="metric-value val-purple" style="font-size: 0.88rem;">(0.00, 1.00)</span>
+                  </div>
+                  <div class="metric-card" style="grid-column: span 2; background: rgba(52, 211, 153, 0.08); border-color: rgba(52, 211, 153, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-green);">行列式 / 面积 $\det(A)$</span>
+                    <span id="coupleDetVal" class="metric-value val-green" style="font-size: 1.25rem;">1.00</span>
+                  </div>
+                </div>
+
+                <!-- Status Diagnostic -->
+                <div id="coupleDiagnostic" style="font-size: 0.78rem; line-height: 1.45; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: rgba(15, 23, 42, 0.6); color: var(--text-muted);">
+                  状态诊断：单位矩阵，基向量彼此正交，面积为 1.00。
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deep Dive Cards: 3 Perspectives -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-top: 1.75rem;">
+            
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">视角 1</span>
+                <strong style="color: var(--text-main);">单剪切的“顺风滑行”</strong>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                当 $a_{21}=0$ 时，$v_1 = (1, 0)^T$ <strong>端坐在水平 x 轴上</strong>。此时变动 $a_{12}$，向量 $v_2$ 沿水平方向移动，这个移动方向<strong>恰好严格平行于底边 $v_1$</strong>！<br>
+                同理，若 $a_{12}=0$，$v_2$ 坐在 y 轴上，$a_{21}$ 沿 y 轴滑动也恰好严格平行于底边 $v_2$。<br>
+                <strong>结论：</strong>因为另一个基向量还没歪（仍在坐标轴上），所以沿着坐标轴滑动恰好就是“沿底边的纯剪切”，高不变，面积保真。
+              </p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">视角 2</span>
+                <strong style="color: var(--text-main);">双非对角元的“对撞挤压”</strong>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                一旦 $a_{12} \neq 0$（比如 $a_{12}=1$），$v_2$ 已经歪成了 $(1, 1)^T$。<strong>此时 y 轴不再平行于 $v_2$ 了！</strong><br>
+                现在再去增加 $a_{21}$，让 $v_1 = (1, a_{21})^T$ 沿垂直方向上移，它<strong>不再是在做平行滑动，而是在直接向已经倾斜的 $v_2$ 靠拢撞击</strong>！<br>
+                当 $a_{21}=1$ 时，$v_1$ 与 $v_2$ 完全撞在一起重合，夹角被压为 0，平面面积瞬间塌缩为 $\det(A) = 1 - 1 \times 1 = 0$！
+              </p>
+            </div>
+
+            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: 700;">视角 3</span>
+                <strong style="color: var(--text-main);">与“真·双重剪切复合”的差异</strong>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin: 0;">
+                先后做两次纯剪切（先水平剪切 $S_1$，再垂直剪切 $S_2$），矩阵相乘为：
+                $$\begin{bmatrix} 1 & 0 \\ a_{21} & 1 \end{bmatrix} \begin{bmatrix} 1 & a_{12} \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 1 & a_{12} \\ a_{21} & \mathbf{1 + a_{21}a_{12}} \end{bmatrix}$$
+                <strong>关键发现：</strong>为了维持面积恒为 1，右下角的对角元必须自动生长出<strong>补偿项 $a_{21}a_{12}$</strong>！<br>
+                而普通矩阵 $A$ 强行把对角线锁死为 1，缺少了这项几何补偿，因而面积不可避免地缩水了 $a_{21}a_{12}$。
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- Section 4: Interactive Lab 3 - The Coordinate Rotation & Grid Illusion -->
+        <section id="rotation-invariance" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>4.</span> 交互实验室 3：坐标旋转与“格子幻觉”
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            保持图形本身的物理形状完全不变，仅仅在空间中<strong>旋转参考坐标系</strong>。请观察：矩阵四个格子的数字如何眼花缭乱地变化，而正交高度的乘积如何稳如磐石。
+          </p>
+
+          <div class="lab-container">
+            <div class="lab-grid">
+              <div class="canvas-wrapper">
+                <canvas id="rotCanvas" width="600" height="420"></canvas>
+              </div>
+
+              <div class="controls-panel">
+                <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-main); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                  🔄 空间旋转控制器
+                </div>
+
+                <div class="control-group">
+                  <div class="control-label">
+                    <span>旋转角度 $\theta$</span>
+                    <span id="rotAngleVal" class="control-val">0°</span>
+                  </div>
+                  <input type="range" id="rotSlider" class="slider-input" min="0" max="360" step="1" value="0">
+                </div>
+
+                <div class="btn-group">
+                  <button class="btn-preset" id="btnRot0">0° (基准)</button>
+                  <button class="btn-preset" id="btnRot45">45° (极值)</button>
+                  <button class="btn-preset" id="btnRot90">90° (置换)</button>
+                  <button class="btn-preset" id="btnRotAnimate">▶ 自动旋转</button>
+                </div>
+
+                <!-- Matrix Display -->
+                <div style="background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 0.75rem;">
+                  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.4rem; text-transform: uppercase;">
+                    当前基底下的坐标矩阵 $A$
+                  </div>
+                  <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: var(--font-mono); font-size: 0.95rem;">
+                    <span style="font-size: 1.8rem; font-weight: 300;">[</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 1.25rem; text-align: right;">
+                      <span id="matA11" class="val-blue">3.00</span>
+                      <span id="matA12" class="val-purple">1.00</span>
+                      <span id="matA21" class="val-purple">0.00</span>
+                      <span id="matA22" class="val-blue">2.00</span>
+                    </div>
+                    <span style="font-size: 1.8rem; font-weight: 300;">]</span>
+                  </div>
+                </div>
+
+                <!-- Live Metrics -->
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                  <div class="metric-card" style="background: rgba(52, 211, 153, 0.1); border-color: rgba(52, 211, 153, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-green);">内在正交高积 / 行列式绝对值</span>
+                    <span id="rotDetVal" class="metric-value val-green">6.00 (恒定不变量)</span>
+                  </div>
+                  <div class="metric-card" style="background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">
+                    <span class="metric-header" style="color: var(--accent-rose);">主对角线格子积 ($a_{11} a_{22}$)</span>
+                    <span id="rotDiagVal" class="metric-value val-rose">6.00</span>
+                  </div>
+                </div>
+
+                <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+                  💡 随着 $\theta$ 变化，主对角线乘积 $a_{11}a_{22}$ 会在巨大区间内振荡（甚至穿过 0），但**多面体真实的面积 $6.00$ 绝不随参考系改变**。
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 5: Gram-Schmidt & QR Decomposition as Physical Orthogonalization -->
+        <section id="qr-decomposition" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>5.</span> 代数化身：QR 分解与施密特正交化
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            既然一般矩阵的格子充斥着倾斜与剪切投影，数学家是如何从中提纯出“正交垂直高度”的呢？答案正是 <strong>QR 分解（$A = QR$）</strong>。
+          </p>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin: 1.5rem 0;">
+            
+            <div class="qr-step-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: var(--accent-blue); color: #000; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">1</span>
+                <span style="font-weight: 700; color: var(--accent-blue);">第 1 步：确立基准底座</span>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                选取第一列向量 $v_1$ 作为底边。归一化得单位正交基向量 $q_1 = v_1 / \|v_1\|$。
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; background: rgba(15, 23, 42, 0.6); padding: 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-blue);">
+                底边长 (第一维高度)：$r_{11} = h_1 = \|v_1\|$
+              </div>
+            </div>
+
+            <div class="qr-step-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: var(--accent-purple); color: #000; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">2</span>
+                <span style="font-weight: 700; color: var(--accent-purple);">第 2 步：剔除剪切平移分量</span>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                第二列向量 $v_2$ 在底边上的投影分量是纯剪切滑动，卡瓦列里原理证明它对面积无贡献：
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; background: rgba(15, 23, 42, 0.6); padding: 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-purple);">
+                剪切分量 (非对角元)：$r_{12} = q_1^T v_2$
+              </div>
+            </div>
+
+            <div class="qr-step-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                <span style="background: var(--accent-green); color: #000; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.8rem;">3</span>
+                <span style="font-weight: 700; color: var(--accent-green);">第 3 步：提取纯垂直独立高</span>
+              </div>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                从 $v_2$ 中扣除无用的剪切平移，得到纯法向垂直分量 $u_2 = v_2 - r_{12} q_1$：
+              </p>
+              <div style="font-family: var(--font-mono); font-size: 0.85rem; background: rgba(15, 23, 42, 0.6); padding: 0.6rem; border-radius: 4px; border-left: 3px solid var(--accent-green);">
+                垂直净高度 (第二维高度)：$r_{22} = h_2 = \|u_2\|$
+              </div>
+            </div>
+
+          </div>
+
+          <div class="formula-box">
+            <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;">
+              📐 矩阵形式的完美对映：
+            </div>
+            $$A = \begin{bmatrix} v_1 & v_2 \end{bmatrix} = \underbrace{\begin{bmatrix} q_1 & q_2 \end{bmatrix}}_{Q \text{ (正交旋转，保体积)}} \cdot \underbrace{\begin{bmatrix} h_1 & r_{12} \\ 0 & h_2 \end{bmatrix}}_{R \text{ (上三角矩阵)}}$$
+            <p style="margin-top: 0.75rem; color: var(--text-muted);">
+              因为 $Q$ 是旋转矩阵，$|\det(Q)| = 1$。所以：
+            </p>
+            $$|\det(A)| = |\det(Q)| \cdot |\det(R)| = 1 \cdot (h_1 \times h_2)$$
+            <p style="color: var(--accent-green); font-weight: 600; margin-top: 0.5rem;">
+              这就是为什么三角矩阵的对角线乘积等于体积：因为上三角化把所有“无用剪切”赶到了非对角线，把所有“正交纯高度”整齐排在了主对角线上！
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 6: Generalization to 3D & n-Dimensions -->
+        <section id="higher-dim" style="margin-bottom: 3.5rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>6.</span> 跃迁：三维平行六面体与 $n$ 维超体积
+          </h2>
+          <p style="color: var(--text-muted); line-height: 1.8;">
+            这种“底 × 垂直高”的递归几何法则可以毫无阻碍地扩展到任意维度：
+          </p>
+
+          <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; margin: 1.5rem 0;">
+            <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+              <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-mono);">
+                  2D
+                </div>
+                <div>
+                  <strong style="color: var(--text-main);">底边 $\times$ 垂直高：</strong>
+                  <span style="color: var(--text-muted);">面积 $S_2 = h_1 \cdot h_2$，剔除了沿第一条边滑动的剪切分量。</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-mono);">
+                  3D
+                </div>
+                <div>
+                  <strong style="color: var(--text-main);">底面积 $\times$ 法向高度：</strong>
+                  <span style="color: var(--text-muted);">第三个向量 $v_3$ 分解为落在底面内的剪切滑动与垂直于底面的法向分量 $u_3$。体积 $V_3 = S_2 \cdot h_3 = h_1 \cdot h_2 \cdot h_3$。</span>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 1rem; align-items: flex-start;">
+                <div style="background: rgba(52, 211, 153, 0.15); color: var(--accent-green); padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-weight: 700; font-family: var(--font-mono);">
+                  nD
+                </div>
+                <div>
+                  <strong style="color: var(--text-main);">$n$ 维超平行多面体通式：</strong>
+                  <span style="color: var(--text-muted);">每一个新维度都只提取垂直于已有超平面的正交净高度 $h_i$：</span>
+                  <div style="margin-top: 0.5rem; font-family: var(--font-mono); color: var(--accent-green); font-size: 1.1rem; font-weight: 700;">
+                    $$V_n = \prod_{i=1}^n h_i = h_1 \cdot h_2 \cdot h_3 \cdots h_n = |\det(A)|$$
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 7: Interactive Check & Quiz -->
+        <section id="quiz-section" style="margin-bottom: 4rem;">
+          <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+            <span>7.</span> 几何直觉自测实验室
+          </h2>
+          <p style="color: var(--text-muted);">
+            检验你是否真正掌握了体积的正交几何本质：
+          </p>
+
+          <div class="quiz-container" id="quiz1">
+            <div style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main);">
+              Q1: 将矩阵的第一列加上第二列的 100 倍（即 $a_1 \to a_1 + 100 a_2$），行列式的值会怎样？为什么？
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1-exp')">
+              A. 行列式放大 100 倍，因为底边被拉长了 100 倍
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q1-exp')">
+              B. 行列式完全不变，因为沿底边方向做平行滑动（剪切）不改变垂直高度
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q1-exp')">
+              C. 取决于主对角线上的数值是否变大
+            </div>
+            <div id="q1-exp" style="display: none; margin-top: 0.75rem; font-size: 0.88rem; color: var(--accent-green);">
+              💡 <strong>完全正确！</strong> 这正是卡瓦列里原理 / 剪切不变性。沿底边平移只是让四边形变斜，垂直高度 $h$ 纹丝未动，面积 $h_1 \times h_2$ 严格守恒。
+            </div>
+          </div>
+
+          <div class="quiz-container" id="quiz2">
+            <div style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main);">
+              Q2: 在 QR 分解 $A = QR$ 中，上三角矩阵 $R$ 的主对角线元素代表什么？
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2-exp')">
+              A. 矩阵 $A$ 原始各列向量的长度
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q2-exp')">
+              B. 各向量在前驱向量张成空间上的法向独立垂直净高度
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q2-exp')">
+              C. 旋转变换所引入的倾斜角度
+            </div>
+            <div id="q2-exp" style="display: none; margin-top: 0.75rem; font-size: 0.88rem; color: var(--accent-green);">
+              💡 <strong>完全正确！</strong> 施密特正交化剔除了所有冗余的投影（剪切分量放入了非对角线），留下来的对角线正是相互垂直的独立高 $h_1, h_2, \dots, h_n$。
+            </div>
+          </div>
+
+          <div class="quiz-container" id="quiz3">
+            <div style="font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main);">
+              Q3: 在二维单位矩阵中，为什么单独变 $a_{12}$（或单独变 $a_{21}$）不改变面积，但 $a_{12} \neq 0$ 后再改变 $a_{21}$ 面积就会改变？
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, true, 'q3-exp')">
+              A. 单独改变时另一向量在坐标轴上，滑动方向即底边方向（纯剪切）；但一旦 $a_{12} \neq 0$ 另一向量已倾斜，沿原坐标轴移动会与底边相撞导致夹角压缩，且矩阵缺少了对角线补偿项 $a_{21}a_{12}$
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3-exp')">
+              B. 因为计算机浮点数计算误差
+            </div>
+            <div class="quiz-option" onclick="checkAnswer(this, false, 'q3-exp')">
+              C. 因为只要矩阵里有两个非对角线元素，行列式就永远等于 0
+            </div>
+            <div id="q3-exp" style="display: none; margin-top: 0.75rem; font-size: 0.88rem; color: var(--accent-green);">
+              💡 <strong>完全正确！</strong> 这正是单向剪切与双向耦合的关键分水岭。单变时是沿着坐标轴底边的“顺风滑移”，双变时则变成了朝倾斜底边相撞的“逆向对撞挤压”。
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- Interactive Scripts -->
+  <script>
+    // ==========================================
+    // Interactive Lab 1: Cavalieri & Shear Logic
+    // ==========================================
+    const shearCanvas = document.getElementById('shearCanvas');
+    const sCtx = shearCanvas.getContext('2d');
+
+    let shearState = {
+      k: 0.0,
+      h1: 3.5,
+      h2: 3.0,
+      scale: 45,
+      origin: { x: 120, y: 320 }
+    };
+
+    function drawShear() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = shearCanvas.parentElement.getBoundingClientRect();
+      const w = rect.width || 600;
+      const h = 420;
+
+      shearCanvas.width = w * dpr;
+      shearCanvas.height = h * dpr;
+      sCtx.resetTransform();
+      sCtx.scale(dpr, dpr);
+
+      shearState.origin.x = Math.max(80, w * 0.2);
+      shearState.origin.y = h * 0.8;
+
+      const ox = shearState.origin.x;
+      const oy = shearState.origin.y;
+      const s = shearState.scale;
+
+      // Background grid
+      sCtx.clearRect(0, 0, w, h);
+      sCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      sCtx.lineWidth = 1;
+      for (let x = 0; x < w; x += s) {
+        sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, h); sCtx.stroke();
+      }
+      for (let y = 0; y < h; y += s) {
+        sCtx.beginPath(); sCtx.moveTo(0, y); sCtx.lineTo(w, y); sCtx.stroke();
+      }
+
+      // Vectors:
+      // v1 is along horizontal axis: (h1, 0)
+      // v2 is (k * h1, h2)
+      const v1x = shearState.h1 * s;
+      const v1y = 0;
+      const v2x = shearState.k * shearState.h1 * s;
+      const v2y = -shearState.h2 * s;
+
+      // Horizontal shear guide line at height h2
+      sCtx.strokeStyle = 'rgba(251, 191, 36, 0.4)';
+      sCtx.lineWidth = 1.5;
+      sCtx.setLineDash([4, 4]);
+      sCtx.beginPath();
+      sCtx.moveTo(0, oy + v2y);
+      sCtx.lineTo(w, oy + v2y);
+      sCtx.stroke();
+      sCtx.setLineDash([]);
+
+      // Fill Parallelogram
+      sCtx.fillStyle = 'rgba(56, 189, 248, 0.15)';
+      sCtx.beginPath();
+      sCtx.moveTo(ox, oy);
+      sCtx.lineTo(ox + v1x, oy + v1y);
+      sCtx.lineTo(ox + v1x + v2x, oy + v1y + v2y);
+      sCtx.lineTo(ox + v2x, oy + v2y);
+      sCtx.closePath();
+      sCtx.fill();
+
+      sCtx.strokeStyle = 'rgba(56, 189, 248, 0.8)';
+      sCtx.lineWidth = 2;
+      sCtx.stroke();
+
+      // Draw Vertical Height h2 line (dashed green with right angle mark)
+      sCtx.strokeStyle = '#34d399';
+      sCtx.lineWidth = 2;
+      sCtx.setLineDash([3, 3]);
+      sCtx.beginPath();
+      sCtx.moveTo(ox + v2x, oy);
+      sCtx.lineTo(ox + v2x, oy + v2y);
+      sCtx.stroke();
+      sCtx.setLineDash([]);
+
+      // Right angle symbol
+      const raSize = 10;
+      sCtx.strokeStyle = '#34d399';
+      sCtx.lineWidth = 1.5;
+      sCtx.beginPath();
+      sCtx.moveTo(ox + v2x, oy - raSize);
+      sCtx.lineTo(ox + v2x + (v2x >= 0 ? -raSize : raSize), oy - raSize);
+      sCtx.lineTo(ox + v2x + (v2x >= 0 ? -raSize : raSize), oy);
+      sCtx.stroke();
+
+      // Shear displacement vector along the guide line
+      if (Math.abs(shearState.k) > 0.05) {
+        sCtx.strokeStyle = '#c084fc';
+        sCtx.lineWidth = 2;
+        sCtx.beginPath();
+        sCtx.moveTo(ox, oy + v2y);
+        sCtx.lineTo(ox + v2x, oy + v2y);
+        sCtx.stroke();
+        drawArrowHead(sCtx, ox, oy + v2y, ox + v2x, oy + v2y, '#c084fc');
+      }
+
+      // Draw v1 arrow (base)
+      drawArrow(sCtx, ox, oy, ox + v1x, oy, '#38bdf8', 3);
+      // Draw v2 arrow (slanted)
+      drawArrow(sCtx, ox, oy, ox + v2x, oy + v2y, '#f43f5e', 3);
+
+      // Text Labels
+      sCtx.font = 'bold 13px Inter, sans-serif';
+      sCtx.fillStyle = '#38bdf8';
+      sCtx.fillText(`底边 v1 (长 h1 = ${shearState.h1.toFixed(2)})`, ox + v1x / 2 - 40, oy + 24);
+
+      sCtx.fillStyle = '#f43f5e';
+      sCtx.fillText('v2', ox + v2x / 2 - 25, oy + v2y / 2);
+
+      sCtx.fillStyle = '#34d399';
+      sCtx.fillText(`垂直高 h2 = ${shearState.h2.toFixed(2)}`, ox + v2x + 8, oy + v2y / 2);
+
+      if (Math.abs(shearState.k) > 0.1) {
+        sCtx.fillStyle = '#c084fc';
+        sCtx.fillText(`剪切滑动量 k·h1 = ${(shearState.k * shearState.h1).toFixed(2)}`, ox + v2x / 2 - 30, oy + v2y - 12);
+      }
+
+      // Update Live Readouts
+      const area = shearState.h1 * shearState.h2;
+      // Matrix: [[h1, k*h1], [0, h2]]
+      // a11 * a22 = h1 * h2 = area in this coordinate setup!
+      // But if we consider matrix as A = [[v1x, v2x], [v1y, v2y]]
+      // v1 = [h1, 0], v2 = [k*h1, h2] => diag is h1 * h2 = area
+      // If we tilt v1 slightly by 20 deg to make it general:
+      const v1Angle = 0.2;
+      const genV1x = shearState.h1 * Math.cos(v1Angle);
+      const genV1y = shearState.h1 * Math.sin(v1Angle);
+      // v2 with shear k along v1:
+      const normV2x = -shearState.h2 * Math.sin(v1Angle);
+      const normV2y = shearState.h2 * Math.cos(v1Angle);
+      const curV2x = normV2x + shearState.k * genV1x;
+      const curV2y = normV2y + shearState.k * genV1y;
+
+      const a11a22 = genV1x * curV2y;
+
+      const lenV2 = Math.hypot(shearState.k * shearState.h1, shearState.h2);
+      const thetaRad = Math.atan2(shearState.h2, shearState.k * shearState.h1);
+      const thetaDeg = (thetaRad * 180 / Math.PI);
+      const sinTheta = Math.sin(thetaRad);
+      const trigHeight = lenV2 * sinTheta;
+
+      document.getElementById('metricH1').textContent = shearState.h1.toFixed(2);
+      document.getElementById('metricH2').textContent = shearState.h2.toFixed(2);
+      document.getElementById('metricV2').textContent = lenV2.toFixed(2);
+      document.getElementById('metricTheta').textContent = `${thetaDeg.toFixed(1)}° (sin: ${sinTheta.toFixed(2)})`;
+      document.getElementById('metricTrig').textContent = `${trigHeight.toFixed(2)} (= h2)`;
+      document.getElementById('metricArea').textContent = area.toFixed(2);
+      document.getElementById('metricDiag').textContent = Math.abs(a11a22).toFixed(2);
+    }
+
+    function drawArrow(ctx, x1, y1, x2, y2, color, width = 2) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      drawArrowHead(ctx, x1, y1, x2, y2, color);
+    }
+
+    function drawArrowHead(ctx, x1, y1, x2, y2, color) {
+      const headlen = 10;
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // Event Listeners for Shear Lab
+    const kSlider = document.getElementById('kSlider');
+    const h2Slider = document.getElementById('h2Slider');
+    const h1Slider = document.getElementById('h1Slider');
+
+    kSlider.addEventListener('input', (e) => {
+      shearState.k = parseFloat(e.target.value);
+      document.getElementById('kVal').textContent = shearState.k.toFixed(2);
+      drawShear();
+    });
+
+    h2Slider.addEventListener('input', (e) => {
+      shearState.h2 = parseFloat(e.target.value);
+      document.getElementById('h2Val').textContent = shearState.h2.toFixed(2);
+      drawShear();
+    });
+
+    h1Slider.addEventListener('input', (e) => {
+      shearState.h1 = parseFloat(e.target.value);
+      document.getElementById('h1Val').textContent = shearState.h1.toFixed(2);
+      drawShear();
+    });
+
+    document.getElementById('btnResetShear').addEventListener('click', () => {
+      kSlider.value = 0;
+      shearState.k = 0;
+      document.getElementById('kVal').textContent = '0.00';
+      drawShear();
+    });
+
+    document.getElementById('btnShear1').addEventListener('click', () => {
+      kSlider.value = 1.2;
+      shearState.k = 1.2;
+      document.getElementById('kVal').textContent = '1.20';
+      drawShear();
+    });
+
+    // ==========================================
+    // Interactive Lab 2: Dual Off-Diagonal Coupling Logic
+    // ==========================================
+    const couplingCanvas = document.getElementById('couplingCanvas');
+    const cCtx = couplingCanvas.getContext('2d');
+
+    let coupleState = {
+      a12: 0.0,
+      a21: 0.0,
+      mode: 'standard', // 'standard' or 'compensated'
+      scale: 75
+    };
+
+    function drawCoupling() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = couplingCanvas.parentElement.getBoundingClientRect();
+      const w = rect.width || 600;
+      const h = 420;
+
+      couplingCanvas.width = w * dpr;
+      couplingCanvas.height = h * dpr;
+      cCtx.resetTransform();
+      cCtx.scale(dpr, dpr);
+
+      const cx = w * 0.32;
+      const cy = h * 0.68;
+      const s = coupleState.scale;
+
+      cCtx.clearRect(0, 0, w, h);
+
+      // Grid
+      cCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      cCtx.lineWidth = 1;
+      for (let x = 0; x < w; x += s / 2) {
+        cCtx.beginPath(); cCtx.moveTo(x, 0); cCtx.lineTo(x, h); cCtx.stroke();
+      }
+      for (let y = 0; y < h; y += s / 2) {
+        cCtx.beginPath(); cCtx.moveTo(0, y); cCtx.lineTo(w, y); cCtx.stroke();
+      }
+
+      // Coordinate axes
+      cCtx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      cCtx.lineWidth = 1.5;
+      cCtx.beginPath();
+      cCtx.moveTo(0, cy); cCtx.lineTo(w, cy);
+      cCtx.moveTo(cx, 0); cCtx.lineTo(cx, h);
+      cCtx.stroke();
+      drawArrowHead(cCtx, 0, cy, w - 5, cy, 'rgba(255, 255, 255, 0.5)');
+      drawArrowHead(cCtx, cx, h, cx, 5, 'rgba(255, 255, 255, 0.5)');
+
+      // Vectors:
+      // In standard mode: v1 = (1, a21), v2 = (a12, 1)
+      // In compensated mode: v1 = (1, a21), v2 = (a12, 1 + a21*a12)
+      const a12 = coupleState.a12;
+      const a21 = coupleState.a21;
+      const a22 = (coupleState.mode === 'compensated') ? (1.0 + a12 * a21) : 1.0;
+
+      const v1x = 1.0 * s;
+      const v1y = -a21 * s;
+      const v2x = a12 * s;
+      const v2y = -a22 * s;
+
+      const det = 1.0 * a22 - a12 * a21;
+
+      // Dashed guide lines
+      // Guide 1: x = 1 line (where v1 slides vertically)
+      cCtx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+      cCtx.lineWidth = 1.5;
+      cCtx.setLineDash([4, 4]);
+      cCtx.beginPath();
+      cCtx.moveTo(cx + 1.0 * s, 0);
+      cCtx.lineTo(cx + 1.0 * s, h);
+      cCtx.stroke();
+
+      // Guide 2: y = 1 line (where v2 slides horizontally)
+      cCtx.strokeStyle = 'rgba(192, 132, 252, 0.35)';
+      cCtx.beginPath();
+      cCtx.moveTo(0, cy - 1.0 * s);
+      cCtx.lineTo(w, cy - 1.0 * s);
+      cCtx.stroke();
+      cCtx.setLineDash([]);
+
+      // Points of parallelogram
+      const p0 = { x: cx, y: cy };
+      const p1 = { x: cx + v1x, y: cy + v1y };
+      const p2 = { x: cx + v1x + v2x, y: cy + v1y + v2y };
+      const p3 = { x: cx + v2x, y: cy + v2y };
+
+      if (Math.abs(det) < 0.03) {
+        // Collapsed!
+        cCtx.strokeStyle = '#f43f5e';
+        cCtx.lineWidth = 4;
+        cCtx.beginPath();
+        cCtx.moveTo(p0.x, p0.y);
+        cCtx.lineTo(p1.x, p1.y);
+        cCtx.stroke();
+      } else {
+        cCtx.beginPath();
+        cCtx.moveTo(p0.x, p0.y);
+        cCtx.lineTo(p1.x, p1.y);
+        cCtx.lineTo(p2.x, p2.y);
+        cCtx.lineTo(p3.x, p3.y);
+        cCtx.closePath();
+
+        if (det > 0) {
+          cCtx.fillStyle = 'rgba(56, 189, 248, 0.2)';
+          cCtx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+        } else {
+          cCtx.fillStyle = 'rgba(244, 63, 94, 0.25)';
+          cCtx.strokeStyle = 'rgba(244, 63, 94, 0.85)';
+        }
+        cCtx.fill();
+        cCtx.lineWidth = 2;
+        cCtx.stroke();
+      }
+
+      // Draw vectors
+      drawArrow(cCtx, p0.x, p0.y, p1.x, p1.y, '#38bdf8', 3); // v1
+      drawArrow(cCtx, p0.x, p0.y, p3.x, p3.y, '#c084fc', 3); // v2
+
+      // Text labels
+      cCtx.font = 'bold 12px Inter, sans-serif';
+      cCtx.fillStyle = '#38bdf8';
+      cCtx.fillText(`v1(1, ${a21.toFixed(2)})`, p1.x + 8, p1.y);
+
+      cCtx.fillStyle = '#c084fc';
+      cCtx.fillText(`v2(${a12.toFixed(2)}, ${a22.toFixed(2)})`, p3.x + 8, p3.y - 6);
+
+      // UI readouts
+      document.getElementById('a12Val').textContent = a12.toFixed(2);
+      document.getElementById('a21Val').textContent = a21.toFixed(2);
+      document.getElementById('matBoxA12').textContent = a12.toFixed(2);
+      document.getElementById('matBoxA21').textContent = a21.toFixed(2);
+      document.getElementById('matBoxA22').textContent = a22.toFixed(2);
+      document.getElementById('metricV1Coord').textContent = `(1.00, ${a21.toFixed(2)})`;
+      document.getElementById('metricV2Coord').textContent = `(${a12.toFixed(2)}, ${a22.toFixed(2)})`;
+
+      const detEl = document.getElementById('coupleDetVal');
+      detEl.textContent = det.toFixed(2);
+      if (Math.abs(det - 1.0) < 0.01) {
+        detEl.className = 'metric-value val-green';
+      } else if (Math.abs(det) < 0.05) {
+        detEl.className = 'metric-value val-rose';
+      } else {
+        detEl.className = 'metric-value val-amber';
+      }
+
+      // Diagnostic
+      const diagEl = document.getElementById('coupleDiagnostic');
+      if (Math.abs(a12) < 0.01 && Math.abs(a21) < 0.01) {
+        diagEl.innerHTML = '<span style="color:var(--accent-green); font-weight:700;">✅ 标准单位正方形：</span> 两向量分别紧贴 x 轴与 y 轴，完全正交，面积严格为 1.00。';
+      } else if (Math.abs(a21) < 0.01) {
+        diagEl.innerHTML = `<span style="color:var(--accent-blue); font-weight:700;">🔹 单水平剪切：</span> 底边 v1 仍端坐 x 轴，a12 让 v2 沿底边方向滑动，垂直高锁死在 1，<strong>面积恒定为 1.00</strong>。`;
+      } else if (Math.abs(a12) < 0.01) {
+        diagEl.innerHTML = `<span style="color:var(--accent-purple); font-weight:700;">🔹 单垂直剪切：</span> 底边 v2 仍端坐 y 轴，a21 让 v1 沿底边方向滑动，水平高锁死在 1，<strong>面积恒定为 1.00</strong>。`;
+      } else {
+        if (coupleState.mode === 'standard') {
+          if (Math.abs(det) < 0.05) {
+            diagEl.innerHTML = `<span style="color:var(--accent-rose); font-weight:700;">🚨 致命对撞！</span> v1 与 v2 完全重合共线，夹角被压至 0°，空间塌缩为线段，面积为 0.00！`;
+          } else {
+            diagEl.innerHTML = `<span style="color:var(--accent-amber); font-weight:700;">⚠️ 坐标耦合对撞：</span> v2 已经倾斜，v1 沿 y 轴向上走不再平行于 v2 底边，而是在径直扑向 v2！未补偿面积被削减至 <strong>${det.toFixed(2)}</strong> (= 1 - a12·a21)。`;
+          }
+        } else {
+          diagEl.innerHTML = `<span style="color:var(--accent-green); font-weight:700;">✨ 复合剪切补偿成功：</span> 右下角自动补上拉伸项 1 + a21·a12 = ${a22.toFixed(2)}，抵消了两向量向内靠拢的挤压，<strong>面积严格守恒为 1.00</strong>！`;
+        }
+      }
+    }
+
+    // Event Listeners for Coupling Lab
+    const a12Slider = document.getElementById('a12Slider');
+    const a21Slider = document.getElementById('a21Slider');
+
+    a12Slider.addEventListener('input', (e) => {
+      coupleState.a12 = parseFloat(e.target.value);
+      drawCoupling();
+    });
+
+    a21Slider.addEventListener('input', (e) => {
+      coupleState.a21 = parseFloat(e.target.value);
+      drawCoupling();
+    });
+
+    document.querySelectorAll('input[name="coupleMode"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        coupleState.mode = e.target.value;
+        drawCoupling();
+      });
+    });
+
+    document.getElementById('btnPresetSingleH').addEventListener('click', () => {
+      a12Slider.value = 1.0;
+      a21Slider.value = 0.0;
+      coupleState.a12 = 1.0;
+      coupleState.a21 = 0.0;
+      document.getElementById('modeStandard').checked = true;
+      coupleState.mode = 'standard';
+      drawCoupling();
+    });
+
+    document.getElementById('btnPresetSingleV').addEventListener('click', () => {
+      a12Slider.value = 0.0;
+      a21Slider.value = 1.0;
+      coupleState.a12 = 0.0;
+      coupleState.a21 = 1.0;
+      document.getElementById('modeStandard').checked = true;
+      coupleState.mode = 'standard';
+      drawCoupling();
+    });
+
+    document.getElementById('btnPresetCrash').addEventListener('click', () => {
+      a12Slider.value = 1.0;
+      a21Slider.value = 1.0;
+      coupleState.a12 = 1.0;
+      coupleState.a21 = 1.0;
+      document.getElementById('modeStandard').checked = true;
+      coupleState.mode = 'standard';
+      drawCoupling();
+    });
+
+    document.getElementById('btnPresetResetCouple').addEventListener('click', () => {
+      a12Slider.value = 0.0;
+      a21Slider.value = 0.0;
+      coupleState.a12 = 0.0;
+      coupleState.a21 = 0.0;
+      document.getElementById('modeStandard').checked = true;
+      coupleState.mode = 'standard';
+      drawCoupling();
+    });
+
+    // ==========================================
+    // Interactive Lab 3: Rotation & Grid Illusion
+    // ==========================================
+    const rotCanvas = document.getElementById('rotCanvas');
+    const rCtx = rotCanvas.getContext('2d');
+
+    let rotAngleDeg = 0;
+    let animId = null;
+
+    // Fixed intrinsic parallelogram: base length 3, height 2, shear offset 1
+    const baseU1 = { x: 3.0, y: 0.0 };
+    const baseU2 = { x: 1.0, y: 2.0 };
+    const trueArea = baseU1.x * baseU2.y - baseU1.y * baseU2.x; // 6.00
+
+    function drawRotation() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = rotCanvas.parentElement.getBoundingClientRect();
+      const w = rect.width || 600;
+      const h = 420;
+
+      rotCanvas.width = w * dpr;
+      rotCanvas.height = h * dpr;
+      rCtx.resetTransform();
+      rCtx.scale(dpr, dpr);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const s = 45;
+
+      rCtx.clearRect(0, 0, w, h);
+
+      // Coordinate axes
+      rCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      rCtx.lineWidth = 1;
+      rCtx.beginPath();
+      rCtx.moveTo(0, cy); rCtx.lineTo(w, cy);
+      rCtx.moveTo(cx, 0); rCtx.lineTo(cx, h);
+      rCtx.stroke();
+
+      // Axis arrows
+      drawArrowHead(rCtx, 0, cy, w - 5, cy, 'rgba(255, 255, 255, 0.4)');
+      drawArrowHead(rCtx, cx, h, cx, 5, 'rgba(255, 255, 255, 0.4)');
+
+      const rad = (rotAngleDeg * Math.PI) / 180;
+      const cosT = Math.cos(rad);
+      const sinT = Math.sin(rad);
+
+      // Rotate vectors by angle
+      const v1x = baseU1.x * cosT - baseU1.y * sinT;
+      const v1y = baseU1.x * sinT + baseU1.y * cosT;
+      const v2x = baseU2.x * cosT - baseU2.y * sinT;
+      const v2y = baseU2.x * sinT + baseU2.y * cosT;
+
+      // Screen coords (y inverted)
+      const p0 = { x: cx, y: cy };
+      const p1 = { x: cx + v1x * s, y: cy - v1y * s };
+      const p2 = { x: cx + (v1x + v2x) * s, y: cy - (v1y + v2y) * s };
+      const p3 = { x: cx + v2x * s, y: cy - v2y * s };
+
+      // Fill Parallelogram
+      rCtx.fillStyle = 'rgba(168, 85, 247, 0.2)';
+      rCtx.beginPath();
+      rCtx.moveTo(p0.x, p0.y);
+      rCtx.lineTo(p1.x, p1.y);
+      rCtx.lineTo(p2.x, p2.y);
+      rCtx.lineTo(p3.x, p3.y);
+      rCtx.closePath();
+      rCtx.fill();
+
+      rCtx.strokeStyle = 'rgba(168, 85, 247, 0.8)';
+      rCtx.lineWidth = 2;
+      rCtx.stroke();
+
+      // Vectors
+      drawArrow(rCtx, p0.x, p0.y, p1.x, p1.y, '#38bdf8', 2.5);
+      drawArrow(rCtx, p0.x, p0.y, p3.x, p3.y, '#f43f5e', 2.5);
+
+      // Labels
+      rCtx.font = 'bold 12px Inter, sans-serif';
+      rCtx.fillStyle = '#38bdf8';
+      rCtx.fillText('v1', p1.x + 8, p1.y);
+      rCtx.fillStyle = '#f43f5e';
+      rCtx.fillText('v2', p3.x + 8, p3.y);
+
+      // Matrix entries: A = [[v1x, v2x], [v1y, v2y]]
+      const a11 = v1x;
+      const a12 = v2x;
+      const a21 = v1y;
+      const a22 = v2y;
+
+      const currentDet = a11 * a22 - a12 * a21;
+      const currentDiag = a11 * a22;
+
+      document.getElementById('matA11').textContent = a11.toFixed(2);
+      document.getElementById('matA12').textContent = a12.toFixed(2);
+      document.getElementById('matA21').textContent = a21.toFixed(2);
+      document.getElementById('matA22').textContent = a22.toFixed(2);
+
+      document.getElementById('rotDetVal').textContent = `${Math.abs(currentDet).toFixed(2)} (恒定面积)`;
+      document.getElementById('rotDiagVal').textContent = currentDiag.toFixed(2);
+    }
+
+    const rotSlider = document.getElementById('rotSlider');
+    rotSlider.addEventListener('input', (e) => {
+      rotAngleDeg = parseInt(e.target.value, 10);
+      document.getElementById('rotAngleVal').textContent = `${rotAngleDeg}°`;
+      drawRotation();
+    });
+
+    document.getElementById('btnRot0').addEventListener('click', () => {
+      stopRotAnim();
+      rotSlider.value = 0;
+      rotAngleDeg = 0;
+      document.getElementById('rotAngleVal').textContent = '0°';
+      drawRotation();
+    });
+
+    document.getElementById('btnRot45').addEventListener('click', () => {
+      stopRotAnim();
+      rotSlider.value = 45;
+      rotAngleDeg = 45;
+      document.getElementById('rotAngleVal').textContent = '45°';
+      drawRotation();
+    });
+
+    document.getElementById('btnRot90').addEventListener('click', () => {
+      stopRotAnim();
+      rotSlider.value = 90;
+      rotAngleDeg = 90;
+      document.getElementById('rotAngleVal').textContent = '90°';
+      drawRotation();
+    });
+
+    const btnAnimate = document.getElementById('btnRotAnimate');
+    btnAnimate.addEventListener('click', () => {
+      if (animId) {
+        stopRotAnim();
+      } else {
+        btnAnimate.textContent = '⏸ 暂停旋转';
+        btnAnimate.style.borderColor = 'var(--accent-amber)';
+        btnAnimate.style.color = 'var(--accent-amber)';
+        function step() {
+          rotAngleDeg = (rotAngleDeg + 1) % 360;
+          rotSlider.value = rotAngleDeg;
+          document.getElementById('rotAngleVal').textContent = `${rotAngleDeg}°`;
+          drawRotation();
+          animId = requestAnimationFrame(step);
+        }
+        animId = requestAnimationFrame(step);
+      }
+    });
+
+    function stopRotAnim() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = null;
+        btnAnimate.textContent = '▶ 自动旋转';
+        btnAnimate.style.borderColor = '';
+        btnAnimate.style.color = '';
+      }
+    }
+
+    // ==========================================
+    // Interactive Quiz Logic
+    // ==========================================
+    function checkAnswer(el, isCorrect, expId) {
+      const parent = el.parentElement;
+      const options = parent.querySelectorAll('.quiz-option');
+      options.forEach(opt => {
+        opt.classList.remove('correct', 'wrong');
+      });
+      if (isCorrect) {
+        el.classList.add('correct');
+      } else {
+        el.classList.add('wrong');
+      }
+      const exp = document.getElementById(expId);
+      if (exp) exp.style.display = 'block';
+    }
+
+    // Initialize all visualizers on load
+    window.addEventListener('load', () => {
+      drawShear();
+      drawCoupling();
+      drawRotation();
+    });
+
+    window.addEventListener('resize', () => {
+      drawShear();
+      drawCoupling();
+      drawRotation();
+    });
+  </script>
+</body>
+</html>

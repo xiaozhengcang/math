@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>拓展专题: 三维向量叉积 (Cross Product) 全景指南 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+<div class="nav-section-title">课程导航</div>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">🏠</span>
+          <span>课程总览与章节地图</span>
+        </a>
+        <a href="essence_of_linear_algebra_3b1b.html" class="nav-item" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); margin-top: 4px;">
+          <span class="nav-icon">🎬</span>
+          <span style="color: var(--accent-purple); font-weight: 700;">3B1B 线性代数的本质 (15讲全景)</span>
+        </a>
+
+        <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
+    
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 1: 线性系统与求解基础
+        </div>
+            
+        <a href="ch1_1_linear_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.1</span>
+          <span>线性系统与微积分算子</span>
+        </a>
+        
+        <a href="ch1_2_vector.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.2</span>
+          <span>向量、几何法则与点积</span>
+        </a>
+        
+        <a href="ch1_3_system_of_equations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.3</span>
+          <span>线性方程组的行与列视角</span>
+        </a>
+        
+        <a href="ch1_4_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.4</span>
+          <span>矩阵概念与 Ax=b 列组合视角</span>
+        </a>
+        
+        <a href="ch1_5_solution.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.5</span>
+          <span>相容性与解集几何结构 (x=xp+xn)</span>
+        </a>
+        
+        <a href="ch1_6_rref.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 1.6</span>
+          <span>高斯消元、RREF 与列对应定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 2: 矩阵运算与逆矩阵
+        </div>
+            
+        <a href="ch2_1_matrix_multiplication.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.1</span>
+          <span>矩阵乘法 4 大视角与几何变换</span>
+        </a>
+        
+        <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
+          <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 3: 行列式
+        </div>
+            
+        <a href="ch3_1_determinant.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.1</span>
+          <span>行列式几何体积与余子式展开</span>
+        </a>
+
+        <a href="ch3_1_supplement_geometric_foundations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 1</span>
+          <span>二维面积推导、减法直觉与法向量底蕴</span>
+        </a>
+
+        <a href="ch3_1_supplement_leibniz_formula.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
+          <span>莱布尼茨公式与全景本质意义</span>
+        </a>
+
+        <a href="ch3_1_supplement_volume_orthogonal_height.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 3</span>
+          <span>正交高度乘积与剪切不变性</span>
+        </a>
+        
+        <a href="ch3_2_cramer_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
+          <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+
+        <a href="ch3_2_supplement_cross_product.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-cyan, #06b6d4);">拓展 4</span>
+          <span>三维向量叉积 (Cross Product) 全景指南</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 4: 空间、基底与坐标系
+        </div>
+            
+        <a href="ch4_1_span_independence.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.1</span>
+          <span>张成空间 (Span) 与线性无关判定</span>
+        </a>
+        
+        <a href="ch4_2_linear_transformation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.2</span>
+          <span>线性变换、几何映射与网格扭曲</span>
+        </a>
+        
+        <a href="ch4_3_subspaces_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.3</span>
+          <span>子空间与四大基本子空间剖析</span>
+        </a>
+        
+        <a href="ch4_4_basis_dimension.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.4</span>
+          <span>基底、维数定理与秩-零度定理</span>
+        </a>
+        
+        <a href="ch4_5_coordinate_system.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.5</span>
+          <span>坐标系统、基坐标与基变换矩阵</span>
+        </a>
+        
+        <a href="ch4_6_operator_matrix.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 4.6</span>
+          <span>算子矩阵化、相似变换与微积分算子</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 5: 特征值与对角化
+        </div>
+            
+        <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
+          <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+
+        <a href="ch5_1_supplement_complex_numbers_foundation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 1</span>
+          <span>高中数学复数完全基石指南</span>
+        </a>
+
+        <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 2</span>
+          <span>代数基本定理与三维马鞍面</span>
+        </a>
+        
+        <a href="ch5_2_characteristic_polynomial.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.2</span>
+          <span>特征多项式、代数/几何重数与相似性</span>
+        </a>
+        
+        <a href="ch5_3_pagerank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.3</span>
+          <span>PageRank 网页排名算法与马尔可夫稳态</span>
+        </a>
+        
+        <a href="ch5_4_diagonalization.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.4</span>
+          <span>矩阵对角化 A=PDP⁻¹ 与高阶幂应用</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 6: 抽象向量空间
+        </div>
+            
+        <a href="ch6_1_vector_space_isomorphism.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.1</span>
+          <span>抽象向量空间 8 大公理与同构定理</span>
+        </a>
+        
+        <a href="ch6_2_inner_product_space.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 6.2</span>
+          <span>抽象内积空间与傅里叶级数分解</span>
+        </a>
+        
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 7: 正交性与 SVD
+        </div>
+            
+        <a href="ch7_1_orthogonality_gram_schmidt.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.1</span>
+          <span>正交性、Gram-Schmidt 正交化与 QR</span>
+        </a>
+        
+        <a href="ch7_2_projection_least_squares.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.2</span>
+          <span>正交投影矩阵与最小二乘法回归</span>
+        </a>
+        
+        <a href="ch7_3_spectral_decomposition.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.3</span>
+          <span>实对称矩阵正交对角化与谱分解</span>
+        </a>
+        
+        <a href="ch7_4_svd_low_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
+          <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 8: 附录与工业实战
+        </div>
+
+        <a href="ch8_1_ols_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">Ch 8.1</span>
+          <span>OLS 股票市场涨跌归因与全景图谱</span>
+        </a>
+        
+        <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
+        <a href="module1_vectors_linear_systems.html" class="nav-item">
+          <span class="nav-icon">1️⃣</span>
+          <span>Module 1: 向量与方程组</span>
+        </a>
+        <a href="module2_rref_solutions_rank.html" class="nav-item">
+          <span class="nav-icon">2️⃣</span>
+          <span>Module 2: RREF 与列对应</span>
+        </a>
+        <a href="module3_matrix_transforms_inverse.html" class="nav-item">
+          <span class="nav-icon">3️⃣</span>
+          <span>Module 3: 矩阵变换与逆矩阵</span>
+        </a>
+        <a href="module4_subspaces_basis_dimension.html" class="nav-item">
+          <span class="nav-icon">4️⃣</span>
+          <span>Module 4: 子空间与四大空间</span>
+        </a>
+        <a href="module5_determinant_cramer.html" class="nav-item">
+          <span class="nav-icon">5️⃣</span>
+          <span>Module 5: 行列式与克莱姆</span>
+        </a>
+        <a href="module6_coordinates_transforms.html" class="nav-item">
+          <span class="nav-icon">6️⃣</span>
+          <span>Module 6: 坐标系与基变换</span>
+        </a>
+        <a href="module7_eigenvalues_diagonalization.html" class="nav-item">
+          <span class="nav-icon">7️⃣</span>
+          <span>Module 7: 特征值与对角化</span>
+        </a>
+        <a href="module8_orthogonality_svd_beyond.html" class="nav-item">
+          <span class="nav-icon">8️⃣</span>
+          <span>Module 8: 正交、SVD与超越</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="ch3_2_cramer_applications.html">Chapter 3: 行列式</a> / <span>拓展专题: 三维向量叉积 (Cross Product) 全景指南</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero">
+          <div class="module-badge" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan, #06b6d4); border: 1px solid rgba(6, 182, 212, 0.3);">
+            Chapter 3 深度拓展 · 几何与代数核心枢纽
+          </div>
+          <h1 class="module-title">三维向量叉积 (Cross Product) 几何直觉、代数推导与全景应用指南</h1>
+          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.75rem;">
+            从点积的投影局限到三维立体的旋转法向；从基向量环到坐标交叉公式的严格推导；全景解锁 6 大黄金性质、计算机图形学法线计算、力矩动力学与高维外代数本质。
+          </p>
+        </div>
+
+        <!-- ================= 第 1 章：动机篇 ================= -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">第一章 · 动机篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 为什么需要叉积？从点积 (Dot Product) 的遗憾谈起</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              初学线性代数或解析几何时，很多同学都会产生一个困惑：“既然我们已经有了<strong>点积（点乘 $\mathbf{a} \cdot \mathbf{b}$）</strong>，为什么数学家还要再费尽心机发明一个规则完全不同的<strong>叉积（叉乘 $\mathbf{a} \times \mathbf{b}$）</strong>？”
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              
+              <!-- 点积的局限 -->
+              <div style="background: rgba(56, 189, 248, 0.06); padding: 1.1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">📉 点积的功绩与“单向局限”</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  • <strong>点积的算式</strong>：$\mathbf{a} \cdot \mathbf{b} = \|\mathbf{a}\| \|\mathbf{b}\| \cos\theta$；<br>
+                  • <strong>输出类型</strong>：是一个<strong>标量（Scalar，单一的数值）</strong>；<br>
+                  • <strong>几何含义</strong>：度量两个向量沿“同一方向”的投影重合度。它回答的是“<strong>投影有多少</strong>”；<br>
+                  • <strong style="color: var(--accent-rose);">核心遗憾</strong>：标量无法指示空间朝向！当两向量垂直时，$\mathbf{a} \cdot \mathbf{b} = 0$，点积直接归零，它无法告诉你两向量所在的平面是水平的、垂直的还是倾斜的，<strong>它无法产生任何新的空间方向</strong>！
+                </p>
+              </div>
+
+              <!-- 现实三维世界的迫切需求 -->
+              <div style="background: rgba(245, 158, 11, 0.06); padding: 1.1rem; border-radius: 6px; border: 1px solid rgba(245, 158, 11, 0.2);">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">🚀 三维物理世界的三大迫切需求</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  在真实的三维物理空间中，我们频繁面对以下几何与物理任务：<br>
+                  1. <strong>寻找法向量 (Surface Normal)</strong>：给定倾斜平面上的两个切向量，如何一瞬间求出一个垂直于该平面的法线方向？<br>
+                  2. <strong>撑开的面度量 (Area)</strong>：不仅需要长度，还需要计算由两向量张成的平行四边形面积；<br>
+                  3. <strong>旋转轴与力矩 (Torque & Rotation)</strong>：用扳手拧螺丝，旋转轴线垂直于扳手臂与施力方向构成的平面，转动趋势由谁来描述？
+                </p>
+              </div>
+
+            </div>
+
+            <!-- 总结框 -->
+            <div class="definition-box" style="padding: 1.1rem; background: rgba(6, 182, 212, 0.08); border-left: 4px solid var(--accent-cyan, #06b6d4); border-radius: 4px;">
+              <h4 style="color: var(--accent-cyan, #06b6d4);">💡 叉积 (Cross Product) 的横空出世</h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                叉积正是为了彻底解决上述三维立体问题而诞生的全新乘法算子：<br>
+                <strong>它把两个三维向量作为输入，输出一个全新的三维向量 $\mathbf{a} \times \mathbf{b}$。这个新向量的模长精确代表底面积，其指向精确代表垂直法线方向！</strong>
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 2 章：几何篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第二章 · 几何篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 叉积的核心定义、几何直觉与右手定则</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              一个向量由<strong>大小（模长）</strong>与<strong>方向</strong>唯二确定。向量 $\mathbf{c} = \mathbf{a} \times \mathbf{b}$ 的几何公理定义如下：
+            </p>
+
+            <div class="theorem-box" style="padding: 1.25rem; background: rgba(74, 222, 128, 0.08); border-left: 4px solid var(--accent-green); border-radius: 4px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">👑 叉积的严格几何公理定义 (Geometric Definition)</h4>
+              <div style="font-size: 0.95rem; line-height: 1.8;">
+                <p><strong>① 模长（大小）：底平行四边形的几何面积</strong></p>
+                $$\|\mathbf{a} \times \mathbf{b}\| = \|\mathbf{a}\| \|\mathbf{b}\| \sin\theta \quad (0^\circ \le \theta \le 180^\circ)$$
+                <p style="color: var(--text-muted); font-size: 0.88rem;">
+                  以向量 $\mathbf{a}$ 为底边（长度 $\|\mathbf{a}\|$），则平行四边形的高为 $h = \|\mathbf{b}\| \sin\theta$。因此底乘高恰好就是面积！
+                </p>
+
+                <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
+
+                <p><strong>② 方向：同时垂直于 $\mathbf{a}$ 与 $\mathbf{b}$，服从右手定则 (Right-Hand Rule)</strong></p>
+                <ul style="margin-left: 1.5rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+                  <li>$\mathbf{a} \times \mathbf{b} \perp \mathbf{a}$ 且 $\mathbf{a} \times \mathbf{b} \perp \mathbf{b}$；</li>
+                  <li><strong>右手定则操作口诀</strong>：伸出右手，使四指顺着第一个向量 $\mathbf{a}$ 的方向，顺着较小夹角 $\theta$ 向第二个向量 $\mathbf{b}$ 弯曲握拳，此时<strong>伸直的大拇指所指的方向，就是 $\mathbf{a} \times \mathbf{b}$ 的空间朝向</strong>。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- SVG 图 1: 几何定义与右手定则 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="370" viewBox="0 0 760 370" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+                <defs>
+                  <marker id="cp-arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                  <marker id="cp-arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80"/>
+                  </marker>
+                  <marker id="cp-arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+                  </marker>
+                  <marker id="cp-arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+                  </marker>
+                  <marker id="cp-arr-curved" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+                  </marker>
+                </defs>
+
+                <!-- ================= 左半区：三维几何面积与垂直法向 ================= -->
+                <g transform="translate(10, 0)">
+                  <!-- 底面参考网格基线 -->
+                  <line x1="30" y1="280" x2="420" y2="280" stroke="#334155" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+                  <!-- 底面平行四边形: 原点 (100, 270) -> a (280, 270) -> a+b (360, 190) -> b (180, 190) -->
+                  <polygon points="100,270 280,270 360,190 180,190" fill="rgba(74, 222, 128, 0.16)" stroke="#4ade80" stroke-width="2"/>
+                  <text x="230" y="235" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">面积 S = ‖a‖ ‖b‖ sinθ</text>
+                  <text x="230" y="252" fill="#94a3b8" font-size="9.5" text-anchor="middle">平行四边形面积 ≡ 模长 ‖a × b‖</text>
+
+                  <!-- 叉积垂直法向量 c = a x b (紫色) -->
+                  <line x1="100" y1="270" x2="100" y2="80" stroke="#c084fc" stroke-width="3.8" marker-end="url(#cp-arr-purple)"/>
+                  <text x="90" y="70" fill="#c084fc" font-size="13" font-weight="bold" text-anchor="middle">c = a × b</text>
+                  <text x="90" y="85" fill="#94a3b8" font-size="9.5" text-anchor="middle">(垂直于 a 与 b 所在平面)</text>
+
+                  <!-- 直角标记: c 垂直于 a -->
+                  <path d="M 100 255 L 115 255 L 115 270" fill="none" stroke="#c084fc" stroke-width="1.2"/>
+                  <!-- 直角标记: c 垂直于 b (透视角度) -->
+                  <path d="M 100 255 L 110 248 L 110 263" fill="none" stroke="#c084fc" stroke-width="1.2"/>
+
+                  <!-- 向量 a (天蓝) -->
+                  <line x1="100" y1="270" x2="280" y2="270" stroke="#38bdf8" stroke-width="3.2" marker-end="url(#cp-arr-blue)"/>
+                  <text x="200" y="292" fill="#38bdf8" font-size="12" font-weight="bold">向量 a (底边)</text>
+
+                  <!-- 向量 b (荧光绿) -->
+                  <line x1="100" y1="270" x2="180" y2="190" stroke="#4ade80" stroke-width="3.2" marker-end="url(#cp-arr-green)"/>
+                  <text x="130" y="225" fill="#4ade80" font-size="12" font-weight="bold">向量 b</text>
+
+                  <!-- 夹角 theta 弧线 -->
+                  <path d="M 145 270 A 45 45 0 0 0 132 238" fill="none" stroke="#fbbf24" stroke-width="1.8"/>
+                  <text x="145" y="255" fill="#fbbf24" font-size="11" font-weight="bold">θ</text>
+
+                  <!-- 垂直高度虚线 h = ||b|| sin(theta) -->
+                  <line x1="180" y1="190" x2="180" y2="270" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <path d="M 180 260 L 190 260 L 190 270" fill="none" stroke="#fbbf24" stroke-width="1"/>
+                  <text x="185" y="235" fill="#fbbf24" font-size="10.5" font-weight="bold">h = ‖b‖ sinθ</text>
+
+                  <!-- 旋转手势小弯箭头 (a 转向 b) -->
+                  <path d="M 170 265 Q 160 245 145 235" fill="none" stroke="#fbbf24" stroke-width="2" marker-end="url(#cp-arr-curved)"/>
+                  <text x="175" y="250" fill="#fbbf24" font-size="9">转向定则</text>
+                </g>
+
+                <!-- ================= 右半区：右手定则与手性图解 ================= -->
+                <g transform="translate(470, 20)">
+                  <rect x="0" y="5" width="275" height="325" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(74, 222, 128, 0.3)" stroke-width="1"/>
+                  
+                  <text x="15" y="32" fill="#4ade80" font-size="12.5" font-weight="bold">✋ 右手定则 (Right-Hand Rule) 解析</text>
+                  
+                  <!-- 步骤卡片 1 -->
+                  <g transform="translate(12, 45)">
+                    <rect width="250" height="75" rx="5" fill="rgba(56, 189, 248, 0.08)" stroke="rgba(56, 189, 248, 0.2)"/>
+                    <text x="10" y="20" fill="#38bdf8" font-size="11" font-weight="bold">① 食指/四指顺着第一个向量 a</text>
+                    <text x="10" y="38" fill="#94a3b8" font-size="9.5">右手手掌摊平，四指严格指向向量 a；</text>
+                    <text x="10" y="54" fill="#94a3b8" font-size="9.5">掌心朝向待弯曲的向量 b 侧。</text>
+                  </g>
+
+                  <!-- 步骤卡片 2 -->
+                  <g transform="translate(12, 130)">
+                    <rect width="250" height="75" rx="5" fill="rgba(251, 191, 36, 0.08)" stroke="rgba(251, 191, 36, 0.2)"/>
+                    <text x="10" y="20" fill="#fbbf24" font-size="11" font-weight="bold">② 四指顺着小夹角 θ 弯向向量 b</text>
+                    <text x="10" y="38" fill="#94a3b8" font-size="9.5">必须走小于 180° 的内夹角方向；</text>
+                    <text x="10" y="54" fill="#94a3b8" font-size="9.5">这一物理动作对应了“旋转趋势/力矩”。</text>
+                  </g>
+
+                  <!-- 步骤卡片 3 -->
+                  <g transform="translate(12, 215)">
+                    <rect width="250" height="95" rx="5" fill="rgba(192, 132, 252, 0.08)" stroke="rgba(192, 132, 252, 0.2)"/>
+                    <text x="10" y="20" fill="#c084fc" font-size="11" font-weight="bold">③ 大拇指直指向量 a × b 的方向</text>
+                    <text x="10" y="38" fill="#94a3b8" font-size="9.5">大拇指与食指呈 90° 垂直挺立；</text>
+                    <text x="10" y="54" fill="#c084fc" font-size="9.5" font-weight="bold">反向乘法：b × a 的大拇指必指向下方！</text>
+                    <text x="10" y="72" fill="#f43f5e" font-size="10.5" font-weight="bold">⟹ b × a = -(a × b) (反对称性)</text>
+                  </g>
+                </g>
+              </svg>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+                图 1：三维向量叉积几何定义 —— 模长等于平行四边形底面积 $\|\mathbf{a}\| \|\mathbf{b}\| \sin\theta$，空间法线朝向由右手定则大拇指唯一指引
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 3 章：推导篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">第三章 · 推导篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 从几何公理到坐标计算公式的严格代数推导</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              很多教科书直接把坐标公式 $\mathbf{a} \times \mathbf{b} = [a_y b_z - a_z b_y, \; a_z b_x - a_x b_z, \; a_x b_y - a_y b_x]^T$ 强行塞给学生记忆，却不解释<strong>它到底是如何从上一章的几何定义推导出来的</strong>。下面我们从三维直角坐标系的标准基向量出发，完成毫无跳跃的一步步严谨推导。
+            </p>
+
+            <!-- 步骤 1: 基底乘法环 -->
+            <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">第 1 步：三维标准基向量 $\mathbf{i}, \mathbf{j}, \mathbf{k}$ 的相互叉乘表</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                在标准右手笛卡尔坐标系中，基向量为 $\mathbf{i} = [1,0,0]^T, \mathbf{j} = [0,1,0]^T, \mathbf{k} = [0,0,1]^T$。它们两两正交且模长全为 1。<br>
+                根据几何定义 $\|\mathbf{u} \times \mathbf{v}\| = \|\mathbf{u}\|\|\mathbf{v}\|\sin\theta$ 与右手定则：
+              </p>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-top: 0.75rem;">
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.88rem;">
+                  <strong style="color: var(--accent-rose);">① 自身与自身叉乘（夹角 0°）：</strong><br>
+                  $\mathbf{i} \times \mathbf{i} = \mathbf{0}$<br>
+                  $\mathbf{j} \times \mathbf{j} = \mathbf{0}$<br>
+                  $\mathbf{k} \times \mathbf{k} = \mathbf{0}$
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.88rem;">
+                  <strong style="color: var(--accent-green);">② 正向顺时针循环（右手定则）：</strong><br>
+                  $\mathbf{i} \times \mathbf{j} = \mathbf{k}$<br>
+                  $\mathbf{j} \times \mathbf{k} = \mathbf{i}$<br>
+                  $\mathbf{k} \times \mathbf{i} = \mathbf{j}$
+                </div>
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.88rem;">
+                  <strong style="color: var(--accent-amber);">③ 反向逆时针循环（反交换律）：</strong><br>
+                  $\mathbf{j} \times \mathbf{i} = -\mathbf{k}$<br>
+                  $\mathbf{k} \times \mathbf{j} = -\mathbf{i}$<br>
+                  $\mathbf{i} \times \mathbf{k} = -\mathbf{j}$
+                </div>
+              </div>
+            </div>
+
+            <!-- 步骤 2: 双线性展开 -->
+            <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">第 2 步：任意两向量的 9 项双线性全展开</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                将向量 $\mathbf{a} = a_x \mathbf{i} + a_y \mathbf{j} + a_z \mathbf{k}$ 与 $\mathbf{b} = b_x \mathbf{i} + b_y \mathbf{j} + b_z \mathbf{k}$ 代入叉积，利用双线性分配律：
+              </p>
+              <div style="text-align: center; font-size: 1rem; margin: 0.75rem 0; padding: 0.6rem; background: rgba(15, 23, 42, 0.8); border-radius: 4px;">
+                $$\mathbf{a} \times \mathbf{b} = (a_x \mathbf{i} + a_y \mathbf{j} + a_z \mathbf{k}) \times (b_x \mathbf{i} + b_y \mathbf{j} + b_z \mathbf{k})$$
+              </div>
+              <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                逐项相乘得到 9 项原子式：
+              </p>
+              $$\begin{aligned}
+                \mathbf{a} \times \mathbf{b} &= a_x b_x (\mathbf{i} \times \mathbf{i}) + a_x b_y (\mathbf{i} \times \mathbf{j}) + a_x b_z (\mathbf{i} \times \mathbf{k}) \\
+                &+ a_y b_x (\mathbf{j} \times \mathbf{i}) + a_y b_y (\mathbf{j} \times \mathbf{j}) + a_y b_z (\mathbf{j} \times \mathbf{k}) \\
+                &+ a_z b_x (\mathbf{k} \times \mathbf{i}) + a_z b_y (\mathbf{k} \times \mathbf{j}) + a_z b_z (\mathbf{k} \times \mathbf{k})
+              \end{aligned}$$
+            </div>
+
+            <!-- 步骤 3: 代入基底公式化简 -->
+            <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">第 3 步：消除 3 个零项，合并 6 个互反项，大功告成！</h4>
+              <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                将第 1 步的基底乘法结果全部代入：<br>
+                • 对角线三项全为零：$\mathbf{i} \times \mathbf{i} = \mathbf{j} \times \mathbf{j} = \mathbf{k} \times \mathbf{k} = \mathbf{0}$；<br>
+                • 按基向量 $\mathbf{i}, \mathbf{j}, \mathbf{k}$ 合并其余 6 项：
+              </p>
+              $$\mathbf{a} \times \mathbf{b} = (a_y b_z - a_z b_y)\mathbf{i} + (a_z b_x - a_x b_z)\mathbf{j} + (a_x b_y - a_y b_x)\mathbf{k}$$
+              
+              <div style="text-align: center; margin: 1rem 0; padding: 1rem; background: rgba(74, 222, 128, 0.08); border-radius: 6px; border: 1px solid rgba(74, 222, 128, 0.3);">
+                <span style="font-size: 1.15rem; font-weight: bold; color: var(--accent-green);">👑 终极坐标解析算式：</span>
+                $$\mathbf{a} \times \mathbf{b} = \begin{bmatrix} a_y b_z - a_z b_y \\ a_z b_x - a_x b_z \\ a_x b_y - a_y b_x \end{bmatrix} = \begin{bmatrix} a_2 b_3 - a_3 b_2 \\ a_3 b_1 - a_1 b_3 \\ a_1 b_2 - a_2 b_1 \end{bmatrix}$$
+              </div>
+            </div>
+
+            <!-- 步骤 4: 行列式助记法 -->
+            <div class="intuition-box" style="margin-top: 1rem;">
+              <div class="box-title">💡 黄金记忆神器：3×3 形式行列式助记法</div>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                这复杂的交叉相减式子极易记错正负号。数学家发现了一个无与伦比的优雅助记法——<strong>形式行列式</strong>：
+              </p>
+              $$\mathbf{a} \times \mathbf{b} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ a_x & a_y & a_z \\ b_x & b_y & b_z \end{vmatrix}$$
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                按照第一行拉普拉斯代数余子式展开：
+              </p>
+              $$\mathbf{a} \times \mathbf{b} = \mathbf{i} \begin{vmatrix} a_y & a_z \\ b_y & b_z \end{vmatrix} - \mathbf{j} \begin{vmatrix} a_x & a_z \\ b_x & b_z \end{vmatrix} + \mathbf{k} \begin{vmatrix} a_x & a_y \\ b_x & b_y \end{vmatrix}$$
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
+                • $x$ 分量：二阶行列式 $a_y b_z - a_z b_y$；<br>
+                • $y$ 分量：自带代数余子式负号 $-(a_x b_z - a_z b_x) = a_z b_x - a_x b_z$；<br>
+                • $z$ 分量：二阶行列式 $a_x b_y - a_y b_x$。<br>
+                <strong>这从数学源头上彻底解释了为什么叉积的每个坐标分量，在代数上天然就是代数余子式！</strong>
+              </p>
+            </div>
+
+            <!-- SVG 图 2: 基向量乘法环与 9 项分解 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="340" viewBox="0 0 760 340" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+                <defs>
+                  <marker id="ring-arr" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                </defs>
+
+                <!-- ================= 左侧：基向量循环乘法环 ================= -->
+                <g transform="translate(40, 20)">
+                  <text x="140" y="25" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">基向量正向乘法环 (右手顺向)</text>
+                  
+                  <!-- 循环外环圆弧 -->
+                  <circle cx="140" cy="160" r="90" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="4,4"/>
+                  
+                  <!-- 三个顶点节点 -->
+                  <!-- 顶 i: (140, 70) -->
+                  <circle cx="140" cy="70" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2.5"/>
+                  <text x="140" y="77" fill="#38bdf8" font-size="16" font-weight="bold" text-anchor="middle">i</text>
+
+                  <!-- 右下 j: (140 + 90*cos(30) = 218, 160 + 90*sin(30) = 205) -->
+                  <circle cx="218" cy="205" r="22" fill="#0f172a" stroke="#4ade80" stroke-width="2.5"/>
+                  <text x="218" y="212" fill="#4ade80" font-size="16" font-weight="bold" text-anchor="middle">j</text>
+
+                  <!-- 左下 k: (140 - 90*cos(30) = 62, 160 + 90*sin(30) = 205) -->
+                  <circle cx="62" cy="205" r="22" fill="#0f172a" stroke="#c084fc" stroke-width="2.5"/>
+                  <text x="62" y="212" fill="#c084fc" font-size="16" font-weight="bold" text-anchor="middle">k</text>
+
+                  <!-- 顺时针有向弧 -->
+                  <!-- i -> j -->
+                  <path d="M 160 85 C 200 105, 225 145, 222 180" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#ring-arr)"/>
+                  <text x="215" y="125" fill="#38bdf8" font-size="11" font-weight="bold">i × j = +k</text>
+
+                  <!-- j -> k -->
+                  <path d="M 195 220 C 160 250, 120 250, 85 220" fill="none" stroke="#4ade80" stroke-width="2.5" marker-end="url(#ring-arr)"/>
+                  <text x="140" y="260" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle">j × k = +i</text>
+
+                  <!-- k -> i -->
+                  <path d="M 58 180 C 55 145, 80 105, 120 85" fill="none" stroke="#c084fc" stroke-width="2.5" marker-end="url(#ring-arr)"/>
+                  <text x="65" y="125" fill="#c084fc" font-size="11" font-weight="bold">k × i = +j</text>
+
+                  <text x="140" y="300" fill="#94a3b8" font-size="10.5" text-anchor="middle">顺向走为正号 (+)，逆向走为负号 (-)</text>
+                </g>
+
+                <!-- ================= 右侧：9 项全展开归纳网格 ================= -->
+                <g transform="translate(380, 25)">
+                  <text x="170" y="20" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">9 项全展开与对角线消除网格</text>
+
+                  <!-- 3x3 网格卡片表 -->
+                  <!-- 表头 -->
+                  <rect x="20" y="40" width="310" height="230" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(74, 222, 128, 0.3)" stroke-width="1"/>
+                  
+                  <!-- 行 1 -->
+                  <text x="40" y="75" fill="#f43f5e" font-size="11">ax bx (i × i) = 0</text>
+                  <text x="145" y="75" fill="#38bdf8" font-size="11">ax by (i × j) = +ax by k</text>
+                  <text x="250" y="75" fill="#c084fc" font-size="11">ax bz (i × k) = -ax bz j</text>
+
+                  <line x1="30" y1="95" x2="320" y2="95" stroke="#334155" stroke-width="1"/>
+
+                  <!-- 行 2 -->
+                  <text x="40" y="130" fill="#38bdf8" font-size="11">ay bx (j × i) = -ay bx k</text>
+                  <text x="145" y="130" fill="#f43f5e" font-size="11">ay by (j × j) = 0</text>
+                  <text x="250" y="130" fill="#4ade80" font-size="11">ay bz (j × k) = +ay bz i</text>
+
+                  <line x1="30" y1="150" x2="320" y2="150" stroke="#334155" stroke-width="1"/>
+
+                  <!-- 行 3 -->
+                  <text x="40" y="185" fill="#c084fc" font-size="11">az bx (k × i) = +az bx j</text>
+                  <text x="145" y="185" fill="#4ade80" font-size="11">az by (k × j) = -az by i</text>
+                  <text x="250" y="185" fill="#f43f5e" font-size="11">az bz (k × k) = 0</text>
+
+                  <!-- 归纳高亮横幅 -->
+                  <rect x="25" y="215" width="300" height="45" rx="4" fill="rgba(74, 222, 128, 0.12)" stroke="rgba(74, 222, 128, 0.3)"/>
+                  <text x="175" y="234" fill="#4ade80" font-size="10.5" font-weight="bold" text-anchor="middle">合并结果: i项 (ay bz - az by), j项 (az bx - ax bz)</text>
+                  <text x="175" y="249" fill="#4ade80" font-size="10.5" font-weight="bold" text-anchor="middle">k项 (ax by - ay bx) 完美对应行列式展开！</text>
+                </g>
+              </svg>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+                图 2：三维基向量正交循环环（左）与 9 项双线性展开消除对角零项化简网格（右）
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 4 章：性质篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">第四章 · 性质篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 叉积的 6 大黄金数学性质</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              叉积不仅运算法则特殊，更具有一系列颠覆初学者对“传统算术乘法”认知的深刻代数性质。
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+
+              <!-- 性质 1: 反交换律 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-rose); font-size: 0.95rem;">① 反交换律 (Anticommutativity)</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.1rem; color: var(--accent-rose);">
+                  $$\mathbf{b} \times \mathbf{a} = -(\mathbf{a} \times \mathbf{b})$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  传统乘法 $ab = ba$ 在叉积中彻底失效！交换乘法顺序，平行四边形面积虽然完全相同，但右手定则四指转向倒转，大拇指指向完全相反的 180° 方向。
+                </p>
+              </div>
+
+              <!-- 性质 2: 自身与平行 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-amber); font-size: 0.95rem;">② 自身叉乘为零与平行判定定理</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.1rem; color: var(--accent-amber);">
+                  $$\mathbf{a} \times \mathbf{a} = \mathbf{0}, \qquad \mathbf{a} \times \mathbf{b} = \mathbf{0} \iff \mathbf{a} \parallel \mathbf{b}$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  夹角 $\theta = 0^\circ$ 或 $180^\circ$ 时，$\sin\theta = 0$，围不成任何面积。因此，<strong>检验两个非零三维向量是否平行，最快的方法就是看它们的叉积是否为零向量 $\mathbf{0}$</strong>！
+                </p>
+              </div>
+
+              <!-- 性质 3: 分配律与数乘 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-blue); font-size: 0.95rem;">③ 双线性与分配律 (Distributivity)</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.05rem; color: var(--accent-blue);">
+                  $$\mathbf{a} \times (\mathbf{b} + \mathbf{c}) = \mathbf{a} \times \mathbf{b} + \mathbf{a} \times \mathbf{c}$$
+                  $$(k \mathbf{a}) \times \mathbf{b} = k (\mathbf{a} \times \mathbf{b}) = \mathbf{a} \times (k \mathbf{b})$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  叉积对加法具有严格的分配律，数乘标量可以自由穿透。这保证了叉积在多线性代数中的良好运算架构。
+                </p>
+              </div>
+
+              <!-- 性质 4: 结合律失效 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-rose); font-size: 0.95rem;">④ 结合律不成立！(Non-associative)</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.1rem; color: var(--accent-rose);">
+                  $$(\mathbf{a} \times \mathbf{b}) \times \mathbf{c} \neq \mathbf{a} \times (\mathbf{b} \times \mathbf{c})$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  <strong>千万不能随意加括号！</strong><br>
+                  极简反例：$(\mathbf{i} \times \mathbf{i}) \times \mathbf{j} = \mathbf{0} \times \mathbf{j} = \mathbf{0}$。<br>
+                  但 $\mathbf{i} \times (\mathbf{i} \times \mathbf{j}) = \mathbf{i} \times \mathbf{k} = -\mathbf{j} \neq \mathbf{0}$！两端结果完全迥异。
+                </p>
+              </div>
+
+              <!-- 性质 5: 标量三重积 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-green); font-size: 0.95rem;">⑤ 标量三重积与轮换对称性 (Scalar Triple Product)</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.05rem; color: var(--accent-green);">
+                  $$\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c}) = \mathbf{b} \cdot (\mathbf{c} \times \mathbf{a}) = \mathbf{c} \cdot (\mathbf{a} \times \mathbf{b}) = \det([\mathbf{a}, \mathbf{b}, \mathbf{c}])$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  三向量围成的平行六面体体积等于“底面积 $\times$ 高”，只要维持正向轮换循环 $\mathbf{a} \to \mathbf{b} \to \mathbf{c} \to \mathbf{a}$，其体积严格不变！
+                </p>
+              </div>
+
+              <!-- 性质 6: BAC-CAB 展开 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <strong style="color: var(--accent-purple); font-size: 0.95rem;">⑥ 矢量三重积与 BAC-CAB 展开定理</strong>
+                <div style="text-align: center; margin: 0.5rem 0; font-size: 1.05rem; color: var(--accent-purple);">
+                  $$\mathbf{a} \times (\mathbf{b} \times \mathbf{c}) = \mathbf{b}(\mathbf{a} \cdot \mathbf{c}) - \mathbf{c}(\mathbf{a} \cdot \mathbf{b})$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  <strong>几何灵魂</strong>：向量 $(\mathbf{b} \times \mathbf{c})$ 垂直于 $bc$ 平面，再次与 $\mathbf{a}$ 叉乘后，结果必定垂直于法线，从而<strong>重新落回 $\mathbf{b}$ 和 $\mathbf{c}$ 所在的平面内</strong>！因此它必然是 $\mathbf{b}$ 与 $\mathbf{c}$ 的线性组合。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- SVG 图 3: 反交换律与结合律对比 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="300" viewBox="0 0 760 300" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+                <defs>
+                  <marker id="prop-arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+                  </marker>
+                  <marker id="prop-arr-rose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                  </marker>
+                  <marker id="prop-arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+                  </marker>
+                </defs>
+
+                <!-- 左侧: 反交换律反向演示 -->
+                <g transform="translate(30, 20)">
+                  <text x="150" y="25" fill="#c084fc" font-size="13" font-weight="bold" text-anchor="middle">反交换律: 方向严格颠倒 180°</text>
+
+                  <!-- 水平底面 -->
+                  <polygon points="50,150 250,150 210,110 10,110" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.5"/>
+                  <text x="130" y="135" fill="#38bdf8" font-size="11" text-anchor="middle">向量 a, b 所在的公共平面</text>
+
+                  <!-- a x b 朝上 (紫色) -->
+                  <line x1="130" y1="130" x2="130" y2="45" stroke="#c084fc" stroke-width="3.5" marker-end="url(#prop-arr-purple)"/>
+                  <text x="140" y="45" fill="#c084fc" font-size="12" font-weight="bold">a × b (向上)</text>
+
+                  <!-- b x a 朝下 (玫瑰红) -->
+                  <line x1="130" y1="130" x2="130" y2="215" stroke="#f43f5e" stroke-width="3.5" marker-end="url(#prop-arr-rose)"/>
+                  <text x="140" y="225" fill="#f43f5e" font-size="12" font-weight="bold">b × a = -(a × b) (向下)</text>
+
+                  <text x="150" y="265" fill="#94a3b8" font-size="10.5" text-anchor="middle">大小严格相等 (面积相同)，符号严格相反</text>
+                </g>
+
+                <!-- 右侧: 结合律失效对比看板 -->
+                <g transform="translate(420, 30)">
+                  <rect x="0" y="5" width="310" height="235" rx="8" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(244, 63, 94, 0.35)" stroke-width="1"/>
+                  <text x="15" y="32" fill="#f43f5e" font-size="12.5" font-weight="bold">⚠️ 结合律彻底失效的反例几何</text>
+
+                  <!-- 左分式 -->
+                  <g transform="translate(15, 50)">
+                    <rect width="280" height="65" rx="4" fill="rgba(15, 23, 42, 0.6)" stroke="#334155"/>
+                    <text x="10" y="22" fill="#38bdf8" font-size="11" font-weight="bold">算式 A: (i × i) × j</text>
+                    <text x="10" y="42" fill="#94a3b8" font-size="10">i × i = 0 ⟹ 0 × j = 0 (零向量！)</text>
+                    <text x="10" y="57" fill="#fbbf24" font-size="9.5">物理图景: i 与自身无面积，叉乘直接坍塌</text>
+                  </g>
+
+                  <!-- 右分式 -->
+                  <g transform="translate(15, 125)">
+                    <rect width="280" height="65" rx="4" fill="rgba(15, 23, 42, 0.6)" stroke="#334155"/>
+                    <text x="10" y="22" fill="#4ade80" font-size="11" font-weight="bold">算式 B: i × (i × j)</text>
+                    <text x="10" y="42" fill="#94a3b8" font-size="10">i × j = k ⟹ i × k = -j (非零向量！)</text>
+                    <text x="10" y="57" fill="#fbbf24" font-size="9.5">物理图景: 先生成 z 轴单位向量，再与 x 轴叉乘转向 -y</text>
+                  </g>
+
+                  <text x="155" y="215" fill="#f43f5e" font-size="11" font-weight="bold" text-anchor="middle">(i × i) × j ≠ i × (i × j)</text>
+                  <text x="155" y="230" fill="#94a3b8" font-size="9.5" text-anchor="middle">向量叉乘绝无普遍结合律！</text>
+                </g>
+              </svg>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+                图 3：反交换律方向 180° 翻转（左）与基向量结合律失效反例可视化对比（右）
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 5 章：应用篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-cyan, #06b6d4); color: #000;">第五章 · 应用篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 现代科学与工程中的四大全景应用</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              叉积不仅是数学黑板上的抽象符号，更是现代 3D 游戏引擎、机器人控制、天体物理与电动力学的核心底层算法。
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+
+              <!-- 应用 1: 计算机图形学 -->
+              <div style="background: var(--bg-card); padding: 1.1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-cyan, #06b6d4); margin-bottom: 0.5rem;">🎮 ① 计算机图形学与 3D 游戏引擎</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  • <strong>三角面片法线计算</strong>：在 Unity、Unreal Engine 或 Blender 中，3D 模型由成千上万个三角形拼成。已知三个顶点 $P_1, P_2, P_3$，两条边为 $\mathbf{e}_1 = P_2 - P_1, \mathbf{e}_2 = P_3 - P_1$。面法向量直接为：
+                  $$\mathbf{N} = \frac{\mathbf{e}_1 \times \mathbf{e}_2}{\|\mathbf{e}_1 \times \mathbf{e}_2\|}$$
+                  • <strong>背面剔除 (Back-face Culling)</strong>：视线方向为 $\mathbf{V}$。若 $\mathbf{N} \cdot \mathbf{V} \gt 0$，说明该三角形背对摄像机，GPU 直接将其剔除不画，瞬间减免 50% 显卡计算量！<br>
+                  • <strong>朗伯着色光照模型</strong>：漫反射亮度正比于 $\mathbf{N} \cdot \mathbf{L}$（法向量与光源方向点积）。
+                </p>
+              </div>
+
+              <!-- 应用 2: 经典力学与机械工程 -->
+              <div style="background: var(--bg-card); padding: 1.1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">⚙️ ② 经典力学与机器人关节控制</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  • <strong>转动力矩 (Torque)</strong>：用扳手拧螺丝，旋转力矩为：
+                  $$\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}$$
+                  力臂 $\mathbf{r}$ 与外力 $\mathbf{F}$ 的叉积，其模长 $\|\mathbf{r}\|\|\mathbf{F}\|\sin\theta$ 代表拧紧力度，其方向直接定义了螺丝向前推进还是向后松退的旋转轴向！<br>
+                  • <strong>旋转角速度与线速度</strong>：刚体定轴转动线速度 $\mathbf{v} = \boldsymbol{\omega} \times \mathbf{r}$；<br>
+                  • <strong>角动量守恒</strong>：天体公转与陀螺稳定原理 $\mathbf{L} = \mathbf{r} \times \mathbf{p}$。
+                </p>
+              </div>
+
+              <!-- 应用 3: 经典电磁学 -->
+              <div style="background: var(--bg-card); padding: 1.1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">⚡ ③ 电动力学与洛伦兹力</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  • <strong>洛伦兹力定律</strong>：带电粒子在磁场中运动受到的偏转力为：
+                  $$\mathbf{F} = q(\mathbf{v} \times \mathbf{B})$$
+                  磁场力严格垂直于运动速度 $\mathbf{v}$，所以<strong>磁场力永远不做功</strong>（只改变粒子运动方向，不改变动能）！粒子在匀强磁场中走出美妙的回旋加速圆周。<br>
+                  • <strong>电磁辐射能量流（坡印廷矢量）</strong>：$\mathbf{S} = \frac{1}{\mu_0}(\mathbf{E} \times \mathbf{B})$，光波沿电场与磁场的叉积方向飞速传播。
+                </p>
+              </div>
+
+              <!-- 应用 4: 线性代数与前沿数学 -->
+              <div style="background: var(--bg-card); padding: 1.1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📐 ④ 伴随矩阵、代数余子式与外代数</h4>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
+                  • <strong>伴随矩阵的真身</strong>：正如 Ch 3.2 所示，三阶矩阵的代数余子式向量 $\mathbf{C}_3$ 在本质上就是底面两列向量的叉积 $\mathbf{a}_1 \times \mathbf{a}_2$！<br>
+                  • <strong>高维推广之谜</strong>：为什么 4 维以上空间没有初等叉积？因为在 $n$ 维空间中，$n-1$ 个向量才能唯一确定一根垂线！数学家因此发展了<strong>外代数（Wedge Product $\mathbf{a} \wedge \mathbf{b}$）</strong>与<strong>霍奇星算子 (Hodge Star $\star$)</strong>，叉积正是 3 维外积的特殊投影：$\mathbf{a} \times \mathbf{b} = \star(\mathbf{a} \wedge \mathbf{b})$。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- SVG 图 4: 图形学光照法线与力矩工程图 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="320" viewBox="0 0 760 320" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+                <defs>
+                  <marker id="app-arr-cyan" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#06b6d4"/>
+                  </marker>
+                  <marker id="app-arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+                  </marker>
+                  <marker id="app-arr-rose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+                  </marker>
+                </defs>
+
+                <!-- 左侧: 3D 图形学三角面法线与着色 -->
+                <g transform="translate(40, 20)">
+                  <text x="140" y="25" fill="#06b6d4" font-size="13" font-weight="bold" text-anchor="middle">3D 网格三角面片法线 N = e₁ × e₂</text>
+
+                  <!-- 三角面片顶点: P1 (60, 220), P2 (220, 220), P3 (150, 140) -->
+                  <polygon points="60,220 220,220 150,140" fill="rgba(6, 182, 212, 0.16)" stroke="#06b6d4" stroke-width="2"/>
+                  
+                  <!-- 边 e1, e2 -->
+                  <line x1="60" y1="220" x2="220" y2="220" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#app-arr-cyan)"/>
+                  <text x="140" y="240" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">边向量 e₁ = P₂ - P₁</text>
+
+                  <line x1="60" y1="220" x2="150" y2="140" stroke="#4ade80" stroke-width="2.5" marker-end="url(#app-arr-cyan)"/>
+                  <text x="90" y="175" fill="#4ade80" font-size="11" font-weight="bold">边 e₂ = P₃ - P₁</text>
+
+                  <!-- 面法向量 N (黄色高亮) 从面中心 (143, 193) 发出 -->
+                  <line x1="143" y1="193" x2="143" y2="70" stroke="#fbbf24" stroke-width="3.5" marker-end="url(#app-arr-amber)"/>
+                  <text x="143" y="55" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">表面法线 N = e₁ × e₂</text>
+
+                  <text x="140" y="280" fill="#94a3b8" font-size="10.5" text-anchor="middle">GPU 光照计算的核心基础 (N · Light)</text>
+                </g>
+
+                <!-- 右侧: 机械力矩扳手旋转 -->
+                <g transform="translate(420, 20)">
+                  <text x="150" y="25" fill="#fbbf24" font-size="13" font-weight="bold" text-anchor="middle">物理机械力矩: τ = r × F</text>
+
+                  <!-- 螺丝中心 (60, 180) -->
+                  <circle cx="60" cy="180" r="16" fill="#1e293b" stroke="#94a3b8" stroke-width="2"/>
+                  <circle cx="60" cy="180" r="6" fill="#fbbf24"/>
+                  <text x="60" y="215" fill="#94a3b8" font-size="10" text-anchor="middle">转轴中心 O</text>
+
+                  <!-- 扳手力臂 r (水平向右) -->
+                  <line x1="60" y1="180" x2="220" y2="180" stroke="#38bdf8" stroke-width="4" marker-end="url(#app-arr-cyan)"/>
+                  <text x="140" y="170" fill="#38bdf8" font-size="11.5" font-weight="bold" text-anchor="middle">扳手力臂向量 r</text>
+
+                  <!-- 垂直施加的外力 F (向下倾斜) -->
+                  <line x1="220" y1="180" x2="220" y2="260" stroke="#f43f5e" stroke-width="3.5" marker-end="url(#app-arr-rose)"/>
+                  <text x="245" y="230" fill="#f43f5e" font-size="11.5" font-weight="bold">外力 F</text>
+
+                  <!-- 转动力矩轴 tau (垂直纸面向里/向外) -->
+                  <line x1="60" y1="180" x2="60" y2="75" stroke="#fbbf24" stroke-width="3.8" marker-end="url(#app-arr-amber)"/>
+                  <text x="60" y="60" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">力矩 τ = r × F (旋转轴)</text>
+
+                  <text x="150" y="295" fill="#94a3b8" font-size="10.5" text-anchor="middle">右手顺着 r 转向 F ⟹ 确定螺丝进退朝向</text>
+                </g>
+              </svg>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+                图 4：计算机图形学网格三角面法线计算（左）与力矩扳手定轴旋转动力学（右）
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 6 章：实战自测篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">第六章 · 自学进阶篇</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 初学者常见误区避坑与精选自学练习</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- 三大误区 -->
+            <div class="warning-box" style="padding: 1.1rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 4px;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">🚨 初学者自学三大必踩大坑警示</h4>
+              <ul style="margin-left: 1.5rem; font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                <li>
+                  <strong style="color: var(--text-main);">误区 1：误以为叉积满足消去律（“除法陷阱”）</strong><br>
+                  若 $\mathbf{a} \times \mathbf{b} = \mathbf{a} \times \mathbf{c}$ 且 $\mathbf{a} \neq \mathbf{0}$，<strong>绝对不能推导出 $\mathbf{b} = \mathbf{c}$！</strong><br>
+                  <em>反例解析</em>：移项得 $\mathbf{a} \times (\mathbf{b} - \mathbf{c}) = \mathbf{0}$，这只说明 $(\mathbf{b} - \mathbf{c})$ 与 $\mathbf{a}$ 平行，即 $\mathbf{b} = \mathbf{c} + k\mathbf{a}$（沿 $\mathbf{a}$ 方向剪切平移不改变叉积）！叉乘不存在逆运算除法。
+                </li>
+                <li>
+                  <strong style="color: var(--text-main);">误区 2：混淆点积与叉积的模长公式</strong><br>
+                  点积是余弦 $\cos\theta$（度量平行重合），叉积是正弦 $\sin\theta$（度量垂直撑开面积）。切勿在算面积时顺手写成了 $\cos\theta$。
+                </li>
+                <li>
+                  <strong style="color: var(--text-main);">误区 3：模长公式忘了加绝对值或向量符号</strong><br>
+                  点积结果可正可负可为 0；而叉积的模长 $\|\mathbf{a} \times \mathbf{b}\|$ 作为几何面积，<strong>永远是非负实数（$\ge 0$）</strong>。
+                </li>
+              </ul>
+            </div>
+
+            <!-- 自学练习 -->
+            <div style="margin-top: 1.5rem;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">✍️ 精选自学练习题（附详细手算解析）</h4>
+
+              <!-- 练习题 1 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                <strong style="color: var(--accent-blue);">【练习 1】求空间三角形面积与平面法向量</strong>
+                <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted); margin-top: 0.4rem;">
+                  已知三维空间中三角形的三顶点坐标为 $A(1, 0, 1)$、$B(2, 2, 1)$、$C(0, 3, 2)$。<br>
+                  (1) 求该三角形所在平面的法向量 $\mathbf{n}$；<br>
+                  (2) 计算三角形 $ABC$ 的面积 $S_{\triangle ABC}$。
+                </p>
+                <details style="margin-top: 0.5rem;">
+                  <summary style="cursor: pointer; color: var(--accent-blue); font-size: 0.88rem; font-weight: bold;">查看详细手算步骤与解答</summary>
+                  <div style="padding: 0.75rem; margin-top: 0.4rem; background: rgba(15, 23, 42, 0.6); border-radius: 4px; font-size: 0.88rem; line-height: 1.8;">
+                    <strong>解题步骤：</strong><br>
+                    1. 构造从顶点 $A$ 出发的两条边向量：<br>
+                    $\mathbf{u} = \overrightarrow{AB} = [2-1, \; 2-0, \; 1-1]^T = [1, 2, 0]^T$<br>
+                    $\mathbf{v} = \overrightarrow{AC} = [0-1, \; 3-0, \; 2-1]^T = [-1, 3, 1]^T$<br>
+                    2. 计算两边向量的叉积：<br>
+                    $$\mathbf{n} = \mathbf{u} \times \mathbf{v} = \begin{vmatrix} \mathbf{i} & \mathbf{j} & \mathbf{k} \\ 1 & 2 & 0 \\ -1 & 3 & 1 \end{vmatrix} = \begin{bmatrix} 2\times 1 - 0\times 3 \\ -(1\times 1 - 0\times(-1)) \\ 1\times 3 - 2\times(-1) \end{bmatrix} = \begin{bmatrix} 2 \\ -1 \\ 5 \end{bmatrix}$$
+                    所以法向量即为 $\mathbf{n} = [2, -1, 5]^T$。<br>
+                    3. 三角形面积等于平行四边形面积的一半：<br>
+                    $$S_{\triangle ABC} = \frac{1}{2} \|\mathbf{u} \times \mathbf{v}\| = \frac{1}{2} \sqrt{2^2 + (-1)^2 + 5^2} = \frac{1}{2} \sqrt{4 + 1 + 25} = \frac{\sqrt{30}}{2} \approx 2.7386$$
+                  </div>
+                </details>
+              </div>
+
+              <!-- 练习题 2 -->
+              <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color); margin-bottom: 1rem;">
+                <strong style="color: var(--accent-green);">【练习 2】利用标量三重积判断空间四点是否共面</strong>
+                <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted); margin-top: 0.4rem;">
+                  判断空间四点 $P_1(1,1,1), P_2(2,3,4), P_3(3,5,7), P_4(4,3,2)$ 是否共面？
+                </p>
+                <details style="margin-top: 0.5rem;">
+                  <summary style="cursor: pointer; color: var(--accent-green); font-size: 0.88rem; font-weight: bold;">查看详细手算步骤与解答</summary>
+                  <div style="padding: 0.75rem; margin-top: 0.4rem; background: rgba(15, 23, 42, 0.6); border-radius: 4px; font-size: 0.88rem; line-height: 1.8;">
+                    <strong>解题思路：</strong><br>
+                    四点共面 $\iff$ 由公共起点引出的三个向量张成的平行六面体体积等于 0（即标量三重积/行列式为 0）。<br>
+                    1. 构造三个向量：<br>
+                    $\mathbf{a} = \overrightarrow{P_1P_2} = [1, 2, 3]^T$<br>
+                    $\mathbf{b} = \overrightarrow{P_1P_3} = [2, 4, 6]^T$<br>
+                    $\mathbf{c} = \overrightarrow{P_1P_4} = [3, 2, 1]^T$<br>
+                    2. 观察容易发现：$\mathbf{b} = 2\mathbf{a}$，向量 $\mathbf{a}$ 与 $\mathbf{b}$ 已经共线平行，其叉积 $\mathbf{a} \times \mathbf{b} = \mathbf{0}$！<br>
+                    因此标量三重积 $\det([\mathbf{a}, \mathbf{b}, \mathbf{c}]) = \mathbf{c} \cdot (\mathbf{a} \times \mathbf{b}) = \mathbf{c} \cdot \mathbf{0} = 0$。<br>
+                    <strong>结论：四点完全共面！</strong>
+                  </div>
+                </details>
+              </div>
+
+            </div>
+
+            <!-- 章节导航贯通 -->
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 0.92rem; line-height: 1.8;">
+              <strong style="color: var(--accent-blue);">🔗 课程大纲无缝贯通</strong><br>
+              • <strong>回溯基石</strong>：在 <a href="ch1_2_vector.html" style="color: var(--accent-cyan); font-weight: 700;">Ch 1.2: 向量与点积</a> 中回顾点乘的投影本质；<br>
+              • <strong>高阶进阶</strong>：在 <a href="ch3_2_cramer_applications.html" style="color: var(--accent-purple); font-weight: 700;">Ch 3.2: 伴随矩阵与克莱姆法则</a> 中领悟叉积如何化身为代数余子式向量，以线高乘底面积统一克莱姆法则！
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+</body>
+</html>

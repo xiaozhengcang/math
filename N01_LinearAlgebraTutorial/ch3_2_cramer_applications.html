@@ -36,10 +36,14 @@
       </div>
       
       <nav class="sidebar-nav">
-        <div class="nav-section-title">课程导航</div>
+<div class="nav-section-title">课程导航</div>
         <a href="index.html" class="nav-item">
           <span class="nav-icon">🏠</span>
           <span>课程总览与章节地图</span>
+        </a>
+        <a href="essence_of_linear_algebra_3b1b.html" class="nav-item" style="background: rgba(168, 85, 247, 0.12); border: 1px solid rgba(168, 85, 247, 0.3); margin-top: 4px;">
+          <span class="nav-icon">🎬</span>
+          <span style="color: var(--accent-purple); font-weight: 700;">3B1B 线性代数的本质 (15讲全景)</span>
         </a>
 
         <div class="nav-section-title">完整教学大纲 (按 Chapter 细分)</div>
@@ -110,10 +114,20 @@
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">拓展 2</span>
           <span>莱布尼茨公式与全景本质意义</span>
         </a>
+
+        <a href="ch3_1_supplement_volume_orthogonal_height.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 3</span>
+          <span>正交高度乘积与剪切不变性</span>
+        </a>
         
         <a href="ch3_2_cramer_applications.html" class="nav-item active" style="padding-left: 1.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 3.2</span>
           <span>伴随矩阵求逆与克莱姆法则</span>
+        </a>
+
+        <a href="ch3_2_supplement_cross_product.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-cyan, #06b6d4);">拓展 4</span>
+          <span>三维向量叉积 (Cross Product) 全景指南</span>
         </a>
         
         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
@@ -157,6 +171,16 @@
         <a href="ch5_1_eigenvalues_eigenvectors.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 5.1</span>
           <span>特征值与特征向量几何直觉与求解</span>
+        </a>
+
+        <a href="ch5_1_supplement_complex_numbers_foundation.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">拓展 1</span>
+          <span>高中数学复数完全基石指南</span>
+        </a>
+
+        <a href="ch5_1_supplement_fundamental_theorem_of_algebra.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-amber);">拓展 2</span>
+          <span>代数基本定理与三维马鞍面</span>
         </a>
         
         <a href="ch5_2_characteristic_polynomial.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
@@ -210,6 +234,15 @@
         <a href="ch7_4_svd_low_rank.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
           <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
+        </a>
+
+        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
+          Chapter 8: 附录与工业实战
+        </div>
+
+        <a href="ch8_1_ols_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">Ch 8.1</span>
+          <span>OLS 股票市场涨跌归因与全景图谱</span>
         </a>
         
         <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>
@@ -288,6 +321,320 @@
       <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 0.75rem 0;">
       <p><strong>逆矩阵封闭解析公式：</strong> 当 $\det(A) \neq 0$ 时，$$A^{-1} = \frac{1}{\det(A)} \text{adj}(A)$$</p>
     </div>
+
+    <!-- 1.2 深度几何直觉：代数余子式向量与单列垂直线高定理 -->
+    <div class="intuition-box" style="margin-top: 1.5rem;">
+      <div class="box-title">💡 深度几何直觉：每一列向量对体积的贡献，严格就是其垂直于剩余平面的“线高”！</div>
+      <p style="font-size: 0.95rem; line-height: 1.8;">
+        很多同学在理解行列式拉普拉斯展开与伴随矩阵时，都会提出一个极具穿透力的问题：“<strong>每一列向量对整个矩阵几何体积的贡献，是否完全等价于它垂直于其余列向量所张成平面的‘垂直线高’？</strong>”<br>
+        <strong>答案是：不仅完全正确，而且在几何与多线性代数中极其严密！</strong>
+      </p>
+
+      <!-- 原理阐述两栏网格 -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0;">
+        
+        <!-- 卡片 1: 单列正交分解与剪切抵消 -->
+        <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <strong style="color: var(--accent-blue);">① 单列正交分解：倾斜分量体积贡献严格为 0</strong>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+            设有 $n$ 阶方阵 $A = [\mathbf{a}_1, \dots, \mathbf{a}_n]$。任选一列 $\mathbf{a}_i$，将其相对其余 $n-1$ 个列向量张成的公共超底面子空间进行正交分解：
+            $$\mathbf{a}_i = (h_i \hat{\mathbf{n}}) + \mathbf{a}_{i,\parallel}$$
+            其中 $\hat{\mathbf{n}}$ 为超底面的单位法向量，$h_i = \mathbf{a}_i \cdot \hat{\mathbf{n}}$ 为垂直线高，$\mathbf{a}_{i,\parallel}$ 为平行于底面的分量。<br>
+            <strong>几何本质：</strong>$\mathbf{a}_{i,\parallel}$ 仅使几何体沿底面发生倾斜滑动（剪切变换），底面积不变、垂直高更不变，<strong>体积增量严格为 0</strong>！多面体的整个超体积<strong>完全由垂直线高分量 $h_i \hat{\mathbf{n}}$ 独立支撑</strong>：
+            $$\det(A) = S_{\text{rest}} \cdot h_i$$
+          </p>
+        </div>
+
+        <!-- 卡片 2: 代数余子式向量的几何真身 -->
+        <div style="background: var(--bg-card); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <strong style="color: var(--accent-purple);">② 代数余子式向量 $\mathbf{C}_i$ 的几何真身</strong>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+            将按第 $i$ 列的拉普拉斯代数展开写为两向量的点积形式：
+            $$\det(A) = \sum_{k=1}^n a_{ki} C_{ki} = \mathbf{a}_i \cdot \mathbf{C}_i$$
+            与几何式 $\det(A) = \mathbf{a}_i \cdot (S_{\text{rest}} \hat{\mathbf{n}})$ 对比，直接导出震撼的代数几何统一恒等式：
+            $$\mathbf{C}_i = S_{\text{rest}} \cdot \hat{\mathbf{n}}$$
+            <strong>代数余子式向量 $\mathbf{C}_i$ 的物理实体就是“超底面的法向面积向量”！</strong><br>
+            • 其<strong>模长</strong>严格等于其余列围成的底面积：$\|\mathbf{C}_i\| = S_{\text{rest}}$；<br>
+            • 其<strong>方向</strong>严格指向垂直于底面的法向 $\hat{\mathbf{n}}$！这也彻底解释了为什么错行展开点积为 0（其余列向量全与法线垂直）。
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 高清矢量 SVG 图解 -->
+      <div style="text-align: center; margin: 1.25rem 0;">
+        <svg width="760" height="360" viewBox="0 0 760 360" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+          <defs>
+            <marker id="alt-arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="alt-arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80"/>
+            </marker>
+            <marker id="alt-arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+            </marker>
+            <marker id="alt-arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+            </marker>
+            <marker id="alt-arr-rose" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#f43f5e"/>
+            </marker>
+          </defs>
+
+          <!-- ================= 左半区：单列正交分解与法向面积向量 ================= -->
+          <g transform="translate(10, 0)">
+            <!-- 底面参考线 -->
+            <line x1="40" y1="290" x2="430" y2="290" stroke="#334155" stroke-width="1.5"/>
+            <text x="350" y="308" fill="#94a3b8" font-size="11">剩余列构成的超平面</text>
+
+            <!-- 平行四边形：底 a1，斜边 a2 -->
+            <!-- a1: (60, 290) -> (260, 290) [底长 200] -->
+            <!-- a2: (60, 290) -> (200, 150) [高度 140, 水平偏移 140] -->
+            <!-- 顶点: (60,290) - (260,290) - (400,150) - (200,150) -->
+            <polygon points="60,290 260,290 400,150 200,150" fill="rgba(56, 189, 248, 0.12)" stroke="#38bdf8" stroke-width="1.6"/>
+            <text x="230" y="225" fill="#38bdf8" font-size="11" font-weight="600">超体积 Vol = S_rest · h_i</text>
+            <text x="230" y="242" fill="#94a3b8" font-size="9.5">剪切分量不贡献任何体积</text>
+
+            <!-- 垂直高度分量投影线 (h_i 垂直方向) -->
+            <line x1="60" y1="290" x2="60" y2="150" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#alt-arr-amber)"/>
+            <text x="18" y="225" fill="#fbbf24" font-size="11" font-weight="bold">h_i n̂</text>
+            <text x="10" y="240" fill="#fbbf24" font-size="9">(线高分量)</text>
+
+            <!-- 水平剪切分量 (a_{i, parallel}) -->
+            <line x1="60" y1="150" x2="200" y2="150" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#alt-arr-rose)"/>
+            <text x="130" y="142" fill="#f43f5e" font-size="10" text-anchor="middle">剪切滑动 a_{i,∥} (体积贡献 = 0)</text>
+
+            <!-- 代数余子式向量 C_i = S_rest * n_hat (法向面积向量) -->
+            <line x1="160" y1="290" x2="160" y2="120" stroke="#c084fc" stroke-width="3.5" marker-end="url(#alt-arr-purple)"/>
+            <text x="170" y="135" fill="#c084fc" font-size="12" font-weight="bold">C_i = S_rest · n̂</text>
+            <text x="170" y="152" fill="#c084fc" font-size="9.5">(余子式法向面积向量)</text>
+
+            <!-- 列向量 a_1 (其余公共底) -->
+            <line x1="60" y1="290" x2="260" y2="290" stroke="#4ade80" stroke-width="3.5" marker-end="url(#alt-arr-green)"/>
+            <text x="160" y="312" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">其余列张成的底面 (面积 S_rest)</text>
+
+            <!-- 列向量 a_i (倾斜真实列) -->
+            <line x1="60" y1="290" x2="200" y2="150" stroke="#38bdf8" stroke-width="3" marker-end="url(#alt-arr-blue)"/>
+            <text x="110" y="210" fill="#38bdf8" font-size="12" font-weight="bold">a_i (真实列)</text>
+
+            <!-- 垂直高测量虚线与直角标 -->
+            <line x1="200" y1="150" x2="200" y2="290" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="3,3"/>
+            <path d="M 200 280 L 210 280 L 210 290" fill="none" stroke="#fbbf24" stroke-width="1"/>
+            <text x="206" y="275" fill="#fbbf24" font-size="11" font-weight="bold">垂直线高 h_i</text>
+          </g>
+
+          <!-- ================= 右半区：全局连乘与 Hadamard 不等式 ================= -->
+          <g transform="translate(470, 20)">
+            <!-- 卡片 1: 全局逐步升维构造 -->
+            <rect x="0" y="10" width="270" height="96" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1"/>
+            <text x="12" y="32" fill="#38bdf8" font-size="11.5" font-weight="bold">① 总体积 = 逐次垂直线高的连乘积</text>
+            <text x="12" y="52" fill="#94a3b8" font-size="10">第 1 列: h₁ = ‖a₁‖ (线段长)</text>
+            <text x="12" y="70" fill="#94a3b8" font-size="10">第 2 列: h₂ = 垂直于 a₁ 的线高</text>
+            <text x="12" y="90" fill="#38bdf8" font-size="11" font-weight="bold">Vol(A) = h₁ · h₂ · h₃ · ... · hₙ</text>
+
+            <!-- 卡片 2: Hadamard 不等式 -->
+            <rect x="0" y="116" width="270" height="96" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1"/>
+            <text x="12" y="138" fill="#fbbf24" font-size="11.5" font-weight="bold">② Hadamard 不等式 (直角边 ≤ 斜边)</text>
+            <text x="12" y="158" fill="#94a3b8" font-size="10">每列垂线高必小于等于自身模长: hₖ ≤ ‖aₖ‖</text>
+            <text x="12" y="176" fill="#94a3b8" font-size="10">仅当列向量两两正交时取等号 (hₖ = ‖aₖ‖)</text>
+            <text x="12" y="196" fill="#fbbf24" font-size="11" font-weight="bold">Vol(A) ≤ ‖a₁‖ · ‖a₂‖ · ... · ‖aₙ‖</text>
+
+            <!-- 卡片 3: 微积分梯度与敏感度 -->
+            <rect x="0" y="222" width="270" height="96" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(192, 132, 252, 0.4)" stroke-width="1"/>
+            <text x="12" y="244" fill="#c084fc" font-size="11.5" font-weight="bold">③ 体积对列向量的梯度方向</text>
+            <text x="12" y="264" fill="#94a3b8" font-size="10">∂ det(A) / ∂ a_i = C_i = S_rest · n̂</text>
+            <text x="12" y="282" fill="#94a3b8" font-size="10">体积对某一列的变化率严格沿法向 n̂</text>
+            <text x="12" y="302" fill="#c084fc" font-size="11" font-weight="bold">沿底面平移导数恒为 0 (梯度垂直于底面)</text>
+          </g>
+        </svg>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+          图 3.2-1：代数余子式向量与单列垂直线高几何分解 —— 倾斜列向量 $\mathbf{a}_i$ 的平行剪切分量对体积贡献严格为 0，唯有垂直线高 $h_i$ 支撑体积；代数余子式向量 $\mathbf{C}_i$ 的几何真身正是法向底面积向量 $S_{\text{rest}} \hat{\mathbf{n}}$
+        </div>
+      </div>
+
+      <!-- 总结提升要点 -->
+      <div style="padding: 0.85rem 1rem; background: rgba(192, 132, 252, 0.08); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.25); font-size: 0.9rem; line-height: 1.8;">
+        <strong style="color: var(--accent-purple);">👑 核心总结：几何、代数与算子的全景统一</strong><br>
+        <ul style="margin-left: 1.25rem; margin-top: 0.2rem; color: var(--text-muted);">
+          <li><strong>体积只认线高</strong>：无论某一列向量自身模长有多大，它对矩阵超平行多面体体积的全部贡献，完完全全取决于它探出其余各列底平面的<strong>垂线高 $h_i$</strong>。</li>
+          <li><strong>余子式就是法向底面积</strong>：代数余子式向量 $\mathbf{C}_i = S_{\text{rest}} \hat{\mathbf{n}}$，将高维底面积与法向量打包封装在一起。点积 $\mathbf{a}_i \cdot \mathbf{C}_i$ 瞬间在代数上完成“底面积 × 高”的乘法计算。</li>
+          <li><strong>克莱姆法则的直接源泉</strong>：当常数项 $\mathbf{b}$ 替换第 $i$ 列时，由于底面完全没变，新矩阵与原矩阵的体积之比自然完完全全就是 $\mathbf{b}$ 的垂直高与 $\mathbf{a}_i$ 的垂直高之比，即 $x_i = \frac{h_{\mathbf{b}}}{h_{\mathbf{a}_i}} = \frac{\det(A_i(\mathbf{b}))}{\det(A)}$！</li>
+        </ul>
+      </div>
+    </div>
+    <!-- 1.3 3×3 具象实证：叉积、标量三重积与逐项求和的几何统一 -->
+    <div class="concept-box" style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.06); border-left: 4px solid var(--accent-blue); border-radius: 4px;">
+      <div class="box-title" style="color: var(--accent-blue); font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">
+        🔍 1.3 3×3 具象实证：向量到剩余平面的高度与逐项展开求和如何在几何上严格统一？
+      </div>
+      <p style="font-size: 0.95rem; line-height: 1.8;">
+        许多读者会追问：“抽象的 $n$ 维符号容易理解，但<strong>在最经典的 $3 \times 3$ 矩阵中，为什么三个元素分别乘以代数余子式然后加起来，能精确无误地等于‘底面积 $\times$ 垂直高度’？代数上的加法究竟对应了什么几何动作？</strong>”<br>
+        答案就在三维向量空间最核心的几何工具中：<strong>叉积 (Cross Product) 与标量三重积 (Scalar Triple Product)</strong>！
+      </p>
+
+      <!-- 3x3 矩阵具体设定 -->
+      <div style="margin: 1rem 0; padding: 1rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
+        <p style="font-size: 0.92rem; line-height: 1.8;">
+          考虑任意 $3 \times 3$ 矩阵 $A$，将其写为三列向量：
+        </p>
+        $$A = \begin{bmatrix} a_{11} & a_{12} & a_{13} \\ a_{21} & a_{22} & a_{23} \\ a_{31} & a_{32} & a_{33} \end{bmatrix} = \begin{bmatrix} \mathbf{a}_1 & \mathbf{a}_2 & \mathbf{a}_3 \end{bmatrix}$$
+        <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem; color: var(--text-muted);">
+          • <strong>剩余底面</strong>：由前两列 $\mathbf{a}_1, \mathbf{a}_2$ 围成平行四边形底面，底面积记为 $S_{\text{base}}$；<br>
+          • <strong>探出向量</strong>：第三列 $\mathbf{a}_3 = [a_{13}, a_{23}, a_{33}]^T$，它到底面的垂直垂线高记为 $h$；<br>
+          • <strong>代数展开式</strong>（按第 3 列拉普拉斯展开）：
+        </p>
+        $$\det(A) = a_{13} C_{13} + a_{23} C_{23} + a_{33} C_{33}$$
+      </div>
+
+      <!-- 核心解密：代数余子式向量 == 叉乘 -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin: 1rem 0;">
+        
+        <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <strong style="color: var(--accent-purple); font-size: 0.95rem;">① 坐标分量严格重合：余子式向量就是叉积！</strong>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+            把第三列的三个代数余子式写出：
+            $$C_{13} = + \begin{vmatrix} a_{21} & a_{22} \\ a_{31} & a_{32} \end{vmatrix} = a_{21} a_{32} - a_{31} a_{22}$$
+            $$C_{23} = - \begin{vmatrix} a_{11} & a_{12} \\ a_{31} & a_{32} \end{vmatrix} = -(a_{11} a_{32} - a_{31} a_{12})$$
+            $$C_{33} = + \begin{vmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{vmatrix} = a_{11} a_{22} - a_{21} a_{12}$$
+            这三个分量，<strong>与解析几何中底面两向量的叉积 $\mathbf{a}_1 \times \mathbf{a}_2$ 的坐标分量分毫不差、完全一致</strong>！
+            $$\mathbf{C}_3 = \begin{bmatrix} C_{13} \\ C_{23} \\ C_{33} \end{bmatrix} \equiv \mathbf{a}_1 \times \mathbf{a}_2$$
+          </p>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.7); padding: 1rem; border-radius: 6px; border: 1px solid var(--border-color);">
+          <strong style="color: var(--accent-green); font-size: 0.95rem;">② 相乘求和的几何物理机理：标量三重积</strong>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+            代数上的逐元素相乘并累加，在向量运算中正是点积：
+            $$a_{13} C_{13} + a_{23} C_{23} + a_{33} C_{33} = \mathbf{a}_3 \cdot (\mathbf{a}_1 \times \mathbf{a}_2)$$
+            根据叉积的几何定义：
+            • 叉积模长 $\|\mathbf{a}_1 \times \mathbf{a}_2\| = S_{\text{base}}$（平行四边形底面积）；<br>
+            • 叉积方向指向底平面的单位法向量 $\hat{\mathbf{n}}$；<br>
+            • 因此 $\mathbf{a}_1 \times \mathbf{a}_2 = S_{\text{base}} \hat{\mathbf{n}}$！<br>
+            代入点积立即统一：
+            $$\mathbf{a}_3 \cdot (\mathbf{a}_1 \times \mathbf{a}_2) = \mathbf{a}_3 \cdot (S_{\text{base}} \hat{\mathbf{n}}) = S_{\text{base}} (\mathbf{a}_3 \cdot \hat{\mathbf{n}}) = S_{\text{base}} \cdot h$$
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 高清矢量 SVG 图解：3x3 标量三重积与叉乘统一 -->
+      <div style="text-align: center; margin: 1.5rem 0;">
+        <svg width="760" height="370" viewBox="0 0 760 370" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+          <defs>
+            <marker id="trip-arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+            </marker>
+            <marker id="trip-arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80"/>
+            </marker>
+            <marker id="trip-arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+            </marker>
+            <marker id="trip-arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+            </marker>
+          </defs>
+
+          <!-- ================= 左半区：三维立体平行六面体与混合积 ================= -->
+          <g transform="translate(10, 0)">
+            <!-- 空间透视基准原点 (150, 270) -->
+            <!-- 底面四边形顶点: (150,270) -> a1(310,270) -> a1+a2(380,210) -> a2(220,210) -->
+            <polygon points="150,270 310,270 380,210 220,210" fill="rgba(74, 222, 128, 0.16)" stroke="#4ade80" stroke-width="1.8"/>
+            <text x="265" y="245" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle">公共底面 S_base = ‖a₁ × a₂‖</text>
+
+            <!-- 六面体顶面: 沿 a3=(90, -170) 平移 -->
+            <!-- 顶点: a3(240,100) -> a1+a3(400,100) -> a1+a2+a3(470,40) -> a2+a3(310,40) -->
+            <polygon points="240,100 400,100 470,40 310,40" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3"/>
+            
+            <!-- 六面体侧棱 (虚线透视) -->
+            <line x1="310" y1="270" x2="400" y2="100" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <line x1="380" y1="210" x2="470" y2="40" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <line x1="220" y1="210" x2="310" y2="40" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+            <!-- 叉积向量 C3 = a1 x a2 (垂直底面向上) -->
+            <line x1="150" y1="270" x2="150" y2="90" stroke="#c084fc" stroke-width="3.5" marker-end="url(#trip-arr-purple)"/>
+            <text x="140" y="80" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">C₃ = a₁ × a₂ = S_base · n̂</text>
+            <text x="140" y="95" fill="#94a3b8" font-size="9.5" text-anchor="middle">(代数余子式向量 ≡ 底面叉积)</text>
+
+            <!-- 列向量 a1 (水平底棱) -->
+            <line x1="150" y1="270" x2="310" y2="270" stroke="#4ade80" stroke-width="3" marker-end="url(#trip-arr-green)"/>
+            <text x="230" y="288" fill="#4ade80" font-size="11.5" font-weight="bold">a₁</text>
+
+            <!-- 列向量 a2 (斜向底棱) -->
+            <line x1="150" y1="270" x2="220" y2="210" stroke="#4ade80" stroke-width="3" marker-end="url(#trip-arr-green)"/>
+            <text x="175" y="235" fill="#4ade80" font-size="11.5" font-weight="bold">a₂</text>
+
+            <!-- 列向量 a3 (倾斜探出立体) -->
+            <line x1="150" y1="270" x2="240" y2="100" stroke="#38bdf8" stroke-width="3.5" marker-end="url(#trip-arr-blue)"/>
+            <text x="180" y="175" fill="#38bdf8" font-size="12" font-weight="bold">a₃ = [a₁₃, a₂₃, a₃₃]ᵀ</text>
+
+            <!-- 从 a3 顶点到底面的垂线高 h -->
+            <line x1="240" y1="100" x2="240" y2="270" stroke="#fbbf24" stroke-width="1.8" stroke-dasharray="4,3"/>
+            <path d="M 240 260 L 250 260 L 250 270" fill="none" stroke="#fbbf24" stroke-width="1"/>
+            <text x="246" y="190" fill="#fbbf24" font-size="11.5" font-weight="bold">垂线高 h = a₃ · n̂</text>
+
+            <!-- 垂直标尺向法向量映射 -->
+            <line x1="150" y1="100" x2="240" y2="100" stroke="#fbbf24" stroke-width="1.2" stroke-dasharray="2,2"/>
+            <circle cx="150" cy="100" r="3.5" fill="#fbbf24"/>
+            <text x="110" y="104" fill="#fbbf24" font-size="10" font-weight="bold">投影 h</text>
+          </g>
+
+          <!-- ================= 右半区：代数与几何统一看板 ================= -->
+          <g transform="translate(470, 15)">
+            <!-- 核心恒等式大卡片 -->
+            <rect x="0" y="5" width="275" height="78" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1"/>
+            <text x="12" y="24" fill="#38bdf8" font-size="11.5" font-weight="bold">👑 核心代数与几何等同关系：</text>
+            <text x="12" y="44" fill="#94a3b8" font-size="10">代数求和: a₁₃C₁₃ + a₂₃C₂₃ + a₃₃C₃₃</text>
+            <text x="12" y="60" fill="#4ade80" font-size="10.5" font-weight="bold">= a₃ · (a₁ × a₂) ≡ 标量三重积</text>
+            <text x="12" y="74" fill="#fbbf24" font-size="10.5" font-weight="bold">= ‖a₁ × a₂‖ · (a₃ · n̂) = S_base · h</text>
+
+            <!-- 卡片 1: 坐标分量逐项对应 -->
+            <rect x="0" y="90" width="275" height="86" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(192, 132, 252, 0.35)" stroke-width="1"/>
+            <text x="12" y="110" fill="#c084fc" font-size="11" font-weight="bold">① 为什么各项代数式恰好是叉乘分量？</text>
+            <text x="12" y="128" fill="#94a3b8" font-size="9.5">C₁₃ = a₂₁a₃₂ - a₃₁a₂₂ ≡ (a₁ × a₂) 的 x 分量</text>
+            <text x="12" y="145" fill="#94a3b8" font-size="9.5">C₂₃ = -(a₁₁a₃₂ - a₃₁a₁₂) ≡ (a₁ × a₂) 的 y 分量</text>
+            <text x="12" y="162" fill="#94a3b8" font-size="9.5">C₃₃ = a₁₁a₂₂ - a₂₁a₁₂ ≡ (a₁ × a₂) 的 z 分量</text>
+
+            <!-- 卡片 2: 投影阴影微观视角 -->
+            <rect x="0" y="184" width="275" height="82" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(251, 191, 36, 0.35)" stroke-width="1"/>
+            <text x="12" y="204" fill="#fbbf24" font-size="11" font-weight="bold">② 投影阴影柱体拼接 (格林/高斯定理)</text>
+            <text x="12" y="222" fill="#94a3b8" font-size="9.5">C₁₃, C₂₃, C₃₃ = 底面在 yz, zx, xy 面的投影面积</text>
+            <text x="12" y="239" fill="#94a3b8" font-size="9.5">a₁₃, a₂₃, a₃₃ = 沿 x, y, z 三轴的分量柱体高度</text>
+            <text x="12" y="256" fill="#fbbf24" font-size="9.5">三项乘积求和 = 空间各向投影定向体积之和</text>
+
+            <!-- 卡片 3: 错行展开几何零值 -->
+            <rect x="0" y="274" width="275" height="72" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(244, 63, 94, 0.35)" stroke-width="1"/>
+            <text x="12" y="294" fill="#f43f5e" font-size="11" font-weight="bold">③ 错行展开为什么必然等于 0？</text>
+            <text x="12" y="312" fill="#94a3b8" font-size="9.5">a₁ · (a₁ × a₂) ≡ 0（底面向量垂直于法向）</text>
+            <text x="12" y="330" fill="#f43f5e" font-size="9.5">底面向量在自身底面上的垂线高 h = 0 ⟹ 积为 0</text>
+          </g>
+        </svg>
+        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+          图 3.2-2：3×3 矩阵标量三重积与代数余子式叉乘统一图解 —— 代数余子式向量 $\mathbf{C}_3$ 完完全全就是底面两列的叉积 $\mathbf{a}_1 \times \mathbf{a}_2$（模长为底面积 $S_{\text{base}}$，方向为法向）；逐项展开求和即为标量三重积 $\mathbf{a}_3 \cdot (\mathbf{a}_1 \times \mathbf{a}_2) = S_{\text{base}} \cdot h$
+        </div>
+      </div>
+
+      <!-- 贯通认知 -->
+      <div style="padding: 0.85rem 1rem; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.25); font-size: 0.9rem; line-height: 1.8;">
+        <strong style="color: var(--accent-blue);">💡 总结：从 3×3 到一般 $n$ 维的认知升华</strong><br>
+        • 在 <strong>3 维空间</strong>：底面只有两个向量，其余平面的法向量可以用初等的<strong>叉积 $\mathbf{a}_1 \times \mathbf{a}_2$</strong> 直接算出，代数余子式向量就是叉积；<br>
+        • 在 <strong>$n$ 维空间 ($n \ge 4$)</strong>：初等叉乘不再适用，但数学家构造出的<strong>代数余子式向量 $\mathbf{C}_i = [C_{1i}, \dots, C_{ni}]^T$</strong>，正是三维叉积在任意 $n$ 维空间中的<strong>终极广义推广（霍奇对偶 / 楔积 Hodge Dual of Wedge Product）</strong>！<br>
+        • 无论在多少维空间，<strong>逐项相乘求和的本质永远是：“用代数余子式封装出超底面的法向面积向量，再用点积量出垂直线高并一举乘出超体积”！</strong>
+      </div>
+
+      <!-- 叉积专题推荐直通车 -->
+      <div style="margin-top: 1rem; padding: 0.9rem 1.1rem; background: rgba(6, 182, 212, 0.08); border-radius: 6px; border: 1px solid rgba(6, 182, 212, 0.3); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <span style="color: var(--accent-cyan, #06b6d4); font-weight: bold; font-size: 0.95rem;">📖 进阶深度专题：什么是叉积 (Cross Product)？</span>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0.2rem 0 0 0;">想彻底搞懂叉积的几何定义、右手定则、坐标公式从零推导与 3D 游戏/物理力矩应用？</p>
+        </div>
+        <a href="ch3_2_supplement_cross_product.html" class="btn" style="background: var(--accent-cyan, #06b6d4); color: #000; font-weight: 700; font-size: 0.85rem; padding: 0.4rem 0.9rem; border-radius: 4px; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem;">
+          进入叉积专题指南 ➔
+        </a>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -358,9 +705,175 @@
         </p>
       </div>
 
-      <!-- 2. 完整矩阵视角与双空间几何映射 -->
+            <!-- 2. 单列相异矩阵体积比例定理（同底等高与剪切不变性） -->
+      <div style="margin-top: 1rem; padding: 1rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
+        <h5 style="color: var(--accent-amber); margin-bottom: 0.6rem; font-size: 1.05rem;">
+          2️⃣ 核心几何定理：两个 $n \times n$ 矩阵若仅有一列不同，它们的体积有什么比例关系？
+        </h5>
+        <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+          这是直击克莱姆法则深层机制的最关键几何基石：<strong>若两个同阶方阵除了一列相异之外，其余所有列向量完全相同，则它们的超平行多面体体积（行列式绝对值）之比，严格等于这两个相异列向量在其余公共列所张成的“超底面”法线方向上的垂直高之比！</strong>
+        </p>
+
+        <!-- 数学定理框 -->
+        <div style="margin: 0.85rem 0; padding: 1rem; background: rgba(251, 191, 36, 0.07); border-left: 4px solid var(--accent-amber); border-radius: 4px;">
+          <h6 style="color: var(--accent-amber); font-size: 0.98rem; margin-bottom: 0.4rem;">📐 单列相异矩阵超体积比定理 (Ratio of Volumes with One Differing Column)</h6>
+          <p style="font-size: 0.9rem; line-height: 1.8;">
+            设方阵 $A$ 与 $B$ 均为 $n \times n$ 矩阵，仅在第 $i$ 列相异（分别为向量 $\mathbf{u}$ 与 $\mathbf{w}$），其余 $n-1$ 个列向量完全相同：
+          </p>
+          $$A = [\mathbf{a}_1, \dots, \mathbf{a}_{i-1}, \; \mathbf{u}, \; \mathbf{a}_{i+1}, \dots, \mathbf{a}_n], \qquad B = [\mathbf{a}_1, \dots, \mathbf{a}_{i-1}, \; \mathbf{w}, \; \mathbf{a}_{i+1}, \dots, \mathbf{a}_n]$$
+          <p style="font-size: 0.9rem; line-height: 1.8; margin-top: 0.5rem;">
+            记其余 $n-1$ 个公共列向量张成的 $(n-1)$ 维子空间为 $V = \text{span}(\mathbf{a}_1, \dots, \mathbf{a}_{i-1}, \mathbf{a}_{i+1}, \dots, \mathbf{a}_n)$。由于这 $n-1$ 列完全相同，它们构成了两个几何体<strong>完全相同的公共超底面</strong>，底面积记为 $S_{\text{base}}$。设该超平面的单位法向量为 $\hat{\mathbf{n}}$，则：
+          </p>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem; margin: 0.75rem 0;">
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.88rem;">
+              <strong style="color: var(--accent-blue);">① 矩阵 A 的法向高与有向体积：</strong><br>
+              高为 $h_u = \mathbf{u} \cdot \hat{\mathbf{n}}$<br>
+              $\det(A) = S_{\text{base}} \cdot h_u$
+            </div>
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem; border-radius: 4px; border: 1px solid var(--border-color); font-size: 0.88rem;">
+              <strong style="color: var(--accent-green);">② 矩阵 B 的法向高与有向体积：</strong><br>
+              高为 $h_w = \mathbf{w} \cdot \hat{\mathbf{n}}$<br>
+              $\det(B) = S_{\text{base}} \cdot h_w$
+            </div>
+          </div>
+          <div style="text-align: center; font-size: 1.15rem; margin: 0.75rem 0; padding: 0.6rem; background: rgba(15, 23, 42, 0.8); border-radius: 4px; border: 1px solid rgba(251, 191, 36, 0.3);">
+            $$\frac{\det(B)}{\det(A)} = \frac{S_{\text{base}} \cdot h_w}{S_{\text{base}} \cdot h_u} = \frac{h_w}{h_u} = \frac{\mathbf{w} \cdot \hat{\mathbf{n}}}{\mathbf{u} \cdot \hat{\mathbf{n}}}$$
+            <span style="font-size: 0.88rem; color: var(--text-muted);">（绝对几何体积之比即为垂线高之比：$\frac{\text{Vol}(B)}{\text{Vol}(A)} = \frac{|h_w|}{|h_u|}$）</span>
+          </div>
+        </div>
+
+        <!-- 剪切不变性解析 -->
+        <div style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted); margin: 0.85rem 0;">
+          <strong style="color: var(--text-main);">🔍 代数分解与几何剪切不变性 (Shear Invariance)：</strong><br>
+          将相异列向量 $\mathbf{w}$ 沿着基向量 $\mathbf{u}$ 与公共底面子空间 $V$ 分解：
+          $$\mathbf{w} = c \cdot \mathbf{u} + \sum_{k \neq i} \lambda_k \mathbf{a}_k = c \cdot \mathbf{u} + \mathbf{v}_{\parallel}$$
+          <ul style="margin-left: 1.25rem; margin-top: 0.3rem;">
+            <li><strong>底面剪切分量 $\mathbf{v}_{\parallel}$</strong>：由于它完全落在其余 $n-1$ 列张成的公共底面内，几何上相当于沿着底面施加了一次<strong>剪切变换 (Shear Mapping)</strong>。底面积不变，顶点到底面的垂线高更丝毫未变，因此<strong>对体积没有产生任何额外贡献（体积增量严格为 0）</strong>！</li>
+            <li><strong>有效法向分量 $c \cdot \mathbf{u}$</strong>：唯有平行于 $\mathbf{u}$ 的分量对高进行了线性缩放，使高度变为 $h_w = c \cdot h_u$。</li>
+            <li>由行列式对列的多线性性质直接印证：$$\det(B) = \det([\dots, c\mathbf{u} + \mathbf{v}_{\parallel}, \dots]) = c \det(A) + 0 = c \det(A) \implies \frac{\det(B)}{\det(A)} = c$$</li>
+          </ul>
+        </div>
+
+        <!-- SVG 矢量图解 -->
+        <div style="text-align: center; margin: 1.25rem 0;">
+          <svg width="760" height="360" viewBox="0 0 760 360" style="max-width: 100%; height: auto; display: block; margin: 0 auto; background: #090d16; border-radius: 8px; border: 1px solid var(--border-color);">
+            <defs>
+              <marker id="sc-arr-blue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+              </marker>
+              <marker id="sc-arr-green" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80"/>
+              </marker>
+              <marker id="sc-arr-purple" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc"/>
+              </marker>
+              <marker id="sc-arr-amber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#fbbf24"/>
+              </marker>
+            </defs>
+
+            <!-- ================= 左半区：几何图形与同底高比 ================= -->
+            <g transform="translate(10, 0)">
+              <!-- 坐标底线 / 公共超底面 -->
+              <line x1="40" y1="290" x2="430" y2="290" stroke="#334155" stroke-width="1.5"/>
+              <text x="350" y="308" fill="#94a3b8" font-size="11">公共底面基准线</text>
+
+              <!-- 单位法向量 n_hat -->
+              <line x1="60" y1="290" x2="60" y2="210" stroke="#fbbf24" stroke-width="2.5" marker-end="url(#sc-arr-amber)"/>
+              <text x="45" y="200" fill="#fbbf24" font-size="11" font-weight="bold">n̂ (法向)</text>
+
+              <!-- 原平行四边形 A = [a1, u] -->
+              <polygon points="60,290 240,290 320,180 140,180" fill="rgba(56, 189, 248, 0.14)" stroke="#38bdf8" stroke-width="1.8"/>
+              <text x="200" y="240" fill="#38bdf8" font-size="11" font-weight="600">矩阵 A = [a₁, u]</text>
+              <text x="200" y="255" fill="#94a3b8" font-size="9.5">面积 = S_base · h_u</text>
+
+              <!-- 纯拉伸点 c*u (c = 1.6): (188, 114) -->
+              <line x1="60" y1="290" x2="188" y2="114" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4,4"/>
+              <circle cx="188" cy="114" r="3.5" fill="#fbbf24"/>
+              <text x="135" y="112" fill="#fbbf24" font-size="10">纯拉伸 c·u</text>
+
+              <!-- 等高线与剪切位移 -->
+              <line x1="120" y1="114" x2="430" y2="114" stroke="#475569" stroke-width="1.2" stroke-dasharray="3,3"/>
+              <text x="350" y="108" fill="#94a3b8" font-size="10">等高线 (高度 = h_w)</text>
+              <line x1="188" y1="114" x2="268" y2="114" stroke="#fbbf24" stroke-width="2" marker-end="url(#sc-arr-amber)"/>
+              <text x="228" y="104" fill="#fbbf24" font-size="9.5" text-anchor="middle">剪切位移 λa₁</text>
+
+              <!-- 矩阵 B 的新平行四边形 B = [a1, w] -->
+              <polygon points="60,290 240,290 448,114 268,114" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="2" stroke-dasharray="5,3"/>
+              <text x="280" y="195" fill="#4ade80" font-size="11" font-weight="bold">矩阵 B = [a₁, w]</text>
+              <text x="280" y="210" fill="#4ade80" font-size="9.5">面积 = S_base · h_w = c · Area(A)</text>
+
+              <!-- 列向量 a1 (公共底) -->
+              <line x1="60" y1="290" x2="240" y2="290" stroke="#c084fc" stroke-width="3.5" marker-end="url(#sc-arr-purple)"/>
+              <text x="150" y="312" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="middle">公共列向量 a₁ (底面 S_base)</text>
+
+              <!-- 列向量 u (原矩阵 A 相异列) -->
+              <line x1="60" y1="290" x2="140" y2="180" stroke="#38bdf8" stroke-width="3" marker-end="url(#sc-arr-blue)"/>
+              <text x="90" y="225" fill="#38bdf8" font-size="12" font-weight="bold">u</text>
+
+              <!-- 列向量 w (矩阵 B 相异列) -->
+              <line x1="60" y1="290" x2="268" y2="114" stroke="#4ade80" stroke-width="3.2" marker-end="url(#sc-arr-green)"/>
+              <text x="235" y="150" fill="#4ade80" font-size="12" font-weight="bold">w</text>
+
+              <!-- 高度标尺 h_u -->
+              <line x1="140" y1="180" x2="140" y2="290" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>
+              <path d="M 140 280 L 150 280 L 150 290" fill="none" stroke="#38bdf8" stroke-width="1"/>
+              <text x="122" y="245" fill="#38bdf8" font-size="11" font-weight="bold">h_u</text>
+
+              <!-- 高度标尺 h_w -->
+              <line x1="268" y1="114" x2="268" y2="290" stroke="#4ade80" stroke-width="1.8" stroke-dasharray="4,3"/>
+              <path d="M 268 280 L 278 280 L 278 290" fill="none" stroke="#4ade80" stroke-width="1"/>
+              <text x="274" y="145" fill="#4ade80" font-size="11" font-weight="bold">h_w = c · h_u</text>
+            </g>
+
+            <!-- ================= 右半区：核心机制与克莱姆推导 ================= -->
+            <g transform="translate(470, 20)">
+              <!-- 卡片 1: 同底等高几何原理 -->
+              <rect x="0" y="10" width="270" height="92" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1"/>
+              <text x="12" y="32" fill="#38bdf8" font-size="11.5" font-weight="bold">① 同底等高体积比</text>
+              <text x="12" y="52" fill="#94a3b8" font-size="10.5">底面完全相同 ⟹ S_base 守恒</text>
+              <text x="12" y="70" fill="#94a3b8" font-size="10.5">高 h_u = u · n̂,  高 h_w = w · n̂</text>
+              <text x="12" y="90" fill="#38bdf8" font-size="11" font-weight="bold">Vol(B) / Vol(A) = h_w / h_u</text>
+
+              <!-- 卡片 2: 剪切不变性 -->
+              <rect x="0" y="112" width="270" height="92" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(251, 191, 36, 0.4)" stroke-width="1"/>
+              <text x="12" y="134" fill="#fbbf24" font-size="11.5" font-weight="bold">② 剪切不变性 (Shear Invariance)</text>
+              <text x="12" y="154" fill="#94a3b8" font-size="10.5">分解: w = c·u + λa₁ (底面位移)</text>
+              <text x="12" y="172" fill="#94a3b8" font-size="10.5">沿底面平移不改变高与体积 (增量=0)</text>
+              <text x="12" y="192" fill="#fbbf24" font-size="11" font-weight="bold">det(B) = c · det(A)  (体积比 = c)</text>
+
+              <!-- 卡片 3: 克莱姆法则对应 -->
+              <rect x="0" y="214" width="270" height="102" rx="6" fill="rgba(15, 23, 42, 0.85)" stroke="rgba(74, 222, 128, 0.4)" stroke-width="1"/>
+              <text x="12" y="236" fill="#4ade80" font-size="11.5" font-weight="bold">③ 克莱姆法则 (Cramer's Rule) 对应</text>
+              <text x="12" y="256" fill="#94a3b8" font-size="10">令 w = b = x₁a₁ + x₂u (代入方程右端)</text>
+              <text x="12" y="274" fill="#94a3b8" font-size="10">分量 x₁a₁ 沿底面剪切被完全吸收</text>
+              <text x="12" y="292" fill="#94a3b8" font-size="10">高度严格放大 x₂ 倍: h_b = x₂ · h_u</text>
+              <text x="12" y="308" fill="#4ade80" font-size="11" font-weight="bold">⟹ x₂ = det(A₂(b)) / det(A)</text>
+            </g>
+          </svg>
+          <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
+            图 3.2-3：单列相异矩阵超体积比例定理 —— 其余公共列向量 $\mathbf{a}_1$ 形成相同底面，体积比严格等于垂线高之比 $\frac{h_w}{h_u}$；沿底面的平移 $\lambda \mathbf{a}_1$ 属于剪切变换，不改变高度与体积
+          </div>
+        </div>
+
+        <!-- 桥接至克莱姆法则 -->
+        <div style="padding: 0.85rem 1rem; background: rgba(56, 189, 248, 0.08); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2); font-size: 0.9rem; line-height: 1.8;">
+          <strong style="color: var(--accent-blue);">🎯 为什么该定理是克莱姆法则的最深层几何源头？</strong><br>
+          在求解线性系统 $A\mathbf{x} = \mathbf{b}$ 时，右端项为列向量的线性组合：$\mathbf{b} = x_1 \mathbf{a}_1 + \dots + x_j \mathbf{a}_j + \dots + x_n \mathbf{a}_n$。<br>
+          将第 $j$ 列替换为 $\mathbf{b}$ 得到新矩阵 $A_j(\mathbf{b}) = [\mathbf{a}_1, \dots, \mathbf{b}, \dots, \mathbf{a}_n]$，它与原矩阵 $A$ <strong>除第 $j$ 列外其余 $n-1$ 列完全一致</strong>！<br>
+          根据本定理：
+          <ul style="margin-left: 1.25rem; margin-top: 0.2rem;">
+            <li>其余 $k \neq j$ 的所有列向量分量 $x_k \mathbf{a}_k$ 全部落在公共底面子空间内，纯属底面剪切位移，对体积的贡献严格为 0；</li>
+            <li>唯独目标分量 $x_j \mathbf{a}_j$ 垂直于底面并贡献法向高度，使高度变为 $h_{\mathbf{b}} = x_j \cdot h_{\mathbf{a}_j}$；</li>
+            <li>由此立得：$$x_j = \frac{h_{\mathbf{b}}}{h_{\mathbf{a}_j}} = \frac{\det(A_j(\mathbf{b}))}{\det(A)}$$</li>
+          </ul>
+          <strong>克莱姆法则的代数商式 $\frac{\det(A_j(\mathbf{b}))}{\det(A)}$，本质就是目标向量 $\mathbf{b}$ 相对原基底向量 $\mathbf{a}_j$ 在公共底面上的“相对垂线高度之比”！</strong>
+        </div>
+      </div>
+
+      <!-- 3. 完整矩阵视角与双空间几何映射 -->
       <div style="margin-top: 1rem; padding: 0.9rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
-        <h5 style="color: var(--accent-purple); margin-bottom: 0.4rem;">2️⃣ 完整矩阵视角：为什么最终图形必须完整保留列向量 $\mathbf{a}_2$？</h5>
+        <h5 style="color: var(--accent-purple); margin-bottom: 0.4rem;">3️⃣ 完整矩阵视角：为什么最终图形必须完整保留列向量 $\mathbf{a}_2$？</h5>
         <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
           很多同学在此处会产生严重困惑：“既然要解方程，为什么最终围成的图形不是单纯的解向量，而是<strong>完整保留了原矩阵的第二列 $\mathbf{a}_2$</strong>，拼成新矩阵 $[\mathbf{b}, \mathbf{a}_2]$？”<br>
           要彻底想通这一点，就<strong>绝不能孤立地只看单独一列或一行，而必须保留整个完整的矩阵乘法与线性变换映射</strong>！
@@ -518,7 +1031,7 @@
             </g>
           </svg>
           <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
-            图 3.2-1：克莱姆法则完整矩阵空间映射 —— 输入解空间矩阵 $X_1 = [\mathbf{x}, \mathbf{e}_2]$（面积为 $x_1$）经 $A$ 变换后映射为输出矩阵 $A_1(\mathbf{b}) = [\mathbf{b}, \mathbf{a}_2]$
+            图 3.2-4：克莱姆法则完整矩阵空间映射 —— 输入解空间矩阵 $X_1 = [\mathbf{x}, \mathbf{e}_2]$（面积为 $x_1$）经 $A$ 变换后映射为输出矩阵 $A_1(\mathbf{b}) = [\mathbf{b}, \mathbf{a}_2]$
           </div>
         </div>
 
@@ -539,9 +1052,9 @@
         </div>
       </div>
 
-      <!-- 3. 高维降维坍塌 -->
+      <!-- 4. 高维降维坍塌 -->
       <div style="margin-top: 1rem; padding: 0.9rem; background: var(--bg-card); border-radius: 6px; border: 1px solid var(--border-color);">
-        <h5 style="color: var(--accent-green); margin-bottom: 0.4rem;">3️⃣ 高维代数机理：高维超体的“降维坍塌”效应</h5>
+        <h5 style="color: var(--accent-green); margin-bottom: 0.4rem;">4️⃣ 高维代数机理：高维超体的“降维坍塌”效应</h5>
         <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-muted);">
           将这一直觉推广到 $n$ 维空间：将 $\mathbf{b} = \sum_{k=1}^n x_k \mathbf{a}_k$ 代入分子矩阵第 $j$ 列，并根据行列式多线性分拆：
           $$\det(A_j(\mathbf{b})) = \det([\mathbf{a}_1, \dots, \sum_{k=1}^n x_k \mathbf{a}_k, \dots, \mathbf{a}_n]) = \sum_{k=1}^n x_k \det([\mathbf{a}_1, \dots, \mathbf{a}_k, \dots, \mathbf{a}_n])$$
@@ -831,7 +1344,7 @@
           </g>
         </svg>
         <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem;">
-          图 3.2-2：雅可比行列式微元几何变形 —— 参数平面直角微矩形映射为物理切空间平行四边形，其面积倍数由 2×2 雅可比行列式决定
+          图 3.2-5：雅可比行列式微元几何变形 —— 参数平面直角微矩形映射为物理切空间平行四边形，其面积倍数由 2×2 雅可比行列式决定
         </div>
       </div>
 
