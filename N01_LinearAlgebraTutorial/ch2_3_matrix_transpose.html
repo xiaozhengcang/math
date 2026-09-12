@@ -1,0 +1,2542 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 2.3: 矩阵转置 (Transpose) 几何直觉、对偶世界与全景入门 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Custom Scoped Styles for Ch 2.3 Transpose Tutorial */
+    .transpose-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    
+    /* Interactive Matrix Flipper Widget */
+    .flipper-container {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .flipper-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    .preset-btn {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent-blue);
+      color: #0f172a;
+      font-weight: 600;
+    }
+    
+    .flipper-stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 380px;
+      position: relative;
+      perspective: 1200px;
+      padding: 1.5rem 0;
+      overflow: visible;
+    }
+
+    .matrix-board {
+      position: relative;
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: var(--radius-md);
+      border: 2px dashed rgba(56, 189, 248, 0.35);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+      transform-style: preserve-3d;
+      user-select: none;
+    }
+
+    .slot-placeholder {
+      position: absolute;
+      width: 62px;
+      height: 62px;
+      border-radius: 8px;
+      border: 1.5px dashed rgba(255, 255, 255, 0.12);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.25);
+      font-family: var(--font-mono);
+    }
+
+    .slot-target {
+      border-color: rgba(192, 132, 252, 0.35);
+      background: rgba(192, 132, 252, 0.05);
+    }
+
+    .matrix-cell {
+      position: absolute;
+      width: 62px;
+      height: 62px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      user-select: none;
+      cursor: default;
+      will-change: transform, left, top;
+    }
+
+    .cell-idx {
+      font-size: 0.62rem;
+      opacity: 0.85;
+      font-family: var(--font-mono);
+      margin-top: 2px;
+    }
+
+    .row-col-label {
+      position: absolute;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      white-space: nowrap;
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: background 0.2s ease;
+    }
+
+    /* Colors for rows */
+    .row-color-0 { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+    .row-color-1 { background: linear-gradient(135deg, #059669, #34d399); }
+    .row-color-2 { background: linear-gradient(135deg, #d97706, #fbbf24); }
+    .row-color-3 { background: linear-gradient(135deg, #9333ea, #c084fc); }
+
+    .is-diagonal {
+      box-shadow: 0 0 0 3px #fbbf24, 0 8px 20px rgba(251, 191, 36, 0.5);
+    }
+
+    /* Dual Canvas Transformation Mirror */
+    .dual-canvas-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .canvas-panel {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .canvas-panel h4 {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      width: 100%;
+    }
+
+    .sim-canvas {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      width: 100%;
+      max-width: 380px;
+      height: 280px;
+      display: block;
+    }
+
+    /* Interactive Balance Scale */
+    .balance-container {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .balance-scale-svg {
+      width: 100%;
+      max-width: 520px;
+      height: 180px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    /* Reversal Socks & Shoes Chain */
+    .chain-flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: var(--radius-md);
+    }
+
+    .chain-box {
+      padding: 0.85rem 1.2rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: rgba(15, 23, 42, 0.8);
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .chain-box .dim-tag {
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--accent-amber);
+      font-weight: 700;
+    }
+
+    .arrow-icon {
+      font-size: 1.5rem;
+      color: var(--text-dim);
+    }
+
+    /* Quiz Card styles */
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-blue);
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ATA Interactive Lab & Geometry Styles */
+    .ata-lab-card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      box-shadow: var(--shadow-lg);
+    }
+    .ata-canvases-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .ata-canvas-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .ata-canvas-box h5 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.88rem;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .ata-canvas-box canvas {
+      background: #060911;
+      border-radius: 4px;
+      width: 100%;
+      max-width: 340px;
+      height: 250px;
+      display: block;
+    }
+    .ata-gauge-container {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem;
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+    }
+    .ata-energy-meter-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+      position: relative;
+    }
+    .ata-energy-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #34d399, #fbbf24, #f43f5e);
+      border-radius: 4px;
+      transition: width 0.08s linear;
+    }
+    .ata-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .ata-diagram-svg {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block;
+      margin: 1.25rem auto;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+  </style>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <!-- Rendered dynamically by main.js -->
+      </nav>
+
+      <div class="sidebar-footer">
+        <button id="theme-toggle" class="theme-toggle-btn">☀️ 切换亮色模式</button>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <header class="top-bar">
+        <div class="breadcrumbs">
+          <a href="index.html">课程主页</a> / <a href="ch2_1_matrix_multiplication.html">Chapter 2: 矩阵运算与逆矩阵</a> / <span>Ch 2.3: 矩阵转置 (Transpose) 全景指南</span>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero">
+          <div class="transpose-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); border: 1px solid rgba(56, 189, 248, 0.3);">
+            Chapter 2.3 · 核心运算与对偶世界纽带
+          </div>
+          <h1 class="module-title">矩阵转置 (Transpose) 几何直觉、对偶世界与全景入门</h1>
+          <p style="font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.75rem;">
+            从简单的“行列互换”与对角线折纸，到几何坐标网格的对偶镜像；从“穿鞋脱袜”逆序定律到内积伴随守恒；全景解锁实对称矩阵 $A^T A$、正交旋转逆变换、神经网络反向传播与四大基本子空间的内在灵魂。
+          </p>
+        </div>
+
+        <!-- ================= 第 1 章：破冰认知 ================= -->
+        <div class="card">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">第一章 · 破冰认知</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 什么是转置？从“折纸对角线”开始的初学者第一直觉</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.96rem; line-height: 1.8;">
+              很多线性代数初学者第一次遇到<strong>转置 (Transpose)</strong> 时，常把它看成一个纯粹的“排版操作”：就是把矩阵的<strong>行变成列、列变成行</strong>。这种直观非常自然，我们可以用一句话概括其代数定义：
+            </p>
+
+            <div class="definition-box" style="padding: 1.1rem; background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); border-radius: 4px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.4rem;">📐 矩阵转置的代数定义 (Matrix Transpose)</h4>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                设 $A$ 是一个 $m \times n$ 的矩阵。将 $A$ 的行与列互换后得到的 $n \times m$ 矩阵称为 $A$ 的<strong>转置矩阵</strong>，记作 $\mathbf{A^T}$（或 $\mathbf{A^\top}, \mathbf{A'}$）。<br>
+                其每一个元素满足关系式：
+                $$(A^T)_{ij} = A_{ji} \quad (1 \le i \le n, \; 1 \le j \le m)$$
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-green); margin-bottom: 0.35rem;">✨ 形状维度的颠倒 (Dimension Flip)</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  • 若 $A$ 是 <strong>$2 \times 3$</strong> 长方阵，则 $A^T$ 变为 <strong>$3 \times 2$</strong>；<br>
+                  • 若 $A$ 是 <strong>$1 \times 4$</strong> 行向量，则 $A^T$ 变为 <strong>$4 \times 1$</strong> 列向量；<br>
+                  • 若 $A$ 是 <strong>$n \times n$</strong> 方阵，转置后尺寸依然是 <strong>$n \times n$</strong>。
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-amber); margin-bottom: 0.35rem;">🪞 45° 主对角线是不动点轴心</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  对角线上的元素坐标为 $(i, i)$。翻转后依然是 $(i, i)$！<br>
+                  这意味着<strong>主对角线就像一面 45° 的梳妆镜</strong>，对角线上的数值犹如钉在轴上的轴承，在翻转过程中纹丝不动。
+                </p>
+              </div>
+            </div>
+
+            <!-- 交互式实验室 1: 矩阵翻转动效实验室 -->
+            <div class="flipper-container">
+              <div class="flipper-controls">
+                <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-main);">选择测试矩阵：</span>
+                <button class="preset-btn active" onclick="setFlipperPreset('rect2x3')">2×3 矩形矩阵</button>
+                <button class="preset-btn" onclick="setFlipperPreset('square3x3')">3×3 方阵</button>
+                <button class="preset-btn" onclick="setFlipperPreset('row1x4')">1×4 行向量</button>
+                <button class="preset-btn" onclick="setFlipperPreset('col3x1')">3×1 列向量</button>
+                <button class="preset-btn" onclick="setFlipperPreset('sym3x3')">实对称方阵 (Aᵀ = A)</button>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 1.25rem; align-items: center; margin-bottom: 1rem;">
+                <button id="flipper-play-btn" class="btn btn-primary" onclick="toggleFlipperPlay()" style="padding: 0.45rem 1rem; font-size: 0.85rem;">
+                  ▶ 播放转置动画
+                </button>
+                <button class="btn btn-secondary" onclick="resetFlipper()" style="padding: 0.45rem 0.85rem; font-size: 0.85rem;">
+                  ↺ 重置为原矩阵 A
+                </button>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                  <label style="font-size: 0.82rem; color: var(--text-muted);">翻转进度：</label>
+                  <input id="flipper-slider" type="range" min="0" max="100" value="0" style="width: 140px;" oninput="updateFlipperProgress(this.value)">
+                  <span id="flipper-progress-val" style="font-family: var(--font-mono); font-size: 0.82rem; min-width: 42px; color: var(--accent-blue);">0%</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem; margin-left: auto;">
+                  <label style="font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                    <input type="checkbox" id="chk-show-diagonal" checked onchange="renderFlipperBoard()">
+                    <span>显示 45° 对角线</span>
+                  </label>
+                  <label style="font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                    <input type="checkbox" id="chk-show-trajectories" checked onchange="renderFlipperBoard()">
+                    <span>显示换位飞行轨迹</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center;">
+                <span><span style="display:inline-block; width:10px; height:10px; background:#38bdf8; border-radius:2px; margin-right:4px;"></span>第 1 行 (转置后变为第 1 列)</span>
+                <span><span style="display:inline-block; width:10px; height:10px; background:#34d399; border-radius:2px; margin-right:4px;"></span>第 2 行 (转置后变为第 2 列)</span>
+                <span><span style="display:inline-block; width:10px; height:10px; background:#fbbf24; border-radius:2px; margin-right:4px;"></span>第 3 行 (转置后变为第 3 列)</span>
+                <span style="color: var(--accent-amber); font-weight: 700;">★ 金色发光边框 = 对角线元素 (i = j，镜面不动点)</span>
+              </div>
+
+              <div class="flipper-stage">
+                <div id="flipper-board" class="matrix-board">
+                  <svg id="flipper-svg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; z-index: 2;"></svg>
+                  <div id="flipper-slots" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;"></div>
+                  <div id="flipper-labels" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3;"></div>
+                  <div id="flipper-cells" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 4;"></div>
+                </div>
+              </div>
+
+              <div id="flipper-status" style="background: rgba(0,0,0,0.25); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.85rem; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                <!-- Generated dynamically via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 2 章：几何篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">第二章 · 几何图景</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 几何视角：$A^T$ 作为线性变换，对空间做了什么？</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.96rem; line-height: 1.8;">
+              3Blue1Brown 告诉我们：“矩阵是空间的线性变换，矩阵的每一列就是变换后基向量的新落点”。那么，如果我们把一个矩阵转置，得到的全新矩阵 $A^T$，在几何上对平面做了什么？
+            </p>
+
+            <div style="background: rgba(192, 132, 252, 0.08); border-left: 4px solid var(--accent-purple); padding: 1rem; border-radius: 4px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.35rem;">💡 核心几何结论：对角线镜像与剪切方向对调</h4>
+              <p style="font-size: 0.92rem; line-height: 1.7;">
+                设 $2 \times 2$ 矩阵 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$，其转置为 $A^T = \begin{bmatrix} a & c \\ b & d \end{bmatrix}$。<br>
+                • 矩阵 $A$ 把基向量 $\hat{i}=[1,0]^T$ 映射到<strong>第 1 列 $[a, c]^T$</strong>，把 $\hat{j}=[0,1]^T$ 映射到<strong>第 2 列 $[b, d]^T$</strong>；<br>
+                • 矩阵 $A^T$ 把基向量 $\hat{i}$ 映射到 $[a, b]^T$，把 $\hat{j}$ 映射到 $[c, d]^T$；<br>
+                • <strong>神奇对称性</strong>：在坐标平面上画一条虚线 $y = x$（45° 对角线）。矩阵 $A$ 所产生的空间形变效果，与 $A^T$ 产生的形变效果，正好构成关于<strong>直线 $y = x$ 的镜像对称</strong>！
+              </p>
+            </div>
+
+            <!-- 交互画布：正向变换 A vs 转置变换 A^T 实时联动镜 -->
+            <div class="dual-canvas-grid">
+              <!-- Canvas A -->
+              <div class="canvas-panel">
+                <h4>
+                  <span style="color: var(--accent-blue);">🟦 正向矩阵变换 $A$</span>
+                  <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal; margin-left:auto;">输入向量 $v \to Av$</span>
+                </h4>
+                <canvas id="canvas-matrix-a" class="sim-canvas" width="380" height="280"></canvas>
+                <div style="margin-top: 0.75rem; font-size: 0.82rem; color: var(--text-muted); text-align: center;">
+                  基向量映射：$\hat{i} \to \mathbf{a}_1 = [a, c]^T$, $\hat{j} \to \mathbf{a}_2 = [b, d]^T$
+                </div>
+              </div>
+
+              <!-- Canvas A^T -->
+              <div class="canvas-panel">
+                <h4>
+                  <span style="color: var(--accent-purple);">🟪 转置矩阵变换 $A^T$</span>
+                  <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal; margin-left:auto;">对偶映射 $v \to A^T v$</span>
+                </h4>
+                <canvas id="canvas-matrix-at" class="sim-canvas" width="380" height="280"></canvas>
+                <div style="margin-top: 0.75rem; font-size: 0.82rem; color: var(--text-muted); text-align: center;">
+                  基向量映射：$\hat{i} \to \mathbf{row}_1^T = [a, b]^T$, $\hat{j} \to \mathbf{row}_2^T = [c, d]^T$
+                </div>
+              </div>
+            </div>
+
+            <!-- 控制条 -->
+            <div style="background: rgba(30, 41, 59, 0.5); padding: 1.1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+              <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 0.85rem; font-weight: 700;">经典变换几何快切：</span>
+                <button class="preset-btn active" onclick="setGeoPreset('shearX')">水平剪切 (X-Shear)</button>
+                <button class="preset-btn" onclick="setGeoPreset('rot45')">纯旋转 45° (Rotation)</button>
+                <button class="preset-btn" onclick="setGeoPreset('scaleAsym')">非对称拉伸</button>
+                <button class="preset-btn" onclick="setGeoPreset('symmetric')">对称矩阵 (A=A^T 镜像完全重合)</button>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                    <span>参数 a (左上)</span><span id="val-a" style="font-family: var(--font-mono); color: var(--accent-blue);">1.0</span>
+                  </label>
+                  <input id="slider-a" type="range" min="-2" max="2" step="0.1" value="1" style="width: 100%;" oninput="updateGeoParams()">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                    <span>参数 b (右上)</span><span id="val-b" style="font-family: var(--font-mono); color: var(--accent-blue);">1.2</span>
+                  </label>
+                  <input id="slider-b" type="range" min="-2" max="2" step="0.1" value="1.2" style="width: 100%;" oninput="updateGeoParams()">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                    <span>参数 c (左下)</span><span id="val-c" style="font-family: var(--font-mono); color: var(--accent-purple);">0.0</span>
+                  </label>
+                  <input id="slider-c" type="range" min="-2" max="2" step="0.1" value="0" style="width: 100%;" oninput="updateGeoParams()">
+                </div>
+                <div>
+                  <label style="font-size: 0.8rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                    <span>参数 d (右下)</span><span id="val-d" style="font-family: var(--font-mono); color: var(--accent-purple);">1.0</span>
+                  </label>
+                  <input id="slider-d" type="range" min="-2" max="2" step="0.1" value="1" style="width: 100%;" oninput="updateGeoParams()">
+                </div>
+              </div>
+              <div id="geo-explanation" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.5rem;">
+                <!-- Filled dynamically -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 3 章：性质篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">第三章 · 代数性质</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 转置的 4 大黄金运算性质与“穿鞋穿袜定律”</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.96rem; line-height: 1.8;">
+              转置在代数运算中非常规整，满足 4 条核心运算法则。其中前三条显而易见，而<strong>第四条乘法逆序定律</strong>则是整个线性代数中最关键的基石定理之一！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              
+              <!-- 性质 1 -->
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 0.35rem;">性质 1 · 双重转置抵消律</div>
+                <div style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); margin: 0.4rem 0;">
+                  $(A^T)^T = A$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  就像把一张纸沿着对角线折叠一次，再折叠一次就恢复原位；矩阵转置两次完全恒等复原。
+                </p>
+              </div>
+
+              <!-- 性质 2 -->
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-green); margin-bottom: 0.35rem;">性质 2 · 加法分配律</div>
+                <div style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); margin: 0.4rem 0;">
+                  $(A + B)^T = A^T + B^T$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  两矩阵相加后再转置，等同于各自翻转后再相加。转置是纯粹的<strong>线性算子</strong>。
+                </p>
+              </div>
+
+              <!-- 性质 3 -->
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 0.35rem;">性质 3 · 标量数乘结合律</div>
+                <div style="font-size: 1.1rem; font-weight: 700; font-family: var(--font-mono); margin: 0.4rem 0;">
+                  $(cA)^T = cA^T$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  常数 $c$ 是纯标量，不具备行与列的方向性，因此直接提到转置符号外部。
+                </p>
+              </div>
+
+              <!-- 性质 4 -->
+              <div style="background: rgba(244, 63, 94, 0.08); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid rgba(244, 63, 94, 0.3);">
+                <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-rose); margin-bottom: 0.35rem;">性质 4 · 乘法逆序定律 (核心灵魂！)</div>
+                <div style="font-size: 1.15rem; font-weight: 700; font-family: var(--font-mono); color: var(--accent-rose); margin: 0.4rem 0;">
+                  $(AB)^T = B^T A^T$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  <strong>注意顺序绝对颠倒！</strong>绝不是 $A^T B^T$！推广至多个矩阵：$(ABC)^T = C^T B^T A^T$。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- 为什么乘法转置必须逆序？深度剖析 -->
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1.25rem;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.75rem;">👞 为什么必须逆序？两大直观铁证</h4>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem;">
+                <div>
+                  <h5 style="color: var(--accent-amber); margin-bottom: 0.35rem;">直觉比喻：“穿鞋穿袜定律” (Socks and Shoes)</h5>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                    • 早上出门时：先穿上<strong>袜子 $A$</strong>，再穿上<strong>鞋子 $B$</strong>，复合过程记作 $B \circ A$（先做 A 再做 B）；<br>
+                    • 晚上回家脱掉时：你<strong>不可能先脱袜子再脱鞋子</strong>！你必须按照<strong>逆序</strong>操作：先脱鞋子 $B^{-1}$，再脱袜子 $A^{-1}$。<br>
+                    • 转置同理：复合变换在对偶视角下的反向传递，必然优先解开最外层的变换，因此次序彻底颠倒！
+                  </p>
+                </div>
+
+                <div>
+                  <h5 style="color: var(--accent-blue); margin-bottom: 0.35rem;">维度积木测试：硬写 $A^T B^T$ 会直接“骨折撞车”</h5>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                    设 $A$ 为 <strong>$2 \times 3$</strong>，矩阵 $B$ 为 <strong>$3 \times 4$</strong>：<br>
+                    1. 乘积 $AB$ 的维度是 <strong>$2 \times 4$</strong>；其转置 $(AB)^T$ 必须是 <strong>$4 \times 2$</strong>；<br>
+                    2. 如果盲目写成 $A^T B^T$：$A^T$ 是 $3 \times 2$，$B^T$ 是 $4 \times 3$。内侧维度是 $2$ 和 $4$（$2 \ne 4$），<strong>矩阵乘法根本无法执行！</strong><br>
+                    3. 换成 $B^T A^T$：$B^T (4 \times 3) \times A^T (3 \times 2) = \mathbf{4 \times 2}$，维度与内容完美咬合！
+                  </p>
+                </div>
+              </div>
+
+              <!-- 维度积木动态演示条 -->
+              <div class="chain-flow">
+                <div class="chain-box">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">矩阵 A</div>
+                  <div class="dim-tag">$2 \times 3$</div>
+                </div>
+                <span class="arrow-icon">×</span>
+                <div class="chain-box">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">矩阵 B</div>
+                  <div class="dim-tag">$3 \times 4$</div>
+                </div>
+                <span class="arrow-icon">=</span>
+                <div class="chain-box" style="border-color: var(--accent-blue);">
+                  <div style="font-size: 0.8rem; color: var(--accent-blue);">乘积 AB</div>
+                  <div class="dim-tag" style="color: var(--accent-blue);">$2 \times 4$</div>
+                </div>
+                <span class="arrow-icon">➔ 转置 ➔</span>
+                <div class="chain-box" style="border-color: var(--accent-rose); background: rgba(244, 63, 94, 0.1);">
+                  <div style="font-size: 0.8rem; color: var(--accent-rose); font-weight: 700;">$(AB)^T$</div>
+                  <div class="dim-tag" style="color: var(--accent-rose); font-weight: 700;">$4 \times 2$</div>
+                </div>
+              </div>
+
+              <div class="chain-flow" style="margin-top: 0.75rem; background: rgba(16, 185, 129, 0.08); border: 1px dashed var(--accent-green);">
+                <div style="width: 100%; font-size: 0.82rem; color: var(--accent-green); font-weight: 700; text-align: center; margin-bottom: 0.5rem;">
+                  ✅ 逆序组合 $B^T A^T$ 的维度严格匹配：
+                </div>
+                <div class="chain-box" style="border-color: var(--accent-green);">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">$B^T$</div>
+                  <div class="dim-tag" style="color: var(--accent-green);">$4 \times 3$</div>
+                </div>
+                <span class="arrow-icon" style="color: var(--accent-green);">×</span>
+                <div class="chain-box" style="border-color: var(--accent-green);">
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">$A^T$</div>
+                  <div class="dim-tag" style="color: var(--accent-green);">$3 \times 2$</div>
+                </div>
+                <span class="arrow-icon" style="color: var(--accent-green);">=</span>
+                <div class="chain-box" style="border-color: var(--accent-green); background: rgba(16, 185, 129, 0.15);">
+                  <div style="font-size: 0.8rem; color: var(--accent-green); font-weight: 700;">$B^T A^T$</div>
+                  <div class="dim-tag" style="color: var(--accent-green); font-weight: 700;">$4 \times 2$</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 4 章：深水区灵魂篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-cyan, #06b6d4); color: #000;">第四章 · 进阶灵魂</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 内积守恒与伴随算子：真正理解转置的数学精髓</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.96rem; line-height: 1.8;">
+              如果你去问一位数学家或物理学家：“转置的本质是什么？”，他们绝不会回答“把行换成列”。他们会告诉你这道至高无上的内积等式：
+            </p>
+
+            <div class="definition-box" style="padding: 1.25rem; background: rgba(6, 182, 212, 0.08); border-left: 4px solid var(--accent-cyan, #06b6d4); border-radius: 4px; margin: 1rem 0;">
+              <h3 style="color: var(--accent-cyan, #06b6d4); font-family: var(--font-mono); margin-bottom: 0.5rem;">
+                $$\langle Ax, y \rangle = \langle x, A^T y \rangle$$
+              </h3>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                用列向量的点积形式展开，即：
+                $$(Ax)^T y = x^T (A^T y)$$
+                在实内积空间中，<strong>转置矩阵 $A^T$ 是线性算子 $A$ 的伴随算子 (Adjoint Operator)</strong>！
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-blue); margin-bottom: 0.35rem;">左边 $\langle Ax, y \rangle$：在“输出空间”进行测量</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  输入向量 $x$ 经过矩阵 $A$ 变换后到达目标空间，成为新状态 $Ax$。此时我们拿一支“测量探针”（向量 $y$）去测量它的投影大小，得到测量值 $\langle Ax, y \rangle$。
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1.1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-purple); margin-bottom: 0.35rem;">右边 $\langle x, A^T y \rangle$：在“输入空间”提前测量</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  $A^T$ 的神奇之处在于：它把输出空间的探针 $y$ <strong>“拉回 (Pullback)”</strong> 到了输入空间，变成了改装后的探针 $A^T y$。直接用这支新探针去测量原始的 $x$，<strong>得到的读数绝对 100% 相同</strong>！
+                </p>
+              </div>
+            </div>
+
+            <!-- 交互式天平实验室 -->
+            <div class="balance-container">
+              <h4 style="color: var(--accent-cyan, #06b6d4); margin-bottom: 0.5rem; text-align: center;">
+                ⚖️ 伴随内积天平：见证 $\langle Ax, y \rangle \equiv \langle x, A^T y \rangle$ 的毫厘不差
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center; margin-bottom: 1.25rem;">
+                无论你如何肆意拖动向量 $x$、向量 $y$ 或者修改变换矩阵 $A$，两侧计算逻辑虽然路径完全不同，但内积天平始终处于绝对平衡！
+              </p>
+
+              <!-- SVG Balance Graphic -->
+              <svg class="balance-scale-svg" viewBox="0 0 520 160">
+                <!-- Base stand -->
+                <polygon points="260,25 245,150 275,150" fill="#334155" />
+                <rect x="220" y="145" width="80" height="12" rx="4" fill="#475569" />
+                <circle cx="260" cy="25" r="8" fill="#fbbf24" />
+                
+                <!-- Crossbeam (always horizontal because both values are strictly equal!) -->
+                <line x1="60" y1="25" x2="460" y2="25" stroke="#fbbf24" stroke-width="4" stroke-linecap="round" />
+                
+                <!-- Center Pointer -->
+                <line x1="260" y1="25" x2="260" y2="60" stroke="#f43f5e" stroke-width="3" />
+                <polygon points="260,65 255,55 265,55" fill="#f43f5e" />
+
+                <!-- Left Tray -->
+                <line x1="100" y1="25" x2="70" y2="90" stroke="#94a3b8" stroke-width="2" />
+                <line x1="100" y1="25" x2="130" y2="90" stroke="#94a3b8" stroke-width="2" />
+                <path d="M 60 90 Q 100 110 140 90 Z" fill="#0284c7" opacity="0.85" />
+                <text x="100" y="80" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">⟨Ax, y⟩</text>
+                <text id="scale-left-val" x="100" y="125" text-anchor="middle" fill="#38bdf8" font-size="15" font-family="monospace" font-weight="700">3.50</text>
+
+                <!-- Right Tray -->
+                <line x1="420" y1="25" x2="390" y2="90" stroke="#94a3b8" stroke-width="2" />
+                <line x1="420" y1="25" x2="450" y2="90" stroke="#94a3b8" stroke-width="2" />
+                <path d="M 380 90 Q 420 110 460 90 Z" fill="#9333ea" opacity="0.85" />
+                <text x="420" y="80" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="700">⟨x, Aᵀy⟩</text>
+                <text id="scale-right-val" x="420" y="125" text-anchor="middle" fill="#c084fc" font-size="15" font-family="monospace" font-weight="700">3.50</text>
+              </svg>
+
+              <!-- Sliders to control vectors x, y and matrix A -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1rem; background: rgba(0,0,0,0.25); padding: 1rem; border-radius: var(--radius-sm);">
+                <div>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); margin-bottom: 0.4rem;">
+                    输入向量 $x = [x_1, x_2]^T$
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">x₁:</span>
+                    <input id="slider-x1" type="range" min="-3" max="3" step="0.5" value="1.5" oninput="updateBalanceScale()" style="width: 100%;">
+                    <span id="txt-x1" style="font-family: monospace; font-size: 0.8rem;">1.5</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">x₂:</span>
+                    <input id="slider-x2" type="range" min="-3" max="3" step="0.5" value="2.0" oninput="updateBalanceScale()" style="width: 100%;">
+                    <span id="txt-x2" style="font-family: monospace; font-size: 0.8rem;">2.0</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-purple); margin-bottom: 0.4rem;">
+                    测量探针 $y = [y_1, y_2]^T$
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">y₁:</span>
+                    <input id="slider-y1" type="range" min="-3" max="3" step="0.5" value="1.0" oninput="updateBalanceScale()" style="width: 100%;">
+                    <span id="txt-y1" style="font-family: monospace; font-size: 0.8rem;">1.0</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.3rem;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">y₂:</span>
+                    <input id="slider-y2" type="range" min="-3" max="3" step="0.5" value="-0.5" oninput="updateBalanceScale()" style="width: 100%;">
+                    <span id="txt-y2" style="font-family: monospace; font-size: 0.8rem;">-0.5</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-amber); margin-bottom: 0.4rem;">
+                    变换矩阵 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem;">
+                    <input id="inp-mat-a" type="number" step="0.5" value="2" oninput="updateBalanceScale()" style="padding: 2px 4px; font-size: 0.8rem; background: #1e293b; color: #fff; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <input id="inp-mat-b" type="number" step="0.5" value="1" oninput="updateBalanceScale()" style="padding: 2px 4px; font-size: 0.8rem; background: #1e293b; color: #fff; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <input id="inp-mat-c" type="number" step="0.5" value="-1" oninput="updateBalanceScale()" style="padding: 2px 4px; font-size: 0.8rem; background: #1e293b; color: #fff; border: 1px solid var(--border-color); border-radius: 4px;">
+                    <input id="inp-mat-d" type="number" step="0.5" value="1.5" oninput="updateBalanceScale()" style="padding: 2px 4px; font-size: 0.8rem; background: #1e293b; color: #fff; border: 1px solid var(--border-color); border-radius: 4px;">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step by Step Calculation Breakdown -->
+              <div id="balance-breakdown" style="font-family: var(--font-mono); font-size: 0.82rem; margin-top: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.35); border-radius: var(--radius-sm); line-height: 1.8;">
+                <!-- Computed live via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 5 章：实对称与 A^T A ================= -->
+        <div class="card" style="margin-top: 2rem;" id="chapter-5">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第五章 · 黄金搭档</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 转置的王牌组合：实对称矩阵与形变度量 $A^T A$ 的几何解构</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.98rem; line-height: 1.85;">
+              在整个线性代数、现代统计学、机器学习与量子力学中，你会无休无止地看到同一个极其特殊的矩阵结构：$\mathbf{A^T A}$（或样本协方差的 $\mathbf{X^T X}$）。
+              从<strong>高斯最小二乘法</strong>的正规方程 $(A^T A)\hat{x} = A^T b$，到<strong>主成分分析 (PCA)</strong> 的方差提取，再到<strong>奇异值分解 (SVD)</strong> 的谱分解……
+              为什么大家如此痴迷于把一个矩阵与它的转置乘在一起？
+            </p>
+
+            <div style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); padding: 1rem 1.25rem; border-radius: 4px; margin: 1.25rem 0; font-size: 0.92rem; line-height: 1.8;">
+              <strong style="color: var(--accent-blue);">💡 核心设问：</strong>
+              无论原矩阵 $A$ 形状多么不规则（长方形、充满不可逆的退化维度、行列严重不对称），只要形成组合 $A^T A$，就会不可思议地同时继承<strong>对称性、非负半正定性、正交主轴基底、信息零额外丢失以及刚体旋转自动消融</strong>五大超强几何特权！
+              这是代数巧合吗？绝不是！每一个性质背后都对应着一条<strong>不可动摇的物理与几何公理</strong>。
+            </div>
+
+            <!-- 5.1 往返闭环映射与度量张量 -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-blue); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.1</span> 往返闭环映射与形变度量：为什么必须把 $A$ 与 $A^T$ 乘在一起？
+              </h3>
+              
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin-top: 1rem;">
+                <div style="background: rgba(255, 255, 255, 0.03); padding: 1.15rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">📐 1. 破解“长方形矩阵的维度灾难”</h4>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                    现实工程中的数据矩阵 $A$ 往往是长方形的（$m \times n$，例如 $1000$ 个采样样本 $\times 3$ 个特征）。
+                    长方形矩阵<strong>没有行列式、不能求逆、也根本无法定义特征值与特征向量</strong>！<br>
+                    但当我们将 $A$（映射 $\mathbb{R}^n \to \mathbb{R}^m$）与转置 $A^T$（拉回映射 $\mathbb{R}^m \to \mathbb{R}^n$）复合时：
+                    $$\mathbf{x} \in \mathbb{R}^n \xrightarrow{\ \ A\ \ } A\mathbf{x} \in \mathbb{R}^m \xrightarrow{\ \ A^T\ \ } A^T A\mathbf{x} \in \mathbb{R}^n$$
+                    长方形的维度裂隙被彻底弥合！$A^T A$ 成为一个<strong>正方、闭环、纯粹作用于输入空间本身的内蕴线性算子</strong>（$n \times n$）。
+                  </p>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.03); padding: 1.15rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">📏 2. 黎曼拉回度量：真实的“形变能量计”</h4>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                    如果我们在输入空间中沿着某个方向走出一小步 $\mathbf{x}$，经过变换 $A$ 之后，目标空间中实际产生了多大的<strong>真实距离平方（能量）</strong>？
+                    $$\|A\mathbf{x}\|^2 = (A\mathbf{x})^T (A\mathbf{x}) = \mathbf{x}^T (A^T A) \mathbf{x}$$
+                    看！中间赫然出现的正是 $A^T A$！在微分几何中，$A^T A$ 就是由目标欧氏空间拉回（Pullback）到输入空间的<strong>度量张量 (Metric Tensor)</strong>。<br>
+                    它就像一台随身携带的<strong>“形变功率计”</strong>，随时测定输入向量在变换后被拉伸放大的能量！
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5.2 为什么必然是对称矩阵？ -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-green); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.2</span> 为什么 $A^T A$ 必然是对称矩阵？对偶测量的“互易守恒”
+              </h3>
+              <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem;">
+                代数上由转置逆序定理可一秒得证：$(A^T A)^T = A^T (A^T)^T = A^T A$。但这背后的几何真相是什么？
+              </p>
+              
+              <div style="background: rgba(52, 211, 153, 0.06); border: 1px solid rgba(52, 211, 153, 0.25); border-radius: var(--radius-sm); padding: 1.1rem; margin-top: 0.75rem;">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.4rem;">🤝 几何本质：目标欧氏空间的天然内积互易性</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  在输入空间中任取两个测试向量 $\mathbf{u}, \mathbf{v} \in \mathbb{R}^n$，考察由 $A^T A$ 诱导的双线性内积配对：
+                  $$\langle \mathbf{u}, (A^T A)\mathbf{v} \rangle = \mathbf{u}^T (A^T A \mathbf{v}) = (A\mathbf{u})^T (A\mathbf{v}) = \langle A\mathbf{u}, A\mathbf{v} \rangle$$
+                  而在物理欧氏空间 $\mathbb{R}^m$ 中，两个向量的点积显然满足无可辩驳的交换律（对称性）：
+                  $$\langle A\mathbf{u}, A\mathbf{v} \rangle = \langle A\mathbf{v}, A\mathbf{u} \rangle = (A\mathbf{v})^T (A\mathbf{u}) = \mathbf{v}^T (A^T A \mathbf{u}) = \langle (A^T A)\mathbf{u}, \mathbf{v} \rangle$$
+                  对比首尾两端，对任意 $\mathbf{u}, \mathbf{v}$ 恒成立：
+                  $$\mathbf{\langle \mathbf{u}, (A^T A)\mathbf{v} \rangle = \langle (A^T A)\mathbf{u}, \mathbf{v} \rangle}$$
+                  这就是数学中<strong>自伴随算子（Self-Adjoint Operator）</strong>的严谨定义！<br>
+                  <strong>结论：$A^T A$ 的对称性不是代数凑巧，它是“欧氏空间内积交换律”在输入空间的拉回投影！</strong>
+                </p>
+              </div>
+            </div>
+
+            <!-- 5.3 为什么必然半正定？ -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-amber); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.3</span> 为什么 $A^T A$ 必然半正定（$\lambda_i \ge 0$）？真实几何长度的非负铁律
+              </h3>
+              
+              <!-- 显式核心概念定义卡 -->
+              <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.35); border-left: 4px solid var(--accent-green); border-radius: var(--radius-sm); padding: 1.15rem; margin: 1rem 0;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <h4 style="color: var(--accent-green); margin: 0; display: flex; align-items: center; gap: 0.4rem;">
+                    <span>📖 核心概念定义：什么是“正定”与“半正定”？</span>
+                  </h4>
+                  <a href="ch7_5_positive_definite.html" style="font-size: 0.82rem; color: var(--accent-green); font-weight: 700; text-decoration: underline;">
+                    查看专属全景课件：Ch 7.5 正定矩阵与二次型能量曲面 →
+                  </a>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin: 0.3rem 0;">
+                  设 $M$ 为实对称矩阵。矩阵对于任意输入向量 $\mathbf{x}$ 赋予的度量能量由二次型 $q(\mathbf{x}) = \mathbf{x}^T M \mathbf{x}$ 刻画：<br>
+                  • <strong style="color:var(--accent-green);">严格正定 (Positive Definite, $M \succ 0$)：</strong>除了零向量之外，向任何方向迈步，能量都<strong>严格大于零</strong>（$\mathbf{x}^T M \mathbf{x} \gt 0, \forall \mathbf{x} \neq \mathbf{0}$）。所有特征值全部严格为正（$\lambda_i \gt 0$），3D 几何曲面如同一口深邃向上的碗面，原点是唯一的绝对最低点！<br>
+                  • <strong style="color:var(--accent-amber);">半正定 (Positive Semi-Definite, $M \succeq 0$)：</strong>能量永远非负（$\mathbf{x}^T M \mathbf{x} \ge 0$），但在某些特定方向（即矩阵的零空间 $\operatorname{Null}(M)$）能量恰好等于零。所有特征值非负（$\lambda_i \ge 0$），3D 几何曲面如同一座不漏水的平底水槽通道。<br>
+                  • <strong style="color:var(--accent-rose);">负定与不定：</strong>若能量处处为负（$\mathbf{x}^T M \mathbf{x} \lt 0$）则为<strong>负定</strong>（倒扣碗面）；若有的方向为正、有的方向为负，则为<strong>不定</strong>（马鞍面）。
+                </p>
+              </div>
+              <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem;">
+                在线性代数中，许多矩阵的特征值可能是负数甚至是虚数，为什么 $A^T A$ 的特征值<strong>百分之百是实数，且绝对不可能小于 0</strong>？
+              </p>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                <div style="background: rgba(251, 191, 36, 0.06); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: var(--radius-sm); padding: 1.1rem;">
+                  <h4 style="color: var(--accent-amber); margin-bottom: 0.4rem;">🌱 1. 距离平方永远大于等于零</h4>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                    对于任意非零向量 $\mathbf{x}$，二次型的值为：
+                    $$\mathbf{x}^T (A^T A) \mathbf{x} = \|A\mathbf{x}\|^2 \ge 0$$
+                    在现实三维或更高维几何世界中，<strong>任何物体的欧氏距离平方绝不可能为负数</strong>！根据正定性定义，二次型处处非负的对称矩阵正是<strong>半正定矩阵 (Positive Semi-Definite)</strong>！
+                  </p>
+                </div>
+
+                <div style="background: rgba(251, 191, 36, 0.06); border: 1px solid rgba(251, 191, 36, 0.25); border-radius: var(--radius-sm); padding: 1.1rem;">
+                  <h4 style="color: var(--accent-amber); margin-bottom: 0.4rem;">🎯 2. 特征值的真实几何身份</h4>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                    设 $\mathbf{v}$ 是 $A^T A$ 的单位特征向量（$\|\mathbf{v}\|=1$），特征值为 $\lambda$：
+                    $$(A^T A)\mathbf{v} = \lambda \mathbf{v} \implies \lambda = \mathbf{v}^T (A^T A)\mathbf{v} = \|A\mathbf{v}\|^2 = \sigma^2$$
+                    看！特征值 $\lambda$ 根本不是抽象解出来的多项式根，它就是<strong>单位基底 $\mathbf{v}$ 被变换拉伸后的真实几何长度的平方 ($\lambda = \sigma^2$)</strong>！既然长度 $\sigma \ge 0$，其平方 $\lambda$ 当然永不为负！
+                  </p>
+                </div>
+              </div>
+
+              <div style="margin-top: 0.75rem; font-size: 0.88rem; color: var(--text-muted); background: rgba(0,0,0,0.25); padding: 0.75rem; border-radius: var(--radius-sm);">
+                <strong>什么时候 $\lambda = 0$？</strong> 只有当 $A\mathbf{v} = \mathbf{0}$，即该方向被矩阵 $A$ 彻底拍扁坍缩进零空间时，长度才为 0。只要 $A$ 的列线性无关（满列秩），没有任何非零向量会被拍死，所有 $\lambda_i \gt 0$，$A^T A$ 成为<strong>严格正定矩阵，必定百分之百可逆！</strong>
+              </div>
+            </div>
+
+            <!-- 5.4 为什么特征向量两两正交？ -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-rose); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.4</span> 为什么特征向量天然两两垂直？高维椭球面的主对称轴
+              </h3>
+              
+              <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem;">
+                当一个平面上的<strong>单位圆</strong>（或高维单位球面 $S^{n-1} = \{\mathbf{x} : \|\mathbf{x}\|=1\}$）经由任意非奇异矩阵 $A$ 变换后，几何上必定被压成一个<strong>倾斜的椭圆（高维超椭球）</strong>。
+              </p>
+
+              <div style="background: rgba(244, 63, 94, 0.06); border: 1px solid rgba(244, 63, 94, 0.25); border-radius: var(--radius-sm); padding: 1.1rem; margin-top: 0.75rem;">
+                <h4 style="color: var(--accent-rose); margin-bottom: 0.4rem;">🪐 几何公理：任何椭球天生具备互相垂直的主对称轴</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  在这个被拉伸的椭球上，哪一个方向被拉伸得最长？哪一个方向被拉伸得最短？<br>
+                  这本质上是拉格朗日极值问题：在约束 $\|\mathbf{x}\|^2 = 1$ 下，寻找能量 $\|A\mathbf{x}\|^2 = \mathbf{x}^T(A^T A)\mathbf{x}$ 的极值方向。求导后的极值方程正是：
+                  $$(A^T A)\mathbf{x} = \lambda \mathbf{x}$$
+                  • 最大特征值 $\lambda_1$ 对应的特征向量 $\mathbf{v}_1$ 是<strong>椭球长轴拉伸方向</strong>；<br>
+                  • 最小特征值 $\lambda_2$ 对应的特征向量 $\mathbf{v}_2$ 是<strong>椭球短轴压缩方向</strong>。<br>
+                  几何上，椭球的对称轴之间显然必须保持 $90^{\circ}$ 正交。代数上更因对称算子的自伴随特性：
+                  $$(\lambda_1 - \lambda_2)\langle \mathbf{v}_1, \mathbf{v}_2 \rangle = \langle (A^TA)\mathbf{v}_1, \mathbf{v}_2 \rangle - \langle \mathbf{v}_1, (A^TA)\mathbf{v}_2 \rangle = 0 \implies \mathbf{v}_1 \perp \mathbf{v}_2$$
+                  <strong>结论：谱定理 (Spectral Theorem) 赋予了 $A^T A$ 一套天然的标准正交特征向量基底！</strong>
+                </p>
+              </div>
+            </div>
+
+            <!-- 5.5 为什么信息零额外丢失？保秩性 -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-indigo); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.5</span> 为什么信息零额外丢失？保秩性 $\operatorname{rank}(A^TA) = \operatorname{rank}(A)$ 与最小二乘法
+              </h3>
+              
+              <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem;">
+                很多人初学时会担忧：矩阵 $A$ 变换本来就可能压缩维度，丢失信息；再乘一个转置 $A^T$，会不会雪上加霜，丢失更多信息？<br>
+                <strong>惊人的数学定理：乘上 $A^T$ 绝对不会造成任何哪怕一丁点额外的维度坍塌！</strong>
+              </p>
+
+              <div style="background: rgba(129, 140, 248, 0.06); border: 1px solid rgba(129, 140, 248, 0.25); border-radius: var(--radius-sm); padding: 1.1rem; margin-top: 0.75rem;">
+                <h4 style="color: var(--accent-indigo); margin-bottom: 0.4rem;">🛡️ 核心定理：零空间绝对重合 $\operatorname{Null}(A^T A) = \operatorname{Null}(A)$</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  <strong>一秒证明：</strong><br>
+                  1. 若 $A\mathbf{x} = \mathbf{0}$，两边左乘 $A^T$ 显然得 $A^T(A\mathbf{x}) = A^T\mathbf{0} = \mathbf{0}$；<br>
+                  2. 反过来，若 $A^T A\mathbf{x} = \mathbf{0}$，在两边左乘 $\mathbf{x}^T$：
+                  $$\mathbf{x}^T (A^T A \mathbf{x}) = (A\mathbf{x})^T (A\mathbf{x}) = \|A\mathbf{x}\|^2 = 0 \implies A\mathbf{x} = \mathbf{0}$$
+                  这意味着：<strong>$A^T A$ 拍扁为零的向量集合，与原矩阵 $A$ 拍扁为零的向量集合，完全 100% 绝对一致！</strong>
+                </p>
+
+                <!-- SVG 架构图 1：往返闭环映射与子空间正交隔绝图 -->
+                <svg class="ata-diagram-svg" viewBox="0 0 680 230" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Background Panel -->
+                  <rect x="0" y="0" width="680" height="230" rx="8" fill="#090d16" stroke="rgba(255,255,255,0.08)" />
+
+                  <!-- Left Space: R^n -->
+                  <rect x="30" y="35" width="220" height="145" rx="6" fill="rgba(56, 189, 248, 0.05)" stroke="#38bdf8" stroke-dasharray="4,3" stroke-width="1.5" />
+                  <text x="140" y="24" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">输入空间 ℝⁿ (定义域)</text>
+                  
+                  <rect x="45" y="48" width="190" height="60" rx="4" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" />
+                  <text x="140" y="72" text-anchor="middle" fill="#e0f2fe" font-size="12" font-weight="700">行空间 Row(A)</text>
+                  <text x="140" y="92" text-anchor="middle" fill="#94a3b8" font-size="11">有效信息载体 (维度 r)</text>
+
+                  <rect x="45" y="115" width="190" height="52" rx="4" fill="rgba(148, 163, 184, 0.08)" stroke="#64748b" />
+                  <text x="140" y="137" text-anchor="middle" fill="#94a3b8" font-size="12">零空间 Null(A)</text>
+                  <text x="140" y="154" text-anchor="middle" fill="#64748b" font-size="10">拍扁为 0 的维度 (n - r)</text>
+
+                  <!-- Right Space: R^m -->
+                  <rect x="430" y="35" width="220" height="145" rx="6" fill="rgba(192, 132, 252, 0.05)" stroke="#c084fc" stroke-dasharray="4,3" stroke-width="1.5" />
+                  <text x="540" y="24" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="700">目标空间 ℝᵐ (到达域)</text>
+
+                  <rect x="445" y="48" width="190" height="60" rx="4" fill="rgba(192, 132, 252, 0.18)" stroke="#c084fc" />
+                  <text x="540" y="72" text-anchor="middle" fill="#f3e8ff" font-size="12" font-weight="700">列空间 Col(A)</text>
+                  <text x="540" y="92" text-anchor="middle" fill="#c084fc" font-size="11">映射到达区域 (Ax ≠ 0)</text>
+
+                  <rect x="445" y="115" width="190" height="52" rx="4" fill="rgba(244, 63, 94, 0.08)" stroke="#f43f5e" />
+                  <text x="540" y="137" text-anchor="middle" fill="#fca5a5" font-size="12">左零空间 Null(Aᵀ)</text>
+                  <text x="540" y="154" text-anchor="middle" fill="#f43f5e" font-size="10">Aᵀ 能够拍成 0 的盲区</text>
+
+                  <!-- Orthogonal Separator Note -->
+                  <text x="540" y="113" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">⟂ 绝对正交隔绝</text>
+
+                  <!-- Forward Arrow: A -->
+                  <path d="M 245 70 C 330 40, 360 40, 435 68" fill="none" stroke="#38bdf8" stroke-width="2.5" />
+                  <polygon points="438,70 427,64 430,73" fill="#38bdf8" />
+                  <text x="340" y="48" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">正向变换 A</text>
+
+                  <!-- Backward Arrow: A^T -->
+                  <path d="M 435 88 C 360 115, 330 115, 245 88" fill="none" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="6,3" />
+                  <polygon points="242,86 253,92 250,83" fill="#fbbf24" />
+                  <text x="340" y="118" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="700">对偶拉回 Aᵀ</text>
+
+                  <!-- Bottom Conclusion Banner -->
+                  <rect x="30" y="192" width="620" height="28" rx="4" fill="rgba(52, 211, 153, 0.12)" stroke="rgba(52, 211, 153, 0.4)" />
+                  <text x="340" y="211" text-anchor="middle" fill="#34d399" font-size="12" font-weight="700">
+                    ✓ 几何保秩绝招：Col(A) ⟂ Null(Aᵀ)，非零像 Ax 永远无法落入 Aᵀ 的零空间盲区！故 rank(AᵀA) = rank(A)！
+                  </text>
+                </svg>
+
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.5rem;">
+                  <strong>几何直觉破案：</strong>为什么 $A^T$ 绝不会误杀任何活着的向量？<br>
+                  因为任何从 $A$ 映射出来的非零向量 $A\mathbf{x}$，必定身处列空间 $\operatorname{Col}(A)$；而线性代数基本定理断言：<strong>$\operatorname{Col}(A) \perp \operatorname{Null}(A^T)$</strong>，二者是完全正交垂直的两个子空间！<br>
+                  所以 $A\mathbf{x}$ 无论如何也绝不可能掉进 $A^T$ 的零空间。因此由秩-零度定理：
+                  $$\operatorname{rank}(A^T A) = n - \dim\operatorname{Null}(A^T A) = n - \dim\operatorname{Null}(A) = \operatorname{rank}(A)$$
+                  <strong>工程神迹：</strong>只要原数据矩阵 $A$ 的列是线性无关的（满列秩 $\operatorname{rank}(A) = n$），则 $A^T A$ 必定是<strong>严格可逆的满秩方阵</strong>！这就是为什么高斯最小二乘正规方程：
+                  $$\mathbf{\hat{x} = (A^T A)^{-1} A^T b}$$
+                  永远能够稳固、唯一地解出最优投影解的坚实基石！
+                </p>
+              </div>
+            </div>
+
+            <!-- 5.6 奇异值分解 (SVD) 视角 -->
+            <div style="margin-top: 2rem;">
+              <h3 style="color: var(--accent-purple); display: flex; align-items: center; gap: 0.5rem; font-size: 1.2rem;">
+                <span>5.6</span> 奇异值分解 (SVD) 的终极视角：刚体旋转在转置中的“消融术”
+              </h3>
+              
+              <p style="font-size: 0.92rem; line-height: 1.8; margin-top: 0.5rem;">
+                如果从几何变换的底层解剖来看，任何线性变换矩阵 $A$ 都可以通过<strong>奇异值分解 (SVD)</strong> 拆解为三步连续的物理动作：
+                $$A = U \Sigma V^T$$
+                • $\mathbf{V^T}$：输入空间的<strong>正交刚体旋转</strong>（调整坐标系，找准主拉伸方向）；<br>
+                • $\mathbf{\Sigma}$：沿各主轴的<strong>纯轴向拉伸与缩放</strong>（奇异值 $\sigma_1 \ge \sigma_2 \ge \dots$）；<br>
+                • $\mathbf{U}$：目标空间的<strong>正交刚体旋转</strong>（将拉伸好的椭球在目标空间中摆好最终姿态）。
+              </p>
+
+              <div style="background: rgba(192, 132, 252, 0.06); border: 1px solid rgba(192, 132, 252, 0.25); border-radius: var(--radius-sm); padding: 1.1rem; margin-top: 0.75rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">✨ 乘积中的旋转湮灭：为什么只剩下 $V \Sigma^2 V^T$？</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  根据转置穿脱鞋袜定律，转置矩阵的 SVD 分解为逆向序列：$A^T = (U \Sigma V^T)^T = V \Sigma^T U^T$。<br>
+                  现在，我们把它们连乘起来：
+                  $$A^T A = (V \Sigma^T U^T)(U \Sigma V^T) = V \Sigma^T \mathbf{(U^T U)} \Sigma V^T$$
+                  请屏住呼吸凝视中间的 $\mathbf{U^T U}$！由于 $U$ 是正交矩阵（刚体旋转），旋转的逆正是其转置，因此：
+                  $$\mathbf{U^T U = I \quad (\text{完全相消为单位恒等变换！})}$$
+                  于是，目标空间的旋转矩阵 $U$ 彻底灰飞烟灭：
+                  $$\mathbf{A^T A = V (\Sigma^T \Sigma) V^T = V \Sigma^2 V^T}$$
+                </p>
+
+                <!-- SVG 架构图 2：SVD 刚体旋转消融流水线 -->
+                <svg class="ata-diagram-svg" viewBox="0 0 680 200" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="0" y="0" width="680" height="200" rx="8" fill="#090d16" stroke="rgba(255,255,255,0.08)" />
+
+                  <!-- Stage 1: Forward A -->
+                  <text x="35" y="42" fill="#38bdf8" font-size="12" font-weight="700">① 正向变换 A = U Σ Vᵀ</text>
+                  <rect x="180" y="24" width="70" height="30" rx="4" fill="#1e293b" stroke="#38bdf8" />
+                  <text x="215" y="44" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="bold">Vᵀ 旋转</text>
+
+                  <line x1="250" y1="39" x2="275" y2="39" stroke="#94a3b8" stroke-width="1.5" />
+                  <polygon points="277,39 270,35 270,43" fill="#94a3b8" />
+
+                  <rect x="280" y="24" width="70" height="30" rx="4" fill="#1e293b" stroke="#34d399" />
+                  <text x="315" y="44" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Σ 拉伸</text>
+
+                  <line x1="350" y1="39" x2="375" y2="39" stroke="#94a3b8" stroke-width="1.5" />
+                  <polygon points="377,39 370,35 370,43" fill="#94a3b8" />
+
+                  <rect x="380" y="24" width="70" height="30" rx="4" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" />
+                  <text x="415" y="44" text-anchor="middle" fill="#f43f5e" font-size="11" font-weight="bold">U 摆放</text>
+
+                  <!-- Stage 2: Backward A^T -->
+                  <text x="35" y="98" fill="#fbbf24" font-size="12" font-weight="700">② 逆向转置 Aᵀ = V Σᵀ Uᵀ</text>
+                  <rect x="380" y="80" width="70" height="30" rx="4" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" />
+                  <text x="415" y="100" text-anchor="middle" fill="#f43f5e" font-size="11" font-weight="bold">Uᵀ 撤销</text>
+
+                  <line x1="380" y1="95" x2="355" y2="95" stroke="#94a3b8" stroke-width="1.5" />
+                  <polygon points="353,95 360,91 360,99" fill="#94a3b8" />
+
+                  <rect x="280" y="80" width="70" height="30" rx="4" fill="#1e293b" stroke="#34d399" />
+                  <text x="315" y="100" text-anchor="middle" fill="#34d399" font-size="11" font-weight="bold">Σᵀ 缩放</text>
+
+                  <line x1="280" y1="95" x2="255" y2="95" stroke="#94a3b8" stroke-width="1.5" />
+                  <polygon points="253,95 260,91 260,99" fill="#94a3b8" />
+
+                  <rect x="180" y="80" width="70" height="30" rx="4" fill="#1e293b" stroke="#fbbf24" />
+                  <text x="215" y="100" text-anchor="middle" fill="#fbbf24" font-size="11" font-weight="bold">V 还原</text>
+
+                  <!-- Annihilation Cloud Connector -->
+                  <rect x="475" y="32" width="180" height="66" rx="6" fill="rgba(251, 191, 36, 0.12)" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3,3" />
+                  <text x="565" y="58" text-anchor="middle" fill="#fbbf24" font-size="12" font-weight="bold">💥 Uᵀ · U = I 相消湮灭！</text>
+                  <text x="565" y="82" text-anchor="middle" fill="#94a3b8" font-size="10">目标旋转刚体不改变距离</text>
+
+                  <path d="M 450 39 C 465 39, 465 50, 475 50" fill="none" stroke="#fbbf24" stroke-width="1.5" />
+                  <path d="M 450 95 C 465 95, 465 80, 475 80" fill="none" stroke="#fbbf24" stroke-width="1.5" />
+
+                  <!-- Bottom Result Banner -->
+                  <rect x="30" y="138" width="620" height="42" rx="4" fill="rgba(192, 132, 252, 0.12)" stroke="rgba(192, 132, 252, 0.4)" />
+                  <text x="340" y="164" text-anchor="middle" fill="#e9d5ff" font-size="13" font-family="monospace" font-weight="bold">
+                    Aᵀ A = V Σ² Vᵀ ➔ 实对称谱分解：特征向量 V 正交，特征值 λᵢ = σᵢ² (形变纯能量)
+                  </text>
+                </svg>
+
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.5rem;">
+                  <strong>深刻的物理直觉：</strong><br>
+                  我们在目标空间中不管怎么把物体翻滚、旋转（$U$），<strong>物体的真实长度、面积和体积从来不会改变哪怕一丝一毫！</strong><br>
+                  而 $A^T A$ 的本质使命就是<strong>“衡量输入向量在形变后的能量与长度平方”</strong>。对于纯粹测量长度的任务来说，外部的姿态旋转 $U$ 本就是毫无价值的冗余信息。
+                  矩阵乘法与转置的结合，就像一套天然的“离心机”，精准将无关的外部旋转 $U$ 甩掉洗净，只提炼出刻画空间伸缩最本质的<strong>内蕴主轴 $V$ 与伸缩系数平方 $\Sigma^2$</strong>！
+                </p>
+              </div>
+            </div>
+
+            <!-- 5.7 互动式“A^T A 能量椭球与度量张量实验室” -->
+            <div class="ata-lab-card" style="margin-top: 2rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.75rem;">
+                <div>
+                  <span class="badge" style="background: var(--accent-amber); color: #000; font-size: 0.75rem;">🔬 动态实验室</span>
+                  <h3 style="color: var(--accent-amber); margin: 0.35rem 0 0 0; font-size: 1.15rem;">
+                    $A^T A$ 能量椭球与度量张量联动实验室
+                  </h3>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">
+                  拖动角度滑块或选择预设，实时感受 $\|Ax\|^2 = x^T(A^TA)x = \sum \lambda_i (x \cdot v_i)^2$ 的严格守恒！
+                </div>
+              </div>
+
+              <!-- Presets Controls -->
+              <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; align-items: center;">
+                <span style="font-size: 0.82rem; color: var(--text-muted); font-weight: 700;">形变预设：</span>
+                <button class="preset-btn active" id="btn-ata-preset-stretch" onclick="setAtaPreset('stretch', this)">🌟 典型拉伸</button>
+                <button class="preset-btn" id="btn-ata-preset-shear" onclick="setAtaPreset('shear', this)">🌀 倾斜剪切</button>
+                <button class="preset-btn" id="btn-ata-preset-rot" onclick="setAtaPreset('rot', this)">🔄 旋转 + 拉伸</button>
+                <button class="preset-btn" id="btn-ata-preset-singular" onclick="setAtaPreset('singular', this)" style="border-color: rgba(244, 63, 94, 0.4); color: #f43f5e;">⚠️ 奇异降维（半正定极值 λ₂=0）</button>
+              </div>
+
+              <!-- Sliders Panel -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin-top: 1rem; background: rgba(0,0,0,0.25); padding: 0.9rem; border-radius: var(--radius-sm);">
+                <!-- Test Angle Slider -->
+                <div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: var(--accent-blue);">测试向量方向角度 $\theta$：</span>
+                    <span id="ata-txt-angle" style="font-family: monospace; font-size: 0.82rem; color: var(--accent-blue);">35°</span>
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; align-items: center;">
+                    <input id="ata-slider-angle" type="range" min="0" max="360" step="1" value="35" oninput="updateAtaLab()" style="width: 100%;">
+                    <button id="ata-play-btn" onclick="toggleAtaSweep()" style="padding: 0.25rem 0.65rem; font-size: 0.76rem; background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; color: #fff; border-radius: 4px; cursor: pointer; white-space: nowrap;">▶ 自动扫描</button>
+                  </div>
+                </div>
+
+                <!-- Matrix A Elements -->
+                <div>
+                  <div style="font-size: 0.82rem; font-weight: 700; color: var(--accent-green); margin-bottom: 0.3rem;">
+                    矩阵元素 $A = \begin{bmatrix} a & b \\ c & d \end{bmatrix}$：
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem;">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">a: <span id="ata-val-a">1.4</span></span>
+                      <input id="ata-slider-a" type="range" min="-2" max="2" step="0.1" value="1.4" oninput="onAtaMatrixChange()" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">b: <span id="ata-val-b">0.5</span></span>
+                      <input id="ata-slider-b" type="range" min="-2" max="2" step="0.1" value="0.5" oninput="onAtaMatrixChange()" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">c: <span id="ata-val-c">0.3</span></span>
+                      <input id="ata-slider-c" type="range" min="-2" max="2" step="0.1" value="0.3" oninput="onAtaMatrixChange()" style="width: 100%;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                      <span style="font-size: 0.7rem; color: var(--text-muted);">d: <span id="ata-val-d">1.1</span></span>
+                      <input id="ata-slider-d" type="range" min="-2" max="2" step="0.1" value="1.1" oninput="onAtaMatrixChange()" style="width: 100%;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dual Canvas Display -->
+              <div class="ata-canvases-row">
+                <!-- Left: Input Space -->
+                <div class="ata-canvas-box">
+                  <h5>
+                    <span style="color: var(--accent-blue);">左：输入空间 ℝ² (单位圆与正交基)</span>
+                    <span class="ata-pill" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">单位圆 ‖x‖ = 1</span>
+                  </h5>
+                  <canvas id="ata-canvas-in" width="340" height="250"></canvas>
+                  <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.4rem; text-align: center;">
+                    金色箭头 $\mathbf{v}_1$ 与粉红箭头 $\mathbf{v}_2$ 为 $A^T A$ 的<strong>正交特征向量</strong>（主轴基底）
+                  </div>
+                </div>
+
+                <!-- Right: Output Space -->
+                <div class="ata-canvas-box">
+                  <h5>
+                    <span style="color: var(--accent-green);">右：输出空间 ℝ² (形变椭圆与奇异轴)</span>
+                    <span class="ata-pill" style="background: rgba(52, 211, 153, 0.15); color: #34d399;">形变椭圆 Ax</span>
+                  </h5>
+                  <canvas id="ata-canvas-out" width="340" height="250"></canvas>
+                  <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.4rem; text-align: center;">
+                    主半轴长度精确等于<strong>奇异值 $\sigma_1 = \sqrt{\lambda_1}, \sigma_2 = \sqrt{\lambda_2}$</strong>，在输出空间依然保持正交！
+                  </div>
+                </div>
+              </div>
+
+              <!-- Live Dynamic Gauge & Equation Breakdown -->
+              <div class="ata-gauge-container">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="font-weight: 700; color: #fbbf24;">⚡ 能量等式实时核验 (三路计算结果严密恒等)：</span>
+                  <span id="ata-eigen-vals" style="color: var(--accent-purple); font-size: 0.8rem;">
+                    λ₁ = 2.45 (σ₁=1.57), λ₂ = 0.82 (σ₂=0.91)
+                  </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; background: rgba(0,0,0,0.4); padding: 0.75rem; border-radius: 4px;">
+                  <div>
+                    <div style="color: var(--accent-blue); font-size: 0.76rem;">① 目标空间实际模长平方 ‖Ax‖²：</div>
+                    <div id="ata-val-norm" style="font-size: 1.1rem; font-weight: 700; color: #38bdf8; margin-top: 2px;">1.8542</div>
+                  </div>
+                  <div>
+                    <div style="color: var(--accent-green); font-size: 0.76rem;">② 输入空间二次型度量 xᵀ(AᵀA)x：</div>
+                    <div id="ata-val-quad" style="font-size: 1.1rem; font-weight: 700; color: #34d399; margin-top: 2px;">1.8542</div>
+                  </div>
+                  <div>
+                    <div style="color: var(--accent-purple); font-size: 0.76rem;">③ 谱定理分解 λ₁(x·v₁)² + λ₂(x·v₂)²：</div>
+                    <div id="ata-val-spectral" style="font-size: 1.1rem; font-weight: 700; color: #c084fc; margin-top: 2px;">1.8542</div>
+                  </div>
+                </div>
+
+                <!-- Progress bar indicating relative energy between lambda_min and lambda_max -->
+                <div style="margin-top: 0.75rem;">
+                  <div style="display: flex; justify-content: space-between; font-size: 0.72rem; color: var(--text-muted);">
+                    <span>最小能量 (短轴 λ₂): <strong id="txt-min-lambda" style="color:#f43f5e;">0.82</strong></span>
+                    <span id="txt-energy-ratio" style="color: #fbbf24; font-weight: bold;">当前形变拉伸比: 1.36x</span>
+                    <span>最大能量 (长轴 λ₁): <strong id="txt-max-lambda" style="color:#fbbf24;">2.45</strong></span>
+                  </div>
+                  <div class="ata-energy-meter-bar">
+                    <div id="ata-energy-bar-fill" class="ata-energy-fill" style="width: 50%;"></div>
+                  </div>
+                </div>
+
+                <div id="ata-dynamic-desc" style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.5rem; line-height: 1.6;">
+                  <!-- Dynamic notes populated by JS -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 6 章：正交矩阵 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">第六章 · 特殊奇迹</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 当转置直接等于逆：正交矩阵 (Orthogonal Matrix)</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.96rem; line-height: 1.8;">
+              在数值计算中，<strong>矩阵求逆（Inversion）</strong>是计算复杂度极高（$O(n^3)$）且极易产生浮点截断误差的操作。但有一类至高无上的矩阵，它的逆矩阵根本不需要计算——<strong>只要把矩阵转置一下，就直接得到了它的逆矩阵！</strong>
+            </p>
+
+            <div class="definition-box" style="padding: 1.1rem; background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); border-radius: 4px; margin: 1rem 0;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.35rem;">🛡️ 正交矩阵定义 (Orthogonal Matrix)</h4>
+              <p style="font-size: 0.95rem; line-height: 1.8;">
+                若方阵 $Q$ 的列向量两两正交且长度均为 1（即标准正交基），则满足：
+                $$Q^T Q = Q Q^T = I \quad \implies \quad \mathbf{Q^{-1} = Q^T}$$
+              </p>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-blue); margin-bottom: 0.35rem;">🔄 物理几何意义：刚体旋转的反向旋转</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  二维旋转矩阵 $R(\theta) = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$ 表示逆时针旋转 $\theta$。<br>
+                  将其转置：
+                  $$R(\theta)^T = \begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{bmatrix} = R(-\theta)$$
+                  看！转置直接把旋转角度从 $+\theta$ 变成了 $-\theta$，完美实现了“逆时针旋转的撤销”！
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                <h5 style="color: var(--accent-green); margin-bottom: 0.35rem;">🚀 计算机图形学与航天姿态控制</h5>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  在 3D 游戏引擎（Unity / Unreal）和卫星姿态控制中，物体的朝向由正交旋转矩阵表示。当需要把相机视锥坐标系逆转回世界坐标系时，GPU 只需做一次内存重排（转置），<strong>零浮点除法开销，零数值精度崩溃风险</strong>！
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 7 章：工业实战篇 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">第七章 · 工业应用</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 现代工程实战：神经网络反向传播与最小二乘法</h2>
+          </div>
+          <div class="card-body">
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+              
+              <!-- 深度学习 -->
+              <div style="background: rgba(129, 140, 248, 0.06); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid rgba(129, 140, 248, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="font-size: 1.25rem;">🧠</span>
+                  <h4 style="color: var(--accent-indigo); margin: 0;">深度学习：神经网络误差梯度的反传通道</h4>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  在全连接神经网络中：<br>
+                  • <strong>前向传播 (Forward)</strong>：信号从上一层神经元 $\mathbf{x}$ 流向下一层神经元 $\mathbf{y}$，计算公式为 $\mathbf{y} = W \mathbf{x}$；<br>
+                  • <strong>反向传播 (Backprop)</strong>：当损失函数产生误差梯度 $\delta_{\mathbf{y}}$ 时，如何将误差责任合理倒流分摊给前一层的每个神经元？<br>
+                  • 根据链式法则与对偶求导，误差反传公式正是：
+                  $$\delta_{\mathbf{x}} = W^T \delta_{\mathbf{y}}$$
+                  <strong>权重矩阵的转置 $W^T$ 构成了神经网络认知修正与学习的信息逆流管道！</strong>
+                </p>
+              </div>
+
+              <!-- 最小二乘法 -->
+              <div style="background: rgba(56, 189, 248, 0.06); padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid rgba(56, 189, 248, 0.2);">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span style="font-size: 1.25rem;">📊</span>
+                  <h4 style="color: var(--accent-blue); margin: 0;">最小二乘法 (OLS)：正交投影的必备钥匙</h4>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                  当数据点存在噪声导致方程组 $Ax = b$ 无解时，我们寻找距离 $b$ 最近的投影解：<br>
+                  • 最优解要求误差向量 $\mathbf{e} = b - Ax$ 垂直于 $A$ 的整个列空间 $C(A)$；<br>
+                  • 由四大子空间定理：“垂直于列空间”等价于“属于 $A^T$ 的零空间”，即：
+                  $$A^T \mathbf{e} = 0 \quad \implies \quad A^T (b - Ax) = 0$$
+                  • 整理即得著名的高斯正规方程：
+                  $$\mathbf{A^T A x = A^T b}$$
+                  <strong>转置矩阵 $A^T$ 在这里就是寻找最小二乘误差投影的唯一数学工具！</strong>
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ================= 第 8 章：交互小测验与速查表 ================= -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第八章 · 知识通关</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 知识检验小测验与转置速查卡片</h2>
+          </div>
+          <div class="card-body">
+            
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+              点击选项即时自测，检验你对矩阵转置直觉的理解程度：
+            </p>
+
+            <!-- Quiz 1 -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem; margin-bottom: 1rem;">
+              <h5 style="margin-bottom: 0.6rem;">Q1. 若矩阵 $A$ 的尺寸为 $3 \times 5$，矩阵 $B$ 的尺寸为 $5 \times 2$，则 $(AB)^T$ 的尺寸是多少？</h5>
+              <div class="quiz-option" onclick="checkQuiz(1, 0, false)">A. $3 \times 2$</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 1, true)">B. $2 \times 3$</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 2, false)">C. $5 \times 5$</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 3, false)">D. 无法进行乘法，无法转置</div>
+              <div id="quiz-feedback-1" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Quiz 2 -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem; margin-bottom: 1rem;">
+              <h5 style="margin-bottom: 0.6rem;">Q2. 乘法转置公式 $(AB)^T = B^T A^T$ 中，什么时候才能写成 $(AB)^T = A^T B^T$？</h5>
+              <div class="quiz-option" onclick="checkQuiz(2, 0, false)">A. 任何时候都可以，矩阵乘法在转置下满足交换律</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 1, false)">B. 只有当 $A$ 和 $B$ 都是单位矩阵时</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 2, true)">C. 只有当 $A$ 和 $B$ 均为对称矩阵且彼此可交换（$AB = BA$）时</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 3, false)">D. 只要 $A$ 和 $B$ 是同阶方阵就可以</div>
+              <div id="quiz-feedback-2" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Quiz 3 -->
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem; margin-bottom: 1rem;">
+              <h5 style="margin-bottom: 0.6rem;">Q3. 关于任意实数矩阵 $A$ 所构成的 $A^T A$，下列哪项断言是绝对错误的？</h5>
+              <div class="quiz-option" onclick="checkQuiz(3, 0, false)">A. $A^T A$ 必定是对称方阵</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 1, false)">B. $A^T A$ 的所有特征值必定全为实数</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 2, true)">C. $A^T A$ 的行列式可能为负数</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 3, false)">D. $A^T A$ 必定是半正定矩阵（特征值非负）</div>
+              <div id="quiz-feedback-3" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Summary Table Cheat Sheet -->
+            <h4 style="color: var(--accent-blue); margin: 1.5rem 0 0.75rem;">📋 矩阵转置终极速查卡片</h4>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color); background: rgba(255,255,255,0.04);">
+                    <th style="padding: 0.75rem;">概念 / 运算</th>
+                    <th style="padding: 0.75rem;">数学表达</th>
+                    <th style="padding: 0.75rem;">通俗直觉</th>
+                    <th style="padding: 0.75rem;">核心应用场景</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 700; color: var(--accent-blue);">基础定义</td>
+                    <td style="padding: 0.75rem; font-family: monospace;">(Aᵀ)ᵢⱼ = Aⱼᵢ</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">行变列，主对角线不动</td>
+                    <td style="padding: 0.75rem;">表格重排、行列向量互化</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 700; color: var(--accent-rose);">乘法逆序</td>
+                    <td style="padding: 0.75rem; font-family: monospace;">(AB)ᵀ = Bᵀ Aᵀ</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">“穿鞋穿袜”顺序倒转，维度吻合</td>
+                    <td style="padding: 0.75rem;">多层矩阵乘积展开与求导</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 700; color: var(--accent-cyan, #06b6d4);">伴随恒等式</td>
+                    <td style="padding: 0.75rem; font-family: monospace;">⟨Ax, y⟩ = ⟨x, Aᵀy⟩</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">输出端测量 = 输入端拉回测量</td>
+                    <td style="padding: 0.75rem;">泛函分析、物理对偶、拉氏变换</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 700; color: var(--accent-green);">对称方阵 AᵀA</td>
+                    <td style="padding: 0.75rem; font-family: monospace;">(AᵀA)ᵀ = AᵀA</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">变形能量度量，特征向量正交</td>
+                    <td style="padding: 0.75rem;">最小二乘回归、SVD、PCA 降维</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.75rem; font-weight: 700; color: var(--accent-amber);">正交旋转</td>
+                    <td style="padding: 0.75rem; font-family: monospace;">Qᵀ = Q⁻¹</td>
+                    <td style="padding: 0.75rem; color: var(--text-muted);">求逆即转置，零算力代价反向旋转</td>
+                    <td style="padding: 0.75rem;">3D 图形学坐标系变换、刚体动力学</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Module Navigation Footer -->
+        <div class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <div>
+            <a href="ch2_2_matrix_inverse.html" class="btn btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <span>⬅️</span>
+              <div>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">上一节</div>
+                <div style="font-weight: 600;">Ch 2.2: 逆矩阵与初等矩阵</div>
+              </div>
+            </a>
+          </div>
+          <div>
+            <a href="index.html" class="btn btn-secondary">
+              🏠 返回目录
+            </a>
+          </div>
+          <div>
+            <a href="ch3_1_determinant.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+              <div style="text-align: right;">
+                <div style="font-size: 0.75rem; opacity: 0.85;">下一节</div>
+                <div style="font-weight: 600;">Ch 3.1: 行列式几何体积与余子式展开</div>
+              </div>
+              <span>➡️</span>
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Interactive Scripts for Ch 2.3 -->
+  <script>
+    // ==========================================
+    // 1. Interactive Matrix Flipper (True Coordinate Transpose Engine)
+    // ==========================================
+    const FLIPPER_PRESETS = {
+      'rect2x3': {
+        rows: 2, cols: 3,
+        data: [[1, 2, 3], [4, 5, 6]],
+        desc: '长方形矩阵（2 行 3 列）➔ 转置后矩阵外框与行列完全对调为（3 行 2 列）。第 1 行 [1, 2, 3] 变为第 1 列！'
+      },
+      'square3x3': {
+        rows: 3, cols: 3,
+        data: [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+        desc: '3×3 方阵 ➔ 对角线元素 (1, 5, 9) 在金色轴上原地不动；非对角元素 (2↔4, 3↔7, 6↔8) 两两对称换位！'
+      },
+      'row1x4': {
+        rows: 1, cols: 4,
+        data: [[2, -1, 4, 3]],
+        desc: '行向量（1×4 水平横条）➔ 转置后所有元素沿对角线立起，变为（4×1 垂直列向量）！'
+      },
+      'col3x1': {
+        rows: 3, cols: 1,
+        data: [[5], [3], [-2]],
+        desc: '列向量（3×1 垂直立柱）➔ 转置后平躺，变为（1×3 水平行向量）！'
+      },
+      'sym3x3': {
+        rows: 3, cols: 3,
+        data: [[1, 7, 3], [7, 4, -5], [3, -5, 2]],
+        desc: '实对称矩阵（Aᵀ = A）➔ 镜像两侧数字完全相等，换位后整个矩阵看起来完全没有变化！'
+      }
+    };
+
+    let curFlipperPreset = 'rect2x3';
+    let flipperProgress = 0;
+    let flipperAnimId = null;
+
+    function renderFlipperBoard() {
+      const p = FLIPPER_PRESETS[curFlipperPreset];
+      const board = document.getElementById('flipper-board');
+      const svgLayer = document.getElementById('flipper-svg');
+      const slotsLayer = document.getElementById('flipper-slots');
+      const labelsLayer = document.getElementById('flipper-labels');
+      const cellsLayer = document.getElementById('flipper-cells');
+      if (!board || !svgLayer || !slotsLayer || !labelsLayer || !cellsLayer) return;
+
+      const t = flipperProgress / 100; // 0 to 1
+
+      const cellSize = 62;
+      const cellGap = 14;
+      const step = cellSize + cellGap; // 76px
+      const padX = 46;
+      const padY = 46;
+      const padExtra = 16;
+
+      // Start and End board dimensions
+      const wStart = padX + p.cols * step - cellGap + padExtra;
+      const hStart = padY + p.rows * step - cellGap + padExtra;
+      const wEnd = padX + p.rows * step - cellGap + padExtra;
+      const hEnd = padY + p.cols * step - cellGap + padExtra;
+
+      const curW = (1 - t) * wStart + t * wEnd;
+      const curH = (1 - t) * hStart + t * hEnd;
+
+      board.style.width = Math.round(curW) + 'px';
+      board.style.height = Math.round(curH) + 'px';
+
+      // 1. Draw SVG Guides (Diagonal line & Trajectories)
+      const showDiag = document.getElementById('chk-show-diagonal')?.checked ?? true;
+      const showTraj = document.getElementById('chk-show-trajectories')?.checked ?? true;
+      let svgHtml = `
+        <defs>
+          <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+          </marker>
+          <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc" />
+          </marker>
+        </defs>
+      `;
+
+      if (showDiag) {
+        const maxDim = Math.max(p.rows, p.cols);
+        const diagEnd = padX + maxDim * step - cellGap / 2;
+        svgHtml += `
+          <line x1="${padX - 16}" y1="${padY - 16}" x2="${diagEnd}" y2="${diagEnd}" 
+                stroke="#fbbf24" stroke-width="2.2" stroke-dasharray="6,4" opacity="0.85" />
+          <text x="${padX + 6}" y="${padY - 6}" fill="#fbbf24" font-size="10.5" font-family="sans-serif" font-weight="bold"
+                transform="rotate(45, ${padX}, ${padY})">45° 主对角线对称轴 (y = x 镜面)</text>
+        `;
+      }
+
+      if (showTraj) {
+        // Draw Trajectory curves for all swapping pairs (r < c)
+        for (let r = 0; r < p.rows; r++) {
+          for (let c = r + 1; c < p.cols; c++) {
+            const sx = padX + c * step + cellSize / 2;
+            const sy = padY + r * step + cellSize / 2;
+            const tx = padX + r * step + cellSize / 2;
+            const ty = padY + c * step + cellSize / 2;
+
+            const mx = (sx + tx) / 2;
+            const my = (sy + ty) / 2;
+            const arcH = 24 + Math.abs(r - c) * 10;
+            const cpx1 = mx + arcH * 0.707;
+            const cpy1 = my + arcH * 0.707;
+            const cpx2 = mx - arcH * 0.707;
+            const cpy2 = my - arcH * 0.707;
+
+            svgHtml += `
+              <path d="M ${sx} ${sy} Q ${cpx1} ${cpy1} ${tx} ${ty}" 
+                    fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="4,4" opacity="0.5" marker-end="url(#arrow-blue)" />
+              <path d="M ${tx} ${ty} Q ${cpx2} ${cpy2} ${sx} ${sy}" 
+                    fill="none" stroke="#c084fc" stroke-width="1.8" stroke-dasharray="4,4" opacity="0.5" marker-end="url(#arrow-purple)" />
+            `;
+          }
+        }
+      }
+      svgLayer.innerHTML = svgHtml;
+
+      // 2. Render Slots (Initial & Target placeholders)
+      let slotsHtml = '';
+      // Initial slots (fade out as t -> 1)
+      for (let r = 0; r < p.rows; r++) {
+        for (let c = 0; c < p.cols; c++) {
+          const sx = padX + c * step;
+          const sy = padY + r * step;
+          const op = Math.max(0.08, 0.45 * (1 - t));
+          slotsHtml += `<div class="slot-placeholder" style="left:${sx}px; top:${sy}px; opacity:${op.toFixed(2)};">原(${r+1},${c+1})</div>`;
+        }
+      }
+      // Target slots (fade in as t -> 1)
+      for (let r = 0; r < p.cols; r++) {
+        for (let c = 0; c < p.rows; c++) {
+          const sx = padX + c * step;
+          const sy = padY + r * step;
+          const op = Math.max(0.08, 0.55 * t);
+          slotsHtml += `<div class="slot-placeholder slot-target" style="left:${sx}px; top:${sy}px; opacity:${op.toFixed(2)};">转(${r+1},${c+1})</div>`;
+        }
+      }
+      slotsLayer.innerHTML = slotsHtml;
+
+      // 3. Render Row & Column Strip Labels
+      let labelsHtml = '';
+      for (let r = 0; r < p.rows; r++) {
+        const xRow = 6;
+        const yRow = padY + r * step + cellSize / 2 - 11;
+        const xCol = padX + r * step + cellSize / 2 - 20;
+        const yCol = 8;
+
+        const curLx = (1 - t) * xRow + t * xCol;
+        const curLy = (1 - t) * yRow + t * yCol;
+        const labelText = (t < 0.45) ? `第 ${r + 1} 行` : ((t > 0.55) ? `第 ${r + 1} 列` : `行➔列`);
+
+        const colors = ['#38bdf8', '#34d399', '#fbbf24', '#c084fc'];
+        const tagCol = colors[r % colors.length];
+
+        labelsHtml += `
+          <div class="row-col-label" style="left:${curLx.toFixed(1)}px; top:${curLy.toFixed(1)}px; border:1px solid ${tagCol}; background:rgba(15,23,42,0.85); color:${tagCol};">
+            ${labelText}
+          </div>
+        `;
+      }
+      labelsLayer.innerHTML = labelsHtml;
+
+      // 4. Render Dynamic Transpose Cells
+      let cellsHtml = '';
+      for (let r = 0; r < p.rows; r++) {
+        for (let c = 0; c < p.cols; c++) {
+          const val = p.data[r][c];
+          const isDiag = (r === c);
+
+          const x0 = padX + c * step;
+          const y0 = padY + r * step;
+          const x1 = padX + r * step;
+          const y1 = padY + c * step;
+
+          let curX, curY, curScale, curZIndex, curShadow, curIdxText;
+
+          if (isDiag) {
+            // Diagonal element: stays firmly in place!
+            curX = x0;
+            curY = y0;
+            const pulse = Math.sin(Math.PI * t) * 0.12;
+            curScale = 1 + pulse;
+            curZIndex = 8;
+            curShadow = '0 0 0 3px #fbbf24, 0 8px 20px rgba(251, 191, 36, 0.5)';
+            curIdxText = `(${r+1},${c+1})`;
+          } else {
+            // Off-diagonal: travels along 3D arc from (x0, y0) to (x1, y1)
+            const arcH = 26 + Math.abs(r - c) * 10;
+            const sign = (r < c) ? 1 : -1;
+            const arcOffset = sign * arcH * Math.sin(Math.PI * t);
+
+            curX = (1 - t) * x0 + t * x1 + arcOffset * 0.707;
+            curY = (1 - t) * y0 + t * y1 + arcOffset * 0.707;
+
+            curScale = 1 + sign * 0.14 * Math.sin(Math.PI * t);
+            curZIndex = (r < c) ? 25 : 12;
+
+            if (r < c && t > 0.05 && t < 0.95) {
+              curShadow = '0 18px 30px rgba(0,0,0,0.7), 0 0 16px rgba(56, 189, 248, 0.6)';
+            } else {
+              curShadow = '0 4px 10px rgba(0,0,0,0.35)';
+            }
+
+            if (t < 0.15) {
+              curIdxText = `(${r+1},${c+1})`;
+            } else if (t > 0.85) {
+              curIdxText = `(${c+1},${r+1})`;
+            } else {
+              curIdxText = `(${r+1},${c+1})➔(${c+1},${r+1})`;
+            }
+          }
+
+          const diagBadge = isDiag ? `<span style="font-size:9px; color:#fbbf24; font-weight:bold; margin-top:1px;">★不动点</span>` : '';
+
+          cellsHtml += `
+            <div class="matrix-cell row-color-${r} ${isDiag ? 'is-diagonal' : ''}" 
+                 style="left:${curX.toFixed(1)}px; top:${curY.toFixed(1)}px; transform:scale(${curScale.toFixed(3)}); z-index:${curZIndex}; box-shadow:${curShadow};">
+              <span>${val}</span>
+              <span class="cell-idx">${curIdxText}</span>
+              ${diagBadge}
+            </div>
+          `;
+        }
+      }
+      cellsLayer.innerHTML = cellsHtml;
+
+      // 5. Update Status Text
+      const statusBox = document.getElementById('flipper-status');
+      if (statusBox) {
+        if (t === 0) {
+          statusBox.innerHTML = `<span>当前状态：<strong>原矩阵 $A$（${p.rows} 行 × ${p.cols} 列）</strong></span><span>${p.desc}</span>`;
+        } else if (t === 1) {
+          statusBox.innerHTML = `<span>当前状态：<strong style="color:var(--accent-rose);">转置矩阵 $A^T$（${p.cols} 行 × ${p.rows} 列）</strong></span><span>每一行成功转置为对应列！</span>`;
+        } else {
+          statusBox.innerHTML = `<span>转置进行中：<strong>${Math.round(flipperProgress)}%</strong> 每一行元素正在沿着 45° 对角线飞跃换位到对应列中...</span><span>${p.desc}</span>`;
+        }
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([statusBox]);
+        }
+      }
+    }
+
+    function setFlipperPreset(key) {
+      curFlipperPreset = key;
+      document.querySelectorAll('.flipper-controls .preset-btn').forEach(b => {
+        b.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      resetFlipper();
+    }
+
+    function updateFlipperProgress(val) {
+      flipperProgress = parseFloat(val);
+      document.getElementById('flipper-progress-val').innerText = `${Math.round(flipperProgress)}%`;
+      renderFlipperBoard();
+    }
+
+    function resetFlipper() {
+      if (flipperAnimId) cancelAnimationFrame(flipperAnimId);
+      flipperAnimId = null;
+      document.getElementById('flipper-play-btn').innerText = '▶ 播放转置动画';
+      updateFlipperProgress(0);
+      document.getElementById('flipper-slider').value = 0;
+    }
+
+    function toggleFlipperPlay() {
+      const btn = document.getElementById('flipper-play-btn');
+      if (flipperAnimId) {
+        cancelAnimationFrame(flipperAnimId);
+        flipperAnimId = null;
+        btn.innerText = '▶ 继续播放';
+        return;
+      }
+
+      if (flipperProgress >= 100) {
+        flipperProgress = 0;
+      }
+      btn.innerText = '⏸ 暂停动画';
+
+      function step() {
+        flipperProgress += 1.0;
+        if (flipperProgress >= 100) {
+          flipperProgress = 100;
+          updateFlipperProgress(100);
+          document.getElementById('flipper-slider').value = 100;
+          btn.innerText = '▶ 重新播放';
+          flipperAnimId = null;
+          return;
+        }
+        updateFlipperProgress(flipperProgress);
+        document.getElementById('flipper-slider').value = flipperProgress;
+        flipperAnimId = requestAnimationFrame(step);
+      }
+      flipperAnimId = requestAnimationFrame(step);
+    }
+
+    // ==========================================
+    // 2. Dual Canvas Transformation Mirror
+    // ==========================================
+    let geoA = 1.0, geoB = 1.2, geoC = 0.0, geoD = 1.0;
+
+    function drawCanvasVectorArrow(ctx, fromx, fromy, tox, toy, color, width) {
+      const headlen = 10;
+      const dx = tox - fromx;
+      const dy = toy - fromy;
+      const angle = Math.atan2(dy, dx);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(fromx, fromy);
+      ctx.lineTo(tox, toy);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(tox, toy);
+      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawTransformPlaneGrid(ctx, w, h, a, b, c, d, colorVector1, colorVector2, isTransposed) {
+      // 1. Clear background
+      ctx.fillStyle = '#090d16';
+      ctx.fillRect(0, 0, w, h);
+
+      const cx = w / 2;
+      const cy = h / 2;
+      const scale = 48; // 48px per unit
+
+      // 2. Faint untransformed Cartesian grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([]);
+      for (let i = -3; i <= 3; i++) {
+        if (i === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(cx + i * scale, 0); ctx.lineTo(cx + i * scale, h);
+        ctx.moveTo(0, cy + i * scale); ctx.lineTo(w, cy + i * scale);
+        ctx.stroke();
+      }
+
+      // 3. Transformed Grid lines (Sheared/Rotated/Stretched)
+      ctx.strokeStyle = isTransposed ? 'rgba(192, 132, 252, 0.22)' : 'rgba(56, 189, 248, 0.22)';
+      ctx.lineWidth = 1.2;
+      for (let x = -3; x <= 3; x++) {
+        // Transformed vertical coordinate lines
+        const p1x = cx + (a * x + b * -3.5) * scale;
+        const p1y = cy - (c * x + d * -3.5) * scale;
+        const p2x = cx + (a * x + b * 3.5) * scale;
+        const p2y = cy - (c * x + d * 3.5) * scale;
+        ctx.beginPath();
+        ctx.moveTo(p1x, p1y);
+        ctx.lineTo(p2x, p2y);
+        ctx.stroke();
+
+        // Transformed horizontal coordinate lines
+        const h1x = cx + (a * -3.5 + b * x) * scale;
+        const h1y = cy - (c * -3.5 + d * x) * scale;
+        const h2x = cx + (a * 3.5 + b * x) * scale;
+        const h2y = cy - (c * 3.5 + d * x) * scale;
+        ctx.beginPath();
+        ctx.moveTo(h1x, h1y);
+        ctx.lineTo(h2x, h2y);
+        ctx.stroke();
+      }
+
+      // 4. Diagonal Mirror Line y = x
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.7)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([5, 4]);
+      ctx.beginPath();
+      ctx.moveTo(cx - 130, cy + 130);
+      ctx.lineTo(cx + 130, cy - 130);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '10px monospace';
+      ctx.fillText('y = x 对偶镜像轴', cx + 55, cy - 65);
+
+      // 5. Main Cartesian Axes
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+      ctx.stroke();
+
+      // Axis labels
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('+x', w - 24, cy - 6);
+      ctx.fillText('+y', cx + 6, 20);
+
+      // 6. Untransformed Unit Circle (Dashed Reference)
+      ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, scale, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // 7. Transformed Unit Circle (Ellipse with glow fill)
+      ctx.strokeStyle = isTransposed ? 'rgba(192, 132, 252, 0.85)' : 'rgba(56, 189, 248, 0.85)';
+      ctx.fillStyle = isTransposed ? 'rgba(192, 132, 252, 0.08)' : 'rgba(56, 189, 248, 0.08)';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      for (let th = 0; th <= Math.PI * 2 + 0.1; th += 0.05) {
+        const u = Math.cos(th);
+        const v = Math.sin(th);
+        const px = cx + (a * u + b * v) * scale;
+        const py = cy - (c * u + d * v) * scale;
+        if (th === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // 8. Basis Vector 1: T(i)
+      const v1x = cx + a * scale;
+      const v1y = cy - c * scale;
+      drawCanvasVectorArrow(ctx, cx, cy, v1x, v1y, colorVector1, 3.5);
+
+      // 9. Basis Vector 2: T(j)
+      const v2x = cx + b * scale;
+      const v2y = cy - d * scale;
+      drawCanvasVectorArrow(ctx, cx, cy, v2x, v2y, colorVector2, 3.5);
+
+      // 10. Vector Label Tags
+      ctx.fillStyle = colorVector1;
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText(`T(i)=[${a.toFixed(1)}, ${c.toFixed(1)}]ᵀ`, v1x + 8, v1y - 6);
+
+      ctx.fillStyle = colorVector2;
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText(`T(j)=[${b.toFixed(1)}, ${d.toFixed(1)}]ᵀ`, v2x + 8, v2y - 6);
+    }
+
+    function renderDualCanvases() {
+      const cA = document.getElementById('canvas-matrix-a');
+      const cAt = document.getElementById('canvas-matrix-at');
+      if (!cA || !cAt) return;
+
+      const ctxA = cA.getContext('2d');
+      const ctxAt = cAt.getContext('2d');
+
+      // Matrix A: [[a, b], [c, d]]
+      drawTransformPlaneGrid(ctxA, cA.width, cA.height, geoA, geoB, geoC, geoD, '#38bdf8', '#34d399', false);
+
+      // Matrix A^T: [[a, c], [b, d]]
+      drawTransformPlaneGrid(ctxAt, cAt.width, cAt.height, geoA, geoC, geoB, geoD, '#c084fc', '#fbbf24', true);
+    }
+
+    function updateGeoParams() {
+      geoA = parseFloat(document.getElementById('slider-a').value);
+      geoB = parseFloat(document.getElementById('slider-b').value);
+      geoC = parseFloat(document.getElementById('slider-c').value);
+      geoD = parseFloat(document.getElementById('slider-d').value);
+
+      document.getElementById('val-a').innerText = geoA.toFixed(1);
+      document.getElementById('val-b').innerText = geoB.toFixed(1);
+      document.getElementById('val-c').innerText = geoC.toFixed(1);
+      document.getElementById('val-d').innerText = geoD.toFixed(1);
+
+      const exp = document.getElementById('geo-explanation');
+      if (exp) {
+        if (Math.abs(geoB - geoC) < 0.01) {
+          exp.innerHTML = `<span style="color:var(--accent-green); font-weight:700;">对称矩阵特征：</span>因为非对角线元素相等（b = c = ${geoB.toFixed(1)}），所以 $A = A^T$！左右两幅变换图像完全重合！`;
+        } else {
+          exp.innerHTML = `<span style="color:var(--accent-blue); font-weight:700;">镜像对偶观察：</span>左图中水平剪切（b=${geoB.toFixed(1)}）在右图转置后精准变成了垂直剪切（c=${geoB.toFixed(1)}），二者关于金色虚线 $y=x$ 完全呈对偶对称！`;
+        }
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          window.MathJax.typesetPromise([exp]);
+        }
+      }
+
+      renderDualCanvases();
+    }
+
+    function setGeoPreset(name, btnElem) {
+      document.querySelectorAll('.dual-canvas-grid ~ div .preset-btn').forEach(b => b.classList.remove('active'));
+      if (btnElem) {
+        btnElem.classList.add('active');
+      } else if (window.event && window.event.target) {
+        window.event.target.classList.add('active');
+      }
+
+      if (name === 'shearX') {
+        geoA = 1.0; geoB = 1.2; geoC = 0.0; geoD = 1.0;
+      } else if (name === 'rot45') {
+        geoA = 0.7; geoB = -0.7; geoC = 0.7; geoD = 0.7;
+      } else if (name === 'scaleAsym') {
+        geoA = 1.5; geoB = 0.0; geoC = 0.0; geoD = 0.6;
+      } else if (name === 'symmetric') {
+        geoA = 1.4; geoB = 0.8; geoC = 0.8; geoD = 1.1;
+      }
+
+      document.getElementById('slider-a').value = geoA;
+      document.getElementById('slider-b').value = geoB;
+      document.getElementById('slider-c').value = geoC;
+      document.getElementById('slider-d').value = geoD;
+      updateGeoParams();
+    }
+
+    // ==========================================
+    // 3. Adjoint Inner Product Balancer
+    // ==========================================
+    function updateBalanceScale() {
+      const x1 = parseFloat(document.getElementById('slider-x1').value);
+      const x2 = parseFloat(document.getElementById('slider-x2').value);
+      const y1 = parseFloat(document.getElementById('slider-y1').value);
+      const y2 = parseFloat(document.getElementById('slider-y2').value);
+
+      const a = parseFloat(document.getElementById('inp-mat-a').value) || 0;
+      const b = parseFloat(document.getElementById('inp-mat-b').value) || 0;
+      const c = parseFloat(document.getElementById('inp-mat-c').value) || 0;
+      const d = parseFloat(document.getElementById('inp-mat-d').value) || 0;
+
+      document.getElementById('txt-x1').innerText = x1.toFixed(1);
+      document.getElementById('txt-x2').innerText = x2.toFixed(1);
+      document.getElementById('txt-y1').innerText = y1.toFixed(1);
+      document.getElementById('txt-y2').innerText = y2.toFixed(1);
+
+      // Left path: Ax, then <Ax, y>
+      const Ax1 = a * x1 + b * x2;
+      const Ax2 = c * x1 + d * x2;
+      const innerLeft = Ax1 * y1 + Ax2 * y2;
+
+      // Right path: A^T y, then <x, A^T y>
+      const ATy1 = a * y1 + c * y2;
+      const ATy2 = b * y1 + d * y2;
+      const innerRight = x1 * ATy1 + x2 * ATy2;
+
+      document.getElementById('scale-left-val').textContent = innerLeft.toFixed(3);
+      document.getElementById('scale-right-val').textContent = innerRight.toFixed(3);
+
+      const bd = document.getElementById('balance-breakdown');
+      if (bd) {
+        bd.innerHTML = `
+          <div style="color:var(--accent-blue);">
+            <strong>左边路径 ⟨Ax, y⟩：</strong>
+            Ax = [(${a}×${x1} + ${b}×${x2}), (${c}×${x1} + ${d}×${x2})] = [${Ax1.toFixed(2)}, ${Ax2.toFixed(2)}]ᵀ<br>
+            内积 = (${Ax1.toFixed(2)} × ${y1}) + (${Ax2.toFixed(2)} × ${y2}) = <span style="color:#38bdf8; font-weight:700;">${innerLeft.toFixed(3)}</span>
+          </div>
+          <div style="color:var(--accent-purple); margin-top:0.4rem;">
+            <strong>右边路径 ⟨x, Aᵀy⟩：</strong>
+            Aᵀy = [(${a}×${y1} + ${c}×${y2}), (${b}×${y1} + ${d}×${y2})] = [${ATy1.toFixed(2)}, ${ATy2.toFixed(2)}]ᵀ<br>
+            内积 = (${x1} × ${ATy1.toFixed(2)}) + (${x2} × ${ATy2.toFixed(2)}) = <span style="color:#c084fc; font-weight:700;">${innerRight.toFixed(3)}</span>
+          </div>
+          <div style="color:var(--accent-green); margin-top:0.4rem; font-weight:700;">
+            ✓ 验证结论：两边差值 = ${(Math.abs(innerLeft - innerRight)).toFixed(6)}（绝对严格守恒！）
+          </div>
+        `;
+      }
+    }
+
+    // ==========================================
+    // 4. Interactive A^T A Metric & Energy Lab
+    // ==========================================
+    let ataAngle = 35;
+    let ataA = 1.4, ataB = 0.5, ataC = 0.3, ataD = 1.1;
+    let ataSweepId = null;
+
+    function drawAtaCanvasArrow(ctx, fromx, fromy, tox, toy, color, width) {
+      const headlen = 9;
+      const dx = tox - fromx;
+      const dy = toy - fromy;
+      const angle = Math.atan2(dy, dx);
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      ctx.moveTo(fromx, fromy);
+      ctx.lineTo(tox, toy);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(tox, toy);
+      ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function updateAtaLab() {
+      const sliderAngle = document.getElementById('ata-slider-angle');
+      if (sliderAngle) {
+        ataAngle = parseFloat(sliderAngle.value);
+      }
+      const txtAngle = document.getElementById('ata-txt-angle');
+      if (txtAngle) {
+        txtAngle.innerText = `${Math.round(ataAngle)}°`;
+      }
+
+      // Compute A^T A matrix elements:
+      // A = [[a, b], [c, d]]
+      // A^T A = [[a^2 + c^2, a*b + c*d], [a*b + c*d, b^2 + d^2]]
+      const M11 = ataA * ataA + ataC * ataC;
+      const M12 = ataA * ataB + ataC * ataD;
+      const M22 = ataB * ataB + ataD * ataD;
+
+      // Eigenvalues of 2x2 symmetric matrix
+      const trace = M11 + M22;
+      const diff = M11 - M22;
+      const disc = Math.max(0, diff * diff + 4 * M12 * M12);
+      const sqrtDisc = Math.sqrt(disc);
+
+      const lambda1 = Math.max(0, (trace + sqrtDisc) / 2);
+      const lambda2 = Math.max(0, (trace - sqrtDisc) / 2);
+
+      const sigma1 = Math.sqrt(lambda1);
+      const sigma2 = Math.sqrt(lambda2);
+
+      // Eigenvectors v1, v2 (orthonormal)
+      let v1x, v1y, v2x, v2y;
+      if (Math.abs(M12) > 1e-6) {
+        v1x = M12;
+        v1y = lambda1 - M11;
+        const norm1 = Math.hypot(v1x, v1y);
+        v1x /= norm1;
+        v1y /= norm1;
+        v2x = -v1y;
+        v2y = v1x;
+      } else {
+        if (M11 >= M22) {
+          v1x = 1; v1y = 0;
+          v2x = 0; v2y = 1;
+        } else {
+          v1x = 0; v1y = 1;
+          v2x = 1; v2y = 0;
+        }
+      }
+
+      // Test vector x on unit circle
+      const rad = (ataAngle * Math.PI) / 180;
+      const x1 = Math.cos(rad);
+      const x2 = Math.sin(rad);
+
+      // Transformed vector Ax
+      const Ax1 = ataA * x1 + ataB * x2;
+      const Ax2 = ataC * x1 + ataD * x2;
+
+      // 1. Metric: ||Ax||^2
+      const valNorm = Ax1 * Ax1 + Ax2 * Ax2;
+
+      // 2. Quadratic form: x^T (A^T A) x
+      const valQuad = M11 * x1 * x1 + 2 * M12 * x1 * x2 + M22 * x2 * x2;
+
+      // 3. Spectral decomposition: lambda1 * (x . v1)^2 + lambda2 * (x . v2)^2
+      const dot1 = x1 * v1x + x2 * v1y;
+      const dot2 = x1 * v2x + x2 * v2y;
+      const valSpectral = lambda1 * dot1 * dot1 + lambda2 * dot2 * dot2;
+
+      // Update Gauge elements
+      const elNorm = document.getElementById('ata-val-norm');
+      const elQuad = document.getElementById('ata-val-quad');
+      const elSpectral = document.getElementById('ata-val-spectral');
+      if (elNorm) elNorm.innerText = valNorm.toFixed(4);
+      if (elQuad) elQuad.innerText = valQuad.toFixed(4);
+      if (elSpectral) elSpectral.innerText = valSpectral.toFixed(4);
+
+      const elEigen = document.getElementById('ata-eigen-vals');
+      if (elEigen) {
+        elEigen.innerHTML = `λ₁ = <strong>${lambda1.toFixed(2)}</strong> (σ₁ = ${sigma1.toFixed(2)})，λ₂ = <strong>${lambda2.toFixed(2)}</strong> (σ₂ = ${sigma2.toFixed(2)})`;
+      }
+
+      const txtMin = document.getElementById('txt-min-lambda');
+      const txtMax = document.getElementById('txt-max-lambda');
+      if (txtMin) txtMin.innerText = lambda2.toFixed(2);
+      if (txtMax) txtMax.innerText = lambda1.toFixed(2);
+
+      let pct = 50;
+      if (Math.abs(lambda1 - lambda2) > 1e-4) {
+        pct = ((valNorm - lambda2) / (lambda1 - lambda2)) * 100;
+        pct = Math.max(0, Math.min(100, pct));
+      }
+
+      const barFill = document.getElementById('ata-energy-bar-fill');
+      const txtRatio = document.getElementById('txt-energy-ratio');
+      if (barFill) {
+        barFill.style.width = `${pct.toFixed(1)}%`;
+      }
+      if (txtRatio) {
+        const curStretch = Math.sqrt(valNorm);
+        txtRatio.innerText = `当前形变伸缩比: ${curStretch.toFixed(2)}x`;
+      }
+
+      const dynDesc = document.getElementById('ata-dynamic-desc');
+      if (dynDesc) {
+        const diffEps = Math.abs(valNorm - valQuad);
+        let note = `✓ <strong>严格守恒验证：</strong>‖Ax‖² 与 xᵀ(AᵀA)x 差值仅为 ${diffEps.toExponential(2)}，证明 AᵀA 100% 裁决了输出空间中的全部形变能量。`;
+        if (lambda2 < 0.005) {
+          note += `<br><span style="color:#f43f5e; font-weight:bold;">⚠️ 奇异矩阵警报：</span>λ₂ ≈ 0，椭圆完全坍缩为一维线段！当测试向量旋转到零空间附近时，输出能量降为 0，这正是“半正定”中可以取等号为 0 的几何实相！`;
+        } else if (pct > 95) {
+          note += `<br><span style="color:#fbbf24; font-weight:bold;">🌟 峰值共振：</span>当前测试向量极度接近最大特征向量 v₁，形变能量逼近理论最高值 λ₁ = ${lambda1.toFixed(2)}！`;
+        } else if (pct < 5) {
+          note += `<br><span style="color:#34d399; font-weight:bold;">🌱 谷值驻留：</span>当前测试向量极度接近最小特征向量 v₂，形变能量处于理论最低值 λ₂ = ${lambda2.toFixed(2)}！`;
+        }
+        dynDesc.innerHTML = note;
+      }
+
+      // Render Left Canvas (Input Space)
+      renderAtaInputCanvas(x1, x2, v1x, v1y, v2x, v2y);
+
+      // Render Right Canvas (Output Space)
+      renderAtaOutputCanvas(Ax1, Ax2, v1x, v1y, v2x, v2y, sigma1, sigma2);
+    }
+
+    function renderAtaInputCanvas(x1, x2, v1x, v1y, v2x, v2y) {
+      const c = document.getElementById('ata-canvas-in');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      const cx = w / 2, cy = h / 2;
+      const scale = 72; // px per unit
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let i = -2; i <= 2; i++) {
+        if (i === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(cx + i * scale, 0); ctx.lineTo(cx + i * scale, h);
+        ctx.moveTo(0, cy + i * scale); ctx.lineTo(w, cy + i * scale);
+        ctx.stroke();
+      }
+
+      // Cartesian Axes
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+      ctx.stroke();
+
+      // Untransformed Unit Circle S^1
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.5)';
+      ctx.lineWidth = 1.8;
+      ctx.setLineDash([4, 3]);
+      ctx.beginPath();
+      ctx.arc(cx, cy, scale, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Eigenvector v1 (Gold)
+      const v1Px = cx + v1x * scale;
+      const v1Py = cy - v1y * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, v1Px, v1Py, '#fbbf24', 3);
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('v₁ (长轴基底)', v1Px + (v1x >= 0 ? 6 : -70), v1Py + (v1y >= 0 ? -6 : 14));
+
+      // Eigenvector v2 (Rose)
+      const v2Px = cx + v2x * scale;
+      const v2Py = cy - v2y * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, v2Px, v2Py, '#f43f5e', 2.5);
+      ctx.fillStyle = '#f43f5e';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('v₂ (短轴基底)', v2Px + (v2x >= 0 ? 6 : -70), v2Py + (v2y >= 0 ? -6 : 14));
+
+      // Right-angle marker between v1 and v2
+      const sq = 12;
+      ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(cx + v1x * sq, cy - v1y * sq);
+      ctx.lineTo(cx + (v1x + v2x) * sq, cy - (v1y + v2y) * sq);
+      ctx.lineTo(cx + v2x * sq, cy - v2y * sq);
+      ctx.stroke();
+
+      // Test Vector x (Cyan)
+      const xPx = cx + x1 * scale;
+      const xPy = cy - x2 * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, xPx, xPy, '#38bdf8', 3.5);
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText(`x(${Math.round(ataAngle)}°)`, xPx + (x1 >= 0 ? 8 : -45), xPy + (x2 >= 0 ? -6 : 14));
+
+      // Coordinate marker
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(xPx, xPy, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function renderAtaOutputCanvas(Ax1, Ax2, v1x, v1y, v2x, v2y, sigma1, sigma2) {
+      const c = document.getElementById('ata-canvas-out');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      const cx = w / 2, cy = h / 2;
+      const scale = 58; // px per unit in output
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Grid lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let i = -2; i <= 2; i++) {
+        if (i === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(cx + i * scale, 0); ctx.lineTo(cx + i * scale, h);
+        ctx.moveTo(0, cy + i * scale); ctx.lineTo(w, cy + i * scale);
+        ctx.stroke();
+      }
+
+      // Cartesian Axes
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+      ctx.stroke();
+
+      // Transformed Unit Circle => Ellipse
+      ctx.strokeStyle = '#34d399';
+      ctx.fillStyle = 'rgba(52, 211, 153, 0.08)';
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      for (let th = 0; th <= Math.PI * 2 + 0.05; th += 0.04) {
+        const u = Math.cos(th);
+        const v = Math.sin(th);
+        const px = cx + (ataA * u + ataB * v) * scale;
+        const py = cy - (ataC * u + ataD * v) * scale;
+        if (th === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      // Transformed Principal Axis 1: Av1 = sigma1 * u1
+      const Av1x = ataA * v1x + ataB * v1y;
+      const Av1y = ataC * v1x + ataD * v1y;
+      const pAv1x = cx + Av1x * scale;
+      const pAv1y = cy - Av1y * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, pAv1x, pAv1y, '#fbbf24', 3);
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(`Av₁ (σ₁=${sigma1.toFixed(2)})`, pAv1x + (Av1x >= 0 ? 6 : -85), pAv1y + (Av1y >= 0 ? -6 : 14));
+
+      // Transformed Principal Axis 2: Av2 = sigma2 * u2
+      const Av2x = ataA * v2x + ataB * v2y;
+      const Av2y = ataC * v2x + ataD * v2y;
+      const pAv2x = cx + Av2x * scale;
+      const pAv2y = cy - Av2y * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, pAv2x, pAv2y, '#f43f5e', 2.5);
+      ctx.fillStyle = '#f43f5e';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(`Av₂ (σ₂=${sigma2.toFixed(2)})`, pAv2x + (Av2x >= 0 ? 6 : -85), pAv2y + (Av2y >= 0 ? -6 : 14));
+
+      // Right-angle marker in output space (Av1 . Av2 = 0)
+      if (sigma1 > 0.2 && sigma2 > 0.2) {
+        const u1x = Av1x / sigma1, u1y = Av1y / sigma1;
+        const u2x = Av2x / sigma2, u2y = Av2y / sigma2;
+        const sq2 = 11;
+        ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(cx + u1x * sq2, cy - u1y * sq2);
+        ctx.lineTo(cx + (u1x + u2x) * sq2, cy - (u1y + u2y) * sq2);
+        ctx.lineTo(cx + u2x * sq2, cy - u2y * sq2);
+        ctx.stroke();
+      }
+
+      // Transformed Test Vector Ax (Cyan)
+      const pAx = cx + Ax1 * scale;
+      const pAy = cy - Ax2 * scale;
+      drawAtaCanvasArrow(ctx, cx, cy, pAx, pAy, '#38bdf8', 3.5);
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 12px monospace';
+      ctx.fillText(`Ax (|Ax|=${Math.sqrt(Ax1*Ax1 + Ax2*Ax2).toFixed(2)})`, pAx + (Ax1 >= 0 ? 8 : -60), pAy + (Ax2 >= 0 ? -6 : 16));
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(pAx, pAy, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function onAtaMatrixChange() {
+      ataA = parseFloat(document.getElementById('ata-slider-a').value);
+      ataB = parseFloat(document.getElementById('ata-slider-b').value);
+      ataC = parseFloat(document.getElementById('ata-slider-c').value);
+      ataD = parseFloat(document.getElementById('ata-slider-d').value);
+
+      document.getElementById('ata-val-a').innerText = ataA.toFixed(1);
+      document.getElementById('ata-val-b').innerText = ataB.toFixed(1);
+      document.getElementById('ata-val-c').innerText = ataC.toFixed(1);
+      document.getElementById('ata-val-d').innerText = ataD.toFixed(1);
+
+      document.querySelectorAll('.ata-lab-card .preset-btn').forEach(b => b.classList.remove('active'));
+
+      updateAtaLab();
+    }
+
+    function setAtaPreset(name, btn) {
+      document.querySelectorAll('.ata-lab-card .preset-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (name === 'stretch') {
+        ataA = 1.4; ataB = 0.5; ataC = 0.3; ataD = 1.1;
+      } else if (name === 'shear') {
+        ataA = 1.2; ataB = 0.9; ataC = 0.0; ataD = 0.8;
+      } else if (name === 'rot') {
+        ataA = 1.3; ataB = -0.6; ataC = 0.7; ataD = 1.1;
+      } else if (name === 'singular') {
+        // Singular rank-1 matrix: det = 1.2 * 0.4 - 0.6 * 0.8 = 0
+        ataA = 1.2; ataB = 0.6; ataC = 0.8; ataD = 0.4;
+      }
+
+      document.getElementById('ata-slider-a').value = ataA;
+      document.getElementById('ata-slider-b').value = ataB;
+      document.getElementById('ata-slider-c').value = ataC;
+      document.getElementById('ata-slider-d').value = ataD;
+
+      document.getElementById('ata-val-a').innerText = ataA.toFixed(1);
+      document.getElementById('ata-val-b').innerText = ataB.toFixed(1);
+      document.getElementById('ata-val-c').innerText = ataC.toFixed(1);
+      document.getElementById('ata-val-d').innerText = ataD.toFixed(1);
+
+      updateAtaLab();
+    }
+
+    function toggleAtaSweep() {
+      const btn = document.getElementById('ata-play-btn');
+      if (ataSweepId) {
+        if (window.cancelAnimationFrame) window.cancelAnimationFrame(ataSweepId);
+        else cancelAnimationFrame(ataSweepId);
+        ataSweepId = null;
+        if (btn) btn.innerText = '▶ 自动扫描';
+        return;
+      }
+
+      if (btn) btn.innerText = '⏸ 暂停扫描';
+
+      function sweepStep() {
+        ataAngle = (ataAngle + 1.2) % 360;
+        const slider = document.getElementById('ata-slider-angle');
+        if (slider) slider.value = Math.round(ataAngle);
+        updateAtaLab();
+        if (window.requestAnimationFrame) {
+          ataSweepId = window.requestAnimationFrame(sweepStep);
+        } else {
+          ataSweepId = requestAnimationFrame(sweepStep);
+        }
+      }
+      if (window.requestAnimationFrame) {
+        ataSweepId = window.requestAnimationFrame(sweepStep);
+      } else {
+        ataSweepId = requestAnimationFrame(sweepStep);
+      }
+    }
+
+    // ==========================================
+    // 5. Interactive Quiz Logic
+    // ==========================================
+    function checkQuiz(qNum, optIdx, isCorrect) {
+      const fb = document.getElementById(`quiz-feedback-${qNum}`);
+      if (!fb) return;
+      fb.style.display = 'block';
+
+      if (isCorrect) {
+        fb.style.background = 'rgba(52, 211, 153, 0.15)';
+        fb.style.border = '1px solid var(--accent-green)';
+        fb.style.color = '#34d399';
+        if (qNum === 1) {
+          fb.innerHTML = '🎉 <strong>完全正确！</strong> 矩阵 $AB$ 尺寸为 $(3 \times 5) \times (5 \times 2) = 3 \times 2$；转置后尺寸行列颠倒，精确变为 <strong>$2 \times 3$</strong>。';
+        } else if (qNum === 2) {
+          fb.innerHTML = '🎉 <strong>回答精准！</strong> 因为 $(AB)^T = B^T A^T$。若 $A, B$ 对称则 $A^T=A, B^T=B$，得 $B^T A^T = BA$。要使其等于 $A^T B^T = AB$，必须满足 $BA = AB$（可交换）。';
+        } else if (qNum === 3) {
+          fb.innerHTML = '🎉 <strong>一语中的！</strong> $A^T A$ 必定是半正定矩阵，其所有特征值 $\\lambda_i \\ge 0$，因此行列式 $\\det(A^T A) = \\prod \\lambda_i \\ge 0$，<strong>绝对不可能为负数</strong>！';
+        }
+      } else {
+        fb.style.background = 'rgba(244, 63, 94, 0.15)';
+        fb.style.border = '1px solid var(--accent-rose)';
+        fb.style.color = '#f43f5e';
+        fb.innerHTML = '❌ <strong>答案不对哦</strong>，仔细回顾本章公式与维度积木法则，再试一次吧！';
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([fb]);
+      }
+    }
+
+    // On DOM Loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      renderFlipperBoard();
+      renderDualCanvases();
+      updateGeoParams();
+      updateBalanceScale();
+      updateAtaLab();
+
+      window.addEventListener('resize', () => {
+        renderDualCanvases();
+        updateAtaLab();
+      });
+    });
+  </script>
+
+</body>
+</html>

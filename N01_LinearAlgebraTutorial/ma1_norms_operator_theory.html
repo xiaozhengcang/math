@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MA 01: 向量与矩阵范数、算子理论与摄动分析 | 矩阵分析进阶指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+  <style>
+    .norm-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .norm-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .norm-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .norm-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-purple);
+    }
+    .lab-dual-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .lab-canvas-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .lab-canvas-box canvas {
+      background: #060911;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 440px;
+      height: 320px;
+      display: block;
+    }
+    .lab-controls-panel {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .preset-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .preset-btn {
+      background: rgba(168, 85, 247, 0.1);
+      color: var(--accent-purple);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent-purple);
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-purple);
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .origin-diagram-svg {
+      width: 100%;
+      max-width: 820px;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Sidebar Navigation (populated by main.js) -->
+    <aside class="sidebar">
+      <nav class="sidebar-nav"></nav>
+    </aside>
+
+    <div class="main-content">
+      <!-- Header Bar -->
+      <header class="top-header">
+        <div class="header-breadcrumb">
+          <a href="index.html">课程首页</a> &gt; 
+          <span style="color: var(--accent-purple);">矩阵分析进阶系列</span> &gt; 
+          <span>MA 01: 向量与矩阵范数</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="theme-toggle" class="btn btn-secondary btn-sm">🌓 切换主题</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Section -->
+        <section class="chapter-hero" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0) 100%); border-left: 5px solid var(--accent-purple); padding: 2rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <span class="norm-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">高阶分析篇 MA 01</span>
+            <span class="norm-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">拓扑度量与扰动界</span>
+          </div>
+          <h1 style="font-size: 2.2rem; color: var(--text-main); margin: 0.5rem 0 1rem;">向量与矩阵范数、算子理论与摄动分析</h1>
+          <p style="font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); max-width: 900px;">
+            在经典线性代数中，我们通过坐标与基底探讨向量空间的代数结构；而在<strong>矩阵分析（Matrix Analysis）</strong>中，我们必须为空间赋予<strong>长度、距离与连续性拓扑</strong>。从测量信号大小的向量 $L_p$ 范数，到衡量线性系统最大拉伸倍率的<strong>诱导算子范数</strong>，再到量化矩阵低秩稀疏性的<strong>核范数</strong>与数值稳定性的<strong>条件数</strong>——范数是连接代数、连续分析与现代凸优化的第一基石。
+          </p>
+        </section>
+
+        <!-- Section 1: 范数公理与向量范数 -->
+        <section class="content-block">
+          <h2>1. 从几何长度到抽象度量：范数三公理</h2>
+          <p>
+            在任意实向量空间 $V$（如 $\mathbb{R}^n$ 或矩阵空间 $\mathbb{R}^{m \times n}$）中，一个函数 $\|\cdot\|: V \to \mathbb{R}$ 要成为合法的<strong>范数 (Norm)</strong>，必须且只需无条件满足以下<strong>三大公理</strong>：
+          </p>
+
+          <div class="norm-card-grid">
+            <div class="norm-card">
+              <h3 style="color: var(--accent-purple); margin-top: 0;">① 正定性 (Positivity)</h3>
+              <p>$\|x\| \ge 0$ 恒成立，且：</p>
+              <p style="text-align: center; font-weight: 700; color: var(--accent-blue); font-size: 1.1rem;">
+                $\|x\| = 0 \iff x = \mathbf{0}$
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">非零物体的“尺度”必定严格为正，只有绝对虚无的零向量长度才为零。</p>
+            </div>
+
+            <div class="norm-card">
+              <h3 style="color: var(--accent-purple); margin-top: 0;">② 绝对齐次性 (Absolute Homogeneity)</h3>
+              <p>对任意标量 $\alpha \in \mathbb{R}$ 与向量 $x \in V$：</p>
+              <p style="text-align: center; font-weight: 700; color: var(--accent-blue); font-size: 1.1rem;">
+                $\|\alpha x\| = |\alpha| \cdot \|x\|$
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">向量被拉伸 $\alpha$ 倍，其度量尺度严格以 $|\alpha|$ 倍同比缩放。</p>
+            </div>
+
+            <div class="norm-card">
+              <h3 style="color: var(--accent-purple); margin-top: 0;">③ 三角不等式 (Subadditivity)</h3>
+              <p>对任意向量 $x, y \in V$：</p>
+              <p style="text-align: center; font-weight: 700; color: var(--accent-blue); font-size: 1.1rem;">
+                $\|x + y\| \le \|x\| + \|y\|$
+              </p>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">“两点之间线段最短”的纯代数推广，也是度量诱导凸集的核心保证。</p>
+            </div>
+          </div>
+
+          <h3>1.1 经典向量 $L_p$ 范数家族</h3>
+          <p>
+            对任意实数 $p \ge 1$，$\mathbb{R}^n$ 上的 $L_p$ 范数严格定义为：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ \|x\|_p = \left( \sum_{i=1}^n |x_i|^p \right)^{1/p} $$
+            三大核心极限特例：
+            <ul>
+              <li><strong>曼哈顿范数 ($L_1$)</strong>：$\|x\|_1 = \sum_{i=1}^n |x_i|$，网格街区折线距离；在机器学习中诱导稀疏解（Lasso 回归）。</li>
+              <li><strong>欧几里得范数 ($L_2$)</strong>：$\|x\|_2 = \sqrt{\sum_{i=1}^n x_i^2} = \sqrt{x^T x}$，经典物理刚体直尺距离。</li>
+              <li><strong>切比雪夫范数 ($L_\infty$)</strong>：$\|x\|_\infty = \lim_{p \to \infty} \|x\|_p = \max_{1 \le i \le n} |x_i|$，最大分量绝对值。</li>
+            </ul>
+          </div>
+
+          <div class="warning-card" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.3); border-left: 4px solid #ef4444; padding: 1rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            <strong style="color: #ef4444;">⚠️ 致命陷阱：为什么当 $0 \lt p \lt 1$ 时不能称为范数？</strong>
+            <p style="font-size: 0.9rem; margin-top: 0.4rem; color: var(--text-muted);">
+              当 $p \lt 1$ 时，函数破坏了<strong>三角不等式</strong>！例如在 $\mathbb{R}^2$ 中取 $x = (1, 0)^T, y = (0, 1)^T$，在 $p = 0.5$ 下：
+              $\|x\|_{0.5} = (1^{0.5} + 0)^{2} = 1$，$\|y\|_{0.5} = 1$。但 $\|x + y\|_{0.5} = (1^{0.5} + 1^{0.5})^2 = 4 \gt \|x\|_{0.5} + \|y\|_{0.5} = 2$。其单位球是向内凹陷的“星形”，不是凸集！
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 2: 交互式 Canvas 实验室 -->
+        <section class="content-block">
+          <h2>2. 交互实验室：$L_p$ 单位球几何形态与凹凸性演化</h2>
+          <p>
+            范数的本质在于其<strong>单位球 (Unit Ball) $\{x \in \mathbb{R}^n : \|x\| \le 1\}$</strong> 的几何形态。拖动下方滑块调节指数 $p$，直观观察单位球如何从非凸凹星形 ($p \lt 1$) 演变为菱形 ($p=1$)、圆形 ($p=2$) 直至正方形 ($p=\infty$)：
+          </p>
+
+          <div class="lab-dual-container">
+            <div class="lab-canvas-box">
+              <canvas id="normCanvas" width="440" height="320"></canvas>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem;">
+                坐标平面：$\{|x_1|^p + |x_2|^p = 1\}$ 的实时截面轨迹
+              </div>
+            </div>
+
+            <div class="lab-controls-panel">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label for="pSlider" style="font-weight: 700;">$p$ 范数指数：<span id="pValueText" style="color: var(--accent-purple); font-size: 1.2rem;">2.0</span></label>
+                <span id="convexityBadge" class="norm-badge" style="background: rgba(16, 185, 129, 0.2); color: var(--accent-green);">凸集 (合法范数)</span>
+              </div>
+              <input type="range" id="pSlider" min="0.3" max="10.0" step="0.1" value="2.0" style="width: 100%;">
+
+              <div class="preset-btn-group">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">快速预设：</span>
+                <button class="preset-btn" onclick="setPresetP(0.5)">p = 0.5 (非凸伪范数)</button>
+                <button class="preset-btn" onclick="setPresetP(1.0)">p = 1 (Lasso 菱形)</button>
+                <button class="preset-btn active" onclick="setPresetP(2.0)">p = 2 (欧氏圆)</button>
+                <button class="preset-btn" onclick="setPresetP(4.0)">p = 4 (超椭圆)</button>
+                <button class="preset-btn" onclick="setPresetP(10.0)">p → ∞ (正方形)</button>
+              </div>
+
+              <div style="background: rgba(0,0,0,0.25); border-radius: var(--radius-sm); padding: 0.85rem; font-size: 0.85rem; line-height: 1.6; color: var(--text-muted);">
+                <strong style="color: var(--text-main);">💡 几何洞察：</strong>
+                <div id="pInsightText">
+                  当 $p = 2$ 时，单位球呈现各向同性的正圆，对应标准的内积正交几何；当 $p = 1$ 时，单位球拥有尖锐的顶点（在坐标轴上），这就是为什么 $L_1$ 正则化在切线相交时总倾向于产生稀疏零解！
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 3: 对偶范数与 Hölder 不等式 -->
+        <section class="content-block">
+          <h2>3. 对偶范数 (Dual Norm) 与极值支撑</h2>
+          <p>
+            对任意赋范向量空间 $(\mathbb{R}^n, \|\cdot\|)$，其<strong>对偶范数 (Dual Norm)</strong> $\|\cdot\|_*$ 衡量了一个线性泛函在该范数单位球上的最大可能投影：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ \|y\|_* \triangleq \sup_{x \ne \mathbf{0}} \frac{y^T x}{\|x\|} = \sup_{\|x\| \le 1} y^T x $$
+            <strong>核心共轭对偶定理</strong>：
+            若 $1 \le p, q \le \infty$ 且满足共轭倒数关系 $\frac{1}{p} + \frac{1}{q} = 1$，则：
+            $$ (\|\cdot\|_p)_* = \|\cdot\|_q $$
+            <ul>
+              <li><strong>$L_2$ 范数是自对偶的</strong>：$\frac{1}{2} + \frac{1}{2} = 1 \implies (\|\cdot\|_2)_* = \|\cdot\|_2$；</li>
+              <li><strong>$L_1$ 与 $L_\infty$ 互为对偶</strong>：$(\|\cdot\|_1)_* = \|\cdot\|_\infty$，且 $(\|\cdot\|_\infty)_* = \|\cdot\|_1$；</li>
+              <li><strong>推广的 Hölder 不等式</strong>：对任意 $x, y$，恒有 $|x^T y| \le \|x\| \cdot \|y\|_*$。</li>
+            </ul>
+          </div>
+
+          <!-- SVG Architecture Diagram: 对偶与单位球支撑超平面 -->
+          <svg class="origin-diagram-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="gridGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#a855f7" stop-opacity="0.05"/>
+              </linearGradient>
+            </defs>
+            <!-- Background -->
+            <rect width="800" height="360" rx="8" fill="#090d16"/>
+            <!-- Title -->
+            <text x="400" y="32" fill="#f8fafc" font-size="16" font-weight="bold" text-anchor="middle">对偶范数几何：极值支撑超平面与共轭映射</text>
+            
+            <!-- Left: L1 ball and L_inf dual -->
+            <g transform="translate(180, 190)">
+              <!-- Axes -->
+              <line x1="-120" y1="0" x2="120" y2="0" stroke="#334155" stroke-width="1.5"/>
+              <line x1="0" y1="-120" x2="0" y2="120" stroke="#334155" stroke-width="1.5"/>
+              <!-- L1 Ball (Diamond) -->
+              <polygon points="0,-80 80,0 0,80 -80,0" fill="rgba(168, 85, 247, 0.2)" stroke="#a855f7" stroke-width="2.5"/>
+              <!-- Tangent hyperplane -->
+              <line x1="-100" y1="-80" x2="100" y2="-80" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5"/>
+              <!-- Gradient vector y -->
+              <line x1="0" y1="0" x2="0" y2="-80" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+              <circle cx="0" cy="-80" r="4" fill="#38bdf8"/>
+              <text x="0" y="-95" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">支撑极值点 x*=(0, 1)</text>
+              <text x="0" y="115" fill="#cbd5e1" font-size="14" font-weight="bold" text-anchor="middle">原空间：L₁ 范数单位球 (菱形)</text>
+              <text x="0" y="135" fill="#94a3b8" font-size="12" text-anchor="middle">极值方向集中于坐标轴顶点</text>
+            </g>
+
+            <!-- Right: L_inf ball and L1 dual -->
+            <g transform="translate(580, 190)">
+              <!-- Axes -->
+              <line x1="-120" y1="0" x2="120" y2="0" stroke="#334155" stroke-width="1.5"/>
+              <line x1="0" y1="-120" x2="0" y2="120" stroke="#334155" stroke-width="1.5"/>
+              <!-- L_inf Ball (Square) -->
+              <rect x="-70" y="-70" width="140" height="140" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8" stroke-width="2.5"/>
+              <!-- Vector -->
+              <line x1="0" y1="0" x2="70" y2="-70" stroke="#ec4899" stroke-width="2.5"/>
+              <circle cx="70" cy="-70" r="4" fill="#ec4899"/>
+              <text x="75" y="-80" fill="#ec4899" font-size="13" font-weight="bold">极值拐角 (1, 1)</text>
+              <text x="0" y="115" fill="#cbd5e1" font-size="14" font-weight="bold" text-anchor="middle">对偶空间：L_∞ 范数单位球 (正方形)</text>
+              <text x="0" y="135" fill="#94a3b8" font-size="12" text-anchor="middle">两空间通过对偶极值建立一一映射</text>
+            </g>
+          </svg>
+        </section>
+
+        <!-- Section 4: 诱导算子范数 -->
+        <section class="content-block">
+          <h2>4. 矩阵诱导算子范数 (Induced Operator Norm)</h2>
+          <p>
+            当矩阵 $A \in \mathbb{R}^{m \times n}$ 作为一个线性映射 $x \mapsto Ax$ 时，我们最关心的是：<strong>该算子最多能将原向量拉伸放大多少倍？</strong> 这就自然引出了由向量范数诱导出的<strong>算子范数</strong>：
+          </p>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ \|A\|_{p, q} \triangleq \sup_{x \ne \mathbf{0}} \frac{\|Ax\|_q}{\|x\|_p} = \sup_{\|x\|_p = 1} \|Ax\|_q $$
+            通常两端采用相同的向量范数，记为 $\|A\|_p \equiv \|A\|_{p, p}$。三大核心算子范数拥有优美的代数闭式：
+          </div>
+
+          <div class="norm-card-grid">
+            <div class="norm-card">
+              <div style="font-size: 0.8rem; color: var(--accent-purple); font-weight: 700;">1-算子范数 (列和范数)</div>
+              <h3 style="margin: 0.4rem 0;">$\|A\|_1 = \max_{1 \le j \le n} \sum_{i=1}^m |a_{ij}|$</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">
+                <strong>几何意义</strong>：矩阵所有列向量的 $L_1$ 模长之最大值（最大列绝对值和）。
+              </p>
+            </div>
+
+            <div class="norm-card">
+              <div style="font-size: 0.8rem; color: var(--accent-blue); font-weight: 700;">2-算子范数 (谱范数)</div>
+              <h3 style="margin: 0.4rem 0;">$\|A\|_2 = \sigma_{\max}(A) = \sqrt{\lambda_{\max}(A^T A)}$</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">
+                <strong>几何意义</strong>：单位欧氏超球被 $A$ 扭曲为超椭球后的<strong>最大半长轴长度</strong>（最大奇异值）。
+              </p>
+            </div>
+
+            <div class="norm-card">
+              <div style="font-size: 0.8rem; color: var(--accent-green); font-weight: 700;">$\infty$-算子范数 (行和范数)</div>
+              <h3 style="margin: 0.4rem 0;">$\|A\|_\infty = \max_{1 \le i \le m} \sum_{j=1}^n |a_{ij}|$</h3>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">
+                <strong>几何意义</strong>：矩阵所有行向量的 $L_1$ 模长之最大值（最大行绝对值和）。
+              </p>
+            </div>
+          </div>
+
+          <h3>4.1 谱范数 $\|A\|_2 = \sigma_{\max}(A)$ 严格数学证明</h3>
+          <div class="proof-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem; margin: 1rem 0;">
+            <p><strong>证明目标</strong>：证明 $\|A\|_2 = \sup_{\|x\|_2 = 1} \|Ax\|_2$ 严格等于 $A$ 的最大奇异值 $\sigma_{\max}$。</p>
+            <ol style="line-height: 1.8; color: var(--text-muted);">
+              <li>
+                由欧几里得模长与转置点积性质：
+                $$ \|Ax\|_2^2 = (Ax)^T (Ax) = x^T (A^T A) x $$
+              </li>
+              <li>
+                因为 $A^T A \in \mathbb{R}^{n \times n}$ 必然是实对称半正定矩阵，根据<strong>谱分解定理</strong>，存在正交矩阵 $Q = [q_1, \dots, q_n]$ 与实特征值 $\lambda_1 \ge \lambda_2 \ge \dots \ge \lambda_n \ge 0$，使得 $A^T A = Q \Lambda Q^T$。
+              </li>
+              <li>
+                设 $y = Q^T x$。由于 $Q$ 保持欧氏长度不变，$\|y\|_2 = \|x\|_2 = 1$。代入得：
+                $$ x^T (A^T A) x = y^T \Lambda y = \sum_{i=1}^n \lambda_i y_i^2 \le \lambda_1 \sum_{i=1}^n y_i^2 = \lambda_1 = \lambda_{\max}(A^T A) $$
+              </li>
+              <li>
+                当且仅当取 $x = q_1$（最大特征值对应的特征向量）时，等号严格成立！
+              </li>
+              <li>
+                因此，$\|A\|_2 = \sqrt{\sup_{\|x\|_2 = 1} x^T A^T A x} = \sqrt{\lambda_{\max}(A^T A)} = \sigma_{\max}(A)$。证毕。
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Section 5: 元素型范数与 Schatten 范数 -->
+        <section class="content-block">
+          <h2>5. 元素型范数、核范数与 Schatten 谱系</h2>
+          <p>
+            除了把矩阵视作拉伸算子，我们还可以把矩阵直接视作 $\mathbb{R}^{m \times n}$ 空间中的“大长向量”，或者通过矩阵的<strong>全部奇异值谱系</strong>进行度量：
+          </p>
+
+          <table class="def-table">
+            <thead>
+              <tr>
+                <th>范数类型</th>
+                <th>数学定义</th>
+                <th>与奇异值的深层联系</th>
+                <th>主要应用场景</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Frobenius 范数</strong></td>
+                <td>$\|A\|_F = \sqrt{\sum_{i=1}^m \sum_{j=1}^n a_{ij}^2}$</td>
+                <td>$\|A\|_F = \sqrt{\operatorname{tr}(A^T A)} = \sqrt{\sum_{i=1}^r \sigma_i^2}$</td>
+                <td>最小二乘误差度量、数值逼近、深度学习权重衰减</td>
+              </tr>
+              <tr>
+                <td><strong>核范数 / 迹范数 (Nuclear Norm)</strong></td>
+                <td>$\|A\|_* = \operatorname{tr}(\sqrt{A^T A})$</td>
+                <td>$\|A\|_* = \sum_{i=1}^r \sigma_i$ (奇异值之和)</td>
+                <td>低秩矩阵恢复、压缩感知、Netflix 电影推荐矩阵补全</td>
+              </tr>
+              <tr>
+                <td><strong>Schatten $p$-范数</strong></td>
+                <td>$\|A\|_{S_p} = \left( \sum_{i=1}^r \sigma_i^p \right)^{1/p}$</td>
+                <td>当 $p=1$ 为核范数；$p=2$ 为 F 范数；$p=\infty$ 为谱范数</td>
+                <td>量子信息理论、非交换几何、多准则正则化优化</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="tip-card" style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-left: 4px solid var(--accent-green); padding: 1.1rem; border-radius: var(--radius-sm); margin: 1.25rem 0;">
+            <strong style="color: var(--accent-green);">🔥 核心思想升华：核范数为什么是“秩函数”的最佳凸松弛？</strong>
+            <p style="font-size: 0.9rem; margin-top: 0.4rem; line-height: 1.6; color: var(--text-muted);">
+              在向量优化中，求非零元素个数的 $\operatorname{card}(x) = \|x\|_0$ 是 NP-hard 的非凸问题，其在单位球内的<strong>凸包 (Convex Envelope)</strong> 恰好是 $L_1$ 范数 $\|x\|_1$；<br>
+              同理，在矩阵优化中，矩阵的秩 $\operatorname{rank}(A)$ 等于非零奇异值的个数。在谱范数单位球内，$\operatorname{rank}(A)$ 的<strong>最优凸近似正是核范数 $\|A\|_* = \sum \sigma_i$</strong>！这使得极其困难的非凸低秩优化，能被转化为凸半定规划 (SDP) 在多项式时间内完美求解！
+            </p>
+          </div>
+        </section>
+
+        <!-- Section 6: 条件数与摄动分析 -->
+        <section class="content-block">
+          <h2>6. 矩阵条件数与方程组摄动界 (Perturbation Bounds)</h2>
+          <p>
+            在实际计算中，浮点数舍入或物理观测误差不可避免。假设精确线性系统为 $Ax = b$，当系数矩阵与右端项存在微小噪声扰动时：
+            $$ (A + \Delta A)(x + \Delta x) = b + \Delta b $$
+            误差解 $\Delta x$ 会被放大多少？答案完全取决于矩阵的<strong>条件数 (Condition Number)</strong>：
+          </p>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ \kappa(A) \triangleq \|A\| \cdot \|A^{-1}\| $$
+            在 2-范数下，条件数直接由矩阵的最大奇异值与最小奇异值决定：
+            $$ \kappa_2(A) = \frac{\sigma_{\max}(A)}{\sigma_{\min}(A)} \ge 1 $$
+            <strong>经典摄动界定理 (Perturbation Bound)</strong>：若 $\|\Delta A\| \cdot \|A^{-1}\| \lt 1$，则相对误差满足严格界：
+            $$ \frac{\|\Delta x\|}{\|x\|} \le \frac{\kappa(A)}{1 - \kappa(A) \frac{\|\Delta A\|}{\|A\|}} \left( \frac{\|\Delta A\|}{\|A\|} + \frac{\|\Delta b\|}{\|b\|} \right) $$
+          </div>
+
+          <p style="line-height: 1.7; color: var(--text-muted);">
+            <strong>物理直觉</strong>：如果 $\kappa(A) \approx 1$（如正交矩阵），误差完全不被放大，称为<strong>良态 (Well-conditioned)</strong>；如果 $\kappa(A) = 10^8$，输入端百万分之一的微小噪声就会导致输出解产生 $100\%$ 的荒谬震荡，此时矩阵接近奇异，称为<strong>病态 (Ill-conditioned)</strong>。
+          </p>
+        </section>
+
+        <!-- Section 7: Python 实战 -->
+        <section class="content-block">
+          <h2>7. Python NumPy / SciPy 高精度代码实战</h2>
+          <p>
+            以下代码演示了如何使用 NumPy 与 SciPy 计算各类向量/算子/Schatten 范数，并实测病态 Hilbert 矩阵在微小扰动下的解发散实验：
+          </p>
+
+          <pre style="background: #090d16; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-sm); overflow-x: auto; color: #e2e8f0; font-family: monospace; font-size: 0.9rem; line-height: 1.6;"><code>import numpy as np
+from scipy.linalg import hilbert
+
+# 1. 构造一个测试矩阵 A
+A = np.array([[3.0, 1.0],
+              [1.0, 2.0]])
+
+# 2. 算子范数计算
+norm_1 = np.linalg.norm(A, 1)          # 列和范数
+norm_inf = np.linalg.norm(A, np.inf)   # 行和范数
+norm_2 = np.linalg.norm(A, 2)          # 谱范数 (最大奇异值)
+norm_fro = np.linalg.norm(A, 'fro')    # Frobenius 范数
+
+# 奇异值分解验证谱范数与核范数
+U, S, Vt = np.linalg.svd(A)
+norm_nuclear = np.sum(S)               # 核范数: 奇异值之和
+
+print(f"||A||_1 (列和): {norm_1:.4f}")
+print(f"||A||_inf (行和): {norm_inf:.4f}")
+print(f"||A||_2 (谱范数/最大奇异值): {norm_2:.4f} (验证: S_max = {S[0]:.4f})")
+print(f"||A||_F (Frobenius): {norm_fro:.4f}")
+print(f"||A||_* (核范数): {norm_nuclear:.4f}")
+
+# 3. 病态矩阵扰动实验 (以 6 阶 Hilbert 矩阵为例)
+H = hilbert(6)
+cond_H = np.linalg.cond(H, 2)
+print(f"\n6 阶 Hilbert 矩阵的条件数 κ(H): {cond_H:.2e}")
+
+# 精确方程 Hx = b
+x_true = np.ones(6)
+b = H @ x_true
+
+# 添加 10^-8 量级的极小扰动
+delta_b = np.random.randn(6) * 1e-8
+b_perturbed = b + delta_b
+
+# 求解扰动系统
+x_perturbed = np.linalg.solve(H, b_perturbed)
+rel_error = np.linalg.norm(x_perturbed - x_true) / np.linalg.norm(x_true)
+print(f"输入端扰动 ||Δb||/||b||: {np.linalg.norm(delta_b)/np.linalg.norm(b):.2e}")
+print(f"输出解相对误差 ||Δx||/||x||: {rel_error:.2e} (发散了 {rel_error / (np.linalg.norm(delta_b)/np.linalg.norm(b)):.1f} 倍!)")
+</code></pre>
+        </section>
+
+        <!-- Section 8: 自测练习 -->
+        <section class="content-block">
+          <h2>8. 交互自测与核心理解巩固</h2>
+          <div class="card" style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(15, 23, 42, 0.5);">
+            <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem;">
+              【单选题】设 $Q \in \mathbb{R}^{n \times n}$ 为正交矩阵，则其谱范数 $\|Q\|_2$ 与条件数 $\kappa_2(Q)$ 分别等于多少？
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。正交矩阵保持长度不变，其奇异值并不依赖于矩阵维度 n。')">
+              A. $\|Q\|_2 = \sqrt{n}$，$\kappa_2(Q) = n$
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, true, '回答完全正确！正交矩阵满足 Q^T Q = I，因此其所有奇异值 σ_i 严格恒等于 1。最大奇异值为 1，最小奇异值为 1，条件数 κ_2(Q) = 1/1 = 1，数值稳定性处于最完美状态！')">
+              B. $\|Q\|_2 = 1$，$\kappa_2(Q) = 1$
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。正交矩阵必是可逆的非奇异矩阵，条件数绝不会为 0。')">
+              C. $\|Q\|_2 = 1$，$\kappa_2(Q) = 0$
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。正交变换是保距刚体变换，放大倍率上限必定严格等于 1。')">
+              D. $\|Q\|_2 = \max |q_{ij}|$，$\kappa_2(Q) = \operatorname{det}(Q)$
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+          </div>
+        </section>
+
+        <!-- Navigation Footer -->
+        <footer class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <a href="ch8_1_ols_applications.html" class="btn btn-secondary">
+            &larr; 上一专题：Ch 8.1 最小二乘与量化实战
+          </a>
+          <a href="ma2_spectral_radius_rayleigh.html" class="btn btn-primary" style="background: var(--accent-purple); border-color: var(--accent-purple);">
+            下一专题：MA 02 谱半径与瑞利商 &rarr;
+          </a>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Canvas Interactive Lab: Lp Unit Ball Visualizer
+    const canvas = document.getElementById('normCanvas');
+    const ctx = canvas.getContext('2d');
+    const pSlider = document.getElementById('pSlider');
+    const pValueText = document.getElementById('pValueText');
+    const convexityBadge = document.getElementById('convexityBadge');
+    const pInsightText = document.getElementById('pInsightText');
+
+    function drawLpBall(p) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const cx = canvas.width / 2;
+      const cy = canvas.height / 2;
+      const scale = 110; // 1 unit = 110 px
+
+      // Draw Grid & Axes
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = -2; x <= 2; x++) {
+        ctx.beginPath();
+        ctx.moveTo(cx + x * scale, 0);
+        ctx.lineTo(cx + x * scale, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = -1.5; y <= 1.5; y += 0.5) {
+        ctx.beginPath();
+        ctx.moveTo(0, cy + y * scale);
+        ctx.lineTo(canvas.width, cy + y * scale);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, cy); ctx.lineTo(canvas.width, cy);
+      ctx.moveTo(cx, 0); ctx.lineTo(cx, canvas.height);
+      ctx.stroke();
+
+      // Axis ticks
+      ctx.fillStyle = '#64748b';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('(1, 0)', cx + scale + 4, cy + 14);
+      ctx.fillText('(0, 1)', cx + 6, cy - scale - 4);
+      ctx.fillText('(-1, 0)', cx - scale - 36, cy + 14);
+      ctx.fillText('(0, -1)', cx + 6, cy + scale + 14);
+
+      // Plot Lp ball contour: |x|^p + |y|^p = 1
+      const points = [];
+      const numSteps = 720;
+      for (let i = 0; i <= numSteps; i++) {
+        const theta = (i / numSteps) * 2 * Math.PI;
+        const cosT = Math.cos(theta);
+        const sinT = Math.sin(theta);
+        const absCos = Math.abs(cosT);
+        const absSin = Math.abs(sinT);
+
+        // r(theta) = ( |cos|^p + |sin|^p )^(-1/p)
+        const denom = Math.pow(absCos, p) + Math.pow(absSin, p);
+        if (denom > 0) {
+          const r = Math.pow(denom, -1 / p);
+          const px = cx + r * cosT * scale;
+          const py = cy - r * sinT * scale;
+          points.push({ x: px, y: py });
+        }
+      }
+
+      if (points.length > 0) {
+        // Fill Unit Ball
+        ctx.beginPath();
+        ctx.moveTo(points[0].x, points[0].y);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i].x, points[i].y);
+        }
+        ctx.closePath();
+        ctx.fillStyle = p < 1.0 ? 'rgba(239, 68, 68, 0.15)' : 'rgba(168, 85, 247, 0.2)';
+        ctx.fill();
+
+        // Stroke Contour
+        ctx.strokeStyle = p < 1.0 ? '#ef4444' : '#a855f7';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+      }
+    }
+
+    function updateP(val) {
+      const p = parseFloat(val);
+      pValueText.textContent = p.toFixed(1);
+      if (p < 1.0) {
+        convexityBadge.textContent = '非凸星形 (违反三角不等式)';
+        convexityBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+        convexityBadge.style.color = '#ef4444';
+        pInsightText.textContent = `当 p = ${p.toFixed(1)} < 1 时，单位球呈现凹陷的星形拓扑，集合非凸，两点连线会穿出集合外部，无法诱导有效度量。`;
+      } else {
+        convexityBadge.textContent = '严格凸集 (合法范数)';
+        convexityBadge.style.background = 'rgba(16, 185, 129, 0.2)';
+        convexityBadge.style.color = 'var(--accent-green)';
+        if (Math.abs(p - 1.0) < 0.05) {
+          pInsightText.textContent = 'p = 1 为 L1 曼哈顿范数，单位球是棱角分明的菱形，与目标函数相切时极易落在坐标轴顶点上，诱导模型产生稀疏解。';
+        } else if (Math.abs(p - 2.0) < 0.05) {
+          pInsightText.textContent = 'p = 2 为经典欧氏范数，单位球为各向同性完美的圆，旋转不变性优异，微积分求导极其光滑。';
+        } else if (p >= 8.0) {
+          pInsightText.textContent = `p = ${p.toFixed(1)} 逼近 L_∞ 范数，单位球逐步饱满为正方形 [-1, 1]²，边界只由绝对值最大的坐标分量决定。`;
+        } else {
+          pInsightText.textContent = `p = ${p.toFixed(1)} 时，单位球呈现圆润平滑的超椭球形态，属于严格赋范巴拿赫空间。`;
+        }
+      }
+      drawLpBall(p);
+    }
+
+    function setPresetP(val) {
+      pSlider.value = val;
+      updateP(val);
+      document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+      if (event && event.target) {
+        event.target.classList.add('active');
+      }
+    }
+
+    pSlider.addEventListener('input', (e) => {
+      updateP(e.target.value);
+      document.querySelectorAll('.preset-btn').forEach(btn => btn.classList.remove('active'));
+    });
+
+    // Quiz logic
+    function checkQuiz(element, isCorrect, explanation) {
+      const feedback = document.getElementById('quizFeedback');
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+        feedback.style.color = 'var(--accent-green)';
+        feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        feedback.innerHTML = '<strong>🎉 正确！</strong> ' + explanation;
+      } else {
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerHTML = '<strong>❌ 遗憾！</strong> ' + explanation;
+      }
+    }
+
+    // Initialize
+    updateP(2.0);
+  </script>
+</body>
+</html>

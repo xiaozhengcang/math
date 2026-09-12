@@ -146,6 +146,43 @@
   - 代数本质：超定方程正交投影 P = X(XᵀX)⁻¹Xᵀ、四大基本子空间直和分解与方差分解 SST = SSR + SSE
   - 贯穿 Ch 1 ~ Ch 7 的全书核心定理立体映射网络与工业级 NumPy 实战
 
+### 🚀 高阶矩阵分析进阶系列 (Matrix Analysis Series: MA 01 ~ MA 07)
+- **MA 01. 向量与矩阵范数、算子理论与摄动 ([ma1_norms_operator_theory.html](ma1_norms_operator_theory.html))**:
+  - 向量 L_p 范数、对偶范数 (Dual Norm)、Hölder 不等式；
+  - 矩阵诱导算子范数（1-范数、2-范数/谱范数、∞-范数）与几何椭球映射；
+  - Frobenius 范数、核范数 (Nuclear Norm) 凸松弛与 Schatten 谱系；
+  - 范数等价性与矩阵条件数 κ(A) 扰动误差界。
+- **MA 02. 特征值变分刻画、谱半径与瑞利商 ([ma2_spectral_radius_rayleigh.html](ma2_spectral_radius_rayleigh.html))**:
+  - 谱半径 ρ(A) 与 Gelfand 极限公式、矩阵幂与级数收敛判据；
+  - 瑞利商 R_A(x) 极值与球面能量地形；
+  - Courant-Fischer 极大极小定理与 Cauchy 特征值交错定理；
+  - 盖尔圆盘定理 (Gerschgorin) 与 Perron-Frobenius 非负矩阵理论。
+- **MA 03. 高阶矩阵分解、伪逆与 Schur 补 ([ma3_schur_jcf_pseudoinverse.html](ma3_schur_jcf_pseudoinverse.html))**:
+  - Schur 酉三角化定理（A = U T U*）归纳证明；
+  - Jordan 标准型 (JCF) 亏损本质与广义特征链；
+  - Moore-Penrose 四方程伪逆与最小范数最小二乘解；
+  - 分块消元 Schur 补与 Woodbury 矩阵逆更新恒等式。
+- **MA 04. 半正定锥、Loewner 偏序与矩阵不等式 ([ma4_psd_matrix_inequalities.html](ma4_psd_matrix_inequalities.html))**:
+  - 半正定凸锥 𝕊₊ⁿ 与 Loewner 偏序 (A ⪰ B)；
+  - 椭球几何包含对偶性与平方保序失效反例；
+  - 基于 Schur 补的正定判定与线性矩阵不等式 (LMI) 转化；
+  - Schur 积定理、Hadamard 行列式界与 von Neumann / Golden-Thompson 迹不等式。
+- **MA 05. 克罗内克积、向量化与矩阵方程 ([ma5_kronecker_vectorization_equations.html](ma5_kronecker_vectorization_equations.html))**:
+  - Kronecker 积 A ⊗ B 代数性质与谱特征；
+  - vec 算子与核心恒等式 vec(AXB) = (Bᵀ ⊗ A) vec(X)；
+  - Khatri-Rao 积与张量 CP 分解；
+  - Sylvester 矩阵方程 AX + XB = C 与连续/离散 Lyapunov 稳定性方程求解。
+- **MA 06. 矩阵微积分、全微分迹技巧与优化 ([ma6_matrix_calculus_optimization.html](ma6_matrix_calculus_optimization.html))**:
+  - 分母布局规范；
+  - 全微分法与迹技巧：df = tr((∂f/∂X)ᵀ dX)；
+  - 常用矩阵导数（二次型、对数行列式 ln det(X)、矩阵逆求导）；
+  - 多元高斯分布协方差 MLE 极大似然估计推导与低秩矩阵补全。
+- **MA 07. 矩阵函数、谱映射与微分动力系统 ([ma7_matrix_functions_dynamics.html](ma7_matrix_functions_dynamics.html))**:
+  - 矩阵函数 f(A) 的 Taylor、谱分解与 Cauchy 围道三种等价定义；
+  - Cayley-Hamilton 降次算法；
+  - 矩阵指数 e^(At) 与线性微分方程组 dx/dt = Ax 闭式解；
+  - 2D 相平面轨迹流场（稳定节点、鞍点、稳定螺旋）与李雅普诺夫渐近稳定性。
+
 ---
 
 ## 💻 编程作业与上机实验 (Hands-on Homeworks)

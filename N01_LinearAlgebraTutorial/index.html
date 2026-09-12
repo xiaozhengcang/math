@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
   <script src="js/main.js" defer></script>
 </head>
 <body>
@@ -93,6 +97,11 @@
         <a href="ch2_2_matrix_inverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.2</span>
           <span>逆矩阵、初等矩阵与可逆等价定理</span>
+        </a>
+        
+        <a href="ch2_3_matrix_transpose.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.3</span>
+          <span>矩阵转置、几何镜像与对偶伴随</span>
         </a>
         
         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
@@ -368,7 +377,7 @@
     <div class="card" style="margin-top: 1.5rem; border-left: 4px solid var(--accent-blue);">
       <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem;">Chapter 2: 矩阵运算与逆矩阵 (Matrix Operations & Inverses)</h3>
-        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">2 个专题</span>
+        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">3 个专题</span>
       </div>
       <div class="card-body" style="padding-top: 1rem;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
@@ -381,6 +390,11 @@
           <a href="ch2_2_matrix_inverse.html" style="display: block; text-decoration: none; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
             <div style="font-weight: 700; color: var(--accent-blue); font-size: 0.95rem;">2.2 逆矩阵、初等矩阵与可逆等价定理</div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.5;">初等矩阵、加边求逆 [A|I]->[I|A⁻¹]、可逆矩阵 10 大条件闭环</div>
+          </a>
+
+          <a href="ch2_3_matrix_transpose.html" style="display: block; text-decoration: none; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="font-weight: 700; color: var(--accent-blue); font-size: 0.95rem;">2.3 矩阵转置、几何镜像与对偶伴随</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.5;">对角线折叠、几何镜像变换、穿鞋穿袜逆序律、内积伴随守恒与 AᵀA 能量度量</div>
           </a>
         
         </div>
@@ -538,7 +552,7 @@
     <div class="card" style="margin-top: 1.5rem; border-left: 4px solid var(--accent-blue);">
       <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
         <h3 style="color: var(--text-main); margin: 0; font-size: 1.2rem;">Chapter 7: 正交性与 SVD (Orthogonality & SVD)</h3>
-        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">4 个专题</span>
+        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">5 个专题</span>
       </div>
       <div class="card-body" style="padding-top: 1rem;">
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
@@ -562,6 +576,11 @@
             <div style="font-weight: 700; color: var(--accent-blue); font-size: 0.95rem;">7.4 奇异值分解 SVD、伪逆与图像低秩压缩</div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.5;">全能分解 A=UΣVᵀ、旋转-拉伸-旋转、Eckart-Young 低秩压缩</div>
           </a>
+
+          <a href="ch7_5_positive_definite.html" style="display: block; text-decoration: none; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-blue)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="font-weight: 700; color: var(--accent-blue); font-size: 0.95rem;">7.5 正定矩阵、半正定与二次型能量曲面</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.5;">五大定性家族、3D 碗面/水槽/马鞍面、Sylvester 主子式判据、Cholesky 分解与 AᵀA 必然半正定</div>
+          </a>
         
         </div>
       </div>
@@ -578,6 +597,96 @@
           <a href="ch8_1_ols_applications.html" style="display: block; text-decoration: none; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-green)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
             <div style="font-weight: 700; color: var(--accent-green); font-size: 0.95rem;">8.1 最小二乘法 (OLS) 股票市场涨跌归因与全景图谱</div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.5;">多因子模型 Alpha/Beta 拆解、Barra 截面纯因子收益、正交子空间直和分解与全书知识点立体映射</div>
+          </a>
+        
+        </div>
+      </div>
+    </div>
+
+    <!-- Matrix Analysis Series Section -->
+    <div class="card" style="margin-top: 2rem; border-left: 4px solid var(--accent-purple); background: linear-gradient(180deg, rgba(168, 85, 247, 0.05) 0%, rgba(15, 23, 42, 0) 100%);">
+      <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <h3 style="color: var(--accent-purple); margin: 0; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🚀</span> 矩阵分析进阶系列 (Matrix Analysis Series)
+          </h3>
+          <p style="margin: 0.35rem 0 0; font-size: 0.84rem; color: var(--text-muted);">
+            从有限维代数空间跨越至拓扑度量、谱系变分、张量微积分与凸优化：面向现代 AI / 最优化 / 动力学的高阶专题课
+          </p>
+        </div>
+        <span class="badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); font-weight: 700;">7 大独立专题 (MA 01 ~ MA 07)</span>
+      </div>
+      <div class="card-body" style="padding-top: 1.25rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.15rem;">
+    
+          <a href="ma1_norms_operator_theory.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 01: 向量与矩阵范数、算子理论与摄动</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">度量拓扑</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              向量 L_p 范数、对偶范数 (Dual Norm)、算子诱导范数椭球映射、Frobenius/核范数/Schatten 谱系与矩阵条件数扰动界
+            </div>
+          </a>
+
+          <a href="ma2_spectral_radius_rayleigh.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 02: 特征值变分刻画、谱半径与瑞利商</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">变分极值</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              谱半径与 Gelfand 极限公式、矩阵幂与级数收敛、瑞利商与广义瑞利商曲面、Courant-Fischer 极大极小定理与 Perron-Frobenius 定理
+            </div>
+          </a>
+
+          <a href="ma3_schur_jcf_pseudoinverse.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 03: 高阶矩阵分解、伪逆与 Schur 补</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">分解与逆</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              Schur 酉三角化、Jordan 标准型亏损本质、Weyl 奇异值扰动、Moore-Penrose 四方程广义逆、分块消元 Schur 补与 Woodbury 公式
+            </div>
+          </a>
+
+          <a href="ma4_psd_matrix_inequalities.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 04: 半正定锥、Loewner 偏序与矩阵不等式</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">凸几何</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              半正定凸锥、Loewner 偏序几何与陷阱、Schur 补 LMI 判据、矩阵平方根与极分解、Schur 积定理与 Hadamard/Fischer/迹不等式
+            </div>
+          </a>
+
+          <a href="ma5_kronecker_vectorization_equations.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 05: 克罗内克积、向量化与矩阵方程</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">张量代数</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              Kronecker 积代数性质与谱特征、vec 算子与交换矩阵、vec(AXB)=(Bᵀ⊗A)vec(X)、Khatri-Rao 积、Sylvester 与 Lyapunov 矩阵方程
+            </div>
+          </a>
+
+          <a href="ma6_matrix_calculus_optimization.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 06: 矩阵微积分、全微分迹技巧与优化</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">导数与优化</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              分子/分母布局消歧、全微分与迹技巧 df=tr((∂f/∂X)ᵀdX)、Log-Det 求导闭式、Hessian 与矩阵凸性、高斯 MLE 与核范数低秩补全
+            </div>
+          </a>
+
+          <a href="ma7_matrix_functions_dynamics.html" style="display: block; text-decoration: none; padding: 1.1rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--accent-purple)'; this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='var(--border-color)'; this.style.transform='translateY(0)';" >
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-weight: 800; color: var(--accent-purple); font-size: 0.98rem;">MA 07: 矩阵函数、谱映射与微分动力系统</span>
+              <span style="font-size: 0.72rem; padding: 0.15rem 0.45rem; background: rgba(168, 85, 247, 0.15); color: var(--accent-purple); border-radius: 4px;">函数与系统</span>
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;">
+              矩阵函数 f(A) 严格定义、Cayley-Hamilton 降次算法、矩阵指数 e^(At) 闭式求解、线性微分方程组相空间轨迹流场与渐近稳定性
+            </div>
           </a>
         
         </div>

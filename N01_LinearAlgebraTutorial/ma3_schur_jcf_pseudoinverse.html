@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MA 03: 高阶矩阵分解、Moore-Penrose 伪逆与 Schur 补 | 矩阵分析进阶指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+  <style>
+    .decomp-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .decomp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .decomp-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .decomp-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-purple);
+    }
+    .lab-dual-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .lab-canvas-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .lab-canvas-box canvas {
+      background: #060911;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 440px;
+      height: 320px;
+      display: block;
+    }
+    .lab-controls-panel {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-purple);
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .origin-diagram-svg {
+      width: 100%;
+      max-width: 820px;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <nav class="sidebar-nav"></nav>
+    </aside>
+
+    <div class="main-content">
+      <header class="top-header">
+        <div class="header-breadcrumb">
+          <a href="index.html">课程首页</a> &gt; 
+          <span style="color: var(--accent-purple);">矩阵分析进阶系列</span> &gt; 
+          <span>MA 03: 高阶矩阵分解与广义逆</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="theme-toggle" class="btn btn-secondary btn-sm">🌓 切换主题</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Section -->
+        <section class="chapter-hero" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0) 100%); border-left: 5px solid var(--accent-purple); padding: 2rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <span class="decomp-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">高阶分析篇 MA 03</span>
+            <span class="decomp-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">正交三角化与广义逆</span>
+          </div>
+          <h1 style="font-size: 2.2rem; color: var(--text-main); margin: 0.5rem 0 1rem;">高阶矩阵分解、Moore-Penrose 伪逆与 Schur 补</h1>
+          <p style="font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); max-width: 900px;">
+            在初阶线性代数中，我们学习了对称矩阵的谱分解与对角化。但如果矩阵<strong>根本无法对角化（特征向量亏损）</strong>，或者矩阵根本不是方阵（长方阵），代数理论将走向何方？本章我们将突破局限：建立<strong>Schur 酉三角化定理</strong>（任意方阵均可酉相似于上三角阵）、揭开 <strong>Jordan 标准型</strong> 的亏损本质；推导 <strong>Moore-Penrose 伪逆</strong> 的四方程大一统投影；最后剖析分块消元核心利器 <strong>Schur 补</strong> 与著名的 <strong>Woodbury 矩阵逆更新公式</strong>。
+          </p>
+        </section>
+
+        <!-- Section 1: Schur 酉三角化定理 -->
+        <section class="content-block">
+          <h2>1. Schur 酉三角化定理 (Schur Triangularization)</h2>
+          <p>
+            对角化依赖于矩阵拥有满秩的线性无关特征向量，这往往过于苛刻。而 <strong>Schur 引理</strong> 指出：在酉变换（保持长度与正交性）的尺度下，任何复方阵都必然可以被化为上三角形式！
+          </p>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            <strong>Schur 酉三角化定理</strong>：对任意方阵 $A \in \mathbb{C}^{n \times n}$，必定存在一个酉矩阵 $U \in \mathbb{C}^{n \times n}$（满足 $U^* U = I$）和一个上三角矩阵 $T$，使得：
+            $$ A = U T U^* $$
+            其中上三角矩阵 $T$ 主对角线上的元素 $t_{11}, t_{22}, \dots, t_{nn}$ 恰好是 $A$ 的全部 $n$ 个特征值（计入代数重数）。
+          </div>
+
+          <div class="proof-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem; margin: 1rem 0;">
+            <p><strong>数学归纳法严密证明</strong>：</p>
+            <ol style="line-height: 1.8; color: var(--text-muted);">
+              <li>当 $n = 1$ 时，标量本身就是上三角，结论平凡成立。</li>
+              <li>假设定理对任意 $n-1$ 阶方阵均成立。</li>
+              <li>由代数基本定理，$A$ 至少存在一个特征值 $\lambda_1$ 和对应的单位特征向量 $u_1$（$\|u_1\|_2 = 1$），使得 $A u_1 = \lambda_1 u_1$。</li>
+              <li>利用 Gram-Schmidt 正交化，将 $u_1$ 扩充为 $\mathbb{C}^n$ 的一组标准正交基，排成酉矩阵 $U_1 = [u_1, V_1]$。计算：
+                $$ U_1^* A U_1 = \begin{bmatrix} u_1^* \\ V_1^* \end{bmatrix} A \begin{bmatrix} u_1 & V_1 \end{bmatrix} = \begin{bmatrix} u_1^* A u_1 & u_1^* A V_1 \\ V_1^* A u_1 & V_1^* A V_1 \end{bmatrix} = \begin{bmatrix} \lambda_1 & u_1^* A V_1 \\ \mathbf{0} & A_1 \end{bmatrix} $$
+                其中右下角分块 $A_1 = V_1^* A V_1$ 是一个 $n-1$ 阶方阵！
+              </li>
+              <li>根据归纳假设，存在 $n-1$ 阶酉矩阵 $W$ 使得 $W^* A_1 W = T_1$ 为上三角矩阵。构造分块酉矩阵 $U_2 = \begin{bmatrix} 1 & \mathbf{0} \\ \mathbf{0} & W \end{bmatrix}$。</li>
+              <li>令 $U = U_1 U_2$。显然两个酉矩阵之积依然是酉矩阵，且：
+                $$ U^* A U = U_2^* (U_1^* A U_1) U_2 = \begin{bmatrix} 1 & \mathbf{0} \\ \mathbf{0} & W^* \end{bmatrix} \begin{bmatrix} \lambda_1 & * \\ \mathbf{0} & A_1 \end{bmatrix} \begin{bmatrix} 1 & \mathbf{0} \\ \mathbf{0} & W \end{bmatrix} = \begin{bmatrix} \lambda_1 & * \\ \mathbf{0} & T_1 \end{bmatrix} = T $$
+                这便构成了一个完美的 $n$ 阶上三角矩阵！数学归纳法证毕。
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Section 2: Jordan 标准型 -->
+        <section class="content-block">
+          <h2>2. Jordan 标准型与特征亏损 (Defective Matrices)</h2>
+          <p>
+            如果允许使用非正交的相似变换 $A = P J P^{-1}$，方阵所能达到的最简形式就是 <strong>Jordan 标准型 (JCF)</strong>：
+          </p>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            任意复方阵 $A$ 均相似于由若干 <strong>Jordan 块 $J_k(\lambda)$</strong> 拼接而成的分块对角阵：
+            $$ J = \begin{bmatrix} J_{k_1}(\lambda_1) & & \\ & \ddots & \\ & & J_{k_m}(\lambda_m) \end{bmatrix}, \quad J_k(\lambda) = \begin{bmatrix} \lambda & 1 & & \\ & \lambda & \ddots & \\ & & \ddots & 1 \\ & & & \lambda \end{bmatrix}_{k \times k} $$
+            <strong>代数几何本质</strong>：
+            <ul>
+              <li><strong>代数重数</strong>：特征值 $\lambda$ 在特征多项式中的根重数，等于所有以 $\lambda$ 为对角元的 Jordan 块阶数之和；</li>
+              <li><strong>几何重数</strong>：特征空间 $\operatorname{Null}(A - \lambda I)$ 的维数，等于以 $\lambda$ 为特征值的 <strong>Jordan 块总个数</strong>；</li>
+              <li>当且仅当所有 Jordan 块均为 $1 \times 1$ 阶（几何重数 = 代数重数）时，矩阵可完全对角化；若出现大于 1 阶的块，则矩阵亏损，产生高维空间剪切效应。</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Section 3: Moore-Penrose 伪逆 -->
+        <section class="content-block">
+          <h2>3. Moore-Penrose 伪逆 (Pseudoinverse)</h2>
+          <p>
+            对于任意形状的实矩阵或复矩阵 $A \in \mathbb{C}^{m \times n}$（包括满秩、降秩、高瘦长矩阵与扁宽短矩阵），逆矩阵通常不存在。但存在唯一的一个矩阵 $A^\dagger \in \mathbb{C}^{n \times m}$，严格满足以下 <strong>4 条 Penrose 方程</strong>：
+          </p>
+
+          <div class="decomp-grid">
+            <div class="decomp-card">
+              <strong style="color: var(--accent-purple);">① $A A^\dagger A = A$</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">保原变换：在 $A$ 的值域上，$A^\dagger$ 表现为忠实逆。</p>
+            </div>
+            <div class="decomp-card">
+              <strong style="color: var(--accent-purple);">② $A^\dagger A A^\dagger = A^\dagger$</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">自洽逆：伪逆自身的作用在二次反演下保持闭合。</p>
+            </div>
+            <div class="decomp-card">
+              <strong style="color: var(--accent-blue);">③ $(A A^\dagger)^* = A A^\dagger$</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">正交投影：$A A^\dagger$ 是到列空间 $\operatorname{Col}(A)$ 的正交投影算子。</p>
+            </div>
+            <div class="decomp-card">
+              <strong style="color: var(--accent-blue);">④ $(A^\dagger A)^* = A^\dagger A$</strong>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">正交投影：$A^\dagger A$ 是到行空间 $\operatorname{Row}(A)$ 的正交投影算子。</p>
+            </div>
+          </div>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            <strong>基于 SVD 的唯一显式构造</strong>：设 $A = U \Sigma V^T$ 为紧 SVD，其中 $\Sigma = \operatorname{diag}(\sigma_1, \dots, \sigma_r)$（$\sigma_i \gt 0$）：
+            $$ A^\dagger = V \Sigma^\dagger U^T = \sum_{i=1}^r \frac{1}{\sigma_i} v_i u_i^T $$
+            <strong>大一统极小解性质</strong>：
+            对任意不相容或超定方程 $Ax = b$，$x^* = A^\dagger b$ 保证了：
+            <ol>
+              <li>残差模长最小化：$\|A x^* - b\|_2 = \min_{x} \|Ax - b\|_2$；</li>
+              <li>在所有使残差最小的解中，其自身的范数严格最小：$\|x^*\|_2 = \min \{\|x\|_2 : \|Ax - b\|_2 = \min\}$。</li>
+            </ol>
+          </div>
+
+          <!-- SVG Architecture Diagram: 伪逆四大空间投影流向 -->
+          <svg class="origin-diagram-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="360" rx="8" fill="#090d16"/>
+            <text x="400" y="32" fill="#f8fafc" font-size="16" font-weight="bold" text-anchor="middle">Moore-Penrose 伪逆：四大子空间的正交投影几何大一统</text>
+
+            <!-- Domain R^n -->
+            <g transform="translate(180, 190)">
+              <rect x="-140" y="-120" width="280" height="240" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+              <text x="0" y="-95" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">定义域空间 ℝⁿ</text>
+
+              <!-- Row space & Null space -->
+              <rect x="-120" y="-80" width="240" height="90" fill="rgba(168, 85, 247, 0.15)" stroke="#a855f7"/>
+              <text x="0" y="-35" fill="#a855f7" font-size="13" font-weight="bold" text-anchor="middle">行空间 Row(A) (维数 r)</text>
+
+              <rect x="-120" y="20" width="240" height="80" fill="rgba(100, 116, 139, 0.15)" stroke="#64748b"/>
+              <text x="0" y="65" fill="#94a3b8" font-size="13" font-weight="bold" text-anchor="middle">零空间 Null(A) (维数 n-r)</text>
+
+              <!-- Minimal norm point x* -->
+              <circle cx="40" cy="-35" r="5" fill="#f59e0b"/>
+              <text x="40" y="-15" fill="#f59e0b" font-size="12" font-weight="bold" text-anchor="middle">唯一最小范数解 x*</text>
+            </g>
+
+            <!-- Mapping Arrows -->
+            <g transform="translate(400, 190)">
+              <!-- Forward A -->
+              <path d="M -60 -40 Q 0 -70 60 -40" fill="none" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/>
+              <text x="0" y="-68" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">线性映射 A (一对一同构)</text>
+
+              <!-- Backward A^+ -->
+              <path d="M 60 10 Q 0 40 -60 10" fill="none" stroke="#a855f7" stroke-width="2.5" marker-end="url(#arrow)"/>
+              <text x="0" y="45" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle">广义伪逆 A⁺ (逆投影映射)</text>
+            </g>
+
+            <!-- Codomain R^m -->
+            <g transform="translate(620, 190)">
+              <rect x="-140" y="-120" width="280" height="240" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+              <text x="0" y="-95" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">值域空间 ℝᵐ</text>
+
+              <!-- Col space & Left null -->
+              <rect x="-120" y="-80" width="240" height="90" fill="rgba(56, 189, 248, 0.15)" stroke="#38bdf8"/>
+              <text x="0" y="-35" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">列空间 Col(A) (维数 r)</text>
+
+              <rect x="-120" y="20" width="240" height="80" fill="rgba(100, 116, 139, 0.15)" stroke="#64748b"/>
+              <text x="0" y="65" fill="#94a3b8" font-size="13" font-weight="bold" text-anchor="middle">左零空间 Null(Aᵀ) (维数 m-r)</text>
+
+              <circle cx="40" cy="-35" r="5" fill="#38bdf8"/>
+              <text x="40" y="-15" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">正交投影 p = Ax*</text>
+            </g>
+          </svg>
+        </section>
+
+        <!-- Section 4: 分块矩阵与 Schur 补 -->
+        <section class="content-block">
+          <h2>4. 分块消元与 Schur 补 (Schur Complement)</h2>
+          <p>
+            考虑通用的 $2 \times 2$ 分块矩阵 $M = \begin{bmatrix} A & B \\ C & D \end{bmatrix}$，其中 $A$ 为可逆方阵。如何对其进行初等高斯分块消元？
+          </p>
+
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            分块初等消元可写为矩阵乘积形式（LDU 分解）：
+            $$ \begin{bmatrix} I & \mathbf{0} \\ -C A^{-1} & I \end{bmatrix} \begin{bmatrix} A & B \\ C & D \end{bmatrix} \begin{bmatrix} I & -A^{-1} B \\ \mathbf{0} & I \end{bmatrix} = \begin{bmatrix} A & \mathbf{0} \\ \mathbf{0} & S_A \end{bmatrix} $$
+            其中出现的右下角核心分块称为 <strong>$A$ 在 $M$ 中的 Schur 补</strong>：
+            $$ S_A \triangleq D - C A^{-1} B $$
+            <strong>三大王牌推论</strong>：
+            <ol>
+              <li><strong>分块行列式公式</strong>：$\operatorname{det}(M) = \operatorname{det}(A) \cdot \operatorname{det}(D - C A^{-1} B)$；</li>
+              <li><strong>分块可逆充要条件</strong>：$M$ 可逆 $\iff$ $A$ 可逆且其 Schur 补 $S_A$ 可逆；</li>
+              <li><strong>分块求逆显式闭式</strong>：
+                $$ \begin{bmatrix} A & B \\ C & D \end{bmatrix}^{-1} = \begin{bmatrix} A^{-1} + A^{-1} B S_A^{-1} C A^{-1} & -A^{-1} B S_A^{-1} \\ -S_A^{-1} C A^{-1} & S_A^{-1} \end{bmatrix} $$
+              </li>
+            </ol>
+          </div>
+
+          <h3>4.1 Woodbury 矩阵逆更新恒等式 (Woodbury Identity)</h3>
+          <p>
+            在卡尔曼滤波、在线低秩更新与强化学习中，每当矩阵增加低秩修正项 $U C V$ 时，如何<strong>无需重算全矩阵求逆</strong>而以极低计算复杂度得到新逆？Woodbury 公式是数值代数中使用频率最高的利器：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ (A + U C V)^{-1} = A^{-1} - A^{-1} U (C^{-1} + V A^{-1} U)^{-1} V A^{-1} $$
+            <strong>特例：Sherman-Morrison 秩一更新公式</strong>（当 $U=u, V=v^T, C=1$ 为向量时）：
+            $$ (A + u v^T)^{-1} = A^{-1} - \frac{A^{-1} u v^T A^{-1}}{1 + v^T A^{-1} u} $$
+            计算复杂度直接从 $O(n^3)$ 暴降为 $O(n^2)$！
+          </div>
+        </section>
+
+        <!-- Section 5: Python 实战 -->
+        <section class="content-block">
+          <h2>5. Python SciPy / NumPy 实战代码</h2>
+          <pre style="background: #090d16; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-sm); overflow-x: auto; color: #e2e8f0; font-family: monospace; font-size: 0.9rem; line-height: 1.6;"><code>import numpy as np
+import scipy.linalg as la
+
+# 1. Schur 酉三角化分解
+A = np.array([[2.0, 1.0, 3.0],
+              [0.0, 2.0, -1.0],
+              [0.0, 0.0, 5.0]])
+
+T, U = la.schur(A, output='complex')
+print("Schur 上三角矩阵 T 对角元 (特征值):", np.diag(T))
+print("酉正交验证 ||U* U - I||:", np.linalg.norm(U.conj().T @ U - np.eye(3)))
+
+# 2. Moore-Penrose 伪逆与最小范数最小二乘解
+# 构造一个 3x2 的超定长方矩阵 (高瘦)
+A_rect = np.array([[1.0, 1.0],
+                   [1.0, 2.0],
+                   [1.0, 3.0]])
+b = np.array([6.0, 0.0, 0.0]) # 矛盾方程组
+
+A_pinv = np.linalg.pinv(A_rect)
+x_opt = A_pinv @ b
+print("\nMoore-Penrose 伪逆解 x*:", x_opt)
+
+# 验证 Penrose 4 条件之首: A @ A+ @ A == A
+assert np.allclose(A_rect @ A_pinv @ A_rect, A_rect)
+print("Penrose 方程 ① A @ A+ @ A == A 检验通过!")
+
+# 3. Sherman-Morrison 秩一更新验证
+np.random.seed(42)
+n = 4
+A_rand = np.random.randn(n, n) + 4 * np.eye(n)
+u = np.random.randn(n, 1)
+v = np.random.randn(n, 1)
+
+A_inv = np.linalg.inv(A_rand)
+# 快速 Sherman-Morrison
+numerator = A_inv @ u @ v.T @ A_inv
+denominator = 1.0 + float(v.T @ A_inv @ u)
+fast_inv = A_inv - numerator / denominator
+
+# 真实全矩阵逆
+true_inv = np.linalg.inv(A_rand + u @ v.T)
+print(f"Sherman-Morrison 逆更新误差: {np.linalg.norm(fast_inv - true_inv):.2e}")
+</code></pre>
+        </section>
+
+        <!-- Section 6: 自测练习 -->
+        <section class="content-block">
+          <h2>6. 交互自测与核心理解巩固</h2>
+          <div class="card" style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(15, 23, 42, 0.5);">
+            <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem;">
+              【单选题】设矩阵 $A \in \mathbb{R}^{m \times n}$ 具有列满秩（$\operatorname{rank}(A) = n \lt m$），则其 Moore-Penrose 伪逆 $A^\dagger$ 的解析式等于下列哪一项？
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, true, '回答完全正确！当 A 列满秩时，A^T A 必然是可逆的 n 阶对称方阵，此时伪逆退化为经典的左逆 A† = (A^T A)⁻¹ A^T，对应最小二乘法正规方程投影解。')">
+              A. $A^\dagger = (A^T A)^{-1} A^T$ (左逆)
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。A A^T 是 m 阶矩阵，当 m > n 时其秩最多为 n，必然奇异不可逆，无法求逆。')">
+              B. $A^\dagger = A^T (A A^T)^{-1}$ (右逆)
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。长方阵 A 的普通逆不存在。')">
+              C. $A^\dagger = A^{-1}$
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。转置矩阵不能满足 Penrose 方程。')">
+              D. $A^\dagger = A^T$
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+          </div>
+        </section>
+
+        <!-- Navigation Footer -->
+        <footer class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <a href="ma2_spectral_radius_rayleigh.html" class="btn btn-secondary">
+            &larr; 上一专题：MA 02 谱半径与瑞利商
+          </a>
+          <a href="ma4_psd_matrix_inequalities.html" class="btn btn-primary" style="background: var(--accent-purple); border-color: var(--accent-purple);">
+            下一专题：MA 04 半正定与矩阵不等式 &rarr;
+          </a>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function checkQuiz(element, isCorrect, explanation) {
+      const feedback = document.getElementById('quizFeedback');
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+        feedback.style.color = 'var(--accent-green)';
+        feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        feedback.innerHTML = '<strong>🎉 正确！</strong> ' + explanation;
+      } else {
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerHTML = '<strong>❌ 遗憾！</strong> ' + explanation;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -390,7 +390,7 @@
                 </p>
 
                 <p style="margin-top: 0.5rem;"><strong>定理 7：四大基本子空间正交互补关系（Exercise 7-3 Prob 61）</strong><br>
-                  <span style="color: var(--accent-blue); font-weight: bold;">$(\text{Row } A)^\perp = \text{Null}(A) \quad \text{与} \quad (\text{Col } A)^\perp = \text{Null}(A^T)$</span><br>
+                  <span style="color: var(--accent-blue); font-weight: bold;">$(\text{Row } A)^\perp = \text{Null}(A)$ 与 $(\text{Col } A)^\perp = \text{Null}(A^T)$</span><br>
                   <span style="color: var(--text-muted);">证明：$\mathbf{x} \in \text{Null}(A) \iff A\mathbf{x} = \mathbf{0} \iff \text{row}_i(A) \cdot \mathbf{x} = 0 \ (\forall i) \iff \mathbf{x} \perp \text{Row}(A) \iff \mathbf{x} \in (\text{Row } A)^\perp$。对 $A^T$ 应用同理即得列空间正交补！</span>
                 </p>
               </div>
@@ -402,7 +402,7 @@
               <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.8;">
                 设 $W = \text{Span}\{\mathbf{u}_1, \mathbf{u}_2\} \subset \mathbb{R}^4$，其中 $\mathbf{u}_1 = \begin{bmatrix} 1 \\ 1 \\ -1 \\ 4 \end{bmatrix}, \mathbf{u}_2 = \begin{bmatrix} 1 \\ -1 \\ 1 \\ 2 \end{bmatrix}$。<br>
                 根据定义，$\mathbf{v} = [x_1, x_2, x_3, x_4]^T \in W^\perp \iff \mathbf{u}_1 \cdot \mathbf{v} = 0$ 且 $\mathbf{u}_2 \cdot \mathbf{v} = 0$，即齐次线性方程组：
-                $$\begin{cases} x_1 + x_2 - x_3 + 4x_4 = 0 \\ x_1 - x_2 + x_3 + 2x_4 = 0 \end{cases} \iff A\mathbf{v} = \mathbf{0} \quad \text{其中 } A = \begin{bmatrix} 1 & 1 & -1 & 4 \\ 1 & -1 & 1 & 2 \end{bmatrix}$$
+                $$\begin{cases} x_1 + x_2 - x_3 + 4x_4 = 0 \\ x_1 - x_2 + x_3 + 2x_4 = 0 \end{cases} \iff A\mathbf{v} = \mathbf{0}, \quad A = \begin{bmatrix} 1 & 1 & -1 & 4 \\ 1 & -1 & 1 & 2 \end{bmatrix}$$
                 消元化为 RREF：
                 $$\begin{bmatrix} 1 & 0 & 0 & 3 \\ 0 & 1 & -1 & 1 \end{bmatrix} \implies \begin{cases} x_1 = -3x_4 \\ x_2 = x_3 - x_4 \end{cases}$$
                 分离自由变量 $x_3, x_4$：
@@ -420,7 +420,7 @@
                 设 $W$ 是 $\mathbb{R}^n$ 的任意子空间。对空间中的<strong>任意向量 $\mathbf{u} \in \mathbb{R}^n$</strong>，存在<strong>唯一的一对向量 $\mathbf{w}, \mathbf{z}$</strong>，使得：
               </p>
               <div style="font-size: 1.2rem; text-align: center; color: var(--accent-green); margin: 0.5rem 0;">
-                $$\mathbf{u} = \mathbf{w} + \mathbf{z}, \quad \text{其中 } \mathbf{w} \in W, \ \mathbf{z} \in W^\perp$$
+                $$\mathbf{u} = \mathbf{w} + \mathbf{z}, \quad \mathbf{w} \in W, \ \mathbf{z} \in W^\perp$$
               </div>
               <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
                 称 $\mathbf{w}$ 为向量 $\mathbf{u}$ 在子空间 $W$ 上的<strong>正交投影 (Orthogonal Projection)</strong>，记作 $\mathbf{w} = \text{proj}_W(\mathbf{u}) = P_W \mathbf{u}$；称 $\mathbf{z} = \mathbf{u} - \mathbf{w}$ 为垂直残差分量。<br>
@@ -665,14 +665,338 @@
           </div>
         </div>
 
-        <!-- 3. 最小二乘法全局最优性与三大求解范式 -->
+        <!-- 3. 最小二乘法 (OLS) 从零入门、正规方程推导与工业级求解 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-green); color: #000;">最优化与算法</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">3. 最小二乘 (OLS) 最优性几何证明与三大工业级求解范式</h2>
+            <span class="badge" style="background: var(--accent-green); color: #000;">核心理论与推导</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 最小二乘法 (OLS) 从零入门：基本概念、正规方程逐步推导与工业级求解</h2>
           </div>
           <div class="card-body">
-            <h3 style="color: var(--accent-green);">3.1 勾股定理证明残差平方和全局唯一最小</h3>
+
+            <!-- 3.1 基本概念定义与现实矛盾引入 -->
+            <h3 style="color: var(--accent-green); margin-top: 0.5rem;">3.1 最小二乘法 (OLS) 究竟是什么？从现实矛盾到基本概念定义</h3>
+            
+            <p>
+              在现实的科学实验、金融量化、工程测绘与机器学习中，我们总是在嘈杂的环境中收集数据。
+              设我们观测到了 $m$ 个样本点 $(x_1, y_1), (x_2, y_2), \dots, (x_m, y_m)$，希望建立一个线性模型 $y = c + dx$ 来揭示自变量 $x$ 与因变量 $y$ 之间的本质规律。
+              若将这 $m$ 个点逐一强行代入模型，会得到一个含有 $m$ 个方程、却仅有 $2$ 个待定未知数（截距 $c$ 与斜率 $d$）的方程组：
+            </p>
+
+            <div style="font-size: 1.1rem; text-align: center; margin: 0.75rem 0;">
+              $$\begin{cases}
+              c + d x_1 = y_1 \\
+              c + d x_2 = y_2 \\
+              \quad \vdots \\
+              c + d x_m = y_m
+              \end{cases} \iff A\mathbf{x} = \mathbf{b}, \quad A = \begin{bmatrix} 1 & x_1 \\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_m \end{bmatrix}, \ \mathbf{x} = \begin{bmatrix} c \\ d \end{bmatrix}, \ \mathbf{b} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{bmatrix}$$
+            </div>
+
+            <!-- 超定矛盾与妥协的艺术 -->
+            <div class="theorem-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">⚖️ 现实困境：超定方程组 (Overdetermined System) 与“最优妥协”</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                • <strong>方程个数远超未知数个数 ($m \gt n$)</strong>：在真实世界中，数据点成百上千（$m \gg 2$），但模型参数仅有寥寥数个。这样的线性系统称为<strong>超定方程组 (Overdetermined System)</strong>。<br>
+                • <strong>测量噪声使得方程组严格矛盾无解</strong>：现实中每个点都不可避免地带有传感器误差、物理扰动或随机波动，这些点<strong>绝不可能完美落在同一条几何直线上</strong>！<br>
+                • <strong>几何本质</strong>：矩阵 $A$ 的所有列向量张成了一个二维平面 $\text{Col}(A) \subset \mathbb{R}^m$。而由真实测量数据组成的观测向量 $\mathbf{b} \in \mathbb{R}^m$ <strong>几乎 100% 悬浮在列空间平面之外（$\mathbf{b} \notin \text{Col}(A)$）</strong>！没有任何线性组合 $A\mathbf{x}$ 能够精准命中 $\mathbf{b}$。<br>
+                • <strong>思维跃迁</strong>：既然“精确解”在物理上绝无可能，人类最明智的策略就是<strong>放弃苛求完美，寻求最体面的“妥协”——寻找一个最优估计参数 $\hat{\mathbf{x}}$，使得预测值 $A\hat{\mathbf{x}}$ 距离真实观测 $\mathbf{b}$ 的总误差达到全空间最小！</strong>
+              </p>
+            </div>
+
+            <!-- 名字考据：为什么叫最小二乘？普通在哪里？ -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.3);">
+                <strong style="color: var(--accent-purple); font-size: 0.95rem;">📜 名字考据：为什么叫“最小二乘”？</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  “二乘”一词源自清代数学家<strong>李善兰</strong>在翻译西方天文学与微积分著作时的古雅用词：在古代数学中，一乘为一次方，<strong>二乘即平方</strong>，三乘即立方。英文 <strong>Least Squares</strong> 直译就是“最小平方法”。顾名思义，“最小二乘法”就是<strong>寻找一组参数，使得模型预测与实际数据之间的“残差平方和达到绝对最小的方法”</strong>！
+                </p>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.5); padding: 1.1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.3);">
+                <strong style="color: var(--accent-green); font-size: 0.95rem;">🏷️ 为什么叫“普通”最小二乘 (OLS)？</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  <strong>OLS (Ordinary Least Squares)</strong> 中的“普通 (Ordinary)”，是相对于<strong>加权最小二乘 (WLS)</strong> 与<strong>总体最小二乘 (TLS)</strong> 而言的。OLS 假定所有样本点的测量精度相同（误差等方差）、彼此独立不相关，且假设自变量 $x$ 的测量是绝对精确无误的。它是整个回归与统计理论中最标准、最纯粹的基准模型。
+                </p>
+              </div>
+            </div>
+
+            <!-- 核心术语表 -->
+            <h4 style="color: var(--accent-blue); margin-top: 1.25rem;">📚 初学者必备：最小二乘核心术语 6 大金刚</h4>
+            <div style="overflow-x: auto; margin: 0.75rem 0;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
+                <thead>
+                  <tr style="border-bottom: 2px solid var(--border-color); color: var(--text-muted);">
+                    <th style="padding: 0.6rem;">概念名称</th>
+                    <th style="padding: 0.6rem;">数学符号</th>
+                    <th style="padding: 0.6rem;">几何对应形象</th>
+                    <th style="padding: 0.6rem;">物理/统计意义</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">观测目标向量</td>
+                    <td style="padding: 0.6rem; color: #ef4444;">$\mathbf{b} = [y_1, \dots, y_m]^T$</td>
+                    <td style="padding: 0.6rem;">悬浮在列空间平面之外的目标点</td>
+                    <td style="padding: 0.6rem;">实验中传感器或市场中记录到的真实响应变量</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">设计矩阵 (特征矩阵)</td>
+                    <td style="padding: 0.6rem; color: var(--accent-blue);">$A \in \mathbb{R}^{m \times n}$</td>
+                    <td style="padding: 0.6rem;">其各列向量张成了子空间 $\text{Col}(A)$</td>
+                    <td style="padding: 0.6rem;">包含了常数偏置列和所有自变量输入特征的矩阵</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">最优参数估计</td>
+                    <td style="padding: 0.6rem; color: var(--accent-green);">$\hat{\mathbf{x}} = [\hat{c}, \hat{d}]^T$</td>
+                    <td style="padding: 0.6rem;">在列基底下的坐标系数</td>
+                    <td style="padding: 0.6rem;">令总拟合误差达到全局唯一的最佳斜率与截距</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">拟合预测向量</td>
+                    <td style="padding: 0.6rem; color: #4ade80;">$\mathbf{p} = \hat{\mathbf{y}} = A\hat{\mathbf{x}}$</td>
+                    <td style="padding: 0.6rem;">目标点向列空间平面作的<strong>正交垂足</strong></td>
+                    <td style="padding: 0.6rem;">模型在每个样本点上给出的估计预测值</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">残差向量 (Residual)</td>
+                    <td style="padding: 0.6rem; color: #fbbf24;">$\mathbf{e} = \mathbf{b} - \mathbf{p} = \mathbf{b} - A\hat{\mathbf{x}}$</td>
+                    <td style="padding: 0.6rem;">连接目标点与垂足的<strong>垂直垂线段</strong></td>
+                    <td style="padding: 0.6rem;">真实值与预测值之间的误差：$e_i = y_i - \hat{y}_i$</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.6rem; font-weight: bold; color: #f8fafc;">残差平方和 (RSS/SSE)</td>
+                    <td style="padding: 0.6rem; color: #f43f5e;">$\text{RSS} = \|\mathbf{e}\|^2 = \sum e_i^2$</td>
+                    <td style="padding: 0.6rem;">垂线段长度的欧氏模长平方</td>
+                    <td style="padding: 0.6rem;">优化算法全力以赴去最小化的核心目标损失函数</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 为什么是平方和？四大理由 -->
+            <div class="theorem-box" style="margin: 1.25rem 0; padding: 1.25rem; background: rgba(251, 191, 36, 0.05); border-left: 4px solid var(--accent-amber); border-radius: 6px;">
+              <h4 style="color: #fbbf24; margin-bottom: 0.75rem;">🤔 灵魂拷问：为什么目标函数偏偏要最小化“平方和”？为什么不是绝对值？</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                很多初学者第一反应会问：衡量误差，为什么不用绝对值之和 $\sum |e_i|$？为什么要大费周章去算平方和 $\sum e_i^2$？数学家与统计学家选择平方和，绝非偶然，背后有四大坚如磐石的理论支柱：
+              </p>
+              <div style="font-size: 0.86rem; line-height: 1.8; color: #f8fafc; margin-top: 0.5rem;">
+                <p><strong>① 微积分处处平滑可导，拥有优雅的闭式解析解 (Closed-Form Solution)：</strong><br>
+                  <span style="color: var(--text-muted);">
+                    单变量平方函数 $f(e) = e^2$ 是全实数域上的连续光滑凸函数，导数 $2e$ 极其简单，通过令导数等于 0 就能通过初等代数直接解出精确的参数公式！
+                    反观绝对值函数 $f(e) = |e|$，在不可导的尖锐拐点 $e = 0$ 处导数不存在，根本无法使用微积分偏导一步解出闭式解，必须借助复杂的线性规划算法迭代逼近。
+                  </span>
+                </p>
+                <p style="margin-top: 0.4rem;"><strong>② 惩罚大误差，维护全局均衡 (Heavy Penalty on Outliers)：</strong><br>
+                  <span style="color: var(--text-muted);">
+                    平方运算具有“放大效应”：极小的微弱误差经平方后变得更小（如 $0.1^2 = 0.01$），而较大的偏离会被平方剧烈放大（如 $4^2 = 16$）。
+                    这迫使最小二乘拟合线必须竭力贴近那些严重偏离的点，促使拟合结果在宏观均值意义上达到全局最佳平衡。
+                  </span>
+                </p>
+                <p style="margin-top: 0.4rem;"><strong>③ 统计学基石：高斯-马尔可夫定理与正态极大似然估计 (MLE)：</strong><br>
+                  <span style="color: var(--text-muted);">
+                    • <strong>高斯-马尔可夫定理 (Gauss-Markov Theorem)</strong>：在误差零均值、等方差且不相关的温和假设下，最小二乘估计量是所有线性无偏估计中<strong>方差最小的最佳线性无偏估计 (BLUE)</strong>！<br>
+                    • <strong>极大似然等价性</strong>：若随机测量误差服从高斯正态分布 $\epsilon \sim \mathcal{N}(0, \sigma^2)$，则写出似然函数取对数后，最大化对数似然在数学上与最小化残差平方和完全<strong>严格等价</strong>！
+                  </span>
+                </p>
+                <p style="margin-top: 0.4rem;"><strong>④ 几何和谐：天然呼应欧几里得范数与高维勾股定理：</strong><br>
+                  <span style="color: var(--text-muted);">
+                    欧氏空间中向量长度平方严格等于坐标平方和 $\|\mathbf{e}\|^2 = \sum e_i^2$。只有平方和能够让空间几何中的<strong>勾股定理、垂直正交、点积与投影算子</strong>天衣无缝地融为一体！
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            <!-- 3.2 正规方程的三重逐步推导 -->
+            <h3 style="color: var(--accent-blue); margin-top: 2rem;">3.2 正规方程 (Normal Equation) 的三重逐步推导：从微积分到线性代数</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              我们究竟如何解出那个最优的参数 $\hat{\mathbf{x}}$？为什么最终的核心公式总是神秘而优美的 $(A^T A)\hat{\mathbf{x}} = A^T \mathbf{b}$？
+              数学的绝妙之处在于：<strong>初等微积分、空间解析几何与高维矩阵代数，从三条截然不同的思维路径出发，最终竟然在同一处巅峰会师！</strong>
+            </p>
+
+            <!-- 路径一：初等微积分求偏导 -->
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent-blue); border-radius: 6px;">
+              <h4 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔹 路径一：初等微积分逐项求偏导推导（零门槛直觉路径）</h4>
+              <p style="font-size: 0.88rem; line-height: 1.8; color: #f8fafc;">
+                设拟合直线为 $y = c + dx$。给定 $m$ 个样本观测点 $(x_1, y_1), \dots, (x_m, y_m)$，所有点的纵向残差平方和为二元函数 $S(c, d)$：
+              </p>
+              <div style="font-size: 1.15rem; text-align: center; color: var(--accent-blue); margin: 0.5rem 0;">
+                $$S(c, d) = \sum_{i=1}^m [y_i - (c + d x_i)]^2$$
+              </div>
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc; margin-top: 0.5rem;">
+                <p><strong>第一步：对截距 $c$ 求偏导并令其等于 0</strong><br>
+                  利用链式求导法则，$[y_i - (c + dx_i)]^2$ 对 $c$ 求导得到 $2[y_i - c - dx_i] \cdot (-1)$：
+                  $$\frac{\partial S}{\partial c} = -2 \sum_{i=1}^m [y_i - c - d x_i] = 0$$
+                  两边同除以 $-2$ 并将各项求和拆开（注意常数 $c$ 累加 $m$ 次得到 $mc$）：
+                  $$\sum_{i=1}^m y_i - m c - d \sum_{i=1}^m x_i = 0 \implies m c + d \sum_{i=1}^m x_i = \sum_{i=1}^m y_i \tag{1}$$
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">（记为截距正规方程 (1)）</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第二步：对斜率 $d$ 求偏导并令其等于 0</strong><br>
+                  利用链式法则，对 $d$ 求导内部多出因式 $(-x_i)$：
+                  $$\frac{\partial S}{\partial d} = -2 \sum_{i=1}^m x_i [y_i - c - d x_i] = 0$$
+                  两边同除以 $-2$ 并拆开求和：
+                  $$\sum_{i=1}^m x_i y_i - c \sum_{i=1}^m x_i - d \sum_{i=1}^m x_i^2 = 0 \implies c \sum_{i=1}^m x_i + d \sum_{i=1}^m x_i^2 = \sum_{i=1}^m x_i y_i \tag{2}$$
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">（记为斜率正规方程 (2)）</span>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第三步：将联立方程整合成矩阵方程</strong><br>
+                  把方程 (1) 与方程 (2) 整理写为矩阵乘法：
+                  $$\begin{bmatrix} m & \sum_{i=1}^m x_i \\ \sum_{i=1}^m x_i & \sum_{i=1}^m x_i^2 \end{bmatrix} \begin{bmatrix} c \\ d \end{bmatrix} = \begin{bmatrix} \sum_{i=1}^m y_i \\ \sum_{i=1}^m x_i y_i \end{bmatrix}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第四步：揭秘与线性代数 $A^T A \mathbf{x} = A^T \mathbf{b}$ 的惊人一致性！</strong><br>
+                  写出设计矩阵 $A$ 与目标向量 $\mathbf{b}$：
+                  $$A = \begin{bmatrix} 1 & x_1 \\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_m \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} c \\ d \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{bmatrix}$$
+                  直接计算矩阵乘积 $A^T A$：
+                  $$A^T A = \begin{bmatrix} 1 & 1 & \cdots & 1 \\ x_1 & x_2 & \cdots & x_m \end{bmatrix} \begin{bmatrix} 1 & x_1 \\ 1 & x_2 \\ \vdots & \vdots \\ 1 & x_m \end{bmatrix} = \begin{bmatrix} \sum_{i=1}^m 1 & \sum_{i=1}^m x_i \\ \sum_{i=1}^m x_i & \sum_{i=1}^m x_i^2 \end{bmatrix} = \begin{bmatrix} m & \sum x_i \\ \sum x_i & \sum x_i^2 \end{bmatrix}$$
+                  计算乘积 $A^T \mathbf{b}$：
+                  $$A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & \cdots & 1 \\ x_1 & x_2 & \cdots & x_m \end{bmatrix} \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{bmatrix} = \begin{bmatrix} \sum y_i \\ \sum x_i y_i \end{bmatrix}$$
+                  <span style="color: var(--accent-green); font-weight: bold;">微积分偏导推导得到的方程组，与线性代数中的矩阵乘积 $(A^T A)\mathbf{x} = A^T \mathbf{b}$ 产生完美闭环，分毫不差！</span>
+                </p>
+              </div>
+            </div>
+
+            <!-- 路径二：几何正交投影与正规方程命名之源 -->
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(52, 211, 153, 0.05); border-left: 4px solid var(--accent-green); border-radius: 6px;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🔹 路径二：几何正交投影推导与“正规方程 (Normal Equation)”命名之源</h4>
+              <p style="font-size: 0.88rem; line-height: 1.8; color: #f8fafc;">
+                这是最富几何直觉的推导方式，也是线性代数的灵魂精髓所在：
+              </p>
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc; margin-top: 0.5rem;">
+                <p><strong>第一步：距离最短的几何充要条件是垂直！</strong><br>
+                  我们在列空间 $\text{Col}(A)$（由 $A$ 的各列向量 $\mathbf{a}_1, \mathbf{a}_2, \dots, \mathbf{a}_n$ 张成的超平面）中寻找距离目标点 $\mathbf{b}$ 最近的点 $\mathbf{p} = A\hat{\mathbf{x}}$。
+                  初等几何告诉我们，<strong>从平面外一点到平面内所有点的距离中，唯有垂足距离最短！</strong>
+                  因此，连接目标点 $\mathbf{b}$ 与垂足点 $A\hat{\mathbf{x}}$ 的<strong>误差残差向量 $\mathbf{e} = \mathbf{b} - A\hat{\mathbf{x}}$，必须垂直于整个列空间超平面！</strong>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第二步：垂直于超平面等价于垂直于张成该平面的每一个基向量</strong><br>
+                  若残差向量 $\mathbf{e}$ 垂直于整个 $\text{Col}(A)$，则 $\mathbf{e}$ 必须与构成矩阵 $A$ 的每一个列向量 $\mathbf{a}_j$ 的点积为 0：
+                  $$\mathbf{a}_1 \cdot \mathbf{e} = \mathbf{a}_1^T \mathbf{e} = 0$$
+                  $$\mathbf{a}_2 \cdot \mathbf{e} = \mathbf{a}_2^T \mathbf{e} = 0$$
+                  $$\vdots$$
+                  $$\mathbf{a}_n \cdot \mathbf{e} = \mathbf{a}_n^T \mathbf{e} = 0$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第三步：按行堆叠为矩阵乘法，正规方程横空出世！</strong><br>
+                  把这 $n$ 个等式一行一行地堆叠在一起：
+                  $$\begin{bmatrix} \mathbf{a}_1^T \\ \mathbf{a}_2^T \\ \vdots \\ \mathbf{a}_n^T \end{bmatrix} \mathbf{e} = \mathbf{0} \iff A^T \mathbf{e} = \mathbf{0}$$
+                  注意观察等式左侧：将所有列向量转置后堆叠构成的矩阵，正是转置矩阵 $A^T$！<br>
+                  现在，把残差向量的定义 $\mathbf{e} = \mathbf{b} - A\hat{\mathbf{x}}$ 代入上式：
+                  $$A^T (\mathbf{b} - A\hat{\mathbf{x}}) = \mathbf{0}$$
+                  展开括号并移项：
+                  <div style="font-size: 1.25rem; text-align: center; color: var(--accent-green); margin: 0.5rem 0;">
+                    $$A^T A \hat{\mathbf{x}} = A^T \mathbf{b}$$
+                  </div>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第四步：为什么叫“正规方程 (Normal Equation)”？</strong><br>
+                  许多初学者困惑于为什么叫“正规”。在英文中，<strong>"Normal" 一词在几何学与物理学中专门代表“法线”、“正交”、“垂直”</strong>（例如曲线的法线叫 Normal Line，三维平面的法向量叫 Normal Vector）。
+                  因为这个方程表达的正是<strong>残差向量 $\mathbf{e}$ 沿平面的“法线方向”垂直于整个列空间</strong>！所以它在几何上最贴切的称呼其实是<strong>“法线方程”</strong>！
+                </p>
+              </div>
+            </div>
+
+            <!-- 路径三：矩阵微积分梯度与黑塞矩阵 -->
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(192, 132, 252, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 6px;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">🔹 路径三：高维矩阵微积分与黑塞矩阵 (Hessian) 凸优化推导（现代机器学习视角）</h4>
+              <p style="font-size: 0.88rem; line-height: 1.8; color: #f8fafc;">
+                在现代机器学习与深度学习中，所有问题都被抽象为高维向量目标函数的凸优化：
+              </p>
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc; margin-top: 0.5rem;">
+                <p><strong>第一步：将残差平方和写作向量内积并展开</strong><br>
+                  损失函数 $f(\mathbf{x}) = \|\mathbf{b} - A\mathbf{x}\|^2 = (\mathbf{b} - A\mathbf{x})^T (\mathbf{b} - A\mathbf{x})$。<br>
+                  利用矩阵乘法分配律展开：
+                  $$f(\mathbf{x}) = \mathbf{b}^T \mathbf{b} - \mathbf{b}^T A\mathbf{x} - (A\mathbf{x})^T \mathbf{b} + (A\mathbf{x})^T (A\mathbf{x})$$
+                  由于 $\mathbf{b}^T A\mathbf{x}$ 是一个 $1 \times 1$ 的纯标量，其转置等于自身，即 $(\mathbf{b}^T A\mathbf{x})^T = \mathbf{x}^T A^T \mathbf{b} = \mathbf{b}^T A\mathbf{x}$。两项完全相等，合并为：
+                  $$f(\mathbf{x}) = \mathbf{b}^T \mathbf{b} - 2\mathbf{x}^T A^T \mathbf{b} + \mathbf{x}^T (A^T A) \mathbf{x}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第二步：计算梯度向量 $\nabla_{\mathbf{x}} f(\mathbf{x})$ 并令其为 0</strong><br>
+                  利用经典向量求导法则：$\nabla_{\mathbf{x}} (\mathbf{x}^T \mathbf{v}) = \mathbf{v}$，以及对于实对称矩阵 $M$ 有 $\nabla_{\mathbf{x}} (\mathbf{x}^T M \mathbf{x}) = 2M\mathbf{x}$：
+                  $$\nabla_{\mathbf{x}} f(\mathbf{x}) = \mathbf{0} - 2 A^T \mathbf{b} + 2 (A^T A)\mathbf{x} = \mathbf{0}$$
+                  两边同除以 2 并移项，再次得出：
+                  $$(A^T A)\mathbf{x} = A^T \mathbf{b}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>第三步：二阶充要条件证明全局唯一最小值</strong><br>
+                  对梯度再次求导，得到目标函数的黑塞矩阵 (Hessian Matrix)：
+                  $$\nabla^2 f(\mathbf{x}) = 2 A^T A$$
+                  当矩阵 $A$ 各列线性无关（列满秩）时，对于任意非零向量 $\mathbf{z} \neq \mathbf{0}$，有：
+                  $$\mathbf{z}^T (A^T A) \mathbf{z} = (A\mathbf{z})^T (A\mathbf{z}) = \|A\mathbf{z}\|^2 \gt 0$$
+                  黑塞矩阵是<strong>严格正定矩阵 ($A^T A \succ 0$)</strong>！这证明目标函数 $f(\mathbf{x})$ 是严格凸函数，具有全局碗状曲面，正规方程求出的极值点 $\hat{\mathbf{x}}$ <strong>必然是全局唯一且绝对最小的解！</strong>
+                </p>
+              </div>
+            </div>
+
+            <!-- 3.3 保姆级新手入门实战：3 点手把手手算示范与帽子矩阵 -->
+            <h3 style="color: var(--accent-green); margin-top: 2rem;">3.3 经典保姆级实操：三点最优直线拟合完整手算演练与“帽子矩阵”</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+              让我们从最简单、最透明的 3 个数据点出发，亲手体验正规方程、正交投影与残差检验的完整计算全貌！
+            </p>
+
+            <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.05); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">
+                【范例精析】给定 3 个观测样本点 $(1, 1), (2, 2), (3, 2)$，求最佳拟合直线 $y = c + dx$
+              </h4>
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                <p><strong>步骤 1：验证超定系统的矛盾性（为什么无精确解）</strong><br>
+                  若试图找到一条直线穿过这三点，列出方程：
+                  $$\begin{cases} c + 1d = 1 \\ c + 2d = 2 \\ c + 3d = 2 \end{cases}$$
+                  由前两个方程相减得 $d = 1$，代回得 $c = 0 \implies y = x$。但当代入第三个点 $x = 3$ 时，预测值 $y = 3 \neq 2$！三点不在同一条直线上，方程组无解！
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤 2：写出矩阵 $A$ 与目标观测向量 $\mathbf{b}$</strong><br>
+                  $$A = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}, \quad \mathbf{x} = \begin{bmatrix} c \\ d \end{bmatrix}, \quad \mathbf{b} = \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤 3：计算正规方程各项 $A^T A$ 与 $A^T \mathbf{b}$</strong><br>
+                  $$A^T A = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1+4+9 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}$$
+                  $$A^T \mathbf{b} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 \\ 2 \\ 2 \end{bmatrix} = \begin{bmatrix} 1+2+2 \\ 1+4+6 \end{bmatrix} = \begin{bmatrix} 5 \\ 11 \end{bmatrix}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤 4：手算二阶矩阵求逆，解出最优参数 $\hat{\mathbf{x}}$</strong><br>
+                  计算行列式：$\det(A^T A) = 3 \times 14 - 6 \times 6 = 42 - 36 = 6 \neq 0$。<br>
+                  利用二阶伴随矩阵公式求逆：
+                  $$(A^T A)^{-1} = \frac{1}{6} \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}$$
+                  求解参数向量：
+                  $$\begin{bmatrix} \hat{c} \\ \hat{d} \end{bmatrix} = (A^T A)^{-1} A^T \mathbf{b} = \frac{1}{6} \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix} \begin{bmatrix} 5 \\ 11 \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 70 - 66 \\ -30 + 33 \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 4 \\ 3 \end{bmatrix} = \begin{bmatrix} 2/3 \\ 1/2 \end{bmatrix}$$
+                  <strong style="color: var(--accent-green); font-size: 1.05rem;">最优拟合直线为：$y = \frac{2}{3} + \frac{1}{2}x$</strong>
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤 5：求拟合预测向量 $\mathbf{p}$ 与残差向量 $\mathbf{e}$</strong><br>
+                  • <strong>拟合向量（垂足）</strong>：
+                  $$\mathbf{p} = A\hat{\mathbf{x}} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} \begin{bmatrix} 2/3 \\ 1/2 \end{bmatrix} = \begin{bmatrix} 2/3 + 1/2 \\ 2/3 + 1 \\ 2/3 + 3/2 \end{bmatrix} = \begin{bmatrix} 7/6 \\ 10/6 \\ 13/6 \end{bmatrix}$$
+                  • <strong>残差向量（垂线）</strong>：
+                  $$\mathbf{e} = \mathbf{b} - \mathbf{p} = \begin{bmatrix} 1 - 7/6 \\ 2 - 10/6 \\ 2 - 13/6 \end{bmatrix} = \begin{bmatrix} -1/6 \\ 2/6 \\ -1/6 \end{bmatrix}$$
+                </p>
+
+                <p style="margin-top: 0.5rem;"><strong>步骤 6：几何正交性与残差平方和严密验算</strong><br>
+                  • 检验残差与 $A$ 的第 1 列点积：$\mathbf{a}_1 \cdot \mathbf{e} = 1(-1/6) + 1(2/6) + 1(-1/6) = \frac{-1+2-1}{6} = 0$ ✓<br>
+                  • 检验残差与 $A$ 的第 2 列点积：$\mathbf{a}_2 \cdot \mathbf{e} = 1(-1/6) + 2(2/6) + 3(-1/6) = \frac{-1+4-3}{6} = 0$ ✓<br>
+                  • 最小残差平方和 (RSS)：
+                  $$\text{RSS} = \|\mathbf{e}\|^2 = \left(-\frac{1}{6}\right)^2 + \left(\frac{2}{6}\right)^2 + \left(-\frac{1}{6}\right)^2 = \frac{1 + 4 + 1}{36} = \frac{6}{36} = \frac{1}{6} \approx 0.1667$$
+                </p>
+              </div>
+            </div>
+
+            <!-- 形象解析：帽子矩阵 (Hat Matrix) -->
+            <div style="background: rgba(192, 132, 252, 0.06); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.3); margin: 1.25rem 0;">
+              <h4 style="color: var(--accent-purple); margin-bottom: 0.5rem;">🎩 趣味形象延伸：为什么统计学家称其为“帽子矩阵 (Hat Matrix)”？</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                把预测向量公式展开：
+                $$\hat{\mathbf{y}} = \mathbf{p} = A\hat{\mathbf{x}} = \underbrace{A (A^T A)^{-1} A^T}_{H} \mathbf{y}$$
+                在统计学与计量经济学中，矩阵 $H = A(A^T A)^{-1} A^T$ 被赋予了一个极其形象的名字——<strong>帽子矩阵 (Hat Matrix)</strong>！<br>
+                为什么呢？因为在代数表达中：
+              </p>
+              <div style="font-size: 1.2rem; text-align: center; color: var(--accent-purple); margin: 0.4rem 0;">
+                $$\hat{\mathbf{y}} = H \mathbf{y}$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                <strong>矩阵 $H$ 就像一顶帽子（Hat $\hat{\ }$），往原始观测目标 $\mathbf{y}$ 的头上一扣，$\mathbf{y}$ 瞬间就变成了头顶带帽的拟合预测值 $\hat{\mathbf{y}}$！</strong><br>
+                从几何上看，$H$ 毫无疑问就是我们在 1.3 节推导的正交投影矩阵 $P_{\text{Col}(A)}$。它满足所有正交投影矩阵的代数性质：$H^2 = H$（幂等性）、$H^T = H$（对称性）、$\text{tr}(H) = \text{rank}(A) = n$！
+              </p>
+            </div>
+
+            <!-- 3.4 勾股定理证明残差平方和全局唯一最小 -->
+            <h3 style="color: var(--accent-green); margin-top: 2rem;">3.4 勾股定理证明残差平方和全局唯一最小</h3>
             <p>
               对于任意假想解 $\mathbf{x} \in \mathbb{R}^n$，我们将总误差分解为两段垂直向量：
             </p>
@@ -689,7 +1013,8 @@
               第二项恒大于等于 0！当且仅当 $A\mathbf{x} = A\hat{\mathbf{x}}$（在列满秩下即 $\mathbf{x} = \hat{\mathbf{x}}$）时等号成立。<strong>正交投影在几何与代数上均是无可挑剔的全局唯一最小二乘解！</strong>
             </p>
 
-            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 三大工业级求解范式深度对比</h3>
+            <!-- 3.5 三大工业级求解范式深度对比 -->
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.5 三大工业级求解范式深度对比</h3>
             <div style="overflow-x: auto; margin-top: 1rem;">
               <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: left;">
                 <thead>
@@ -723,8 +1048,8 @@
               </table>
             </div>
 
-            <!-- 3.3 最小二乘高次拟合与多元回归模型 (讲义 Slide 31-35) -->
-            <h3 style="color: var(--accent-blue); margin-top: 1.5rem;">3.3 最小二乘高次多项式拟合、多元回归与讲义工业算例</h3>
+            <!-- 3.6 最小二乘高次拟合与多元回归模型 (讲义 Slide 31-35) -->
+            <h3 style="color: var(--accent-blue); margin-top: 1.5rem;">3.6 最小二乘高次多项式拟合、多元回归与讲义工业算例</h3>
             <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
               最小二乘法绝不仅限于拟合直线！无论是二次抛物线、任意高阶多项式还是多个特征的多元回归，只要参数是线性的，均能统一纳入正交投影矩阵框架 $C\mathbf{a} = \mathbf{y}$！
             </p>

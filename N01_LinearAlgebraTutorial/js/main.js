@@ -96,6 +96,11 @@ const MASTER_SIDEBAR_NAV = `<div class="nav-section-title">课程导航</div>
           <span>逆矩阵、初等矩阵与可逆等价定理</span>
         </a>
         
+        <a href="ch2_3_matrix_transpose.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 2.3</span>
+          <span>矩阵转置、几何镜像与对偶伴随</span>
+        </a>
+        
         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
           Chapter 3: 行列式
         </div>
@@ -235,6 +240,11 @@ const MASTER_SIDEBAR_NAV = `<div class="nav-section-title">课程导航</div>
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.4</span>
           <span>奇异值分解 SVD、伪逆与图像低秩压缩</span>
         </a>
+        
+        <a href="ch7_5_positive_definite.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--primary);">Ch 7.5</span>
+          <span>正定与半正定矩阵、二次型几何曲面</span>
+        </a>
 
         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
           Chapter 8: 附录与工业实战
@@ -243,6 +253,45 @@ const MASTER_SIDEBAR_NAV = `<div class="nav-section-title">课程导航</div>
         <a href="ch8_1_ols_applications.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
           <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-green);">Ch 8.1</span>
           <span>OLS 股票市场涨跌归因与全景图谱</span>
+        </a>
+
+        <div class="nav-section-title" style="color: var(--accent-purple); border-top: 1px solid rgba(168, 85, 247, 0.25); padding-top: 14px; margin-top: 14px;">
+          矩阵分析进阶系列 (Matrix Analysis)
+        </div>
+
+        <a href="ma1_norms_operator_theory.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 01</span>
+          <span>向量与矩阵范数、算子理论与摄动</span>
+        </a>
+
+        <a href="ma2_spectral_radius_rayleigh.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 02</span>
+          <span>特征值变分刻画、谱半径与瑞利商</span>
+        </a>
+
+        <a href="ma3_schur_jcf_pseudoinverse.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 03</span>
+          <span>高阶矩阵分解、伪逆与 Schur 补</span>
+        </a>
+
+        <a href="ma4_psd_matrix_inequalities.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 04</span>
+          <span>半正定锥、Loewner 偏序与矩阵不等式</span>
+        </a>
+
+        <a href="ma5_kronecker_vectorization_equations.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 05</span>
+          <span>克罗内克积、向量化与矩阵方程</span>
+        </a>
+
+        <a href="ma6_matrix_calculus_optimization.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 06</span>
+          <span>矩阵微积分、全微分迹技巧与优化</span>
+        </a>
+
+        <a href="ma7_matrix_functions_dynamics.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">MA 07</span>
+          <span>矩阵函数、谱映射与微分动力系统</span>
         </a>
         
         <div class="nav-section-title">综合大模块入口 (原 Module 1-8)</div>

@@ -12,7 +12,7 @@
    - [Chapter 4: 空间、基底与坐标系 (6 个课件)](#chapter-4-空间基底与坐标系)
    - [Chapter 5: 特征值与对角化 (6 个课件)](#chapter-5-特征值与对角化)
    - [Chapter 6: 抽象向量空间与内积空间 (2 个课件)](#chapter-6-抽象向量空间与内积空间)
-   - [Chapter 7: 正交性、谱分解与 SVD (4 个课件)](#chapter-7-正交性谱分解与-svd)
+   - [Chapter 7: 正交性、谱分解与 SVD (5 个课件)](#chapter-7-正交性谱分解与-svd)
    - [综合大模块 (Module 1 ~ Module 8) 与主页 (9 个课件)](#综合大模块-module-1--module-8-与主页)
 2. [第二部分：按 PDF 讲义编号索引 (共 84 个 PDF 文件)](#第二部分按-pdf-讲义编号索引)
 
@@ -98,6 +98,21 @@
 | 28 | [ch7_2_projection_least_squares.html](ch7_2_projection_least_squares.html) | Ch 7.2: 正交投影矩阵与最小二乘法回归 | [`75_Ch07_01_orthogonality.pdf`](../References/LA2022Fall/75_Ch07_01_orthogonality.pdf)<br>[`77_Ch07_03_orthogonal_projection.pdf`](../References/LA2022Fall/77_Ch07_03_orthogonal_projection.pdf)<br>[`78_Ch07_Exercise_7-3.pdf`](../References/LA2022Fall/78_Ch07_Exercise_7-3.pdf)<br>[`79_Ch07_Exercise_7-4.pdf`](../References/LA2022Fall/79_Ch07_Exercise_7-4.pdf) | 正交补空间 W^⊥ 性质群（子空间性/自反性/维数互补）、四大基本子空间垂直互补定理、投影算子矩阵 P = C(CᵀC)⁻¹Cᵀ、投影矩阵性质 P²=P=Pᵀ、Householder 镜像反射 Q = 2P - I、最小二乘法正规方程 AᵀAx̂ = Aᵀb |
 | 29 | [ch7_3_spectral_decomposition.html](ch7_3_spectral_decomposition.html) | Ch 7.3: 实对称矩阵正交对角化与谱分解 | [`80_Ch07_04_special_matrix.pdf`](../References/LA2022Fall/80_Ch07_04_special_matrix.pdf)<br>[`81_Ch07_Exercise_7-5.pdf`](../References/LA2022Fall/81_Ch07_Exercise_7-5.pdf) | 正交矩阵 Q 的 7 大充要判据、实对称矩阵谱定理（特征值恒实、特征向量正交、必定可正交对角化 A=QDQᵀ）、外积谱分解 A = ∑ λᵢ qᵢqᵢᵀ、投影原子四大定律、正定矩阵判别、AᵀA 恒半正定定理 |
 | 30 | [ch7_4_svd_low_rank.html](ch7_4_svd_low_rank.html) | Ch 7.4: 奇异值分解 SVD、伪逆与图像低秩压缩 | [`82_Ch07_05_SVD.pdf`](../References/LA2022Fall/82_Ch07_05_SVD.pdf) | 奇异值定义 σᵢ = √(λᵢ(AᵀA))、SVD 定理 A = UΣVᵀ 构造性严密证明、旋转拉伸几何意义、完全 SVD 与紧致 SVD、Eckart-Young-Mirsky 最优低秩截断定理、摩尔-彭罗斯广义逆 A⁺ 计算与应用 |
+| 31 | [ch7_5_positive_definite.html](ch7_5_positive_definite.html) | Ch 7.5: 正定矩阵、半正定与二次型能量曲面全景指南 | [`80_Ch07_04_special_matrix.pdf`](../References/LA2022Fall/80_Ch07_04_special_matrix.pdf)<br>[`81_Ch07_Exercise_7-5.pdf`](../References/LA2022Fall/81_Ch07_Exercise_7-5.pdf) | 正定/半正定/负定/半负定/不定五大家族严格定义与 3D 碗面/水槽/马鞍面几何谱系、5 大等价判定准则 (定义/特征值/Sylvester 顺序主子式/主元/Cholesky 分解)、半正定主子式陷阱与反例、AᵀA 恒半正定与保秩可逆定理、凸优化 Hessian 矩阵与金融协方差 |
+
+---
+
+### 高阶矩阵分析进阶系列 (Matrix Analysis Series: MA 01 ~ MA 07)
+
+| 序号 | HTML 教程文件 | 章节主题 | 经典参考书目与对应理论 | 核心覆盖知识点与几何实验 |
+| :--- | :--- | :--- | :--- | :--- |
+| MA 01 | [ma1_norms_operator_theory.html](ma1_norms_operator_theory.html) | MA 01: 向量与矩阵范数、算子理论与摄动分析 | Horn & Johnson《Matrix Analysis》Ch 5<br>Golub & Van Loan《Matrix Computations》Ch 2 | 范数三公理、向量 L_p 范数、对偶范数与 Hölder 不等式、诱导算子范数（列和/谱范数/行和）椭球映射、Frobenius/核范数/Schatten 谱系、有限维范数等价性、矩阵条件数与方程组摄动界、**交互式 2D L_p 单位球凹凸性演化** |
+| MA 02 | [ma2_spectral_radius_rayleigh.html](ma2_spectral_radius_rayleigh.html) | MA 02: 特征值变分刻画、谱半径与瑞利商极值理论 | Horn & Johnson《Matrix Analysis》Ch 1 & 4<br>Bhatia《Matrix Analysis》Ch 1 | 谱半径定义、Gelfand 极限公式、矩阵幂与级数收敛充要条件、瑞利商与广义瑞利商极值、Courant-Fischer 极大极小定理、Cauchy 特征值交错定理、盖尔圆盘定理与严格对角占优、Perron-Frobenius 非负矩阵理论、**交互式 3D 瑞利商能量球面地形图** |
+| MA 03 | [ma3_schur_jcf_pseudoinverse.html](ma3_schur_jcf_pseudoinverse.html) | MA 03: 高阶矩阵分解、Moore-Penrose 伪逆与 Schur 补 | Horn & Johnson《Matrix Analysis》Ch 2 & 3<br>Ben-Israel & Greville《Generalized Inverses》 | Schur 酉三角化定理数学归纳法证明、Jordan 标准型与特征亏损本质、SVD 极分解与 Weyl 奇异值摄动界、Moore-Penrose 伪逆四方程大一统投影证明、分块初等消元 Schur 补与分块行列式/求逆、Woodbury / Sherman-Morrison 逆更新公式 |
+| MA 04 | [ma4_psd_matrix_inequalities.html](ma4_psd_matrix_inequalities.html) | MA 04: 半正定锥、Loewner 偏序与现代矩阵不等式 | Boyd《Convex Optimization》Ch 2<br>Bhatia《Positive Definite Matrices》 | 半正定凸锥 𝕊₊ⁿ 拓扑、Loewner 偏序与椭球包含几何对偶性、A ⪰ B ⇏ A² ⪰ B² 经典反例与 Löwner-Heinz 单调性定理、基于 Schur 补的正定判定与 LMI 线性矩阵不等式转化、Schur 积定理 (A ⊙ B ⪰ 0)、Hadamard / Fischer / von Neumann / Golden-Thompson 核心不等式族、**交互式 Loewner 偏序椭球包含演变实验** |
+| MA 05 | [ma5_kronecker_vectorization_equations.html](ma5_kronecker_vectorization_equations.html) | MA 05: 克罗内克积、向量化算子与代数矩阵方程 | Horn & Johnson《Topics in Matrix Analysis》Ch 4<br>Kolda & Bader《Tensor Decompositions and Applications》 | 克罗内克积 A ⊗ B 代数运算律与双边谱映射、向量化算子 vec(X) 与内积恒等式、vec(AXB) = (Bᵀ ⊗ A) vec(X) 无跳步推导、Khatri-Rao 积与多维张量 CP 因子分解、Sylvester 方程 AX + XB = C 唯一解谱不相交判据、连续/离散 Lyapunov 稳定性方程求解 |
+| MA 06 | [ma6_matrix_calculus_optimization.html](ma6_matrix_calculus_optimization.html) | MA 06: 矩阵微积分、全微分迹技巧与高阶凸优化 | Magnus & Neudecker《Matrix Differential Calculus》<br>Boyd《Convex Optimization》Ch 3 | 分子/分母布局规范消歧、全微分法与迹技巧 df = tr((∂f/∂X)ᵀ dX)、矩阵乘积/逆/行列式/对数行列式常用微分公式表、二次型与 ln det(X) 导数推导、矩阵 Hessian 与函数凸性、多元高斯协方差极大似然估计 (MLE) 闭式求解、低秩核范数松弛与矩阵补全优化 |
+| MA 07 | [ma7_matrix_functions_dynamics.html](ma7_matrix_functions_dynamics.html) | MA 07: 矩阵函数、谱映射与微分动力系统 | Higham《Functions of Matrices: Theory and Computation》<br>Strogatz《Nonlinear Dynamics and Chaos》 | 矩阵函数 f(A) 的 Taylor/谱分解/Cauchy 围道预解式三位一体定义、Cayley-Hamilton 定理与最小多项式降次算法、矩阵指数 e^(At) 状态转移解、一阶线性常微分方程组 dx/dt = Ax、相平面轨迹拓扑（稳定汇/鞍点/螺旋源/极限环）、李雅普诺夫渐近稳定性、**交互式 2D 相平面流场实验** |
 
 ---
 

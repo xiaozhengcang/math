@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 7.5: 正定矩阵、半正定与二次型能量曲面全景指南 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+  <style>
+    /* Custom Scoped Styles for Ch 7.5 Positive Definite */
+    .definiteness-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    
+    .def-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    .def-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .def-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .criteria-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem;
+      margin: 1rem 0;
+    }
+
+    /* Interactive Lab Containers */
+    .lab-dual-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .lab-canvas-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .lab-canvas-box canvas {
+      background: #060911;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 440px;
+      height: 300px;
+      display: block;
+      cursor: grab;
+    }
+    .lab-canvas-box canvas:active {
+      cursor: grabbing;
+    }
+
+    .lab-controls-panel {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .preset-btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .preset-btn {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 0.4rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .preset-btn:hover, .preset-btn.active {
+      background: var(--accent-blue);
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-blue);
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .def-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.88rem;
+    }
+    .def-table th, .def-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 0.9rem;
+      text-align: left;
+    }
+    .def-table th {
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .def-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Origin and Physical Energy Diagrams */
+    .origin-diagram-svg {
+      width: 100%;
+      max-width: 820px;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .concept-origin-card {
+      background: rgba(30, 41, 59, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      margin: 1.25rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <!-- Replaced dynamically by js/main.js -->
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <header class="top-nav">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>/</span>
+          <a href="ch7_3_spectral_decomposition.html">Chapter 7</a>
+          <span>/</span>
+          <span style="color: var(--text-main);">Ch 7.5 正定矩阵与二次型</span>
+        </div>
+        <div class="nav-actions">
+          <button class="theme-toggle" id="theme-toggle" title="切换主题">🌓</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(56, 189, 248, 0.08)); border-bottom: 1px solid rgba(16, 185, 129, 0.3);">
+          <div class="module-badge" style="background: var(--accent-green); color: #000; font-weight: 700;">Chapter 7 核心进阶</div>
+          <h1 class="module-title" style="margin-top: 0.5rem;">Ch 7.5: 正定矩阵、半正定与二次型能量曲面全景指南</h1>
+          <p class="module-subtitle" style="max-width: 820px;">
+            彻底告别死记硬背！从一元导数极值到高维二次型，从 3D 碗面、水槽到马鞍面，五大定性家族定义、判别法与 $A^T A$ 几何底蕴完全贯通。
+          </p>
+        </div>
+
+        <!-- 导言：为什么需要正定性？ -->
+        <div class="card" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">认知溯源</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">0. 为什么需要“正定”？高维空间中“大于零”的终极推广</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.98rem; line-height: 1.85;">
+              在初中和高中一元微积分中，我们要判断一个光滑函数 $f(x)$ 在驻点 $f'(x_0) = 0$ 处是否是<strong>局部极小值</strong>，只需观察二阶导数：
+              $$f''(x_0) \gt 0$$
+              如果 $f''(x_0) \lt 0$，则是开口向下的极大值；如果 $f''(x_0) = 0$，则可能产生拐点或平坦带。
+            </p>
+            <p style="font-size: 0.98rem; line-height: 1.85;">
+              现在，把视角推向<strong>多维世界</strong>（如机器学习优化损失函数 $L(\theta_1, \theta_2, \dots, \theta_n)$，或者物理系统的势能面）：
+              一阶导数变成了<strong>梯度向量 $\nabla f = \mathbf{0}$</strong>；而二阶导数则演化成一个由所有二阶偏导数构成的 $n \times n$ 对称矩阵——<strong>海森矩阵 (Hessian Matrix) $H$</strong>！
+            </p>
+            <div style="background: rgba(56, 189, 248, 0.08); border-left: 4px solid var(--accent-blue); padding: 1rem 1.25rem; border-radius: 4px; margin: 1.25rem 0; font-size: 0.94rem; line-height: 1.8;">
+              <strong style="color: var(--accent-blue);">💡 核心几何挑战：</strong><br>
+              在一维直线上，你只能向左走或向右走；但在 $n$ 维空间中，你有<strong>无穷无尽个方向</strong>可以出发！<br>
+              怎样才能保证：<strong>“无论你从驻点沿着空间的哪一个方向迈出一步，函数能量都百分之百在往上增加？”</strong><br>
+              这就是<strong>正定矩阵 (Positive Definite Matrix)</strong> 诞生的物理与几何天职！它是多元数学中对标量“实数大于零 ($c \gt 0$)”最深刻、最严密的终极推广。
+            </div>
+          </div>
+        </div>
+
+                <!-- 第一章：二次型与能量本源 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">第一章 · 追根溯源</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 为什么需要二次型？“能量表达式”到底是在做什么？</h2>
+          </div>
+          <div class="card-body">
+            
+            <div style="background: rgba(56, 189, 248, 0.07); border-left: 4px solid var(--accent-blue); padding: 1.1rem 1.3rem; border-radius: 4px; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.85;">
+              <strong style="color: var(--accent-blue); font-size: 1rem;">🎯 核心直觉认知：</strong><br>
+              初学者面对公式 $\mathbf{x}^T A \mathbf{x}$ 时，最困惑的往往是两个问题：<br>
+              1. <strong>为什么要在向量两边做这种“左边横着乘、右边竖着乘”的三明治夹心乘法？</strong><br>
+              2. <strong>为什么所有教科书都管它叫“能量表达式 (Energy Expression)”？它测量的究竟是什么能量？</strong><br>
+              本节将从<strong>物理力学系统的弹性势能</strong>、<strong>多元微积分的极值造碗</strong>与<strong>解析几何倾斜椭圆</strong>三大真实历史源头，彻底还原二次型的诞生逻辑！
+            </div>
+
+            <!-- 1.1 物理力学本源 -->
+            <div class="concept-origin-card">
+              <h3 style="color: var(--accent-amber); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>⚙️</span> 1.1 真实物理之源：多质点耦合弹性振动与刚度矩阵的诞生
+              </h3>
+              <p style="font-size: 0.93rem; line-height: 1.85; color: var(--text-muted);">
+                先回忆初中物理的单弹簧模型：拉长距离 $x$，恢复弹力为 $F = kx$。根据做功公式 $W = \int F \, dx = \int kx \, dx = \frac{1}{2}kx^2$，弹簧积蓄的弹性势能就是一个纯粹的二次项：$E = \frac{1}{2}kx^2$。<strong>为什么势能天生是二次的？因为力与位移成正比，对位移积分一次必然升为二次方！</strong>
+              </p>
+              <p style="font-size: 0.93rem; line-height: 1.85; color: var(--text-muted);">
+                现在，我们把问题推向真实工程场景（如桥梁桁架、汽车悬挂或分子化学键）：考虑一个<strong>两个小球串联在两堵固定墙壁之间</strong>的三弹簧振动系统：
+              </p>
+
+              <!-- SVG 1: 耦合弹簧与刚度矩阵诞生图 -->
+              <svg class="origin-diagram-svg" viewBox="0 0 800 340" xmlns="http://www.w3.org/2000/svg">
+                <!-- Background Panel -->
+                <rect x="0" y="0" width="800" height="340" rx="8" fill="#090d16" stroke="rgba(255,255,255,0.08)" />
+                
+                <!-- Title -->
+                <text x="30" y="32" fill="#38bdf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">
+                  物理力学图解：多质点耦合弹簧系统如何天然孕育出二次型与刚度矩阵 K
+                </text>
+
+                <!-- Left Wall -->
+                <rect x="25" y="55" width="18" height="90" fill="rgba(148, 163, 184, 0.2)" stroke="#64748b" stroke-width="2" />
+                <line x1="20" y1="65" x2="25" y2="60" stroke="#64748b" stroke-width="1.5" />
+                <line x1="20" y1="85" x2="25" y2="80" stroke="#64748b" stroke-width="1.5" />
+                <line x1="20" y1="105" x2="25" y2="100" stroke="#64748b" stroke-width="1.5" />
+                <line x1="20" y1="125" x2="25" y2="120" stroke="#64748b" stroke-width="1.5" />
+                <line x1="20" y1="145" x2="25" y2="140" stroke="#64748b" stroke-width="1.5" />
+
+                <!-- Right Wall -->
+                <rect x="755" y="55" width="18" height="90" fill="rgba(148, 163, 184, 0.2)" stroke="#64748b" stroke-width="2" />
+                <line x1="773" y1="65" x2="778" y2="60" stroke="#64748b" stroke-width="1.5" />
+                <line x1="773" y1="85" x2="778" y2="80" stroke="#64748b" stroke-width="1.5" />
+                <line x1="773" y1="105" x2="778" y2="100" stroke="#64748b" stroke-width="1.5" />
+                <line x1="773" y1="125" x2="778" y2="120" stroke="#64748b" stroke-width="1.5" />
+                <line x1="773" y1="145" x2="778" y2="140" stroke="#64748b" stroke-width="1.5" />
+
+                <!-- Spring 1 (Cyan) -->
+                <path d="M 43,100 L 70,100 L 80,85 L 100,115 L 120,85 L 140,115 L 160,85 L 180,115 L 190,100 L 210,100" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <text x="110" y="72" fill="#38bdf8" font-size="12" font-weight="700" text-anchor="middle">弹簧 k₁</text>
+                <text x="110" y="132" fill="#94a3b8" font-size="11" text-anchor="middle">势能 E₁ = ½ k₁ x₁²</text>
+
+                <!-- Mass 1 -->
+                <rect x="210" y="75" width="80" height="50" rx="6" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2" />
+                <text x="250" y="98" fill="#e2e8f0" font-size="12" font-weight="700" text-anchor="middle">质点 m₁</text>
+                <text x="250" y="116" fill="#38bdf8" font-size="11" font-weight="700" text-anchor="middle">位移 x₁</text>
+
+                <!-- Spring 12 (Amber - Coupling Spring) -->
+                <path d="M 290,100 L 320,100 L 330,85 L 350,115 L 370,85 L 390,115 L 410,85 L 430,115 L 450,85 L 470,115 L 480,100 L 510,100" fill="none" stroke="#fbbf24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <text x="400" y="68" fill="#fbbf24" font-size="12" font-weight="700" text-anchor="middle">耦合弹簧 k₁₂ (相互作用)</text>
+                <rect x="300" y="120" width="200" height="24" rx="4" fill="rgba(251, 191, 36, 0.15)" stroke="rgba(251, 191, 36, 0.4)" />
+                <text x="400" y="136" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">形变 (x₁ - x₂) → 势能 E₁₂</text>
+
+                <!-- Mass 2 -->
+                <rect x="510" y="75" width="80" height="50" rx="6" fill="rgba(52, 211, 153, 0.2)" stroke="#34d399" stroke-width="2" />
+                <text x="550" y="98" fill="#e2e8f0" font-size="12" font-weight="700" text-anchor="middle">质点 m₂</text>
+                <text x="550" y="116" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">位移 x₂</text>
+
+                <!-- Spring 2 (Emerald) -->
+                <path d="M 590,100 L 615,100 L 625,85 L 645,115 L 665,85 L 685,115 L 705,85 L 725,115 L 735,100 L 755,100" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                <text x="675" y="72" fill="#34d399" font-size="12" font-weight="700" text-anchor="middle">弹簧 k₂</text>
+                <text x="675" y="132" fill="#94a3b8" font-size="11" text-anchor="middle">势能 E₂ = ½ k₂ x₂²</text>
+
+                <!-- Equilibrium Dashed Lines -->
+                <line x1="250" y1="125" x2="250" y2="175" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" />
+                <line x1="550" y1="125" x2="550" y2="175" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" />
+                <text x="250" y="170" fill="#64748b" font-size="11" text-anchor="middle">平衡位 x₁=0</text>
+                <text x="550" y="170" fill="#64748b" font-size="11" text-anchor="middle">平衡位 x₂=0</text>
+
+                <!-- Bottom Mathematical Synthesis Box -->
+                <rect x="25" y="185" width="750" height="135" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(255,255,255,0.12)" />
+                
+                <text x="45" y="212" fill="#e2e8f0" font-size="13" font-weight="700">
+                  全系统总弹性势能分解与矩阵化：
+                </text>
+                <text x="45" y="238" fill="#94a3b8" font-size="12" font-family="var(--font-mono)">
+                  总势能 E = E₁ + E₁₂ + E₂ = ½ k₁ x₁² + ½ k₁₂(x₁ - x₂)² + ½ k₂ x₂²
+                </text>
+                <text x="45" y="262" fill="#fbbf24" font-size="12" font-weight="700" font-family="var(--font-mono)">
+                  展开相对位移平方：½ k₁₂ [x₁² - 2x₁x₂ + x₂²]   ← 这里的 -2x₁x₂ 交叉项，正是两个小球相互拉扯耦合的数学体现！
+                </text>
+                <text x="45" y="286" fill="#38bdf8" font-size="12" font-weight="700" font-family="var(--font-mono)">
+                  合并同类项后提纯为矩阵二次型：E = ½ [x₁, x₂] · [ (k₁+k₁₂) ,  -k₁₂ ;  -k₁₂ , (k₂+k₁₂) ] · [x₁; x₂] = ½ xᵀ K x
+                </text>
+                <text x="45" y="308" fill="#34d399" font-size="11.5" font-weight="600">
+                  ★ 结论：对角线是每个质点各自受到的总刚度；非对角线是对称的互感阻抗！这就是“能量表达式”与“刚度矩阵 K”的物理原貌！
+                </text>
+              </svg>
+
+              <div style="background: rgba(16, 185, 129, 0.08); border-radius: 4px; border-left: 4px solid var(--accent-green); padding: 1rem 1.25rem; margin-top: 1rem;">
+                <strong style="color: var(--accent-green); font-size: 0.95rem;">💡 灵魂发问：“正定性”在这里到底在做什么？</strong>
+                <p style="font-size: 0.9rem; line-height: 1.8; color: var(--text-muted); margin-top: 0.4rem;">
+                  根据拉格朗日力学，系统的合力是势能梯度的负值：$\mathbf{F} = -\nabla E = -K \mathbf{x}$。<br>
+                  • <strong>如果刚度矩阵 $K$ 正定 ($K \succ 0$)</strong>：只要质点发生任何非零位移 $\mathbf{x} \neq \mathbf{0}$，总能量 $E = \frac{1}{2}\mathbf{x}^T K \mathbf{x} \gt 0$ 恒大于零！这意味着<strong>外界必须克服弹力做正功才能拉偏系统</strong>；一旦撤掉外力，受力 $\mathbf{F} = -K\mathbf{x}$ 永远产生<strong>指向平衡点 $(0,0)$ 的恢复力</strong>，系统必然平稳地振荡并回到原点——<strong>这就是物理结构稳态平衡的数学本质！</strong><br>
+                  • <strong>如果刚度矩阵 $K$ 非正定（存在负特征值）</strong>：说明沿着某些位移方向，能量不仅不增加，反而小于零！这意味着系统会自发顺着该方向加速逃逸，结构在受到哪怕最微小的扰动时都会直接<strong>失稳崩塌 (Structural Collapse / Buckling)</strong>！
+                </p>
+              </div>
+            </div>
+
+            <!-- 1.2 微积分与最优化之源 -->
+            <div class="concept-origin-card" style="margin-top: 1.5rem;">
+              <h3 style="color: var(--accent-blue); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>🏔️</span> 1.2 微积分与最优化之源：为什么一次项造不出“平衡”，必须二阶“造碗”？
+              </h3>
+              <p style="font-size: 0.93rem; line-height: 1.85; color: var(--text-muted);">
+                在多元微积分和机器学习（如梯度下降算法寻找最优权重）中，我们总是在寻找损失函数的<strong>局部极小值（最优解）</strong>。为什么线性函数完全无能为力？
+              </p>
+
+              <!-- SVG 2: 三种地形对比图 -->
+              <svg class="origin-diagram-svg" viewBox="0 0 800 270" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <marker id="arrow-red" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                    <polygon points="0 0, 6 3, 0 6" fill="#f43f5e" />
+                  </marker>
+                </defs>
+                <rect x="0" y="0" width="800" height="270" rx="8" fill="#090d16" stroke="rgba(255,255,255,0.08)" />
+
+                <text x="30" y="30" fill="#38bdf8" font-size="14" font-weight="700" font-family="system-ui, sans-serif">
+                  多维几何曲面形态对比：为什么必须依赖二次型才能造出“极值与汇聚碗”？
+                </text>
+
+                <!-- Panel 1: 一阶线性倾斜面 -->
+                <rect x="25" y="50" width="235" height="200" rx="6" fill="rgba(244, 63, 94, 0.06)" stroke="rgba(244, 63, 94, 0.3)" />
+                <text x="142" y="75" fill="#f43f5e" font-size="13" font-weight="700" text-anchor="middle">一阶线性函数 (Flat Slope)</text>
+                <text x="142" y="93" fill="#94a3b8" font-size="11" text-anchor="middle">z = c₁x₁ + c₂x₂ = cᵀx</text>
+                <!-- Tilted plane illustration -->
+                <polygon points="50,165 190,120 230,150 90,195" fill="rgba(244, 63, 94, 0.2)" stroke="#f43f5e" stroke-width="1.5" />
+                <line x1="80" y1="175" x2="180" y2="135" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,3" />
+                <!-- Rolling ball -->
+                <circle cx="150" cy="147" r="8" fill="#f43f5e" />
+                <line x1="150" y1="147" x2="90" y2="171" stroke="#f43f5e" stroke-width="2" marker-end="url(#arrow-red)" />
+                <text x="142" y="218" fill="#f43f5e" font-size="11" font-weight="700" text-anchor="middle">致命缺陷：没有极值点！</text>
+                <text x="142" y="235" fill="#94a3b8" font-size="10.5" text-anchor="middle">到处是无底斜坡，小球滚向 -∞</text>
+
+                <!-- Panel 2: 二阶正定二次型 (碗) -->
+                <rect x="282" y="50" width="236" height="200" rx="6" fill="rgba(52, 211, 153, 0.08)" stroke="rgba(52, 211, 153, 0.4)" />
+                <text x="400" y="75" fill="#34d399" font-size="13" font-weight="700" text-anchor="middle">二阶正定二次型 (Energy Bowl)</text>
+                <text x="400" y="93" fill="#94a3b8" font-size="11" text-anchor="middle">z = ½ xᵀ A x &gt; 0 (A ≻ 0)</text>
+                <!-- Parabolic bowl contours -->
+                <ellipse cx="400" cy="140" rx="75" ry="30" fill="none" stroke="rgba(52, 211, 153, 0.4)" stroke-width="1.5" />
+                <ellipse cx="400" cy="152" rx="45" ry="18" fill="none" stroke="rgba(52, 211, 153, 0.6)" stroke-width="1.5" />
+                <ellipse cx="400" cy="162" rx="20" ry="8" fill="none" stroke="rgba(52, 211, 153, 0.9)" stroke-width="1.5" />
+                <!-- Center bottom point -->
+                <circle cx="400" cy="162" r="4" fill="#fbbf24" />
+                <!-- Inward forces -->
+                <line x1="340" y1="140" x2="385" y2="157" stroke="#34d399" stroke-width="1.5" />
+                <line x1="460" y1="140" x2="415" y2="157" stroke="#34d399" stroke-width="1.5" />
+                <text x="400" y="218" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">向心收敛：稳定能量碗！</text>
+                <text x="400" y="235" fill="#94a3b8" font-size="10.5" text-anchor="middle">四周上扬，(0,0) 是唯一绝对底点</text>
+
+                <!-- Panel 3: 二阶不定马鞍面 -->
+                <rect x="540" y="50" width="235" height="200" rx="6" fill="rgba(251, 191, 36, 0.06)" stroke="rgba(251, 191, 36, 0.3)" />
+                <text x="657" y="75" fill="#fbbf24" font-size="13" font-weight="700" text-anchor="middle">二阶不定二次型 (Saddle)</text>
+                <text x="657" y="93" fill="#94a3b8" font-size="11" text-anchor="middle">特征值一正一负 (λ₁ &gt; 0, λ₂ &lt; 0)</text>
+                <!-- Saddle curves -->
+                <path d="M 570,135 Q 657,175 745,135" fill="none" stroke="#38bdf8" stroke-width="2" />
+                <path d="M 657,110 Q 657,155 657,200" fill="none" stroke="#f43f5e" stroke-width="2" />
+                <circle cx="657" cy="155" r="4" fill="#fbbf24" />
+                <text x="600" y="145" fill="#38bdf8" font-size="10">上扬轴</text>
+                <text x="670" y="185" fill="#f43f5e" font-size="10">坠落轴</text>
+                <text x="657" y="218" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">方向冲突：摇摆失稳鞍点！</text>
+                <text x="657" y="235" fill="#94a3b8" font-size="10.5" text-anchor="middle">一个方向上坡，另一个方向落崖</text>
+              </svg>
+
+              <div style="font-size: 0.91rem; line-height: 1.85; color: var(--text-muted); margin-top: 0.8rem;">
+                根据多元泰勒公式，任何光滑函数 $f(\mathbf{x})$ 在驻点（一阶导数 $\nabla f = \mathbf{0}$）处的局部展开为：
+                $$f(\mathbf{x}_0 + \Delta\mathbf{x}) \approx f(\mathbf{x}_0) + \nabla f(\mathbf{x}_0)^T \Delta\mathbf{x} + \frac{1}{2} \Delta\mathbf{x}^T H \Delta\mathbf{x}$$
+                • <strong>常数项</strong>只决定绝对标高，没有趋势；<br>
+                • <strong>一次项</strong>是倾斜的平面，只有斜率没有弯曲，无法制造任何“极值底点”；<br>
+                • <strong>二次型</strong>是数学上能够制造<strong>曲率 (Curvature)</strong> 与<strong>封闭聚拢容器</strong>的最简结构！海森矩阵 $H$ 是否正定，决定了这里的地形是一个能困住小球的“聚宝盆（极小值）”，还是一个滑脱的“马鞍垭口（鞍点）”。
+              </div>
+            </div>
+
+            <!-- 1.3 解析几何之源 -->
+            <div class="concept-origin-card" style="margin-top: 1.5rem;">
+              <h3 style="color: var(--accent-purple); margin-bottom: 0.6rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span>📐</span> 1.3 解析几何之源：从标准正圆到任意倾斜的旋转椭圆
+              </h3>
+              <p style="font-size: 0.93rem; line-height: 1.85; color: var(--text-muted);">
+                我们最熟悉的欧氏距离平方：$\|\mathbf{x}\|^2 = x_1^2 + x_2^2 = \mathbf{x}^T I \mathbf{x} = 1$（矩阵为单位阵 $I$），几何上是一圈完美的<strong>正圆</strong>。<br>
+                如果各个轴的尺度不同，如 $\frac{x_1^2}{a^2} + \frac{x_2^2}{b^2} = 1$，则是一个端端正正水平摆放的<strong>标准椭圆</strong>（此时对应对角矩阵）。<br>
+                但是，现实中数据特征之间往往<strong>互相影响</strong>（比如在统计学中，身高与体重天然正相关）。在几何坐标系中，这相当于把椭圆<strong>逆时针旋转了一个倾斜角 $\theta$</strong>！
+              </p>
+              <div style="background: rgba(168, 85, 247, 0.08); border-left: 4px solid var(--accent-purple); border-radius: 4px; padding: 0.9rem 1.2rem; margin: 0.8rem 0; font-size: 0.9rem; line-height: 1.8; color: var(--text-muted);">
+                一旦将坐标旋转 $[x_1, x_2]^T = R_\theta [y_1, y_2]^T$ 代入标准椭圆方程，原本干净的平方项就会展开出<strong>交叉互乘项 $x_1 x_2$</strong>：
+                $$a x_1^2 + 2b x_1 x_2 + c x_2^2 = 1 \iff \begin{bmatrix} x_1 & x_2 \end{bmatrix} \begin{bmatrix} a & b \\ b & c \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix} = 1$$
+                <strong>解析几何结论：</strong>二次型 $\mathbf{x}^T A \mathbf{x}$ 的本质，就是<strong>全空间所有倾斜二次曲面（椭圆、双曲线、抛物线）的母代数方程</strong>！而“正定性”正是约束这个方程必须是<strong>有界、闭合的实椭圆</strong>（而非散发到无穷远处的双曲线）的充要条件。
+              </div>
+            </div>
+
+            <!-- 1.4 二次型严格定义与矩阵对称性 -->
+            <div class="criteria-box" style="margin-top: 1.5rem;">
+              <h4 style="color: var(--accent-amber); margin-bottom: 0.4rem;">📐 1.4 二次型的现代代数定义 (Quadratic Form)</h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                关于向量 $\mathbf{x} = [x_1, x_2, \dots, x_n]^T$ 的<strong>二次型</strong>，是一个每一项均为二次项的齐次多项式函数 $q(\mathbf{x})$：
+                $$q(\mathbf{x}) = \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j = \mathbf{x}^T A \mathbf{x}$$
+                以二维平面向量 $\mathbf{x} = [x_1, x_2]^T$ 为例：
+                $$q(x_1, x_2) = a x_1^2 + 2b x_1 x_2 + c x_2^2 = \begin{bmatrix} x_1 & x_2 \end{bmatrix} \begin{bmatrix} a & b \\ b & c \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \end{bmatrix}$$
+              </p>
+            </div>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border-left: 4px solid var(--accent-rose); padding: 1.1rem; border-radius: 4px; margin: 1.25rem 0;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.4rem;">⚠️ 关键疑问：为什么矩阵 $A$ 必须要求是对称矩阵？</h4>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                如果在二次型中间随便放一个非对称矩阵，比如 $M = \begin{bmatrix} 3 & 5 \\ 1 & 3 \end{bmatrix}$，计算二次型：
+                $$\mathbf{x}^T M \mathbf{x} = 3x_1^2 + (5 + 1)x_1 x_2 + 3x_2^2 = 3x_1^2 + 6x_1 x_2 + 3x_2^2$$
+                看！交叉项只取决于 $5 + 1 = 6$！如果换成对称矩阵 $A = \begin{bmatrix} 3 & 3 \\ 3 & 3 \end{bmatrix}$，其计算出的多项式<strong>完全一模一样</strong>！<br>
+                <strong>数学本质：</strong>任何实方阵 $M$ 都可以拆成对称部 $S = \frac{M + M^T}{2}$ 与反对称部 $K = \frac{M - M^T}{2}$。由于反对称矩阵的二次型恒等于零（$\mathbf{x}^T K \mathbf{x} \equiv 0$），非对称部分的差异在二次型中会被<strong>完全抹除</strong>！<br>
+                而非对称矩阵具有虚数特征值、轴不垂直等病态特性。因此在线性代数与最优化中，<strong>所有关于定性（正定、半正定、负定）的讨论，一律严格建立在实对称矩阵的基础之上！</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第二章：五大定性家族严格定义与几何谱系 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第二章 · 核心谱系</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 五大定性家族严格数学定义与 3D 几何曲面谱系</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.85;">
+              设 $A$ 为 $n$ 阶实对称矩阵。根据其二次型能量 $q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$ 在整个空间中的取值符号分布，对称矩阵被清晰严谨地划分为以下<strong>五大定性家族</strong>：
+            </p>
+
+            <div class="def-card-grid">
+              
+              <!-- 1. 正定 -->
+              <div class="def-card" style="border-top: 4px solid var(--accent-green); background: rgba(52, 211, 153, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="color: var(--accent-green); margin: 0;">1. 正定 (Positive Definite)</h4>
+                  <span class="definiteness-badge" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">$A \succ 0$</span>
+                </div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">
+                  严格定义：对任意非零向量 $\mathbf{x} \neq \mathbf{0}$，恒有 $\mathbf{x}^T A \mathbf{x} \gt 0$
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                  • <strong>几何直觉：深邃的向上碗面</strong>。整个二次曲面 $z = \mathbf{x}^T A \mathbf{x}$ 如同开口向上的椭圆抛物面，原点 $(0,0)$ 是全局唯一的最低点，四周无论沿什么方向都是上坡！<br>
+                  • <strong>特征值特征：</strong>所有特征值全部严格为正（$\lambda_1, \dots, \lambda_n \gt 0$）。<br>
+                  • <strong>等高线：</strong>闭合的同心椭圆族。
+                </p>
+              </div>
+
+              <!-- 2. 半正定 -->
+              <div class="def-card" style="border-top: 4px solid var(--accent-amber); background: rgba(251, 191, 36, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="color: var(--accent-amber); margin: 0;">2. 半正定 (Positive Semi-Definite)</h4>
+                  <span class="definiteness-badge" style="background: rgba(251, 191, 36, 0.2); color: #fbbf24;">$A \succeq 0$</span>
+                </div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">
+                  严格定义：对所有 $\mathbf{x}$，恒有 $\mathbf{x}^T A \mathbf{x} \ge 0$，且存在非零 $\mathbf{v} \neq \mathbf{0}$ 使 $\mathbf{v}^T A \mathbf{v} = 0$
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                  • <strong>几何直觉：平底的抛物线水槽</strong>。水槽不漏水（高度永远不为负），但水槽底部是一条水平延伸的槽沟（即零空间 $\operatorname{Null}(A)$）。沿着槽底走，高度恒为 0！<br>
+                  • <strong>特征值特征：</strong>所有特征值 $\lambda_i \ge 0$，且至少有一个特征值恰好等于 0。<br>
+                  • <strong>等高线：</strong>平行的直线带（退化的椭圆）。
+                </p>
+              </div>
+
+              <!-- 3. 负定 -->
+              <div class="def-card" style="border-top: 4px solid var(--accent-blue); background: rgba(56, 189, 248, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="color: var(--accent-blue); margin: 0;">3. 负定 (Negative Definite)</h4>
+                  <span class="definiteness-badge" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8;">$A \prec 0$</span>
+                </div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">
+                  严格定义：对任意非零向量 $\mathbf{x} \neq \mathbf{0}$，恒有 $\mathbf{x}^T A \mathbf{x} \lt 0$
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                  • <strong>几何直觉：倒扣的圆顶碗面</strong>。原点是空间的最高峰，向任何方向迈步都是下坡！<br>
+                  • <strong>特征值特征：</strong>所有特征值全部严格为负（$\lambda_i \lt 0$）。<br>
+                  • 等价关系：$A \prec 0 \iff -A \succ 0$。
+                </p>
+              </div>
+
+              <!-- 4. 半负定 -->
+              <div class="def-card" style="border-top: 4px solid var(--accent-purple); background: rgba(192, 132, 252, 0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="color: var(--accent-purple); margin: 0;">4. 半负定 (Negative Semi-Definite)</h4>
+                  <span class="definiteness-badge" style="background: rgba(192, 132, 252, 0.2); color: #c084fc;">$A \preceq 0$</span>
+                </div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">
+                  严格定义：对所有 $\mathbf{x}$，恒有 $\mathbf{x}^T A \mathbf{x} \le 0$，且存在非零 $\mathbf{v} \neq \mathbf{0}$ 使 $\mathbf{v}^T A \mathbf{v} = 0$
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                  • <strong>几何直觉：倒扣的抛物线水槽</strong>。高度永远不超过 0，槽脊上的向量能量全为 0。<br>
+                  • <strong>特征值特征：</strong>所有特征值 $\lambda_i \le 0$，且至少有一个特征值等于 0。
+                </p>
+              </div>
+
+              <!-- 5. 不定 -->
+              <div class="def-card" style="border-top: 4px solid var(--accent-rose); background: rgba(244, 63, 94, 0.05); grid-column: 1 / -1;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h4 style="color: var(--accent-rose); margin: 0;">5. 不定 (Indefinite) —— 著名的双曲马鞍面</h4>
+                  <span class="definiteness-badge" style="background: rgba(244, 63, 94, 0.2); color: #f43f5e;">正负交织</span>
+                </div>
+                <div style="font-size: 0.88rem; font-weight: 700; color: #fff; margin: 0.5rem 0;">
+                  严格定义：存在向量 $\mathbf{x}$ 使得 $\mathbf{x}^T A \mathbf{x} \gt 0$，同时又存在向量 $\mathbf{y}$ 使得 $\mathbf{y}^T A \mathbf{y} \lt 0$
+                </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.7;">
+                  • <strong>几何直觉：经典的马鞍面 / 品客薯片面 (Saddle / Pringles Surface)</strong>。前后看像山谷（向上凸），左右看像山脊（向下凹）！原点是著名的<strong>马鞍点 (Saddle Point)</strong>，梯度虽然为 0，但它既不是极小值也不是极大值！<br>
+                  • <strong>特征值特征：</strong>特征值既有正数又有负数（如 $\lambda_1 \gt 0, \lambda_2 \lt 0$）。<br>
+                  • <strong>等高线：</strong>双曲线族（两条交叉的渐近线能量为 0）。
+                </p>
+              </div>
+
+            </div>
+
+            <!-- 五大定性家族对比表格 -->
+            <div style="overflow-x: auto; margin-top: 1rem;">
+              <table class="def-table">
+                <thead>
+                  <tr>
+                    <th>定性类别</th>
+                    <th>符号标记</th>
+                    <th>二次型值域</th>
+                    <th>特征值条件</th>
+                    <th>3D 几何曲面相貌</th>
+                    <th>原点驻点性质</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color:var(--accent-green);">正定 (Positive Definite)</strong></td>
+                    <td>$A \succ 0$</td>
+                    <td>$\mathbf{x} \neq \mathbf{0} \implies q(\mathbf{x}) \gt 0$</td>
+                    <td>全 $\lambda_i \gt 0$</td>
+                    <td>开口向上的椭圆抛物面 (深碗面)</td>
+                    <td>严格全局极小值点</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:var(--accent-amber);">半正定 (Positive Semi-Definite)</strong></td>
+                    <td>$A \succeq 0$</td>
+                    <td>$q(\mathbf{x}) \ge 0$ (含非零 0 解)</td>
+                    <td>$\lambda_i \ge 0$ (含 $\lambda=0$)</td>
+                    <td>抛物线平底水槽 (槽底能量为 0)</td>
+                    <td>非严格极小值线段/平面</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:var(--accent-blue);">负定 (Negative Definite)</strong></td>
+                    <td>$A \prec 0$</td>
+                    <td>$\mathbf{x} \neq \mathbf{0} \implies q(\mathbf{x}) \lt 0$</td>
+                    <td>全 $\lambda_i \lt 0$</td>
+                    <td>开口向下的倒扣碗面</td>
+                    <td>严格全局极大值点</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:var(--accent-purple);">半负定 (Negative Semi-Definite)</strong></td>
+                    <td>$A \preceq 0$</td>
+                    <td>$q(\mathbf{x}) \le 0$ (含非零 0 解)</td>
+                    <td>$\lambda_i \le 0$ (含 $\lambda=0$)</td>
+                    <td>倒扣抛物线水槽</td>
+                    <td>非严格极大值线段/平面</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color:var(--accent-rose);">不定 (Indefinite)</strong></td>
+                    <td>—</td>
+                    <td>既有正值，又有负值</td>
+                    <td>有正有负 ($\lambda_1 \gt 0, \lambda_n \lt 0$)</td>
+                    <td>双曲抛物面 (马鞍面 / 薯片面)</td>
+                    <td>马鞍点 (非极值点)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 第三章：正定矩阵 5 大等价判定法则 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">第三章 · 判定宝典</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 正定矩阵的 5 大充要判定黄金法则 (Five Golden Criteria)</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.85;">
+              给定一个具体的实对称矩阵 $A$，我们不可能代入无限多个向量 $\mathbf{x}$ 去验证 $q(\mathbf{x}) \gt 0$。在实际数学研究和计算机算法中，有<strong>五套彼此完全等价的判定准则</strong>（满足其一则其余全部自动成立）：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem; margin-top: 1rem;">
+              
+              <!-- 准则 1 -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.4rem;">① 定义法准则 (Energy Definition)</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                  对任意非零向量 $\mathbf{x} \in \mathbb{R}^n$（$\mathbf{x} \neq \mathbf{0}$），二次型恒为正：
+                  $$\mathbf{x}^T A \mathbf{x} \gt 0$$
+                  这是物理与几何能量的本质源头。
+                </p>
+              </div>
+
+              <!-- 准则 2 -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.4rem;">② 特征值准则 (Eigenvalues)</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                  $A$ 的所有特征值严格大于 0：
+                  $$\lambda_1 \gt 0, \ \lambda_2 \gt 0, \ \dots, \ \lambda_n \gt 0$$
+                  <strong>证明：</strong>由谱定理 $A = Q \Lambda Q^T$，令 $\mathbf{y} = Q^T \mathbf{x}$，则 $\mathbf{x}^T A \mathbf{x} = \sum \lambda_i y_i^2$。当且仅当所有 $\lambda_i \gt 0$ 时，对任意 $\mathbf{y} \neq \mathbf{0}$ 该平方和严格大于 0！
+                </p>
+              </div>
+
+              <!-- 准则 3 -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.4rem;">③ 顺序主子式准则 (Sylvester's Criterion)</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                  $A$ 的所有左上角前 $k \times k$ 阶顺序主子式行列式<strong>全严格为正</strong>：
+                  $$\det(A_1) \gt 0, \ \det(A_2) \gt 0, \ \dots, \ \det(A_n) \gt 0$$
+                  对于二阶对称矩阵 $\begin{bmatrix} a & b \\ b & c \end{bmatrix}$，充要条件极其简练：
+                  $$a \gt 0, \quad ac - b^2 \gt 0$$
+                </p>
+              </div>
+
+              <!-- 准则 4 -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">④ 高斯消元主元准则 (Pivots)</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                  在高斯消元法（不进行行交换）过程中，产生的所有主元<strong>全部严格为正</strong>：
+                  $$d_1 \gt 0, \ d_2 \gt 0, \ \dots, \ d_n \gt 0$$
+                  这是数值计算中最省算力的判定法（无需计算特征值！）。
+                </p>
+              </div>
+
+              <!-- 准则 5 -->
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem; grid-column: 1 / -1;">
+                <h4 style="color: var(--accent-rose); margin-bottom: 0.4rem;">⑤ 乔列斯基分解准则 (Cholesky Factorization) —— 实数开方的终极推广</h4>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.75;">
+                  存在唯一的对角线元素严格为正的实下三角矩阵 $L$，使得：
+                  $$A = L L^T$$
+                  <strong>深刻直觉：</strong>普通正实数 $a \gt 0$ 必定可以开平方写成 $a = (\sqrt{a})^2$；正定矩阵正是“矩阵世界中的正实数”，而下三角矩阵 $L$ 就是正定矩阵的“算术平方根”！
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 第四章：半正定判定的重大陷阱 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-rose); color: #fff;">第四章 · 避坑指南</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 半正定判定的重大陷阱：顺序主子式能直接加“等号”吗？</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.85;">
+              许多学生和初学者在这里会遭遇线性代数中最具杀伤力的逻辑陷阱：<br>
+              <em>“既然正定是顺序主子式全部 $\gt 0$，那么半正定是不是只要顺序主子式全部 $\ge 0$ 就行了？”</em><br>
+              <strong style="color: var(--accent-rose); font-size: 1.05rem;">答案是：绝对不行！这是百分之百错误的假定理！</strong>
+            </p>
+
+            <div style="background: rgba(244, 63, 94, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(244, 63, 94, 0.3); padding: 1.25rem; margin: 1rem 0;">
+              <h4 style="color: var(--accent-rose); margin-bottom: 0.5rem;">💣 经典反例轰炸：</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+                考虑矩阵 $A = \begin{bmatrix} 0 & 0 \\ 0 & -1 \end{bmatrix}$：<br>
+                • 一阶顺序主子式：$\det([0]) = 0 \ge 0$；<br>
+                • 二阶顺序主子式：$\det(A) = 0 \times (-1) - 0 = 0 \ge 0$；<br>
+                按照错误的“直接加等号”逻辑，它的顺序主子式全部 $\ge 0$。<br>
+                但它的特征值是 $\lambda_1 = 0, \lambda_2 = -1$！如果代入测试向量 $\mathbf{x} = [0, 1]^T$：
+                $$\mathbf{x}^T A \mathbf{x} = \begin{bmatrix} 0 & 1 \end{bmatrix} \begin{bmatrix} 0 & 0 \\ 0 & -1 \end{bmatrix} \begin{bmatrix} 0 \\ 1 \end{bmatrix} = -1 \lt 0$$
+                它根本不是半正定，而是一个<strong>半负定矩阵</strong>！
+              </p>
+            </div>
+
+            <div style="background: rgba(52, 211, 153, 0.08); border-radius: var(--radius-sm); border: 1px solid rgba(52, 211, 153, 0.3); padding: 1.25rem;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🛡️ 半正定判定的严密真定理：</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+                对于实对称矩阵 $A$，以下条件彼此等价：<br>
+                1. <strong>特征值法（最推荐、最稳妥）：</strong>所有特征值全部大于等于零（$\lambda_i \ge 0$）；<br>
+                2. <strong>全部主子式法：</strong>$A$ 的<strong>所有 $2^n - 1$ 个主子式</strong>（不仅是左上角顺序主子式，包括每一个沿对角线对称截取的子式）全部 $\ge 0$；<br>
+                3. <strong>分解法：</strong>存在某个实矩阵 $B$，使得 $A = B^T B$。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第五章：A^T A 为什么天然半正定？ -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-indigo); color: #fff;">第五章 · 实战王者</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 黄金纽带：为什么转置乘积 $A^T A$ 天生就是半正定矩阵？</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.85;">
+              回顾我们在 <a href="ch2_3_matrix_transpose.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.3 矩阵转置教程</a> 中反复赞叹的组合 $A^T A$。
+              现在，用本章的正定性框架来审视，其背后的数学逻辑清澈如水：
+            </p>
+
+            <div style="background: rgba(129, 140, 248, 0.06); border: 1px solid rgba(129, 140, 248, 0.3); border-radius: var(--radius-sm); padding: 1.25rem; margin: 1rem 0;">
+              <h4 style="color: var(--accent-indigo); margin-bottom: 0.5rem;">🌟 $A^T A$ 半正定性的秒杀证明：</h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                对任意非零向量 $\mathbf{x} \in \mathbb{R}^n$，计算其关于矩阵 $A^T A$ 的二次型：
+                $$\mathbf{x}^T (A^T A) \mathbf{x} = (A\mathbf{x})^T (A\mathbf{x}) = \|A\mathbf{x}\|^2$$
+                根据欧几里得空间的几何公理，<strong>任何真实向量的欧氏长度平方 $\|A\mathbf{x}\|^2$ 绝对不可能是负数！</strong><br>
+                因此 $\mathbf{x}^T (A^T A) \mathbf{x} \ge 0$ 无条件恒成立！$A^T A$ 必定无条件为<strong>半正定矩阵</strong>！
+              </p>
+              <hr style="border: 0; border-top: 1px dashed var(--border-color); margin: 0.75rem 0;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">💎 什么时候 $A^T A$ 成为严格正定矩阵 ($A^T A \succ 0$)？</h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
+                要让二次型严格大于零（$\mathbf{x}^T A^T A \mathbf{x} \gt 0, \forall \mathbf{x} \neq \mathbf{0}$），等价于要求：
+                $$\|A\mathbf{x}\|^2 \gt 0 \iff A\mathbf{x} \neq \mathbf{0} \quad (\forall \mathbf{x} \neq \mathbf{0})$$
+                这意味着矩阵 $A$ 不能把任何非零向量压缩为零，即 $A$ 的列向量组严格线性无关（满列秩）：
+                $$\operatorname{Null}(A) = \{\mathbf{0}\} \iff \operatorname{rank}(A) = n$$
+                <strong>结论：只要数据矩阵 $A$ 满列秩，$A^T A$ 就必定是严格正定矩阵，必定存在唯一的逆矩阵 $(A^T A)^{-1}$！</strong><br>
+                这正是高斯最小二乘法正规方程 $\hat{x} = (A^TA)^{-1}A^Tb$ 永远能求出唯一解的理论基石！
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 第六章：现代科技与工业实战应用 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-blue); color: #000;">第六章 · 工业赋能</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. 现代科技实战：正定性在人工智能与金融量化中的无上地位</h2>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
+              
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.15rem;">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.4rem;">🧠 1. 深度学习凸优化与鞍点逃逸</h4>
+                <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.75;">
+                  在训练神经网络时，如果损失函数的海森矩阵 $H$ 正定，说明局部处于“碗底”，梯度下降一定能收敛至局部最优；如果 $H$ 不定，说明遇到了<strong>马鞍面鞍点 (Saddle Point)</strong>，必须通过动量 (Adam) 机制加速冲出鞍点通道。
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.15rem;">
+                <h4 style="color: var(--accent-green); margin-bottom: 0.4rem;">📈 2. 量化金融资产协方差与风险</h4>
+                <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.75;">
+                  在马科维茨资产配置理论中，投资组合的收益方差为 $\sigma_p^2 = \mathbf{w}^T \Sigma \mathbf{w}$。协方差矩阵 $\Sigma = \frac{1}{N} X^T X$ 天然半正定，保证了资产组合的风险（波动率平方）绝对不会出现荒谬的负数！
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.15rem;">
+                <h4 style="color: var(--accent-purple); margin-bottom: 0.4rem;">📊 3. 多元高斯分布概率密度</h4>
+                <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.75;">
+                  多元正态分布表达式中的核心指数项为 $\exp(-\frac{1}{2}(\mathbf{x}-\mathbf{\mu})^T \Sigma^{-1} (\mathbf{x}-\mathbf{\mu}))$。只有当 $\Sigma$ 严格正定时，二次型恒正，指数项才会随着远离均值而收敛衰减，概率总积分为 1。
+                </p>
+              </div>
+
+              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.15rem;">
+                <h4 style="color: var(--accent-amber); margin-bottom: 0.4rem;">🛡️ 4. 机械工程与结构振动模态</h4>
+                <p style="font-size: 0.86rem; color: var(--text-muted); line-height: 1.75;">
+                  飞机机翼与桥梁动力学中，动能矩阵（质量阵 $M$）与势能矩阵（刚度阵 $K$）均为严格正定矩阵。这保证了结构的固有振动频率 $\omega = \sqrt{\lambda}$ 必须全为实数，不会产生自发发散爆炸的虚数模态！
+                </p>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 第七章：双视口交互实验室 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-amber); color: #000;">第七章 · 动手探索</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧪 双视口联动实验室：2D 等高线与 3D 透视能量曲面</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; color: var(--text-muted);">
+              拖动参数滑块调节二阶对称矩阵 $A = \begin{bmatrix} a & b \\ b & c \end{bmatrix}$，或者点击预设按钮，实时观察<strong>左侧 2D 等高线</strong>与<strong>右侧 3D 空间能量曲面</strong>的即时形变与定性演化（右侧 3D 画布可直接用鼠标拖动旋转视角）：
+            </p>
+
+            <!-- Preset Buttons -->
+            <div class="preset-btn-group" style="margin-top: 1rem;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">形态预设：</span>
+              <button class="preset-btn active" onclick="setDefinitenessPreset('bowl', this)">🥣 严格正定 (深碗面 a=2, b=0.5, c=2)</button>
+              <button class="preset-btn" onclick="setDefinitenessPreset('trough', this)">🛹 半正定水槽 (a=2, b=0, c=0)</button>
+              <button class="preset-btn" onclick="setDefinitenessPreset('saddle', this)">🥔 不定马鞍面 (a=2, b=0, c=-2)</button>
+              <button class="preset-btn" onclick="setDefinitenessPreset('downbowl', this)">☂️ 严格负定 (倒扣碗 a=-2, b=0, c=-2)</button>
+              <button class="preset-btn" onclick="setDefinitenessPreset('ata', this)">⚡ AᵀA 实战正定 (a=2.6, b=1.2, c=1.0)</button>
+            </div>
+
+            <!-- Sliders Panel -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.25rem; background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-sm);">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.3rem;">
+                  <span>参数 a (x₁² 系数): <strong id="val-disp-a" style="color:var(--accent-blue);">2.0</strong></span>
+                </div>
+                <input id="slider-param-a" type="range" min="-3" max="3" step="0.2" value="2.0" oninput="onMatrixParamChange()" style="width: 100%;">
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.3rem;">
+                  <span>参数 b (x₁x₂ 交叉项): <strong id="val-disp-b" style="color:var(--accent-purple);">0.5</strong></span>
+                </div>
+                <input id="slider-param-b" type="range" min="-3" max="3" step="0.1" value="0.5" oninput="onMatrixParamChange()" style="width: 100%;">
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.3rem;">
+                  <span>参数 c (x₂² 系数): <strong id="val-disp-c" style="color:var(--accent-green);">2.0</strong></span>
+                </div>
+                <input id="slider-param-c" type="range" min="-3" max="3" step="0.2" value="2.0" oninput="onMatrixParamChange()" style="width: 100%;">
+              </div>
+            </div>
+
+            <!-- Dual Canvas Row -->
+            <div class="lab-dual-container">
+              <!-- Left: 2D Contours -->
+              <div class="lab-canvas-box">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.88rem; font-weight: 700; color: var(--accent-blue);">视口 1：2D 等高线切片 q(x) = C</span>
+                  <span id="badge-contour-type" class="definiteness-badge" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">正定同心椭圆</span>
+                </div>
+                <canvas id="canvas-2d-contour" width="440" height="300"></canvas>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.4rem; text-align: center;">
+                  金色线与粉色线代表特征主轴方向；等高线椭圆长短轴精确反映特征值倒数！
+                </div>
+              </div>
+
+              <!-- Right: 3D Isometric Surface -->
+              <div class="lab-canvas-box">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.88rem; font-weight: 700; color: var(--accent-purple);">视口 2：3D 空间能量曲面 (可按住鼠标旋转)</span>
+                  <span id="badge-surface-type" class="definiteness-badge" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">向上碗面</span>
+                </div>
+                <canvas id="canvas-3d-surface" width="440" height="300"></canvas>
+                <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 0.4rem; text-align: center;">
+                  高度 $z = ax_1^2 + 2bx_1x_2 + cx_2^2$。青蓝代表低谷，金红代表高峰。
+                </div>
+              </div>
+            </div>
+
+            <!-- Mathematical Status Banner -->
+            <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem; font-family: var(--font-mono); font-size: 0.88rem; line-height: 1.8;">
+              <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.5rem;">
+                <span>当前判定结果：<strong id="stat-definiteness-name" style="color:var(--accent-green); font-size: 1.05rem;">严格正定矩阵 (Positive Definite)</strong></span>
+                <span id="stat-sylvester-text" style="color: var(--accent-blue);">顺序主子式：Δ₁=2.00 > 0, Δ₂=3.75 > 0 ✓</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem; margin-top: 0.5rem;">
+                <div>• 特征值 λ₁: <strong id="stat-lambda-1" style="color:#fbbf24;">2.500</strong></div>
+                <div>• 特征值 λ₂: <strong id="stat-lambda-2" style="color:#f43f5e;">1.500</strong></div>
+                <div>• 行列式 det(A): <span id="stat-det-val">3.75</span></div>
+                <div>• 矩阵迹 tr(A): <span id="stat-trace-val">4.00</span></div>
+              </div>
+              <div id="stat-geometric-summary" style="margin-top: 0.4rem; color: var(--text-muted); font-size: 0.82rem;">
+                曲面形状：严格向上开口的超椭球碗面，原点 (0,0) 为唯一的全局绝对极小值点。
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 第八章：通关自测小挑战 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-green); color: #000;">第八章 · 巩固检验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 知识闯关小挑战：测测你的正定直觉</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- Q1 -->
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 700; margin-bottom: 0.5rem;">
+                1. 设实对称矩阵 $A$ 的特征值分别为 $\lambda_1 = 3, \lambda_2 = 0, \lambda_3 = 5$，则矩阵 $A$ 属于什么类型？
+              </p>
+              <div class="quiz-option" onclick="checkQuiz(1, 0, false)">A. 严格正定矩阵</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 1, true)">B. 半正定矩阵</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 2, false)">C. 不定矩阵</div>
+              <div class="quiz-option" onclick="checkQuiz(1, 3, false)">D. 奇异不可判定</div>
+              <div id="quiz-feedback-1" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Q2 -->
+            <div style="margin-bottom: 1.5rem;">
+              <p style="font-weight: 700; margin-bottom: 0.5rem;">
+                2. 已知矩阵 $M = \begin{bmatrix} 2 & k \\ k & 3 \end{bmatrix}$，要使其成为严格正定矩阵，实数 $k$ 的取值范围必须满足什么？
+              </p>
+              <div class="quiz-option" onclick="checkQuiz(2, 0, false)">A. $k \gt 0$</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 1, false)">B. $k \lt \sqrt{6}$</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 2, true)">C. $-\sqrt{6} \lt k \lt \sqrt{6}$</div>
+              <div class="quiz-option" onclick="checkQuiz(2, 3, false)">D. $k \neq 0$</div>
+              <div id="quiz-feedback-2" class="quiz-feedback"></div>
+            </div>
+
+            <!-- Q3 -->
+            <div style="margin-bottom: 1rem;">
+              <p style="font-weight: 700; margin-bottom: 0.5rem;">
+                3. 对于任意 $100 \times 3$ 的长方形数据矩阵 $X$（假设其列向量线性无关），矩阵 $X^T X$ 的定性必然是？
+              </p>
+              <div class="quiz-option" onclick="checkQuiz(3, 0, false)">A. 半负定矩阵</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 1, false)">B. 仅能保证半正定，不一定严格正定</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 2, true)">C. 必定是严格正定矩阵，且必定可逆</div>
+              <div class="quiz-option" onclick="checkQuiz(3, 3, false)">D. 不定矩阵</div>
+              <div id="quiz-feedback-3" class="quiz-feedback"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+
+      <!-- Footer Navigation -->
+      <footer style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+        <a href="ch7_3_spectral_decomposition.html" class="btn" style="text-decoration: none; color: var(--accent-blue); display: inline-flex; align-items: center; gap: 0.5rem;">
+          ← 上一节：Ch 7.3 实对称矩阵正交对角化与谱分解
+        </a>
+        <a href="ch7_4_svd_low_rank.html" class="btn" style="text-decoration: none; color: var(--accent-purple); display: inline-flex; align-items: center; gap: 0.5rem;">
+          下一节：Ch 7.4 奇异值分解 SVD 与低秩压缩 →
+        </a>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Interactive Scripts for Ch 7.5 -->
+  <script>
+    // ====================================================
+    // Interactive 2D Contour & 3D Surface Simulation
+    // ====================================================
+    let matA = 2.0;
+    let matB = 0.5;
+    let matC = 2.0;
+
+    // 3D View rotation angles (radians)
+    let rotX = 0.45; // Elevation
+    let rotY = 0.65; // Azimuth
+    let isDragging3D = false;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
+
+    function onMatrixParamChange() {
+      matA = parseFloat(document.getElementById('slider-param-a').value);
+      matB = parseFloat(document.getElementById('slider-param-b').value);
+      matC = parseFloat(document.getElementById('slider-param-c').value);
+
+      document.getElementById('val-disp-a').innerText = matA.toFixed(1);
+      document.getElementById('val-disp-b').innerText = matB.toFixed(1);
+      document.getElementById('val-disp-c').innerText = matC.toFixed(1);
+
+      document.querySelectorAll('.preset-btn-group .preset-btn').forEach(b => b.classList.remove('active'));
+
+      renderLab();
+    }
+
+    function setDefinitenessPreset(name, btn) {
+      document.querySelectorAll('.preset-btn-group .preset-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      if (name === 'bowl') {
+        matA = 2.0; matB = 0.5; matC = 2.0;
+      } else if (name === 'trough') {
+        matA = 2.0; matB = 0.0; matC = 0.0;
+      } else if (name === 'saddle') {
+        matA = 2.0; matB = 0.0; matC = -2.0;
+      } else if (name === 'downbowl') {
+        matA = -2.0; matB = 0.0; matC = -2.0;
+      } else if (name === 'ata') {
+        // Formed from X = [[1.5, 0.5], [0.6, 0.8]] -> X^T X = [[2.61, 1.23], [1.23, 0.89]]
+        matA = 2.6; matB = 1.2; matC = 1.0;
+      }
+
+      document.getElementById('slider-param-a').value = matA;
+      document.getElementById('slider-param-b').value = matB;
+      document.getElementById('slider-param-c').value = matC;
+
+      document.getElementById('val-disp-a').innerText = matA.toFixed(1);
+      document.getElementById('val-disp-b').innerText = matB.toFixed(1);
+      document.getElementById('val-disp-c').innerText = matC.toFixed(1);
+
+      renderLab();
+    }
+
+    function computeEigens() {
+      const trace = matA + matC;
+      const det = matA * matC - matB * matB;
+      const diff = matA - matC;
+      const disc = Math.max(0, diff * diff + 4 * matB * matB);
+      const sqrtDisc = Math.sqrt(disc);
+
+      const lambda1 = (trace + sqrtDisc) / 2;
+      const lambda2 = (trace - sqrtDisc) / 2;
+
+      // Primary eigenvector angle
+      const angle = 0.5 * Math.atan2(2 * matB, matA - matC);
+
+      return { trace, det, lambda1, lambda2, angle };
+    }
+
+    function updateStats(eigens) {
+      const { trace, det, lambda1, lambda2 } = eigens;
+
+      document.getElementById('stat-lambda-1').innerText = lambda1.toFixed(3);
+      document.getElementById('stat-lambda-2').innerText = lambda2.toFixed(3);
+      document.getElementById('stat-det-val').innerText = det.toFixed(3);
+      document.getElementById('stat-trace-val').innerText = trace.toFixed(3);
+
+      const eps = 1e-4;
+      let defName = '';
+      let defColor = '';
+      let badgeText = '';
+      let surfName = '';
+      let geomText = '';
+
+      const sylv1 = matA;
+      const sylv2 = det;
+      document.getElementById('stat-sylvester-text').innerText = 
+        `顺序主子式：Δ₁=${sylv1.toFixed(2)}${sylv1 > eps ? ' > 0' : (Math.abs(sylv1) <= eps ? ' = 0' : ' < 0')}, Δ₂=${sylv2.toFixed(2)}${sylv2 > eps ? ' > 0' : (Math.abs(sylv2) <= eps ? ' = 0' : ' < 0')}`;
+
+      if (lambda1 > eps && lambda2 > eps) {
+        defName = '严格正定矩阵 (Positive Definite, A ≻ 0)';
+        defColor = '#34d399';
+        badgeText = '正定同心椭圆';
+        surfName = '向上凹碗面 (Bowl)';
+        geomText = '曲面特征：严格开口向上的超椭球碗面。原点 (0,0) 为全空间唯一的绝对极小值点。';
+      } else if (lambda1 < -eps && lambda2 < -eps) {
+        defName = '严格负定矩阵 (Negative Definite, A ≺ 0)';
+        defColor = '#38bdf8';
+        badgeText = '负定同心椭圆';
+        surfName = '倒扣圆顶碗面';
+        geomText = '曲面特征：严格开口向下的倒扣碗面。原点 (0,0) 为全空间唯一的绝对极大值点。';
+      } else if (lambda1 > eps && lambda2 < -eps) {
+        defName = '不定矩阵 (Indefinite)';
+        defColor = '#f43f5e';
+        badgeText = '不定双曲线族';
+        surfName = '双曲马鞍面 (Saddle)';
+        geomText = '曲面特征：经典品客薯片马鞍面。前后上翘、左右下垂；原点 (0,0) 为马鞍点，非极值点。';
+      } else if (lambda1 >= -eps && lambda2 >= -eps) {
+        defName = '半正定矩阵 (Positive Semi-Definite, A ⪰ 0)';
+        defColor = '#fbbf24';
+        badgeText = '半正定平行带';
+        surfName = '抛物线平底水槽 (Trough)';
+        geomText = '曲面特征：平底水槽通道，曲面处处非负。槽底直线对应零空间，沿此方向能量恒为 0。';
+      } else {
+        defName = '半负定矩阵 (Negative Semi-Definite, A ⪯ 0)';
+        defColor = '#c084fc';
+        badgeText = '半负定平行带';
+        surfName = '倒扣抛物线水槽';
+        geomText = '曲面特征：倒扣的抛物槽面，能量处处非正。脊线对应零空间，能量恒为 0。';
+      }
+
+      const elName = document.getElementById('stat-definiteness-name');
+      elName.innerText = defName;
+      elName.style.color = defColor;
+
+      const badge2D = document.getElementById('badge-contour-type');
+      badge2D.innerText = badgeText;
+      badge2D.style.color = defColor;
+      badge2D.style.background = defColor + '25';
+
+      const badge3D = document.getElementById('badge-surface-type');
+      badge3D.innerText = surfName;
+      badge3D.style.color = defColor;
+      badge3D.style.background = defColor + '25';
+
+      document.getElementById('stat-geometric-summary').innerText = geomText;
+    }
+
+    // ==========================================
+    // 2D Contour Rendering
+    // ==========================================
+    function render2DContour(eigens) {
+      const c = document.getElementById('canvas-2d-contour');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      const cx = w / 2, cy = h / 2;
+      const scale = 50;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Coordinate Grid
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+      ctx.lineWidth = 1;
+      for (let i = -4; i <= 4; i++) {
+        if (i === 0) continue;
+        ctx.beginPath();
+        ctx.moveTo(cx + i * scale, 0); ctx.lineTo(cx + i * scale, h);
+        ctx.moveTo(0, cy + i * scale); ctx.lineTo(w, cy + i * scale);
+        ctx.stroke();
+      }
+
+      // Cartesian Axes
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(10, cy); ctx.lineTo(w - 10, cy);
+      ctx.moveTo(cx, 10); ctx.lineTo(cx, h - 10);
+      ctx.stroke();
+
+      const { lambda1, lambda2, angle } = eigens;
+      const eps = 1e-4;
+
+      // Draw Principal Axes
+      const cosA = Math.cos(angle);
+      const sinA = Math.sin(angle);
+      const axisLen = 130;
+
+      // Axis 1 (Gold, corresponding to lambda1)
+      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx - cosA * axisLen, cy + sinA * axisLen);
+      ctx.lineTo(cx + cosA * axisLen, cy - sinA * axisLen);
+      ctx.stroke();
+
+      // Axis 2 (Rose, corresponding to lambda2)
+      ctx.strokeStyle = '#f43f5e';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx + sinA * axisLen, cy + cosA * axisLen);
+      ctx.lineTo(cx - sinA * axisLen, cy - cosA * axisLen);
+      ctx.stroke();
+
+      // Axis labels
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText('v₁', cx + cosA * (axisLen + 10) - 5, cy - sinA * (axisLen + 10) + 4);
+
+      ctx.fillStyle = '#f43f5e';
+      ctx.fillText('v₂', cx - sinA * (axisLen + 10) - 5, cy - cosA * (axisLen + 10) + 4);
+
+      // Draw Contours
+      const energyLevels = [0.5, 1.2, 2.2, 3.8, 6.0];
+
+      if (lambda1 > eps && lambda2 > eps) {
+        // Positive Definite: Concentric Ellipses
+        ctx.lineWidth = 1.6;
+        for (let idx = 0; idx < energyLevels.length; idx++) {
+          const E = energyLevels[idx];
+          const rx = Math.sqrt(E / lambda1) * scale;
+          const ry = Math.sqrt(E / lambda2) * scale;
+          ctx.strokeStyle = `rgba(52, 211, 153, ${0.4 + idx * 0.12})`;
+
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(-angle);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      } else if (lambda1 < -eps && lambda2 < -eps) {
+        // Negative Definite: Concentric Ellipses
+        ctx.lineWidth = 1.6;
+        for (let idx = 0; idx < energyLevels.length; idx++) {
+          const E = energyLevels[idx];
+          const rx = Math.sqrt(E / Math.abs(lambda1)) * scale;
+          const ry = Math.sqrt(E / Math.abs(lambda2)) * scale;
+          ctx.strokeStyle = `rgba(56, 189, 248, ${0.4 + idx * 0.12})`;
+
+          ctx.save();
+          ctx.translate(cx, cy);
+          ctx.rotate(-angle);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      } else if (lambda1 > eps && lambda2 < -eps) {
+        // Indefinite: Hyperbolas
+        ctx.lineWidth = 1.6;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-angle);
+
+        // Draw asymptotes
+        const slope = Math.sqrt(-lambda2 / lambda1);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(-160, 160 * slope); ctx.lineTo(160, -160 * slope);
+        ctx.moveTo(-160, -160 * slope); ctx.lineTo(160, 160 * slope);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Hyperbolas for positive energy
+        ctx.strokeStyle = 'rgba(52, 211, 153, 0.7)';
+        for (let E of [1.0, 3.0]) {
+          for (let sign of [1, -1]) {
+            ctx.beginPath();
+            let first = true;
+            for (let y = -140; y <= 140; y += 4) {
+              const xVal = sign * Math.sqrt(Math.max(0, (E - lambda2 * Math.pow(y / scale, 2)) / lambda1)) * scale;
+              if (first) { ctx.moveTo(xVal, -y); first = false; }
+              else { ctx.lineTo(xVal, -y); }
+            }
+            ctx.stroke();
+          }
+        }
+
+        // Hyperbolas for negative energy
+        ctx.strokeStyle = 'rgba(244, 63, 94, 0.7)';
+        for (let E of [-1.0, -3.0]) {
+          for (let sign of [1, -1]) {
+            ctx.beginPath();
+            let first = true;
+            for (let x = -140; x <= 140; x += 4) {
+              const yVal = sign * Math.sqrt(Math.max(0, (E - lambda1 * Math.pow(x / scale, 2)) / lambda2)) * scale;
+              if (first) { ctx.moveTo(x, -yVal); first = false; }
+              else { ctx.lineTo(x, -yVal); }
+            }
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+      } else {
+        // Semi-definite: Parallel Lines
+        const nonZeroLambda = Math.abs(lambda1) > eps ? lambda1 : lambda2;
+        const nonZeroAngle = Math.abs(lambda1) > eps ? angle : angle + Math.PI / 2;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(-nonZeroAngle);
+
+        ctx.strokeStyle = nonZeroLambda > 0 ? 'rgba(251, 191, 36, 0.7)' : 'rgba(192, 132, 252, 0.7)';
+        ctx.lineWidth = 1.8;
+        for (let E of [0.5, 1.5, 3.0]) {
+          const d = Math.sqrt(Math.max(0, E / Math.abs(nonZeroLambda))) * scale;
+          ctx.beginPath();
+          ctx.moveTo(d, -140); ctx.lineTo(d, 140);
+          ctx.moveTo(-d, -140); ctx.lineTo(-d, 140);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+    }
+
+    // ==========================================
+    // 3D Isometric Surface Rendering
+    // ==========================================
+    function project3D(x, y, z, cx, cy) {
+      // Rotate around Y-axis (Azimuth)
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x1 = x * cosY - y * sinY;
+      const y1 = x * sinY + y * cosY;
+
+      // Rotate around X-axis (Elevation)
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const y2 = y1 * cosX - z * sinX;
+      const z2 = y1 * sinX + z * cosX;
+
+      const scale3D = 42;
+      return {
+        px: cx + x1 * scale3D,
+        py: cy - (y2 * 0.45 + z2 * 0.9) * 22,
+        depth: y1
+      };
+    }
+
+    function render3DSurface() {
+      const c = document.getElementById('canvas-3d-surface');
+      if (!c) return;
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      const cx = w / 2, cy = h / 2 + 25;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const N = 18;
+      const range = 2.0;
+      const step = (2 * range) / N;
+
+      // Compute grid heights
+      const grid = [];
+      for (let i = 0; i <= N; i++) {
+        const row = [];
+        const x = -range + i * step;
+        for (let j = 0; j <= N; j++) {
+          const y = -range + j * step;
+          const z = matA * x * x + 2 * matB * x * y + matC * y * y;
+          const clampedZ = Math.max(-5, Math.min(5, z));
+          const p = project3D(x, y, clampedZ, cx, cy);
+          row.push({ x, y, z: clampedZ, px: p.px, py: p.py, depth: p.depth });
+        }
+        grid.push(row);
+      }
+
+      // Draw Grid Lines along X
+      for (let i = 0; i <= N; i++) {
+        ctx.beginPath();
+        for (let j = 0; j <= N; j++) {
+          const pt = grid[i][j];
+          if (j === 0) ctx.moveTo(pt.px, pt.py);
+          else ctx.lineTo(pt.px, pt.py);
+        }
+        // Color based on height
+        const avgZ = grid[i][Math.floor(N / 2)].z;
+        ctx.strokeStyle = getZColor(avgZ, 0.45);
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      // Draw Grid Lines along Y
+      for (let j = 0; j <= N; j++) {
+        ctx.beginPath();
+        for (let i = 0; i <= N; i++) {
+          const pt = grid[i][j];
+          if (i === 0) ctx.moveTo(pt.px, pt.py);
+          else ctx.lineTo(pt.px, pt.py);
+        }
+        const avgZ = grid[Math.floor(N / 2)][j].z;
+        ctx.strokeStyle = getZColor(avgZ, 0.45);
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+      }
+
+      // Draw Base Origin Marker (0, 0, 0)
+      const p0 = project3D(0, 0, 0, cx, cy);
+      ctx.fillStyle = '#fbbf24';
+      ctx.beginPath();
+      ctx.arc(p0.px, p0.py, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function getZColor(z, alpha) {
+      // Range: z in [-4, 4]
+      // Negative: cyan/blue (#38bdf8), Zero: green (#34d399), High: yellow/rose (#fbbf24 / #f43f5e)
+      if (z > 1.5) return `rgba(251, 191, 36, ${alpha})`;
+      if (z > 0.1) return `rgba(52, 211, 153, ${alpha})`;
+      if (z >= -0.1) return `rgba(148, 163, 184, ${alpha})`;
+      return `rgba(56, 189, 248, ${alpha})`;
+    }
+
+    function renderLab() {
+      const eigens = computeEigens();
+      updateStats(eigens);
+      render2DContour(eigens);
+      render3DSurface();
+    }
+
+    // ==========================================
+    // Interactive Quiz Logic
+    // ==========================================
+    function checkQuiz(qNum, optIdx, isCorrect) {
+      const fb = document.getElementById('quiz-feedback-' + qNum);
+      if (!fb) return;
+      fb.style.display = 'block';
+
+      if (isCorrect) {
+        fb.style.background = 'rgba(52, 211, 153, 0.15)';
+        fb.style.border = '1px solid var(--accent-green)';
+        fb.style.color = '#34d399';
+        if (qNum === 1) {
+          fb.innerHTML = '🎉 <strong>完全正确！</strong> 所有特征值均满足 $\lambda_i \ge 0$，但由于其中存在 $\lambda_2 = 0$，二次型可以在非零特征向量方向取到零值，因此属于标准的<strong>半正定矩阵</strong>！';
+        } else if (qNum === 2) {
+          fb.innerHTML = '🎉 <strong>回答精准！</strong> 根据 Sylvester 顺序主子式准则：一阶主子式 $2 \gt 0$ 恒成立；二阶行列式 $\det(M) = 6 - k^2 \gt 0 \implies k^2 \lt 6 \implies -\sqrt{6} \lt k \lt \sqrt{6}$！';
+        } else if (qNum === 3) {
+          fb.innerHTML = '🎉 <strong>一语中的！</strong> 因为 $X$ 的列向量线性无关（满列秩），其零空间 $\operatorname{Null}(X) = \{\mathbf{0}\}$。由定理 $\mathbf{x}^T (X^T X)\mathbf{x} = \|X\mathbf{x}\|^2 \gt 0 (\forall \mathbf{x} \neq \mathbf{0})$，故 $X^T X$ <strong>必定是严格正定矩阵</strong>且必定可逆！';
+        }
+      } else {
+        fb.style.background = 'rgba(244, 63, 94, 0.15)';
+        fb.style.border = '1px solid var(--accent-rose)';
+        fb.style.color = '#f43f5e';
+        fb.innerHTML = '❌ <strong>答案不对哦</strong>，仔细回顾本章特征值判据与主子式定理，再试一次吧！';
+      }
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise([fb]);
+      }
+    }
+
+    // ==========================================
+    // DOM Init & Mouse Drag for 3D Surface
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLab();
+
+      const c3d = document.getElementById('canvas-3d-surface');
+      if (c3d) {
+        c3d.addEventListener('mousedown', (e) => {
+          isDragging3D = true;
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isDragging3D) return;
+          const dx = e.clientX - lastMouseX;
+          const dy = e.clientY - lastMouseY;
+          rotY += dx * 0.01;
+          rotX = Math.max(0.1, Math.min(1.4, rotX + dy * 0.01));
+          lastMouseX = e.clientX;
+          lastMouseY = e.clientY;
+          render3DSurface();
+        });
+
+        window.addEventListener('mouseup', () => {
+          isDragging3D = false;
+        });
+
+        // Touch support
+        c3d.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 1) {
+            isDragging3D = true;
+            lastMouseX = e.touches[0].clientX;
+            lastMouseY = e.touches[0].clientY;
+          }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+          if (!isDragging3D || e.touches.length !== 1) return;
+          const dx = e.touches[0].clientX - lastMouseX;
+          const dy = e.touches[0].clientY - lastMouseY;
+          rotY += dx * 0.015;
+          rotX = Math.max(0.1, Math.min(1.4, rotX + dy * 0.015));
+          lastMouseX = e.touches[0].clientX;
+          lastMouseY = e.touches[0].clientY;
+          render3DSurface();
+        });
+
+        window.addEventListener('touchend', () => {
+          isDragging3D = false;
+        });
+      }
+
+      window.addEventListener('resize', () => {
+        renderLab();
+      });
+    });
+  </script>
+
+</body>
+</html>

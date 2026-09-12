@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MA 05: 克罗内克积、向量化算子与代数矩阵方程 | 矩阵分析进阶指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+  <style>
+    .kron-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+    .kron-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .kron-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .kron-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-purple);
+    }
+    .quiz-option {
+      display: block;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quiz-option:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--accent-purple);
+    }
+    .quiz-feedback {
+      margin-top: 0.75rem;
+      padding: 0.75rem;
+      border-radius: var(--radius-sm);
+      display: none;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    .origin-diagram-svg {
+      width: 100%;
+      max-width: 820px;
+      height: auto;
+      display: block;
+      margin: 1.5rem auto;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <aside class="sidebar">
+      <nav class="sidebar-nav"></nav>
+    </aside>
+
+    <div class="main-content">
+      <header class="top-header">
+        <div class="header-breadcrumb">
+          <a href="index.html">课程首页</a> &gt; 
+          <span style="color: var(--accent-purple);">矩阵分析进阶系列</span> &gt; 
+          <span>MA 05: 克罗内克积与矩阵方程</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <button id="theme-toggle" class="btn btn-secondary btn-sm">🌓 切换主题</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Section -->
+        <section class="chapter-hero" style="background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(15, 23, 42, 0) 100%); border-left: 5px solid var(--accent-purple); padding: 2rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+          <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem;">
+            <span class="kron-badge" style="background: rgba(168, 85, 247, 0.2); color: var(--accent-purple);">高阶分析篇 MA 05</span>
+            <span class="kron-badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">张量代数与矩阵方程求解</span>
+          </div>
+          <h1 style="font-size: 2.2rem; color: var(--text-main); margin: 0.5rem 0 1rem;">克罗内克积、向量化算子与代数矩阵方程</h1>
+          <p style="font-size: 1.05rem; line-height: 1.7; color: var(--text-muted); max-width: 900px;">
+            在经典线性代数中，未知量通常是孤立的向量 $x \in \mathbb{R}^n$。然而在现代控制论、量子信息与信号处理中，未知量往往是一个二维矩阵 $X$，且出现在形如 $AX + XB = C$（Sylvester 方程）或 $AX + XA^T = Q$（Lyapunov 方程）的复杂耦合矩阵方程中。如何求解这类矩阵方程？秘密就在于：利用<strong>克罗内克积 (Kronecker Product)</strong> 与<strong>向量化算子 (vec)</strong>，将多维矩阵空间“拉直”为经典的一维线性系统！
+          </p>
+        </section>
+
+        <!-- Section 1: 克罗内克积 -->
+        <section class="content-block">
+          <h2>1. 克罗内克积 (Kronecker Product $A \otimes B$)</h2>
+          <p>
+            设 $A \in \mathbb{R}^{m \times n}$，$B \in \mathbb{R}^{p \times q}$。它们的<strong>克罗内克积（直积 / 张量积）</strong>定义为一个规模为 $mp \times nq$ 的巨型分块矩阵：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ A \otimes B \triangleq \begin{bmatrix} a_{11} B & a_{12} B & \dots & a_{1n} B \\ a_{21} B & a_{22} B & \dots & a_{2n} B \\ \vdots & \vdots & \ddots & \vdots \\ a_{m1} B & a_{m2} B & \dots & a_{mn} B \end{bmatrix} \in \mathbb{R}^{mp \times nq} $$
+            <strong>核心基本运算法则</strong>：
+            <ol>
+              <li>双线性性：$(\alpha A) \otimes B = A \otimes (\alpha B) = \alpha (A \otimes B)$；$(A + B) \otimes C = A \otimes C + B \otimes C$；</li>
+              <li>结合律：$(A \otimes B) \otimes C = A \otimes (B \otimes C)$；</li>
+              <li>转置法则：$(A \otimes B)^T = A^T \otimes B^T$；</li>
+              <li><strong>混合积性质 (Mixed-Product Property)</strong>：只要矩阵维度相容，必有：
+                $$ (A \otimes B)(C \otimes D) = (AC) \otimes (BD) $$
+              </li>
+              <li>逆矩阵法则：若 $A, B$ 均可逆，则 $(A \otimes B)^{-1} = A^{-1} \otimes B^{-1}$。</li>
+            </ol>
+          </div>
+
+          <h3>1.1 克罗内克积的谱特征定理</h3>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            设 $A \in \mathbb{C}^{m \times m}$ 的特征值为 $\lambda_1, \dots, \lambda_m$，$B \in \mathbb{C}^{n \times n}$ 的特征值为 $\mu_1, \dots, \mu_n$。则：
+            <ol>
+              <li>$A \otimes B$ 的 $mn$ 个特征值恰好为<strong>所有可能的特征值两两乘积</strong>：
+                $$ \sigma(A \otimes B) = \{\lambda_i \cdot \mu_j : 1 \le i \le m, \; 1 \le j \le n\} $$
+              </li>
+              <li>行列式公式：$\operatorname{det}(A \otimes B) = (\operatorname{det} A)^n \cdot (\operatorname{det} B)^m$；</li>
+              <li>迹公式：$\operatorname{tr}(A \otimes B) = \operatorname{tr}(A) \cdot \operatorname{tr}(B)$。</li>
+            </ol>
+          </div>
+        </section>
+
+        <!-- Section 2: 向量化算子与核心恒等式 -->
+        <section class="content-block">
+          <h2>2. 向量化算子 $\operatorname{vec}(X)$ 与核心恒等式</h2>
+          <p>
+            对任意矩阵 $X = [x_1, x_2, \dots, x_k] \in \mathbb{R}^{m \times k}$，其<strong>向量化算子 $\operatorname{vec}(X)$</strong> 定义为将其各列自左向右依次垂直堆叠而成的长向量：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-purple); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ \operatorname{vec}(X) \triangleq \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_k \end{bmatrix} \in \mathbb{R}^{mk} $$
+            <strong>与矩阵内积/迹的联系</strong>：
+            $$ \operatorname{tr}(A^T B) = \operatorname{vec}(A)^T \operatorname{vec}(B) $$
+            两个矩阵的 Frobenius 内积，等于它们拉直后向量的标准欧氏点积！
+          </div>
+
+          <h3>2.1 全书最重要恒等式：$\operatorname{vec}(AXB) = (B^T \otimes A)\operatorname{vec}(X)$</h3>
+          <div class="proof-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem; margin: 1rem 0;">
+            <p><strong>定理证明</strong>：设 $B = [b_1, b_2, \dots, b_p]$，考虑矩阵乘积 $Y = AXB$ 的第 $j$ 列：</p>
+            <ol style="line-height: 1.8; color: var(--text-muted);">
+              <li>根据矩阵乘法的列线性组合定义，$AXB$ 的第 $j$ 列为：
+                $$ (AXB)_j = AX b_j = A \sum_{i=1}^k b_{ij} x_i = \sum_{i=1}^k b_{ij} (A x_i) $$
+              </li>
+              <li>将这个列向量改写为分块行向量乘以列向量：
+                $$ (AXB)_j = \begin{bmatrix} b_{1j} A & b_{2j} A & \dots & b_{kj} A \end{bmatrix} \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_k \end{bmatrix} = (b_j^T \otimes A) \operatorname{vec}(X) $$
+              </li>
+              <li>将所有列 $j = 1, \dots, p$ 自上而下堆叠起来组成 $\operatorname{vec}(AXB)$：
+                $$ \operatorname{vec}(AXB) = \begin{bmatrix} (AXB)_1 \\ \vdots \\ (AXB)_p \end{bmatrix} = \begin{bmatrix} b_1^T \otimes A \\ \vdots \\ b_p^T \otimes A \end{bmatrix} \operatorname{vec}(X) = \left( \begin{bmatrix} b_1^T \\ \vdots \\ b_p^T \end{bmatrix} \otimes A \right) \operatorname{vec}(X) = (B^T \otimes A) \operatorname{vec}(X) $$
+                推导完毕！这一恒等式直接打通了“矩阵夹心变换”与“高维单矩阵乘向量”的代数鸿沟！
+              </li>
+            </ol>
+          </div>
+
+          <!-- SVG Architecture Diagram: 矩阵拉直与克罗内克积映射网格 -->
+          <svg class="origin-diagram-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+            <rect width="800" height="360" rx="8" fill="#090d16"/>
+            <text x="400" y="32" fill="#f8fafc" font-size="16" font-weight="bold" text-anchor="middle">向量化同构：vec(AXB) = (Bᵀ ⊗ A) vec(X) 的代数空间映射网络</text>
+
+            <!-- Matrix domain: AXB -->
+            <g transform="translate(180, 190)">
+              <rect x="-130" y="-110" width="260" height="220" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+              <text x="0" y="-85" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">矩阵空间：A · X · B</text>
+
+              <!-- Sandwich components -->
+              <rect x="-110" y="-60" width="40" height="120" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8"/>
+              <text x="-90" y="5" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">A</text>
+
+              <rect x="-55" y="-60" width="110" height="120" fill="rgba(168, 85, 247, 0.25)" stroke="#a855f7"/>
+              <text x="0" y="5" fill="#a855f7" font-size="14" font-weight="bold" text-anchor="middle">未知矩阵 X</text>
+
+              <rect x="70" y="-60" width="40" height="120" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981"/>
+              <text x="90" y="5" fill="#10b981" font-size="12" font-weight="bold" text-anchor="middle">B</text>
+
+              <text x="0" y="90" fill="#94a3b8" font-size="12" text-anchor="middle">双边夹心矩阵算子</text>
+            </g>
+
+            <!-- Vectorization mapping arrows -->
+            <g transform="translate(400, 190)">
+              <path d="M -50 -30 Q 0 -60 50 -30" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+              <text x="0" y="-60" fill="#f59e0b" font-size="13" font-weight="bold" text-anchor="middle">vec 算子拉直</text>
+
+              <text x="0" y="15" fill="#cbd5e1" font-size="15" font-weight="bold" text-anchor="middle">⟺</text>
+
+              <path d="M 50 40 Q 0 70 -50 40" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+              <text x="0" y="70" fill="#38bdf8" font-size="13" font-weight="bold" text-anchor="middle">重构为标准线性系统</text>
+            </g>
+
+            <!-- Vector domain -->
+            <g transform="translate(620, 190)">
+              <rect x="-130" y="-110" width="260" height="220" rx="6" fill="rgba(15, 23, 42, 0.9)" stroke="#334155"/>
+              <text x="0" y="-85" fill="#f8fafc" font-size="14" font-weight="bold" text-anchor="middle">向量空间：M · vec(X)</text>
+
+              <!-- Big Kronecker Matrix -->
+              <rect x="-110" y="-60" width="130" height="120" fill="rgba(245, 158, 11, 0.15)" stroke="#f59e0b"/>
+              <text x="-45" y="0" fill="#f59e0b" font-size="13" font-weight="bold" text-anchor="middle">Bᵀ ⊗ A</text>
+              <text x="-45" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">(大系数方阵)</text>
+
+              <!-- Vector vec(X) -->
+              <rect x="40" y="-60" width="30" height="120" fill="rgba(168, 85, 247, 0.3)" stroke="#a855f7"/>
+              <text x="55" y="5" fill="#a855f7" font-size="11" font-weight="bold" text-anchor="middle">vec(X)</text>
+
+              <text x="0" y="90" fill="#94a3b8" font-size="12" text-anchor="middle">标准线性系统 (Bᵀ⊗A) v = c</text>
+            </g>
+          </svg>
+        </section>
+
+        <!-- Section 3: 隐形连接点：Khatri-Rao 积与张量分解 -->
+        <section class="content-block">
+          <h2>3. 隐形连接点：Khatri-Rao 积与高维张量分解</h2>
+          <p>
+            设矩阵 $A \in \mathbb{R}^{m \times k}$ 与 $B \in \mathbb{R}^{p \times k}$ 拥有<strong>相同的列数 $k$</strong>。它们的 <strong>Khatri-Rao 积（列级直积）</strong> $A \ast B \in \mathbb{R}^{mp \times k}$ 定义为两矩阵对应列的克罗内克积：
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-green); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            $$ A \ast B \triangleq \begin{bmatrix} a_1 \otimes b_1 & a_2 \otimes b_2 & \dots & a_k \otimes b_k \end{bmatrix} $$
+            <strong>现代数据科学核心地位</strong>：
+            在多维数据分析（如多通道脑电图、高维推荐系统、化学计量学）中，三阶张量 $\mathcal{X} \in \mathbb{R}^{I \times J \times K}$ 的 <strong>CP 因子分解 (CANDECOMP/PARAFAC)</strong>：
+            $$ \mathcal{X} \approx \sum_{r=1}^R a_r \circ b_r \circ c_r $$
+            其沿模态 1 展开的矩阵形式恰好就是：$X_{(1)} \approx A (C \ast B)^T$！Khatri-Rao 积是张量交替最小二乘法 (ALS) 算法的命脉。
+          </div>
+        </section>
+
+        <!-- Section 4: 代数矩阵方程求解 -->
+        <section class="content-block">
+          <h2>4. 经典矩阵方程求解：Sylvester 与 Lyapunov 方程</h2>
+
+          <h3>4.1 Sylvester 方程：$AX + XB = C$</h3>
+          <p>
+            利用向量化恒等式：
+            $$ \operatorname{vec}(AX + XB) = \operatorname{vec}(AX I) + \operatorname{vec}(I X B) = (I \otimes A) \operatorname{vec}(X) + (B^T \otimes I) \operatorname{vec}(X) = \operatorname{vec}(C) $$
+            提公因式合并为经典系统：
+            $$ (I_n \otimes A + B^T \otimes I_m) \operatorname{vec}(X) = \operatorname{vec}(C) $$
+          </p>
+          <div class="theorem-card" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-color); border-left: 4px solid var(--accent-blue); padding: 1.2rem; border-radius: var(--radius-sm); margin: 1rem 0;">
+            <strong>Sylvester 唯一解充要定理</strong>：<br>
+            矩阵方程 $AX + XB = C$ 对任意 $C$ 存在唯一解 $\iff$ 大方阵 $(I \otimes A + B^T \otimes I)$ 可逆 $\iff$ 其全部特征值 $\lambda_i(A) + \mu_j(B) \ne 0$（即 $A$ 的特征值谱与 $-B$ 的特征值谱严格不相交！）。
+          </div>
+
+          <h3>4.2 连续时间 Lyapunov 方程：$AX + XA^T + Q = 0$</h3>
+          <p>
+            在控制理论中，考虑线性动力系统 $\dot{x} = Ax$。由李雅普诺夫稳定性理论，系统渐近稳定的充要条件是：对任意对称正定矩阵 $Q \succ 0$，Lyapunov 方程必然存在唯一的正定解 $X \succ 0$！其化简形式为：
+            $$ (I \otimes A + A \otimes I) \operatorname{vec}(X) = -\operatorname{vec}(Q) $$
+            若 $A$ 的所有特征值均具有负实部（$\operatorname{Re}(\lambda_i) \lt 0$），则解必然唯一且正定。
+          </p>
+        </section>
+
+        <!-- Section 5: Python 实战 -->
+        <section class="content-block">
+          <h2>5. Python SciPy 实战：Sylvester 与 Lyapunov 方程求解</h2>
+          <pre style="background: #090d16; border: 1px solid var(--border-color); padding: 1.25rem; border-radius: var(--radius-sm); overflow-x: auto; color: #e2e8f0; font-family: monospace; font-size: 0.9rem; line-height: 1.6;"><code>import numpy as np
+import scipy.linalg as la
+
+# 1. 验证克罗内克积与 vec 恒等式: vec(AXB) == (B^T ⊗ A) vec(X)
+m, k, n = 3, 2, 4
+A = np.random.randn(m, k)
+X = np.random.randn(k, n)
+B = np.random.randn(n, 2)
+
+# 左边: 矩阵乘法后向量化 (按列堆叠 order='F')
+AXB = A @ X @ B
+vec_AXB = AXB.flatten(order='F')
+
+# 右边: 克罗内克大矩阵乘 vec(X)
+big_M = np.kron(B.T, A)
+vec_X = X.flatten(order='F')
+rhs = big_M @ vec_X
+
+print(f"vec(AXB) 恒等式绝对误差: {np.linalg.norm(vec_AXB - rhs):.2e}")
+assert np.allclose(vec_AXB, rhs)
+
+# 2. 求解连续 Lyapunov 方程: A X + X A^T + Q = 0
+# 构造稳定系统矩阵 A (特征值实部为负)
+A_sys = np.array([[-2.0, 1.0],
+                  [0.0, -3.0]])
+Q = np.eye(2)
+
+# 使用 SciPy 专用高精算法求解
+X_sol = la.solve_continuous_lyapunov(A_sys, -Q)
+print("\nLyapunov 正定解矩阵 X:\n", X_sol)
+print("验证残差 ||A X + X A^T + Q||:", np.linalg.norm(A_sys @ X_sol + X_sol @ A_sys.T + Q))
+print("解 X 的特征值 (验证正定性):", np.linalg.eigvalsh(X_sol))
+</code></pre>
+        </section>
+
+        <!-- Section 6: 自测练习 -->
+        <section class="content-block">
+          <h2>6. 交互自测与核心理解巩固</h2>
+          <div class="card" style="margin: 1.5rem 0; padding: 1.5rem; background: rgba(15, 23, 42, 0.5);">
+            <div style="font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem;">
+              【单选题】设 $A \in \mathbb{R}^{2 \times 2}$ 的特征值为 $1, 2$；$B \in \mathbb{R}^{2 \times 2}$ 的特征值为 $3, 4$。则方阵 $A \otimes B$ 的特征值连乘积（即行列式 $\operatorname{det}(A \otimes B)$）等于多少？
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, true, '回答完全正确！根据克罗内克积分块行列式定理，det(A ⊗ B) = (det A)^n · (det B)^m。这里 det(A) = 1 × 2 = 2，det(B) = 3 × 4 = 12，m = n = 2。故 det(A ⊗ B) = 2² × 12² = 4 × 144 = 576！')">
+              A. 576
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。24 只是 det(A) · det(B) 的值，但直积的阶数为 4，行列式有幂次放大效应。')">
+              B. 24
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。请代入 det(A ⊗ B) = (det A)^n (det B)^m 公式。')">
+              C. 144
+            </div>
+            <div class="quiz-option" onclick="checkQuiz(this, false, '错误。')">
+              D. 288
+            </div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+          </div>
+        </section>
+
+        <!-- Navigation Footer -->
+        <footer class="module-nav-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+          <a href="ma4_psd_matrix_inequalities.html" class="btn btn-secondary">
+            &larr; 上一专题：MA 04 半正定与矩阵不等式
+          </a>
+          <a href="ma6_matrix_calculus_optimization.html" class="btn btn-primary" style="background: var(--accent-purple); border-color: var(--accent-purple);">
+            下一专题：MA 06 矩阵微积分与极值优化 &rarr;
+          </a>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function checkQuiz(element, isCorrect, explanation) {
+      const feedback = document.getElementById('quizFeedback');
+      feedback.style.display = 'block';
+      if (isCorrect) {
+        feedback.style.background = 'rgba(16, 185, 129, 0.15)';
+        feedback.style.color = 'var(--accent-green)';
+        feedback.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        feedback.innerHTML = '<strong>🎉 正确！</strong> ' + explanation;
+      } else {
+        feedback.style.background = 'rgba(239, 68, 68, 0.15)';
+        feedback.style.color = '#ef4444';
+        feedback.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        feedback.innerHTML = '<strong>❌ 遗憾！</strong> ' + explanation;
+      }
+    }
+  </script>
+</body>
+</html>
