@@ -438,11 +438,354 @@
           </div>
         </div>
 
-        <!-- 2. 谱分解与算子多项式 (Exercise 7-5 深度融合) -->
+        <!-- 2. 几何深度视界：零剪切定理与“谱”的物理画卷 -->
+        <div class="card" style="margin-top: 2rem;">
+          <div class="card-header">
+            <span class="badge" style="background: var(--accent-cyan, #06b6d4); color: #000;">几何深度视界</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 几何深度透视：对称矩阵为什么天生“零剪切”？“谱”的几何本质与物理画卷</h2>
+          </div>
+          <div class="card-body">
+            
+            <!-- 2.1 剪切变形的几何本质与空间互易性 -->
+            <h3 style="color: var(--accent-cyan, #06b6d4); margin-top: 0.5rem;">2.1 剪切变形 (Shear) 的几何本质：单向侧滑与空间互易性 (Reciprocity)</h3>
+            <p>
+              在探讨“为什么实对称矩阵没有剪切”之前，必须先看清：<strong>几何上的剪切变形（Shear）究竟是什么？</strong>
+            </p>
+            <p>
+              在二维平面中，考虑一个标准剪切变换矩阵 $S = \begin{bmatrix} 1 & k \\ 0 & 1 \end{bmatrix}$（其中 $k \neq 0$）。当它作用于两个原本相互正交的标准基向量 $\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix}$ 与 $\mathbf{e}_2 = \begin{bmatrix} 0 \\ 1 \end{bmatrix}$ 时：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem 1.25rem; border-radius: 6px; font-size: 0.95rem; line-height: 1.8; margin: 0.75rem 0;">
+              • $S\mathbf{e}_1 = \begin{bmatrix} 1 \\ 0 \end{bmatrix} = \mathbf{e}_1$（横向轴纹丝不动）<br>
+              • $S\mathbf{e}_2 = \begin{bmatrix} k \\ 1 \end{bmatrix} = \mathbf{e}_2 + k\mathbf{e}_1$（纵向轴<strong>向 $\mathbf{e}_1$ 方向单向滑移倾倒了 $k$</strong>）
+            </div>
+            <p>
+              <strong>剪切的几何灵魂是“单向侧滑”：</strong>垂直正交的网格被斜切成倾斜的平行四边形。如果从内积投影审视它们的相互影响：
+            </p>
+            <ul style="margin-left: 1.5rem; line-height: 1.8; font-size: 0.9rem; color: #f8fafc;">
+              <li>$\mathbf{e}_2$ 变换后倒向 $\mathbf{e}_1$ 的投影分量为：$\mathbf{e}_1 \cdot (S\mathbf{e}_2) = 1 \times k + 0 \times 1 = k$</li>
+              <li>$\mathbf{e}_1$ 变换后倒向 $\mathbf{e}_2$ 的投影分量为：$(S\mathbf{e}_1) \cdot \mathbf{e}_2 = 1 \times 0 + 0 \times 1 = 0$</li>
+            </ul>
+            <p style="margin-top: 0.5rem;">
+              <strong>一个拼命朝对方倾倒，另一个却岿然不动！</strong>这种相互作用的<strong>极端不对称性</strong>，正是剪切畸变产生的第一代数根源。
+            </p>
+
+            <div class="theorem-box" style="margin: 1rem 0; padding: 1.25rem; background: rgba(6, 182, 212, 0.06); border-left: 4px solid var(--accent-cyan, #06b6d4); border-radius: 6px;">
+              <h4 style="color: var(--accent-cyan, #06b6d4); font-size: 1.05rem; margin-bottom: 0.5rem;">
+                ⚖️ 对称矩阵的几何铁律：严格的“空间互易性” (Spatial Reciprocity)
+              </h4>
+              <p style="font-size: 0.92rem; line-height: 1.8;">
+                实对称矩阵 $A = A^T$ 的内积定义满足：对任意向量 $\mathbf{u}, \mathbf{v}$，恒有：
+              </p>
+              <div style="font-size: 1.2rem; text-align: center; margin: 0.5rem 0; color: var(--accent-cyan, #06b6d4); font-weight: bold;">
+                $$\mathbf{u} \cdot (A\mathbf{v}) = (A\mathbf{u}) \cdot \mathbf{v}$$
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                • <strong>几何直觉翻译：</strong>“向量 $\mathbf{v}$ 变换后向 $\mathbf{u}$ 倾斜的投影分量，<strong>必须严格等于</strong>向量 $\mathbf{u}$ 变换后向 $\mathbf{v}$ 倾斜的投影分量！”<br>
+                • <strong>双重封杀剪切与旋转：</strong>若发生旋转，一方靠近必伴随另一方远离（投影符号相反，破坏互易性）；若发生剪切，单向滑移导致投影不等。对称矩阵从最底层公理上就<strong>彻底禁止了任何单向滑动的可能</strong>！
+              </p>
+            </div>
+
+            <!-- SVG 图解 1：剪切 vs 互易性机制对比 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="280" viewBox="0 0 760 280" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <defs>
+                  <marker id="arr-cyan-s2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M 0 0 L 8 4 L 0 8 Z" fill="#06b6d4" />
+                  </marker>
+                  <marker id="arr-green-s2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M 0 0 L 8 4 L 0 8 Z" fill="#4ade80" />
+                  </marker>
+                  <marker id="arr-purple-s2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M 0 0 L 8 4 L 0 8 Z" fill="#c084fc" />
+                  </marker>
+                  <marker id="arr-rose-s2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                    <path d="M 0 0 L 8 4 L 0 8 Z" fill="#f43f5e" />
+                  </marker>
+                </defs>
+
+                <!-- Left Panel: Shear Deformation -->
+                <g transform="translate(40, 20)">
+                  <rect width="320" height="240" rx="6" fill="rgba(15, 23, 42, 0.4)" stroke="rgba(255, 255, 255, 0.08)"/>
+                  <text x="160" y="24" fill="#f43f5e" font-size="13" font-weight="bold" text-anchor="middle">非对称剪切变形：单向侧滑与互易失衡</text>
+                  
+                  <!-- Original Square (dashed) -->
+                  <polygon points="60,190 160,190 160,90 60,90" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                  
+                  <!-- Sheared Parallelogram (k=0.7) -->
+                  <polygon points="60,190 160,190 230,90 130,90" fill="rgba(244, 63, 94, 0.12)" stroke="#f43f5e" stroke-width="2"/>
+                  
+                  <!-- e1 vector -->
+                  <line x1="60" y1="190" x2="160" y2="190" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr-cyan-s2)"/>
+                  <text x="110" y="208" fill="#38bdf8" font-size="11" font-weight="bold">e₁ = Se₁ (不动)</text>
+                  
+                  <!-- e2 vector and Se2 -->
+                  <line x1="60" y1="190" x2="60" y2="90" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <text x="35" y="140" fill="#94a3b8" font-size="11">原 e₂</text>
+                  <line x1="60" y1="190" x2="130" y2="90" stroke="#f43f5e" stroke-width="2.5" marker-end="url(#arr-rose-s2)"/>
+                  <text x="140" y="85" fill="#f43f5e" font-size="11" font-weight="bold">Se₂ = e₂ + k·e₁</text>
+
+                  <!-- Lateral Slide Arrow -->
+                  <path d="M 60 80 L 130 80" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2,2" marker-end="url(#arr-cyan-s2)"/>
+                  <text x="95" y="72" fill="#fbbf24" font-size="10" text-anchor="middle">单向滑移量 k</text>
+
+                  <text x="160" y="228" fill="#94a3b8" font-size="11" text-anchor="middle">e₁·(Se₂) = k ≠ (Se₁)·e₂ = 0 (互易性破损)</text>
+                </g>
+
+                <!-- Right Panel: Symmetric Shear-Free Deformation -->
+                <g transform="translate(400, 20)">
+                  <rect width="320" height="240" rx="6" fill="rgba(15, 23, 42, 0.4)" stroke="rgba(255, 255, 255, 0.08)"/>
+                  <text x="160" y="24" fill="#4ade80" font-size="13" font-weight="bold" text-anchor="middle">实对称矩阵：空间互易与直角刚性保角</text>
+                  
+                  <!-- Unit Square rotated along principal axes -->
+                  <g transform="translate(160, 150) rotate(-28)">
+                    <!-- Original Circle / Square -->
+                    <rect x="-40" y="-40" width="80" height="80" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                    <!-- Scaled Rectangle along q1 & q2 -->
+                    <rect x="-70" y="-30" width="140" height="60" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="2"/>
+                    
+                    <!-- Eigenvectors q1 & q2 -->
+                    <line x1="0" y1="0" x2="85" y2="0" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green-s2)"/>
+                    <text x="92" y="4" fill="#4ade80" font-size="11" font-weight="bold">λ₁q₁</text>
+                    
+                    <line x1="0" y1="0" x2="0" y2="-45" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple-s2)"/>
+                    <text x="5" y="-48" fill="#c084fc" font-size="11" font-weight="bold">λ₂q₂</text>
+
+                    <!-- Right Angle Symbol -->
+                    <path d="M 0 -12 L 12 -12 L 12 0" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+                    <text x="16" y="-15" fill="#fbbf24" font-size="9" font-weight="bold">90°</text>
+                  </g>
+
+                  <text x="160" y="210" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle">网格夹角保持 90° 严格垂直（零剪切）</text>
+                  <text x="160" y="228" fill="#94a3b8" font-size="11" text-anchor="middle">u·(Av) = (Au)·v (投影完全互易)</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- 2.2 正交隔离定理与递推机制 -->
+            <h3 style="color: var(--accent-green); margin-top: 1.5rem;">2.2 正交隔离机制：为什么一定能找到“完全零剪切”的坐标系？</h3>
+            <p>
+              剪切之所以在几何中发生，是因为<strong>变换把原本垂直的向量拖向了其他轴线</strong>。但实对称矩阵拥有一条无可撼动的几何铁律——<strong>正交补空间绝对隔离定理</strong>：
+            </p>
+            <div style="background: rgba(15, 23, 42, 0.5); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1rem 0;">
+              <h4 style="color: var(--accent-green); margin-bottom: 0.5rem;">🛡️ 正交补空间“不侧滑”定理 (Orthogonal Subspace Invariance)</h4>
+              <p style="font-size: 0.9rem; line-height: 1.9; color: #f8fafc;">
+                <strong>第一步（主轴存在）：</strong>在空间单位球 $\|\mathbf{x}\| = 1$ 上，二次型连续函数 $\mathbf{x}^T A \mathbf{x}$ 必能在某个方向 $\mathbf{q}_1$ 达到最大拉伸极值。在该方向上，梯度与向量共线，即矩阵实施纯径向拉伸：
+                $$A\mathbf{q}_1 = \lambda_1 \mathbf{q}_1$$
+                <strong>第二步（正交隔离计算）：</strong>现在，任意取一个与主轴 $\mathbf{q}_1$ 严格垂直的向量 $\mathbf{w}$（满足 $\mathbf{q}_1 \cdot \mathbf{w} = 0$）。<br>
+                我们计算 $\mathbf{w}$ 经过矩阵变换后的新向量 $A\mathbf{w}$，检验它在 $\mathbf{q}_1$ 方向上是否产生了倾斜侧滑投影：
+                $$\mathbf{q}_1 \cdot (A\mathbf{w}) = (A\mathbf{q}_1) \cdot \mathbf{w} = (\lambda_1 \mathbf{q}_1) \cdot \mathbf{w} = \lambda_1 (\mathbf{q}_1 \cdot \mathbf{w}) = \lambda_1 \times 0 = 0$$
+              </p>
+              <div style="background: rgba(52, 211, 153, 0.1); border-left: 3px solid var(--accent-green); padding: 0.6rem 1rem; border-radius: 4px; margin-top: 0.75rem; font-size: 0.88rem; color: #e2e8f0;">
+                🎯 <strong>几何结论：</strong>所有原本垂直于 $\mathbf{q}_1$ 的向量，变换之后<strong>依然 100% 垂直于 $\mathbf{q}_1$</strong>！<br>
+                变换 $A$ 在拉伸 $\mathbf{q}_1$ 的同时，对垂直子空间没有任何侧向拖拽或剪切歪斜，侧滑分量被绝对清零！
+              </div>
+            </div>
+
+            <!-- SVG 图解 2：正交隔离与无侧滑递推机制 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="260" viewBox="0 0 760 260" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <g transform="translate(80, 130)">
+                  <!-- Principal Axis q1 -->
+                  <line x1="0" y1="0" x2="360" y2="0" stroke="#4ade80" stroke-width="3" marker-end="url(#arr-green-s2)"/>
+                  <text x="375" y="5" fill="#4ade80" font-size="13" font-weight="bold">第一主轴: Aq₁ = λ₁q₁</text>
+
+                  <!-- Original unit vector q1 -->
+                  <circle cx="120" cy="0" r="4" fill="#4ade80"/>
+                  <text x="110" y="20" fill="#94a3b8" font-size="11">单位基 q₁</text>
+
+                  <!-- Orthogonal Subspace Line (q1_perp) -->
+                  <line x1="0" y1="-100" x2="0" y2="100" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                  <text x="-15" y="-105" fill="#c084fc" font-size="12" font-weight="bold" text-anchor="end">正交补空间 q₁ᐩ</text>
+
+                  <!-- Vector w in orthogonal subspace -->
+                  <circle cx="0" cy="-50" r="3" fill="#c084fc"/>
+                  <text x="-10" y="-45" fill="#94a3b8" font-size="11" text-anchor="end">向量 w ⊥ q₁</text>
+
+                  <!-- Transformed Aw on the exact same vertical line! -->
+                  <line x1="0" y1="0" x2="0" y2="-90" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple-s2)"/>
+                  <text x="12" y="-75" fill="#c084fc" font-size="12" font-weight="bold">Aw (仍严格位于 q₁ᐩ 上)</text>
+
+                  <!-- Right Angle Symbol between Aw and Aq1 -->
+                  <path d="M 0 -18 L 18 -18 L 18 0" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+                  <circle cx="9" cy="-9" r="2" fill="#fbbf24"/>
+                  <text x="24" y="-12" fill="#fbbf24" font-size="11" font-weight="bold">严格 90°</text>
+
+                  <!-- Forbidden tilt component (Red dashed with cross) -->
+                  <line x1="0" y1="-50" x2="70" y2="-50" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <text x="80" y="-46" fill="#f43f5e" font-size="10">剪切倾斜分量 q₁·(Aw) ≡ 0 (被互易律绝对封杀！)</text>
+
+                  <!-- Bottom summary annotation -->
+                  <rect x="180" y="30" width="380" height="42" rx="4" fill="rgba(15, 23, 42, 0.6)" stroke="rgba(56, 189, 248, 0.3)"/>
+                  <text x="370" y="55" fill="#38bdf8" font-size="11" text-anchor="middle">q₁·(Aw) = (Aq₁)·w = λ₁(q₁·w) = λ₁ × 0 = 0</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- 2.3 “谱”的几何本质与光学色散隐喻 -->
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">2.3 “谱 (Spectrum)”的几何本质：从三棱镜色散到正交投影叠加</h3>
+            <p>
+              “谱（Spectrum）”这一词汇借用自光学：<strong>牛顿用三棱镜将一束复杂的白光色散为红、橙、黄、绿、青、蓝、紫等独立纯色光带</strong>。
+            </p>
+            <p>
+              在线性代数中，对称矩阵的谱分解所做的事情与三棱镜如出一辙：<strong>把全空间中任何一个复杂的线性运动，拆解为 $n$ 个互不干扰、两两正交的单模态纯拉伸（正交基波）</strong>：
+            </p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1rem 0;">
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(192, 132, 252, 0.25);">
+                <strong style="color: var(--accent-purple);">🌈 光学色散隐喻</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  白光通过棱镜：按不同波长（固有频率）发生不同折射率分离，互不掺杂。<br>
+                  向量输入矩阵：按不同特征向量（正交主轴）发生不同缩放倍率，互不串扰。
+                </p>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+                <strong style="color: var(--accent-blue);">🪐 超球到超椭球的纯轴向拉伸</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  单位球面上每一个点被变换后形成多维超椭球。特征向量 $\mathbf{q}_i$ 恰好是<strong>椭球各条对称主轴的方向</strong>，特征值 $\lambda_i$ 是对应的半轴缩放长度，完全没有扭曲歪斜！
+                </p>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: 8px; border: 1px solid rgba(52, 211, 153, 0.25);">
+                <strong style="color: var(--accent-green);">🧩 正交投影原子的能量合成</strong>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.4rem; line-height: 1.7;">
+                  $A\mathbf{x} = \sum_{i=1}^n \lambda_i (\mathbf{q}_i^T\mathbf{x}) \mathbf{q}_i$。先正交投射到主轴上（取坐标分量），各自乘以频率强度 $\lambda_i$，再线性叠加无损重构！
+                </p>
+              </div>
+            </div>
+
+            <!-- SVG 图解 3：“谱”的光学色散与正交投影原子叠加 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="290" viewBox="0 0 760 290" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <!-- Left: White Input Vector x -->
+                <g transform="translate(60, 150)">
+                  <line x1="0" y1="0" x2="80" y2="-45" stroke="#f8fafc" stroke-width="3" marker-end="url(#arr-cyan-s2)"/>
+                  <text x="40" y="-55" fill="#f8fafc" font-size="12" font-weight="bold" text-anchor="middle">输入复合向量 x</text>
+                  <circle cx="0" cy="0" r="3" fill="#f8fafc"/>
+                  <text x="0" y="20" fill="#94a3b8" font-size="11" text-anchor="middle">(犹如复色白光)</text>
+                </g>
+
+                <!-- Center: Prism Operator A -->
+                <g transform="translate(230, 70)">
+                  <!-- Triangular Prism Glass -->
+                  <polygon points="50,10 150,150 0,150" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="2"/>
+                  <text x="65" y="115" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">算子 A</text>
+                  <text x="65" y="132" fill="#94a3b8" font-size="10" text-anchor="middle">(光学三棱镜)</text>
+
+                  <!-- Incident Ray Entering -->
+                  <line x1="-90" y1="35" x2="30" y2="90" stroke="#f8fafc" stroke-width="2.5" stroke-dasharray="3,3"/>
+                  
+                  <!-- Refracted/Dispersed Rays Emerging -->
+                  <!-- Ray 1 (Green: q1 projection) -->
+                  <line x1="105" y1="90" x2="220" y2="40" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green-s2)"/>
+                  <text x="230" y="32" fill="#4ade80" font-size="11" font-weight="bold">分量 1: λ₁ P₁x = λ₁(q₁ᵀx)q₁</text>
+
+                  <!-- Ray 2 (Purple: q2 projection) -->
+                  <line x1="125" y1="120" x2="220" y2="155" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple-s2)"/>
+                  <text x="230" y="170" fill="#c084fc" font-size="11" font-weight="bold">分量 2: λ₂ P₂x = λ₂(q₂ᵀx)q₂</text>
+                </g>
+
+                <!-- Right: Vector Recombination Ax -->
+                <g transform="translate(560, 145)">
+                  <!-- Parallelogram addition -->
+                  <line x1="0" y1="0" x2="70" y2="-40" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <line x1="0" y1="0" x2="50" y2="35" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <line x1="70" y1="-40" x2="120" y2="-5" stroke="#c084fc" stroke-width="1.5" stroke-dasharray="3,3"/>
+                  <line x1="50" y1="35" x2="120" y2="-5" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+                  <!-- Final Recombined Vector Ax -->
+                  <line x1="0" y1="0" x2="120" y2="-5" stroke="#fbbf24" stroke-width="3" marker-end="url(#arr-rose-s2)"/>
+                  <text x="135" y="-2" fill="#fbbf24" font-size="13" font-weight="bold">Ax = ∑ λᵢ Pᵢx</text>
+                  <text x="60" y="65" fill="#94a3b8" font-size="11" text-anchor="middle">正交单色投影完美无损重构</text>
+                </g>
+              </svg>
+            </div>
+
+            <!-- 2.4 连续介质力学：柯西应力微元与主应力零剪应力面 -->
+            <h3 style="color: var(--accent-rose); margin-top: 1.5rem;">2.4 物理力学现实印证：柯西应力张量与主应力“零剪应力面”</h3>
+            <p>
+              在连续介质力学中，材料内部任意一点的受力状态由<strong>柯西应力张量 (Cauchy Stress Tensor) $\sigma$</strong> 描述。由微元力矩平衡定理，剪切互等定律必然成立，因此<strong>应力张量天然必定是对称矩阵（$\sigma = \sigma^T$）</strong>！
+            </p>
+            <p>
+              对称矩阵谱定理在物理世界上演了极其壮丽的奇迹：
+            </p>
+            <div class="intuition-box" style="margin-top: 1rem;">
+              <strong style="color: var(--accent-rose);">🏗️ 主应力状态 (Principal Stresses) 的物理本质</strong>
+              <p style="font-size: 0.9rem; color: #f8fafc; line-height: 1.8; margin-top: 0.4rem;">
+                • 无论外力环境多么复杂、物体内部看似受尽扭曲；<br>
+                • <strong>永远可以在材料内切出一个微小的正方体微元，使得该正方体的六个表面上的剪应力完全消亡 ($\tau = 0$)！</strong><br>
+                • 在这组主平面上，外力只表现为垂直于表面的<strong>纯拉伸或纯压缩（主正应力 $\sigma_1, \sigma_2, \sigma_3$）</strong>，其面法向就是特征向量 $\mathbf{q}_i$！
+              </p>
+            </div>
+
+            <!-- SVG 图解 4：柯西应力微元与剪应力消亡 -->
+            <div style="text-align: center; margin: 1.5rem 0;">
+              <svg width="760" height="270" viewBox="0 0 760 270" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                <!-- Left: General element with shear -->
+                <g transform="translate(60, 30)">
+                  <rect width="280" height="210" rx="6" fill="rgba(15, 23, 42, 0.4)" stroke="rgba(255, 255, 255, 0.08)"/>
+                  <text x="140" y="24" fill="#fbbf24" font-size="12" font-weight="bold" text-anchor="middle">任意方位微元 (含剪应力 τ ≠ 0)</text>
+
+                  <!-- Square element -->
+                  <g transform="translate(90, 60)">
+                    <rect x="0" y="0" width="80" height="80" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" stroke-width="2"/>
+                    
+                    <!-- Normal Stresses (Arrows perpendicular) -->
+                    <line x1="40" y1="0" x2="40" y2="-25" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-cyan-s2)"/>
+                    <line x1="40" y1="80" x2="40" y2="105" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-cyan-s2)"/>
+                    <text x="45" y="-12" fill="#38bdf8" font-size="10">σ_y</text>
+                    
+                    <line x1="80" y1="40" x2="105" y2="40" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-cyan-s2)"/>
+                    <line x1="0" y1="40" x2="-25" y2="40" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-cyan-s2)"/>
+                    <text x="92" y="32" fill="#38bdf8" font-size="10">σ_x</text>
+
+                    <!-- Shear Stresses (Arrows parallel to faces) -->
+                    <line x1="15" y1="-5" x2="65" y2="-5" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arr-rose-s2)"/>
+                    <line x1="85" y1="15" x2="85" y2="65" stroke="#f43f5e" stroke-width="1.5" marker-end="url(#arr-rose-s2)"/>
+                    <text x="90" y="55" fill="#f43f5e" font-size="10" font-weight="bold">τ_xy ≠ 0</text>
+                  </g>
+                  <text x="140" y="195" fill="#94a3b8" font-size="11" text-anchor="middle">表面既受拉伸又受剪切滑移</text>
+                </g>
+
+                <!-- Middle Transition: Principal Rotation -->
+                <g transform="translate(355, 125)">
+                  <path d="M 0 0 L 40 0 M 32 -6 L 40 0 L 32 6" fill="none" stroke="#4ade80" stroke-width="2"/>
+                  <text x="20" y="-12" fill="#4ade80" font-size="10" font-weight="bold" text-anchor="middle">旋转至特征轴</text>
+                  <text x="20" y="18" fill="#94a3b8" font-size="9" text-anchor="middle">(正交变换 Q)</text>
+                </g>
+
+                <!-- Right: Principal Stress State (Zero Shear) -->
+                <g transform="translate(420, 30)">
+                  <rect width="280" height="210" rx="6" fill="rgba(15, 23, 42, 0.4)" stroke="rgba(255, 255, 255, 0.08)"/>
+                  <text x="140" y="24" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">主应力状态 (剪应力完全清零 τ = 0)</text>
+
+                  <!-- Rotated square element -->
+                  <g transform="translate(140, 100) rotate(32)">
+                    <rect x="-40" y="-40" width="80" height="80" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="2"/>
+                    
+                    <!-- Principal Stresses (Normal only) -->
+                    <line x1="0" y1="-40" x2="0" y2="-72" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green-s2)"/>
+                    <line x1="0" y1="40" x2="0" y2="72" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arr-green-s2)"/>
+                    <text x="8" y="-55" fill="#4ade80" font-size="11" font-weight="bold">σ₁ = λ₁</text>
+
+                    <line x1="40" y1="0" x2="72" y2="0" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple-s2)"/>
+                    <line x1="-40" y1="0" x2="-72" y2="0" stroke="#c084fc" stroke-width="2.5" marker-end="url(#arr-purple-s2)"/>
+                    <text x="50" y="-6" fill="#c084fc" font-size="11" font-weight="bold">σ₂ = λ₂</text>
+
+                    <!-- Zero Shear Stress Stamp -->
+                    <text x="0" y="4" fill="#4ade80" font-size="10" font-weight="bold" text-anchor="middle">τ ≡ 0</text>
+                  </g>
+
+                  <text x="140" y="195" fill="#4ade80" font-size="11" font-weight="bold" text-anchor="middle">剪应力完全消失！仅剩纯拉伸与纯压缩</text>
+                </g>
+              </svg>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3. 谱分解与算子多项式 (Exercise 7-5 深度融合) -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-purple); color: #fff;">空间解构与算子函数</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">2. 谱分解 (Spectral Decomposition)：矩阵的外积投影原子化与矩阵函数</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 谱分解 (Spectral Decomposition)：矩阵的外积投影原子化与矩阵函数</h2>
           </div>
           <div class="card-body">
             <p>
@@ -452,7 +795,7 @@
               $$A = \begin{bmatrix} \mathbf{q}_1 & \dots & \mathbf{q}_n \end{bmatrix} \begin{bmatrix} \lambda_1 & & 0 \\ & \ddots & \\ 0 & & \lambda_n \end{bmatrix} \begin{bmatrix} \mathbf{q}_1^T \\ \vdots \\ \mathbf{q}_n^T \end{bmatrix} = \lambda_1 \mathbf{q}_1 \mathbf{q}_1^T + \lambda_2 \mathbf{q}_2 \mathbf{q}_2^T + \dots + \lambda_n \mathbf{q}_n \mathbf{q}_n^T$$
             </div>
             <div style="font-size: 1.35rem; text-align: center; font-weight: bold; margin: 0.75rem 0; color: var(--accent-purple);">
-              $$A = \sum_{i=1}^n \lambda_i P_i \quad \text{其中 } P_i = \mathbf{q}_i \mathbf{q}_i^T$$
+              $$A = \sum_{i=1}^n \lambda_i P_i \quad (P_i = \mathbf{q}_i \mathbf{q}_i^T)$$
             </div>
 
             <!-- 谱分解原子性质 -->
@@ -477,7 +820,8 @@
                 $$P_1 = \mathbf{q}_1 \mathbf{q}_1^T = \frac{1}{5}\begin{bmatrix} -2 \\ 1 \end{bmatrix} \begin{bmatrix} -2 & 1 \end{bmatrix} = \begin{bmatrix} 4/5 & -2/5 \\ -2/5 & 1/5 \end{bmatrix}$$
                 $$P_2 = \mathbf{q}_2 \mathbf{q}_2^T = \frac{1}{5}\begin{bmatrix} 1 \\ 2 \end{bmatrix} \begin{bmatrix} 1 & 2 \end{bmatrix} = \begin{bmatrix} 1/5 & 2/5 \\ 2/5 & 4/5 \end{bmatrix}$$
                 线性组合验证：
-                $$\lambda_1 P_1 + \lambda_2 P_2 = 5 \begin{bmatrix} 4/5 & -2/5 \\ -2/5 & 1/5 \end{bmatrix} - 5 \begin{bmatrix} 1/5 & 2/5 \\ 2/5 & 4/5 \end{bmatrix} = \begin{bmatrix} 4 - 1 & -2 - 2 \\ -2 - 2 & 1 - 4 \end{bmatrix} = \begin{bmatrix} 3 & -4 \\ -4 & -3 \end{bmatrix} = A \quad \text{✓ 完美吻合！}$$
+                $$\lambda_1 P_1 + \lambda_2 P_2 = 5 \begin{bmatrix} 4/5 & -2/5 \\ -2/5 & 1/5 \end{bmatrix} - 5 \begin{bmatrix} 1/5 & 2/5 \\ 2/5 & 4/5 \end{bmatrix} = \begin{bmatrix} 4 - 1 & -2 - 2 \\ -2 - 2 & 1 - 4 \end{bmatrix} = \begin{bmatrix} 3 & -4 \\ -4 & -3 \end{bmatrix} = A$$
+                <span style="color: var(--accent-green); font-weight: bold;">✓ 完美吻合！</span>
               </p>
             </div>
 
@@ -509,11 +853,11 @@
           </div>
         </div>
 
-        <!-- 3. 二次型、主轴定理与正定矩阵 -->
+        <!-- 4. 二次型、主轴定理与正定矩阵 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-green); color: #000;">能量曲面与优化</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">3. 二次型 (Quadratic Forms)、主轴定理与正定矩阵五大充要判据</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 二次型 (Quadratic Forms)、主轴定理与正定矩阵五大充要判据</h2>
           </div>
           <div class="card-body">
                         <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 0.75rem 1rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
@@ -524,7 +868,7 @@
                 阅读专属课件：Ch 7.5 正定矩阵与二次型能量曲面 →
               </a>
             </div>
-            <h3 style="color: var(--accent-green);">3.1 二次型几何与主轴定理 (Principal Axis Theorem)</h3>
+            <h3 style="color: var(--accent-green);">4.1 二次型几何与主轴定理 (Principal Axis Theorem)</h3>
             <p>
               在多元微积分、物理学能量、以及机器学习损失函数中，处处充满二次多项式 $q(\mathbf{x}) = \mathbf{x}^T A \mathbf{x}$。
               当存在交叉项（如 $2b x_1 x_2$）时，几何曲面是倾斜旋转的。
@@ -582,7 +926,7 @@
               </svg>
             </div>
 
-            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">3.2 正定矩阵 (Positive Definite, $A \succ 0$) 五大充要判定金律</h3>
+            <h3 style="color: var(--accent-purple); margin-top: 1.5rem;">4.2 正定矩阵 (Positive Definite, $A \succ 0$) 五大充要判定金律</h3>
             <p>
               实对称矩阵 $A$ 称为<strong>正定矩阵 (Positive Definite)</strong>，若对任意非零向量 $\mathbf{x} \neq \mathbf{0}$，二次型恒严格正：$\mathbf{x}^T A \mathbf{x} > 0$。以下 5 条判定准则<strong>在数学上彼此完全等价</strong>：
             </p>
@@ -619,7 +963,7 @@
               </p>
             </div>
 
-            <!-- 3.3 正定性与半正定性理论专题 (Exercise 7-5 核心证明群) -->
+            <!-- 4.3 正定性与半正定性理论专题 (Exercise 7-5 核心证明群) -->
             <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.04); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
               <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem;">
                 📚 正定性与半正定性严密证明体系 (Exercise 7-5 讲义真题专题)
@@ -694,11 +1038,11 @@
           </div>
         </div>
 
-        <!-- 4. 交互实验台：二次型能量曲面与主轴旋转实验室 -->
+        <!-- 5. 交互实验台：二次型能量曲面与主轴旋转实验室 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-amber); color: #000;">动手实验室</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">4. 🧪 交互实验台：二次型主轴旋转与正定性动态探索</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 🧪 交互实验台：二次型主轴旋转与正定性动态探索</h2>
           </div>
           <div class="card-body">
             <p style="font-size: 0.95rem; color: var(--text-muted);">
@@ -759,11 +1103,11 @@
           </div>
         </div>
 
-        <!-- 5. 经典手算演练：3x3 对称矩阵谱分解 -->
+        <!-- 6. 经典手算演练：3x3 对称矩阵谱分解 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-green); color: #000;">手算示范</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">5. ✍️ 经典手算精析：带重根的 3×3 对称矩阵正交对角化全流程</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">6. ✍️ 经典手算精析：带重根的 3×3 对称矩阵正交对角化全流程</h2>
           </div>
           <div class="card-body">
             <div class="example-box" style="padding: 1.5rem; background: rgba(52, 211, 153, 0.06); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
@@ -798,11 +1142,11 @@
           </div>
         </div>
 
-        <!-- 6. Python / NumPy 工业实战演练 -->
+        <!-- 7. Python / NumPy 工业实战演练 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-amber); color: #000;">工业实战</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">6. 💻 Python 工业实战：协方差谱分解与 PCA 主成分提取</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">7. 💻 Python 工业实战：协方差谱分解与 PCA 主成分提取</h2>
           </div>
           <div class="card-body">
             <p>
@@ -843,11 +1187,11 @@ print(f"外积谱分解重构误差 ||A - QΛQ^T||: {reconstruction_err:.2e} (�
           </div>
         </div>
 
-        <!-- 7. 交互自测题 -->
+        <!-- 8. 交互自测题 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
             <span class="badge" style="background: var(--accent-rose); color: #fff;">自我检测</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">7. 🧠 交互自测：实对称矩阵与谱分解核心概念挑战</h2>
+            <h2 class="card-title" style="margin-top: 0.5rem;">8. 🧠 交互自测：实对称矩阵与谱分解核心概念挑战</h2>
           </div>
           <div class="card-body">
             <div class="quiz-container" style="display: flex; flex-direction: column; gap: 1.25rem;">

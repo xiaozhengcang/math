@@ -369,66 +369,465 @@
             <h2 class="card-title" style="margin-top: 0.5rem;">2. OLS 数学建模、正规方程推导与几何正交性</h2>
           </div>
           <div class="card-body">
-            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">2.1 超定方程组建模 (Overdetermined System)</h3>
+            <!-- 2.1 数据源头与矩阵装配机制 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-bottom: 0.75rem;">2.1 从现实金融数据到数学矩阵：数据是如何被构建出来的？</h3>
             <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
-              设我们考察资产在 $T$ 个时间截面（如 250 个交易日）的超额收益率序列，选取了 $K$ 个风险因子（$T \gg K$）：
+              在很多教科书中，多元线性回归直接从抽象的代数方程 $\mathbf{y} = X\beta + \varepsilon$ 凭空开始。然而在真实的量化金融与数据科学中，<strong>理解这些数字在现实中是如何采集、清洗并对齐组装为矩阵的，是建立代数几何直觉的第一基石</strong>。
+            </p>
+
+            <!-- 步骤 1 & 2 流程卡片 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-blue);">
+                <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.5rem;">📥 步骤一：因变量向量 $\mathbf{y} \in \mathbb{R}^T$ 的构建</div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  考察目标资产（如某只股票）在历史连续 $T$ 个交易日（如 $T = 250$ 个交易日，约 1 年）的表现：
+                </p>
+                <ul style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.25rem;">
+                  <li>每日收盘提取行情价 $P_t$，计算日百分比收益率：$r_t = \frac{P_t - P_{t-1}}{P_{t-1}}$；</li>
+                  <li>扣除当日央行/国债无风险基准利率 $r_{f,t}$，得到<strong>纯超额收益率</strong>：$y_t = r_t - r_{f,t}$；</li>
+                  <li>将这 $T$ 个标量按交易日时序垂向堆叠，生成 $T \times 1$ 的观测目标向量 $\mathbf{y}$。</li>
+                </ul>
+              </div>
+
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-green);">
+                <div style="font-weight: 700; color: var(--accent-green); margin-bottom: 0.5rem;">🧱 步骤二：设计矩阵 $X \in \mathbb{R}^{T \times (K+1)}$ 的逐列装配</div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  选取 $K$ 个解释性公共风险因子（如大盘、市值、估值因子）：
+                </p>
+                <ul style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.25rem;">
+                  <li><strong>第 0 列（全 1 常数基底）</strong>：全由 1 组成的常数列 $\mathbf{1} = [1, 1, \dots, 1]^T$。它在代数上负责赋予拟合超平面平行位移的自由度，在金融上负责承载脱离任何市场因子的纯特质选股超额 Alpha（$\alpha$）；</li>
+                  <li><strong>第 $1 \sim K$ 列（公共因子时序）</strong>：每一列 $\mathbf{f}_j \in \mathbb{R}^T$ 代表第 $j$ 个基准因子在过去 $T$ 天的完整时间序列；</li>
+                  <li>横向水平拼接：$X = [\mathbf{1}, \mathbf{f}_1, \mathbf{f}_2, \dots, \mathbf{f}_K]$。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 公共因子收益率数据源头深度剖析 -->
+            <div style="background: rgba(56, 189, 248, 0.05); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem;">
+                <span style="font-size: 1.1rem;">💡</span>
+                <strong style="color: var(--accent-blue); font-size: 0.95rem;">关键数据源头追溯：大盘公共因子与风格因子的超额收益率到底是怎么计算出来的？</strong>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8;">
+                很多初学者困惑于“因子的数字是凭空假设的吗？”——在工业实战中，公共因子的每一列数据都有着极度严肃的金融生成逻辑：
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px;">
+                  <div style="font-weight: 700; color: var(--accent-cyan); font-size: 0.88rem; margin-bottom: 0.4rem;">
+                    1. 大盘公共因子 ($f_{\text{MKT},t}$) 的真实生产链条
+                  </div>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem;">
+                    <li><strong>第一步（采大盘点位）</strong>：选取代表全市场综合表现的宽基指数（如沪深 300、中证全指、标普 500），每日收盘提取指数点位 $I_t$，计算大盘名义收益率 $R_{M,t} = \frac{I_t - I_{t-1}}{I_{t-1}}$；</li>
+                    <li><strong>第二步（采无风险利率）</strong>：调取当天银行间质押式回购利率（如 DR007）或 1 年期国债到期收益率的日折算值 $R_{f,t}$（如年化 2.5% 折算为日度约为 $0.01\%$）；</li>
+                    <li><strong>第三步（相减得纯超额）</strong>：$f_{\text{MKT},t} = R_{M,t} - R_{f,t}$。这就是输入给设计矩阵 $X$ 的第一列真实数字！</li>
+                  </ul>
+                </div>
+
+                <div style="background: var(--bg-secondary); padding: 1rem; border-radius: 6px;">
+                  <div style="font-weight: 700; color: var(--accent-purple); font-size: 0.88rem; margin-bottom: 0.4rem;">
+                    2. 风格/特征因子 ($f_{\text{SMB},t}, f_{\text{HML},t}$) 的真实生产链条
+                  </div>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem;">
+                    <li><strong>多空对冲组合构建 (Long-Short Portfolio)</strong>：风格因子不是单只股票，而是虚拟对冲组合。例如小市值因子 SMB：每日将全市场股票按市值大小排序，买入最小的 $30\%$ 股票（多头篮子），同时融券卖出最大的 $30\%$ 股票（空头篮子）；</li>
+                    <li><strong>纯多空净收益输出</strong>：该对冲组合的日净涨跌 $R_{\text{Long},t} - R_{\text{Short},t}$ 即为小市值风格收益。由于多空市值相等、系统性大盘风险已相互抵消，它衡量了纯粹靠“以小博大”风格获取的净回报！</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- 微观数值示例卡片 -->
+            <div style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin: 1.25rem 0;">
+              <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.75rem;">
+                🔍 极简数值切片：以 $T=3$ 个交易日与 $K=2$ 个因子（大盘 MKT、小市值 SMB）为例
+              </div>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; line-height: 1.6; text-align: center;">
+                  <thead>
+                    <tr style="background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border-color);">
+                      <th style="padding: 0.5rem; color: var(--text-main);">交易日 ($t$)</th>
+                      <th style="padding: 0.5rem; color: var(--accent-green);">股票超额收益 $y_t$</th>
+                      <th style="padding: 0.5rem; color: var(--text-muted);">常数项基底 (第0列)</th>
+                      <th style="padding: 0.5rem; color: var(--accent-blue);">大盘因子收益 $f_{t,1}$</th>
+                      <th style="padding: 0.5rem; color: var(--accent-purple);">小市值因子收益 $f_{t,2}$</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                      <td style="padding: 0.5rem;">Day 1</td>
+                      <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green);">+2.1%</td>
+                      <td style="padding: 0.5rem; color: var(--text-muted);">1</td>
+                      <td style="padding: 0.5rem; color: var(--accent-blue);">+1.0%</td>
+                      <td style="padding: 0.5rem; color: var(--accent-purple);">+0.5%</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                      <td style="padding: 0.5rem;">Day 2</td>
+                      <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green);">-0.8%</td>
+                      <td style="padding: 0.5rem; color: var(--text-muted);">1</td>
+                      <td style="padding: 0.5rem; color: var(--accent-blue);">-0.5%</td>
+                      <td style="padding: 0.5rem; color: var(--accent-purple);">-0.2%</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 0.5rem;">Day 3</td>
+                      <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green);">+1.5%</td>
+                      <td style="padding: 0.5rem; color: var(--text-muted);">1</td>
+                      <td style="padding: 0.5rem; color: var(--accent-blue);">+0.8%</td>
+                      <td style="padding: 0.5rem; color: var(--accent-purple);">+0.1%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; line-height: 1.7;">
+                将上述具体数值填入多元线性模型，得到具体的数值矩阵装配形态：
+              </p>
+              <div class="math-block" style="font-size: 0.95rem; margin: 0.5rem 0; text-align: center;">
+                $$\begin{bmatrix} +2.1\% \\ -0.8\% \\ +1.5\% \end{bmatrix} = \begin{bmatrix} 1 & +1.0\% & +0.5\% \\ 1 & -0.5\% & -0.2\% \\ 1 & +0.8\% & +0.1\% \end{bmatrix} \begin{bmatrix} \alpha \\ \beta_{\text{MKT}} \\ \beta_{\text{SMB}} \end{bmatrix} + \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \varepsilon_3 \end{bmatrix}$$
+              </div>
+            </div>
+
+            <!-- 2.2 矩阵维度与变量物理含义全景解剖 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.2 矩阵维度与变量物理含义全景解剖</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              将样本区间推广到一般的 $T$ 个交易日与 $K$ 个公共风险因子，模型写为紧凑的矩阵方程：
             </p>
             <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
-              $$\mathbf{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$$
+              $$\mathbf{y} = X\beta + \varepsilon$$
               $$\begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_T \end{bmatrix} = \begin{bmatrix} 1 & f_{1,1} & f_{1,2} & \dots & f_{1,K} \\ 1 & f_{2,1} & f_{2,2} & \dots & f_{2,K} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & f_{T,1} & f_{T,2} & \dots & f_{T,K} \end{bmatrix} \begin{bmatrix} \alpha \\ \beta_1 \\ \beta_2 \\ \vdots \\ \beta_K \end{bmatrix} + \begin{bmatrix} \varepsilon_1 \\ \varepsilon_2 \\ \vdots \\ \varepsilon_T \end{bmatrix}$$
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
-              其中设计矩阵 $X \in \mathbb{R}^{T \times (K+1)}$：第一列为全 1 的常数截距向量（用于捕捉超额 Alpha $\alpha$），后 $K$ 列为各个公共因子收益率序列；$\boldsymbol{\beta} \in \mathbb{R}^{K+1}$ 为因子敏感度载荷（Exposure/Beta）；$\mathbf{y} \in \mathbb{R}^T$ 为实际观测收益。
-            </p>
 
-            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.2 几何视角：误差垂直与正规方程组推导</h3>
+            <div style="overflow-x: auto; margin-top: 1rem;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; line-height: 1.7;">
+                <thead>
+                  <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); text-align: left;">
+                    <th style="padding: 0.7rem; color: var(--text-main); width: 18%;">符号与维度</th>
+                    <th style="padding: 0.7rem; color: var(--text-main); width: 27%;">统计与金融学实体</th>
+                    <th style="padding: 0.7rem; color: var(--accent-blue); width: 27%;">线性代数视角</th>
+                    <th style="padding: 0.7rem; color: var(--accent-green); width: 28%;">几何欧氏空间视角</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-cyan);">$\mathbf{y} \in \mathbb{R}^{T \times 1}$</td>
+                    <td style="padding: 0.7rem;">目标股票历史各日超额收益率</td>
+                    <td style="padding: 0.7rem;">待分解的被解释目标向量</td>
+                    <td style="padding: 0.7rem; color: var(--text-muted);">$T$ 维空间 $\mathbb{R}^T$ 中的一个实际观测点目标</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-blue);">$X \in \mathbb{R}^{T \times (K+1)}$</td>
+                    <td style="padding: 0.7rem;">设计矩阵（全1截距列 + $K$ 列公共因子时序）</td>
+                    <td style="padding: 0.7rem;">列组合基底，每一列为一个基向量</td>
+                    <td style="padding: 0.7rem; color: var(--text-muted);">其列张成一个 $(K+1)$ 维超平面子空间 $\text{Col}(X)$</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-purple);">$\beta \in \mathbb{R}^{(K+1) \times 1}$</td>
+                    <td style="padding: 0.7rem;">待求解的超额 Alpha 及各风格因子敞口载荷</td>
+                    <td style="padding: 0.7rem;">对各列基向量做线性组合时的标量坐标权重</td>
+                    <td style="padding: 0.7rem; color: var(--text-muted);">确定拟合向量在子空间基底下的坐标位置</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-rose);">$\varepsilon \in \mathbb{R}^{T \times 1}$</td>
+                    <td style="padding: 0.7rem;">每日随机特质扰动（突发消息、微观噪声）</td>
+                    <td style="padding: 0.7rem;">无法被基底线性表出的特异性分量</td>
+                    <td style="padding: 0.7rem; color: var(--text-muted);">从超平面垂足指向目标点 $\mathbf{y}$ 的垂直垂线段（属于正交补空间）</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 2.3 超定方程组与几何无解真相 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.3 为什么必须引入 OLS？超定方程组 ($T \gg K$) 与无解的几何真相</h3>
             <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
-              由于样本期数远超因子数（$T > K+1$），实际收益向量 $\mathbf{y}$ 几乎绝不可能恰好落在 $X$ 的列空间 $\text{Col}(X)$ 内，方程 $X\boldsymbol{\beta} = \mathbf{y}$ 无精确解（Inconsistent System）。OLS 的目标是在 $\text{Col}(X)$ 中寻找一个与 $\mathbf{y}$ 距离最近的拟合向量 $\hat{\mathbf{y}} = X\hat{\boldsymbol{\beta}}$：
+              在初等代数中，若未知数个数等于方程个数（$n$ 个方程 $n$ 个未知数），通常能求出唯一解。但在股票多因子回归中，我们面临的是典型的<strong>超定方程组 (Overdetermined System)</strong>：
+            </p>
+            <div style="background: rgba(244, 63, 94, 0.08); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-rose); margin: 1rem 0;">
+              <div style="font-weight: 700; color: var(--accent-rose); margin-bottom: 0.4rem;">💥 矛盾系统的几何本质：250 个等式约束 vs 4 个自由度参数</div>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                假设我们考察 1 年（$T = 250$ 个交易日），模型包含 $K = 3$ 个因子。这意味着我们写下了 <strong>250 个彼此制约的等式方程</strong>，却试图仅用 <strong>4 个未知参数（$\alpha, \beta_1, \beta_2, \beta_3$）</strong> 同时精确满足所有等式！<br>
+                从几何角度看：$X$ 的 4 个列向量最多只能张成 250 维庞大空间中的一个<strong>极度狭窄的 4 维超平面子空间 $\text{Col}(X)$</strong>。由于个股每日必然存在特质独立波动，实际收益向量 $\mathbf{y}$ 几乎 100% 的概率<strong>跌落在该 4 维超平面之外（$\mathbf{y} \notin \text{Col}(X)$）</strong>！
+              </p>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              因此，精确满足 $X\beta = \mathbf{y}$ 的参数 $\beta$ 在现实中<strong>绝对不存在</strong>（Inconsistent System，方程组无精确解）。我们必须退而求其次：<strong>在超平面 $\text{Col}(X)$ 内寻找一个离真实点 $\mathbf{y}$ 欧氏距离最近的拟合向量 $\hat{\mathbf{y}} = X\hat{\beta}$</strong>，使得残差向量 $\mathbf{e} = \mathbf{y} - X\beta$ 的长度平方最小化：
             </p>
             <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
-              $$\min_{\boldsymbol{\beta}} \|\mathbf{e}\|^2 = \|\mathbf{y} - X\boldsymbol{\beta}\|^2 = (\mathbf{y} - X\boldsymbol{\beta})^T (\mathbf{y} - X\boldsymbol{\beta})$$
-            </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
-              <strong>几何正交条件 (Orthogonality Condition)</strong>：根据最佳逼近定理，残差向量 $\mathbf{e} = \mathbf{y} - X\hat{\boldsymbol{\beta}}$ 必须<strong>正交于 $X$ 的列空间所包含的任意基向量</strong>，即垂直于 $X$ 的每一个列向量：
-            </p>
-            <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1.05rem; margin: 1rem 0; color: var(--accent-green);">
-              $$X^T \mathbf{e} = \mathbf{0} \implies X^T (\mathbf{y} - X\hat{\boldsymbol{\beta}}) = \mathbf{0} \implies (X^T X)\hat{\boldsymbol{\beta}} = X^T \mathbf{y}$$
-            </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8;">
-              这便是著名的<strong>正规方程 (Normal Equations)</strong>。当设计矩阵 $X$ 列满秩时，$X^T X$ 保证可逆，得出解析解：
-            </p>
-            <div class="math-block" style="background: rgba(56, 189, 248, 0.08); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 1.1rem; text-align: center; color: var(--accent-blue);">
-              $$\hat{\boldsymbol{\beta}} = (X^T X)^{-1} X^T \mathbf{y}$$
+              $$\min_{\beta} \|\mathbf{e}\|^2 = \min_{\beta} \|\mathbf{y} - X\beta\|^2 = (\mathbf{y} - X\beta)^T (\mathbf{y} - X\beta)$$
             </div>
 
-            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.3 投影矩阵 $P$ 与方差分解定理 (ANOVA)</h3>
+            <!-- 2.4 正规方程组推导：微积分 vs 几何正交 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.4 正规方程组的诞生：双重视角严密推导</h3>
             <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
-              将解 $\hat{\boldsymbol{\beta}}$ 代回拟合值：
-              $$\hat{\mathbf{y}} = X\hat{\boldsymbol{\beta}} = X(X^T X)^{-1}X^T \mathbf{y} = P \mathbf{y}$$
-              投影矩阵 $P = X(X^T X)^{-1}X^T$ 具备两大公理化性质：
+              如何解出这个最优参数 $\hat{\beta}$？数学的美妙之处在于，从“分析学（微积分极值）”与“线性代数（几何正交性）”两个完全不同的数学大厦出发，将殊途同归汇聚于同一个核心公式！
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin: 1.25rem 0;">
+              <!-- 视角 A: 微积分 -->
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-cyan); font-size: 1rem; margin-bottom: 0.5rem;">📐 视角 A：微积分极值推导 ($\nabla S = \mathbf{0}$)</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  将残差二范数目标函数展开为二次型：
+                </p>
+                <div style="font-size: 0.82rem; line-height: 1.8; margin: 0.5rem 0;">
+                  $$S(\beta) = (\mathbf{y} - X\beta)^T (\mathbf{y} - X\beta)$$
+                  $$= \mathbf{y}^T\mathbf{y} - 2\beta^T X^T\mathbf{y} + \beta^T (X^T X) \beta$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  对列向量 $\beta$ 求偏导（利用矩阵微积分法则：$\nabla_\beta (\beta^T \mathbf{a}) = \mathbf{a}$，以及 $\nabla_\beta (\beta^T M \beta) = 2M\beta$ 当 $M$ 对称时）：
+                </p>
+                <div style="font-size: 0.85rem; color: var(--accent-cyan); font-weight: 700; margin: 0.5rem 0;">
+                  $$\nabla_\beta S(\beta) = -2 X^T \mathbf{y} + 2 (X^T X)\beta = \mathbf{0}$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  移项消去常数 2，即得正规方程：$(X^T X)\beta = X^T \mathbf{y}$。
+                </p>
+              </div>
+
+              <!-- 视角 B: 几何正交 -->
+              <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                <h4 style="color: var(--accent-green); font-size: 1rem; margin-bottom: 0.5rem;">📏 视角 B：几何与内积正交推导 (无需微积分!)</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  根据高维欧氏空间最佳逼近定理，从点 $\mathbf{y}$ 到超平面 $\text{Col}(X)$ 的最短连线<strong>必为垂线段</strong>。这意味着误差向量 $\mathbf{e} = \mathbf{y} - X\hat{\beta}$ 必须<strong>垂直于子空间中的每一个基向量</strong>！
+                </p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  由于 $X$ 的每一列 $\mathbf{x}_j$ 都是子空间的基底，因此点积全为 0：
+                </p>
+                <div style="font-size: 0.82rem; line-height: 1.8; margin: 0.5rem 0;">
+                  $$\mathbf{x}_j^T \mathbf{e} = 0 \quad (\forall j=0, 1, \dots, K)$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                  将这 $K+1$ 个一字排开的内积等式堆叠为矩阵乘法：
+                </p>
+                <div style="font-size: 0.85rem; color: var(--accent-green); font-weight: 700; margin: 0.5rem 0;">
+                  $$\begin{bmatrix} \mathbf{x}_0^T \\ \mathbf{x}_1^T \\ \vdots \\ \mathbf{x}_K^T \end{bmatrix} \mathbf{e} = X^T \mathbf{e} = \mathbf{0}$$
+                </div>
+              </div>
+            </div>
+
+            <!-- 正规方程解析解框 -->
+            <div class="math-block" style="background: rgba(16, 185, 129, 0.08); padding: 1.25rem; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 1.05rem; margin: 1rem 0; text-align: center;">
+              <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">代入残差定义 $\mathbf{e} = \mathbf{y} - X\hat{\beta}$，得出核心正规方程 (Normal Equations)：</div>
+              $$X^T \mathbf{e} = \mathbf{0} \implies X^T (\mathbf{y} - X\hat{\beta}) = \mathbf{0} \implies (X^T X)\hat{\beta} = X^T \mathbf{y}$$
+            </div>
+
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              <strong>解析解的存在性保证</strong>：只要设计矩阵 $X$ 的各列线性无关（即入选的风格因子之间不存在完全冗余的严重共线性，$\text{Rank}(X) = K+1$），Gram 矩阵 $X^T X \in \mathbb{R}^{(K+1) \times (K+1)}$ 必然<strong>严格正定且可逆</strong>，得出解析解：
+            </p>
+            <div class="math-block" style="background: rgba(56, 189, 248, 0.08); padding: 1rem; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.3); font-size: 1.15rem; text-align: center; color: var(--accent-blue);">
+              $$\hat{\beta} = (X^T X)^{-1} X^T \mathbf{y}$$
+            </div>
+
+            <!-- 2.5 手把手实操推演：从原始数字到 beta_hat 的完整矩阵计算流水线 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.5 手把手实战推演：从原始行情到 $\hat{\beta}$ 的完整矩阵计算全流程</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              为了让读者彻底击碎矩阵公式的抽象高墙，我们将抛开计算机黑盒，<strong>用一套设计极其规整的微观实战数据（包含 3 个交易日与 1 个基准因子），一步一步亲手完成从数字装配到正规方程求解的全部矩阵运算</strong>！
+            </p>
+
+            <div style="background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; padding: 1.5rem; margin: 1.25rem 0;">
+              
+              <!-- Step 1 -->
+              <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-blue); color: #fff; font-weight: 700;">步骤 1</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">原始行情数据溯源与矩阵装配：大盘因子与股票超额收益从何而来？</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  我们绝不凭空捏造数字！设某量化团队考察连续 3 个交易日。基准无风险日利率为 $R_{f,t} = 0.01\%$（年化约 $2.5\%$）。我们从证券交易所拉取<strong>沪深 300 指数实际收盘点位 $I_t$</strong> 与<strong>目标股票实际收盘价 $P_t$</strong>，展开清晰无遗的计算流水线：
+                </p>
+
+                <!-- 真实行情计算流水线表格 -->
+                <div style="overflow-x: auto; margin: 0.75rem 0;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.83rem; line-height: 1.6; text-align: center;">
+                    <thead>
+                      <tr style="background: rgba(255,255,255,0.04); border-bottom: 1px solid var(--border-color);">
+                        <th style="padding: 0.5rem; color: var(--text-main);">交易日</th>
+                        <th style="padding: 0.5rem; color: var(--accent-blue);">沪深300收盘点位 $I_t$</th>
+                        <th style="padding: 0.5rem; color: var(--accent-blue);">大盘名义收益率 $R_{M,t}$</th>
+                        <th style="padding: 0.5rem; color: var(--accent-cyan); font-weight: 700;">大盘超额收益 $f_t = R_{M,t} - R_f$</th>
+                        <th style="padding: 0.5rem; color: var(--accent-green);">股票收盘价 $P_t$</th>
+                        <th style="padding: 0.5rem; color: var(--accent-green);">股票名义收益率 $r_t$</th>
+                        <th style="padding: 0.5rem; color: var(--accent-green); font-weight: 700;">股票超额收益 $y_t = r_t - R_f$</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.5rem; color: var(--text-muted);">Day 0 (基准)</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">3861.00 点</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">-</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">-</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">50.00 元</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">-</td>
+                        <td style="padding: 0.5rem; color: var(--text-muted);">-</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.5rem;">Day 1</td>
+                        <td style="padding: 0.5rem;">3900.00 点</td>
+                        <td style="padding: 0.5rem; color: var(--accent-blue);">$\frac{3900 - 3861}{3861} = +1.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.08);">+1.01% - 0.01% = <strong>+1.00%</strong></td>
+                        <td style="padding: 0.5rem;">51.005 元</td>
+                        <td style="padding: 0.5rem; color: var(--accent-green);">$\frac{51.005 - 50}{50} = +2.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green); background: rgba(16, 185, 129, 0.08);">+2.01% - 0.01% = <strong>+2.00%</strong></td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 0.5rem;">Day 2</td>
+                        <td style="padding: 0.5rem;">3978.39 点</td>
+                        <td style="padding: 0.5rem; color: var(--accent-blue);">$\frac{3978.39 - 3900}{3900} = +2.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.08);">+2.01% - 0.01% = <strong>+2.00%</strong></td>
+                        <td style="padding: 0.5rem;">51.520 元</td>
+                        <td style="padding: 0.5rem; color: var(--accent-green);">$\frac{51.52 - 51.005}{51.005} = +1.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green); background: rgba(16, 185, 129, 0.08);">+1.01% - 0.01% = <strong>+1.00%</strong></td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 0.5rem;">Day 3</td>
+                        <td style="padding: 0.5rem;">4098.14 点</td>
+                        <td style="padding: 0.5rem; color: var(--accent-blue);">$\frac{4098.14 - 3978.39}{3978.39} = +3.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.08);">+3.01% - 0.01% = <strong>+3.00%</strong></td>
+                        <td style="padding: 0.5rem;">53.586 元</td>
+                        <td style="padding: 0.5rem; color: var(--accent-green);">$\frac{53.586 - 51.52}{51.52} = +4.01\%$</td>
+                        <td style="padding: 0.5rem; font-weight: 700; color: var(--accent-green); background: rgba(16, 185, 129, 0.08);">+4.01% - 0.01% = <strong>+4.00%</strong></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.75rem;">
+                  看！通过从原始行情点位一步步减去国债日利率，大盘因子的超额收益序列 $[+1\%, +2\%, +3\%]^T$ 与股票超额收益向量 $[+2\%, +1\%, +4\%]^T$ 便无可辩驳地从市场上计算出来！<br>
+                  我们在 $X$ 矩阵第 0 列固定补充全 1 常数截距项（用于承接 $\alpha$），组装为标准的代数矩阵（省略百分号以纯数字代入）：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem;">
+                  $$\mathbf{y} = \begin{bmatrix} 2 \\ 1 \\ 4 \end{bmatrix}_{3 \times 1}, \quad X = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix}_{3 \times 2}, \quad X^T = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix}_{2 \times 3}$$
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-green); color: #000; font-weight: 700;">步骤 2</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">计算 Gram 矩阵积 $X^T X$（未归一化的因子内积方阵）</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  将 $2 \times 3$ 的转置矩阵与 $3 \times 2$ 的设计矩阵相乘，得到维度为 $2 \times 2$ 的因子协方差基础矩阵：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem;">
+                  $$X^T X = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} = \begin{bmatrix} 1+1+1 & 1+2+3 \\ 1+2+3 & 1^2+2^2+3^2 \end{bmatrix} = \begin{bmatrix} 3 & 6 \\ 6 & 14 \end{bmatrix}_{2 \times 2}$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  矩阵各元素物理内涵：主对角线元素代表基向量自身点积范数平方（$1+1+1=3$ 为样本量 $T$，第 2 个主对角元 $1+4+9=14$ 为因子平方和）；非对角线元素 $6$ 代表常数列与因子列的交叉点积。
+                </p>
+              </div>
+
+              <!-- Step 3 -->
+              <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-purple); color: #fff; font-weight: 700;">步骤 3</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">计算二阶方阵的逆矩阵 $(X^T X)^{-1}$</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  应用初等代数经典二阶伴随矩阵求逆公式 $\begin{bmatrix} a & b \\ c & d \end{bmatrix}^{-1} = \frac{1}{ad - bc}\begin{bmatrix} d & -b \\ -c & a \end{bmatrix}$：
+                </p>
+                <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7; margin-left: 1.25rem;">
+                  • <strong>第一步：求行列式</strong>：$\det(X^T X) = (3)(14) - (6)(6) = 42 - 36 = 6 \neq 0$（行列式不为 0，矩阵绝对可逆！）；<br>
+                  • <strong>第二步：主对角互换，副对角取负</strong>：伴随矩阵为 $\begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix}$；<br>
+                  • <strong>第三步：除以行列式</strong>：
+                </div>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem;">
+                  $$(X^T X)^{-1} = \frac{1}{6} \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix} = \begin{bmatrix} 7/3 & -1 \\ -1 & 1/2 \end{bmatrix}$$
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-amber); color: #000; font-weight: 700;">步骤 4</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">计算基底投影内积向量 $X^T \mathbf{y}$</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  将设计矩阵的各列基向量分别与目标收益向量 $\mathbf{y}$ 做点积投影：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem;">
+                  $$X^T \mathbf{y} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 2 \\ 1 \\ 4 \end{bmatrix} = \begin{bmatrix} 1(2) + 1(1) + 1(4) \\ 1(2) + 2(1) + 3(4) \end{bmatrix} = \begin{bmatrix} 2+1+4 \\ 2+2+12 \end{bmatrix} = \begin{bmatrix} 7 \\ 16 \end{bmatrix}_{2 \times 1}$$
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  物理内涵：第 1 项 $7$ 为股票 3 天超额收益总和；第 2 项 $16$ 为因子与股票收益的时序交叉积（协方差分子）。
+                </p>
+              </div>
+
+              <!-- Step 5 -->
+              <div style="margin-bottom: 1.5rem; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 1.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-cyan); color: #000; font-weight: 700;">步骤 5</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">两项矩阵乘积：解出核心参数 $\hat{\beta} = [\hat{\alpha}, \hat{\beta}_1]^T$</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  将求得的逆矩阵 $(X^T X)^{-1}$ 与投影向量 $X^T \mathbf{y}$ 相乘：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 1rem; color: var(--accent-cyan);">
+                  $$\hat{\beta} = (X^T X)^{-1} X^T \mathbf{y} = \frac{1}{6} \begin{bmatrix} 14 & -6 \\ -6 & 3 \end{bmatrix} \begin{bmatrix} 7 \\ 16 \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 14(7) - 6(16) \\ -6(7) + 3(16) \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 98 - 96 \\ -42 + 48 \end{bmatrix} = \frac{1}{6} \begin{bmatrix} 2 \\ 6 \end{bmatrix} = \begin{bmatrix} 1/3 \\ 1 \end{bmatrix}$$
+                </div>
+                <div style="background: rgba(6, 182, 212, 0.08); padding: 0.85rem; border-radius: 6px; border-left: 3px solid var(--accent-cyan); margin-top: 0.75rem;">
+                  <strong style="color: var(--accent-cyan);">🎉 解析结果物理定论：</strong>
+                  <span style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                    • <strong>主动超额 Alpha ($\hat{\alpha}$)</strong>：$\hat{\alpha} = \frac{1}{3} \approx +0.33\%$（每天即使大盘不涨不跌，该股票凭借自身能力稳健获取 $0.33\%$ 的日均特质超额）；<br>
+                    • <strong>大盘因子载荷 ($\hat{\beta}_1$)</strong>：$\hat{\beta}_1 = 1.00$（该股票是大盘的基准同步资产，大盘涨跌 $1\%$，其系统性部分完全同步涨跌 $1\%$）。
+                  </span>
+                </div>
+              </div>
+
+              <!-- Step 6 -->
+              <div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <span class="badge" style="background: var(--accent-rose); color: #fff; font-weight: 700;">步骤 6</span>
+                  <strong style="color: var(--text-main); font-size: 0.95rem;">反向代入检验：验算残差与几何正交公理 $X^T \mathbf{e} = \mathbf{0}$</strong>
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  将解得的参数 $\hat{\beta} = [1/3, 1]^T$ 代回计算拟合值 $\hat{\mathbf{y}}$ 与残差 $\mathbf{e}$：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem;">
+                  $$\hat{\mathbf{y}} = X\hat{\beta} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \\ 1 & 3 \end{bmatrix} \begin{bmatrix} 1/3 \\ 1 \end{bmatrix} = \begin{bmatrix} 1/3 + 1 \\ 1/3 + 2 \\ 1/3 + 3 \end{bmatrix} = \begin{bmatrix} 4/3 \\ 7/3 \\ 10/3 \end{bmatrix}, \quad \mathbf{e} = \mathbf{y} - \hat{\mathbf{y}} = \begin{bmatrix} 2 \\ 1 \\ 4 \end{bmatrix} - \begin{bmatrix} 4/3 \\ 7/3 \\ 10/3 \end{bmatrix} = \begin{bmatrix} +2/3 \\ -4/3 \\ +2/3 \end{bmatrix}$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  严密验证残差向量 $\mathbf{e}$ 是否如理论所言，与设计矩阵 $X$ 的每一列<strong>严格垂直正交</strong>：
+                </p>
+                <div class="math-block" style="text-align: center; margin: 0.75rem 0; font-size: 0.95rem; color: var(--accent-green);">
+                  $$X^T \mathbf{e} = \begin{bmatrix} 1 & 1 & 1 \\ 1 & 2 & 3 \end{bmatrix} \begin{bmatrix} 2/3 \\ -4/3 \\ 2/3 \end{bmatrix} = \begin{bmatrix} 1(2/3) + 1(-4/3) + 1(2/3) \\ 1(2/3) + 2(-4/3) + 3(2/3) \end{bmatrix} = \begin{bmatrix} (2 - 4 + 2)/3 \\ (2 - 8 + 6)/3 \end{bmatrix} = \begin{bmatrix} 0 \\ 0 \end{bmatrix}$$
+                </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                  结果完全等于零向量 $\mathbf{0}$！这在数学上证明了：<strong>残差向量在几何上是绝对垂直于因子平面的垂线，它不包含任何来自常数基准或大盘因子的残留信息，信息提取彻底无泄漏！</strong>
+                </p>
+              </div>
+
+            </div>
+
+            <!-- 2.6 正交投影矩阵 P 与方差分解定理 -->
+            <h3 style="color: var(--accent-blue); font-size: 1.15rem; margin-top: 1.75rem; margin-bottom: 0.75rem;">2.6 投影矩阵 $P$ 与方差分解定理 (ANOVA / 勾股定理)</h3>
+            <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+              将解得的最优参数 $\hat{\beta}$ 代回拟合向量：
+              $$\hat{\mathbf{y}} = X\hat{\beta} = X(X^T X)^{-1}X^T \mathbf{y} = P \mathbf{y}$$
+              其中的方阵 $P = X(X^T X)^{-1}X^T \in \mathbb{R}^{T \times T}$ 即为著名的<strong>正交投影算子 (Orthogonal Projection Matrix)</strong>。它具备两大代数公理化特征：
             </p>
             <ul style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-left: 1.5rem;">
-              <li><strong>对称性</strong>：$P^T = (X(X^T X)^{-1}X^T)^T = X ((X^T X)^{-1})^T X^T = P$；</li>
-              <li><strong>幂等性</strong>：$P^2 = P \cdot P = X(X^T X)^{-1}(X^T X)(X^T X)^{-1}X^T = X(X^T X)^{-1}X^T = P$（投射两次与投射一次相同）。</li>
+              <li><strong>对称性 (Symmetric)</strong>：$P^T = (X(X^T X)^{-1}X^T)^T = X ((X^T X)^{-1})^T X^T = P$；</li>
+              <li><strong>幂等性 (Idempotent)</strong>：$P^2 = P \cdot P = X(X^T X)^{-1}(X^T X)(X^T X)^{-1}X^T = X(X^T X)^{-1}X^T = P$（投射一次后点已落在子空间内部，再次投射位置不再发生任何改变）。</li>
             </ul>
             <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.75rem;">
-              残差投影算子为 $I - P$，且有 $\mathbf{e} = (I - P)\mathbf{y}$。由勾股定理（因为 $\hat{\mathbf{y}} \perp \mathbf{e}$）：
+              残差投影算子对应为 $I - P$，且有 $\mathbf{e} = (I - P)\mathbf{y}$。注意到 $P(I - P) = P - P^2 = \mathbf{0}$，意味着拟合向量 $\hat{\mathbf{y}}$ 与残差向量 $\mathbf{e}$ 严格正交（$\hat{\mathbf{y}} \perp \mathbf{e}$）！<br>
+              根据高维欧氏空间中的<strong>毕达哥拉斯勾股定理</strong>：
             </p>
             <div class="math-block" style="background: rgba(15, 23, 42, 0.6); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); font-size: 1rem; margin: 1rem 0;">
               $$\|\mathbf{y} - \bar{y}\mathbf{1}\|^2 = \|\hat{\mathbf{y}} - \bar{y}\mathbf{1}\|^2 + \|\mathbf{e}\|^2 \iff \text{SST} = \text{SSR} + \text{SSE}$$
               $$R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\text{SSE}}{\text{SST}}$$
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
-              <strong>金融物理含义</strong>：$R^2$（决定系数）衡量了该股票涨跌<strong>有多少比例被已知市场公共风格完全主导</strong>；而 $1 - R^2$ 则衡量了<strong>特异性风险 (Idiosyncratic Risk) 占比</strong>！
-            </p>
+            <div style="background: rgba(56, 189, 248, 0.08); padding: 1rem; border-radius: 6px; border-left: 3px solid var(--accent-blue); margin-top: 0.75rem;">
+              <span style="color: var(--accent-blue); font-weight: 700;">💡 金融物理内涵：</span>
+              <span style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;">
+                $R^2$（决定系数）衡量了该资产的总体涨跌<strong>有多少比例是被已知公共市场风格牢牢锁定的系统性收益</strong>；而 $1 - R^2$ 则衡量了<strong>纯粹来自个股基本面黑天鹅或选股能力的特质风险 (Idiosyncratic Risk) 占比</strong>。
+              </span>
+            </div>
           </div>
         </div>
 
         <!-- 3. 股票市场归因的两大应用范式 -->
         <div class="card" style="margin-top: 2rem;">
           <div class="card-header">
-            <span class="badge" style="background: var(--accent-purple); color: #fff;">算法工程范式</span>
-            <h2 class="card-title" style="margin-top: 0.5rem;">3. 股票市场 OLS 归因的两大工业范式详解</h2>
+            <span class="badge" style="background: var(--accent-purple); color: #fff;">算法工程范式 · 全景武器库</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 股票市场归因范式、全市场宏微观实战与现代量化武器库谱系</h2>
           </div>
           <div class="card-body">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.5rem;">
@@ -442,17 +841,19 @@
                 <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
                   <strong>适用对象</strong>：评估<strong>单只股票或特定投资组合/基金产品</strong>在历史 $T$ 个交易日中的长期选股能力与风格偏好。
                 </p>
-                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.88rem; font-family: var(--font-mono);">
-                  r_t - r_{f,t} = α + β_MKT · f_{MKT,t} + β_SMB · f_{SMB,t} + β_HML · f_{HML,t} + ε_t
+                <div class="math-block" style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.95rem; text-align: center;">
+                  $$r_t - r_{f,t} = \alpha + \beta_{\text{MKT}} f_{\text{MKT},t} + \beta_{\text{SMB}} f_{\text{SMB},t} + \beta_{\text{HML}} f_{\text{HML},t} + \varepsilon_t$$
                 </div>
                 <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
                   <strong>涨跌分解算法</strong>：
                   <ol style="padding-left: 1.25rem; margin-top: 0.4rem;">
                     <li>将目标时序回归到基准因子序列，估计求得 $\hat{\alpha}$ 与各因子载荷 $\hat{\beta}_j$；</li>
                     <li>在任一交易日 $t$，将实际收益 $r_t$ 拆解为：
-                      $$\text{市场风格贡献} = \sum_{j=1}^K \hat{\beta}_j f_{j,t}$$
-                      $$\text{Alpha 选股贡献} = \hat{\alpha}$$
-                      $$\text{特质扰动残差} = e_t = r_t - (\hat{\alpha} + \sum_{j=1}^K \hat{\beta}_j f_{j,t})$$
+                      <div style="margin: 0.5rem 0; line-height: 1.8;">
+                        • <strong>市场风格贡献</strong>：$\sum_{j=1}^K \hat{\beta}_j f_{j,t}$<br>
+                        • <strong>Alpha 选股贡献</strong>：$\hat{\alpha}$<br>
+                        • <strong>特质扰动残差</strong>：$e_t = r_t - (\hat{\alpha} + \sum_{j=1}^K \hat{\beta}_j f_{j,t})$
+                      </div>
                     </li>
                   </ol>
                 </div>
@@ -467,8 +868,8 @@
                 <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
                   <strong>适用对象</strong>：在<strong>单日截面</strong>上，对全市场 $N$ 只股票（$N \approx 5000$ 远大于因子数 $K \approx 30$）解出当日纯因子收益率。
                 </p>
-                <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.88rem; font-family: var(--font-mono);">
-                  \mathbf{R}_t = X_t \mathbf{f}_t + \boldsymbol{\varepsilon}_t \quad (N \times 1 = N \times K \cdot K \times 1 + N \times 1)
+                <div class="math-block" style="background: rgba(15, 23, 42, 0.5); padding: 0.85rem; border-radius: 6px; margin: 0.75rem 0; font-size: 0.95rem; text-align: center;">
+                  $$\mathbf{R}_t = X_t \mathbf{f}_t + \varepsilon_t \quad (N \times 1 = N \times K \cdot K \times 1 + N \times 1)$$
                 </div>
                 <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
                   <strong>纯因子收益求解与组合归因</strong>：
@@ -478,9 +879,438 @@
                       $$\hat{\mathbf{f}}_t = (X_t^T X_t)^{-1} X_t^T \mathbf{R}_t$$
                     </li>
                     <li>对持仓权重为 $\mathbf{w}$ 的投资组合，当日涨跌归因为：
-                      $$r_p = \mathbf{w}^T \mathbf{R}_t = (\mathbf{w}^T X_t)\hat{\mathbf{f}}_t + \mathbf{w}^T \mathbf{e}_t = \sum_{j=1}^K (\text{组合因子暴露}_j \cdot \hat{f}_{j,t}) + \text{特质收益}$$
+                      $$r_p = \mathbf{w}^T \mathbf{R}_t = (\mathbf{w}^T X_t)\hat{\mathbf{f}}_t + \mathbf{w}^T \mathbf{e}_t = \sum_{j=1}^K (x_{p,j} \cdot \hat{f}_{j,t}) + e_p$$
+                      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.3rem;">
+                        其中 $x_{p,j} = (\mathbf{w}^T X_t)_j$ 为投资组合在第 $j$ 个因子上的暴露载荷，$e_p = \mathbf{w}^T \mathbf{e}_t$ 为投资组合特质收益。
+                      </div>
                     </li>
                   </ol>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 3.3 宏观跃迁：对全市场 5000 只股票同时求解，能洞见哪些全局运行规律？ -->
+            <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h3 style="color: var(--accent-cyan); margin: 0; font-size: 1.2rem;">3.3 宏观跃迁：若对全市场 5000 只股票同时求解，能洞察出哪些全局运行规律？</h3>
+                <span class="badge" style="background: rgba(6, 182, 212, 0.15); color: var(--accent-cyan);">全市场高维代数透镜</span>
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+                很多初学者会追问：如果不仅对单个股票或组合回归，而是<strong>每天对全市场所有 5000 只股票同步运行这套线性代数方程</strong>，能为我们揭示出股票市场哪些深层的宏观运行规律与资金底牌？<br>
+                事实上，结合本章的 <strong>OLS 截面求解</strong> 与 <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称矩阵谱分解</a>，量化系统能瞬间解密全市场的 <strong>5 大底层运行法则</strong>：
+              </p>
+
+              <!-- 5 大规律卡片网格 -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                
+                <!-- 规律 1 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-blue);">
+                  <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    🎯 规律一：解开全市场资金的“风格轮动底牌”
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    截面回归每天解出的纯因子收益向量 $\hat{\mathbf{f}}_t = (X_t^T X_t)^{-1} X_t^T \mathbf{R}_t$ 会直接剔除噪音，展示出资金究竟在往哪里抱团：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>大小盘偏好</strong>：若市值因子 $\hat{f}_{\text{SMB}} \lt 0$，说明全市场正处于“大盘吸血、小微盘失血”的巨头抱团期；</li>
+                    <li><strong>防御情绪浓度</strong>：若价值因子 $\hat{f}_{\text{HML}} \gt 0$ 伴随高股息红利因子走高，说明宏观避险情绪主导市场，避险资金正在扎堆公用事业与银行；</li>
+                    <li><strong>行业真伪甄别</strong>：若某行业股票普遍上涨但剥离大盘贝塔后的纯行业收益接近于 0，说明该板块纯属“搭大势便车”，并无独立基本面驱动。</li>
+                  </ul>
+                </div>
+
+                <!-- 规律 2 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-green);">
+                  <div style="font-weight: 700; color: var(--accent-green); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    🌡️ 规律二：全市场 $R^2$ 测度“系统共振 vs 群魔乱舞”
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    统计全市场 5000 只股票回归后的拟合优度均值 $\bar{R}^2$，它是一面灵敏的“市场分化体温计”：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>全市场 $\bar{R}^2$ 飙升至 $60\% \sim 70\%$（系统共振期）</strong>：宏观大盘处于强趋势行情（流动性普涨狂欢，或系统性恐慌暴跌）。此时选股基本失效，超额收益被大盘压制，应当做宽基指数 ETF（做 Beta）；</li>
+                    <li><strong>全市场 $\bar{R}^2$ 骤降至 $10\% \sim 20\%$（异质分化期）</strong>：大盘指数几乎走平，但局部特质残差 $\mathbf{e}_t$ 极度活跃。此时因子整体失效，“妖股”与个股基本面黑马横行，是挖掘纯特质 Alpha 的黄金窗口。</li>
+                  </ul>
+                </div>
+
+                <!-- 规律 3 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-purple);">
+                  <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    💥 规律三：谱分解协方差矩阵，预警“流动性踩踏黑天鹅”
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    将全市场股票收益率时序构成协方差矩阵 $\Sigma \in \mathbb{R}^{5000 \times 5000}$，应用 <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称谱分解</a>：$\Sigma = Q \Lambda Q^T = \sum_{i=1}^N \lambda_i \mathbf{q}_i \mathbf{q}_i^T$：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>最大特征值占比（$\lambda_1 / \sum \lambda_i$）异常暴增（如从 $20\%$ 飙升至 $50\%$ 以上）</strong>：代表全市场第一主成分（市场模式 Market Mode）完全吸收了方差；</li>
+                    <li><strong>物理本质</strong>：说明平时毫无关联的各行各业股票，此时所有人都在为了变现而不计成本地无差别抛售（如 2008 雷曼破产、2020 年 3 月全球流动性挤兑）！量化多头必须立刻进入最高级别防御并收缩杠杆。</li>
+                  </ul>
+                </div>
+
+                <!-- 规律 4 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-amber);">
+                  <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.4rem;">
+                    ⚠️ 规律四：因子极端偏离与“均值回归 / 踩踏崩塌预警”
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    长期跟踪全市场各纯风格因子的累积净值曲线，揭示市场周期的拥挤度风险：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li>当某个风格因子（如微盘股、动量追高）的累积收益偏离其历史均线超过 $3$ 倍标准差（$3\sigma$），且因子成分股的估值分散度极度收敛时；</li>
+                    <li><strong>崩塌信号触发</strong>：代表该风格已陷入极度拥挤（Crowded Trade）。场内资金在极度狭窄的通道里抢跑，最微小的利空也会诱发剧烈的多杀多踩踏（<strong>典型如 2024 年 1 月末 A 股微盘股踩踏崩塌，全市场多因子监控系统此前已连续数周亮起红灯</strong>）。</li>
+                  </ul>
+                </div>
+
+                <!-- 规律 5 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-rose);">
+                  <div style="font-weight: 700; color: var(--accent-rose); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    🧭 规律五：全市场风险预算天平（系统性风险 vs 特质风险）
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    由方差分解定理 $\text{SST} = \text{SSR} + \text{SSE}$，全市场波动被严格切为两半，成为顶级资产配置机构（如社保、主权财富基金）的攻防指南针：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>系统性风险主导（$\text{SSR}/\text{SST} \gg 50\%$）</strong>：风险全由宏观环境主导（货币政策转向、地缘冲击），操作策略应偏向防守，利用股指期货进行贝塔对冲或增加现金储备；</li>
+                    <li><strong>特质风险主导（$\text{SSE}/\text{SST} \gg 50\%$）</strong>：宏观平稳，各企业凭核心竞争力独立发展，操作策略应放开风险敞口，积极精选核心成长资产或行业阿尔法龙头。</li>
+                  </ul>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 3.4 微观穿透实战：股票究竟在跟随哪个板块？—— 动态影子行业映射与板块龙头识别算法 -->
+            <div style="margin-top: 2.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h3 style="color: var(--accent-green); margin: 0; font-size: 1.2rem;">3.4 微观穿透实战：股票究竟在跟随哪个板块？—— 动态影子行业映射与板块龙头识别算法</h3>
+                <span class="badge" style="background: rgba(16, 185, 129, 0.15); color: var(--accent-green);">微观风格穿透 · 领跑识别</span>
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+                在实盘交易与量化归因中，一个极高频的实战痛点是：<strong>上市公司的“名义法定行业”常常与“二级市场资金真实交易逻辑”严重脱节！</strong><br>
+                例如：某家传统农药化工企业涉足了算力液冷或固态电池材料研发，其股价走势早已脱离基础化工指数，80% 的时间在跟随“算力服务器”或“新能源电池”板块共振；或者某机械企业同时具备“人形机器人”与“汽车零部件”双重概念属性。<br>
+                量化投资系统如何借助 <strong>正交投影、约束优化与时移内积</strong>，自动穿透股票的真实板块归属，并精准判定它是“板块带头大哥”还是“跟风小弟”？本节为您拆解四大工业级算法维度：
+              </p>
+
+              <!-- 四大算法维度网格 -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                
+                <!-- 维度 1 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-blue);">
+                  <div style="font-weight: 700; color: var(--accent-blue); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    🧬 维度一：受约束 OLS 投影与夏普风格分析（行业基因谱拆解）
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    将目标个股超额收益向量 $\mathbf{y} \in \mathbb{R}^T$ 投影到 $K$ 个候选行业指数收益列向量组成的子空间 $\text{Col}(X_{\text{Ind}})$：
+                  </p>
+                  <div class="math-block" style="background: rgba(15, 23, 42, 0.5); padding: 0.6rem; border-radius: 6px; margin: 0.5rem 0; font-size: 0.88rem; text-align: center;">
+                    $$\min_{\beta} \|\mathbf{y} - X_{\text{Ind}} \beta\|^2 \quad \text{s.t.} \quad \sum_{j=1}^K \beta_j = 1, \quad \beta_j \ge 0$$
+                  </div>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>凸组合约束物理意义</strong>：非负约束 $\beta_j \ge 0$ 排除了无意义的做空解释；和为 1 约束 $\sum \beta_j = 1$ 将系数直接转化为<strong>百分比行业归属权重</strong>；</li>
+                    <li><strong>实战输出示例</strong>：解出 $\beta_{\text{半导体}} = 65\%$、$\beta_{\text{消费电子}} = 25\%$、$\beta_{\text{传统机械}} = 10\%$。尽管名义属于机械行业，但其走势本质上由 90% 的泛科技电子属性所主导。</li>
+                  </ul>
+                </div>
+
+                <!-- 维度 2 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-green);">
+                  <div style="font-weight: 700; color: var(--accent-green); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    📐 维度二：内积夹角与余弦相似度（全市场板块毫秒级快筛）
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    联动 <a href="ch6_2_inner_product_space.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.2 抽象内积空间</a>，利用中心化收益向量的点积定义空间夹角余弦（即皮尔逊相关系数）：
+                  </p>
+                  <div class="math-block" style="background: rgba(15, 23, 42, 0.5); padding: 0.6rem; border-radius: 6px; margin: 0.5rem 0; font-size: 0.88rem; text-align: center;">
+                    $$\cos(\theta_j) = \frac{\langle \mathbf{y}, \mathbf{x}_j \rangle}{\|\mathbf{y}\| \|\mathbf{x}_j\|} = \frac{\sum_{t=1}^T y_t x_{j,t}}{\sqrt{\sum_{t=1}^T y_t^2} \sqrt{\sum_{t=1}^T x_{j,t}^2}} = \text{Corr}(\mathbf{y}, \mathbf{x}_j)$$
+                  </div>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>几何直观</strong>：在 31 个申万一级行业向量中，空间夹角 $\theta_j$ 最小、$\cos(\theta_j) \to 1$ 的那个行业基向量，就是当前与该股同向运动最紧密的“孪生影子板块”；</li>
+                    <li><strong>计算优势</strong>：单次矩阵向量乘法即完成全行业扫描，适合高频盯盘系统与千股批量实时筛选。</li>
+                  </ul>
+                </div>
+
+                <!-- 维度 3 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-purple);">
+                  <div style="font-weight: 700; color: var(--accent-purple); margin-bottom: 0.4rem; font-size: 0.95rem;">
+                    🔄 维度三：滑动窗口 OLS（捕捉主力“题材切换 / 变轨”拐点）
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    市场主力资金对个股逻辑的炒作并非静止。采用滚动窗口（如 $T_{\text{window}} = 20 \sim 60$ 天）动态运行多元 OLS，得到时序连续变化的 $\beta_j(t)$ 与拟合优度 $R^2(t)$ 轨迹：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>题材变轨前夕</strong>：原法定行业的 $\beta_{\text{旧}}(t)$ 稳定在 $0.8$ 以上，$R^2 \approx 70\%$；</li>
+                    <li><strong>变轨拐点爆发</strong>：随着公司发布新技术公告或游资介入，$\beta_{\text{旧}}(t)$ 迅速跌向接近 $0$，而新概念行业（如固态电池）的 $\beta_{\text{新}}(t)$ 剧烈飙升至 $0.85$ 以上，且新模型 $R^2$ 同步重回高位；</li>
+                    <li><strong>交易启示</strong>：算法无需阅读研报，仅凭收益率子空间投影的变化，即可在第一时间捕捉到资金逻辑发生“质变重定价”。</li>
+                  </ul>
+                </div>
+
+                <!-- 维度 4 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-amber);">
+                  <div style="font-weight: 700; color: var(--accent-amber); font-size: 0.95rem; margin-bottom: 0.4rem;">
+                    👑 维度四：时移滞后 OLS（辨别“板块带头大哥” vs “跟风杂毛”）
+                  </div>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    知道个股跟随某个板块后，最核心的实战拷问是：<strong>究竟是它发动了板块行情，还是板块大涨带动了它被动跟风？</strong> 这在线性代数中通过<strong>时移滞后互相关（Lead-Lag OLS）</strong>精准判定：
+                  </p>
+                  <ul style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.7; padding-left: 1.2rem; margin-top: 0.4rem;">
+                    <li><strong>被动跟风杂毛检验（$y_t = \alpha + \gamma \cdot x_{\text{Ind}, t-1} + e_t$）</strong>：若滞后系数 $\gamma \gt 0$ 显著，说明板块昨天动、该股票今天才补涨，属于典型的<strong>“后知后觉跟风者 / 补涨套利工具”</strong>；</li>
+                    <li><strong>领头羊中军先导检验（$x_{\text{Ind}, t} = \alpha + \delta \cdot y_{t-1} + e_t$）</strong>：若反向滞后系数 $\delta \gt 0$ 显著，说明该股票一旦昨日异动拉升，次日整个板块大概率全线跟进！说明该股是<strong>该赛道的绝对领涨总龙头 / 情绪指挥棒</strong>。</li>
+                  </ul>
+                </div>
+
+              </div>
+
+              <!-- 实战总结表格 -->
+              <div style="overflow-x: auto; margin-top: 1.25rem;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; line-height: 1.6;">
+                  <thead>
+                    <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); text-align: left;">
+                      <th style="padding: 0.7rem; color: var(--text-main); min-width: 120px;">穿透分析维度</th>
+                      <th style="padding: 0.7rem; color: var(--text-main); min-width: 180px;">使用的核心代数/几何工具</th>
+                      <th style="padding: 0.7rem; color: var(--accent-green); min-width: 160px;">量化输出结果</th>
+                      <th style="padding: 0.7rem; color: var(--text-muted); min-width: 200px;">投研与交易决策价值</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-blue);">混合基因拆解</td>
+                      <td style="padding: 0.7rem;">受约束凸组合 OLS（$\sum \beta_j=1, \beta_j \ge 0$）</td>
+                      <td style="padding: 0.7rem; color: var(--accent-cyan);">百分比归属基因谱（如 65% 半导体 + 25% 汽车）</td>
+                      <td style="padding: 0.7rem; color: var(--text-muted);">识破名义行业伪装，透视公募持仓隐形风格漂移</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-green);">主板块极速锁定</td>
+                      <td style="padding: 0.7rem;">去中心化向量夹角 $\cos \theta$（余弦相似度）</td>
+                      <td style="padding: 0.7rem; color: var(--accent-cyan);">全市场 31 个行业同向共振排序表</td>
+                      <td style="padding: 0.7rem; color: var(--text-muted);">毫秒级批量快筛，监控异动股票当下在跟谁共振</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--border-color);">
+                      <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-purple);">题材切换监控</td>
+                      <td style="padding: 0.7rem;">滑动窗口回归（Rolling $\beta(t)$ 与 $R^2(t)$）</td>
+                      <td style="padding: 0.7rem; color: var(--accent-cyan);">动态行业载荷时序曲线与拐点告警</td>
+                      <td style="padding: 0.7rem; color: var(--text-muted);">捕捉资金重定价契机，在主升浪初期跟进新赛道</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-amber);">领跑地位定性</td>
+                      <td style="padding: 0.7rem;">滞后互相关时移回归（Lead-Lag OLS）</td>
+                      <td style="padding: 0.7rem; color: var(--accent-cyan);">滞后相关系数与 Granger 引导因果性</td>
+                      <td style="padding: 0.7rem; color: var(--text-muted);">区分领头羊总龙头（敢于追高）与跟风杂毛（谨防冲高回落）</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 3.5 进阶跃迁：超越传统 OLS —— 现代量化金融武器库全景、工业价值天梯与底层数学知识图谱 -->
+            <div style="margin-top: 2.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
+                <h3 style="color: var(--accent-purple); margin: 0; font-size: 1.2rem;">3.5 进阶跃迁：超越传统 OLS —— 现代量化武器库全景、工业价值天梯与底层数学知识图谱</h3>
+                <span class="badge" style="background: rgba(168, 85, 247, 0.15); color: var(--accent-purple);">工业武器库 · 核心算法与数学基底</span>
+              </div>
+              <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.8;">
+                在量化金融与实战交易中，<strong>普通最小二乘法 (OLS) 只是整个庞大武器库的“基础步枪与初心基石”</strong>。<br>
+                真实二级市场的金融数据充斥着三大严峻挑战：
+                <strong>高维多重共线性（概念因子成百上千且互相重叠抄袭）</strong>、
+                <strong>参数时变性（主力资金炒作逻辑天天在迁移）</strong>、以及
+                <strong>重尾黑天鹅（闪崩暴跌与天地板极端污染样本）</strong>。<br>
+                为了克服 OLS 的固有局限，全球顶尖对冲基金（如 Two Sigma、Citadel、Millennium 及国内头部量化私募）演化出了一整套环环相扣的高级工具链。以下为您全面拆解其<strong>工业实战价值天梯排行榜</strong>以及<strong>每一款武器背后所依赖的严格数学知识点</strong>：
+              </p>
+
+              <!-- 价值天梯卡片展示 -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.25rem; margin-top: 1.25rem;">
+                
+                <!-- T0 级 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 700; color: #f59e0b; font-size: 1rem;">👑 T0 殿堂级：生产线命脉 (机构 100% 标配)</div>
+                  </div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">1. 加权/广义最小二乘 (WLS / GLS)</strong><br>
+                      • <strong>解决痛点</strong>：消除截面异方差（小市值公司噪音极大，大蓝筹方差平稳，OLS 一视同仁导致估计失真）；<br>
+                      • <strong>底层数学</strong>：马氏度量内积空间 $\langle \mathbf{u}, \mathbf{v} \rangle_W = \mathbf{u}^T W \mathbf{v}$，其中权重矩阵 $W = \text{diag}(1/\sigma_i^2)$；求解正规方程变为 $(X^T W X)\beta = X^T W \mathbf{y}$，对应 <a href="ch6_2_inner_product_space.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.2 抽象内积空间</a> 与 <a href="ch7_2_projection_least_squares.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.2 加权正交投影</a>；<br>
+                      • <strong>实战场景</strong>：<strong>全球 Barra 结构化风险多因子模型的计算底座</strong>。
+                    </div>
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">2. Lasso (L1) / 弹性网 (ElasticNet) 正则化</strong><br>
+                      • <strong>解决痛点</strong>：面对全市场 100 多个概念板块，因严重共线性导致 OLS 的 $(X^T X)^{-1}$ 奇异爆炸；<br>
+                      • <strong>底层数学</strong>：引入凸优化 $L_1$ 范数惩罚项 $\min \|\mathbf{y} - X\beta\|^2 + \lambda \|\beta\|_1$。利用高维超球与 $L_1$ 范数超多面体“尖角”接触的几何特性，迫使大量非核心因子的权重投影在坐标轴上直接归零，自动提炼极大线性无关特征集，对应 <a href="ch1_2_vector.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.2 向量范数</a> 与 <a href="ch4_1_span_independence.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.1 线性无关基</a>；<br>
+                      • <strong>实战场景</strong>：<strong>高维概念板块精准剔除、稀疏特征工程筛选</strong>。
+                    </div>
+                    <div>
+                      <strong style="color: var(--text-main);">3. 梯度提升决策树 (GBDT / LightGBM)</strong><br>
+                      • <strong>解决痛点</strong>：突破 OLS 的纯线性平面假设，捕捉金融市场广泛存在的“阈值非线性”与“多因子高阶交叉”效应；<br>
+                      • <strong>底层数学</strong>：希尔伯特函数空间中的梯度负方向最速下降（Gradient Boosting），以及多维欧几里得空间中的正交超平面切分（多维特征空间正交超矩形划分）；<br>
+                      • <strong>实战场景</strong>：<strong>现代量化多头 Alpha 收益预测的绝对核心盈利引擎</strong>。
+                    </div>
+                  </div>
+                </div>
+
+                <!-- T1 级 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-blue);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 700; color: var(--accent-blue); font-size: 1rem;">🥇 T1 杀手级：高阶动态与降维核心</div>
+                  </div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">4. 卡尔曼滤波 (Kalman Filter)</strong><br>
+                      • <strong>解决痛点</strong>：解决 OLS“静态假设”与滑动窗口“两难迟钝”（天数短噪音大，天数长滞后）；<br>
+                      • <strong>底层数学</strong>：状态空间模型（State-Space Model），高斯向量在贝叶斯后验条件概率下的线性最优正交投影：$\hat{\beta}_t = \hat{\beta}_{t-1} + K_t(y_t - \mathbf{x}_t^T \hat{\beta}_{t-1})$，对应 <a href="ch2_1_matrix_multiplication.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.1 状态转移矩阵乘法</a> 与 <a href="ch7_2_projection_least_squares.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.2 最优正交更新</a>；<br>
+                      • <strong>实战场景</strong>：<strong>日内/日频毫秒级连续追踪动态贝塔，高频配对统计套利 (Pairs Trading)</strong>。
+                    </div>
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">5. 主成分分析 (PCA) 与截断 SVD</strong><br>
+                      • <strong>解决痛点</strong>：从数千只股票的历史庞大走势中，无监督提炼出完全互相正交的纯净隐式统计因子；<br>
+                      • <strong>底层数学</strong>：实对称协方差矩阵正交特征对角化 $\Sigma = Q \Lambda Q^T$、低秩奇异值逼近 Eckart-Young 定理，对应 <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称谱分解</a> 与 <a href="ch7_4_svd_low_rank.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.4 SVD 低秩压缩</a>；<br>
+                      • <strong>实战场景</strong>：<strong>全市场流动性踩踏预警、高维协方差矩阵压缩降噪 (Ledoit-Wolf 收缩)</strong>。
+                    </div>
+                    <div>
+                      <strong style="color: var(--text-main);">6. 鲁棒回归 (Huber / RANSAC Regression)</strong><br>
+                      • <strong>解决痛点</strong>：OLS 最小化残差平方和对极端离群点极度敏感，A 股天地板闪崩暴跌极易拽歪拟合直线；<br>
+                      • <strong>底层数学</strong>：损失函数在较小残差时保持二次抛物线（保证精度），在超过阈值时转为一阶绝对值线性增长（截断高阶拉力），属于凸优化中的次梯度估计；<br>
+                      • <strong>实战场景</strong>：<strong>极端异常行情下的脏数据清洗、重尾风险抵御</strong>。
+                    </div>
+                  </div>
+                </div>
+
+                <!-- T2 & T3 级 -->
+                <div style="background: var(--bg-secondary); padding: 1.25rem; border-radius: 8px; border-left: 3px solid var(--accent-cyan);">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <div style="font-weight: 700; color: var(--accent-cyan); font-size: 1rem;">🥈 T2 专精级 & 🥉 T3 前沿级：因果与网络传导</div>
+                  </div>
+                  <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.7;">
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">7. 时移互相关与 Granger 因果检验 (VAR)</strong><br>
+                      • <strong>解决痛点</strong>：OLS 只能度量同时期的静态相关性，无法回答“谁引发了谁”；<br>
+                      • <strong>底层数学</strong>：滞后时间滞后多项式算子 $L^k$，向量自回归 (VAR) 的残差方差正交投影分解与 F 统计量假设检验；<br>
+                      • <strong>实战场景</strong>：<strong>量化识别“领涨总龙头中军”与“后知后觉跟风杂毛”</strong>。
+                    </div>
+                    <div style="margin-bottom: 0.75rem;">
+                      <strong style="color: var(--text-main);">8. 图神经网络 (GNN) 与知识图谱</strong><br>
+                      • <strong>解决痛点</strong>：传统时序回归将股票视为彼此孤立的点，忽略了真实的产业链上下游供应关系；<br>
+                      • <strong>底层数学</strong>：拓扑邻接矩阵 $A$ 与度矩阵 $D$ 构成的<strong>图拉普拉斯矩阵 $L = D - A$ 谱分解</strong>，图上的切比雪夫多项式谱卷积，对应 <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 特征值谱分析</a>；<br>
+                      • <strong>实战场景</strong>：<strong>跨国/跨产业链级联传导建模（如英伟达链、光模块向液冷扩散）</strong>。
+                    </div>
+                    <div>
+                      <strong style="color: var(--text-main);">9. 隐马尔可夫模型 (HMM) 与机制转换 (Regime Switching)</strong><br>
+                      • <strong>解决痛点</strong>：市场在“大牛市普涨、熊市阴跌、猴市震荡”不同宏观状态间跳变；<br>
+                      • <strong>底层数学</strong>：随机矩阵与一阶马尔可夫转移概率阵 $P$，稳态分布特征向量（$\lambda=1$ 稳态解），对应 <a href="ch7_1_orthogonality_gram_schmidt.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7 矩阵特征值</a>；<br>
+                      • <strong>实战场景</strong>：<strong>大类资产配置顶层仓位择时（股债牛熊开关）</strong>。
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 全算法与数学知识点穿透映射大表 -->
+              <div style="margin-top: 1.75rem;">
+                <h4 style="color: var(--accent-blue); margin-bottom: 0.75rem; font-size: 1rem;">📐 现代量化算法与底层数学知识点全景穿透映射表</h4>
+                <div style="overflow-x: auto;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; line-height: 1.6;">
+                    <thead>
+                      <tr style="background: var(--bg-secondary); border-bottom: 2px solid var(--border-color); text-align: left;">
+                        <th style="padding: 0.7rem; color: var(--text-main); min-width: 130px;">量化高级算法</th>
+                        <th style="padding: 0.7rem; color: var(--text-main); min-width: 170px;">所解决的金融死穴</th>
+                        <th style="padding: 0.7rem; color: var(--accent-blue); min-width: 180px;">底层核心数学知识点</th>
+                        <th style="padding: 0.7rem; color: var(--accent-green); min-width: 150px;">本教程对应章节</th>
+                        <th style="padding: 0.7rem; color: var(--text-muted); min-width: 220px;">数学机理一句话点睛</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: #f59e0b;">加权最小二乘 (WLS)</td>
+                        <td style="padding: 0.7rem;">截面异方差（不同市值资产噪音方差不均）</td>
+                        <td style="padding: 0.7rem;">马氏度量空间、正定对角度量矩阵、广义内积</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch6_2_inner_product_space.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.2 抽象内积空间</a><br>
+                          <a href="ch7_2_projection_least_squares.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.2 正交投影定理</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">用非欧几里得正定度量矩阵 $W$ 重新度量向量长度，高方差股票投影权重自然压缩。</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: #f59e0b;">岭回归 (Ridge / L2)</td>
+                        <td style="padding: 0.7rem;">多重共线性导致逆矩阵条件数 $\kappa \to \infty$ 爆炸</td>
+                        <td style="padding: 0.7rem;">正规方程平移、实对称矩阵特征值谱平移、条件数压制</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch2_2_matrix_inverse.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.2 可逆等价定理</a><br>
+                          <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称谱分解</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">对角线加入 $\lambda I$，本质是将所有特征值向右平移 $\lambda_i + \lambda$，强行彻底消除奇异性。</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: #f59e0b;">Lasso 回归 (L1)</td>
+                        <td style="padding: 0.7rem;">高维冗余因子多、参数稀疏化筛选</td>
+                        <td style="padding: 0.7rem;">$L_1$ 向量范数、非光滑凸优化、次梯度截断</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch1_2_vector.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.2 向量范数定义</a><br>
+                          <a href="ch4_1_span_independence.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 4.1 线性无关基底</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">$L_1$ 范数超球在坐标轴上拥有几何尖角，使目标等值面最先在轴上相切，实现精准系数归零。</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-blue);">主成分分析 (PCA)</td>
+                        <td style="padding: 0.7rem;">高维数据降噪、提炼不相关统计隐式因子</td>
+                        <td style="padding: 0.7rem;">实对称协方差矩阵谱分解、低秩奇异值逼近</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称谱分解</a><br>
+                          <a href="ch7_4_svd_low_rank.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.4 SVD 低秩逼近</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">将数据旋转到方差最大的互相正交主轴上，舍弃接近零的特征值，保留核心能量。</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-blue);">卡尔曼滤波 (Kalman)</td>
+                        <td style="padding: 0.7rem;">参数时变漂移、滑动窗口滞后迟钝</td>
+                        <td style="padding: 0.7rem;">高斯向量正交分解、递推投影更新、状态转移矩阵</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch2_1_matrix_multiplication.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.1 状态转移矩阵</a><br>
+                          <a href="ch7_2_projection_least_squares.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.2 正交投影定理</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">每次获得新观测，仅将新残差（新息）沿正交补方向作增量投影，无须重新全量求逆。</td>
+                      </tr>
+                      <tr style="border-bottom: 1px solid var(--border-color);">
+                        <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-blue);">梯度提升树 (GBDT)</td>
+                        <td style="padding: 0.7rem;">非线性复杂关系、高阶因子特征交互</td>
+                        <td style="padding: 0.7rem;">希尔伯特函数空间正交投影、正交超平面超矩形切分</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch6_2_inner_product_space.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 6.2 抽象向量空间</a><br>
+                          <a href="ch7_1_orthogonality_gram_schmidt.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.1 正交基逐步逼近</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">在函数无限维空间中，每一棵新树都是对上一步残差函数的最佳负梯度基底逼近。</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 0.7rem; font-weight: 700; color: var(--accent-cyan);">图神经网络 (GNN)</td>
+                        <td style="padding: 0.7rem;">产业链上下游供应关系传导被传统模型割裂</td>
+                        <td style="padding: 0.7rem;">图拉普拉斯矩阵 $L=D-A$ 谱分解、傅里叶图卷积</td>
+                        <td style="padding: 0.7rem;">
+                          <a href="ch7_3_spectral_decomposition.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 7.3 实对称矩阵谱分解</a>
+                        </td>
+                        <td style="padding: 0.7rem; color: var(--text-muted);">以图拉普拉斯特征向量作为广义傅里叶变换正交基，将行情信号在产业链拓扑图上滤波扩散。</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- 工业界实战决策选型树 -->
+              <div style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.25rem; margin-top: 1.5rem;">
+                <div style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; font-size: 0.95rem;">
+                  🧭 工业界量化实战选型决策指南 (Quants Decision Tree)
+                </div>
+                <div style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); line-height: 1.8;">
+                  我们要解决的具体量化业务是什么？<br>
+                  &nbsp;&nbsp;│<br>
+                  &nbsp;&nbsp;├─► <span style="color: var(--accent-cyan);">【合规归因与风控】</span> 需要严格向监管与 LP 解释收益来源与风险预算？<br>
+                  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─► <strong>必选：WLS 加权最小二乘 + Barra 结构化因子体系</strong> (行业工业金标)<br>
+                  &nbsp;&nbsp;│<br>
+                  &nbsp;&nbsp;├─► <span style="color: var(--accent-cyan);">【板块归属与高维筛选】</span> 候选概念因子太多（共线性严重，需要剔除噪音）？<br>
+                  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─► <strong>必选：Lasso (L1) / 弹性网 (ElasticNet)</strong> (自动稀疏化压零)<br>
+                  &nbsp;&nbsp;│<br>
+                  &nbsp;&nbsp;├─► <span style="color: var(--accent-cyan);">【高频套利与动态追踪】</span> 做配对交易，贝塔载荷每天快速漂移、要求无延迟更新？<br>
+                  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─► <strong>必选：卡尔曼滤波 (Kalman Filter)</strong> (在线毫秒级贝叶斯状态估计)<br>
+                  &nbsp;&nbsp;│<br>
+                  &nbsp;&nbsp;├─► <span style="color: var(--accent-cyan);">【纯 Alpha 选股赚钱】</span> 追求极致预测精度与夏普比率，允许一定程度的黑盒？<br>
+                  &nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─► <strong>必选：GBDT (LightGBM/CatBoost) + Transformer/LSTM 深度时序混合架构</strong><br>
+                  &nbsp;&nbsp;│<br>
+                  &nbsp;&nbsp;└─► <span style="color: var(--accent-cyan);">【宏观周期与流动性挤兑】</span> 全市场系统性风险防范、危机预警与大类资产配置？<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─► <strong>必选：协方差矩阵谱分解 (PCA/SVD) + 隐马尔可夫模型 (HMM)</strong>
                 </div>
               </div>
 
@@ -512,9 +1342,9 @@
                 <tbody>
                   <!-- Row 1 -->
                   <tr style="border-bottom: 1px solid var(--border-color);">
-                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">1. 因子合成 $\hat{\mathbf{y}} = X\boldsymbol{\beta}$</td>
+                    <td style="padding: 0.8rem; font-weight: 700; color: var(--accent-green);">1. 因子合成 $\hat{\mathbf{y}} = X\beta$</td>
                     <td style="padding: 0.8rem;">矩阵相乘的<strong>列组合视角</strong></td>
-                    <td style="padding: 0.8rem; color: var(--text-muted);">拟合收益本质上就是将 $X$ 的各因子收益基向量，以系数 $\boldsymbol{\beta}$ 为权重做线性加权组合。</td>
+                    <td style="padding: 0.8rem; color: var(--text-muted);">拟合收益本质上就是将 $X$ 的各因子收益基向量，以系数 $\beta$ 为权重做线性加权组合。</td>
                     <td style="padding: 0.8rem;">
                       <a href="ch1_4_matrix.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 1.4: 矩阵 Ax 列组合视角</a><br>
                       <a href="ch2_1_matrix_multiplication.html" style="color: var(--accent-blue); text-decoration: underline;">Ch 2.1: 矩阵乘法 4 大视角</a>
@@ -835,7 +1665,7 @@ print(f"  └─ 特质残差扰动:  {contrib_idio * 100:+.3f}%")
                 </div>
                 <div class="quiz-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
                   <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">A. 回归结果精度翻倍</button>
-                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 导致 $X$ 列线性相关，$\text{Rank}(X) < K+1$，$X^T X$ 不可逆（行列式为0），OLS 无唯一确定解</button>
+                  <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="true">B. 导致 $X$ 列线性相关，$\text{Rank}(X) \lt K+1$，$X^T X$ 不可逆（行列式为0），OLS 无唯一确定解</button>
                   <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">C. 投影矩阵 $P$ 变为斜投影</button>
                   <button class="btn btn-secondary quiz-opt" style="text-align: left;" data-correct="false">D. $R^2$ 必然强制等于 1</button>
                 </div>

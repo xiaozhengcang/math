@@ -433,10 +433,553 @@
               </ul>
             </div>
 
-            <!-- 1.2 严密构造性数学证明 (讲义 82_Ch07_05 Slide 10-12) -->
+            <!-- 1.2 SVD 几何本质深度剖析（五层直觉视界） -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(56, 189, 248, 0.04); border-left: 4px solid var(--accent-blue); border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.2);">
+              <h3 style="color: var(--accent-blue); font-size: 1.18rem; margin-bottom: 0.75rem;">
+                🌌 1.2 SVD 几何本质深度剖析：从单位超球面到超椭球面的五层直觉视界
+              </h3>
+              <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+                如果说代数定义 $A = U \Sigma V^T$ 只是给出了矩阵的因式分解，那么其背后的几何景象则是人类对线性变换理解的最高峰。任何一个线性映射，无论维度如何、无论是否方阵，在几何本质上都遵循着极度纯粹的五层物理法则：
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                <!-- 视界 1 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                  <strong style="color: var(--accent-blue); font-size: 0.95rem;">① 视界一：几何三步曲的纯净性（旋转 ➔ 轴向拉伸 ➔ 旋转）</strong>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.8;">
+                    线性映射看似复杂，往往伴随着剪切错位与畸变。但 SVD 证明：<strong>任何线性变换都可以无损拆解为两次刚体正交变换（旋转或镜像）与一次坐标轴纯缩放！</strong>
+                    <br>• $V^T$：在定义域 $\mathbb{R}^n$ 中旋转刚体坐标系，将一组特定的正交轴 $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$ 对齐到笛卡尔标准轴；
+                    <br>• $\Sigma$：沿着各个标准坐标轴执行非负拉伸或压缩，缩放倍率即奇异值 $\sigma_i$，同时完成维度升降；
+                    <br>• $U$：在值域 $\mathbb{R}^m$ 中再次执行刚体旋转，将拉伸后的图形最终摆放到目标朝向 $\{\mathbf{u}_1, \dots, \mathbf{u}_m\}$。
+                  </p>
+                </div>
+
+                <!-- 视界 2 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                  <strong style="color: var(--accent-purple); font-size: 0.95rem;">② 视界二：单位超球面到超椭球面的优雅映射（核心几何定理）</strong>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.8;">
+                    考察输入空间中的单位超球面 $\mathcal{S} = \{\mathbf{x} \in \mathbb{R}^n : \|\mathbf{x}\| = 1\}$，经过矩阵映射 $A\mathcal{S}$ 后的像<strong>必然是一个超椭球面</strong>（Hyper-ellipsoid）。
+                    <br>• <strong>右奇异向量 $\mathbf{v}_i$（输入敏感主轴）</strong>：单位球面上究竟哪组相互垂直的半径向量，在变换后能正好成为输出超椭球的主半轴？正是右奇异向量 $\{\mathbf{v}_1, \dots, \mathbf{v}_n\}$！它们是该线性算子产生极值缩放的主敏感方向。
+                    <br>• <strong>奇异值 $\sigma_i$（椭球半轴长度）</strong>：输出超椭球各个主半轴的物理长度。最大奇异值 $\sigma_1 = \max_{\|\mathbf{x}\|=1}\|A\mathbf{x}\| = \|A\|_2$ 即算子 2-范数（最大拉伸倍数）；最小奇异值代表最扁轴长。
+                    <br>• <strong>左奇异向量 $\mathbf{u}_i$（输出主轴方向）</strong>：输出超椭球各个主半轴指向的标准正交单位向量。
+                    <br>• <strong>核心基本映射式</strong>：$A\mathbf{v}_i = \sigma_i \mathbf{u}_i$。这意味着：<strong>只要在定义域挑对了一组互相垂直的轴，它们在值域中不仅被缩放为 $\sigma_i$，而且依然严格保持互相垂直！</strong>
+                  </p>
+                </div>
+
+                <!-- 视界 3 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                  <strong style="color: var(--accent-green); font-size: 0.95rem;">③ 视界三：四大基本子空间的正交几何解耦与降维扁平化</strong>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.8;">
+                    当矩阵秩亏损（$\text{rank}(A) = k \lt \min(m, n)$）时，后 $n-k$ 个奇异值全部为 0（$\sigma_{k+1} = \dots = \sigma_n = 0$）。
+                    <br>• <strong>几何厚度归零</strong>：在几何上，这意味着输入超球面沿着这 $n-k$ 个轴向被<strong>彻底拍扁为 0 厚度</strong>（映射为原点 $\mathbf{0}$）。
+                    <br>• <strong>输入空间 $\mathbb{R}^n$ 的正交解耦</strong>：$\text{Row}(A) = \text{span}\{\mathbf{v}_1, \dots, \mathbf{v}_k\}$ 是产生实质拉伸输出的有效基底；$\text{Null}(A) = \text{span}\{\mathbf{v}_{k+1}, \dots, \mathbf{v}_n\}$ 则是被完全压碎湮灭的信息盲区，二者满足 $\text{Row}(A) \perp \text{Null}(A)$。
+                    <br>• <strong>输出空间 $\mathbb{R}^m$ 的正交解耦</strong>：$\text{Col}(A) = \text{span}\{\mathbf{u}_1, \dots, \mathbf{u}_k\}$ 是输出椭球实际舒展张成的 $k$ 维实体空间；$\text{Null}(A^T) = \text{span}\{\mathbf{u}_{k+1}, \dots, \mathbf{u}_m\}$ 是椭球厚度为 0 的不可达正交补空间，二者满足 $\text{Col}(A) \perp \text{Null}(A^T)$。
+                  </p>
+                </div>
+
+                <!-- 视界 4 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                  <strong style="color: var(--accent-amber); font-size: 0.95rem;">④ 视界四：几何低秩逼近与能量主轴（Eckart-Young 定理的几何视界）</strong>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.8;">
+                    根据外积展开：$A = \sum_{i=1}^k \sigma_i \mathbf{u}_i \mathbf{v}_i^T$。每个基础算子 $\sigma_i \mathbf{u}_i \mathbf{v}_i^T$ 都是一个秩 1 的几何构造：提取沿 $\mathbf{v}_i$ 的投影长度 ➔ 乘以放大系数 $\sigma_i$ ➔ 沿目标方向 $\mathbf{u}_i$ 发射。
+                    <br>• 若一个超椭球的后部半轴 $\sigma_{r+1}, \dots, \sigma_k$ 非常微小，说明该几何体在这些维度上极其薄（宛如一张纸片）。
+                    <br>• 舍弃这些微小奇异值，在几何上相当于<strong>将扁平超椭球垂直正交投影到前 $r$ 个最主要长半轴张成的低维超平面上</strong>！这就是图像压缩、主成分分析 (PCA) 与大模型 LoRA 低秩微调在空间几何层面的统一本质。
+                  </p>
+                </div>
+
+                <!-- 视界 5 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.06);">
+                  <strong style="color: #f43f5e; font-size: 0.95rem;">⑤ 视界五：为什么 SVD 几何比特征值分解 (EVD) 更深刻普适？</strong>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.35rem; line-height: 1.8;">
+                    • <strong>特征值分解 $A = P D P^{-1}$ 的局限执念</strong>：强求“输入和输出必须在同一个空间”，拼命寻找“变换前后方向保持不变”的向量（$A\mathbf{x} = \lambda\mathbf{x}$）。但在一般几何变换（非对称剪切、旋转、长方形映射）中，不仅根本不存在方向不变的向量，而且特征基经常斜交扭曲，遇到亏损矩阵更是彻底失效。
+                    <br>• <strong>SVD $A = U \Sigma V^T$ 的宏大解耦</strong>：承认空间在发生旋转与维度迁移，转而寻找<strong>两组各自标准正交的基底</strong>（一组在输入端，一组在输出端）。它揭示了线性空间的终极定理：<strong>输入空间的刚体垂直性，在经过任意矩阵变换后，在输出空间依然可以被完美保持为刚体垂直性！</strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.3 二维极透几何实战：单位圆映射到超椭球数值与图形全还原 -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(52, 211, 153, 0.05); border-left: 4px solid var(--accent-green); border-radius: 6px; border: 1px solid rgba(52, 211, 153, 0.2);">
+              <h3 style="color: var(--accent-green); font-size: 1.18rem; margin-bottom: 0.75rem;">
+                🎯 1.3 二维极透几何实战：单位圆映射到倾斜超椭球的数值全过程拆解
+              </h3>
+              <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+                为了彻底看透上述几何图景，我们考察一个具体的非对称实数矩阵，通过纯手推解析与几何坐标追踪，观察一个标准单位圆是如何一步步被拉伸、旋转为倾斜椭圆的。
+              </p>
+
+              <!-- 具体案例设定 -->
+              <div style="background: rgba(15, 23, 42, 0.6); padding: 1rem 1.25rem; border-radius: 6px; border: 1px solid var(--border-color); margin: 1rem 0;">
+                <p style="font-size: 0.95rem; font-weight: bold; color: var(--text-color);">
+                  【实战算例】设变换矩阵为 $A = \begin{bmatrix} 1 & -2 \\ 2 & -1 \end{bmatrix}$。分析它对单位圆的几何映射过程，求解其完整的 SVD 分解并验证主轴与面积缩放。
+                </p>
+              </div>
+
+              <!-- SVG 案例可视化图解 -->
+              <div style="text-align:center; margin: 1.5rem 0;">
+                <svg width="680" height="250" viewBox="0 0 680 250" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                  <defs>
+                    <marker id="m-arrow-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+                    </marker>
+                    <marker id="m-arrow-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"/>
+                    </marker>
+                    <marker id="m-arrow-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+                    </marker>
+                    <marker id="m-arrow-main" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+                      <path d="M0,0 L0,7 L9,3.5 z" fill="#f8fafc"/>
+                    </marker>
+                  </defs>
+
+                  <!-- 坐标轴网格：左侧输入空间 -->
+                  <g transform="translate(150, 120)">
+                    <line x1="-90" y1="0" x2="90" y2="0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <line x1="0" y1="-90" x2="0" y2="90" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <text x="94" y="4" fill="#94a3b8" font-size="10">x₁</text>
+                    <text x="4" y="-94" fill="#94a3b8" font-size="10">x₂</text>
+                    
+                    <!-- 单位圆 -->
+                    <circle cx="0" cy="0" r="50" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="2"/>
+                    
+                    <!-- 输入主轴 v1 = (1, -1)/sqrt(2) -> 角度 -45° (屏幕 y 轴正向向下所以 +45° 屏幕角) -->
+                    <!-- 50 * cos(45°) = 35.35 -->
+                    <line x1="0" y1="0" x2="35.4" y2="35.4" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#m-arrow-blue)"/>
+                    <text x="40" y="48" fill="#38bdf8" font-size="12" font-weight="bold">v₁ (-45°)</text>
+                    
+                    <!-- 输入主轴 v2 = (1, 1)/sqrt(2) -> 角度 +45° (屏幕 y 轴负向向上所以 -45° 屏幕角) -->
+                    <line x1="0" y1="0" x2="35.4" y2="-35.4" stroke="#c084fc" stroke-width="2.5" marker-end="url(#m-arrow-purple)"/>
+                    <text x="40" y="-40" fill="#c084fc" font-size="12" font-weight="bold">v₂ (+45°)</text>
+
+                    <!-- 垂直符号 -->
+                    <path d="M 14,14 L 0,28 L -14,14" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                  </g>
+                  <text x="150" y="222" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">输入空间单位圆 ||x|| = 1</text>
+                  <text x="150" y="238" fill="#94a3b8" font-size="10.5" text-anchor="middle">标准正交基 {v₁, v₂} 夹角 90°</text>
+
+                  <!-- 中间映射连接箭头 -->
+                  <g transform="translate(330, 120)">
+                    <line x1="-50" y1="0" x2="50" y2="0" stroke="#f8fafc" stroke-width="2.5" marker-end="url(#m-arrow-main)"/>
+                    <text x="0" y="-18" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">y = Ax 映射</text>
+                    <text x="0" y="-2" fill="#f8fafc" font-size="10" font-family="monospace" text-anchor="middle">A = [[1, -2], [2, -1]]</text>
+                    <text x="0" y="20" fill="#fbbf24" font-size="10" text-anchor="middle">|det(A)| = 3 (面积放大 3 倍)</text>
+                  </g>
+
+                  <!-- 坐标轴网格：右侧输出空间 -->
+                  <g transform="translate(510, 120)">
+                    <line x1="-120" y1="0" x2="120" y2="0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <line x1="0" y1="-120" x2="0" y2="120" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <text x="124" y="4" fill="#94a3b8" font-size="10">y₁</text>
+                    <text x="4" y="-124" fill="#94a3b8" font-size="10">y₂</text>
+
+                    <!-- 倾斜输出椭圆：长半轴 3*30 = 90，短半轴 1*30 = 30，旋转角 -45° (笛卡尔 +45°) -->
+                    <g transform="rotate(-45)">
+                      <ellipse cx="0" cy="0" rx="85" ry="28" fill="rgba(74, 222, 128, 0.12)" stroke="#4ade80" stroke-width="2.2"/>
+                      
+                      <!-- 长半轴 Av1 = sigma1 * u1 = 3 * u1 -->
+                      <line x1="0" y1="0" x2="83" y2="0" stroke="#38bdf8" stroke-width="3" marker-end="url(#m-arrow-blue)"/>
+                      <text x="48" y="-8" fill="#38bdf8" font-size="11.5" font-weight="bold">σ₁u₁ (长半轴=3)</text>
+                      
+                      <!-- 短半轴 Av2 = sigma2 * u2 = 1 * u2 -->
+                      <line x1="0" y1="0" x2="0" y2="-27" stroke="#c084fc" stroke-width="2.8" marker-end="url(#m-arrow-purple)"/>
+                      <text x="6" y="-12" fill="#c084fc" font-size="11.5" font-weight="bold">σ₂u₂ (短半轴=1)</text>
+
+                      <!-- 直角标记 -->
+                      <rect x="0" y="-10" width="10" height="10" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                    </g>
+                  </g>
+                  <text x="510" y="222" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">输出空间超椭圆 {Ax : ||x|| = 1}</text>
+                  <text x="510" y="238" fill="#94a3b8" font-size="10.5" text-anchor="middle">输出主轴 {u₁, u₂} 严格正交垂直！</text>
+                </svg>
+              </div>
+
+              <!-- 详细解析五步走 -->
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                <p><strong>第一步：构造对称矩阵 $A^T A$ 并求输入主轴（右奇异基 $V$ 与奇异值）</strong><br>
+                  计算内积度量矩阵：
+                  $$A^T A = \begin{bmatrix} 1 & 2 \\ -2 & -1 \end{bmatrix}\begin{bmatrix} 1 & -2 \\ 2 & -1 \end{bmatrix} = \begin{bmatrix} 1+4 & -2-2 \\ -2-2 & 4+1 \end{bmatrix} = \begin{bmatrix} 5 & -4 \\ -4 & 5 \end{bmatrix}$$
+                  其特征方程为：
+                  $$\det(A^T A - \lambda I) = (5 - \lambda)^2 - (-4)^2 = (5 - \lambda - 4)(5 - \lambda + 4) = (1 - \lambda)(9 - \lambda) = 0$$
+                  解得降序特征值：$\lambda_1 = 9, \lambda_2 = 1$。
+                  <br>• <strong>奇异值（椭圆主半轴长度）</strong>：
+                  $$\sigma_1 = \sqrt{\lambda_1} = \sqrt{9} = 3, \quad \sigma_2 = \sqrt{\lambda_2} = \sqrt{1} = 1$$
+                  • <strong>右奇异向量（单位球面上的极值主方向）</strong>：
+                  <br>代入 $\lambda_1 = 9$：$\begin{bmatrix} -4 & -4 \\ -4 & -4 \end{bmatrix}\mathbf{v}_1 = \mathbf{0} \implies \mathbf{v}_1 = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}$（指向 $-45^{\circ}$ 方位）；
+                  <br>代入 $\lambda_2 = 1$：$\begin{bmatrix} 4 & -4 \\ -4 & 4 \end{bmatrix}\mathbf{v}_2 = \mathbf{0} \implies \mathbf{v}_2 = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}$（指向 $+45^{\circ}$ 方位）。
+                  <br>验证正交性：$\mathbf{v}_1 \cdot \mathbf{v}_2 = \frac{1}{2}(1(1) + (-1)(1)) = 0$ 且模长 $\|\mathbf{v}_1\| = \|\mathbf{v}_2\| = 1$。输入基构成一组完美的标准正交标架！
+                </p>
+
+                <p style="margin-top: 0.75rem;"><strong>第二步：映射追踪与输出椭球主轴确认（左奇异基 $U$）</strong><br>
+                  将矩阵 $A$ 作用于这两个正交输入基：
+                  $$A \mathbf{v}_1 = \begin{bmatrix} 1 & -2 \\ 2 & -1 \end{bmatrix} \left(\frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ -1 \end{bmatrix}\right) = \frac{1}{\sqrt{2}}\begin{bmatrix} 1+2 \\ 2+1 \end{bmatrix} = \frac{1}{\sqrt{2}}\begin{bmatrix} 3 \\ 3 \end{bmatrix} = 3 \cdot \left(\frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}\right)$$
+                  $$A \mathbf{v}_2 = \begin{bmatrix} 1 & -2 \\ 2 & -1 \end{bmatrix} \left(\frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix}\right) = \frac{1}{\sqrt{2}}\begin{bmatrix} 1-2 \\ 2-1 \end{bmatrix} = \frac{1}{\sqrt{2}}\begin{bmatrix} -1 \\ 1 \end{bmatrix} = 1 \cdot \left(\frac{1}{\sqrt{2}}\begin{bmatrix} -1 \\ 1 \end{bmatrix}\right)$$
+                  由基本定义 $A\mathbf{v}_i = \sigma_i \mathbf{u}_i$，立即提取出左奇异基：
+                  $$\mathbf{u}_1 = \frac{1}{\sqrt{2}}\begin{bmatrix} 1 \\ 1 \end{bmatrix} \ (\text{指向 } +45^{\circ} \text{ 方向}), \quad \mathbf{u}_2 = \frac{1}{\sqrt{2}}\begin{bmatrix} -1 \\ 1 \end{bmatrix} \ (\text{指向 } +135^{\circ} \text{ 方向})$$
+                  <strong style="color: var(--accent-green);">🔥 震撼的几何见证：</strong>
+                  <br>1. 输入空间夹角 $90^{\circ}$ 的两个单位向量 $\mathbf{v}_1$ 与 $\mathbf{v}_2$，经过变换后分别变为长度为 $\sigma_1 = 3$ 和 $\sigma_2 = 1$ 的向量；
+                  <br>2. 计算其输出内积：$\mathbf{u}_1 \cdot \mathbf{u}_2 = \frac{1}{2}(1(-1) + 1(1)) = 0$！它们在输出椭球面中<strong>依然严格保持正交垂直！</strong>
+                </p>
+
+                <p style="margin-top: 0.75rem;"><strong>第三步：SVD 矩阵三步动作组装</strong><br>
+                  $$A = U \Sigma V^T = \underbrace{\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix}}_{U \ (\text{旋转 } +45^{\circ})} \underbrace{\begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}}_{\Sigma \ (\text{沿坐标轴纯拉伸})} \underbrace{\frac{1}{\sqrt{2}}\begin{bmatrix} 1 & -1 \\ 1 & 1 \end{bmatrix}^T}_{V^T \ (\text{旋转 } +45^{\circ} \text{ 反向对齐})}$$
+                  整个几何过程为：将定义域中的单位圆旋转对齐坐标轴 ➔ 沿水平轴拉伸 3 倍、垂直轴保持 1 倍形成椭圆 ➔ 旋转 $+45^{\circ}$ 摆放在最终位置。
+                </p>
+
+                <p style="margin-top: 0.75rem;"><strong>第四步：面积放大率与行列式的几何大一统</strong><br>
+                  • 输入单位圆面积：$S_{\text{in}} = \pi \cdot 1^2 = \pi$；
+                  <br>• 输出椭圆主半轴长为 $a = \sigma_1 = 3$，$b = \sigma_2 = 1$，其面积为：
+                  $$S_{\text{out}} = \pi \cdot a \cdot b = \pi \cdot \sigma_1 \sigma_2 = \pi \cdot (3) \cdot (1) = 3\pi$$
+                  • 矩阵行列式绝对值：$|\det(A)| = |(1)(-1) - (-2)(2)| = |-1 + 4| = 3$。
+                  <br><strong>几何结论：$|\det(A)| = \prod_{i=1}^n \sigma_i$ 严格成立！矩阵行列式代表的空间体积缩放比，本质上正是所有奇异值（超椭球各主半轴长度）的累乘积！</strong>
+                </p>
+
+                <div style="margin-top: 0.75rem; padding: 0.85rem 1rem; background: rgba(244, 63, 94, 0.08); border-radius: 6px; border: 1px solid rgba(244, 63, 94, 0.25);">
+                  <strong style="color: #f43f5e;">⚡ 退化对比：若矩阵秩亏损（降维拍扁为纸片/线段）</strong>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; line-height: 1.7;">
+                    设奇异矩阵 $B = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$。其特征值 $\lambda_1 = 25, \lambda_2 = 0 \implies \sigma_1 = 5, \sigma_2 = 0$。
+                    <br>• 单位圆沿 $\mathbf{v}_1 = \frac{1}{\sqrt{5}}\begin{bmatrix} 1 \\ 2 \end{bmatrix}$（行空间）被拉伸为长度为 $2\sigma_1 = 10$ 的线段；
+                    <br>• 沿 $\mathbf{v}_2 = \frac{1}{\sqrt{5}}\begin{bmatrix} -2 \\ 1 \end{bmatrix}$（零空间 $\text{Null}(B)$）被完全压扁为 0 厚度（$B\mathbf{v}_2 = \mathbf{0}$）。
+                    <br>原本丰满的二维椭圆退化为一根一维线段，面积为 0（$|\det(B)| = \sigma_1 \cdot 0 = 0$）。零空间就是被几何拍扁吸收的全部自由度！
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.4 深度思辨：U, V 都是正交矩阵，组合起来为什么能表达任意非正交形变？ -->
+            <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(251, 191, 36, 0.04); border-left: 4px solid var(--accent-amber); border-radius: 6px; border: 1px solid rgba(251, 191, 36, 0.2);">
+              <h3 style="color: var(--accent-amber); font-size: 1.18rem; margin-bottom: 0.75rem;">
+                🤔 1.4 深度思辨：$U, V$ 都是正交矩阵，组合起来为什么能表达任意非正交形变（如剪切与畸变）？
+              </h3>
+              
+              <div class="intuition-box" style="margin-bottom: 1rem; border-color: rgba(251, 191, 36, 0.3);">
+                <strong style="color: #fbbf24;">❓ 经典认知困惑 (The Intuitive Paradox)：</strong>
+                <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.8; margin-top: 0.3rem;">
+                  「正交矩阵的乘积依然是正交矩阵，正交变换只能做刚体旋转或镜像，具有绝对的“保长保角性”（90° 直角变换后永远是 90°）。那为什么 $A = U \Sigma V^T$ 能表达任意斜交错位的剪切形变、甚至压扁投影等非正交变换？」
+                </p>
+              </div>
+
+              <p style="font-size: 0.92rem; line-height: 1.8; color: var(--text-muted);">
+                答案的核心破局点，就在于被许多人忽略的<strong>中间“夹心层”——对角缩放矩阵 $\Sigma$！</strong>
+                <br>分解式是 $A = U \Sigma V^T$，<strong>绝非</strong> $A = U V^T$。正是中间非均匀尺度的介入，彻底重塑了空间的几何度量：
+              </p>
+
+              <!-- SVG: 机制图解（非均匀拉伸破坏直角 vs 剪切分解） -->
+              <div style="text-align:center; margin: 1.5rem 0;">
+                <svg width="720" height="260" viewBox="0 0 720 260" style="background:#090d16; border-radius:8px; border:1px solid var(--border-color); max-width: 100%;">
+                  <defs>
+                    <marker id="m-shear-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#38bdf8"/>
+                    </marker>
+                    <marker id="m-shear-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#c084fc"/>
+                    </marker>
+                    <marker id="m-shear-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                      <path d="M0,0 L0,6 L8,3 z" fill="#4ade80"/>
+                    </marker>
+                  </defs>
+
+                  <!-- 左半区：非均匀拉伸撕裂正交性 -->
+                  <g transform="translate(170, 125)">
+                    <!-- 坐标轴 -->
+                    <line x1="-120" y1="0" x2="120" y2="0" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <line x1="0" y1="-100" x2="0" y2="100" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <text x="124" y="4" fill="#94a3b8" font-size="10">x₁</text>
+                    <text x="4" y="-102" fill="#94a3b8" font-size="10">x₂</text>
+
+                    <!-- 原正交向量 x=(1, 1), y=(1, -1) 缩放比例 25px -->
+                    <line x1="0" y1="0" x2="25" y2="-25" stroke="rgba(255,255,255,0.35)" stroke-dasharray="3,3" stroke-width="1.8"/>
+                    <line x1="0" y1="0" x2="25" y2="25" stroke="rgba(255,255,255,0.35)" stroke-dasharray="3,3" stroke-width="1.8"/>
+                    <!-- 原始 90° 直角标记 -->
+                    <path d="M 12,-12 L 24,0 L 12,12" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>
+                    <text x="32" y="3" fill="#94a3b8" font-size="10">原 90° 直角</text>
+
+                    <!-- 经 Sigma=diag(3, 1) 拉伸后的新向量 x'=(3, 1)->(75, -25), y'=(3, -1)->(75, 25) -->
+                    <line x1="0" y1="0" x2="75" y2="-25" stroke="#38bdf8" stroke-width="2.8" marker-end="url(#m-shear-blue)"/>
+                    <text x="80" y="-28" fill="#38bdf8" font-size="11" font-weight="bold">x' = (3, 1)</text>
+
+                    <line x1="0" y1="0" x2="75" y2="25" stroke="#c084fc" stroke-width="2.8" marker-end="url(#m-shear-purple)"/>
+                    <text x="80" y="33" fill="#c084fc" font-size="11" font-weight="bold">y' = (3, -1)</text>
+
+                    <!-- 夹角压缩弧线 -->
+                    <path d="M 40,-13.3 A 42 42 0 0 1 40,13.3" fill="none" stroke="#f43f5e" stroke-width="2"/>
+                    <text x="48" y="2" fill="#f43f5e" font-size="11" font-weight="bold">θ ≈ 36.9°</text>
+                  </g>
+                  <text x="170" y="235" fill="#38bdf8" font-size="12" font-weight="bold" text-anchor="middle">图 A: Σ 非均匀缩放彻底打破正交保角性</text>
+                  <text x="170" y="250" fill="#94a3b8" font-size="10.5" text-anchor="middle">内积从 0 突增至 8，直角被急剧压缩为锐角</text>
+
+                  <!-- 分隔虚线 -->
+                  <line x1="360" y1="20" x2="360" y2="240" stroke="rgba(255,255,255,0.12)" stroke-dasharray="4,4" stroke-width="1"/>
+
+                  <!-- 右半区：剪切矩阵的 SVD 黄金分割解耦 -->
+                  <g transform="translate(540, 125)">
+                    <!-- 原单位正方形（虚线）: 边长 56px -->
+                    <rect x="-28" y="-28" width="56" height="56" fill="none" stroke="rgba(255,255,255,0.25)" stroke-dasharray="3,3" stroke-width="1.2"/>
+                    <text x="-32" y="38" fill="#94a3b8" font-size="9.5">原单位正方形</text>
+
+                    <!-- 剪切后的平行四边形: [[1, 1], [0, 1]] 作用结果 -->
+                    <!-- 点映射: (-28, 28)->(-56, 28), (28, 28)->(0, 28), (28, -28)->(56, -28), (-28, -28)->(0, -28) -->
+                    <polygon points="-56,28 0,28 56,-28 0,-28" fill="rgba(251, 191, 36, 0.08)" stroke="#fbbf24" stroke-width="2"/>
+                    <text x="42" y="-32" fill="#fbbf24" font-size="11" font-weight="bold">剪切平行四边形 S</text>
+
+                    <!-- 内部 SVD 黄金椭圆：半轴 a=1.618*28=45.3, b=0.618*28=17.3, 旋转角 -31.7° -->
+                    <g transform="rotate(-31.7)">
+                      <ellipse cx="0" cy="0" rx="45.3" ry="17.3" fill="rgba(74, 222, 128, 0.15)" stroke="#4ade80" stroke-width="2"/>
+                      <line x1="0" y1="0" x2="43" y2="0" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#m-shear-blue)"/>
+                      <text x="18" y="-6" fill="#38bdf8" font-size="10" font-weight="bold">σ₁=1.618</text>
+
+                      <line x1="0" y1="0" x2="0" y2="-15.5" stroke="#c084fc" stroke-width="2.2" marker-end="url(#m-shear-purple)"/>
+                      <text x="4" y="-8" fill="#c084fc" font-size="10" font-weight="bold">σ₂=0.618</text>
+                    </g>
+                  </g>
+                  <text x="540" y="235" fill="#4ade80" font-size="12" font-weight="bold" text-anchor="middle">图 B: 剪切变换 S 被 SVD 解耦为对角拉伸</text>
+                  <text x="540" y="250" fill="#94a3b8" font-size="10.5" text-anchor="middle">剪切实质：沿 31.7° 轴拉长 1.618 倍 + 沿 121.7° 轴压缩 0.618 倍</text>
+                </svg>
+              </div>
+
+              <!-- 三大机制深度解析 -->
+              <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                <p>
+                  <strong style="color: var(--accent-blue);">1. 机制一：非均匀拉伸（$\sigma_1 \neq \sigma_2$）如何把直角“活生生拉成斜角”</strong><br>
+                  • <strong>何时保持正交？</strong> 若所有奇异值严格相等（$\sigma_1 = \sigma_2 = c$），则 $\Sigma = c I$。此时 $A = c (U V^T)$ 确实依然是一个正交相似变换（仅仅是整体保形放大 $c$ 倍的纯旋转），无法产生任何畸变。<br>
+                  • <strong>何时打破正交？</strong> 只要奇异值出现差异（$\sigma_1 \neq \sigma_2$），空间在不同维度上的伸缩率就脱节了！<br>
+                  如上图 A 所示，取原本点积严格为零的两个正交向量 $\mathbf{x} = \begin{bmatrix} 1 \\ 1 \end{bmatrix}$ 与 $\mathbf{y} = \begin{bmatrix} 1 \\ -1 \end{bmatrix}$（$\mathbf{x} \cdot \mathbf{y} = 0$）。<br>
+                  仅通过对角拉伸矩阵 $\Sigma = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$，它们分别变为 $\mathbf{x}' = \begin{bmatrix} 3 \\ 1 \end{bmatrix}$ 与 $\mathbf{y}' = \begin{bmatrix} 3 \\ -1 \end{bmatrix}$。<br>
+                  计算拉伸后的新内积：
+                  $$\mathbf{x}' \cdot \mathbf{y}' = (3)(3) + (1)(-1) = 9 - 1 = 8 \neq 0$$
+                  两向量的新夹角由内积公式可得：
+                  $$\cos \theta = \frac{8}{\sqrt{3^2+1^2}\sqrt{3^2+(-1)^2}} = \frac{8}{10} = 0.8 \implies \theta \approx 36.87^{\circ}$$
+                  <strong>原本垂直的 90° 直角，被非均匀尺度活生生压缩成了 36.87° 锐角！这正是非正交形变诞生的根源。</strong>
+                </p>
+
+                <p style="margin-top: 0.75rem;">
+                  <strong style="color: var(--accent-green);">2. 机制二：经典剪切变换 (Shear Matrix) 的 SVD 黄金分割奇迹</strong><br>
+                  直觉上最让人难以置信的是<strong>水平剪切变换</strong> $S = \begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$。它既非标准旋转，也没有沿水平或竖直坐标轴直接拉伸，而是像推倒多米诺骨牌一样产生整排的倾斜滑动。它真的能写成旋转加拉伸吗？<br>
+                  对 $S$ 进行严密手推 SVD：
+                  $$S^T S = \begin{bmatrix} 1 & 0 \\ 1 & 1 \end{bmatrix}\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix} = \begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix} \implies \lambda^2 - 3\lambda + 1 = 0$$
+                  解出的特征值恰好是<strong>黄金分割数 $\phi$ 的平方</strong>：
+                  $$\lambda_1 = \frac{3+\sqrt{5}}{2} \approx 2.6180, \quad \lambda_2 = \frac{3-\sqrt{5}}{2} \approx 0.3820$$
+                  求得奇异值：
+                  $$\sigma_1 = \sqrt{\lambda_1} = \frac{1+\sqrt{5}}{2} \approx 1.6180 = \phi, \quad \sigma_2 = \sqrt{\lambda_2} = \frac{\sqrt{5}-1}{2} \approx 0.6180 = \frac{1}{\phi}$$
+                  • 注意 $\sigma_1 \sigma_2 = 1.618 \times 0.618 = 1 = \det(S)$，完全符合剪切保持面积守恒的物理本质！<br>
+                  • 计算奇异向量，对应主轴朝向：$V$ 为顺时针旋转约 $58.28^{\circ}$，$U$ 为逆时针旋转约 $31.72^{\circ}$。<br>
+                  <strong>几何大揭秘：所谓的“剪切滑移”，在物理空间中根本不是一种基础动作！它在本质上就是在倾斜 $31.72^{\circ}$ 的对角轴上拉长 1.618 倍、同时在垂直轴上压缩 0.618 倍，再通过刚体旋转摆正的复合产物！</strong>
+                </p>
+
+                <p style="margin-top: 0.75rem;">
+                  <strong style="color: var(--accent-purple);">3. 机制三：升维、降维与厚度湮灭（长方形与零奇异值）</strong><br>
+                  当矩阵是非方阵或秩亏损时，$U$ 与 $V$ 甚至生活在不同维度的空间（例如 $V \in \mathbb{R}^{2 \times 2}$，而 $U \in \mathbb{R}^{3 \times 3}$）：<br>
+                  • 它们自身绝不可能直接相乘相消；<br>
+                  • 矩阵 $\Sigma$ 负责扮演<strong>“维度路由器”</strong>：多余的轴通过补零嵌入高维空间，多余的自由度通过截断丢弃；<br>
+                  • 当某个奇异值 $\sigma_i = 0$ 时，$\Sigma$ 直接将该轴向的几何厚度<strong>完全压扁归零</strong>（投影湮灭）。正交矩阵是保维的，但 $\Sigma$ 赋予了变换抹除维度的终极权力。
+                </p>
+
+                <!-- 机制四：拉伸本质与三步曲终极配合 -->
+                <div style="margin-top: 1.25rem; padding: 1.25rem; background: rgba(56, 189, 248, 0.05); border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.25);">
+                  <h4 style="color: var(--accent-blue); font-size: 1.05rem; margin-bottom: 0.6rem;">
+                    🎯 4. 机制四：拉伸的本质——对角阵永远拉伸“同一个维度”，为什么必须配合 $V^T$ 与 $U$？
+                  </h4>
+                  <div style="font-size: 0.88rem; line-height: 1.9; color: #f8fafc;">
+                    <p>
+                      <strong>（1）对角矩阵的“死板本质”：它只认标准坐标轴，拉伸的是所有向量的“同一个维度”</strong><br>
+                      对角矩阵 $\Sigma = \text{diag}(\sigma_1, \sigma_2, \dots, \sigma_n)$ 在代数操作上是完全机械统一的。对空间中任意向量 $\mathbf{v} = [v_1, v_2, \dots, v_n]^T$：
+                      $$\Sigma \mathbf{v} = [\sigma_1 v_1, \ \sigma_2 v_2, \ \dots, \ \sigma_n v_n]^T$$
+                      • $\sigma_1$ 统治所有向量的第 1 个分量（$x$ 轴）：无论输入向量是谁，其横坐标统一乘以 $\sigma_1$；<br>
+                      • $\sigma_2$ 统治所有向量的第 2 个分量（$y$ 轴）：所有向量的纵坐标统一乘以 $\sigma_2$；<br>
+                      回顾刚才的数值算例：$\mathbf{x} = [1, 1]^T \to [3, 1]^T$，$\mathbf{y} = [1, -1]^T \to [3, -1]^T$。<strong>两者的第 1 维分量同时且无差别地放大了 3 倍！</strong>正是这种对坐标分量的单向同步拉扯，导致所有向量被强烈吸附、按扁向放大倍率最大的轴向，直角被硬生生夹扁为锐角。
+                    </p>
+
+                    <p style="margin-top: 0.6rem;">
+                      <strong>（2）认知的终极跃迁：为什么光有一把死板的 $\Sigma$ 远远不够？</strong><br>
+                      现实世界中的物理变形，其长轴与短轴几乎总是沿着<strong>倾斜角度</strong>（例如倾斜 $30^{\circ}$、$45^{\circ}$ 或空间任意法向）舒展的。然而，$\Sigma$ 是一把**只能死板地沿着水平轴与竖直轴拉伸的刻度尺**，它自身根本不具备斜向拉伸的能力！
+                    </p>
+
+                    <p style="margin-top: 0.6rem;">
+                      <strong>（3）三步曲协同神技：两只“灵活之手”与一把“死板尺子”的终极配合</strong><br>
+                      为了让这把死板的尺子能够完成任意倾斜方向的形变，SVD 安排了两只具有刚体旋转自由度的“手”（正交矩阵 $V^T$ 与 $U$）：
+                      <br>• <strong>第一步 $V^T$（转正借位对齐）</strong>：既然形变主轴是倾斜的，$V^T$ 先将物体整体做刚体旋转，<strong>把物体原本倾斜的主敏感轴，端端正正地旋转对齐到标准笛卡尔坐标轴上</strong>！
+                      <br>• <strong>第二步 $\Sigma$（死板地拉伸同一个维度）</strong>：主轴一旦对齐，死板的 $\Sigma$ 便可大显身手，<strong>老老实实沿着固定的标准轴进行各维度纯拉伸</strong>（沿水平轴放大 $\sigma_1$ 倍，竖直轴放大 $\sigma_2$ 倍），将标准单位圆拉成轴对齐的椭圆；
+                      <br>• <strong>第三步 $U$（转回到目标输出姿态）</strong>：拉伸完毕后，输出正交矩阵 $U$ 再次将物体整体刚体旋转，<strong>优雅地摆放到输出空间所要求的最终倾斜朝向</strong>！
+                    </p>
+
+                    <!-- 终极几何权责解耦法则 -->
+                    <div style="margin-top: 0.85rem; padding: 0.9rem 1.1rem; background: rgba(251, 191, 36, 0.08); border-left: 3px solid #fbbf24; border-radius: 4px;">
+                      <div style="color: #fbbf24; font-size: 0.95rem; font-weight: bold; margin-bottom: 0.4rem;">
+                        🔥 （4）终极几何权责解耦：最终模长是第二步 $\Sigma$ 控制的，但谁被拉得多是由第一步 $V^T$ 的旋转角度控制的！
+                      </div>
+                      <div style="font-size: 0.86rem; line-height: 1.85; color: #f8fafc;">
+                        许多初学者困惑：既然最终两个主轴的模长比值严格等于 $\sigma_1 / \sigma_2$，那为什么不直接说“模长全由 $\Sigma$ 决定”？这里蕴含着线性代数中最精妙的几何权责解耦：<br>
+                        • <strong>$\Sigma$ 掌控拉伸额度（多少 / Magnitude）</strong>：$\Sigma = \operatorname{diag}(\sigma_1, \sigma_2)$ 绝对控制了空间最大极限伸缩率 $\sigma_1$ 与次级伸缩率 $\sigma_2$，决定了输出超椭球的“长宽比例”（即矩阵的条件数 $\sigma_1 / \sigma_2$）。但 $\Sigma$ 自身是盲目的，它只懂得死板地沿着固定笛卡尔坐标轴拉伸，根本不知道输入空间原本各方向的物理意义；<br>
+                        • <strong>$V^T$ 的旋转角度掌控名额分配（给谁 / Direction Allocation）</strong>：输入空间有 $360^{\circ}$ 无数个倾斜方向，<strong>凭什么某个特定的方向能享受到最大拉伸？全靠 $V^T$ 的旋转角度！</strong>若输入空间中某向量 $\mathbf{v}_1$ 的原始倾斜角度恰好与 $V^T$ 的转角对齐，它在第一步就会被精准转到标准横轴上，从而独享最大的 $\sigma_1$ 倍膨胀！反之，与其垂直的 $\mathbf{v}_2$ 被转到纵轴，只能得到较小的 $\sigma_2$ 倍拉伸；<br>
+                        • <strong>主成分分析（PCA / 数据降维）的现实投射</strong>：$V^T$ 的旋转角度告诉算法<strong>“数据在哪个倾斜方向上的方差最大、最具信息量（谁被拉得最多）”</strong>，而 $\Sigma$ 的奇异值大小告诉算法<strong>“这个方向上的能量究竟有多大（拉了多少倍，是否值得保留）”</strong>。角度决定了<strong>方向归属</strong>，奇异值决定了<strong>能量强度</strong>！
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 总结金句 -->
+              <div style="background: rgba(15, 23, 42, 0.7); padding: 0.85rem 1.25rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-top: 1rem;">
+                <p style="font-size: 0.9rem; margin: 0; color: #f8fafc; line-height: 1.85;">
+                  💡 <strong>一句话哲学总结：</strong><br>
+                  • <strong>拉多少（模长与能量）</strong>：由第二步 $\Sigma$ 的奇异值绝对决定（最终主轴长短之比为 $\sigma_1 / \sigma_2$）；<br>
+                  • <strong>给谁拉（名额与方向）</strong>：由第一步 $V^T$ 的刚体旋转角度决定（谁转到横轴，谁就享受最大倍率）；<br>
+                  • <strong>去哪里（落地与姿态）</strong>：由第三步 $U$ 的刚体旋转角度决定（拉成椭圆后整体摆正到输出空间）。<br>
+                  <strong>“两只灵活的旋转之手 + 一把多轴死板比例尺 = 宇宙间所有实数线性变换”</strong>！
+                </p>
+              </div>
+
+              <!-- 🧪 交互实验室：SVD 三步曲动态形变实验室 (选择目标矩阵 A，逐帧查看矩阵值、向量值与几何图形) -->
+              <div style="margin-top: 1.5rem; background: #070a13; border-radius: 8px; border: 1px solid rgba(251, 191, 36, 0.45); padding: 1.25rem;">
+                <!-- 标题与当前步骤徽章 -->
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem;">
+                  <h4 style="color: #fbbf24; margin: 0; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span>🧪</span> SVD 几何三步曲分步实验室：目标矩阵 $A$ 剖析与逐级数值追踪
+                  </h4>
+                  <span id="svdStepBadge" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 12px; border-radius: 12px; font-size: 0.82rem; font-weight: bold;">
+                    步骤 0：初始输入态 (M = I)
+                  </span>
+                </div>
+
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; line-height: 1.6;">
+                  选择不同的<strong>目标矩阵 $A$</strong>，系统将立即展开其 SVD 矩阵数值分解式。切换四个步骤阶段，右侧实时显示<strong>当前步的矩阵算子、变换后的向量坐标数值与夹角</strong>，左侧图形同步更新！
+                </p>
+
+                <!-- 1. 目标矩阵 A 选择器 -->
+                <div style="background: rgba(15, 23, 42, 0.7); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem;">
+                  <div style="font-size: 0.85rem; font-weight: bold; color: #f8fafc; margin-bottom: 0.5rem;">
+                    🎯 选择目标矩阵 $A$：
+                  </div>
+                  <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <button id="btnMatA1" class="quiz-opt" style="font-size: 0.8rem; padding: 5px 12px; background: rgba(56, 189, 248, 0.18); border: 1px solid var(--accent-blue); color: #f8fafc; border-radius: 4px; cursor: pointer;">
+                      矩阵 A₁: $\begin{bmatrix} 1 & -2 \\ 2 & -1 \end{bmatrix}$ (旋转拉伸)
+                    </button>
+                    <button id="btnMatA2" class="quiz-opt" style="font-size: 0.8rem; padding: 5px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      矩阵 A₂: $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$ (水平剪切·黄金分割)
+                    </button>
+                    <button id="btnMatA3" class="quiz-opt" style="font-size: 0.8rem; padding: 5px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      矩阵 A₃: $\begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$ (纯对角拉伸·直角压扁)
+                    </button>
+                    <button id="btnMatA4" class="quiz-opt" style="font-size: 0.8rem; padding: 5px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      矩阵 A₄: $\begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$ (实对称谱对角化)
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 2. 当前选中矩阵 A 的 SVD 显式数值公式看板 -->
+                <div style="background: rgba(15, 23, 42, 0.85); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.25); margin-bottom: 1rem;">
+                  <div style="font-size: 0.82rem; color: #94a3b8; margin-bottom: 0.35rem;">
+                    🧮 目标矩阵 $A$ 的完全奇异值数值分解式：$A = U \cdot \Sigma \cdot V^T$
+                  </div>
+                  <div id="svdFormulaDisplay" style="font-family: var(--font-mono); font-size: 0.92rem; color: #f8fafc; overflow-x: auto; white-space: nowrap; padding: 0.2rem 0;">
+                    <!-- 动态注入数学公式与排版好的矩阵数值 -->
+                  </div>
+                </div>
+
+                <!-- 3. 四个步骤导航与进度条 -->
+                <div style="background: rgba(15, 23, 42, 0.6); padding: 0.75rem 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; font-size: 0.82rem;">
+                    <span style="color: #f8fafc; font-weight: bold;">🕹️ 当前执行步骤：</span>
+                    <span style="color: var(--text-muted);">插值进度 $t$: <strong id="valT" style="color: #fbbf24; font-size: 0.95rem;">0.00</strong> / 3.0 (<span id="valPercent" style="color: var(--accent-green);">0%</span>)</span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 0.6rem;">
+                    <button id="btnStep0" style="padding: 6px 4px; font-size: 0.78rem; font-weight: bold; background: rgba(56, 189, 248, 0.2); border: 1px solid var(--accent-blue); color: #38bdf8; border-radius: 4px; cursor: pointer;">
+                      步骤 0: 初始态 (I)
+                    </button>
+                    <button id="btnStep1" style="padding: 6px 4px; font-size: 0.78rem; font-weight: bold; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      步骤 1: Vᵀ 刚体旋转
+                    </button>
+                    <button id="btnStep2" style="padding: 6px 4px; font-size: 0.78rem; font-weight: bold; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      步骤 2: Σ 轴向拉伸
+                    </button>
+                    <button id="btnStep3" style="padding: 6px 4px; font-size: 0.78rem; font-weight: bold; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-muted); border-radius: 4px; cursor: pointer;">
+                      步骤 3: U 刚体旋转
+                    </button>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <input type="range" id="sliderSvdProgress" min="0" max="3" step="0.01" value="0" style="flex: 1; cursor: pointer;">
+                    <button id="btnAutoPlay" style="padding: 4px 14px; font-size: 0.8rem; font-weight: bold; background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent-blue); color: #38bdf8; border-radius: 4px; cursor: pointer; white-space: nowrap;">
+                      ▶ 播放动画
+                    </button>
+                  </div>
+                </div>
+
+                <!-- 4. 双栏交互主体：左侧 Canvas 图形，右侧数值与矩阵看板 -->
+                <div style="display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.25fr); gap: 1rem; align-items: start;">
+                  <!-- 左栏：动态 Canvas 视图 -->
+                  <div style="background: #040711; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); padding: 0.75rem; text-align: center;">
+                    <canvas id="svd3StepCanvas" width="460" height="340" style="width: 100%; max-width: 460px; height: auto; background: #03060d; border-radius: 4px; display: block; margin: 0 auto;"></canvas>
+                    <div style="display: flex; justify-content: space-around; font-size: 0.75rem; margin-top: 0.5rem; color: #94a3b8;">
+                      <span><strong style="color: #38bdf8;">■</strong> 奇异主轴 1 (v₁)</span>
+                      <span><strong style="color: #c084fc;">■</strong> 奇异主轴 2 (v₂)</span>
+                      <span><strong style="color: #4ade80;">■</strong> 测试向量 x</span>
+                      <span><strong style="color: #fbbf24;">■</strong> 测试向量 y</span>
+                    </div>
+                  </div>
+
+                  <!-- 右栏：每一个步骤的矩阵值 + 变换后的向量坐标值 + 物理几何指标 -->
+                  <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                    <!-- 当前步骤算子与累积矩阵 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+                      <div style="font-size: 0.82rem; color: var(--accent-blue); font-weight: bold; margin-bottom: 0.4rem;">
+                        🔢 步骤矩阵算子与当前累积变换矩阵 $M(t)$：
+                      </div>
+                      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-family: var(--font-mono); font-size: 0.82rem;">
+                        <div style="background: rgba(0,0,0,0.35); padding: 0.5rem; border-radius: 4px; border-left: 3px solid var(--accent-purple);">
+                          <div style="color: #c084fc; font-size: 0.75rem; margin-bottom: 2px;">本步施加算子：</div>
+                          <div id="stepOperatorVal" style="color: #f8fafc; line-height: 1.4;">I (恒等变换)</div>
+                        </div>
+                        <div style="background: rgba(0,0,0,0.35); padding: 0.5rem; border-radius: 4px; border-left: 3px solid var(--accent-blue);">
+                          <div style="color: #38bdf8; font-size: 0.75rem; margin-bottom: 2px;">当前累积矩阵 M：</div>
+                          <div id="stepAccumMatrixVal" style="color: #f8fafc; line-height: 1.4;">[[1.00, 0.00], [0.00, 1.00]]</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 向量变换后的精确坐标数值表格 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);">
+                      <div style="font-size: 0.82rem; color: var(--accent-green); font-weight: bold; margin-bottom: 0.4rem;">
+                        📐 变换后向量坐标与模长精确追踪：
+                      </div>
+                      <table style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem; color: #f8fafc;">
+                        <thead>
+                          <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color: #94a3b8; text-align: left;">
+                            <th style="padding: 4px 6px;">向量</th>
+                            <th style="padding: 4px 6px;">初始值</th>
+                            <th style="padding: 4px 6px;">变换后当前值 [x', y']</th>
+                            <th style="padding: 4px 6px;">当前模长</th>
+                          </tr>
+                        </thead>
+                        <tbody id="vectorValuesTableBody">
+                          <!-- 动态填充 -->
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- 实时物理夹角与几何本质看板 -->
+                    <div style="background: rgba(15, 23, 42, 0.65); padding: 0.85rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); font-size: 0.8rem; line-height: 1.7;">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem;">
+                        <span style="color: #fbbf24; font-weight: bold;">⚡ 关键物理指标：</span>
+                        <span style="font-family: var(--font-mono);">点积 $\mathbf{x}' \cdot \mathbf{y}'$: <strong id="statDot" style="color: #fbbf24;">0.00</strong></span>
+                      </div>
+                      <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 4px; margin-bottom: 0.4rem;">
+                        <span style="color: #94a3b8;">测试向量夹角 $\theta$：</span>
+                        <span style="font-family: var(--font-mono); font-size: 0.95rem; font-weight: bold;" id="statAngleBadge">
+                          <span id="statAngle" style="color: #4ade80;">90.0°</span> (严格正交)
+                        </span>
+                      </div>
+                      <div id="statStepDesc" style="color: var(--text-muted); font-size: 0.76rem; line-height: 1.6;">
+                        <!-- 动态填充本步动作解释 -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 1.5 严密构造性数学证明 (讲义 82_Ch07_05 Slide 10-12) -->
             <div style="margin-top: 1.5rem; padding: 1.5rem; background: rgba(192, 132, 252, 0.05); border-left: 4px solid var(--accent-purple); border-radius: 6px; border: 1px solid rgba(192, 132, 252, 0.2);">
               <h4 style="color: var(--accent-purple); font-size: 1.1rem; margin-bottom: 0.75rem;">
-                ✍️ SVD 定理严密构造性数学证明 (82_Ch07_05 Slide 10-12 深度还原)
+                ✍️ 1.5 SVD 定理严密构造性数学证明 (82_Ch07_05 Slide 10-12 深度还原)
               </h4>
               <div style="font-size: 0.88rem; color: #f8fafc; line-height: 1.9;">
                 <p><strong>步骤一：构造并分析对称半正定算子 $A^T A$</strong><br>
@@ -979,6 +1522,539 @@ print("\n伪逆最小范数解 ||x||:", np.round(np.linalg.norm(x_pinv), 4))</co
 
       sliderK.addEventListener('input', render);
       render();
+    })();
+
+    // -------------------------------------------------------------
+    // SVD 几何三步曲动态形变实验室 (V^T -> Sigma -> U)
+    // -------------------------------------------------------------
+    (function() {
+      const canvas = typeof document !== 'undefined' ? document.getElementById('svd3StepCanvas') : null;
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      // Elements
+      const slider = document.getElementById('sliderSvdProgress');
+      const valT = document.getElementById('valT');
+      const valPercent = document.getElementById('valPercent');
+      const btnAutoPlay = document.getElementById('btnAutoPlay');
+      const badge = document.getElementById('svdStepBadge');
+      const formulaDisplay = document.getElementById('svdFormulaDisplay');
+
+      const stepOperatorVal = document.getElementById('stepOperatorVal');
+      const stepAccumMatrixVal = document.getElementById('stepAccumMatrixVal');
+      const vectorValuesTableBody = document.getElementById('vectorValuesTableBody');
+
+      const statAngle = document.getElementById('statAngle');
+      const statAngleBadge = document.getElementById('statAngleBadge');
+      const statDot = document.getElementById('statDot');
+      const statStepDesc = document.getElementById('statStepDesc');
+
+      // Matrix A buttons
+      const btnMatA1 = document.getElementById('btnMatA1');
+      const btnMatA2 = document.getElementById('btnMatA2');
+      const btnMatA3 = document.getElementById('btnMatA3');
+      const btnMatA4 = document.getElementById('btnMatA4');
+      const matButtons = [btnMatA1, btnMatA2, btnMatA3, btnMatA4];
+
+      // Step buttons
+      const btnStep0 = document.getElementById('btnStep0');
+      const btnStep1 = document.getElementById('btnStep1');
+      const btnStep2 = document.getElementById('btnStep2');
+      const btnStep3 = document.getElementById('btnStep3');
+      const stepButtons = [btnStep0, btnStep1, btnStep2, btnStep3];
+
+      // 4 Target Matrices Presets
+      const matrixPresets = {
+        1: {
+          name: 'A₁: 旋转拉伸复合矩阵',
+          target: [[1.0, -2.0], [2.0, -1.0]],
+          U: [[0.7071, -0.7071], [0.7071, 0.7071]],
+          Sigma: [[3.0, 0.0], [0.0, 1.0]],
+          VT: [[0.7071, -0.7071], [0.7071, 0.7071]],
+          thetaVT: Math.PI / 4,
+          sigma1: 3.0,
+          sigma2: 1.0,
+          thetaU: Math.PI / 4,
+          testX: [1.0, 0.0],
+          testY: [0.0, 1.0],
+          isSquare: false,
+          desc: 'A₁ 综合了 45° 刚体旋转与 3:1 非均匀拉伸，普通正交基底经变换后丧失 90° 垂直性。'
+        },
+        2: {
+          name: 'A₂: 水平剪切矩阵 (黄金分割)',
+          target: [[1.0, 1.0], [0.0, 1.0]],
+          U: [[0.8507, -0.5257], [0.5257, 0.8507]],
+          Sigma: [[1.618, 0.0], [0.0, 0.618]],
+          VT: [[0.5257, 0.8507], [-0.8507, 0.5257]],
+          thetaVT: -58.2825 * (Math.PI / 180),
+          sigma1: (1 + Math.sqrt(5)) / 2,
+          sigma2: (Math.sqrt(5) - 1) / 2,
+          thetaU: 31.7175 * (Math.PI / 180),
+          testX: [1.0, 0.0],
+          testY: [0.0, 1.0],
+          isSquare: true,
+          desc: '剪切矩阵将单位正方形压斜成平行四边形，奇异值呈现出神奇的黄金分割比 φ 与 1/φ。'
+        },
+        3: {
+          name: 'A₃: 纯对角拉伸矩阵 (直角压扁演示)',
+          target: [[3.0, 0.0], [0.0, 1.0]],
+          U: [[1.0, 0.0], [0.0, 1.0]],
+          Sigma: [[3.0, 0.0], [0.0, 1.0]],
+          VT: [[1.0, 0.0], [0.0, 1.0]],
+          thetaVT: 0,
+          sigma1: 3.0,
+          sigma2: 1.0,
+          thetaU: 0,
+          testX: [1.0, 1.0],
+          testY: [1.0, -1.0],
+          isSquare: false,
+          desc: '仅对所有向量的 x 分量放大 3 倍，使得初始严格成 90° 直角的测试向量 (1,1) 与 (1,-1) 夹角被强行压扁至 36.9°！'
+        },
+        4: {
+          name: 'A₄: 实对称矩阵 (谱分解与 SVD 等价)',
+          target: [[2.0, 1.0], [1.0, 2.0]],
+          U: [[0.7071, -0.7071], [0.7071, 0.7071]],
+          Sigma: [[3.0, 0.0], [0.0, 1.0]],
+          VT: [[0.7071, 0.7071], [-0.7071, 0.7071]],
+          thetaVT: -Math.PI / 4,
+          sigma1: 3.0,
+          sigma2: 1.0,
+          thetaU: Math.PI / 4,
+          testX: [1.0, 0.0],
+          testY: [0.0, 1.0],
+          isSquare: false,
+          desc: '实对称矩阵的奇异值即为其特征值绝对值，V 与 U 相互转置，旋转出去后最终旋转还原。'
+        }
+      };
+
+      let curMatId = 1;
+      let isPlaying = false;
+      let animId = null;
+
+      function drawArrow(ctx, fromX, fromY, toX, toY, color, width, headLen) {
+        width = width || 2;
+        headLen = headLen || 8;
+        const dx = toX - fromX;
+        const dy = toY - fromY;
+        const angle = Math.atan2(dy, dx);
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(fromX, fromY);
+        ctx.lineTo(toX, toY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(toX, toY);
+        ctx.lineTo(toX - headLen * Math.cos(angle - Math.PI / 6), toY - headLen * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(toX - headLen * Math.cos(angle + Math.PI / 6), toY - headLen * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function renderMatrixBadge(mat, color, label) {
+        return `<span style="display:inline-flex; flex-direction:column; align-items:center; margin:0 5px; vertical-align:middle;">
+          <span style="font-size:0.72rem; color:${color}; margin-bottom:2px; font-weight:bold;">${label}</span>
+          <span style="display:inline-block; border-left:2px solid ${color}; border-right:2px solid ${color}; padding:2px 6px; border-radius:3px; background:rgba(0,0,0,0.35); font-family:var(--font-mono); font-size:0.8rem; line-height:1.25; text-align:right;">
+            <span>${(mat[0][0] >= 0 ? ' ' : '') + mat[0][0].toFixed(2)}&nbsp;&nbsp;${(mat[0][1] >= 0 ? ' ' : '') + mat[0][1].toFixed(2)}</span><br>
+            <span>${(mat[1][0] >= 0 ? ' ' : '') + mat[1][0].toFixed(2)}&nbsp;&nbsp;${(mat[1][1] >= 0 ? ' ' : '') + mat[1][1].toFixed(2)}</span>
+          </span>
+        </span>`;
+      }
+
+      function updateFormulaDisplay() {
+        if (!formulaDisplay) return;
+        const sc = matrixPresets[curMatId];
+        formulaDisplay.innerHTML = `
+          ${renderMatrixBadge(sc.target, '#fbbf24', '目标矩阵 A')}
+          <span style="color:#94a3b8; font-weight:bold; font-size:1.1rem; vertical-align:middle;">=</span>
+          ${renderMatrixBadge(sc.U, '#4ade80', '输出基底 U')}
+          <span style="color:#94a3b8; font-weight:bold; font-size:1.1rem; vertical-align:middle;">·</span>
+          ${renderMatrixBadge(sc.Sigma, '#f59e0b', '奇异尺度 Σ')}
+          <span style="color:#94a3b8; font-weight:bold; font-size:1.1rem; vertical-align:middle;">·</span>
+          ${renderMatrixBadge(sc.VT, '#38bdf8', '输入对齐 Vᵀ')}
+        `;
+      }
+
+      // Compute current transformation operator and cumulative matrix M(t)
+      function getTransformState(t, sc) {
+        let opName = '';
+        let opColor = '#38bdf8';
+        let opMatrix = [[1, 0], [0, 1]];
+        let M = [[1, 0], [0, 1]];
+
+        if (t <= 0.001) {
+          opName = '恒等算子 I (初始态)';
+          opColor = '#94a3b8';
+          opMatrix = [[1.0, 0.0], [0.0, 1.0]];
+          M = [[1.0, 0.0], [0.0, 1.0]];
+        } else if (t <= 1.0) {
+          const p = t;
+          const curAngle = sc.thetaVT * p;
+          const c = Math.cos(curAngle), s = Math.sin(curAngle);
+          opName = `Vᵀ 刚体旋转 (θ = ${(curAngle * 180 / Math.PI).toFixed(1)}°)`;
+          opColor = '#38bdf8';
+          opMatrix = [[c, -s], [s, c]];
+          M = [[c, -s], [s, c]];
+        } else if (t <= 2.0) {
+          const p = t - 1.0;
+          const c1 = Math.cos(sc.thetaVT), s1 = Math.sin(sc.thetaVT);
+          const M_vt = [[c1, -s1], [s1, c1]];
+
+          const curS1 = 1.0 + p * (sc.sigma1 - 1.0);
+          const curS2 = 1.0 + p * (sc.sigma2 - 1.0);
+
+          opName = `Σ 轴向拉伸 (diag(${curS1.toFixed(2)}, ${curS2.toFixed(2)}))`;
+          opColor = '#fbbf24';
+          opMatrix = [[curS1, 0.0], [0.0, curS2]];
+
+          // Cumulative M = S * VT
+          M = [
+            [curS1 * M_vt[0][0], curS1 * M_vt[0][1]],
+            [curS1 * M_vt[0][1], curS2 * M_vt[1][1]]
+          ];
+          // Correct dot product for M
+          M = [
+            [curS1 * M_vt[0][0], curS1 * M_vt[0][1]],
+            [curS2 * M_vt[1][0], curS2 * M_vt[1][1]]
+          ];
+        } else {
+          const p = t - 2.0;
+          const c1 = Math.cos(sc.thetaVT), s1 = Math.sin(sc.thetaVT);
+          const M_step2 = [
+            [sc.sigma1 * c1, -sc.sigma1 * s1],
+            [sc.sigma2 * s1, sc.sigma2 * c1]
+          ];
+
+          const curAngleU = sc.thetaU * p;
+          const cu = Math.cos(curAngleU), su = Math.sin(curAngleU);
+
+          opName = `U 刚体旋转 (θ = ${(curAngleU * 180 / Math.PI).toFixed(1)}°)`;
+          opColor = '#4ade80';
+          opMatrix = [[cu, -su], [su, cu]];
+
+          // Cumulative M = R_U * (Sigma * VT)
+          M = [
+            [cu * M_step2[0][0] - su * M_step2[1][0], cu * M_step2[0][1] - su * M_step2[1][1]],
+            [su * M_step2[0][0] + cu * M_step2[1][0], su * M_step2[0][1] + cu * M_step2[1][1]]
+          ];
+        }
+
+        return { opName, opColor, opMatrix, M };
+      }
+
+      function applyMatrix(M, vec) {
+        return [
+          M[0][0] * vec[0] + M[0][1] * vec[1],
+          M[1][0] * vec[0] + M[1][1] * vec[1]
+        ];
+      }
+
+      function formatMat2x2Text(mat) {
+        const r0 = `[${(mat[0][0] >= 0 ? ' ' : '') + mat[0][0].toFixed(2)}, ${(mat[0][1] >= 0 ? ' ' : '') + mat[0][1].toFixed(2)}]`;
+        const r1 = `[${(mat[1][0] >= 0 ? ' ' : '') + mat[1][0].toFixed(2)}, ${(mat[1][1] >= 0 ? ' ' : '') + mat[1][1].toFixed(2)}]`;
+        return `[${r0},<br>&nbsp;${r1}]`;
+      }
+
+      function renderLab() {
+        const t = parseFloat(slider.value);
+        const sc = matrixPresets[curMatId];
+        const state = getTransformState(t, sc);
+        const M = state.M;
+
+        valT.textContent = t.toFixed(2);
+        valPercent.textContent = Math.round((t / 3.0) * 100) + '%';
+
+        // 1. Update Step Badge & Text
+        if (t < 0.05) {
+          badge.textContent = '步骤 0：初始输入态 (M = I)';
+          badge.style.color = '#38bdf8';
+          badge.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+          statStepDesc.innerHTML = '<strong>【步骤 0：初始态】</strong>输入空间中的单位圆和单位正交基底未受扰动，测试向量处于原始状态。';
+        } else if (t <= 1.0) {
+          badge.textContent = '步骤 1：Vᵀ 刚体旋转对齐主轴';
+          badge.style.color = '#38bdf8';
+          badge.style.borderColor = 'rgba(56, 189, 248, 0.5)';
+          statStepDesc.innerHTML = '<strong>【步骤 1：Vᵀ 刚体旋转】</strong>将输入空间的倾斜敏感轴旋转对齐到标准笛卡尔坐标轴上！所有向量长度与夹角绝对守恒不变（保内积与正交性）。';
+        } else if (t <= 2.0) {
+          badge.textContent = '步骤 2：Σ 沿坐标轴非均匀纯拉伸';
+          badge.style.color = '#fbbf24';
+          badge.style.borderColor = 'rgba(251, 191, 36, 0.5)';
+          statStepDesc.innerHTML = `<strong>【步骤 2：Σ 纯轴向拉伸】</strong>沿标准坐标轴独立拉伸不同倍数 (σ₁ = ${sc.sigma1.toFixed(2)}, σ₂ = ${sc.sigma2.toFixed(2)})！<strong>直角正是被这一步硬生生破坏拉偏的！</strong>`;
+        } else {
+          badge.textContent = '步骤 3：U 刚体旋转至目标姿态';
+          badge.style.color = '#4ade80';
+          badge.style.borderColor = 'rgba(74, 222, 128, 0.5)';
+          statStepDesc.innerHTML = '<strong>【步骤 3：U 刚体旋转】</strong>输出正交矩阵将已经拉伸成椭圆的几何体做整体刚体旋转，优雅平移旋转到目标空间最终姿态，完成 A = U · Σ · Vᵀ！';
+        }
+
+        // 2. Update Step Buttons Active State
+        const activeStepIdx = Math.min(3, Math.floor(t + 0.49));
+        stepButtons.forEach((btn, idx) => {
+          if (!btn) return;
+          if (idx === activeStepIdx) {
+            btn.style.background = 'rgba(56, 189, 248, 0.2)';
+            btn.style.borderColor = 'var(--accent-blue)';
+            btn.style.color = '#38bdf8';
+          } else {
+            btn.style.background = 'rgba(255, 255, 255, 0.05)';
+            btn.style.borderColor = 'var(--border-color)';
+            btn.style.color = 'var(--text-muted)';
+          }
+        });
+
+        // 3. Update Step Operator and Cumulative Matrix
+        if (stepOperatorVal) {
+          stepOperatorVal.innerHTML = `<span style="color:${state.opColor}; font-weight:bold;">${state.opName}</span><br>${formatMat2x2Text(state.opMatrix)}`;
+        }
+        if (stepAccumMatrixVal) {
+          stepAccumMatrixVal.innerHTML = `<span style="color:#38bdf8; font-weight:bold;">M(t) 累积变换矩阵</span><br>${formatMat2x2Text(M)}`;
+        }
+
+        // 4. Compute Transformed Vectors
+        const v1_init = [Math.cos(-sc.thetaVT), Math.sin(-sc.thetaVT)];
+        const v2_init = [Math.cos(-sc.thetaVT + Math.PI / 2), Math.sin(-sc.thetaVT + Math.PI / 2)];
+        const x_init = sc.testX;
+        const y_init = sc.testY;
+
+        const v1_cur = applyMatrix(M, v1_init);
+        const v2_cur = applyMatrix(M, v2_init);
+        const x_cur = applyMatrix(M, x_init);
+        const y_cur = applyMatrix(M, y_init);
+
+        const lenV1 = Math.hypot(v1_cur[0], v1_cur[1]);
+        const lenV2 = Math.hypot(v2_cur[0], v2_cur[1]);
+        const lenX = Math.hypot(x_cur[0], x_cur[1]);
+        const lenY = Math.hypot(y_cur[0], y_cur[1]);
+
+        // 5. Update Vector Table
+        if (vectorValuesTableBody) {
+          const vecRows = [
+            { name: 'v₁ (奇异轴 1)', color: '#38bdf8', init: v1_init, cur: v1_cur, len: lenV1 },
+            { name: 'v₂ (奇异轴 2)', color: '#c084fc', init: v2_init, cur: v2_cur, len: lenV2 },
+            { name: 'x (测试向量)', color: '#4ade80', init: x_init, cur: x_cur, len: lenX },
+            { name: 'y (测试向量)', color: '#fbbf24', init: y_init, cur: y_cur, len: lenY }
+          ];
+
+          vectorValuesTableBody.innerHTML = vecRows.map(r => `
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+              <td style="padding: 4px 6px; color:${r.color}; font-weight:bold;">${r.name}</td>
+              <td style="padding: 4px 6px; color:#94a3b8;">[${(r.init[0]>=0?' ':'')+r.init[0].toFixed(2)}, ${(r.init[1]>=0?' ':'')+r.init[1].toFixed(2)}]ᵀ</td>
+              <td style="padding: 4px 6px; color:#f8fafc; font-weight:bold;">[${(r.cur[0]>=0?' ':'')+r.cur[0].toFixed(2)}, ${(r.cur[1]>=0?' ':'')+r.cur[1].toFixed(2)}]ᵀ</td>
+              <td style="padding: 4px 6px; color:#fbbf24;">${r.len.toFixed(2)}</td>
+            </tr>
+          `).join('');
+        }
+
+        // 6. Dot Product & Angle between Test Vectors x & y
+        const dotXY = x_cur[0] * y_cur[0] + x_cur[1] * y_cur[1];
+        const denomXY = lenX * lenY;
+        let cosXY = denomXY > 1e-7 ? Math.max(-1, Math.min(1, dotXY / denomXY)) : 1.0;
+        const fullAngleDeg = Math.acos(cosXY) * (180 / Math.PI);
+
+        if (statDot) statDot.textContent = (dotXY >= 0 ? '+' : '') + dotXY.toFixed(2);
+        if (statAngle) statAngle.textContent = fullAngleDeg.toFixed(1) + '°';
+
+        if (statAngleBadge) {
+          const isOrthogonal = Math.abs(fullAngleDeg - 90.0) < 0.25;
+          if (isOrthogonal) {
+            statAngleBadge.innerHTML = `<span style="color: #4ade80;">${fullAngleDeg.toFixed(1)}°</span> (严格正交 90°)`;
+          } else {
+            statAngleBadge.innerHTML = `<span style="color: #f43f5e;">${fullAngleDeg.toFixed(1)}°</span> (正交性被破坏!)`;
+          }
+        }
+
+        // 7. Render Canvas Graphics
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+
+        const cx = w / 2;
+        const cy = h / 2;
+        const R0 = 40.0; // Base unit length in px
+
+        // 7.1 Subtle grid
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+        ctx.lineWidth = 1;
+        const stepGrid = 40;
+        for (let gx = cx % stepGrid; gx < w; gx += stepGrid) {
+          ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+        }
+        for (let gy = cy % stepGrid; gy < h; gy += stepGrid) {
+          ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+        }
+
+        // 7.2 Standard axes
+        drawArrow(ctx, 25, cy, w - 25, cy, 'rgba(255, 255, 255, 0.22)', 1.2, 6);
+        drawArrow(ctx, cx, h - 20, cx, 20, 'rgba(255, 255, 255, 0.22)', 1.2, 6);
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px monospace';
+        ctx.fillText('x₁', w - 20, cy + 14);
+        ctx.fillText('x₂', cx + 8, 25);
+
+        // 7.3 Faint reference circle
+        ctx.beginPath();
+        ctx.arc(cx, cy, R0, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.setLineDash([3, 3]);
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 7.4 Unit square (if shear matrix)
+        if (sc.isSquare) {
+          const sqPts = [[0, 0], [1, 0], [1, 1], [0, 1]];
+          ctx.beginPath();
+          sqPts.forEach((pt, idx) => {
+            const p = applyMatrix(M, pt);
+            const sx = cx + p[0] * R0;
+            const sy = cy - p[1] * R0;
+            if (idx === 0) ctx.moveTo(sx, sy);
+            else ctx.lineTo(sx, sy);
+          });
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.08)';
+          ctx.fill();
+          ctx.strokeStyle = 'rgba(251, 191, 36, 0.5)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+
+        // 7.5 Transformed unit circle -> ellipse
+        const N = 120;
+        ctx.beginPath();
+        for (let i = 0; i <= N; i++) {
+          const phi = (i / N) * Math.PI * 2;
+          const p = applyMatrix(M, [Math.cos(phi), Math.sin(phi)]);
+          const sx = cx + p[0] * R0;
+          const sy = cy - p[1] * R0;
+          if (i === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.08)';
+        ctx.fill();
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2.2;
+        ctx.stroke();
+
+        // 7.6 Draw Principal singular vectors v1 and v2
+        drawArrow(ctx, cx, cy, cx + v1_cur[0] * R0, cy - v1_cur[1] * R0, '#38bdf8', 2.8, 8);
+        drawArrow(ctx, cx, cy, cx + v2_cur[0] * R0, cy - v2_cur[1] * R0, '#c084fc', 2.8, 8);
+
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('v₁', cx + v1_cur[0] * R0 + 6, cy - v1_cur[1] * R0 - 6);
+
+        ctx.fillStyle = '#c084fc';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('v₂', cx + v2_cur[0] * R0 + 6, cy - v2_cur[1] * R0 - 6);
+
+        // 7.7 Draw Test vectors x and y
+        drawArrow(ctx, cx, cy, cx + x_cur[0] * R0, cy - x_cur[1] * R0, '#4ade80', 2.2, 7);
+        drawArrow(ctx, cx, cy, cx + y_cur[0] * R0, cy - y_cur[1] * R0, '#fbbf24', 2.2, 7);
+
+        ctx.fillStyle = '#4ade80';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('x', cx + x_cur[0] * R0 + 6, cy - x_cur[1] * R0 - 4);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 11px sans-serif';
+        ctx.fillText('y', cx + y_cur[0] * R0 + 6, cy - y_cur[1] * R0 + 12);
+
+        // 7.8 Angle arc between test vectors x and y
+        if (lenX > 0.05 && lenY > 0.05) {
+          const angX = Math.atan2(-x_cur[1], x_cur[0]);
+          const angY = Math.atan2(-y_cur[1], y_cur[0]);
+          ctx.beginPath();
+          ctx.arc(cx, cy, 24, angX, angY, Math.sin(angY - angX) < 0);
+          ctx.strokeStyle = Math.abs(fullAngleDeg - 90.0) < 0.5 ? '#4ade80' : '#f43f5e';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Angle text on Canvas
+          const midAng = (angX + angY) / 2 + (Math.abs(angX - angY) > Math.PI ? Math.PI : 0);
+          ctx.fillStyle = Math.abs(fullAngleDeg - 90.0) < 0.5 ? '#4ade80' : '#f43f5e';
+          ctx.font = 'bold 10px sans-serif';
+          ctx.fillText(`${fullAngleDeg.toFixed(0)}°`, cx + 34 * Math.cos(midAng) - 8, cy + 34 * Math.sin(midAng) + 4);
+        }
+      }
+
+      function switchMatrix(id) {
+        curMatId = id;
+        slider.value = 0;
+        if (isPlaying) togglePlay();
+
+        matButtons.forEach((b, idx) => {
+          if (!b) return;
+          if (idx + 1 === id) {
+            b.style.borderColor = 'var(--accent-blue)';
+            b.style.background = 'rgba(56, 189, 248, 0.18)';
+            b.style.color = '#f8fafc';
+          } else {
+            b.style.borderColor = 'var(--border-color)';
+            b.style.background = 'rgba(255, 255, 255, 0.05)';
+            b.style.color = 'var(--text-muted)';
+          }
+        });
+
+        updateFormulaDisplay();
+        renderLab();
+      }
+
+      function togglePlay() {
+        if (isPlaying) {
+          isPlaying = false;
+          btnAutoPlay.textContent = '▶ 播放动画';
+          btnAutoPlay.style.background = 'rgba(56, 189, 248, 0.15)';
+          btnAutoPlay.style.color = '#38bdf8';
+          btnAutoPlay.style.borderColor = 'var(--accent-blue)';
+          if (animId) cancelAnimationFrame(animId);
+        } else {
+          isPlaying = true;
+          btnAutoPlay.textContent = '⏸ 暂停动画';
+          btnAutoPlay.style.background = 'rgba(244, 63, 94, 0.2)';
+          btnAutoPlay.style.color = '#f43f5e';
+          btnAutoPlay.style.borderColor = '#f43f5e';
+
+          function stepAnim() {
+            if (!isPlaying) return;
+            let curVal = parseFloat(slider.value) + 0.015;
+            if (curVal > 3.0) {
+              curVal = 0;
+            }
+            slider.value = curVal;
+            renderLab();
+            animId = requestAnimationFrame(stepAnim);
+          }
+          animId = requestAnimationFrame(stepAnim);
+        }
+      }
+
+      // Event listeners
+      slider.addEventListener('input', () => {
+        if (isPlaying) togglePlay();
+        renderLab();
+      });
+
+      btnAutoPlay.addEventListener('click', togglePlay);
+
+      btnStep0.addEventListener('click', () => { if (isPlaying) togglePlay(); slider.value = 0; renderLab(); });
+      btnStep1.addEventListener('click', () => { if (isPlaying) togglePlay(); slider.value = 1; renderLab(); });
+      btnStep2.addEventListener('click', () => { if (isPlaying) togglePlay(); slider.value = 2; renderLab(); });
+      btnStep3.addEventListener('click', () => { if (isPlaying) togglePlay(); slider.value = 3; renderLab(); });
+
+      if (btnMatA1) btnMatA1.addEventListener('click', () => switchMatrix(1));
+      if (btnMatA2) btnMatA2.addEventListener('click', () => switchMatrix(2));
+      if (btnMatA3) btnMatA3.addEventListener('click', () => switchMatrix(3));
+      if (btnMatA4) btnMatA4.addEventListener('click', () => switchMatrix(4));
+
+      // Initial initialization
+      updateFormulaDisplay();
+      renderLab();
     })();
 
     // 交互式自测 Quiz 选项点击逻辑
