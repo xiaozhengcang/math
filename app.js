@@ -13,12 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modalCloseBtn = document.getElementById('modalClose');
   const searchInput = document.getElementById('searchInput');
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const progressBadge = document.getElementById('progressBadgeText');
   const scrollProgressBar = document.getElementById('scroll-progress');
-  
-  // Progress state from LocalStorage
-  let completedDisciplines = JSON.parse(localStorage.getItem('ai_math_completed_disciplines') || '[]');
-  let completedNodes = JSON.parse(localStorage.getItem('ai_math_completed_nodes') || '[]');
 
   function getLevelColor(levelNum) {
     switch(levelNum) {
@@ -32,13 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --------------------------------------------------------------------------
-  // 3. Syllabus Disciplines Cards Renderer (13 大核心学科 · 4 大支柱模块)
+  // 1. Syllabus Disciplines Cards Renderer (13 大核心学科 · 4 大支柱模块)
   // --------------------------------------------------------------------------
   const modulesMap = {
-    "module-1": { title: "🏛️ 模块一：基础数学支柱 (Foundational Mathematics)", badgeClass: "mod-1", desc: "微积分、高维线性代数、初等概率统计与凸优化理论" },
-    "module-2": { title: "🌊 模块二：分析、测度与动力系统 (Analysis, Measure & Dynamics)", badgeClass: "mod-2", desc: "实变测度、泛函希尔伯特空间、偏微分方程、随机过程与伊藤分析" },
-    "module-3": { title: "📊 模块三：信息、时序与统计学习界 (Information, Sequences & Learning Bounds)", badgeClass: "mod-3", desc: "香农信息论、时序状态空间卡尔曼滤波与高维经验过程泛化界" },
-    "module-4": { title: "🚀 模块四：现代 AI 前沿交叉专题 (Frontier AI Cross-disciplinary Topics)", badgeClass: "mod-4", desc: "李代数几何深度学习、随机矩阵 RMT、连续生成流、大模型数学建模与复杂系统 Scaling Laws" }
+    "module-1": { title: "🏛️ 模块一：基础数学支柱", badgeClass: "mod-1", desc: "微积分、线性代数、概率统计与凸优化理论" },
+    "module-2": { title: "🌊 模块二：分析、测度与动力系统", badgeClass: "mod-2", desc: "实变函数与测度论、泛函分析、偏微分方程、随机过程与随机分析" },
+    "module-3": { title: "📊 模块三：信息、时序与统计学习界", badgeClass: "mod-3", desc: "信息论基础、时间序列分析与状态空间模型、高维概率与统计学习理论" },
+    "module-4": { title: "🚀 模块四：现代 AI 前沿交叉专题", badgeClass: "mod-4", desc: "李代数几何深度学习、随机矩阵论、连续生成流、大模型数学建模与复杂系统 Scaling Laws" }
   };
 
   function renderRoadmapCards() {
@@ -67,18 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
       gridEl.className = 'syllabus-grid';
 
       groupDisciplines.forEach(d => {
-        const isDone = completedDisciplines.includes(d.id);
         const cardEl = document.createElement('div');
-        cardEl.className = `syllabus-card ${isDone ? 'done' : ''}`;
+        cardEl.className = 'syllabus-card';
         cardEl.style.setProperty('--card-accent', d.color);
         cardEl.dataset.id = d.id;
 
         const textbookHtml = d.primaryTextbook ? `
-          <a href="${d.primaryTextbook.url}" target="_blank" class="card-textbook-bar" title="点击研读推荐数字化经典专著">
+          <a href="${d.primaryTextbook.url}" target="_blank" class="card-textbook-bar" title="研读推荐教材">
             <div class="card-textbook-info">
               <span>📖</span> ${d.primaryTextbook.title}
             </div>
-            <span class="card-textbook-badge">${d.primaryTextbook.badge || '经典重构教材'}</span>
+            <span class="card-textbook-badge">${d.primaryTextbook.badge || '配套教材'}</span>
           </a>
         ` : '';
 
@@ -91,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="discipline-id-badge" style="color: ${d.color}; border-color: ${d.color}40; background: ${d.color}15;">${d.id}</span>
                 <span style="font-size:0.75rem; color:${d.color}; font-weight:700; border:1px solid ${d.color}40; padding:0.12rem 0.45rem; border-radius:6px; background:rgba(255,255,255,0.03);">${d.badge}</span>
               </div>
-              ${isDone ? '<span style="color:#10b981; font-size:0.8rem; font-weight:700;">✓ 已掌握</span>' : ''}
             </div>
 
             <h3 class="discipline-title">${d.name}</h3>
@@ -99,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <div class="concepts-section">
               <div class="concepts-label">
-                <span>📋</span> 学习大纲考核核心知识点
+                <span>📋</span> 核心概念与考点
               </div>
               <div class="concepts-pills">
                 ${conceptsPills}
@@ -114,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span class="meta-row-content">${d.mathTools}</span>
               </div>
               <div class="meta-row">
-                <strong>⚡ AI 落地：</strong>
+                <strong>⚡ AI 应用：</strong>
                 <span class="meta-row-content">${d.aiApplications}</span>
               </div>
             </div>
@@ -123,17 +116,11 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="syllabus-card-footer">
             <div class="syllabus-action-btns">
               <a href="${d.primaryTutorial.url}" target="_blank" class="btn-syllabus-primary" style="background: linear-gradient(135deg, ${d.color}25 0%, rgba(99, 102, 241, 0.2) 100%); border-color: ${d.color}60; color: ${d.color};">
-                🚀 直达大纲教程 ➔
+                阅读教程 ➔
               </a>
-              <button class="btn-syllabus-secondary" onclick="window.openDisciplineModal('${d.id}')" title="查看完整理论考点与奠基论文">
-                📖 理论与论文
+              <button class="btn-syllabus-secondary" onclick="window.openDisciplineModal('${d.id}')" title="查看知识点与参考文献">
+                理论与文献
               </button>
-            </div>
-            <div style="display:flex; justify-content:flex-end;">
-              <label class="check-label">
-                <input type="checkbox" ${isDone ? 'checked' : ''} onchange="window.toggleDisciplineProgress('${d.id}')">
-                打卡已掌握
-              </label>
             </div>
           </div>
         `;
@@ -212,12 +199,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="item-card">
           <strong>📖 ${d.primaryTextbook.title}</strong>
           <div style="color: var(--accent-blue); font-size: 0.82rem; margin-top: 0.2rem;">
-            <a href="${d.primaryTextbook.url}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">🚀 点击进入经典重构数字化教材 ➔</a>
+            <a href="${d.primaryTextbook.url}" target="_blank" style="color:var(--accent-blue); text-decoration:none;">进入配套教材 ➔</a>
           </div>
         </div>
       `;
     } else {
-      booksContainer.innerHTML = '<span style="color:var(--text-muted); font-size:0.85rem;">可参考上方经典数字化教材文库中的对应章节。</span>';
+      booksContainer.innerHTML = '<span style="color:var(--text-muted); font-size:0.85rem;">可参考上方经典教材文库中的对应章节。</span>';
     }
 
     // Papers list
@@ -341,36 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === modalBackdrop) closeModal();
   });
 
-  // --------------------------------------------------------------------------
-  // 5. LocalStorage Progress Management
-  // --------------------------------------------------------------------------
-  window.toggleDisciplineProgress = function(disciplineId) {
-    if (completedDisciplines.includes(disciplineId)) {
-      completedDisciplines = completedDisciplines.filter(id => id !== disciplineId);
-    } else {
-      completedDisciplines.push(disciplineId);
-    }
-    localStorage.setItem('ai_math_completed_disciplines', JSON.stringify(completedDisciplines));
-    updateProgressUI();
-    renderRoadmapCards();
-  };
-
-  window.toggleNodeProgress = function(nodeId) {
-    if (completedNodes.includes(nodeId)) {
-      completedNodes = completedNodes.filter(id => id !== nodeId);
-    } else {
-      completedNodes.push(nodeId);
-    }
-    localStorage.setItem('ai_math_completed_nodes', JSON.stringify(completedNodes));
-    updateProgressUI();
-    renderRoadmapCards();
-  };
-
-  function updateProgressUI() {
-    const pct = Math.round((completedDisciplines.length / SYLLABUS_DISCIPLINES.length) * 100);
-    progressBadge.textContent = `${completedDisciplines.length}/${SYLLABUS_DISCIPLINES.length} 学科已掌握 (${pct}%)`;
-  }
-
   // Search & Filters Listener
   searchInput.addEventListener('input', (e) => {
     searchQuery = e.target.value;
@@ -395,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --------------------------------------------------------------------------
-  // 6. Interactive Visual Labs Setup (LoRA, Softmax, Scaling Law)
+  // 5. Interactive Visual Labs Setup (LoRA, Softmax)
   // --------------------------------------------------------------------------
   function setupInteractiveLabs() {
     // Lab 1: LoRA Low-Rank Decomposition
@@ -415,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
       loraResult.innerHTML = `
         原始全量矩阵 $W_0$: <strong>${origParams.toLocaleString()}</strong> 参数<br>
         LoRA 低秩分解 $B \\cdot A$: <strong>${loraParams.toLocaleString()}</strong> 参数<br>
-        <span style="color: var(--accent-emerald); font-weight:700;">节省算力/显存: ${compression}%</span>
+        <span style="color: var(--accent-emerald); font-weight:700;">参数量削减: ${compression}%</span>
       `;
       if (window.renderMathInElement) window.renderMathInElement(loraResult);
     }
@@ -466,6 +423,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Initialization
   renderRoadmapCards();
-  updateProgressUI();
   setupInteractiveLabs();
 });
