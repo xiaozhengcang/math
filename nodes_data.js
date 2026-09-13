@@ -120,7 +120,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "系统架构与图模型（自动微分计算图调度、MoE 稀疏路由分配、推理搜索树 MCTS 与思维树 ToT 搜索）",
     localLinks: [
-      { name: "N05 入门教程: 图论与计算图分析", url: "N05_GraphTheory/index.html" }
+      { name: "N05 入门教程: 图论与计算图分析", url: "FrontierTopics/N05_GraphTheory/index.html" }
     ]
   },
   {
@@ -231,7 +231,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "对抗学习与偏好对齐（GAN 对抗博弈、Actor-Critic 协同博弈、多智能体对齐与自博弈演化）",
     localLinks: [
-      { name: "N10 入门教程: 博弈论与变分不等式", url: "N10_GameTheoryVariationalInequalities/index.html" }
+      { name: "N10 入门教程: 博弈论与变分不等式", url: "FrontierTopics/N10_GameTheoryVariationalInequalities/index.html" }
     ]
   },
   {
@@ -253,7 +253,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "生成分布几何对齐（Flow Matching 极小传输成本轨迹插值、WGAN 稳定性控制、跨模态流形对齐）",
     localLinks: [
-      { name: "N11 入门教程: 最优传输理论", url: "N11_OptimalTransport/index.html" }
+      { name: "N11 入门教程: 最优传输理论", url: "FrontierTopics/N11_OptimalTransport/index.html" }
     ]
   },
   {
@@ -275,7 +275,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "视觉与通用感知网络（ResNet、ConvNeXt、视觉自监督模型 MAE、神经网络初始化与梯度爆炸控制）",
     localLinks: [
-      { name: "N12 入门教程: 深度神经网络动力学", url: "N12_DeepNeuralNetDynamics/index.html" }
+      { name: "N12 入门教程: 深度神经网络动力学", url: "FrontierTopics/N12_DeepNeuralNetDynamics/index.html" }
     ]
   },
   {
@@ -297,7 +297,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "结构生物与材料科学（AlphaFold3 蛋白质设计、分子构象生成、等变图神经网络 GNN）",
     localLinks: [
-      { name: "N13 入门教程: 几何深度学习与代数拓扑", url: "N13_GeometricDeepLearning/index.html" }
+      { name: "N13 入门教程: 几何深度学习与代数拓扑", url: "FrontierTopics/N13_GeometricDeepLearning/index.html" }
     ]
   },
   {
@@ -342,7 +342,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "多模态内容生成（Stable Diffusion、Flux.1、Sora 视频生成底座、流匹配语音合成与极速采样求解）",
     localLinks: [
-      { name: "N15 入门教程: 连续生成模型", url: "N15_ContinuousGenerativeModels/index.html" }
+      { name: "N15 入门教程: 连续生成模型", url: "FrontierTopics/N15_ContinuousGenerativeModels/index.html" }
     ]
   },
   {
@@ -389,7 +389,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "多模态对齐与自监督（CLIP 跨模态表征对齐、DINOv2 视觉自监督特征提取、表征坍缩防御）",
     localLinks: [
-      { name: "N17 入门教程: 表征学习与信息瓶颈", url: "N17_RepresentationLearningInformationBottleneck/index.html" }
+      { name: "N17 入门教程: 表征学习与信息瓶颈", url: "FrontierTopics/N17_RepresentationLearningInformationBottleneck/index.html" }
     ]
   },
   {
@@ -411,7 +411,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "认知推理与基座架构（GPT-4、Claude、DeepSeek 基座模型、长程代码生成与数学自动证明）",
     localLinks: [
-      { name: "N18 入门教程: 大语言模型 (LLMs) 数学建模", url: "N18_LLMMathModeling/index.html" },
+      { name: "N18 入门教程: 大语言模型 (LLMs) 数学建模", url: "FrontierTopics/N18_LLMMathModeling/index.html" },
       { name: "Attention (QKV) 矩阵运算几何本质", url: "attention.html" }
     ]
   },
@@ -435,7 +435,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "慢思考与复杂推理模型（o1/o3 推理范式、长链推理 CoT 自省、数学与竞赛级代码自博弈求解）",
     localLinks: [
-      { name: "N19 入门教程: 推理搜索与测试时计算理论", url: "N19_ReasoningSearchTestTimeCompute/index.html" }
+      { name: "N19 入门教程: 推理搜索与测试时计算理论", url: "FrontierTopics/N19_ReasoningSearchTestTimeCompute/index.html" }
     ]
   },
   {
@@ -458,7 +458,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "大模型后训练与具身控制（RLHF 人类偏好对齐、DPO/GRPO 推理模型自博弈强化、机器人运动控制）",
     localLinks: [
-      { name: "N20 入门教程: 强化学习与对齐理论", url: "N20_ReinforcementLearningAlignment/index.html" }
+      { name: "N20 入门教程: 强化学习与对齐理论", url: "FrontierTopics/N20_ReinforcementLearningAlignment/index.html" }
     ]
   },
   {
@@ -481,7 +481,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "基础模型鲁棒性与剪枝（SAM 锐度感知优化、结构化剪枝、稀疏激活 MoE 负载均衡控制）",
     localLinks: [
-      { name: "N21 入门教程: 过参数化泛化理论", url: "N21_OverparameterizedGeneralization/index.html" }
+      { name: "N21 入门教程: 过参数化泛化理论", url: "FrontierTopics/N21_OverparameterizedGeneralization/index.html" }
     ]
   },
   {
@@ -504,7 +504,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "训练相变与涌现预测（Grokking 顿悟机制预测、模型表征坍缩临界点监测、相变边界推导）",
     localLinks: [
-      { name: "N22 入门教程: 机器学习统计物理", url: "N22_StatisticalPhysicsML/index.html" }
+      { name: "N22 入门教程: 机器学习统计物理", url: "FrontierTopics/N22_StatisticalPhysicsML/index.html" }
     ]
   },
   {
@@ -527,7 +527,464 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "超算集群与前沿范式规划（预训练+推理计算联合 Scaling 边界算力分配、AGI 演化论证）",
     localLinks: [
-      { name: "N23 入门教程: 复杂系统涌现与 Scaling Laws", url: "N23_ComplexSystemsScalingLaws/index.html" }
+      { name: "N23 入门教程: 复杂系统涌现与 Scaling Laws", url: "FrontierTopics/N23_ComplexSystemsScalingLaws/index.html" }
     ]
   }
 ];
+
+// ============================================================================
+// 现代 AI & 数学大纲学习计划体系 (13 大标准化现代学科 · 4 大宏观模块)
+// 依据最新学习大纲表格严格归纳
+// ============================================================================
+
+const SYLLABUS_MODULES = [
+  { id: "all", name: "全部学科 (13门)", count: 13, icon: "🌐" },
+  { id: "module-1", name: "🏛️ 基础数学支柱 (4门)", count: 4, desc: "微积分、线性代数、概率统计与凸优化" },
+  { id: "module-2", name: "🌊 分析、测度与动力系统 (5门)", count: 5, desc: "实变测度、泛函分析、偏微分方程、随机过程与伊藤分析" },
+  { id: "module-3", name: "📊 信息、时序与统计学习界 (3门)", count: 3, desc: "香农信息论、时序状态空间与经验过程泛化界" },
+  { id: "module-4", name: "🚀 现代 AI 前沿交叉专题 (1门大专题)", count: 1, desc: "李群几何ML、随机矩阵RMT、连续生成流、大模型与复杂系统" }
+];
+
+const SYLLABUS_DISCIPLINES = [
+  // --------------------------------------------------------------------------
+  // 模块一：基础数学支柱 (4门)
+  // --------------------------------------------------------------------------
+  {
+    id: "D01",
+    name: "微积分 & 精细数学分析",
+    moduleId: "module-1",
+    badge: "数学底座",
+    color: "#38bdf8",
+    overview: "连续空间微积分与精细分析基底，刻画多元函数局部线性近似、高阶曲率与多维空间积分测度。",
+    topics: [
+      "极限、序列收敛",
+      "一元微分、泰勒展开",
+      "多元微分、Jacobi、Hessian",
+      "隐函数定理、反函数定理",
+      "多元积分、变量替换",
+      "级数、一致收敛（基础）"
+    ],
+    mathTools: "梯度 $\\nabla f$、Jacobian 矩阵 $\\mathbf{J}$、Hessian $\\mathbf{H}$、多元泰勒展开 $\\Delta f \\approx \\nabla f^T \\mathbf{dx} + \\frac{1}{2} \\mathbf{dx}^T \\mathbf{H} \\mathbf{dx}$、反向传播链式法则",
+    aiApplications: "自动微分反向传播 (VJP/JVP)、神经切空间曲率分析、二阶牛顿法优化、能量曲面局部临界点刻画",
+    primaryTextbook: {
+      title: "《高等数学》(同济第八版·全两册 数字化重构版)",
+      url: "TextBook-Advanced%20Mathematics/index.html",
+      badge: "796页纯文本 · 322幅独立高清插图"
+    },
+    primaryTutorial: {
+      title: "N02 多元微积分与微分分析专属教程",
+      url: "N02_MultivariableCalculus/index.html"
+    },
+    localLabs: [
+      { name: "2D变换与平面映射", url: "plane_translation.html" }
+    ],
+    seminalPapers: [
+      { title: "Automatic Differentiation in Machine Learning: A Survey", authors: "Baydin et al.", year: "2018", journal: "JMLR" },
+      { title: "Neural Ordinary Differential Equations", authors: "Chen et al.", year: "2018", journal: "NeurIPS Best Paper" }
+    ],
+    relatedNodeIds: ["N02"]
+  },
+  {
+    id: "D02",
+    name: "线性代数 & 矩阵分析",
+    moduleId: "module-1",
+    badge: "代数底座",
+    color: "#818cf8",
+    overview: "高维空间线性变换与矩阵算子分析，为深度网络的权重量化、低秩适配与特征投影提供代数工具。",
+    topics: [
+      "向量/矩阵范数、算子范数",
+      "特征值、谱半径、瑞利商",
+      "SVD、伪逆、Schur补",
+      "半正定矩阵、矩阵不等式",
+      "克罗内克积、向量化算子",
+      "矩阵求导（标量/矩阵/对矩阵）"
+    ],
+    mathTools: "SVD 分解 $\\mathbf{A}=\\mathbf{U}\\mathbf{\\Sigma}\\mathbf{V}^T$、低秩逼近定理 (Eckart-Young)、矩阵范式诱导 $\|\\mathbf{A}\|_2 = \\sigma_{\\max}(\\mathbf{A})$、克罗内克积 $\\mathbf{A} \\otimes \\mathbf{B}$、标量对矩阵求导 $\\frac{\\partial \\mathrm{Tr}(\\mathbf{A}\\mathbf{X})}{\\partial \\mathbf{X}}$",
+    aiApplications: "LoRA 低秩微调 ($W=W_0+BA$)、大模型权重 INT4/FP4 奇异值量化、KV Cache 谱分解压缩、注意力机制 QK 投影",
+    primaryTextbook: {
+      title: "《工程数学 线性代数》(同济第七版 数字化重构版)",
+      url: "TextBook-LinearAlgebra/index.html",
+      badge: "国家级规划教材 · 离线矢量 MathJax 3"
+    },
+    primaryTutorial: {
+      title: "N01 线性代数与矩阵分析 (8大核心模块教程)",
+      url: "N01_LinearAlgebraTutorial/index.html"
+    },
+    localLabs: [
+      { name: "Week 1: 代数与运算底座", url: "algebra1.html" },
+      { name: "Week 2: 空间与几何投影", url: "week2_geometric_projection.html" },
+      { name: "LoRA 低秩微调参数省减计算器", url: "#labs-view" }
+    ],
+    seminalPapers: [
+      { title: "LoRA: Low-Rank Adaptation of Large Language Models", authors: "Hu et al.", year: "2021", journal: "ICLR 2022" },
+      { title: "Low-rank Matrix Recoveries via Convex Optimization", authors: "Candès & Recht", year: "2009", journal: "CPAM" }
+    ],
+    relatedNodeIds: ["N01"]
+  },
+  {
+    id: "D03",
+    name: "概率论与数理统计",
+    moduleId: "module-1",
+    badge: "随机底座",
+    color: "#34d399",
+    overview: "不确定性量化与统计推断，支撑变分自编码器推断、贝叶斯后验更新与大语言模型概率解码采样。",
+    topics: [
+      "随机变量、分布函数、期望方差",
+      "条件概率、条件期望",
+      "大数定律、中心极限定理CLT",
+      "极大似然估计、矩估计",
+      "假设检验、p值、置信区间",
+      "Bootstrap、蒙特卡洛模拟",
+      "多元正态分布、高维协方差推断"
+    ],
+    mathTools: "全概率公式、贝叶斯定理 $P(\\theta|x) \\propto P(x|\\theta)P(\\theta)$、大数定律 (LLN)、中心极限定理 (CLT)、Fisher 信息矩阵与似然检验",
+    aiApplications: "LLM 采样解码算法 (Top-p / Top-k / Temperature 缩放)、变分自编码器 VAE 重参数化、强化学习期望收益估计、A/B 测试置信度检验",
+    primaryTextbook: {
+      title: "《概率论与数理统计》(同济版 数字化重构版)",
+      url: "TextBook-Probobility%20and%20Statistics/index.html",
+      badge: "251页纯文本 · 180幅矢量插图"
+    },
+    primaryTutorial: {
+      title: "N03 初等概率论与数理统计专属教程",
+      url: "N03_ProbabilityAndStatistics/index.html"
+    },
+    localLabs: [
+      { name: "Softmax 测度温度 Sampling 解码器", url: "#labs-view" }
+    ],
+    seminalPapers: [
+      { title: "Auto-Encoding Variational Bayes", authors: "Kingma & Welling", year: "2014", journal: "ICLR 2014" },
+      { title: "The Curious Case of Neural Text Degeneration (Nucleus Sampling)", authors: "Holtzman et al.", year: "2020", journal: "ICLR 2020" }
+    ],
+    relatedNodeIds: ["N03"]
+  },
+  {
+    id: "D04",
+    name: "优化理论 / 凸优化",
+    moduleId: "module-1",
+    badge: "训练核心",
+    color: "#10b981",
+    overview: "神经网络损失曲面遍历与训练算法的数学心脏，从非光滑凸分析到自适应学习率与二阶加速算法。",
+    topics: [
+      "凸集、凸函数、Jensen不等式",
+      "次梯度、次微分",
+      "对偶理论、KKT条件",
+      "梯度下降、牛顿法收敛分析",
+      "近端梯度、Nesterov加速",
+      "二次规划、带约束优化"
+    ],
+    mathTools: "Jensen 不等式 $f(\\mathbb{E}[X]) \\le \\mathbb{E}[f(X)]$、次微分 $\\partial f(x)$、拉格朗日乘子法与 KKT 条件、近端算子 $\\mathrm{prox}_{\\gamma g}(x)$、Nesterov 动量加速",
+    aiApplications: "分布式优化器 (AdamW, Lion, Muon 谱正则)、非光滑正则化 (LASSO L1 正则近端收敛)、带约束对齐优化 (KL 对齐惩罚、二次边界规划)",
+    primaryTextbook: {
+      title: "《Convex Optimization》(Stephen Boyd 经典教材)",
+      url: "N07_ConvexOptimization/index.html",
+      badge: "Stanford 经典 · 凸分析与数值优化权威"
+    },
+    primaryTutorial: {
+      title: "N07 连续最优化理论与凸分析专属教程",
+      url: "N07_ConvexOptimization/index.html"
+    },
+    localLabs: [
+      { name: "Week 2: 正交投影与法方程极小二乘", url: "week2_geometric_projection.html#s3" }
+    ],
+    seminalPapers: [
+      { title: "Adam: A Method for Stochastic Optimization", authors: "Kingma & Ba", year: "2015", journal: "ICLR 2015" },
+      { title: "Escaping From Saddle Points — Online Stochastic Gradient for Nonconvex Problems", authors: "Ge et al.", year: "2015", journal: "COLT 2015" }
+    ],
+    relatedNodeIds: ["N07"]
+  },
+
+  // --------------------------------------------------------------------------
+  // 模块二：分析、测度与动力系统 (5门)
+  // --------------------------------------------------------------------------
+  {
+    id: "D05",
+    name: "测度论 & 实变基础",
+    moduleId: "module-2",
+    badge: "高维概率基石",
+    color: "#06b6d4",
+    overview: "严格定义高维连续空间与无限维概率测度的公理化工具，解决奇异测度、几乎处处收敛与测度推前问题。",
+    topics: [
+      "σ-代数、可测集/函数",
+      "勒贝格测度、勒贝格积分",
+      "控制收敛定理、单调收敛定理"
+    ],
+    mathTools: "σ-代数 $\\mathcal{F}$、勒贝格测度 $\\lambda$、Radon-Nikodym 导数 $\\frac{d\\mu}{d\\nu}$、测度推前 (Push-forward Measure $T_\\sharp\\mu$)、控制收敛定理 (DCT)",
+    aiApplications: "连续生成模型连续流测度推演、Flow Matching 概率测度插值、概率密度变换与多模态奇异测度支撑集",
+    primaryTextbook: {
+      title: "《Real Analysis and Probability》(R. M. Dudley)",
+      url: "N08_MeasureTheoryHighDimProb/index.html",
+      badge: "实分析与测度论权威专著"
+    },
+    primaryTutorial: {
+      title: "N08 测度论与高维概率专属教程",
+      url: "N08_MeasureTheoryHighDimProb/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "Concentration Inequalities: A Nonasymptotic Theory of Independence", authors: "Boucheron, Lugosi, Massart", year: "2013", journal: "Oxford" }
+    ],
+    relatedNodeIds: ["N08"]
+  },
+  {
+    id: "D06",
+    name: "泛函分析基础",
+    moduleId: "module-2",
+    badge: "无限维空间",
+    color: "#a855f7",
+    overview: "从有限维向量空间跃迁至无限维连续函数空间，给出万能逼近定理的泛函完备性证明与核算子理论。",
+    topics: [
+      "希尔伯特空间、内积",
+      "再生核希尔伯特空间 RKHS",
+      "巴拿赫空间、有界算子"
+    ],
+    mathTools: "希尔伯特空间 $\\mathcal{H}$、Riesz 表示定理、核函数重现性 $\\langle f, K(x, \\cdot) \\rangle_\\mathcal{H} = f(x)$、万能逼近定理 (UAT)、Sobolev 空间",
+    aiApplications: "神经算子 (FNO 傅里叶神经算子、DeepONet) 求解无限维 PDE、高斯过程回归与核方法分类、连续函数流形表征",
+    primaryTextbook: {
+      title: "《Introductory Functional Analysis with Applications》(Kreyszig)",
+      url: "N06_FunctionalAnalysis/index.html",
+      badge: "应用泛函分析世界名著"
+    },
+    primaryTutorial: {
+      title: "N06 逼近论与泛函分析专属教程",
+      url: "N06_FunctionalAnalysis/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "Approximation by Superpositions of a Sigmoidal Function", authors: "G. Cybenko", year: "1989", journal: "MCSS" },
+      { title: "Fourier Neural Operator for Parametric PDEs", authors: "Zongyi Li et al.", year: "2021", journal: "ICLR 2021" }
+    ],
+    relatedNodeIds: ["N06"]
+  },
+  {
+    id: "D07",
+    name: "偏微分方程 PDE",
+    moduleId: "module-2",
+    badge: "连续物理场",
+    color: "#ec4899",
+    overview: "描述自然界时空演化规律的核心语言，与扩散生成模型、物理信息神经网络 (PINN) 及连续生成流密切融合。",
+    topics: [
+      "抛物型方程（BS与热方程）",
+      "分离变量、有限差分法 FDM",
+      "蒙特卡洛PDE数值解"
+    ],
+    mathTools: "热方程 $\\frac{\\partial u}{\\partial t} = \\alpha \\nabla^2 u$、Black-Scholes 抛物微分方程、分离变量法、有限差分算子 (FDM)、Feynman-Kac 随机微分数值联系",
+    aiApplications: "扩散生成模型逆向连续去噪动力学、AI for Science (天气预报气象动力方程、分子流体力学 Navier-Stokes 拟合)、PINN 求解物理系统",
+    primaryTextbook: {
+      title: "《Partial Differential Equations》(L. C. Evans)",
+      url: "N02_MultivariableCalculus/index.html",
+      badge: "现代偏微分方程经典教材"
+    },
+    primaryTutorial: {
+      title: "偏微分方程 PDE 专属教程",
+      url: "FrontierTopics/N15_ContinuousGenerativeModels/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "Physics-informed neural networks (PINNs)", authors: "Raissi, Perdikaris, Karniadakis", year: "2019", journal: "JCP" },
+      { title: "Score-Based Generative Modeling through SDEs", authors: "Song et al.", year: "2021", journal: "ICLR 2021 Outstanding Paper" }
+    ],
+    relatedNodeIds: ["N02", "N15"]
+  },
+  {
+    id: "D08",
+    name: "随机过程",
+    moduleId: "module-2",
+    badge: "时序演化",
+    color: "#f97316",
+    overview: "研究随机变量随时间演化的动力学系统，构建马尔可夫决策过程、蒙特卡洛采样与强化学习的数学支架。",
+    topics: [
+      "马尔可夫链、转移概率",
+      "平稳过程、遍历性",
+      "布朗运动",
+      "鞅、停时、可选停时定理"
+    ],
+    mathTools: "马尔可夫性 $P(X_{t+1}|X_{\\le t}) = P(X_{t+1}|X_t)$、转移矩阵 $\\mathbf{P}$ 与平稳分布 $\\pi = \\pi\\mathbf{P}$、布朗运动 $B_t$、鞅性 $\\mathbb{E}[M_{t}|\\mathcal{F}_s] = M_s$、Doob 停时定理",
+    aiApplications: "马尔可夫决策过程 MDP (强化学习基石)、MCMC 采样与 Gibbs 采样、树搜索 (MCTS) 状态转移建模、随机游走图嵌入",
+    primaryTextbook: {
+      title: "《Adventures in Stochastic Processes》(Sidney Resnick)",
+      url: "N03_ProbabilityAndStatistics/index.html",
+      badge: "现代随机过程经典教科书"
+    },
+    primaryTutorial: {
+      title: "随机过程专属教程",
+      url: "FrontierTopics/N20_ReinforcementLearningAlignment/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "Markov Decision Processes: Discrete Stochastic Dynamic Programming", authors: "Puterman", year: "1994", journal: "Wiley" }
+    ],
+    relatedNodeIds: ["N03", "N14", "N20"]
+  },
+  {
+    id: "D09",
+    name: "随机分析 (伊藤)",
+    moduleId: "module-2",
+    badge: "SDE与连续生成",
+    color: "#e11d48",
+    overview: "热噪声驱动下的微积分学，以伊藤积分与伊藤引理为核心，统摄扩散模型 (Diffusion) 与随机微分方程动力学。",
+    topics: [
+      "伊藤积分、伊藤引理",
+      "Girsanov测度变换",
+      "Feynman-Kac公式"
+    ],
+    mathTools: "伊藤引理 $df(X_t) = f'(X_t)dX_t + \\frac{1}{2}f''(X_t)(dX_t)^2$、伊藤等距性 $\\mathbb{E}[(\\int H_s dB_s)^2] = \\int \\mathbb{E}[H_s^2]ds$、Girsanov 测度变换、Fokker-Planck 偏微分方程",
+    aiApplications: "Score-based 扩散模型逆向 SDE 连续去噪、朗之万梯度退火动力学 (SGLD)、SGD 热噪声鞍点逃逸与平滑收敛分析",
+    primaryTextbook: {
+      title: "《Applied Stochastic Differential Equations》(Särkkä & Solin)",
+      url: "N14_StochasticDynamicsSDE/index.html",
+      badge: "剑桥大学 SDE 应用权威"
+    },
+    primaryTutorial: {
+      title: "N14 随机动力学与 SDE 专属教程",
+      url: "N14_StochasticDynamicsSDE/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "Bayesian Learning via Stochastic Gradient Langevin Dynamics (SGLD)", authors: "Welling & Teh", year: "2011", journal: "ICML 2011" },
+      { title: "Denoising Diffusion Probabilistic Models (DDPM)", authors: "Ho et al.", year: "2020", journal: "NeurIPS 2020" }
+    ],
+    relatedNodeIds: ["N14"]
+  },
+
+  // --------------------------------------------------------------------------
+  // 模块三：信息、时序与统计学习界 (3门)
+  // --------------------------------------------------------------------------
+  {
+    id: "D10",
+    name: "信息论",
+    moduleId: "module-3",
+    badge: "度量与熵",
+    color: "#6366f1",
+    overview: "信息量化与概率分布度量的权威理论，奠定了交叉熵损失函数、KL 散度对齐与信息瓶颈表征学习的基础。",
+    topics: [
+      "熵、条件熵",
+      "KL散度、互信息"
+    ],
+    mathTools: "香农熵 $H(X) = -\\sum p_i \\log p_i$、条件熵 $H(Y|X)$、互信息 $I(X;Y)$、相对熵 (KL 散度) $D_{KL}(P \\| Q) = \\sum P(x) \\log \\frac{P(x)}{Q(x)}$、信息瓶颈原理",
+    aiApplications: "分类与语言模型交叉熵目标函数、RLHF 偏好对齐 KL 散度约束、上下文 Prompt 压缩率失真、InfoNCE 对比学习互信息下界",
+    primaryTextbook: {
+      title: "《Elements of Information Theory》(Cover & Thomas 2nd Ed)",
+      url: "N04_InformationTheory/index.html",
+      badge: "信息论圣经 · 贝尔实验室经典"
+    },
+    primaryTutorial: {
+      title: "N04 信息论基础专属教程",
+      url: "N04_InformationTheory/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "A Mathematical Theory of Communication", authors: "Claude E. Shannon", year: "1948", journal: "Bell System Tech. J." },
+      { title: "Estimating Divergences with Information Bottleneck", authors: "Tishby et al.", year: "2000", journal: "Allerton" }
+    ],
+    relatedNodeIds: ["N04", "N17"]
+  },
+  {
+    id: "D11",
+    name: "时间序列分析",
+    moduleId: "module-3",
+    badge: "时序与状态空间",
+    color: "#8b5cf6",
+    overview: "从经典 ARMA/GARCH 到现代连续状态空间模型 (SSM) 与卡尔曼滤波，统摄连续长序列的记忆、衰减与演化。",
+    topics: [
+      "平稳性、单位根检验",
+      "AR/MA/ARMA/ARIMA",
+      "协整检验",
+      "GARCH类波动率模型",
+      "状态空间、卡尔曼滤波"
+    ],
+    mathTools: "自协方差函数 $\\gamma(k)$、单位根 ADF 检验、状态空间方程 $\\mathbf{h}_t = \\mathbf{A}\\mathbf{h}_{t-1} + \\mathbf{B}\\mathbf{x}_t$、卡尔曼增益更新 $K_t$、HiPPO 正交多项式记忆矩阵",
+    aiApplications: "长文本序列模型 Mamba/SSM 线性复杂度状态演化、金融高频时序与波动率预测、多模态时序传感器融合与滤波",
+    primaryTextbook: {
+      title: "《Time Series Analysis: Forecasting and Control》(Box & Jenkins)",
+      url: "N16_SequenceModelsSSM/index.html",
+      badge: "时间序列经典名著"
+    },
+    primaryTutorial: {
+      title: "N16 序列模型与状态空间系统 (SSM) 专属教程",
+      url: "N16_SequenceModelsSSM/index.html"
+    },
+    localLabs: [
+      { name: "Attention (QKV) 矩阵几何本质交互教程", url: "attention.html" }
+    ],
+    seminalPapers: [
+      { title: "HiPPO: Recurrent Memory with Optimal Polynomial Projections", authors: "Gu et al.", year: "2020", journal: "NeurIPS 2020" },
+      { title: "Mamba: Linear-Time Sequence Modeling with Selective State Spaces", authors: "Gu & Dao", year: "2023", journal: "arXiv" }
+    ],
+    relatedNodeIds: ["N16"]
+  },
+  {
+    id: "D12",
+    name: "高维概率 / 经验过程",
+    moduleId: "module-3",
+    badge: "泛化与复杂度",
+    color: "#d97706",
+    overview: "回答“机器学习为什么能泛化”的高维概率理论，给出泛化误差上界、一致收敛与高维测度集中不等式。",
+    topics: [
+      "集中不等式（Hoeffding等）",
+      "Rademacher复杂度、VC维"
+    ],
+    mathTools: "马尔可夫不等式、切比雪夫不等式、Hoeffding 不等式 $P(|\\bar{X}-\\mu|\\ge \\epsilon) \\le 2e^{-2n\\epsilon^2}$、Sub-Gaussian 集中度、Rademacher 复杂度 $\\mathcal{R}_n(\\mathcal{F})$、VC 维",
+    aiApplications: "机器学习泛化误差界分析、Few-shot 样本复杂度评估、高维表征各向异性修正、对抗扰动鲁棒性边界推导",
+    primaryTextbook: {
+      title: "《High-Dimensional Statistics: A Non-Asymptotic Viewpoint》(Wainwright)",
+      url: "N09_StatisticalLearningTheory/index.html",
+      badge: "高维统计与泛化界权威专著"
+    },
+    primaryTutorial: {
+      title: "N09 统计学习理论与泛化界专属教程",
+      url: "N09_StatisticalLearningTheory/index.html"
+    },
+    localLabs: [],
+    seminalPapers: [
+      { title: "A Theory of the Learnable", authors: "Leslie G. Valiant", year: "1984", journal: "Comm. ACM" },
+      { title: "Rademacher and Gaussian Complexities", authors: "Bartlett & Mendelson", year: "2002", journal: "JMLR" }
+    ],
+    relatedNodeIds: ["N08", "N09", "N21"]
+  },
+
+  // --------------------------------------------------------------------------
+  // 模块四：现代 AI 前沿交叉专题 (1门大专题)
+  // --------------------------------------------------------------------------
+  {
+    id: "D13",
+    name: "现代 AI 前沿交叉专题",
+    moduleId: "module-4",
+    badge: "前沿交叉",
+    color: "#f43f5e",
+    overview: "现代 AI 前沿数学的集大成者，融合李代数几何、随机矩阵统计物理、连续生成流、大模型数学建模与复杂系统 Scaling Laws。",
+    topics: [
+      "李群、李代数与几何ML",
+      "随机矩阵理论 RMT",
+      "连续生成模型与流匹配 (Diffusion / Flow Matching)",
+      "大语言模型数学建模 (自回归联合概率 / ICL 隐式梯度)",
+      "慢思考推理搜索与测试时计算 (MCTS / PRM)",
+      "博弈决策与强化学习对齐 (RLHF / DPO / GRPO)",
+      "复杂系统涌现与 Scaling Laws 幂律标度"
+    ],
+    mathTools: "李群 $\\mathrm{SO}(3)/\\mathrm{SE}(3)$ 与李代数微元生成元、Wigner 半圆律与 Marchenko-Pastur 高维谱分布、连续流匹配概率流场、自回归条件概率分解、MCTS 树搜索、Chinchilla 幂律标度微分方程",
+    aiApplications: "AlphaFold3 蛋白质几何预测、Flux/Sora 视频扩散连续流、DeepSeek-R1 / o1 慢思考长链推理、前沿大模型超算集群 Scaling 边界算力分配",
+    primaryTextbook: {
+      title: "《Geometric Deep Learning》&《Scaling Laws Monograph》",
+      url: "FrontierTopics/N23_ComplexSystemsScalingLaws/index.html",
+      badge: "AGI 现代前沿多学科交叉专著"
+    },
+    primaryTutorial: {
+      title: "现代 AI 前沿交叉专题综合门户",
+      url: "FrontierTopics/N23_ComplexSystemsScalingLaws/index.html"
+    },
+    localLabs: [
+      { name: "LoRA 低秩参数计算器", url: "#labs-view" },
+      { name: "Softmax 采样模拟器", url: "#labs-view" },
+      { name: "Attention 几何本质教程", url: "attention.html" }
+    ],
+    seminalPapers: [
+      { title: "E(n) Equivariant Graph Neural Networks", authors: "Satorras et al.", year: "2021", journal: "ICML 2021" },
+      { title: "Flow Matching for Generative Modeling", authors: "Lipman et al.", year: "2023", journal: "ICLR 2023" },
+      { title: "Language Models are Few-Shot Learners (GPT-3)", authors: "Brown et al.", year: "2020", journal: "NeurIPS 2020" },
+      { title: "Scaling LLM Test-Time Compute Optimally", authors: "Snell et al.", year: "2024", journal: "arXiv" },
+      { title: "Scaling Laws for Neural Language Models", authors: "Kaplan et al.", year: "2020", journal: "arXiv" }
+    ],
+    relatedNodeIds: ["N10", "N11", "N13", "N15", "N18", "N19", "N20", "N21", "N22", "N23"]
+  }
+];
+
