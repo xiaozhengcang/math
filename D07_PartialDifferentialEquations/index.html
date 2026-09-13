@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>偏微分方程 PDE | 学习大纲与 AI 科学计算专刊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-rose: #ec4899;
+      --accent-blue: #38bdf8;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-rose); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, rgba(99, 102, 241, 0.12) 100%); border: 1px solid rgba(236, 72, 153, 0.35); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(236, 72, 153, 0.2); color: var(--accent-rose); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-rose); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-rose); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">D07 · 模块二 分析、测度与动力系统</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">D07 · 核心学科</span>
+      <h1>偏微分方程 PDE (Partial Differential Equations)</h1>
+      <p style="color: var(--text-secondary);">抛物型方程、有限差分法 FDM、蒙特卡洛 PDE 数值解与物理信息神经网络 (PINN)。</p>
+    </div>
+
+    <!-- Section 1: Syllabus Topics -->
+    <div class="card">
+      <h2>📋 学习大纲考点拆解</h2>
+      <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>抛物型方程（BS模型与热方程）</strong>：热传导方程 $\frac{\partial u}{\partial t} = \alpha \nabla^2 u$ 与 Black-Scholes 期权定价偏微分方程。</li>
+        <li><strong>分离变量法</strong>：将多元时空偏微分方程解分解为空间算子特征函数与时间衰减指数的线性叠加。</li>
+        <li><strong>有限差分法 (FDM)</strong>：利用网格离散近似导数算子（向前差分、中心差分、Crank-Nicolson 隐式格式）。</li>
+        <li><strong>蒙特卡洛 PDE 数值解</strong>：通过 Feynman-Kac 公式建立随机扩散路径采样与 PDE 解的数学对偶。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2: Mathematical Core -->
+    <div class="card">
+      <h2>🧮 核心数学推导：热传导与扩散生成的联系</h2>
+      <p style="color: var(--text-secondary);">热传导方程本质是正向扩散过程的连续流极限。当温度场（或概率密度场）随时间平滑演化时：</p>
+      <div class="math-callout">
+        $$\frac{\partial p_t(x)}{\partial t} = \nabla_x \cdot (f(x, t) p_t(x)) + \frac{1}{2} g(t)^2 \nabla_x^2 p_t(x)$$
+      </div>
+      <p style="color: var(--text-secondary);">
+        在 Score-based 扩散生成模型中，逆向时间 SDE 去噪公式由 Fokker-Planck 偏微分方程严格推导得出，通过预测对数概率密度梯度（Score 函数 $\nabla_x \log p_t(x)$）逆转热力学熵增扩散！
+      </p>
+    </div>
+
+    <!-- Section 3: AI Applications -->
+    <div class="card">
+      <h2>⚡ AI 核心落地场景</h2>
+      <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>物理信息神经网络 (PINN)</strong>：将偏微分方程残差 $\| \frac{\partial u}{\partial t} - \mathcal{N}(u) \|^2$ 作为惩罚项注入神经网络损失函数，实现无网格高维流体力学求解。</li>
+        <li><strong>神经算子 (FNO / DeepONet)</strong>：学习无限维连续函数空间之间的非线性算子映射，将传统气象 Navier-Stokes 求解加速数千倍。</li>
+        <li><strong>连续扩散去噪与 Flow Matching</strong>：多模态图像/视频生成的连续概率密度场时间演化数值解。</li>
+      </ul>
+    </div>
+
+    <!-- Section 4: Classic Literature -->
+    <div class="card">
+      <h2>📄 推荐必读奠基论文</h2>
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; border-left: 4px solid var(--accent-rose);">
+        <strong>Physics-informed neural networks: A deep learning framework for solving forward and inverse problems</strong><br>
+        <span style="font-size: 0.85rem; color: var(--text-secondary);">M. Raissi, P. Perdikaris, G. E. Karniadakis · Journal of Computational Physics (2019)</span>
+        <p style="font-size: 0.88rem; margin-top: 0.5rem; color: #cbd5e1;">奠定 PINN 范式的划时代论文，开创了深度学习自动微分与经典偏微分方程算子融合的宏伟篇章。</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

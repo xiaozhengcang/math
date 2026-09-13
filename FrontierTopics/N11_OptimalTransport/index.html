@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N11 最优传输理论 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-emerald); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(16, 185, 129, 0.1); border-color: var(--accent-emerald); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N11 · Level 1 核心工具</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N11 · 最优传输理论</span>
+      <h1>最优传输理论 (Optimal Transport Theory)</h1>
+      <p style="color: var(--text-secondary);">从“推土机距离 (Earth Mover's Distance)”到 Wasserstein 距离与 Flow Matching 最小搬运能耗。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Peyré & Cuturi: Computational Optimal Transport</span>
+        <span class="badge">📖 Villani: Optimal Transport</span>
+        <span class="badge">📄 Arjovsky et al. (ICML 2017) WGAN</span>
+        <span class="badge">📄 Cuturi (NeurIPS 2013) Sinkhorn Distances</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>想象你有一堆土（概率分布 P），需要把它全部搬运重建成一座城堡（目标分布 Q）：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>推土机距离 (Wasserstein 距离)</strong>：把每单位质量的土从地点 $x$ 搬运到地点 $y$ 的距离为 $d(x,y)$。最佳搬运方案下的“最小总功”即为 Wasserstein 距离。</li>
+        <li><strong>为什么比 KL 散度优越？</strong>：如果两堆土支撑集没有任何交集（如两个不相交的高维流形），KL 散度是无意义的无穷大 $\infty$ 且梯度为 0！而 Wasserstein 距离依然提供平滑且有向的梯度引力。</li>
+        <li><strong>Sinkhorn 光速求解器</strong>：引入熵正则化，将 NP-hard 的离散线性规划转化为双正则化矩阵求逆，计算速度提升成千上万倍。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>Kantorovich 最优传输问题与 Kantorovich-Rubinstein 对偶公式：</p>
+      <div class="math-callout">
+        $$W_1(\mu, \nu) = \inf_{\gamma \in \Pi(\mu, \nu)} \mathbb{E}_{(x,y)\sim \gamma}[\|x - y\|] = \sup_{\|f\|_L \le 1} \left( \mathbb{E}_{x \sim \mu}[f(x)] - \mathbb{E}_{y \sim \nu}[f(y)] \right)$$
+      </div>
+      <p style="color: var(--text-secondary);">其中，对偶约束条件限制 $f$ 满足 1-Lipschitz 连续。正交几何中 Benamou-Brenier 动力学表达：</p>
+      <div class="math-callout">
+        $$W_2^2(\mu, \nu) = \inf_{v_t} \int_0^1 \int_{\mathbb{R}^d} \|v_t(x)\|^2 \rho_t(x) dx dt, \quad \text{s.t. } \frac{\partial \rho_t}{\partial t} + \nabla \cdot (\rho_t v_t) = 0$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文一：Wasserstein Generative Adversarial Networks (Arjovsky et al., ICML 2017)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 彻底解决了 GAN 训练崩溃与梯度消失难题！用 Wasserstein 距离替代 JS 散度，引入权重剪枝 (Weight Clipping) 或梯度惩罚 (GP) 强制约束 Discriminator 为 1-Lipschitz 函数。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Sinkhorn Distances: Lightspeed Computation of Optimal Transport (Cuturi, NeurIPS 2013)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 引入香农熵正则化，将离散最优传输转化为简单的矩阵 Sinkhorn 迭代（对矩阵交替进行行列归一化），使 Optimal Transport 在 GPU 上实现了 GPU 级极速并行。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>Flow Matching 生成模型中的极小传输轨迹插值 (OT-Flow Matching)：</p>
+      <div class="math-callout">
+        $$x_t = (1 - t) x_0 + t x_1, \quad v_t(x_t) = x_1 - x_0$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        基于最优传输的最短直线速度场 $v_t$，使得 Diffusion/Flow 模型去噪生成轨迹保持直线直达，将采样步数从上百步缩减至仅需 4~10 步！
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Peyré & Cuturi (Chapter 2: Geometry of Optimal Transport)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：为什么 WGAN 能够解决原始 GAN 训练过程中的梯度消失问题？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！Wasserstein 距离是连续且平滑的，即使生成分布与真实分布完全没有重叠，Wasserstein 距离依然能提供恒定非零的梯度信号指导生成器优化！')">
+          A. 因为 Wasserstein 距离即使在两个分布支撑集完全不重叠时，依然具备平滑、非零且有向的梯度引力。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾两分布无重叠时 JS 散度与 Wasserstein 距离的区别。')">
+          B. 因为 Wasserstein 距离永远等于零。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

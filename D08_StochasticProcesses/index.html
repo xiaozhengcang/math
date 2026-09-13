@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>随机过程 | 学习大纲与强化学习决策专刊</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-orange: #f97316;
+      --accent-blue: #38bdf8;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-orange); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(249, 115, 22, 0.15) 0%, rgba(244, 63, 94, 0.12) 100%); border: 1px solid rgba(249, 115, 22, 0.35); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-orange); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-orange); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">D08 · 模块二 分析、测度与动力系统</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">D08 · 核心学科</span>
+      <h1>随机过程 (Stochastic Processes)</h1>
+      <p style="color: var(--text-secondary);">马尔可夫链、平稳过程遍历性、布朗运动与鞅论停时定理。</p>
+    </div>
+
+    <!-- Section 1: Syllabus Topics -->
+    <div class="card">
+      <h2>📋 学习大纲考点拆解</h2>
+      <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>马尔可夫链、转移概率</strong>：状态转移矩阵 $\mathbf{P}$、Chapman-Kolmogorov 方程与稳态分布 $\pi = \pi \mathbf{P}$。</li>
+        <li><strong>平稳过程、遍历性</strong>：严平稳与宽平稳定义、自协方差函数衰减与时间平均等于系综平均的遍历性定理。</li>
+        <li><strong>布朗运动 (Wiener 过程)</strong>：连续时间独立平稳增量、高斯分布方差线性增长 $\mathrm{Var}(B_t - B_s) = t - s$。</li>
+        <li><strong>鞅、停时、可选停时定理</strong>：条件期望保持性 $\mathbb{E}[M_t | \mathcal{F}_s] = M_s$、Doob 可选停时定理在序贯决策中的应用。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2: Mathematical Core -->
+    <div class="card">
+      <h2>🧮 核心数学推导：马尔可夫性质与收敛</h2>
+      <p style="color: var(--text-secondary);">马尔可夫决策过程 (MDP) 是强化学习的数学支架，未来仅取决于当前状态：</p>
+      <div class="math-callout">
+        $$P(S_{t+1} = s' | S_t = s, A_t = a, S_{t-1}, A_{t-1}, \dots) = P(S_{t+1} = s' | S_t = s, A_t = a)$$
+      </div>
+      <p style="color: var(--text-secondary);">
+        在有限状态非周期不可约马氏链中， Perron-Frobenius 定理保证了平稳分布 $\pi$ 的唯一存在性，为 MCMC 采样与 PageRank 算法提供了严密收敛保证。
+      </p>
+    </div>
+
+    <!-- Section 3: AI Applications -->
+    <div class="card">
+      <h2>⚡ AI 核心落地场景</h2>
+      <ul style="padding-left: 1.5rem; color: var(--text-secondary); line-height: 1.8;">
+        <li><strong>强化学习 MDP 框架</strong>：Q-Learning, Policy Gradient, PPO 与价值函数贝尔曼方程的随机过程本质。</li>
+        <li><strong>MCMC 随机采样</strong>：Metropolis-Hastings 算法、Gibbs 采样与哈密顿蒙特卡洛 (HMC) 采样。</li>
+        <li><strong>推理搜索树 (MCTS)</strong>：蒙特卡洛树搜索在状态空间中的序贯决策与上置信界 (UCB) 探索平衡。</li>
+      </ul>
+    </div>
+
+    <!-- Section 4: Classic Literature -->
+    <div class="card">
+      <h2>📄 推荐必读专著</h2>
+      <div style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; border-left: 4px solid var(--accent-orange);">
+        <strong>Markov Decision Processes: Discrete Stochastic Dynamic Programming</strong><br>
+        <span style="font-size: 0.85rem; color: var(--text-secondary);">Martin L. Puterman · John Wiley & Sons (1994)</span>
+        <p style="font-size: 0.88rem; margin-top: 0.5rem; color: #cbd5e1;">强化学习与随机动态规划领域的奠基专著，系统阐述贝尔曼最优算子的收缩映射性质与策略迭代收敛性。</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

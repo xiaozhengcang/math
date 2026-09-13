@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N17 表征学习与信息瓶颈 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-purple); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N17 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N17 · 表征学习与信息瓶颈</span>
+      <h1>表征学习与信息瓶颈 (Representation Learning & Information Bottleneck)</h1>
+      <p style="color: var(--text-secondary);">特征抽取的极限与其几何对齐。InfoNCE 对比学习、信息瓶颈 (IB) 原理与 CLIP 跨模态表征。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Tishby: Information Bottleneck Theory</span>
+        <span class="badge">📖 Jing & Tian: Self-Supervised Learning</span>
+        <span class="badge">📄 Shwartz-Ziv & Tishby (2017) DNN Black Box</span>
+        <span class="badge">📄 van den Oord et al. (2018) CPC</span>
+        <span class="badge">📄 Radford et al. (ICML 2021) CLIP</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>表征学习的目标是从海量原始像素/文本中榨取出最精炼、最具通用性的语义编码：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>信息瓶颈原理 (Information Bottleneck)</strong>：假设你在把一部厚厚的字典（输入 $X$）总结为摘要（表征 $Z$）。信息瓶颈拉动两个力：一方面尽可能忘记与任务无关的冗余细节（小 $I(X; Z)$），另一方面保留与目标 $Y$ 相关的关键核心（大 $I(Z; Y)$）。</li>
+        <li><strong>对比学习 InfoNCE</strong>：就像是在排队中“拉近好朋友、推开陌生人”。使匹配的图像-文本对在特征空间中夹角为 0（高余弦相似度），未匹配的样本夹角相互正交。</li>
+        <li><strong>表征坍缩 (Representation Collapse)</strong>：如果模型太偷懒，将所有不同图像全部映射为同一个恒定常数向量，损失函数虽然看起来很小，但特征完全丧失了区分度。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>信息瓶颈拉格朗日目标函数与 InfoNCE 损失推导：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{IB}} = I(X; Z) - \beta I(Z; Y)$$
+      </div>
+      <p style="color: var(--text-secondary);">InfoNCE 互信息下界损失函数：</p>
+      <div class="math-callout">
+        $$\mathcal{L}_{\text{InfoNCE}} = -\mathbb{E} \left[ \log \frac{\exp(\text{sim}(z_i, z_j) / \tau)}{\sum_{k=1}^K \exp(\text{sim}(z_i, z_k) / \tau)} \right] \le -I(X; Z) + \text{const}$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-purple); font-size: 1.1rem;">论文一：Opening the Black Box of Deep Neural Networks via Information (Shwartz-Ziv & Tishby, 2017)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 首次在信息平面 $(I(X;T), I(T;Y))$ 上可视化神经网络的训练两阶段：前阶段为拟合阶段，后阶段为漫长的信息压缩与噪音剔除阶段。
+        </p>
+      </div>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Representation Learning with Contrastive Predictive Coding (van den Oord et al., 2018)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了 <strong>InfoNCE 损失</strong>，证明了最小化 InfoNCE 损失等价于最大化底层表征与观测变量之间的互信息下界。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文三：Learning Transferable Visual Models From Natural Language Supervision (CLIP, Radford et al., ICML 2021)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 用 4 亿对“图像-文本”对进行大规模对称 InfoNCE 对比学习，构建了多模态表征对齐基座，开创了零样本 Zero-Shot 迁移时代。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>CLIP 多模态对称对比学习矩阵对齐算子：</p>
+      <div class="math-callout">
+        $$\mathbf{S} = \frac{\mathbf{I}_{\text{embed}} \cdot \mathbf{T}_{\text{embed}}^T}{\tau}, \quad \mathcal{L} = \frac{1}{2} \left( \text{CE}(\mathbf{S}, \text{labels}) + \text{CE}(\mathbf{S}^T, \text{labels}) \right)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        图像编码器与文本编码器提取的 $N \times d$ 维特征归一化后计算余弦相似度矩阵 $\mathbf{S}$，双向应用 Softmax 交叉熵损失，使跨模态流形精准重合。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Jing & Tian (Self-Supervised Representation Learning Foundations Chapter 2)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：在 CLIP 对比学习中，温度参数 $\tau$ (Temperature) 的物理意义是什么？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！较小的温度参数 $\tau$ 会显著放大难负样本 (Hard Negatives) 的相似度差异，迫使模型在特征空间中将其强烈排斥分开！')">
+          A. 缩放相似度矩阵的梯度幅度，过小的 $\tau$ 会显著放大难负样本（Hard Negatives）的惩罚权重。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾 Softmax 温度缩放的梯度分配。')">
+          B. 改变图像编码器的输出维度。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

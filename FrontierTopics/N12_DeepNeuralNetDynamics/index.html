@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N12 深度神经网络动力学 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-purple: #a855f7;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(168, 85, 247, 0.15) 0%, rgba(56, 189, 248, 0.1) 100%); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(168, 85, 247, 0.2); color: var(--accent-purple); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-purple); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(168, 85, 247, 0.1); border-color: var(--accent-purple); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N12 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N12 · 深度神经网络动力学</span>
+      <h1>深度神经网络动力学 (Deep Neural Network Dynamics)</h1>
+      <p style="color: var(--text-secondary);">极深网络中的信号传播、神经正切核 (NTK) 与连续 Residual ODE 极限。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Goodfellow: Deep Learning</span>
+        <span class="badge">📖 Roberts: Principles of Deep Learning Theory</span>
+        <span class="badge">📄 He et al. (CVPR 2016) ResNet</span>
+        <span class="badge">📄 Jacot et al. (NeurIPS 2018) NTK</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>当神经网络层数达到上百甚至上千层时，信息传播面临着剧烈的物理相变：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>残差连接 (Residual Shortcut $h_{l+1} = h_l + f(h_l)$)</strong>：相当于在极长的信息长廊中修筑了“信息高速公路”，使得梯度可以原封不动地跨层直达第一层。</li>
+        <li><strong>神经正切核 (NTK)</strong>：无限宽度的超大网络在初始化附近训练时，其参数更新轨迹表现为线性动力学方程，核函数在训练过程中保持恒定不变。</li>
+        <li><strong>梯度爆炸与消失</strong>：由于雅可比矩阵连续相乘 $\prod \mathbf{W}_l$，如果最大特征值大于 1 则梯度呈指数爆炸；小于 1 则梯度瞬间归零。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>神经正切核 (Neural Tangent Kernel) 定义与梯度流演化：</p>
+      <div class="math-callout">
+        $$\Theta(x, x') = \left\langle \frac{\partial f(x; \theta)}{\partial \theta}, \frac{\partial f(x'; \theta)}{\partial \theta} \right\rangle$$
+      </div>
+      <p style="color: var(--text-secondary);">在无限宽度极限下，网络输出 $f(x; \theta(t))$ 遵从线性微分方程：</p>
+      <div class="math-callout">
+        $$\frac{d f(x; \theta(t))}{dt} = -\sum_{i=1}^N \Theta(x, x_i) \left( f(x_i; \theta(t)) - y_i \right)$$
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-purple); font-size: 1.1rem;">论文一：Deep Residual Learning for Image Recognition (He et al., CVPR 2016)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 提出了经典 ResNet！通过简单的恒等映射残差连接 (Identity Shortcut)，攻克了深层网络退化问题，成功训练出 152 层甚至 1000 层深度的神经网络。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文二：Neural Tangent Kernel: Convergence and Generalization in Neural Networks (Jacot et al., NeurIPS 2018)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 证明了在无穷宽度极限下，神经网络的梯度下降优化等价于以 NTK 为核函数的线性凸优化，为深度学习收敛性给出了解析证明。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>神经网络初始化 Kaiming / Xavier 缩放方差设计：</p>
+      <div class="math-callout">
+        $$\text{Var}(W) = \frac{2}{n_{\text{in}}}$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在现代大模型与 ConvNeXt / MAE 架构中，使用严格推导的方差缩放初始化（如 RMSNorm 与 Residual Scale 1/$\sqrt{2L}$），确保在前向传播 80 层以上时激活值方差保持为 1，防止数值溢出。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Roberts (Chapter 1: The Infinite-Width Limit)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：ResNet 的残差结构 $h_{l+1} = h_l + f(h_l)$ 为什么能天然消除反向传播时的梯度消失？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！对残差块求导 $\frac{\partial h_{l+1}}{\partial h_l} = \mathbf{I} + \frac{\partial f}{\partial h_l}$，由于存在恒等矩阵 $\mathbf{I}$，即使 $\frac{\partial f}{\partial h_l}$ 很小，梯度依然可以通过 $\mathbf{I}$ 无损地向前传导！')">
+          A. 因为雅可比求导项包含恒等矩阵 $\mathbf{I}$，反向传播时总能保留基础梯度项 $\mathbf{I}$，防止连续矩阵相乘归零。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请重新计算残差项的微分表达式。')">
+          B. 因为它去掉了激活函数。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

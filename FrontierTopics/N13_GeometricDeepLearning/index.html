@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>N13 几何深度学习与代数拓扑 | 入门级教程与论文拆解</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ], throwOnError: false
+    });"></script>
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --font-sans: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); line-height: 1.7; padding-bottom: 5rem; }
+    header { sticky: top; top: 0; background: rgba(7, 10, 18, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border-color); padding: 1rem 2rem; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 0.9rem; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+    .hero-box { background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2.5rem; }
+    .tag { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 6px; font-size: 0.8rem; font-weight: 700; font-family: var(--font-mono); margin-bottom: 0.75rem; background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.75rem; }
+    .badge-group { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+    .badge { font-size: 0.82rem; padding: 0.25rem 0.75rem; border-radius: 9999px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-secondary); }
+    .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem; margin-bottom: 2rem; backdrop-filter: blur(12px); }
+    .card h2 { font-size: 1.35rem; color: var(--accent-blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    .math-callout { background: rgba(15, 23, 42, 0.85); border-left: 4px solid var(--accent-blue); border-radius: 10px; padding: 1.25rem; margin: 1.25rem 0; font-family: var(--font-mono); }
+    .quiz-option { background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem 1rem; margin-top: 0.5rem; cursor: pointer; transition: all 0.2s; }
+    .quiz-option:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--accent-blue); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="../index.html" class="back-btn">← 返回 AI 现代数学主门户</a>
+    <span style="font-size: 0.85rem; color: var(--text-secondary);">N13 · Level 2 模型与几何</span>
+  </header>
+
+  <div class="container">
+    <div class="hero-box">
+      <span class="tag">N13 · 几何深度学习</span>
+      <h1>几何深度学习与代数拓扑 (Geometric Deep Learning)</h1>
+      <p style="color: var(--text-secondary);">流形假说、李群对称性、$\mathrm{E}(n)$ 群等变性与 AlphaFold3 结构预测。</p>
+
+      <div class="badge-group">
+        <span class="badge">📖 Bronstein: Geometric Deep Learning</span>
+        <span class="badge">📖 Lee: Riemannian Manifolds</span>
+        <span class="badge">📄 Satorras et al. (ICML 2021) EGNN</span>
+        <span class="badge">📄 Jumper et al. (Nature 2021) AlphaFold</span>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="card">
+      <h2>💡 1. 生活比喻与直觉通俗化</h2>
+      <p>现实世界中的真实数据（如三维蛋白质、分子结构、网格曲面）并非平坦的欧氏网格：</p>
+      <ul style="margin-left: 1.5rem; margin-top: 0.5rem; color: var(--text-secondary);">
+        <li><strong>不变性 (Invariance) 与等变性 (Equivariance)</strong>：一朵花在 3D 空间中旋转，它的名称标签是不变的（$f(g \cdot x) = f(x)$）；而它的叶子和花瓣坐标则是等变的（$f(g \cdot x) = g \cdot f(x)$）。</li>
+        <li><strong>李群 (Lie Groups $\mathrm{SE}(3)$)</strong>：描述三维空间所有平移与旋转变换的连续流形群。</li>
+        <li><strong>流形假说 (Manifold Hypothesis)</strong>：高维图像/文本向量实际上都聚拢在低维弯曲流形曲面上。</li>
+      </ul>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="card">
+      <h2>🧮 2. 严密数学工具与公式推导</h2>
+      <p>$\mathrm{E}(n)$ 欧几里得群等变神经网络 (EGNN) 节点与坐标更新公式：</p>
+      <div class="math-callout">
+        $$m_{ij} = \phi_e(h_i, h_j, \|x_i - x_j\|^2, a_{ij})$$
+      </div>
+      <div class="math-callout">
+        $$x_i^{(l+1)} = x_i^{(l)} + C \sum_{j \neq i} (x_i^{(l)} - x_j^{(l)}) \phi_x(m_{ij})$$
+      </div>
+      <p style="color: var(--text-secondary);">其中，距离差项 $(x_i - x_j)$ 保证了对平移与旋转变换的严格等变性。</p>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="card">
+      <h2>📄 3. 经典奠基论文核心拆解</h2>
+      <div style="margin-bottom: 1.25rem;">
+        <h3 style="color: var(--accent-blue); font-size: 1.1rem;">论文一：E(n) Equivariant Graph Neural Networks (Satorras et al., ICML 2021)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 摆脱了昂贵的球谐函数 (Spherical Harmonics) 高阶张量积计算，仅用相对欧氏距离标量实现了极简、高效且严格的 $\mathrm{E}(n)$ 群等变 Graph 架构。
+        </p>
+      </div>
+      <div>
+        <h3 style="color: var(--accent-emerald); font-size: 1.1rem;">论文二：Highly accurate protein structure prediction with AlphaFold (Jumper et al., Nature 2021)</h3>
+        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.3rem;">
+          <strong>核心突破：</strong> 获得了诺贝尔化学奖的物理革命！提出了 Evoformer 与 Invariant Point Attention (IPA)，利用三维空间等变几何框架解决了长达半个世纪的蛋白质折叠难题。
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="card">
+      <h2>⚡ 4. AI 核心落地与算子视角</h2>
+      <p>AlphaFold3 / 药物小分子构象生成中的 Invariant Point Attention (IPA) 算子：</p>
+      <div class="math-callout">
+        $$a_{ij} = \text{Softmax}\left( \frac{q_i^T k_j}{\sqrt{d}} - \frac{\gamma}{2} \sum_{m=1}^{N_{point}} \|T_i \cdot p_m^q - T_j \cdot p_m^k\|^2 \right)$$
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem;">
+        在全局 Attention 计算中，引入三维空间仿射刚体变换 $T_i \in \mathrm{SE}(3)$ 点对欧氏距离惩罚，实现了三维空间结构与一维氨基酸序列的完美联合注意力几何重构。
+      </p>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="card">
+      <h2>📚 5. 教材章节导读与自测题</h2>
+      <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+        建议阅读 <em>Bronstein (Chapter 3: Groups and Symmetries)</em>。
+      </p>
+
+      <div style="background: rgba(0,0,0,0.3); padding: 1.25rem; border-radius: 12px;">
+        <p><strong>思考题：在分子 3D 结构生成任务中，为什么必须要求神经网络满足 $\mathrm{SE}(3)$ 等变性？</strong></p>
+        <div class="quiz-option" onclick="alert('正确！如果一个分子在空中旋转或平移，其原子的物理受力向量与预测三维坐标也必须发生同等的旋转和平移（等变性），否则模型预测的物理规律就会随着参考系的选择而发生错乱！')">
+          A. 因为分子在真实物理空间中的受力与坐标预测必须与观测坐标系的平移与旋转保持同等映射（物理守恒）。
+        </div>
+        <div class="quiz-option" onclick="alert('错误，请回顾旋转变换对 3D 坐标的影响。')">
+          B. 为了使输入维度降阶。
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
