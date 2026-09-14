@@ -246,6 +246,11 @@ const MASTER_SIDEBAR_NAV = `<div class="nav-section-title">课程导航</div>
           <span>正定与半正定矩阵、二次型几何曲面</span>
         </a>
 
+        <a href="ch7_6_spectral_vs_svd.html" class="nav-item" style="padding-left: 1.25rem; font-size: 0.82rem;">
+          <span style="font-size:0.75rem; font-weight:700; min-width:38px; color:var(--accent-purple);">Ch 7.6</span>
+          <span>谱分解 vs SVD 全景对比与特征向量本质</span>
+        </a>
+
         <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; margin: 12px 12px 4px; text-transform: uppercase;">
           Chapter 8: 附录与工业实战
         </div>

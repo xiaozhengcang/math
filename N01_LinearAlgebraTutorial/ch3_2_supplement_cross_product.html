@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>拓展专题: 三维向量叉积 (Cross Product) 全景指南 | 线性代数直觉指南</title>
   <link rel="stylesheet" href="css/style.css">
-    <script>
+  <script>
     window.MathJax = {
       tex: {
         inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -14,12 +14,16 @@
         processEnvironments: true
       },
       options: {
+        enableAssistiveMml: false,
         ignoreHtmlClass: 'tex2jax_ignore',
         processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
       }
     };
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
   <script src="js/main.js" defer></script>
   <script src="js/visualizer.js" defer></script>
 </head>
@@ -371,7 +375,7 @@
               <h4 style="color: var(--accent-green); margin-bottom: 0.75rem;">👑 叉积的严格几何公理定义 (Geometric Definition)</h4>
               <div style="font-size: 0.95rem; line-height: 1.8;">
                 <p><strong>① 模长（大小）：底平行四边形的几何面积</strong></p>
-                $$\|\mathbf{a} \times \mathbf{b}\| = \|\mathbf{a}\| \|\mathbf{b}\| \sin\theta \quad (0^\circ \le \theta \le 180^\circ)$$
+                $$\|\mathbf{a} \times \mathbf{b}\| = \|\mathbf{a}\| \|\mathbf{b}\| \sin\theta \quad (0^{\circ} \le \theta \le 180^{\circ})$$
                 <p style="color: var(--text-muted); font-size: 0.88rem;">
                   以向量 $\mathbf{a}$ 为底边（长度 $\|\mathbf{a}\|$），则平行四边形的高为 $h = \|\mathbf{b}\| \sin\theta$。因此底乘高恰好就是面积！
                 </p>
@@ -703,7 +707,7 @@
                   $$\mathbf{a} \times \mathbf{a} = \mathbf{0}, \qquad \mathbf{a} \times \mathbf{b} = \mathbf{0} \iff \mathbf{a} \parallel \mathbf{b}$$
                 </div>
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
-                  夹角 $\theta = 0^\circ$ 或 $180^\circ$ 时，$\sin\theta = 0$，围不成任何面积。因此，<strong>检验两个非零三维向量是否平行，最快的方法就是看它们的叉积是否为零向量 $\mathbf{0}$</strong>！
+                  夹角 $\theta = 0^{\circ}$ 或 $180^{\circ}$ 时，$\sin\theta = 0$，围不成任何面积。因此，<strong>检验两个非零三维向量是否平行，最快的方法就是看它们的叉积是否为零向量 $\mathbf{0}$</strong>！
                 </p>
               </div>
 
@@ -853,9 +857,9 @@
                 <h4 style="color: var(--accent-amber); margin-bottom: 0.5rem;">⚙️ ② 经典力学与机器人关节控制</h4>
                 <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted);">
                   • <strong>转动力矩 (Torque)</strong>：用扳手拧螺丝，旋转力矩为：
-                  $$\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}$$
+                  $$\mathbf{\tau} = \mathbf{r} \times \mathbf{F}$$
                   力臂 $\mathbf{r}$ 与外力 $\mathbf{F}$ 的叉积，其模长 $\|\mathbf{r}\|\|\mathbf{F}\|\sin\theta$ 代表拧紧力度，其方向直接定义了螺丝向前推进还是向后松退的旋转轴向！<br>
-                  • <strong>旋转角速度与线速度</strong>：刚体定轴转动线速度 $\mathbf{v} = \boldsymbol{\omega} \times \mathbf{r}$；<br>
+                  • <strong>旋转角速度与线速度</strong>：刚体定轴转动线速度 $\mathbf{v} = \mathbf{\omega} \times \mathbf{r}$；<br>
                   • <strong>角动量守恒</strong>：天体公转与陀螺稳定原理 $\mathbf{L} = \mathbf{r} \times \mathbf{p}$。
                 </p>
               </div>
