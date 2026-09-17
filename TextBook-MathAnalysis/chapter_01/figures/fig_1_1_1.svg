@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" width="100%" height="auto" style="max-width:760px; font-family:'Times New Roman', serif; font-size:16px;">
+  <defs>
+    <clipPath id="circleS1"><circle cx="85" cy="115" r="50" /></clipPath>
+    <clipPath id="circleT1"><circle cx="125" cy="75" r="50" /></clipPath>
+    <clipPath id="circleS2"><circle cx="265" cy="115" r="50" /></clipPath>
+    <clipPath id="circleT2"><circle cx="305" cy="75" r="50" /></clipPath>
+    <clipPath id="circleS3"><circle cx="445" cy="115" r="50" /></clipPath>
+    <clipPath id="circleT3"><circle cx="485" cy="75" r="50" /></clipPath>
+    <mask id="diffMask">
+      <rect x="380" y="10" width="200" height="200" fill="white" />
+      <circle cx="485" cy="75" r="50" fill="black" />
+    </mask>
+    <mask id="compMask">
+      <rect x="580" y="25" width="140" height="140" fill="white" />
+      <circle cx="650" cy="95" r="46" fill="black" />
+    </mask>
+  </defs>
+
+  <!-- Panel 1: S \cup T -->
+  <g>
+    <circle cx="85" cy="115" r="50" fill="#d0d5dd" />
+    <circle cx="125" cy="75" r="50" fill="#d0d5dd" />
+    <circle cx="85" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <circle cx="125" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <text x="80" y="135" font-style="italic">S</text>
+    <text x="125" y="65" font-style="italic">T</text>
+    <text x="105" y="200" text-anchor="middle" font-style="italic">S ∪ T</text>
+  </g>
+
+  <!-- Panel 2: S \cap T -->
+  <g>
+    <circle cx="265" cy="115" r="50" fill="#fff" stroke="#222" stroke-width="1.8" />
+    <circle cx="305" cy="75" r="50" fill="#fff" stroke="#222" stroke-width="1.8" />
+    <circle cx="265" cy="115" r="50" fill="#d0d5dd" clip-path="url(#circleT2)" />
+    <circle cx="265" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <circle cx="305" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <text x="260" y="135" font-style="italic">S</text>
+    <text x="305" y="65" font-style="italic">T</text>
+    <text x="285" y="200" text-anchor="middle" font-style="italic">S ∩ T</text>
+  </g>
+
+  <!-- Panel 3: S \setminus T -->
+  <g>
+    <circle cx="445" cy="115" r="50" fill="#d0d5dd" mask="url(#diffMask)" />
+    <circle cx="445" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <circle cx="485" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
+    <text x="440" y="135" font-style="italic">S</text>
+    <text x="485" y="65" font-style="italic">T</text>
+    <text x="465" y="200" text-anchor="middle" font-style="italic">S \ T</text>
+  </g>
+
+  <!-- Panel 4: S^c -->
+  <g>
+    <rect x="580" y="25" width="140" height="140" fill="#d0d5dd" mask="url(#compMask)" />
+    <rect x="580" y="25" width="140" height="140" fill="none" stroke="#222" stroke-width="1.8" />
+    <circle cx="650" cy="95" r="46" fill="#fff" stroke="#222" stroke-width="1.8" />
+    <text x="645" y="100" font-style="italic">S</text>
+    <text x="705" y="45" font-style="italic">X</text>
+    <text x="650" y="200" text-anchor="middle" font-style="italic">S<tspan baseline-shift="super" font-size="12px">c</tspan></text>
+  </g>
+</svg>

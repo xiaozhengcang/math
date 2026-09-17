@@ -97,6 +97,7 @@ Math/
 ├── N14_StochasticDynamicsSDE/           # D09 随机分析专属教程
 ├── N16_SequenceModelsSSM/               # D11 时间序列分析专属教程
 ├── TextBook-Advanced Mathematics/       # 经典教材: 同济《高等数学》(第八版 上下册 796页数字化重构)
+├── TextBook-MathAnalysis/               # 经典教材: 复旦《数学分析》(陈纪修 第三版 数字化精校重构)
 ├── TextBook-LinearAlgebra/              # 经典教材: 同济《工程数学 线性代数》(第七版 数字化重构)
 ├── TextBook-Probobility and Statistics/ # 经典教材: 同济《概率论与数理统计》(纯文本数字化重构)
 ├── algebra1.html                        # 实战交互: 向量与矩阵运算底座

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="100%" height="300" style="max-width: 460px; display: block; margin: 1.5rem auto;">
+  <defs>
+    <style>
+      .axis { stroke: var(--text-color, #2c3e50); stroke-width: 1.5; marker-end: url(#arrow-4); }
+      .curve { fill: none; stroke: var(--primary-color, #2980b9); stroke-width: 2.2; }
+      .asymptote { stroke: var(--secondary-color, #e74c3c); stroke-width: 1.2; stroke-dasharray: 6 4; }
+      .label { font-family: 'Times New Roman', serif; font-size: 15px; fill: var(--text-color, #2c3e50); }
+      .math-italic { font-style: italic; }
+    </style>
+    <marker id="arrow-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor" />
+    </marker>
+  </defs>
+
+  <!-- Axes -->
+  <!-- x-axis -->
+  <line x1="40" y1="180" x2="440" y2="180" class="axis" />
+  <text x="445" y="184" class="label math-italic">x</text>
+
+  <!-- y-axis -->
+  <line x1="280" y1="310" x2="280" y2="35" class="axis" />
+  <text x="272" y="28" class="label math-italic">y</text>
+
+  <!-- Vertical Asymptote x = -1 at x=240 -->
+  <line x1="240" y1="35" x2="240" y2="310" class="asymptote" />
+  <text x="240" y="300" class="label" text-anchor="start" dx="5">x = −1</text>
+  <text x="238" y="195" class="label" text-anchor="end">−1</text>
+
+  <!-- Oblique Asymptote y = x/3 - 1 -->
+  <!-- slope = -0.3 in screen coords (as x increases, y decreases in SVG) -->
+  <!-- at x=280, y_screen = 215. At x=40: y_screen = 215 + 240*0.35 = 299. At x=440: y_screen = 215 - 160*0.35 = 159 -->
+  <line x1="40" y1="290" x2="440" y2="155" class="asymptote" />
+  <text x="365" y="225" class="label math-italic">y = </text>
+  <text x="390" y="215" class="label">x</text>
+  <line x1="385" y1="220" x2="400" y2="220" stroke="currentColor" stroke-width="1" />
+  <text x="390" y="235" class="label">3</text>
+  <text x="405" y="225" class="label">− 1</text>
+
+  <!-- Curve branches -->
+  <!-- Left branch (x < -1): approaches x=-1 from left (x=240) down to infinity, approaches oblique asymptote at left -->
+  <path d="M 45 292 C 120 280 180 270 200 275 C 220 280 232 295 235 310" class="curve" />
+
+  <!-- Right branch (x > -1): from (245, 40) down, y-intercept (280, 168), touches (315, 180), then rises asymptotically -->
+  <path d="M 245 40 C 248 100 258 150 280 168 C 295 180 305 180 315 180 C 345 180 390 160 440 142" class="curve" />
+
+  <!-- Touch point (1, 0) tick and label -->
+  <text x="315" y="195" class="label">1</text>
+
+  <!-- Origin -->
+  <text x="268" y="195" class="label math-italic">O</text>
+
+  <!-- Curve formula label -->
+  <text x="380" y="55" class="label math-italic">y = </text>
+  <text x="405" y="45" class="label">(x − 1)²</text>
+  <line x1="395" y1="52" x2="450" y2="52" stroke="currentColor" stroke-width="1" />
+  <text x="405" y="68" class="label">3(x + 1)</text>
+</svg>

@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第一章 集合与映射 - 数学分析（陈纪修 第三版）</title>
+  <link rel="stylesheet" href="../styles/book.css">
+  <!-- KaTeX for high performance mathematical typography -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+<div class="book-layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-title">数学分析（第三版）上册</div>
+    <div class="sidebar-subtitle">陈纪修 於崇华 金路 著</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="../index.html" class="toc-link">← 返回全书目录</a></li>
+      <li class="toc-item">
+        <a href="#ch1" class="toc-link active">第一章 集合与映射</a>
+        <ul class="toc-sublist">
+          <li><a href="#intro" class="toc-link">引言 / 导论</a></li>
+          <li><a href="#sec1" class="toc-link">§1 集合</a>
+            <ul class="toc-sublist">
+              <li><a href="#sec1-1" class="toc-link">集合的概念与表示</a></li>
+              <li><a href="#sec1-2" class="toc-link">集合运算</a></li>
+              <li><a href="#sec1-3" class="toc-link">有限集与无限集</a></li>
+              <li><a href="#sec1-4" class="toc-link">Descartes 乘积集合</a></li>
+              <li><a href="#ex1" class="toc-link">习题 1.1</a></li>
+            </ul>
+          </li>
+          <li><a href="#sec2" class="toc-link">§2 映射与函数</a>
+            <ul class="toc-sublist">
+              <li><a href="#sec2-1" class="toc-link">映射</a></li>
+              <li><a href="#sec2-2" class="toc-link">一元实函数</a></li>
+              <li><a href="#sec2-3" class="toc-link">初等函数</a></li>
+              <li><a href="#sec2-4" class="toc-link">分段、隐式与参数表示</a></li>
+              <li><a href="#sec2-5" class="toc-link">函数的简单特性</a></li>
+              <li><a href="#sec2-6" class="toc-link">两个常用不等式</a></li>
+              <li><a href="#ex2" class="toc-link">习题 1.2</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <header class="top-bar">
+      <nav class="top-nav">
+        <a href="../index.html">首页</a>
+        <a href="#sec1">§1 集合</a>
+        <a href="#sec2">§2 映射与函数</a>
+        <a href="#ex2">课后习题</a>
+      </nav>
+      <button class="theme-toggle-btn" id="themeToggleBtn">切换夜间模式</button>
+    </header>
+
+    <main class="content-container">
+      <h1 class="book-title" id="ch1">第一章 集合与映射</h1>
+      <div class="page-divider" data-page="原书第 1 页 [PDF P.20]" id="p1"></div>
+
+      <section id="intro">
+        <p>数学是一门研究数量关系和空间形式的科学，是一个范围广阔、分支众多、应用广泛的科学体系，是其他各门科学（包括自然科学、社会科学、管理科学与技术科学等）的基础和工具，在整个人类知识体系中占有特殊的地位.</p>
+        <p>数学起源于计数、测量和贸易等活动. 17 世纪以来，随着物理学、力学等学科的发展和工业技术的崛起，尤其是 Newton 和 Leibniz 发明微积分这划时代的贡献，数学迅速发展起来，到 19 世纪已成为天体力学、弹性力学、流体力学、热学、电磁学和统计物理学中不可缺少的重要工具. 20 世纪以来，数学与自然科学和生产技术的联系达到了新的高度.</p>
+        <p>20 世纪 70 年代后，随着电子计算机的迅猛发展和普及，数学理论、方法和工具更是以前所未有的广度、深度和速度进入了几乎所有的其他学科. 马克思一百多年前的“一切科学，只有在成功地运用数学时，才算达到了真正完善的地步”的著名论断正在逐步成为现实. 进入 21 世纪以后，随着高新技术的加速发展，数学在人类知识各个领域中愈加大显身手，在科学舞台上扮演更为令人瞩目的角色.</p>
+        <p>当今，随着学科内部高度发展交融以及与其他领域（尤其是计算机技术）间空前广泛的渗透，数学已成为一座巍峨的科学大厦. 但是，万丈高楼平地起，就研究数量关系和空间形式而言，必须从变量间最本质的联系，即函数开始起步. 数学分析正是讲述函数理论的最基本的课程，是几乎所有后继数学课程的奠基石，因此，它理所当然地被列为数学科学最重要的基础课之一，在培养具有良好的数学素养的人才方面，它所起的作用是任何别的课程无法相比的.</p>
+        <p>历史上，微积分的形成和发展直接得益于物理学、天文学、几何学等领域的研究，因而当微积分一旦形成为一门学科，它在这些应用领域中就极具应用活力. 因此，学习数学分析不仅要循序渐进地深刻领会已抽象出来的普遍结论，更要切实掌握用数学工具分析问题、转化问题、解决问题的思想和方法——这是开设本课程的宗旨.</p>
+      </section>
+
+      <!-- Section 1 -->
+      <section id="sec1">
+        <h3 class="section-title">§1 集合</h3>
+        
+        <h4 class="subsection-title" id="sec1-1">集合</h4>
+        <p>面对浩瀚的大千世界，人们总要先把林林总总的客观事物按其某一方面的特性进行适当划分，再分门别类地加以研究. 所谓的“物以类聚”在某种程度上反映出了人类普遍的思维模式，在各个领域中被广泛使用的集合的概念正是这一原则最基本的体现.</p>
+        <div class="page-divider" data-page="原书第 2 页 [PDF P.21]" id="p2"></div>
+        <p>集合在数学领域更是具有无可比拟的特殊重要性. 集合论的基础是由德国数学家 Cantor 在 19 世纪 70 年代奠定的，经过一大批卓越的数学家半个世纪的努力，到 20 世纪 20 年代已确立了其在现代数学理论体系中的基础地位，可以说，当今数学各个分支的几乎所有结果都构筑在严格的集合理论上. 所以，学习现代数学，应该由集合入手. 但集合论是一门深奥的理论，需要有专门的课程来讲述，我们下面谈的只是数学分析课程要涉及的有关集合的一些基本概念和问题.</p>
+        <p><strong>集合</strong>又称<strong>集</strong>，是指具有某种特定性质的具体的或抽象的对象汇集成的总体，这些对象称为该集合的<strong>元素</strong>. 我们通常用大写字母如 $A, B, S, T, \dots$ 表示集合，而用小写字母如 $a, b, x, y, \dots$ 表示集合的元素.</p>
+        <p>若 $x$ 是集合 $S$ 的元素，则称 $x$ <strong>属于</strong> $S$，记为 $x \in S$. 若 $y$ 不是集合 $S$ 的元素，则称 $y$ <strong>不属于</strong> $S$，记为 $y \notin S$ 或 $y \bar{\in} S$.</p>
+        <p>全体正整数的集合，全体整数的集合，全体有理数的集合，全体实数的集合是我们常用的集合，习惯上分别用字母 $\mathbb{N}^*, \mathbb{Z}, \mathbb{Q}$ 和 $\mathbb{R}$ 来表示<span class="footnote-ref">①</span>.</p>
+        <p>表示集合的方式通常有两种. 一种是<strong>枚举法</strong>，就是将集合的元素逐一列举出来的方式. 例如，光学中的三基色可以用集合</p>
+        $$ \{ \text{红}, \text{绿}, \text{蓝} \} $$
+        <p class="no-indent">表示，由 $a, b, c, d$ 四个字母组成的集合 $A$ 可用</p>
+        $$ A = \{ a, b, c, d \} $$
+        <p class="no-indent">表示，如此等等.</p>
+        <p>枚举法还包括尽管集合的元素无法一一列举，但可以将它们的变化规律表示出来的情况. 如正整数集 $\mathbb{N}^*$ 和整数集 $\mathbb{Z}$ 可以分别表示为</p>
+        $$ \mathbb{N}^* = \{ 1, 2, 3, \dots, n, \dots \} $$
+        <p class="no-indent">和</p>
+        $$ \mathbb{Z} = \{ 0, \pm 1, \pm 2, \pm 3, \dots, \pm n, \dots \}. $$
+        <p>另一种表示集合的方式是<strong>描述法</strong>. 设集合 $S$ 是由具有某种性质 $P$ 的元素全体所构成的，则可以采用描述集合中元素公共属性的方法来表示集合：</p>
+        $$ S = \{ x \mid x \text{ 具有性质 } P \}. $$
+        <p class="no-indent">例如，由 2 的平方根组成的集合 $B$ 可表示为</p>
+        $$ B = \{ x \mid x^2 = 2 \}, $$
+        <p class="no-indent">而有理数集 $\mathbb{Q}$ 和正实数集 $\mathbb{R}^+$ 则可以分别表示为</p>
+        $$ \mathbb{Q} = \left\{ x \;\middle|\; x = \frac{q}{p}, p \in \mathbb{N}^*, q \in \mathbb{Z} \right\} $$
+        <p class="no-indent">和</p>
+        $$ \mathbb{R}^+ = \{ x \mid x \in \mathbb{R} \text{ 并且 } x > 0 \}. $$
+        <p>要注意的是，集合中的元素之间并没有次序关系，也就是说，在集合的表示中，同</p>
+        <div class="footnote">
+          ① 在国家标准中规定，自然数的集合 $\{0, 1, 2, \dots \}$ 用 $\mathbb{N}$ 表示，这里 $\mathbb{N}^*$ 表示正整数的集合.
+        </div>
+
+        <div class="page-divider" data-page="原书第 3 页 [PDF P.22]" id="p3"></div>
+        <p class="no-indent">一元素的重复出现或在不同位置上出现不具有任何特殊意义. 例如，$\{a, b\}$、$\{b, a\}$ 和 $\{a, b, a\}$ 表示的是同一个集合.</p>
+        <p>有一类特殊的集合，它不包含任何元素，如 $\{ x \mid x \in \mathbb{R} \text{ 并且 } x^2 + 1 = 0 \}$，我们称之为<strong>空集</strong>，记为 $\emptyset$. 要注意，空集并不由于其内部空空如也而失去存在价值，如在集合 $\{\text{红}, \text{绿}, \text{蓝}\}$ 中选取某些基色进行配色，三种基色都不选显然也同样是一种重要的配色方案，所以，空集具有很实际的意义.</p>
+        <p>设 $S, T$ 是两个集合，如果 $S$ 的所有元素都属于 $T$，即</p>
+        $$ x \in S \Longrightarrow x \in T, $$
+        <p class="no-indent">其中符号“$\Longrightarrow$”称为“蕴含”，即表示由左边的命题可以推出右边的命题，则称 $S$ 是 $T$ 的<strong>子集</strong>，记为 $S \subset T$. 例如，对于正整数集 $\mathbb{N}^*$，整数集 $\mathbb{Z}$，有理数集 $\mathbb{Q}$ 与实数集 $\mathbb{R}$，成立</p>
+        $$ \mathbb{N}^* \subset \mathbb{Z} \subset \mathbb{Q} \subset \mathbb{R}. $$
+        <p>显然，对任何集合 $S$，都有 $S \subset S$ 与 $\emptyset \subset S$.</p>
+        <p>如果 $S$ 中至少存在一个元素 $x$ 不属于 $T$，即 $x \in S$ 但 $x \notin T$，那么 $S$ 不是 $T$ 的子集，记为 $S \not\subset T$. 如</p>
+        $$ \{ x \mid x^2 - 1 = 0 \} \not\subset \mathbb{N}^*. $$
+        <div class="example-box">
+          <span class="box-title">例 1.1.1</span>
+          设 $T = \{ a, b, c \}$，则 $T$ 有如下 $2^3$ 个子集：
+          $$\emptyset;$$
+          $$\{a\}, \{b\}, \{c\};$$
+          $$\{a, b\}, \{b, c\}, \{c, a\};$$
+          $$\{a, b, c\}.$$
+          容易证明，由 $n$ 个元素组成的集合 $T = \{a_1, a_2, \dots, a_n\}$ 共有 $2^n$ 个子集.
+        </div>
+        <p>如果 $S$ 是 $T$ 的一个子集，即 $S \subset T$，但在 $T$ 中存在一个元素 $x$ 不属于 $S$，即 $T \not\subset S$，则称 $S$ 是 $T$ 的一个<strong>真子集</strong>. 在上面所举的集合 $T = \{a_1, a_2, \dots, a_n\}$ 的 $2^n$ 个子集中，有 $2^n - 1$ 个是真子集.</p>
+        <p>如果两个集合 $S$ 与 $T$ 的元素完全相同，则称 $S$ 与 $T$ 两集合<strong>相等</strong>，记为 $S = T$. 显然我们有</p>
+        $$ S = T \iff S \subset T \text{ 并且 } T \subset S, $$
+        <p class="no-indent">其中符号“$\iff$”称为“当且仅当”，表示左边的命题与右边的命题相互“蕴含”，即两个命题“等价”.</p>
+        <p>在数学分析课程中，最常遇到的实数集的子集是<strong>区间</strong>：</p>
+        <p>设 $a, b \; (a < b)$ 是两个实数，则满足不等式 $a < x < b$ 的所有实数 $x$ 的集合称为以 $a, b$ 为端点的<strong>开区间</strong>，记为</p>
+        $$ (a, b) = \{ x \mid a < x < b \}. $$
+        <p>满足不等式 $a \le x \le b$ 的所有实数 $x$ 的集合称为以 $a, b$ 为端点的<strong>闭区间</strong>，记为</p>
+        $$ [a, b] = \{ x \mid a \le x \le b \}. $$
+        <p>满足不等式 $a < x \le b$ 或 $a \le x < b$ 的所有实数 $x$ 的集合称为以 $a, b$ 为端点的<strong>半开半闭区间</strong>，分别记为</p>
+        $$ (a, b] = \{ x \mid a < x \le b \} \quad \text{或} \quad [a, b) = \{ x \mid a \le x < b \}. $$
+        <p>上述几类区间的长度是有限的，称为<strong>有限区间</strong>. 除此以外，还有下述几类<strong>无限区间</strong>：</p>
+
+        <div class="page-divider" data-page="原书第 4 页 [PDF P.23]" id="p4"></div>
+        $$ (a, +\infty) = \{ x \mid x > a \}; \quad [a, +\infty) = \{ x \mid x \ge a \}; $$
+        $$ (-\infty, b) = \{ x \mid x < b \}; \quad (-\infty, b] = \{ x \mid x \le b \}; $$
+        <p class="no-indent">和</p>
+        $$ (-\infty, +\infty) = \{ x \mid x \text{ 为任意实数} \} \quad (\text{即实数集 } \mathbb{R}). $$
+
+        <h4 class="subsection-title" id="sec1-2">集合运算</h4>
+        <p>集合的基本运算有并、交、差、补四种（如图 1.1.1）.</p>
+        <p>两个集合 $S$ 和 $T$ 的<strong>并</strong>是由 $S$ 和 $T$ 的元素汇集成的集合，记为 $S \cup T$，即：</p>
+        $$ S \cup T = \{ x \mid x \in S \text{ 或者 } x \in T \}. $$
+        <p>两个集合 $S$ 和 $T$ 的<strong>交</strong>是由 $S$ 和 $T$ 的公共元素组成的集合，记为 $S \cap T$，即：</p>
+        $$ S \cap T = \{ x \mid x \in S \text{ 并且 } x \in T \}. $$
+        <p>例如，设 $S = \{a, b, c\}, T = \{b, c, d, e\}$，则</p>
+        $$ S \cup T = \{a, b, c, d, e\}, \quad S \cap T = \{b, c\}. $$
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_1_1.svg" alt="图 1.1.1 集合的并、交、差、补">
+          <div class="figure-caption">图 1.1.1 集合的基本运算：并、交、差、补</div>
+        </div>
+
+        <p>集合的并与交运算具有下列一些性质：</p>
+        <p><strong>1. 交换律</strong></p>
+        $$ A \cup B = B \cup A, \quad A \cap B = B \cap A. $$
+        <p><strong>2. 结合律</strong></p>
+        $$ A \cup (B \cup D) = (A \cup B) \cup D, \quad A \cap (B \cap D) = (A \cap B) \cap D. $$
+        <p><strong>3. 分配律</strong></p>
+        $$ A \cap (B \cup D) = (A \cap B) \cup (A \cap D), \quad A \cup (B \cap D) = (A \cup B) \cap (A \cup D). $$
+        <p>作为一个例子，我们证明</p>
+        $$ A \cup (B \cap D) = (A \cup B) \cap (A \cup D). $$
+        <div class="proof">
+          <span class="proof-title">证</span>
+          <p>第一步，证明 $A \cup (B \cap D) \subset (A \cup B) \cap (A \cup D)$.</p>
+          <p>设 $x \in A \cup (B \cap D)$，按照并的定义，或者 $x \in A$，或者 $x \in B \cap D$；再按照交的定义即为：或者 $x \in A$，或者 $x \in B$ 并且 $x \in D$. 所以，不管怎么样，总有 $x \in A \cup B$ 并且 $x \in A \cup D$，即 $x \in (A \cup B) \cap (A \cup D)$. 于是</p>
+          $$ x \in A \cup (B \cap D) \Longrightarrow x \in (A \cup B) \cap (A \cup D). $$
+          <p>第二步，证明 $(A \cup B) \cap (A \cup D) \subset A \cup (B \cap D)$.</p>
+          <p>设 $x \in (A \cup B) \cap (A \cup D)$，按照交的定义，$x \in A \cup B$ 并且 $x \in A \cup D$；再按照并的定义，或者 $x \in A$，或者 $x \in B$ 并且 $x \in D$，即 $x \in A \cup (B \cap D)$. 于是</p>
+          $$ x \in (A \cup B) \cap (A \cup D) \Longrightarrow x \in A \cup (B \cap D). $$
+          <p>将上述两步结合起来，就得到结论</p>
+          $$ A \cup (B \cap D) = (A \cup B) \cap (A \cup D). $$
+          <span class="proof-qed">证毕</span>
+        </div>
+
+        <div class="page-divider" data-page="原书第 5 页 [PDF P.24]" id="p5"></div>
+        <p>两个集合 $S$ 和 $T$ 的<strong>差</strong>是由属于 $S$ 但不属于 $T$ 的元素组成的集合，记为 $S \setminus T$（注意这里并不要求 $T \subset S$），即</p>
+        $$ S \setminus T = \{ x \mid x \in S \text{ 并且 } x \notin T \}. $$
+        <p>例如</p>
+        $$ \{a, b, c\} \setminus \{b, c, d, e\} = \{a\}, \quad \{ x \mid x < 1 \} \setminus \{ x \mid x \ge 0 \} = \{ x \mid x < 0 \}. $$
+        <p>假设我们在集合 $X$ 中讨论某一问题，$S$ 是 $X$ 的一个子集，则集合 $S$ 关于 $X$ 的<strong>补集</strong> $S_X^c$ 定义为<span class="footnote-ref">①</span></p>
+        $$ S_X^c = X \setminus S. $$
+        <p>例如偶数集 $E$ 关于整数集 $\mathbb{Z}$ 的补集为奇数集 $O$，有理数集 $\mathbb{Q}$ 关于实数集 $\mathbb{R}$ 的补集为无理数集.</p>
+        <p>关于补集显然成立</p>
+        $$ S \cup S^c = X, \quad S \cap S^c = \emptyset. $$
+        <p>在不会发生混淆的前提下，通常将 $S_X^c$ 简记为 $S^c$.</p>
+        <p>容易知道，集合补与差运算满足关系</p>
+        $$ S \setminus T = S \cap T^c. $$
+        <p>集合补的运算具有如下性质：</p>
+        <p><strong>4. 对偶律（De Morgan 公式）</strong></p>
+        $$ (A \cup B)^c = A^c \cap B^c, \quad (A \cap B)^c = A^c \cup B^c. $$
+        <p>我们证明第二个公式.</p>
+        <div class="proof">
+          <span class="proof-title">证</span>
+          <p>先设 $x \in (A \cap B)^c$，按照补的定义，有 $x \notin A \cap B$. 此式等价于或者 $x \notin A$，或者 $x \notin B$，于是得到 $x \in A^c \cup B^c$，即</p>
+          $$ x \in (A \cap B)^c \Longrightarrow x \in A^c \cup B^c. $$
+          <p>反过来，设 $x \in A^c \cup B^c$，按照并的定义，或者 $x \in A^c$，或者 $x \in B^c$. 换言之，或者 $x \notin A$，或者 $x \notin B$，于是得到 $x \notin A \cap B$，即</p>
+          $$ x \in A^c \cup B^c \Longrightarrow x \in (A \cap B)^c. $$
+          <p>将上述两方面结合起来，就得到结论</p>
+          $$ (A \cap B)^c = A^c \cup B^c. $$
+          <span class="proof-qed">证毕</span>
+        </div>
+        <div class="footnote">
+          ① 补集记号 $S_X^c$ 在 GB 3102.11-93 中为 $\complement_X S$.
+        </div>
+
+        <h4 class="subsection-title" id="sec1-3">有限集与无限集</h4>
+        <p>若集合 $S$ 由 $n$ 个元素组成，这里 $n$ 是确定的非负整数，则称集合 $S$ 为<strong>有限集</strong>，如 $\{\text{红}, \text{绿}, \text{蓝}\}$、$\{a, b, c, d\}$ 和 $\{x \mid x^2 - 3x + 2 = 0\}$ 都是有限集.</p>
+        <p>不是有限集的集合称为<strong>无限集</strong>，前面说的 $\mathbb{N}^*, \mathbb{Z}, \mathbb{Q}, \mathbb{R}$ 都是无限集.</p>
+        <p>如果一个无限集中的元素可以按某种规律排成一个序列，或者说，这个集合可表示为</p>
+        $$ \{ a_1, a_2, \dots, a_n, \dots \}, $$
+        <p class="no-indent">则称其为<strong>可列集</strong>（或<strong>可数集</strong>）. 例如，正整数集 $\mathbb{N}^*$、$\{x \mid \sin x = 0\}$ 都是可列集.</p>
+        <p>容易证明，每个无限集必包含可列子集. 但是，无限集并非就一定是可列集（在 §2.4，</p>
+
+        <div class="page-divider" data-page="原书第 6 页 [PDF P.25]" id="p6"></div>
+        <p class="no-indent">我们将证明实数集 $\mathbb{R}$ 不是可列集）.</p>
+        <p>显然，要证明一个无限集是可列集，关键在于设计出一种排列的规则，使集合中所有元素可以按此规则，既无重复也无遗漏地排成一列.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.1.2</span>
+          整数集 $\mathbb{Z}$ 是可列集.
+          <div class="proof">
+            <span class="proof-title">解</span>
+            因为整数全体可以按规则
+            $$ 0, 1, -1, 2, -2, \dots, n, -n, \dots $$
+            排成一列，由定义，即知整数集是可列集.
+          </div>
+          <p class="no-indent">将整数全体排成一列的方法是多种多样的，这只是其中的一种.</p>
+        </div>
+        <p>设 $A_n \; (n = 1, 2, 3, \dots)$ 是无限可列个集合，其中每个集合 $A_n$ 都是可列集，定义它们的并为</p>
+        $$ \bigcup_{n=1}^\infty A_n = A_1 \cup A_2 \cup \cdots \cup A_n \cup \cdots = \{ x \mid \text{存在 } n \in \mathbb{N}^*, \text{使 } x \in A_n \}, $$
+        <p class="no-indent">那么可以证明，$\bigcup_{n=1}^\infty A_n$ 也是可列集.</p>
+        
+        <div class="theorem-box">
+          <span class="box-title">定理 1.1.1</span>
+          可列个可列集之并也是可列集.
+          <div class="proof">
+            <span class="proof-title">证</span>
+            对任意 $n \in \mathbb{N}^*$，设 $A_n$ 可表示为
+            $$ A_n = \{ x_{n1}, x_{n2}, x_{n3}, \dots, x_{nk}, \dots \}, $$
+            则 $\bigcup_{n=1}^\infty A_n$ 的元素全体可排成如下的无穷方块阵：
+            $$\begin{matrix}
+              x_{11} & & x_{12} & & x_{13} & & x_{14} & \cdots \\
+              & \swarrow & & \swarrow & & \swarrow & & \\
+              x_{21} & & x_{22} & & x_{23} & & x_{24} & \cdots \\
+              & \swarrow & & \swarrow & & \swarrow & & \\
+              x_{31} & & x_{32} & & x_{33} & & x_{34} & \cdots \\
+              & \swarrow & & \swarrow & & \swarrow & & \\
+              x_{41} & & x_{42} & & x_{43} & & x_{44} & \cdots \\
+              \vdots & & \vdots & & \vdots & & \vdots & \ddots
+            \end{matrix}$$
+            <p>把所有这些元素排成一列的规则可以有许多，常用的一种称为<strong>对角线法则</strong>：从最左面开始，顺着逐条“对角线”（图中箭头所示）将元素按从右上至左下的次序排列，也就是把所有的元素排列成</p>
+            $$ x_{11}, x_{12}, x_{21}, x_{13}, x_{22}, x_{31}, x_{14}, x_{23}, x_{32}, x_{41}, \dots, $$
+            <p class="no-indent">这样的规则保证了不会遗漏一个元素.</p>
+            <p>由于不同集合 $A_i$ 与 $A_j \; (i \ne j)$ 的交可能不是空集，因此有些元素可能会在排列中多次出现，我们对此只保留一个而去掉多余的，这样得到的排列仍然表示集合 $\bigcup_{n=1}^\infty A_n$，从而定理得到证明.</p>
+            <span class="proof-qed">证毕</span>
+          </div>
+        </div>
+
+        <div class="theorem-box">
+          <span class="box-title">定理 1.1.2</span>
+          有理数集 $\mathbb{Q}$ 是可列集.
+          <div class="proof">
+            <span class="proof-title">证</span>
+            由于区间 $(-\infty, +\infty)$ 可以表示为可列个区间 $(n, n+1] \; (n \in \mathbb{Z})$ 的并，我们只须
+          </div>
+        </div>
+
+        <div class="page-divider" data-page="原书第 7 页 [PDF P.26]" id="p7"></div>
+        <div class="proof no-indent">
+          <p class="no-indent">证明区间 $(0, 1]$ 中的有理数是可列集即可.</p>
+          <p>由于区间 $(0, 1]$ 中的有理数可惟一地表示为既约分数 $\frac{q}{p}$，其中 $p \in \mathbb{N}^*, q \in \mathbb{N}^*, q \le p$，并且 $p, q$ 互素. 我们按下列方式排列这些有理数：</p>
+          <p>分母 $p=1$ 的既约分数只有一个：$r_{11} = \frac{1}{1} = 1$；</p>
+          <p>分母 $p=2$ 的既约分数也只有一个：$r_{21} = \frac{1}{2}$；</p>
+          <p>分母 $p=3$ 的既约分数有两个：$r_{31} = \frac{1}{3}, r_{32} = \frac{2}{3}$；</p>
+          <p>分母 $p=4$ 的既约分数也只有两个：$r_{41} = \frac{1}{4}, r_{42} = \frac{3}{4}$；</p>
+          <p>$\dots\dots$</p>
+          <p>一般地，分母 $p=n$ 的既约分数至多不超过 $n-1$ 个，可将它们记为 $r_{n1}, r_{n2}, \dots, r_{nk(n)}$，其中 $k(n) \le n$.</p>
+          <p>于是区间 $(0, 1]$ 中的有理数全体可以排成</p>
+          $$ r_{11}, r_{21}, r_{31}, r_{32}, r_{41}, r_{42}, \dots, r_{n1}, r_{n2}, \dots, r_{nk(n)}, \dots, $$
+          <p class="no-indent">这就证明了有理数集 $\mathbb{Q}$ 是可列集.</p>
+          <span class="proof-qed">证毕</span>
+        </div>
+
+        <h4 class="subsection-title" id="sec1-4">Descartes 乘积集合</h4>
+        <p>设 $A$ 与 $B$ 是两个集合. 在集合 $A$ 中任意取一个元素 $x$，在集合 $B$ 中任意取一个元素 $y$，组成一个有序对 $(x, y)$. 把这样的有序对作为新的元素，它们全体组成的集合称为集合 $A$ 与集合 $B$ 的 <strong>Descartes 乘积集合</strong>（直积），记为 $A \times B$，即</p>
+        $$ A \times B = \{ (x, y) \mid x \in A \text{ 并且 } y \in B \}. $$
+        <p>集合 $A$ 与集合 $B$ 可以相同也可以不相同，甚至其元素可以是完全不同类型的.</p>
+        <p>比如说，有一家生产窗帘的厂，所用的面料颜色有红、绿、蓝三种，所用的工艺有抽纱、提花、印染、刺绣等四种. 若用</p>
+        $$ A = \{ \text{红}, \text{绿}, \text{蓝} \} $$
+        <p class="no-indent">表示面料颜色的集合，</p>
+        $$ B = \{ \text{抽纱}, \text{提花}, \text{印染}, \text{刺绣} \} $$
+        <p class="no-indent">表示加工工艺的集合，那么它们的 Descartes 乘积集合</p>
+        $$ A \times B = \{ (x, y) \mid x \in A \text{ 并且 } y \in B \} $$
+        <p class="no-indent">表示的是该厂生产的所有的窗帘品种. 集合 $A \times B$ 中共有 12 个元素，如 (红, 提花)、(蓝, 印染)、(绿, 抽纱) 等，每个元素均表示该厂所生产的窗帘品种之一.</p>
+        <p>特别地，当 $A$ 与 $B$ 都是实数集 $\mathbb{R}$ 时，$\mathbb{R} \times \mathbb{R}$（记作 $\mathbb{R}^2$）表示的是平面 Descartes 直角坐标系下用坐标表示的点的集合.（这也是“Descartes 乘积集合”一词的来历.）平面上任意一点 $P$ 的坐标可以用有序实数对 $(x, y)$ 表示，其中 $x$ 和 $y$ 分别为 $P$ 点在横轴和纵轴上的投影坐标. 反过来，任意一个实数对 $(x, y)$ 也都能通过坐标的方式找到平面上惟一的对应点，这正是我们熟知的平面解析几何的理论基础.</p>
+        <p>读者不难举一反三地推出由更多个集合构成 Descartes 乘积集合的情况. 作为一个</p>
+
+        <div class="page-divider" data-page="原书第 8 页 [PDF P.27]" id="p8"></div>
+        <p class="no-indent">特例，容易知道 $\mathbb{R} \times \mathbb{R} \times \mathbb{R}$（记作 $\mathbb{R}^3$）表示的是空间 Descartes 直角坐标系下用坐标表示的点的集合.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.1.3</span>
+          设
+          $$ A = \{ x \mid x \in \mathbb{R} \text{ 并且 } a \le x \le b \}, $$
+          $$ B = \{ y \mid y \in \mathbb{R} \text{ 并且 } c \le y \le d \}, $$
+          $$ C = \{ z \mid z \in \mathbb{R} \text{ 并且 } e \le z \le f \}, $$
+          则 $A \times B$ 就表示 $Oxy$ 平面上一个闭矩形，而 $A \times B \times C$ 表示 $Oxyz$ 空间中的一个闭长方体（如图 1.1.2）.
+        </div>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_1_2.svg" alt="图 1.1.2 笛卡尔乘积的平面闭矩形与空间闭长方体">
+          <div class="figure-caption">图 1.1.2 笛卡尔积表示的平面闭矩形 $A \times B$ 与空间闭长方体 $A \times B \times C$</div>
+        </div>
+
+        <!-- Exercises 1.1 -->
+        <div class="exercise-container" id="ex1">
+          <h3>习 题 1.1</h3>
+          <ul class="exercise-list">
+            <li class="exercise-item">
+              <span class="exercise-number">1.</span>
+              证明由 $n$ 个元素组成的集合 $T = \{a_1, a_2, \dots, a_n\}$ 有 $2^n$ 个子集.
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">2.</span>
+              证明：
+              <div class="exercise-subitem">(1) 任意无限集必包含一个可列子集；</div>
+              <div class="exercise-subitem">(2) 设 $A$ 与 $B$ 都是可列集，证明 $A \cup B$ 也是可列集.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">3.</span>
+              指出下列表述中的错误：
+              <div class="exercise-subitem">(1) $\{\emptyset\} = \emptyset$；</div>
+              <div class="exercise-subitem">(2) $a \subset \{a, b, c\}$；</div>
+              <div class="exercise-subitem">(3) $\{a, b\} \in \{a, b, c\}$；</div>
+              <div class="exercise-subitem">(4) $\{a, b, \{a, b\}\} = \{a, b\}$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">4.</span>
+              用集合符号表示下列数集：
+              <div class="exercise-subitem">(1) 满足 $\frac{x-3}{x+2} \le 0$ 的实数全体；</div>
+              <div class="exercise-subitem">(2) 平面上第一象限的点的全体；</div>
+              <div class="exercise-subitem">(3) 大于 0 并且小于 1 的有理数全体；</div>
+              <div class="exercise-subitem">(4) 方程 $\sin x \cot x = 0$ 的实数解全体.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">5.</span>
+              证明下列集合等式：
+              <div class="exercise-subitem">(1) $A \cap (B \cup D) = (A \cap B) \cup (A \cap D)$；</div>
+              <div class="exercise-subitem">(2) $(A \cup B)^c = A^c \cap B^c$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">6.</span>
+              举例说明集合运算不满足消去律：
+              <div class="exercise-subitem">(1) $A \cup B = A \cup C \;\not\Longrightarrow\; B = C$；</div>
+              <div class="exercise-subitem">(2) $A \cap B = A \cap C \;\not\Longrightarrow\; B = C$.</div>
+              <div class="exercise-subitem">其中符号“$\not\Longrightarrow$”表示左边的命题不能推出右边的命题.</div>
+            </li>
+
+            <div class="page-divider" data-page="原书第 9 页 [PDF P.28]" id="p9"></div>
+            <li class="exercise-item">
+              <span class="exercise-number">7.</span>
+              下述命题是否正确？不正确的话，请改正.
+              <div class="exercise-subitem">(1) $x \notin A \cap B \iff x \notin A \text{ 并且 } x \notin B$；</div>
+              <div class="exercise-subitem">(2) $x \notin A \cup B \iff x \notin A \text{ 或者 } x \notin B$.</div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section id="sec2">
+        <h3 class="section-title">§2 映射与函数</h3>
+
+        <h4 class="subsection-title" id="sec2-1">映射</h4>
+        <p>映射是指两个集合之间的一种对应关系.</p>
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.1</span>
+          设 $X, Y$ 是两个给定的集合，若按照某种规则 $f$，使得对集合 $X$ 中的每一个元素 $x$，都可以找到集合 $Y$ 中惟一确定的元素 $y$ 与之对应，则称这个对应规则 $f$ 是集合 $X$ 到集合 $Y$ 的一个<strong>映射</strong>，记为
+          $$ f: X \longrightarrow Y $$
+          $$ x \longmapsto y = f(x), $$
+          其中 $y$ 称为在映射 $f$ 之下 $x$ 的<strong>像</strong>，$x$ 称为在映射 $f$ 之下 $y$ 的一个<strong>逆像</strong>（也称为<strong>原像</strong>）. 集合 $X$ 称为映射 $f$ 的<strong>定义域</strong>，记为 $D_f$；而在映射 $f$ 之下，$X$ 中元素 $x$ 的像 $y$ 的全体称为映射 $f$ 的<strong>值域</strong>，记为 $R_f$，即
+          $$ R_f = \{ y \in Y \mid \text{存在 } x \in X, \text{使 } y = f(x) \}. $$
+        </div>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.1</span>
+          设 $X$ 是平面上所有三角形的全体，$Y$ 是平面上所有圆的全体. 因每个三角形都有惟一确定的外接圆，若定义对应规则
+          $$ f: X \longrightarrow Y $$
+          $$ x \longmapsto y \quad (y \text{ 是三角形 } x \text{ 的外接圆}), $$
+          则 $f$ 显然是一个映射，其定义域与值域分别为 $D_f = X$ 和 $R_f = Y$.
+        </div>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.2</span>
+          记 $X = \{\alpha, \beta, \gamma\}, Y = \{a, b, c, d\}$，下面所规定的对应关系 $f$ 显然也是一个映射：
+          $$ f(\alpha) = a, \quad f(\beta) = d, \quad f(\gamma) = b. $$
+          $f$ 的定义域与值域分别为
+          $$ D_f = X = \{\alpha, \beta, \gamma\}, \quad R_f = \{a, b, d\} \subset Y. $$
+          在这个例子中，$R_f$ 是 $Y$ 的真子集.
+        </div>
+
+        <p>概括起来，构成一个映射必须具备下列三个基本要素：</p>
+        <p>(1) 集合 $X$，即定义域 $D_f = X$；</p>
+        <p>(2) 集合 $Y$，即限制值域的范围：$R_f \subset Y$；</p>
+        <p>(3) 对应规则 $f$，使每一个 $x \in X$，有惟一确定的 $y = f(x)$ 与之对应.</p>
+        <p>需要指出两点：</p>
+
+        <div class="page-divider" data-page="原书第 10 页 [PDF P.29]" id="p10"></div>
+        <p><strong>1. 映射要求元素的像必须是惟一的.</strong></p>
+        <p>例如，设 $X = \mathbb{R}^+, Y = \mathbb{R}$，而对应规则 $f$ 要求对每一个 $x \in \mathbb{R}^+$，它的像 $y \in \mathbb{R}$ 且满足关系 $y^2 = x$，这样的 $f$ 是不是映射呢？回答是否定的. 因为对每个 $x > 0$，都可以有两个实数 $y_1 = \sqrt{x}$ 与 $y_2 = -\sqrt{x}$ 与之对应，即 $f$ 不满足像的惟一性要求.</p>
+        <p>对于不满足像的惟一性要求的对应规则，一般只要对值域范围稍加限制，就能使它成为映射.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.3</span>
+          设 $X = \mathbb{R}^+$, $Y = \mathbb{R}^- = \{ x \mid -x \in \mathbb{R}^+ \}$，则对应关系
+          $$ f: X \longrightarrow Y $$
+          $$ x \longmapsto y \quad (y = -\sqrt{x}) $$
+          是一个映射.
+        </div>
+
+        <p><strong>2. 映射并不要求逆像也具有惟一性.</strong></p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.4</span>
+          设 $X = Y = \mathbb{R}$，对应关系
+          $$ f: X \longrightarrow Y $$
+          $$ x \longmapsto y = x^2. $$
+          虽然 $Y$ 中与 $x = 2$ 和 $x = -2$ 对应的元素都是 $y = 4$，但这并不影响 $f$ 成为一个映射.
+        </div>
+
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.2</span>
+          设 $f$ 是集合 $X$ 到集合 $Y$ 的一个映射，若 $f$ 的逆像也具有惟一性，即对 $X$ 中的任意两个不同元素 $x_1 \ne x_2$，它们的像 $y_1$ 与 $y_2$ 也满足 $y_1 \ne y_2$，则称 $f$ 为<strong>单射</strong>；如果映射 $f$ 满足 $R_f = Y$，则称 $f$ 为<strong>满射</strong>；如果映射 $f$ 既是单射，又是满射，则称 $f$ 是<strong>双射</strong>（又称<strong>一一对应</strong>）.
+        </div>
+
+        <p>上面例 1.2.2 与例 1.2.3 中的映射是单射，例 1.2.1 与例 1.2.3 中的映射是满射，因而例 1.2.3 中的映射是双射.</p>
+        <p>设 $f: X \longrightarrow Y$ 是单射，则由定义 1.2.2，对任一 $y \in R_f \subset Y$，它的逆像 $x \in X$（即满足方程 $f(x) = y$ 的 $x$）是惟一确定的. 由定义 1.2.1，对应关系</p>
+        $$ g: R_f \longrightarrow X $$
+        $$ y \longmapsto x \quad (f(x) = y) $$
+        <p class="no-indent">构成了 $R_f$ 到 $X$ 上的一个映射，我们把它称为 $f$ 的<strong>逆映射</strong>，记为 $f^{-1}$，其定义域为 $D_{f^{-1}} = R_f$，值域为 $R_{f^{-1}} = X$.</p>
+        <p>显然，只要逆映射 $f^{-1}$ 存在，它就一定是 $R_f$ 到 $X$ 上的双射.</p>
+        <p>现设有如下两个映射</p>
+        $$ g: X \longrightarrow U_g, \quad x \longmapsto u = g(x) $$
+        <p class="no-indent">和</p>
+        $$ f: U_f \longrightarrow Y, \quad u \longmapsto y = f(u). $$
+        <p>如果 $R_g \subset U_f = D_f$，那就可以构造出一个新的对应关系</p>
+        $$ f \circ g: X \longrightarrow Y $$
+        $$ x \longmapsto y = f(g(x)), $$
+        <p class="no-indent">由定义 1.2.1，这还是一个映射，我们将之称为 $f$ 和 $g$ 的<strong>复合映射</strong>.</p>
+        <p>可以看出，复合映射 $f \circ g$ 的构成，实质上是引入了中间变量，因此关键在于 $R_g \subset D_f$ 是否成立. 如果这一条件得不到满足，就不能构成复合映射.</p>
+
+        <div class="page-divider" data-page="原书第 11 页 [PDF P.30]" id="p11"></div>
+        <div class="example-box">
+          <span class="box-title">例 1.2.5</span>
+          设映射 $g$ 与 $f$ 为
+          $$ g: X = \mathbb{R} \longrightarrow U_g = \mathbb{R}, \quad x \longmapsto u = \sin x $$
+          和
+          $$ f: U_f = [-1, 1] \longrightarrow Y = \mathbb{R}, \quad u \longmapsto y = \frac{u}{1+u^2}. $$
+          显然 $R_g = [-1, 1] \subset D_f$，因此可以构成复合映射
+          $$ f \circ g: X \longrightarrow Y $$
+          $$ x \longmapsto y = f(g(x)) = \frac{\sin x}{1 + \sin^2 x}. $$
+        </div>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.6</span>
+          设映射 $g$ 与 $f$ 为
+          $$ g: \mathbb{R} \longrightarrow \mathbb{R}, \quad x \longmapsto u = 1 - x^2 $$
+          和
+          $$ f: \mathbb{R}^+ \longrightarrow \mathbb{R}, \quad u \longmapsto y = \lg u, $$
+          其中 $\lg x = \log_{10} x$. 则 $R_g = (-\infty, 1] \not\subset D_f$，因此不能构成复合映射 $f \circ g$.<br>
+          但若将映射 $g$ 的定义域作一限制，即换成映射 $g^*$：
+          $$ g^*: X = (-1, 1) \longrightarrow \mathbb{R}, \quad x \longmapsto u = 1 - x^2 $$
+          和
+          $$ f: \mathbb{R}^+ \longrightarrow \mathbb{R}, \quad u \longmapsto y = \lg u. $$
+          则 $R_{g^*} = (0, 1] \subset D_f$，于是可以构成复合映射
+          $$ f \circ g^*: X = (-1, 1) \longrightarrow \mathbb{R}, \quad x \longmapsto y = \lg(1 - x^2). $$
+        </div>
+
+        <p>要注意，映射 $f$ 和 $g$ 的复合是有顺序的. 这就是说，$f \circ g$ 有意义并不意味 $g \circ f$ 也一定有意义，即使都有意义，即 $R_g \subset D_f$ 与 $R_f \subset D_g$ 都满足，复合映射 $f \circ g$ 与 $g \circ f$ 一般来讲也是不同的.</p>
+        <p>特别地，若将映射 $f$ 与它的逆映射 $f^{-1}$ 进行复合，则得到下述两恒等式：</p>
+        $$ f \circ f^{-1}(y) = y, \quad y \in R_f; \qquad f^{-1} \circ f(x) = x, \quad x \in X. $$
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.7</span>
+          $y = \sin x: \left[-\frac{\pi}{2}, \frac{\pi}{2}\right] \longrightarrow [-1, 1]$ 是双射，它的逆映射是
+          $$ x = \arcsin y: [-1, 1] \longrightarrow \left[-\frac{\pi}{2}, \frac{\pi}{2}\right]. $$
+          通过复合运算，可得到恒等式
+          $$ \sin(\arcsin y) = y, \quad y \in [-1, 1]; $$
+          $$ \arcsin(\sin x) = x, \quad x \in \left[-\frac{\pi}{2}, \frac{\pi}{2}\right]. $$
+        </div>
+
+        <h4 class="subsection-title" id="sec2-2">一元实函数</h4>
+        <p>若在定义 1.2.1 中特殊地取集合 $X \subset \mathbb{R}$，集合 $Y = \mathbb{R}$，则映射</p>
+        $$ f: X \longrightarrow Y $$
+        $$ x \longmapsto y = f(x) $$
+        <p class="no-indent">称为<strong>一元实函数</strong>，简称<strong>函数</strong>. 由于函数表示的必是实数集合与实数集合之间的对应关系，所以在其映射表示中，第一行是不需要的，只要写成</p>
+        $$ y = f(x), \quad x \in X \; (= D_f) $$
+        <p class="no-indent">就可以了，读作“函数 $y = f(x)$”或“函数 $f$”. 这里 $f$ 表示一种对应规则，对于每一个 $x \in D_f$，它确定了惟一的 $y = f(x) \in \mathbb{R}$ 与之相对应.</p>
+
+        <div class="page-divider" data-page="原书第 12 页 [PDF P.31]" id="p12"></div>
+        <p>例如，我们将一块边长为 $a$ 的正方形铁皮，在四个角上各剪去一个边长为 $x$ 的小正方形，做成一个无盖的方盒（如图 1.2.1），显然方盒的容积为 $V = x(a - 2x)^2$，其中 $x$ 的变化范围是 $\left(0, \frac{a}{2}\right)$.</p>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_1.svg" alt="图 1.2.1 铁皮折叠无盖方盒示意图">
+          <div class="figure-caption">图 1.2.1 制作无盖方盒与函数关系 $V = x(a - 2x)^2$</div>
+        </div>
+
+        <p>分析一下对应关系 $V = x(a - 2x)^2$，其中变量 $x$ 是主动变化的，我们称它为<strong>自变量</strong>. 随着 $x$ 的变化，容积 $V$ 是被动地变化，我们称它为<strong>因变量</strong>. 当自变量在定义域 $D_V = \left(0, \frac{a}{2}\right)$ 中取任一数值时，因变量 $V$ 相应有惟一确定的数值. 因变量对于自变量的这种依赖关系就叫做<strong>函数关系</strong>.</p>
+        <p>在观察自然现象和分析社会活动时，可以发现存在着许许多多的变量，它们在一定的约束关系制约下千变万化. 前面已经指出，数学分析的根本任务是研究各种变量之间最基本的关系，即函数关系. 这里给出的一元实函数是只含有一个自变量与一个因变量的函数关系，以后会进一步讨论多元函数（含有多个自变量的函数关系）与向量值函数（含有多个因变量的函数关系）.</p>
+
+        <h4 class="subsection-title" id="sec2-3">初等函数</h4>
+        <p>我们对下面 6 类函数已经很熟悉了：</p>
+        <p><strong>常数函数：</strong> $y = c$；</p>
+        <p><strong>幂函数：</strong> $y = x^\alpha \quad (\alpha \in \mathbb{R})$；</p>
+        <p><strong>指数函数：</strong> $y = a^x \quad (a > 0 \text{ 且 } a \ne 1)$；</p>
+        <p><strong>对数函数：</strong> $y = \log_a x \quad (a > 0 \text{ 且 } a \ne 1)$；</p>
+        <p><strong>三角函数：</strong> 如 $y = \sin x, y = \cos x, y = \tan x, y = \cot x$ 等；</p>
+        <p><strong>反三角函数：</strong> 如 $y = \arcsin x, y = \arccos x, y = \arctan x$ 等.</p>
+        <p>这 6 类函数统称为<strong>基本初等函数</strong>.</p>
+        <p>由基本初等函数经过有限次四则运算与复合运算所产生的函数称<strong>初等函数</strong>. 例如 $y = ax^2 + bx + c$, $y = \frac{\log_a(1+x)}{x^2+1}$, $y = \sin^2 x + \cos^2 x + \arctan \frac{1}{x}$ 等都是初等函数.</p>
+        <p>初等函数的<strong>自然定义域</strong>是指它的自变量的最大取值范围. 例如 $x^n$（$n$ 是正整数），$\sin x, \arctan x, a^x \; (a > 0, a \ne 1)$ 等函数的自然定义域都是 $\mathbb{R} = (-\infty, +\infty)$；$\log_a x \; (a > 0, a \ne 1)$ 的自然定义域是 $\mathbb{R}^+ = (0, +\infty)$；$\arcsin x$ 的自然定义域是 $[-1, 1]$；$x^\alpha$ 的自然定义域则</p>
+
+        <div class="page-divider" data-page="原书第 13 页 [PDF P.32]" id="p13"></div>
+        <p class="no-indent">要视 $\alpha$ 而定，例如：$x^3$ 的自然定义域是 $\mathbb{R} = (-\infty, +\infty)$；$x^{-1}$ 的自然定义域是 $\mathbb{R} \setminus \{0\} = (-\infty, 0) \cup (0, +\infty)$；$x^{\frac{1}{2}}$ 的自然定义域是 $[0, +\infty)$；$x^{\sqrt{2}}$ 的自然定义域是 $\mathbb{R}^+ = (0, +\infty)$ 等.</p>
+        <p>一般说来，给出一个函数 $f(x)$ 的具体表达式的同时应该指出它的定义域，否则即表示默认该函数的自然定义域为其定义域.</p>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.8</span>
+          求下列初等函数的自然定义域与值域.
+          <p>(1) $y = x + \frac{1}{x}$；</p>
+          <p>(2) $y = \arcsin \frac{2x - 1}{3}$；</p>
+          <p>(3) $y = \sqrt{3 + 2x - x^2}$；</p>
+          <p>(4) $y = \log_a \frac{x-2}{x^2 - 3x - 4} \quad (a > 0, a \ne 1)$.</p>
+          <div class="proof">
+            <span class="proof-title">解</span>
+            <p>(1) $D = (-\infty, 0) \cup (0, +\infty)$, $R = (-\infty, -2] \cup [2, +\infty)$；</p>
+            <p>(2) $D = [-1, 2]$, $R = \left[-\frac{\pi}{2}, \frac{\pi}{2}\right]$；</p>
+            <p>(3) $D = [-1, 3]$, $R = [0, 2]$；</p>
+            <p>(4) $D = (-1, 2) \cup (4, +\infty)$, $R = (-\infty, +\infty)$.</p>
+          </div>
+        </div>
+
+        <p>需要指出，即使两个函数关系看上去完全相同，也不一定能说这两个函数就是等同的，因为它们的定义域可能不相同. 如函数 $f(x) = \sin x$ 与 $g(x) = \frac{2\sin \frac{x}{2}\cos \frac{x}{2}}{\frac{x}{x}}$，因为 $D_f = (-\infty, +\infty)$ 而 $D_g = (-\infty, 0) \cup (0, +\infty)$，所以它们表示的是不同的函数.</p>
+        <p>当两个函数不仅函数关系相同，而且定义域也相同时（于是它们的值域必然相同），它们表示的是相同的函数，至于此时自变量与因变量采用什么符号倒是无关紧要的. 例如 $y = \sin x, x \in (-\infty, +\infty)$ 与 $w = \sin v, v \in (-\infty, +\infty)$ 表示的是同一个函数.</p>
+
+        <h4 class="subsection-title" id="sec2-4">函数的分段表示、隐式表示与参数表示</h4>
+        <p>设 $A, B$ 是两个互不相交的实数集合，$\varphi(x)$ 和 $\psi(x)$ 是分别定义在集合 $A$ 和集合 $B$ 上的函数，则</p>
+        $$ f(x) = \begin{cases} \varphi(x), & x \in A, \\ \psi(x), & x \in B \end{cases} $$
+        <p class="no-indent">是定义在集合 $A \cup B$ 上的函数. 这样的表示方法称为函数的<strong>分段表示</strong>. 这里函数 $f$ 是分成两段来表示的，事实上，分段表示可以分成任意有限段，甚至无限多段.</p>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.9</span>
+          设一辆汽车从甲城驶往乙城. 先从出发地驶到高速公路，车速 $45\text{ km/h}$，花了 40 分钟. 然后在高速公路上以 $100\text{ km/h}$ 的速度行驶了 1 小时 45 分钟. 最后从高速公路出口行驶到乙城的目的地，车速为 $40\text{ km/h}$，花了 30 分钟. 求汽车行驶的路程 $s$（单位：$\text{km}$）与行驶时间 $t$（单位：$\text{h}$）之间的函数关系.
+          <div class="proof">
+            <span class="proof-title">解</span>
+            $$ s(t) = \begin{cases}
+              45t, & 0 \le t < \frac{2}{3}, \\
+              30 + 100\left(t - \frac{2}{3}\right), & \frac{2}{3} \le t < 2\frac{5}{12}, \\
+              205 + 40\left(t - 2\frac{5}{12}\right), & 2\frac{5}{12} \le t \le 2\frac{11}{12}.
+            \end{cases} $$
+          </div>
+        </div>
+
+        <div class="page-divider" data-page="原书第 14 页 [PDF P.33]" id="p14"></div>
+        <p>下面我们介绍几个常用的分段表示函数.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.10</span>
+          <strong>符号函数</strong> $\operatorname{sgn} x$（如图 1.2.2）：
+          $$ \operatorname{sgn} x = \begin{cases} 1, & x > 0, \\ 0, & x = 0, \\ -1, & x < 0. \end{cases} $$
+          它的定义域是 $D = (-\infty, +\infty)$，值域是 $R = \{-1, 0, 1\}$.
+        </div>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_2.svg" alt="图 1.2.2 符号函数 sgn x">
+          <div class="figure-caption">图 1.2.2 符号函数 $y = \operatorname{sgn} x$</div>
+        </div>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.11</span>
+          <strong>“整数部分”函数</strong>（如图 1.2.3）：
+          $$ y = [x] = n, \quad n \le x < n+1, \; n \in \mathbb{Z}. $$
+          它的定义域是 $D = (-\infty, +\infty)$，值域是 $R = \mathbb{Z}$.
+        </div>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_3.svg" alt="图 1.2.3 整数部分函数 [x]">
+          <div class="figure-caption">图 1.2.3 整数部分函数（阶梯函数）$y = [x]$</div>
+        </div>
+
+        <div class="example-box">
+          <span class="box-title">例 1.2.12</span>
+          <strong>“非负小数部分”函数</strong>（如图 1.2.4）：
+          $$ y = (x) = x - [x], \quad x \in (-\infty, +\infty). $$
+          它的定义域是 $D = (-\infty, +\infty)$，值域是 $R = [0, 1)$.<br>
+          如对 $x = 3.4$，有 $[x] = 3, (x) = 0.4$；对 $x = -2.7$，有 $[x] = -3, (x) = 0.3$ 等. 显然，对于任意实数 $x$，成立等式 $[x] + (x) = x$.
+        </div>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_4.svg" alt="图 1.2.4 非负小数部分函数 (x) = x - [x]">
+          <div class="figure-caption">图 1.2.4 非负小数部分函数 $y = (x) = x - [x]$</div>
+        </div>
+
+        <p>若函数 $y = f(x)$ 中的因变量 $y$ 可以通过自变量 $x$ 的一个算式直接表示出来，如上面讨论的所有函数，这种表示方式称为<strong>显式表示</strong>，由显式表示所给出的函数称为<strong>显函数</strong>. 但有时变量 $x$ 与 $y$ 之间的函数关系并不直接表示为 $y = f(x)$ 的形式，而是通过一个二元方程</p>
+        $$ F(x, y) = 0 $$
+        <p class="no-indent">来确定，这种表示方式称为<strong>隐式表示</strong>，由隐式表示所给出的函数称为<strong>隐函数</strong>.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.13</span>
+          方程
+          $$ x^2 + y^2 = R^2 \quad (R > 0) $$
+          表示的是平面上以原点为圆心，以 $R$ 为半径的圆. 该方程并不确定一个 $x$ 到 $y$ 的函数，因为由像的惟一性要求，一个自变量 $x \in (-R, R)$ 对应着两个不同的 $y$ 值：$y = \pm \sqrt{R^2 - x^2}$.
+        </div>
+
+        <div class="page-divider" data-page="原书第 15 页 [PDF P.34]" id="p15"></div>
+        <p class="no-indent">但在一定的条件下，如要求 $y \ge 0$（或 $y \le 0$），即只考虑上半圆周（或下半圆周）时，方程 $x^2 + y^2 = R^2$ 就在 $[-R, R]$ 上确定了惟一的函数关系：</p>
+        $$ y = \sqrt{R^2 - x^2} \quad (\text{或 } y = -\sqrt{R^2 - x^2}), \quad x \in [-R, R]. $$
+        <p class="no-indent">这就给出了由方程 $x^2 + y^2 = R^2$ 隐式表示的两个函数.</p>
+        <p>不仅如此，我们还可以将变量 $x$ 和 $y$ 与第三个变量 $t$（称为<strong>参数</strong>）联系起来，使得当参数 $t$ 在某个集合 $T$ 中变化时，所确定的一对有序实数 $(x(t), y(t))$ 恰好满足方程 $F(x, y) = 0$，即满足恒等式</p>
+        $$ F(x(t), y(t)) \equiv 0, \quad t \in T. $$
+        <p class="no-indent">如果从 $x = x(t), t \in T$ 中能够解出 $t$ 作为 $x$ 的单值函数 $t = t(x), x \in X$，将其代入 $y = y(t)$，就得到变量 $x$ 与 $y$ 之间的函数关系</p>
+        $$ y = y(t(x)), \quad x \in X. $$
+        <p class="no-indent">这种通过参数将变量 $x$ 与 $y$ 之间的函数关系表示成</p>
+        $$ \begin{cases} x = x(t), \\ y = y(t), \end{cases} \quad t \in T $$
+        <p class="no-indent">的方式称为<strong>参数表示</strong>，由参数表示所给出的函数称为<strong>参数表示的函数</strong>. 此时自变量 $x$ 与因变量 $y$ 之间的函数关系即为</p>
+        $$ f: X \longrightarrow Y $$
+        $$ x = x(t) \longmapsto y = y(t). $$
+
+        <p>例如，对于例 1.2.13 中的圆方程 $x^2 + y^2 = R^2$ 所确定的函数关系，可以引入参数 $t$ 表示 $x$ 轴正向按逆时针方向旋转至射线 $\overline{OP}$ 的角的弧度，其中 $P = P(x, y)$ 表示圆上任意一点（如图 1.2.5）. 则对于上半圆周（或下半圆周），$x$ 与 $y$ 的函数关系可表示成</p>
+        $$ \begin{cases} x = R \cos t, \\ y = R \sin t, \end{cases} \quad t \in [0, \pi] \quad (\text{或 } t \in [\pi, 2\pi]). $$
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_5.svg" alt="图 1.2.5 圆的参数表示">
+          <div class="figure-caption">图 1.2.5 圆的参数方程几何示意图</div>
+        </div>
+
+        <p><strong>旋轮线</strong>又称<strong>摆线</strong>，顾名思义，它表示一只滚动的轮子的边缘上一点的运动轨迹. 下面我们通过引入适当的参数，推导旋轮线所表示的函数关系的参数表示.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.15</span>
+          半径为 1 的轮子置于平地上，轮子边缘一点 $A$ 与地面相接触. 求当轮子滚动时，$A$ 点运动的函数表示.
+          <div class="proof">
+            <span class="proof-title">解</span>
+            如图 1.2.6 建立坐标系. 设轮子滚动时 $A$ 点的坐标为 $A(x, y)$. 当轮子滚动到 $P$ 点时，线段 $OP$ 的长度等于圆弧 $AP$ 的长度，也等于轮子转过的角度的弧度（见例 2.4.5 的注）.<br>
+            令参数 $t$ 表示轮子转过的角度的弧度，于是得到
+            $$ \begin{cases} x = t - \sin t, \\ y = 1 - \cos t, \end{cases} \quad t \in [0, \infty). $$
+            此即为旋轮线的参数表示.
+          </div>
+        </div>
+
+        <div class="page-divider" data-page="原书第 16 页 [PDF P.35]" id="p16"></div>
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_6.svg" alt="图 1.2.6 摆线（旋轮线）形成示意图">
+          <div class="figure-caption">图 1.2.6 旋轮线（摆线）的运动生成轨迹</div>
+        </div>
+
+        <h4 class="subsection-title" id="sec2-5">函数的简单特性</h4>
+        <p><strong>(1) 有界性</strong></p>
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.3</span>
+          若存在两个常数 $m$ 和 $M$，使函数 $y = f(x), x \in D$ 满足
+          $$ m \le f(x) \le M, \quad x \in D, $$
+          则称函数 $f$ 在 $D$ <strong>有界</strong>. 其中 $m$ 是它的<strong>下界</strong>，$M$ 是它的<strong>上界</strong>.
+        </div>
+        <p>注意，当一个函数有界时，它的上界与下界不惟一. 由上面定义可知，任意小于 $m$ 的数也是 $f$ 的下界，任意大于 $M$ 的数也是 $f$ 的上界.</p>
+        <p>有界函数的另一定义是：<br>
+        “存在常数 $M > 0$，使函数 $y = f(x), x \in D$ 满足 $|f(x)| \le M, x \in D$”，容易证明这两种定义是等价的.</p>
+
+        <p><strong>(2) 单调性</strong></p>
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.4</span>
+          设函数 $f$ 定义在集合 $D$ 上. 若对 $D$ 中的任意两个元素 $x_1 < x_2$，都有 $f(x_1) \le f(x_2)$（或 $f(x_1) < f(x_2)$），则称函数 $f$ 在 $D$ <strong>单调增加</strong>（或<strong>严格单调增加</strong>），通常记作 $f \uparrow$（或 $f$ 严格 $\uparrow$）；若对 $D$ 中的任意两个元素 $x_1 < x_2$，都有 $f(x_1) \ge f(x_2)$（或 $f(x_1) > f(x_2)$），则称函数 $f$ 在 $D$ <strong>单调减少</strong>（或<strong>严格单调减少</strong>），通常记作 $f \downarrow$（或 $f$ 严格 $\downarrow$）.
+        </div>
+        <p>例如，$y = x^n, y = a^x \; (a > 1), y = \log_a x \; (a > 1), y = \arctan x$ 等函数在它们的定义域中都是严格单调增加的；而 $y = a^x \; (0 < a < 1), y = \log_a x \; (0 < a < 1), y = \operatorname{arccot} x$ 等函数在它们的定义域中都是严格单调减少的；$y = [x]$ 是单调增加的，但不是严格单调增加的.</p>
+        <p>也有许多函数在它的自然定义域中并非单调，但在较小的范围内却具有单调性. 例如 $y = x^2$ 在 $(-\infty, +\infty)$ 不具有单调性，但在 $(-\infty, 0]$ 是严格单调减少的，在 $[0, +\infty)$ 是严格单调增加的；$y = \sin x$ 在 $\left[2n\pi - \frac{\pi}{2}, 2n\pi + \frac{\pi}{2}\right] \; (n \in \mathbb{Z})$ 是严格单调增加的，在 $\left[2n\pi + \frac{\pi}{2}, 2n\pi + \frac{3\pi}{2}\right] \; (n \in \mathbb{Z})$ 是严格单调减少的.</p>
+
+        <p><strong>(3) 奇偶性</strong></p>
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.5</span>
+          设函数 $f$ 的定义域 $D$ 关于原点对称，即 $x \in D \iff -x \in D$. 若对一切 $x \in D$，成立 $f(-x) = f(x)$，则称函数 $f$ 是<strong>偶函数</strong>；若对一切 $x \in D$，成立 $f(-x) = -f(x)$，则称函数 $f$ 是<strong>奇函数</strong>.
+        </div>
+        <p>显然，奇函数的图像关于原点对称，偶函数的图像关于 $y$ 轴对称. 了解了函数的奇偶性，我们只需在 $D \cap [0, +\infty)$ 上讨论函数的性质，再由对称性推出它在 $D \cap (-\infty, 0]$ 上的性质.</p>
+        <p>例如，$y = x^{2n}$</p>
+
+        <div class="page-divider" data-page="原书第 17 页 [PDF P.36]" id="p17"></div>
+        <p class="no-indent">都是偶函数.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.16</span>
+          判断函数 $f(x) = \frac{1 - a^x}{1 + a^x} \quad (a > 0, a \ne 1)$ 的奇偶性.
+          <div class="proof">
+            <span class="proof-title">解</span>
+            因为
+            $$ f(-x) = \frac{1 - a^{-x}}{1 + a^{-x}} = \frac{1 - \frac{1}{a^x}}{1 + \frac{1}{a^x}} = \frac{a^x - 1}{a^x + 1} = -\frac{1 - a^x}{1 + a^x} = -f(x), $$
+            所以 $f(x) = \frac{1 - a^x}{1 + a^x}$ 是奇函数.
+          </div>
+        </div>
+
+        <p><strong>(4) 周期性</strong></p>
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.6</span>
+          若存在常数 $T > 0$，使得对一切 $x \in D$，成立 $f(x + T) = f(x)$，则称函数 $f$ 是<strong>周期函数</strong>，$T$ 称为它的<strong>周期</strong>. 若存在满足上述条件的最小的 $T$，则称它为 $f$ 的<strong>最小正周期</strong>.
+        </div>
+        <p>显然，周期函数 $f$ 的定义域 $D$ 必须满足条件：对一切 $x \in D$，有 $x \pm T \in D$.</p>
+        <p>例如 $y = \sin x$ 是 $(-\infty, +\infty)$ 上的周期函数，$2n\pi \; (n \in \mathbb{N}^*)$ 都是它的周期，其中 $2\pi$ 是它的最小正周期；$y = \tan x$ 也是周期函数，它的定义域是 $(-\infty, +\infty) \setminus \left\{ \frac{\pi}{2} + n\pi, n \in \mathbb{Z} \right\}$，$\pi$ 是它的最小正周期.</p>
+        <p>但并非每个周期函数都有最小正周期的.</p>
+        <div class="example-box">
+          <span class="box-title">例 1.2.17</span>
+          <strong>Dirichlet 函数</strong>
+          $$ D(x) = \begin{cases} 0, & x \text{ 为无理数}, \\ 1, & x \text{ 为有理数}. \end{cases} $$
+          容易判断这是一个周期函数，任何正有理数都是它的周期. 因为不存在最小正有理数，所以它不可能有最小正周期.
+        </div>
+        <p>对于周期函数，我们只需要研究它在一个周期上的性质，再根据周期性推出它在其他范围上的性质.</p>
+
+        <h4 class="subsection-title" id="sec2-6">两个常用不等式</h4>
+        <p>下面介绍两个简单但重要的不等式，它们不仅在数学分析的证明中频繁出现，而且在其他数学分支中也都有广泛的用途.</p>
+        
+        <div class="theorem-box">
+          <span class="box-title">定理 1.2.1（三角不等式）</span>
+          对于任意实数 $a$ 和 $b$，都有
+          $$ \big| |a| - |b| \big| \le |a + b| \le |a| + |b|. $$
+          <div class="proof">
+            <span class="proof-title">证</span>
+            因为对于任意实数 $a$ 和 $b$，都有
+            $$ -|a||b| \le ab \le |a||b|, $$
+            所以
+            $$ |a|^2 - 2|a||b| + |b|^2 \le a^2 + 2ab + b^2 \le |a|^2 + 2|a||b| + |b|^2, $$
+            即
+            $$ (|a| - |b|)^2 \le (a + b)^2 \le (|a| + |b|)^2, $$
+            开方后就得到上述不等式.
+            <span class="proof-qed">证毕</span>
+          </div>
+        </div>
+
+        <p>若将 $a$ 和 $b$ 理解为向量，则 $\boldsymbol{a}, \boldsymbol{b}$ 和 $\boldsymbol{a} + \boldsymbol{b}$ 正好构成一个三角形，定理 1.2.1 表示的</p>
+
+        <div class="page-divider" data-page="原书第 18 页 [PDF P.37]" id="p18"></div>
+        <p class="no-indent">正是三角形任意两边之和大于第三边、任意两边之差小于第三边这一性质，这就是“三角不等式”名称的来源（如图 1.2.7）.</p>
+        <p>以后我们会看到，对于整个数学领域，三角不等式可以说是无处不在.</p>
+
+        <div class="figure-wrapper">
+          <img src="figures/fig_1_2_7.svg" alt="图 1.2.7 向量三角不等式">
+          <div class="figure-caption">图 1.2.7 向量三角不等式几何示意图 $|\boldsymbol{a}+\boldsymbol{b}| \le |\boldsymbol{a}| + |\boldsymbol{b}|$</div>
+        </div>
+
+        <div class="definition-box">
+          <span class="box-title">定义 1.2.7</span>
+          设 $a_1, a_2, \dots, a_n$ 是 $n$ 个正数，则称
+          $$ \frac{a_1 + a_2 + \cdots + a_n}{n} $$
+          是它们的<strong>算术平均值</strong>；$\sqrt[n]{a_1 a_2 \cdots a_n}$ 是它们的<strong>几何平均值</strong>；
+          $$ n \Big/ \left( \frac{1}{a_1} + \frac{1}{a_2} + \cdots + \frac{1}{a_n} \right) $$
+          是它们的<strong>调和平均值</strong>.
+        </div>
+        <p>这三个平均值之间成立如下关系：</p>
+
+        <div class="theorem-box">
+          <span class="box-title">定理 1.2.2（平均值不等式）</span>
+          对任意 $n$ 个正数 $a_1, a_2, \dots, a_n$，有
+          $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n} \ge n \Big/ \left( \frac{1}{a_1} + \frac{1}{a_2} + \cdots + \frac{1}{a_n} \right), $$
+          等号当且仅当 $a_1, a_2, \dots, a_n$ 全部相等时成立.
+          <p>这就是说，算术平均值不小于几何平均值，几何平均值不小于调和平均值.</p>
+          <div class="proof">
+            <span class="proof-title">证</span>
+            先证明左边的不等式
+            $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n}. $$
+            当 $n = 1, 2$ 时，不等式显然成立.<br>
+            当 $n = 2^k \; (k \in \mathbb{N}^*)$ 时，不等式是 $\frac{a+b}{2} \ge \sqrt{ab}$ 的直接推论.<br>
+            当 $n \ne 2^k$ 时，取 $l \in \mathbb{N}^*$，使 $2^{l-1} < n < 2^l$. 记
+            $$ \sqrt[n]{a_1 a_2 \cdots a_n} = \bar{a}, $$
+            在 $a_1, a_2, \dots, a_n$ 后面加上 $(2^l - n)$ 个 $\bar{a}$，将其扩充成 $2^l$ 个正数. 对这 $2^l$ 个正数应用不等式，得到
+            $$ \frac{1}{2^l}[a_1 + a_2 + \cdots + a_n + (2^l - n)\bar{a}] \ge (a_1 a_2 \cdots a_n \bar{a}^{2^l - n})^{\frac{1}{2^l}} = \bar{a}, $$
+            整理后即有
+            $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n}. $$
+            对 $\frac{1}{a_1}, \frac{1}{a_2}, \dots, \frac{1}{a_n}$ 使用上面的结论，便得到右边的不等式.
+            <span class="proof-qed">证毕</span>
+          </div>
+        </div>
+
+        <!-- Exercises 1.2 -->
+        <div class="exercise-container" id="ex2">
+          <h3>习 题 1.2</h3>
+          <ul class="exercise-list">
+            <li class="exercise-item">
+              <span class="exercise-number">1.</span>
+              设 $S = \{\alpha, \beta, \gamma\}, T = \{a, b, c\}$，问有多少种可能的映射 $f: S \to T$，其中哪些是双射？
+            </li>
+
+            <div class="page-divider" data-page="原书第 19 页 [PDF P.38]" id="p19"></div>
+            <li class="exercise-item">
+              <span class="exercise-number">2.</span>
+              <div class="exercise-subitem">(1) 建立区间 $[a, b]$ 与 $[0, 1]$ 之间的一一对应；</div>
+              <div class="exercise-subitem">(2) 建立区间 $(0, 1)$ 与 $(-\infty, +\infty)$ 之间的一一对应.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">3.</span>
+              将下列函数 $f$ 和 $g$ 构成复合函数，并指出定义域与值域：
+              <div class="exercise-subitem">(1) $y = f(u) = \log_a u, \quad u = g(x) = x^2 - 3$；</div>
+              <div class="exercise-subitem">(2) $y = f(u) = \arcsin u, \quad u = g(x) = 3^x$；</div>
+              <div class="exercise-subitem">(3) $y = f(u) = \sqrt{u^2 - 1}, \quad u = g(x) = \sec x$；</div>
+              <div class="exercise-subitem">(4) $y = f(u) = \sqrt{u}, \quad u = g(x) = \frac{x-1}{x+1}$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">4.</span>
+              指出下列函数是由哪些基本初等函数复合而成的：
+              <div class="exercise-subitem">(1) $y = \arcsin \frac{1}{\sqrt{x^2+1}}$；</div>
+              <div class="exercise-subitem">(2) $y = \frac{1}{3}\log_a^3(x^2-1)$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">5.</span>
+              求下列函数的自然定义域与值域：
+              <div class="exercise-subitem">(1) $y = \log_a \sin x \quad (a > 1)$；</div>
+              <div class="exercise-subitem">(2) $y = \sqrt{\cos x}$；</div>
+              <div class="exercise-subitem">(3) $y = \sqrt{4 - 3x - x^2}$；</div>
+              <div class="exercise-subitem">(4) $y = x^2 + \frac{1}{x^4}$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">6.</span>
+              问下列函数 $f$ 和 $g$ 是否等同？
+              <div class="exercise-subitem">(1) $f(x) = \log_a(x^2), \quad g(x) = 2\log_a x$；</div>
+              <div class="exercise-subitem">(2) $f(x) = \sec^2 x - \tan^2 x, \quad g(x) = 1$；</div>
+              <div class="exercise-subitem">(3) $f(x) = \sin^2 x + \cos^2 x, \quad g(x) = 1$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">7.</span>
+              <div class="exercise-subitem">(1) 设 $f(x+3) = 2x^3 - 3x^2 + 5x - 1$，求 $f(x)$；</div>
+              <div class="exercise-subitem">(2) 设 $f\left(\frac{x}{x-1}\right) = \frac{3x-1}{3x+1}$，求 $f(x)$.</div>
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">8.</span>
+              设 $f(x) = \frac{1}{1+x}$，求 $f \circ f, f \circ f \circ f, f \circ f \circ f \circ f$ 的函数表达式.
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">9.</span>
+              证明：定义于 $(-\infty, +\infty)$ 上的任何函数都可以表示成一个偶函数与一个奇函数之和.
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">10.</span>
+              写出折线 $ABCD$ 所表示的函数关系 $y = f(x)$ 的分段表示，其中 $A = (0, 3), B = (1, -1), C = (3, 2), D = (4, 0)$.
+            </li>
+            <li class="exercise-item">
+              <span class="exercise-number">11.</span>
+              设 $f(x)$ 表示图 1.2.8 中阴影部分面积，写出函数 $y = f(x), x \in [0, 2]$ 的表达式.
+            </li>
+            <div class="figure-wrapper">
+              <img src="figures/fig_1_2_8.svg" alt="图 1.2.8 习题阴影部分面积">
+              <div class="figure-caption">图 1.2.8 习题 11 阴影部分面积函数</div>
+            </div>
+            <li class="exercise-item">
+              <span class="exercise-number">12.</span>
+              一玻璃杯装有汞、水、煤油三种液体，密度分别为 $13.6\text{ g/cm}^3, 1\text{ g/cm}^3, 0.8\text{ g/cm}^3$，上层煤油液体高度为 $5\text{ cm}$，中层水液体高度为 $4\text{ cm}$，下层汞液体高度为 $2\text{ cm}$（如图 1.2.9），试求压强 $P$ 与液体深度 $x$ 之间的函数关系.
+            </li>
+            <div class="figure-wrapper">
+              <img src="figures/fig_1_2_9.svg" alt="图 1.2.9 习题三种液体深度与压强关系">
+              <div class="figure-caption">图 1.2.9 习题 12 玻璃杯中三种液体的压强与深度</div>
+            </div>
+
+            <div class="page-divider" data-page="原书第 20 页 [PDF P.39]" id="p20"></div>
+            <li class="exercise-item">
+              <span class="exercise-number">13.</span>
+              试求定义在 $[0, 1]$ 上的函数，它是 $[0, 1]$ 与 $[0, 1]$ 之间的一一对应，但在 $[0, 1]$ 的任一子区间上都不是单调函数.
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script>
+  // Dark mode toggle
+  const themeBtn = document.getElementById('themeToggleBtn');
+  let currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeBtn.innerText = '切换日间模式';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+      themeBtn.innerText = '切换夜间模式';
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeBtn.innerText = '切换日间模式';
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  // Active TOC highlight on scroll
+  const sections = document.querySelectorAll('section, h4, .exercise-container');
+  const navLinks = document.querySelectorAll('.toc-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 120;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>

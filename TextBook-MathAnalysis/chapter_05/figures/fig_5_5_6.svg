@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="220" style="max-width: 360px; display: block; margin: 1.5rem auto;">
+  <defs>
+    <style>
+      .base-line { stroke: var(--text-color, #2c3e50); stroke-width: 2; }
+      .cable-line { stroke: var(--text-color, #2c3e50); stroke-width: 2; }
+      .dashed-v { stroke: var(--text-color, #2c3e50); stroke-width: 1.2; stroke-dasharray: 5 4; }
+      .dim-line { stroke: var(--text-color, #2c3e50); stroke-width: 1; marker-end: url(#arr-6); marker-start: url(#arr-rev6); }
+      .label-text { font-family: 'Times New Roman', serif; font-size: 15px; fill: var(--text-color, #2c3e50); }
+      .math-italic { font-style: italic; }
+    </style>
+    <marker id="arr-6" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor" />
+    </marker>
+    <marker id="arr-rev6" viewBox="0 0 10 10" refX="4" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 8 1.5 L 0 5 L 8 8.5 z" fill="currentColor" />
+    </marker>
+  </defs>
+
+  <!-- Baseline -->
+  <line x1="50" y1="150" x2="290" y2="150" class="base-line" />
+
+  <!-- Vertical dashed projection lines -->
+  <line x1="65" y1="75" x2="65" y2="150" class="dashed-v" />
+  <line x1="265" y1="35" x2="265" y2="150" class="dashed-v" />
+
+  <!-- Cables from A to M and B to M -->
+  <!-- A(65, 75), B(265, 35), M(145, 150) -->
+  <line x1="65" y1="75" x2="145" y2="150" class="cable-line" />
+  <line x1="265" y1="35" x2="145" y2="150" class="cable-line" />
+
+  <!-- Labels for Points -->
+  <text x="65" y="68" class="label-text math-italic" text-anchor="middle">A</text>
+  <text x="265" y="28" class="label-text math-italic" text-anchor="middle">B</text>
+  <text x="145" y="142" class="label-text math-italic" text-anchor="middle">M</text>
+
+  <!-- Left dimension 1.2 km (brace) -->
+  <!-- bracket at x=55 from y=75 to y=150 -->
+  <path d="M 60 75 L 53 75 C 50 75 50 110 45 112.5 C 50 115 50 150 53 150 L 60 150" fill="none" stroke="currentColor" stroke-width="1" />
+  <text x="40" y="116" class="label-text" font-size="13px" text-anchor="end">1.2 km</text>
+
+  <!-- Right dimension 1.8 km (brace) -->
+  <!-- bracket at x=270 from y=35 to y=150 -->
+  <path d="M 270 35 L 277 35 C 280 35 280 90 285 92.5 C 280 95 280 150 277 150 L 270 150" fill="none" stroke="currentColor" stroke-width="1" />
+  <text x="290" y="96" class="label-text" font-size="13px" text-anchor="start">1.8 km</text>
+
+  <!-- Bottom dimension 3.2 km -->
+  <line x1="65" y1="150" x2="65" y2="180" stroke="currentColor" stroke-width="0.8" />
+  <line x1="265" y1="150" x2="265" y2="180" stroke="currentColor" stroke-width="0.8" />
+  <line x1="70" y1="172" x2="260" y2="172" class="dim-line" />
+  <text x="165" y="176" class="label-text" font-size="13px" text-anchor="middle" dy="-4">3.2 km</text>
+</svg>

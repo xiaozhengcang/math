@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ch 7.6: 谱分解 vs SVD 全景对比与特征向量本质 | 线性代数直觉指南</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        processEscapes: true,
+        processEnvironments: true
+      },
+      options: {
+        enableAssistiveMml: false,
+        ignoreHtmlClass: 'tex2jax_ignore',
+        processHtmlClass: 'tex2jax_process'
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onerror="this.onerror=null;this.src='js/tex-svg.js';"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/visualizer.js" defer></script>
+  <style>
+    /* Scoped Styles for Ch 7.6 Spectral vs SVD */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+    .compare-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .compare-card:hover {
+      transform: translateY(-2px);
+    }
+    .compare-card.spectral {
+      border-top: 4px solid var(--accent-blue);
+    }
+    .compare-card.svd {
+      border-top: 4px solid var(--accent-purple);
+    }
+
+    .diff-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+    }
+    .diff-table th, .diff-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.85rem 1rem;
+      text-align: left;
+    }
+    .diff-table th {
+      background: rgba(15, 23, 42, 0.85);
+      color: var(--text-main);
+      font-weight: 700;
+    }
+    .diff-table tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .diff-table td strong {
+      color: var(--accent-green);
+    }
+
+    /* Interactive Lab Styling */
+    .lab-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    @media (max-width: 900px) {
+      .lab-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    .lab-box {
+      background: #090d16;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    .lab-box canvas {
+      background: #060911;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 440px;
+      height: 320px;
+      display: block;
+      cursor: crosshair;
+    }
+    .lab-controls {
+      width: 100%;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    .control-row input[type="range"] {
+      flex: 1;
+    }
+
+    /* Diagram Containers */
+    .diagram-card {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    .diagram-svg {
+      width: 100%;
+      max-width: 840px;
+      height: auto;
+      display: block;
+      margin: 1rem auto;
+      background: #070a12;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .key-callout {
+      background: rgba(56, 189, 248, 0.08);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.2rem 0;
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+    .key-callout-purple {
+      background: rgba(168, 85, 247, 0.08);
+      border-left: 4px solid var(--accent-purple);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      margin: 1.2rem 0;
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+    .pill-badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .pill-blue { background: rgba(56, 189, 248, 0.2); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); }
+    .pill-purple { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.4); }
+    .pill-green { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.4); }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <span>📐</span> 线性代数直觉指南
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <!-- Replaced dynamically by js/main.js -->
+      </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <header class="top-nav">
+        <div class="breadcrumb">
+          <a href="index.html">首页</a>
+          <span>/</span>
+          <a href="ch7_3_spectral_decomposition.html">Chapter 7</a>
+          <span>/</span>
+          <span style="color: var(--text-main);">Ch 7.6 谱分解 vs SVD 全景对比</span>
+        </div>
+        <div class="nav-actions">
+          <button class="theme-toggle" id="theme-toggle" title="切换主题">🌓</button>
+        </div>
+      </header>
+
+      <main class="content-area">
+        <!-- Hero Header -->
+        <div class="module-hero" style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(168, 85, 247, 0.12)); border-bottom: 1px solid rgba(56, 189, 248, 0.3);">
+          <div class="module-badge" style="background: var(--accent-purple); color: #fff; font-weight: 700;">Chapter 7 专题汇聚</div>
+          <h1 class="module-title" style="margin-top: 0.5rem;">Ch 7.6: 谱分解 vs SVD 全景对比与特征向量本质</h1>
+          <p class="module-subtitle" style="max-width: 850px;">
+            线性代数中两大终极对角化利器的巅峰对决！从数学形式、基底转换、特征向量归属，到几何变换轨迹与交互实验，全面理清 $Q^T$ 与 $V^T$ 的异同，洞悉不变子空间与主轴拉伸的本质。
+          </p>
+        </div>
+
+        <!-- 章节目录导航卡 -->
+        <div class="card" style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.45);">
+          <div class="card-body" style="padding: 1rem 1.25rem;">
+            <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 0.5rem;">本章核心研读路径：</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.85rem;">
+              <a href="#section-1" class="btn btn-sm" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">1. 全景对比矩阵</a>
+              <a href="#section-2" class="btn btn-sm" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">2. $Q^T$ 与 $V^T$ 的异同剖析</a>
+              <a href="#section-3" class="btn btn-sm" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">3. 与特征向量的深层纽带</a>
+              <a href="#section-4" class="btn btn-sm" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">4. 几何本质与交互实验台</a>
+              <a href="#section-5" class="btn btn-sm" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color);">5. 工程选型与典型实战</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 1: 全景对比矩阵 -->
+        <div class="card" id="section-1" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="pill-badge pill-blue">核心速览</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">1. 谱分解 vs SVD 核心对比矩阵</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              很多学习者常常将<strong>实对称矩阵的谱分解（Spectral Decomposition）</strong>与<strong>任意矩阵的奇异值分解（SVD）</strong>混淆。两者都把复杂的矩阵映射拆解为“旋转-拉伸-旋转”，但它们所处的数学舞台与几何目标截然不同：
+            </p>
+
+            <table class="diff-table">
+              <thead>
+                <tr>
+                  <th style="width: 18%;">对比维度</th>
+                  <th style="width: 41%;">谱分解 (Spectral Decomposition)</th>
+                  <th style="width: 41%;">奇异值分解 (Singular Value Decomposition, SVD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>适用矩阵范围</strong></td>
+                  <td>仅适用于<strong>实对称方阵</strong> $A \in \mathbb{R}^{n \times n}$ 满足 $A = A^T$（在复数域为 Hermitian 矩阵 $A = A^H$）</td>
+                  <td>适用于<strong>任意实数矩阵</strong> $A \in \mathbb{R}^{m \times n}$（长方阵、奇异阵、甚至亏秩矩阵均可）</td>
+                </tr>
+                <tr>
+                  <td><strong>代数分解形式</strong></td>
+                  <td>$$A = Q \Lambda Q^T = \sum_{i=1}^{n} \lambda_i \mathbf{q}_i \mathbf{q}_i^T$$</td>
+                  <td>$$A = U \Sigma V^T = \sum_{i=1}^{r} \sigma_i \mathbf{u}_i \mathbf{v}_i^T$$</td>
+                </tr>
+                <tr>
+                  <td><strong>变换空间范围</strong></td>
+                  <td><strong>单空间内的自映射</strong>：$\mathbb{R}^n \to \mathbb{R}^n$<br>起点空间与终点空间完全同一</td>
+                  <td><strong>跨空间的广义映射</strong>：$\mathbb{R}^n \to \mathbb{R}^m$<br>从输入定义域映射到全新输出值域</td>
+                </tr>
+                <tr>
+                  <td><strong>基底数量与关系</strong></td>
+                  <td><strong>一套正交基</strong>：$Q$ 的列向量 $\mathbf{q}_i$ 既充当输入坐标系的基底，又充当输出坐标系的基底</td>
+                  <td><strong>两套不同的正交基</strong>：<br>输入空间正交基 $V$（列向量 $\mathbf{v}_i$）<br>输出空间正交基 $U$（列向量 $\mathbf{u}_i$）</td>
+                </tr>
+                <tr>
+                  <td><strong>对角线核心指标</strong></td>
+                  <td><strong>特征值 $\lambda_i \in \mathbb{R}$</strong>：<br>可正、可负、可为 0（正负号具有极其重要的动力学与惯性指数意义）</td>
+                  <td><strong>奇异值 $\sigma_i \ge 0$</strong>：<br>严格<strong>非负实数</strong>，且约定由大到小排序 $\sigma_1 \ge \sigma_2 \ge \dots \ge 0$</td>
+                </tr>
+                <tr>
+                  <td><strong>几何作用本质</strong></td>
+                  <td>在不变轴方向上的<strong>沿轴拉伸与镜像反转</strong>（若 $\lambda_i \lt 0$ 则反向）</td>
+                  <td>将输入空间单位超球映射为输出空间的<strong>超椭球体</strong>，主半轴长度为 $\sigma_i$</td>
+                </tr>
+                <tr>
+                  <td><strong>与特征向量的关系</strong></td>
+                  <td>$\mathbf{q}_i$ <strong>就是 $A$ 自身的特征向量</strong>：<br>$A \mathbf{q}_i = \lambda_i \mathbf{q}_i$</td>
+                  <td>$\mathbf{v}_i$ 是 $A^T A$ 的特征向量，$\mathbf{u}_i$ 是 $A A^T$ 的特征向量：<br>$A \mathbf{v}_i = \sigma_i \mathbf{u}_i$</td>
+                </tr>
+                <tr>
+                  <td><strong>截断与低秩逼近</strong></td>
+                  <td>仅对半正定矩阵自然具备能量保序性；对于具有大负特征值的矩阵截断需谨慎</td>
+                  <td><strong>Eckart-Young-Mirsky 定理</strong>：保留前 $k$ 个最大奇异值即可获得最佳低秩逼近矩阵 $A_k$</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="key-callout">
+              <strong>直觉一言总结：</strong><br>
+              谱分解是<strong>“自省”</strong>——在同一个房间里找到最顺畅的几个垂直主方向，只做伸缩（必要时转身）；<br>
+              SVD 是<strong>“出海”</strong>——从国家 A（输入空间）出发，在国家 B（输出空间）找到一套相互垂直的落脚点，把原本的球体映射为定制的椭球体。
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 2: Q^T 与 V^T 的异同剖析 -->
+        <div class="card" id="section-2" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="pill-badge pill-purple">深度剖析</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">2. 关键第一步：$Q^T$ 与 $V^T$ 的作用是一样的吗？</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              在谱分解 $A = Q \Lambda Q^T$ 与奇异值分解 $A = U \Sigma V^T$ 中，变换的第一步都是将输入向量 $\mathbf{x}$ 与一个正交矩阵的转置相乘：
+              $$\mathbf{y}_{\text{spectral}} = Q^T \mathbf{x}, \quad \mathbf{y}_{\text{svd}} = V^T \mathbf{x}$$
+              它们表面上看似完全平行，但<strong>系统闭环性</strong>与<strong>后续交接机制</strong>存在本质区别。
+            </p>
+
+            <div class="compare-grid">
+              <div class="compare-card spectral">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 style="margin: 0; font-size: 1.1rem; color: #38bdf8;">$Q^T$ 的角色：临时换装，必须原路还原</h3>
+                  <span class="pill-badge pill-blue">闭环自映射</span>
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted); margin-top: 0.75rem;">
+                  谱分解作用于同一空间 $\mathbb{R}^n \to \mathbb{R}^n$。变换全链路为：
+                </p>
+                <div style="background: rgba(0,0,0,0.3); padding: 0.6rem; border-radius: 4px; font-size: 0.85rem; text-align: center; margin: 0.5rem 0;">
+                  $\mathbf{x} \xrightarrow{Q^T} \text{特征基坐标} \xrightarrow{\Lambda} \text{独立拉伸} \xrightarrow{Q} \text{换回原坐标}$
+                </div>
+                <ul style="font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem; color: var(--text-main);">
+                  <li><strong>换底计算</strong>：标准基下元素相互耦合，用 $Q^T$ 将向量投影到特征向量 $\mathbf{q}_i$ 上，得到无耦合的纯坐标分量。</li>
+                  <li><strong>必须由 $Q$ 收尾</strong>：因为最终结果仍需呈现在原坐标系中，所以第一步借了 $Q^T$ 换底，最后一步就<strong>必须使用 $Q = (Q^T)^{-1}$ 换回来</strong>。两者构成严密的“出借-归还”闭环。</li>
+                </ul>
+              </div>
+
+              <div class="compare-card svd">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 style="margin: 0; font-size: 1.1rem; color: #c084fc;">$V^T$ 的角色：整理输入，单向移交新空间</h3>
+                  <span class="pill-badge pill-purple">跨空间桥梁</span>
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.7; color: var(--text-muted); margin-top: 0.75rem;">
+                  SVD 作用于跨空间 $\mathbb{R}^n \to \mathbb{R}^m$。变换全链路为：
+                </p>
+                <div style="background: rgba(0,0,0,0.3); padding: 0.6rem; border-radius: 4px; font-size: 0.85rem; text-align: center; margin: 0.5rem 0;">
+                  $\mathbf{x} \xrightarrow{V^T} \text{输入能量轴分量} \xrightarrow{\Sigma} \text{奇异值放大/改维} \xrightarrow{U} \text{输出空间基底组装}$
+                </div>
+                <ul style="font-size: 0.88rem; line-height: 1.7; padding-left: 1.2rem; color: var(--text-main);">
+                  <li><strong>单向输入对齐</strong>：$V^T$ 负责在输入空间 $\mathbb{R}^n$ 中找到能量最强的主轴并将输入向量分解到这些轴上。</li>
+                  <li><strong>交给全新基底 $U$ 接收</strong>：经过奇异值 $\Sigma$ 缩放与维数调整后，直接由<strong>目标空间的基底 $U$</strong> 挂载输出。$V^T$ 走完它的历史使命后，<strong>绝不需要也不可能由 $V$ 转回输入空间</strong>。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 矢量对比图解 -->
+            <div class="diagram-card">
+              <h4 style="margin: 0 0 0.5rem 0; font-size: 0.95rem; color: var(--text-main);">几何流向对比图：闭环自映射 vs 单向跨空间流转</h4>
+              <svg class="diagram-svg" viewBox="0 0 820 280">
+                <defs>
+                  <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-fit">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+                  </marker>
+                  <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-fit">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc" />
+                  </marker>
+                  <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-fit">
+                    <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80" />
+                  </marker>
+                </defs>
+
+                <!-- 上半部：谱分解流程 -->
+                <rect x="30" y="25" width="760" height="100" rx="8" fill="rgba(56, 189, 248, 0.04)" stroke="rgba(56, 189, 248, 0.25)" />
+                <text x="45" y="48" fill="#38bdf8" font-size="12" font-weight="700">谱分解 A = Q Λ Qᵀ（单空间闭环自映射：ℝⁿ → ℝⁿ）</text>
+
+                <!-- 节点 1 -->
+                <circle cx="120" cy="85" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+                <text x="120" y="89" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">x ∈ ℝⁿ</text>
+
+                <line x1="145" y1="85" x2="275" y2="85" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)" />
+                <text x="210" y="75" fill="#94a3b8" font-size="11" text-anchor="middle">Qᵀ (刚体旋转到特征轴)</text>
+
+                <!-- 节点 2 -->
+                <circle cx="305" cy="85" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+                <text x="305" y="89" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">Qᵀx</text>
+
+                <line x1="330" y1="85" x2="480" y2="85" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)" />
+                <text x="405" y="75" fill="#94a3b8" font-size="11" text-anchor="middle">Λ (沿主轴独立伸缩 λᵢ)</text>
+
+                <!-- 节点 3 -->
+                <circle cx="510" cy="85" r="22" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+                <text x="510" y="89" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">ΛQᵀx</text>
+
+                <line x1="535" y1="85" x2="685" y2="85" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)" />
+                <text x="610" y="75" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">Q (旋转回归原坐标系)</text>
+
+                <!-- 节点 4 -->
+                <circle cx="715" cy="85" r="22" fill="#0f172a" stroke="#4ade80" stroke-width="2" />
+                <text x="715" y="89" fill="#4ade80" font-size="12" font-weight="700" text-anchor="middle">Ax ∈ ℝⁿ</text>
+
+                <!-- 下半部：SVD 流程 -->
+                <rect x="30" y="145" width="760" height="110" rx="8" fill="rgba(168, 85, 247, 0.04)" stroke="rgba(168, 85, 247, 0.25)" />
+                <text x="45" y="168" fill="#c084fc" font-size="12" font-weight="700">SVD A = U Σ Vᵀ（跨空间单向映射：ℝⁿ → ℝᵐ）</text>
+
+                <!-- 节点 1 -->
+                <circle cx="120" cy="210" r="22" fill="#0f172a" stroke="#c084fc" stroke-width="2" />
+                <text x="120" y="214" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">x ∈ ℝⁿ</text>
+
+                <line x1="145" y1="210" x2="275" y2="210" stroke="#c084fc" stroke-width="2" marker-end="url(#arrow-purple)" />
+                <text x="210" y="200" fill="#94a3b8" font-size="11" text-anchor="middle">Vᵀ (旋转到 AᵀA 极值轴)</text>
+
+                <!-- 节点 2 -->
+                <circle cx="305" cy="210" r="22" fill="#0f172a" stroke="#c084fc" stroke-width="2" />
+                <text x="305" y="214" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">Vᵀx</text>
+
+                <line x1="330" y1="210" x2="480" y2="210" stroke="#c084fc" stroke-width="2" marker-end="url(#arrow-purple)" />
+                <text x="405" y="200" fill="#94a3b8" font-size="11" text-anchor="middle">Σ (按奇异值 σᵢ 缩放/维度转换)</text>
+
+                <!-- 节点 3 -->
+                <circle cx="510" cy="210" r="22" fill="#0f172a" stroke="#c084fc" stroke-width="2" />
+                <text x="510" y="214" fill="#f8fafc" font-size="12" font-weight="700" text-anchor="middle">ΣVᵀx</text>
+
+                <line x1="535" y1="210" x2="685" y2="210" stroke="#c084fc" stroke-width="2" marker-end="url(#arrow-green)" />
+                <text x="610" y="200" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">U (由全新输出基底承接)</text>
+
+                <!-- 节点 4 -->
+                <circle cx="715" cy="210" r="22" fill="#0f172a" stroke="#4ade80" stroke-width="2" />
+                <text x="715" y="214" fill="#4ade80" font-size="12" font-weight="700" text-anchor="middle">Ax ∈ ℝᵐ</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 3: 与特征向量的深层纽带 -->
+        <div class="card" id="section-3" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="pill-badge pill-green">数学核心</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">3. 与特征向量的深层纽带：谁是谁的特征向量？</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              一个极其核心却频繁被误解的问题：<strong>$Q$、$V$、$U$ 这三个矩阵的列向量，与“特征向量”到底是什么关系？</strong>
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.25rem 0;">
+              <div style="background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #38bdf8; text-transform: uppercase;">矩阵 Q 的列向量</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin: 0.35rem 0;">$\mathbf{q}_i$ 是 $A$ 自身的特征向量</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  根据谱定理，实对称阵 $A$ 一定存在正交特征向量：<br>
+                  $$A \mathbf{q}_i = \lambda_i \mathbf{q}_i$$
+                  $Q$ 既是特征向量矩阵，也是使 $A$ 对角化的正交变换阵。
+                </p>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #c084fc; text-transform: uppercase;">矩阵 V 的列向量</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin: 0.35rem 0;">$\mathbf{v}_i$ 是 $A^T A$ 的特征向量</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  $A$ 本身可能非方阵，无特征向量；但对称方阵 $A^T A$ 必有正交特征基：<br>
+                  $$(A^T A) \mathbf{v}_i = \sigma_i^2 \mathbf{v}_i$$
+                  特征值恰好为奇异值的平方 $\sigma_i^2$。
+                </p>
+              </div>
+
+              <div style="background: rgba(15, 23, 42, 0.55); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.1rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #4ade80; text-transform: uppercase;">矩阵 U 的列向量</div>
+                <div style="font-size: 1.15rem; font-weight: 700; color: var(--text-main); margin: 0.35rem 0;">$\mathbf{u}_i$ 是 $A A^T$ 的特征向量</div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;">
+                  对称方阵 $A A^T$ 同样具有完全同一套非零特征值 $\sigma_i^2$：<br>
+                  $$(A A^T) \mathbf{u}_i = \sigma_i^2 \mathbf{u}_i$$
+                  左奇异向量 $\mathbf{u}_i$ 即为其正交特征基。
+                </p>
+              </div>
+            </div>
+
+            <!-- 代数推导证明 -->
+            <div class="card" style="background: rgba(30, 41, 59, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); margin: 1rem 0;">
+              <div class="card-body" style="padding: 1.1rem;">
+                <h4 style="margin: 0 0 0.5rem 0; font-size: 0.92rem; color: var(--accent-green);">严谨代数闭环验证：为什么 $V$ 和 $U$ 会自动与特征值分解连结？</h4>
+                <p style="font-size: 0.88rem; line-height: 1.75; color: var(--text-main); margin-bottom: 0.5rem;">
+                  将 SVD 分解式 $A = U \Sigma V^T$ 代入构造矩阵：
+                </p>
+                <div style="font-size: 0.9rem; line-height: 1.8;">
+                  $$A^T A = (V \Sigma^T U^T)(U \Sigma V^T) = V (\Sigma^T \Sigma) V^T \quad (\text{因 } U^T U = I)$$
+                  $$A A^T = (U \Sigma V^T)(V \Sigma^T U^T) = U (\Sigma \Sigma^T) U^T \quad (\text{因 } V^T V = I)$$
+                </div>
+                <p style="font-size: 0.88rem; line-height: 1.75; color: var(--text-muted); margin-top: 0.5rem;">
+                  观察发现：对角阵 $\Sigma^T \Sigma$ 与 $\Sigma \Sigma^T$ 的对角元正是 $\sigma_i^2$！这恰恰是<strong>对称阵 $A^T A$ 与 $A A^T$ 的标准谱分解形式</strong>。因此 SVD 在理论上可以完全借由对称矩阵的谱分解来构造。
+                </p>
+              </div>
+            </div>
+
+            <!-- 特殊场景：当 A 本身就是对称矩阵时 -->
+            <div class="key-callout-purple" style="margin-top: 1.25rem;">
+              <h4 style="margin: 0 0 0.35rem 0; font-size: 0.95rem; color: #c084fc;">两者何时合二为一？——实对称矩阵下的合流</h4>
+              <p style="margin: 0; font-size: 0.88rem; line-height: 1.7;">
+                若 $A$ 本身就是一个实对称矩阵（$A = A^T$），那么：
+              </p>
+              <ul style="margin: 0.4rem 0 0 0; padding-left: 1.2rem; font-size: 0.88rem; line-height: 1.7;">
+                <li><strong>当所有特征值非负时（半正定矩阵，$\lambda_i \ge 0$）</strong>：<br>
+                  奇异值等于特征值 $\sigma_i = \lambda_i$；左、右奇异向量完全重合且等于特征向量：<strong>$Q = U = V$</strong>。此时 SVD 与谱分解<strong>完全同一</strong>！
+                </li>
+                <li><strong>当存在负特征值时（$\lambda_i \lt 0$）</strong>：<br>
+                  奇异值必须为正，取绝对值 $\sigma_i = |\lambda_i|$；此时特征向量仍与右奇异向量对应 $\mathbf{v}_i = \mathbf{q}_i$，而左奇异向量需反向 $\mathbf{u}_i = -\mathbf{q}_i$ 来吸收负号。
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 4: 几何本质与交互实验台 -->
+        <div class="card" id="section-4" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="pill-badge pill-blue">直观体验</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">4. 几何本质对比：方向不变 vs 跨空间超椭球</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              为了真正建立直觉，我们把两种分解的几何作用在下方的双视图实验台中同台呈现。
+              在左侧观察<strong>谱分解（对称矩阵）的方向不变性</strong>；在右侧观察<strong>SVD（非对称/一般矩阵）的跨空间球-椭球正交映射</strong>。
+            </p>
+
+            <!-- 交互实验台容器 -->
+            <div class="lab-container">
+              <!-- 左侧：谱分解实验框 -->
+              <div class="lab-box">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.85rem; font-weight: 700; color: #38bdf8;">谱分解实验视图 (实对称矩阵)</span>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);" id="spectral-matrix-label">A = [[2.5, 1.2], [1.2, 1.8]]</span>
+                </div>
+                <canvas id="canvas-spectral" width="440" height="320"></canvas>
+                <div class="lab-controls">
+                  <div class="control-row">
+                    <span>对角元素 a (缩放轴1):</span>
+                    <input type="range" id="slider-a" min="0.5" max="3.5" step="0.1" value="2.5">
+                    <span id="val-a" style="min-width: 28px; text-align: right; color: var(--text-main);">2.5</span>
+                  </div>
+                  <div class="control-row">
+                    <span>对称耦合 b (A₁₂ = A₂₁):</span>
+                    <input type="range" id="slider-b" min="-1.8" max="1.8" step="0.1" value="1.2">
+                    <span id="val-b" style="min-width: 28px; text-align: right; color: var(--text-main);">1.2</span>
+                  </div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.5; margin-top: 0.2rem;">
+                    💡 <strong>观察重点</strong>：蓝线与紫线为相互正交的特征向量 $\mathbf{q}_1, \mathbf{q}_2$。经过 $A$ 变换后，它们<strong>始终停留在原来的直线上</strong>，只有长度伸缩 $\lambda_1, \lambda_2$！
+                  </div>
+                </div>
+              </div>
+
+              <!-- 右侧：SVD 实验框 -->
+              <div class="lab-box">
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                  <span style="font-size: 0.85rem; font-weight: 700; color: #c084fc;">SVD 实验视图 (一般矩阵)</span>
+                  <span style="font-size: 0.75rem; color: var(--text-muted);" id="svd-matrix-label">A = [[2.0, 1.2], [0.3, 1.5]]</span>
+                </div>
+                <canvas id="canvas-svd" width="440" height="320"></canvas>
+                <div class="lab-controls">
+                  <div class="control-row">
+                    <span>非对称剪切分量 c:</span>
+                    <input type="range" id="slider-c" min="-1.5" max="1.5" step="0.1" value="0.3">
+                    <span id="val-c" style="min-width: 28px; text-align: right; color: var(--text-main);">0.3</span>
+                  </div>
+                  <div class="control-row">
+                    <span>观察模式切换:</span>
+                    <button class="btn btn-sm" id="btn-toggle-vectors" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; background: rgba(168, 85, 247, 0.2); border: 1px solid #c084fc; color: #c084fc;">
+                      高亮奇异向量对 (vᵢ → uᵢ)
+                    </button>
+                  </div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; line-height: 1.5; margin-top: 0.2rem;">
+                    💡 <strong>观察重点</strong>：虚线圆为输入单位圆，绿色实线为映射后的椭圆。输入正交基 $\mathbf{v}_1, \mathbf{v}_2$ 经变换后精确落到椭圆的长短主轴 $\mathbf{u}_1, \mathbf{u}_2$ 上，长度即为 $\sigma_1, \sigma_2$！
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 几何本质核心公式总结 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.85rem 1rem;">
+                <div style="font-weight: 700; color: #38bdf8; font-size: 0.85rem;">谱分解的几何规律</div>
+                <div style="font-size: 0.88rem; margin-top: 0.4rem; color: var(--text-main);">
+                  $$A \mathbf{q}_i = \lambda_i \mathbf{q}_i$$
+                  <strong>方向锁定</strong>：在特征向量方向上无偏转旋转，只有纯粹的轴向伸缩与反转。
+                </div>
+              </div>
+              <div style="background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border-color); border-radius: 6px; padding: 0.85rem 1rem;">
+                <div style="font-weight: 700; color: #c084fc; font-size: 0.85rem;">SVD 的几何规律</div>
+                <div style="font-size: 0.88rem; margin-top: 0.4rem; color: var(--text-main);">
+                  $$A \mathbf{v}_i = \sigma_i \mathbf{u}_i$$
+                  <strong>正交映射</strong>：将输入空间的垂直基底映射为输出空间的垂直基底，并拉伸 $\sigma_i$ 倍。
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION 5: 工程选型与典型实战 -->
+        <div class="card" id="section-5" style="margin-top: 1.5rem;">
+          <div class="card-header">
+            <span class="pill-badge pill-green">工程实战</span>
+            <h2 class="card-title" style="margin-top: 0.5rem;">5. 工程与算法选型决策树</h2>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 0.95rem; line-height: 1.8;">
+              在机器学习、信号处理与科学计算中，面对具体问题时应该使用谱分解还是 SVD？请遵循以下清晰的技术选型指南：
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; margin: 1rem 0;">
+              <!-- 谱分解主场 -->
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+                <div style="font-size: 1.05rem; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>⚡ 必须/优先使用谱分解</span>
+                </div>
+                <ul style="font-size: 0.88rem; line-height: 1.75; padding-left: 1.2rem; margin-top: 0.75rem; color: var(--text-main);">
+                  <li><strong>马尔可夫链与矩阵幂 $A^k$</strong>：计算长期稳态分布时，$A^k = Q \Lambda^k Q^T$，仅需对标量特征值求 $k$ 次幂，计算复杂度从 $O(k n^3)$ 骤降至 $O(n)$。</li>
+                  <li><strong>物理振动模态解耦</strong>：弹性力学与结构工程中的广义刚度矩阵与质量矩阵对角化。</li>
+                  <li><strong>谱图理论与图卷积神经网络 (GCN)</strong>：图拉普拉斯矩阵 $L = D - W$ 是对称半正定方阵，谱分解得到图的频域傅里叶基。</li>
+                  <li><strong>主成分分析 PCA（直接在协方差矩阵上）</strong>：样本协方差矩阵 $\Sigma_{cov} = \frac{1}{m} X^T X$ 天然是对称半正定方阵。</li>
+                </ul>
+              </div>
+
+              <!-- SVD 主场 -->
+              <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem;">
+                <div style="font-size: 1.05rem; font-weight: 700; color: #c084fc; display: flex; align-items: center; gap: 0.5rem;">
+                  <span>🎯 必须/优先使用 SVD</span>
+                </div>
+                <ul style="font-size: 0.88rem; line-height: 1.75; padding-left: 1.2rem; margin-top: 0.75rem; color: var(--text-main);">
+                  <li><strong>长方阵与原始数据降维</strong>：用户-物品评分矩阵 $M \times N$（推荐系统协同过滤）、词-文档矩阵（潜在语义分析 LSA）。</li>
+                  <li><strong>图像与权重低秩矩阵压缩 (LoRA / 截断 SVD)</strong>：截取前 $k$ 个最大奇异值即可在最小均方误差（Frobenius 范数）下压缩模型参数。</li>
+                  <li><strong>求解广义逆与最小二乘方程</strong>：对于超定或病态方程 $A \mathbf{x} = \mathbf{b}$，直接利用伪逆 $A^+ = V \Sigma^+ U^T$ 获得最小范数最小二乘解。</li>
+                  <li><strong>数值稳定 PCA</strong>：在数据矩阵 $X$ 上直接做 SVD（无需显式计算 $X^T X$），避免二次方放大条件数导致的数值浮点下溢。</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- 自测辨析卡片 -->
+            <div style="background: rgba(15, 23, 42, 0.45); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 1.25rem; margin-top: 1.5rem;">
+              <h3 style="margin: 0 0 0.75rem 0; font-size: 1rem; color: var(--text-main);">💡 核心辨析自测题</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; line-height: 1.7;">
+                <div>
+                  <strong>问：为什么特征值可以为负，而奇异值永远必须非负？</strong><br>
+                  <span style="color: var(--text-muted);">答：因为特征值衡量的是同一空间内沿着特征轴的缩放比例，负号代表反向翻转；而奇异值度量的是跨空间映射后超椭球各主半轴的几何<strong>物理长度</strong>（几何长度不能为负），或者等价于对称半正定阵 $A^T A$ 特征值的算术平方根 $\sqrt{\lambda_i(A^T A)}$，非负性由半正定性所保证。</span>
+                </div>
+                <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0.25rem 0;">
+                <div>
+                  <strong>问：如果矩阵 $A$ 已经是正交矩阵（$A^T A = I$），它的谱分解与 SVD 分别是什么？</strong><br>
+                  <span style="color: var(--text-muted);">答：若 $A$ 是正交矩阵，它的所有奇异值恒等于 1（$\Sigma = I$），其 SVD 即为 $A = A \cdot I \cdot I$；而正交矩阵不一定是对称矩阵（如二维纯旋转矩阵），若非对称则在实数域内甚至无法进行实数谱分解（特征值为复数 $e^{i\theta}$）。这再次展示了 SVD 在实数域的普适性！</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 底部翻页导航 -->
+        <div class="card" style="margin-top: 2rem; background: rgba(15, 23, 42, 0.5);">
+          <div class="card-body" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <a href="ch7_5_positive_definite.html" class="btn" style="background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--text-main);">
+              ← 上一节：Ch 7.5 正定矩阵与二次型
+            </a>
+            <a href="ch8_1_ols_applications.html" class="btn" style="background: var(--accent-green); color: #000; font-weight: 700;">
+              下一章：Ch 8.1 OLS 工业实战全景 →
+            </a>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Interactive Visualizer Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Spectral Visualizer Canvas
+      const cSpec = document.getElementById('canvas-spectral');
+      const ctxSpec = cSpec ? cSpec.getContext('2d') : null;
+      const sliderA = document.getElementById('slider-a');
+      const sliderB = document.getElementById('slider-b');
+      const valA = document.getElementById('val-a');
+      const valB = document.getElementById('val-b');
+      const specLabel = document.getElementById('spectral-matrix-label');
+
+      // 2. SVD Visualizer Canvas
+      const cSvd = document.getElementById('canvas-svd');
+      const ctxSvd = cSvd ? cSvd.getContext('2d') : null;
+      const sliderC = document.getElementById('slider-c');
+      const valC = document.getElementById('val-c');
+      const svdLabel = document.getElementById('svd-matrix-label');
+      const btnToggle = document.getElementById('btn-toggle-vectors');
+
+      let showSvdPairs = true;
+
+      // Helper for drawing 2D axes
+      function drawGrid(ctx, w, h, scale) {
+        ctx.save();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.lineWidth = 1;
+
+        const cx = w / 2;
+        const cy = h / 2;
+
+        for (let x = cx; x < w; x += scale) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let x = cx; x > 0; x -= scale) {
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
+        }
+        for (let y = cy; y < h; y += scale) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+        for (let y = cy; y > 0; y -= scale) {
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+        }
+
+        // Main Axes
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(w, cy); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawVector(ctx, cx, cy, vx, vy, color, width, label) {
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = width;
+
+        const ex = cx + vx;
+        const ey = cy - vy; // flip y for standard math coords
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(ex, ey);
+        ctx.stroke();
+
+        // Arrow head
+        const angle = Math.atan2(-vy, vx);
+        const headlen = 8;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(ex - headlen * Math.cos(angle - Math.PI / 6), ey - headlen * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(ex - headlen * Math.cos(angle + Math.PI / 6), ey - headlen * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+
+        if (label) {
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText(label, ex + 6, ey - 6);
+        }
+        ctx.restore();
+      }
+
+      // Render Spectral Decomposition (Symmetric Matrix: A = [[a, b], [b, d]])
+      function renderSpectral() {
+        if (!ctxSpec) return;
+        const w = cSpec.width;
+        const h = cSpec.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const scale = 38;
+
+        ctxSpec.clearRect(0, 0, w, h);
+        drawGrid(ctxSpec, w, h, scale);
+
+        const a = parseFloat(sliderA.value);
+        const b = parseFloat(sliderB.value);
+        const d = 1.8; // fixed d for clear visual variation
+        valA.textContent = a.toFixed(1);
+        valB.textContent = b.toFixed(1);
+        specLabel.textContent = `A = [[${a.toFixed(1)}, ${b.toFixed(1)}], [${b.toFixed(1)}, ${d.toFixed(1)}]]`;
+
+        // Calculate Eigenvalues of 2x2 symmetric matrix
+        const tr = a + d;
+        const det = a * d - b * b;
+        const disc = Math.sqrt(Math.max(0, tr * tr / 4 - det));
+        const lam1 = tr / 2 + disc;
+        const lam2 = tr / 2 - disc;
+
+        // Eigenvector for lam1
+        let v1x = 1, v1y = 0;
+        if (Math.abs(b) > 1e-4) {
+          v1x = lam1 - d;
+          v1y = b;
+        } else if (a >= d) {
+          v1x = 1; v1y = 0;
+        } else {
+          v1x = 0; v1y = 1;
+        }
+        const len1 = Math.hypot(v1x, v1y);
+        const q1x = v1x / len1;
+        const q1y = v1y / len1;
+        // q2 is perpendicular to q1
+        const q2x = -q1y;
+        const q2y = q1x;
+
+        // 1. Draw transformed unit circle
+        ctxSpec.save();
+        ctxSpec.strokeStyle = 'rgba(56, 189, 248, 0.4)';
+        ctxSpec.lineWidth = 2;
+        ctxSpec.beginPath();
+        const steps = 100;
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const ux = Math.cos(theta);
+          const uy = Math.sin(theta);
+          const tx = a * ux + b * uy;
+          const ty = b * ux + d * uy;
+          const px = cx + tx * scale;
+          const py = cy - ty * scale;
+          if (i === 0) ctxSpec.moveTo(px, py);
+          else ctxSpec.lineTo(px, py);
+        }
+        ctxSpec.stroke();
+
+        // Unit circle reference (dashed)
+        ctxSpec.setLineDash([4, 4]);
+        ctxSpec.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctxSpec.lineWidth = 1;
+        ctxSpec.beginPath();
+        ctxSpec.arc(cx, cy, scale, 0, Math.PI * 2);
+        ctxSpec.stroke();
+        ctxSpec.restore();
+
+        // 2. Draw Eigenvectors before and after transformation
+        // Transformed: A q1 = lam1 q1
+        drawVector(ctxSpec, cx, cy, q1x * scale, q1y * scale, 'rgba(56, 189, 248, 0.5)', 1.5, 'q₁');
+        drawVector(ctxSpec, cx, cy, q2x * scale, q2y * scale, 'rgba(168, 85, 247, 0.5)', 1.5, 'q₂');
+
+        // Transformed (solid long arrows)
+        drawVector(ctxSpec, cx, cy, lam1 * q1x * scale, lam1 * q1y * scale, '#38bdf8', 2.5, `Aq₁ (λ₁=${lam1.toFixed(2)})`);
+        drawVector(ctxSpec, cx, cy, lam2 * q2x * scale, lam2 * q2y * scale, '#c084fc', 2.5, `Aq₂ (λ₂=${lam2.toFixed(2)})`);
+      }
+
+      // Render SVD (General Matrix A = [[2.0, 1.2], [c, 1.5]])
+      function renderSvd() {
+        if (!ctxSvd) return;
+        const w = cSvd.width;
+        const h = cSvd.height;
+        const cx = w / 2;
+        const cy = h / 2;
+        const scale = 36;
+
+        ctxSvd.clearRect(0, 0, w, h);
+        drawGrid(ctxSvd, w, h, scale);
+
+        const a11 = 2.0;
+        const a12 = 1.2;
+        const a21 = parseFloat(sliderC.value);
+        const a22 = 1.5;
+        valC.textContent = a21.toFixed(1);
+        svdLabel.textContent = `A = [[${a11.toFixed(1)}, ${a12.toFixed(1)}], [${a21.toFixed(1)}, ${a22.toFixed(1)}]]`;
+
+        // Matrix A^T A = [[s11, s12], [s12, s22]]
+        const s11 = a11 * a11 + a21 * a21;
+        const s12 = a11 * a12 + a21 * a22;
+        const s22 = a12 * a12 + a22 * a22;
+
+        const trS = s11 + s22;
+        const detS = s11 * s22 - s12 * s12;
+        const discS = Math.sqrt(Math.max(0, trS * trS / 4 - detS));
+        const eig1 = trS / 2 + discS;
+        const eig2 = Math.max(0, trS / 2 - discS);
+
+        const sig1 = Math.sqrt(eig1);
+        const sig2 = Math.sqrt(eig2);
+
+        // Right singular vector v1 (eigenvector of A^T A)
+        let v1x = 1, v1y = 0;
+        if (Math.abs(s12) > 1e-4) {
+          v1x = eig1 - s22;
+          v1y = s12;
+        } else if (s11 >= s22) {
+          v1x = 1; v1y = 0;
+        } else {
+          v1x = 0; v1y = 1;
+        }
+        const lenV1 = Math.hypot(v1x, v1y);
+        const nV1x = v1x / lenV1;
+        const nV1y = v1y / lenV1;
+        const nV2x = -nV1y;
+        const nV2y = nV1x;
+
+        // Left singular vectors: u1 = A v1 / sig1, u2 = A v2 / sig2
+        const Av1x = a11 * nV1x + a12 * nV1y;
+        const Av1y = a21 * nV1x + a22 * nV1y;
+        const u1x = sig1 > 1e-4 ? Av1x / sig1 : 1;
+        const u1y = sig1 > 1e-4 ? Av1y / sig1 : 0;
+
+        const Av2x = a11 * nV2x + a12 * nV2y;
+        const Av2y = a21 * nV2x + a22 * nV2y;
+        const u2x = sig2 > 1e-4 ? Av2x / sig2 : 0;
+        const u2y = sig2 > 1e-4 ? Av2y / sig2 : 1;
+
+        // 1. Draw input unit circle (dashed white)
+        ctxSvd.save();
+        ctxSvd.setLineDash([4, 4]);
+        ctxSvd.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+        ctxSvd.lineWidth = 1.2;
+        ctxSvd.beginPath();
+        ctxSvd.arc(cx, cy, scale, 0, Math.PI * 2);
+        ctxSvd.stroke();
+
+        // 2. Draw transformed ellipse (solid green)
+        ctxSvd.setLineDash([]);
+        ctxSvd.strokeStyle = '#4ade80';
+        ctxSvd.lineWidth = 2;
+        ctxSvd.beginPath();
+        const steps = 120;
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const ux = Math.cos(theta);
+          const uy = Math.sin(theta);
+          const tx = a11 * ux + a12 * uy;
+          const ty = a21 * ux + a22 * uy;
+          const px = cx + tx * scale;
+          const py = cy - ty * scale;
+          if (i === 0) ctxSvd.moveTo(px, py);
+          else ctxSvd.lineTo(px, py);
+        }
+        ctxSvd.stroke();
+        ctxSvd.restore();
+
+        // 3. Draw Singular Vectors
+        if (showSvdPairs) {
+          // Input v1, v2
+          drawVector(ctxSvd, cx, cy, nV1x * scale, nV1y * scale, '#38bdf8', 2, 'v₁');
+          drawVector(ctxSvd, cx, cy, nV2x * scale, nV2y * scale, '#93c5fd', 1.5, 'v₂');
+
+          // Output u1, u2 with singular values
+          drawVector(ctxSvd, cx, cy, sig1 * u1x * scale, sig1 * u1y * scale, '#f43f5e', 2.5, `σ₁u₁ (${sig1.toFixed(2)})`);
+          drawVector(ctxSvd, cx, cy, sig2 * u2x * scale, sig2 * u2y * scale, '#fb7185', 2, `σ₂u₂ (${sig2.toFixed(2)})`);
+        }
+      }
+
+      // Event Listeners
+      if (sliderA) sliderA.addEventListener('input', renderSpectral);
+      if (sliderB) sliderB.addEventListener('input', renderSpectral);
+      if (sliderC) sliderC.addEventListener('input', renderSvd);
+      if (btnToggle) {
+        btnToggle.addEventListener('click', () => {
+          showSvdPairs = !showSvdPairs;
+          btnToggle.textContent = showSvdPairs ? '隐藏奇异向量对 (vᵢ → uᵢ)' : '显示奇异向量对 (vᵢ → uᵢ)';
+          renderSvd();
+        });
+      }
+
+      // Initial Render
+      renderSpectral();
+      renderSvd();
+
+      window.addEventListener('resize', () => {
+        renderSpectral();
+        renderSvd();
+      });
+    });
+  </script>
+
+</body>
+</html>

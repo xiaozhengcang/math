@@ -41,6 +41,7 @@ const KNOWLEDGE_NODES = [
     description: "神经网络参数更新与流形微分的代数基底。从一阶梯度的最速下降方向，到二阶 Hessian 矩阵描绘的能量曲面曲率，全面支撑反向传播算法与连续流模型的构建。",
     books: [
       { title: "高等数学 (第八版·全两册 数字化重构教材)", author: "同济大学数学系 编" },
+      { title: "数学分析 (第三版·全两册 数字化精校教材)", author: "陈纪修、於崇华、金路 编" },
       { title: "Principles of Mathematical Analysis", author: "Walter Rudin" },
       { title: "Vector Calculus, Linear Algebra, and Differential Forms", author: "J. H. Hubbard" }
     ],
@@ -50,6 +51,7 @@ const KNOWLEDGE_NODES = [
     ],
     applications: "自动微分引擎（PyTorch/JAX 算子链式微分与 VJP/JVP 映射、神经流曲率剪枝、反向传播优化）",
     localLinks: [
+      { name: "📚 数字化教材: 数学分析 (陈纪修 第三版)", url: "TextBook-MathAnalysis/index.html" },
       { name: "📚 数字化教材: 高等数学 (第八版·全两册)", url: "TextBook-Advanced%20Mathematics/index.html" },
       { name: "N02 入门教程: 多元微积分与微分分析", url: "N02_MultivariableCalculus/index.html" },
       { name: "2D 变换与平面映射", url: "plane_translation.html" }

@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第四章 微分 - 数学分析（第三版）上册</title>
+  <link rel="stylesheet" href="../styles/book.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+<div class="book-layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-title">数学分析（第三版）上册</div>
+    <div class="sidebar-subtitle">陈纪修 於崇华 金路 著</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="../index.html" class="toc-link">← 返回全书目录</a></li>
+      <li class="toc-item">
+        <a href="#ch-top" class="toc-link active">第四章 微分</a>
+        <ul class="toc-sublist">
+          <li class="toc-item"><a href="#sec1" class="toc-link">§1 微分和导数</a>
+<ul class="toc-sublist">
+<li><a href="#sec1-1" class="toc-link">微分概念的导出背景</a></li>
+<li><a href="#sec1-2" class="toc-link">微分的定义</a></li>
+<li><a href="#sec1-3" class="toc-link">微分和导数</a></li>
+<li><a href="#ex4-1" class="toc-link">习题 4.1</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec2" class="toc-link">§2 导数的意义和性质</a>
+<ul class="toc-sublist">
+<li><a href="#sec2-1" class="toc-link">产生导数的实际背景</a></li>
+<li><a href="#sec2-2" class="toc-link">导数的几何意义</a></li>
+<li><a href="#sec2-3" class="toc-link">单侧导数</a></li>
+<li><a href="#ex4-2" class="toc-link">习题 4.2</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec3" class="toc-link">§3 导数四则运算和反函数求导法则</a>
+<ul class="toc-sublist">
+<li><a href="#sec3-1" class="toc-link">从定义出发求导函数</a></li>
+<li><a href="#sec3-2" class="toc-link">求导的四则运算法则</a></li>
+<li><a href="#sec3-3" class="toc-link">反函数求导法则</a></li>
+<li><a href="#ex4-3" class="toc-link">习题 4.3</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec4" class="toc-link">§4 复合函数求导法则及其应用</a>
+<ul class="toc-sublist">
+<li><a href="#sec4-1" class="toc-link">复合函数求导法则</a></li>
+<li><a href="#sec4-2" class="toc-link">一阶微分的形式不变性</a></li>
+<li><a href="#sec4-3" class="toc-link">隐函数求导与求微分</a></li>
+<li><a href="#sec4-4" class="toc-link">复合函数求导法则的其他应用</a></li>
+<li><a href="#ex4-4" class="toc-link">习题 4.4</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec5" class="toc-link">§5 高阶导数和高阶微分</a>
+<ul class="toc-sublist">
+<li><a href="#sec5-1" class="toc-link">高阶导数的实际背景及定义</a></li>
+<li><a href="#sec5-2" class="toc-link">高阶导数的运算法则</a></li>
+<li><a href="#sec5-3" class="toc-link">高阶微分</a></li>
+<li><a href="#ex4-5" class="toc-link">习题 4.5</a></li>
+</ul>
+</li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <header class="top-bar">
+      <nav class="top-nav">
+        <a href="../index.html">首页</a>
+        <a href="#ch-top">第四章 微分</a>
+      </nav>
+      <button class="theme-toggle-btn" id="themeToggleBtn">切换夜间模式</button>
+    </header>
+
+    <main class="content-container">
+      <h1 class="book-title" id="ch-top">第四章 微分</h1>
+      <h1 class="book-title" id="ch4">第四章 微分</h1>
+
+<div class="page-divider" data-page="原书第 100 页 [PDF P.119]" id="p100"></div>
+
+<section id="sec1">
+<h3 class="section-title">§1 微分和导数</h3>
+
+<h4 class="subsection-title" id="sec1-1">微分概念的导出背景</h4>
+
+<p>人们通常所说的"微积分"实际上包含了微分和积分两个部分，这一章我们先来谈谈微分.</p>
+
+<p>当一个函数的自变量有微小的改变时，它的因变量一般说来也会有一个相应的改变. 微分的原始思想在于去寻找一种方法，当因变量的改变也是很微小的时候，能够简便而又比较精确地估计出这个改变量.</p>
+
+<p>我们先来看一个简单的例子.</p>
+
+<p>维持物体围绕地球作永不着地（理论上）的飞行所需要的最低速度称为第一宇宙速度. 在中学里，利用计算向心加速度的办法已经求出这个速度约为 $7.9\,\mathrm{km/s}$，现在我们改用另一种思路去推导它.</p>
+
+<p>设卫星当前时刻在地球表面附近的 $A$ 点沿着水平方向飞行，假如没有外力影响的话，那么它在一秒钟后本应到达 $B$ 点. 但事实上它要受到地球的引力，因而实际到达的并非是 $B$ 点而是 $C$ 点，$BC = 4.9\,\mathrm{m}$ 是自由落体在重力加速度的作用下，第一秒中所走过的距离.</p>
+
+<p>容易看出，若卫星在沿地球的一个同心圆轨道运行，也就是作环绕地球的飞行，则 $C$ 点与地心 $O$ 的距离与 $A$ 点到 $O$ 的距离相等，由此可以推断出卫星每秒飞行距离至少为直线段 $AB$ 的长度，此即卫星应具有的最低速度. 由于 $\triangle AOB$ 是直角三角形，$OA$ 和 $OC$ 可近似地取为地球的平均半径 $6371\,\mathrm{km}$，也就是 $6\,371\,000\,\mathrm{m}$，于是由勾股定理得到</p>
+
+$$AB^2 = (6\,371\,000 + 4.9)^2 - (6\,371\,000)^2.$$
+
+<p>显然，按上式去计算 $AB^2$ 是不可取的——这将导致两个 $O(10^{13})$ 量级的数直接相减，工作量大且不说，在字长较短的计算机上还可能产生较大的误差.</p>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_1_1.svg" alt="图 4.1.1 卫星环绕地球飞行">
+<div class="figure-caption">图 4.1.1 卫星环绕地球飞行</div>
+</div>
+
+<div class="page-divider" data-page="原书第 101 页 [PDF P.120]" id="p101"></div>
+
+<p>利用乘法公式</p>
+
+$$a^2 - b^2 = (a + b)(a - b),$$
+
+<p class="no-indent">可将上式改写为</p>
+
+$$\begin{aligned}
+AB^2 &= (6\,371\,000 + 4.9 + 6\,371\,000)(6\,371\,000 + 4.9 - 6\,371\,000)\\
+&= 2 \times 6\,371\,000 \times 4.9 + 4.9^2.
+\end{aligned}$$
+
+<p>由于 $4.9^2$ 这一项与 $2 \times 6\,371\,000 \times 4.9$ 这一项相比可以忽略不计，于是可以把计算简化为</p>
+
+$$AB^2 \approx 2 \times 6\,371\,000 \times 4.9.$$
+
+<p>由此算出</p>
+
+$$AB \approx 7.9\,\mathrm{km}.$$
+
+<p>这就是说，卫星的速度至少要达到每秒 $7.9\,\mathrm{km}$ 才能维持其围绕地球的飞行，此即所要求的第一宇宙速度.</p>
+
+<p>上面所计算的 $AB^2$，实际上就是函数 $y = x^2$ 在 $x = 6\,371\,000$ 处，自变量出现了一个微小的改变量 $4.9$ 之后，函数值的相应改变量. 然而在计算过程中，我们并没有完全精确地去算</p>
+
+$$AB^2 = 2 \times 6\,371\,000 \times 4.9 + 4.9^2,$$
+
+<p>而是抛弃了最后那一项对整个计算结果而言可以忽略的量，得到了具有足够精度的计算值. 这样的思想方法和处理过程恰恰就是微分概念的应用.</p>
+
+<h4 class="subsection-title" id="sec1-2">微分的定义</h4>
+
+<p>下面我们来考察一般情况. 如图 4.1.2 所示，设</p>
+
+$$y = f(x)$$
+
+<p class="no-indent">是一个给定的函数，在点 $x$ 附近有定义. 若 $f(x)$ 的自变量在 $x$ 处产生了某个增量 $\Delta x$ 变成了 $x + \Delta x$（增量 $\Delta x$ 可正可负，但不为零），那么它的函数值也相应地产生了一个增量</p>
+
+$$\Delta y(x) = f(x + \Delta x) - f(x),$$
+
+<p>这里的增量 $\Delta x$ 和 $\Delta y(x)$ 分别称为自变量和因变量的<b>差分</b>.（在不会发生混淆的场合，或者是无需特别指明自变量的时候，我们一般就将 $\Delta y(x)$ 简单地记为 $\Delta y$.）</p>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_1_2.svg" alt="图 4.1.2 函数的增量与微分">
+<div class="figure-caption">图 4.1.2 函数的增量与微分</div>
+</div>
+
+<div class="definition-box">
+<span class="box-title">定义 4.1.1</span>
+对函数 $y = f(x)$ 定义域中的一点 $x_0$，若存在一个只与 $x_0$ 有关，而与 $\Delta x$ 无关的数 $g(x_0)$，使得当 $\Delta x \to 0$ 时恒成立关系式
+$$\Delta y = g(x_0)\Delta x + o(\Delta x),$$
+则称 $f(x)$ 在 $x_0$ 处的<b>微分存在</b>，或称 $f(x)$ 在 $x_0$ 处<b>可微</b>.
+</div>
+
+<p>若函数 $y = f(x)$ 在某一区间上的每一点都可微，则称 $f(x)$ 在该区间上<b>可微</b>.</p>
+
+<p>由定义 4.1.1 知道，若 $f(x)$ 在 $x$ 处是可微的，那么当 $\Delta x \to 0$ 时 $\Delta y$ 也是无穷小量，且当 $g(x) \ne 0$ 时，成立等价关系</p>
+
+$$\Delta y \sim g(x)\Delta x.$$
+
+<p>"$g(x)\Delta x$" 这一项也被称为 $\Delta y$ 的<b>线性主要部分</b>. 很明显，当 $|\Delta x|$ 充分小的时候，干脆就用 "$g(x)\Delta x$" 这一项来代替因变量的增量 $\Delta y$，所产生的偏差将是很微小的.</p>
+
+<p>于是，当 $f(x)$ 在 $x$ 处可微且 $\Delta x \to 0$ 时，我们将 $\Delta x$ 称为<b>自变量的微分</b>，记作 $\mathrm{d}x$，而将 $\Delta y$ 的线性主要部分 $g(x)\mathrm{d}x$（即 $g(x)\Delta x$）称为<b>因变量的微分</b>，记作 $\mathrm{d}y$ 或 $\mathrm{d}f(x)$，这样就有了以下的微分关系式</p>
+
+$$\mathrm{d}y = g(x)\mathrm{d}x.$$
+
+<div class="example-box">
+<span class="box-title">例 4.1.1</span>
+设 $y = f(x) = x^2$，对于在任意一点 $x \in (-\infty, +\infty)$ 处所产生的增量 $\Delta x$，有
+$$\Delta y = (x + \Delta x)^2 - x^2 = 2x\Delta x + \Delta x^2,$$
+由定义，函数 $y = x^2$ 在 $x$ 处是可微的，它的微分为
+$$\mathrm{d}y = \mathrm{d}(x^2) = 2x\mathrm{d}x,$$
+这正是我们前面用来求出第一宇宙速度所用的近似式.
+</div>
+
+<div class="page-divider" data-page="原书第 102 页 [PDF P.121]" id="p102"></div>
+
+<div class="example-box">
+<span class="box-title">例 4.1.2</span>
+设 $y = f(x) = \sqrt[3]{x^2}$，在 $x = 0$ 处，有
+$$\Delta y = f(\Delta x) - f(0) = \sqrt[3]{(\Delta x)^2},$$
+当 $\Delta x \to 0$ 时，$\sqrt[3]{(\Delta x)^2}$ 趋于 $0$ 的阶比 $\Delta x$ 的阶低，因而 $\Delta y$ 绝不可能表示成 $\Delta x$ 的线性项与高阶项的和. 由定义，函数 $y = \sqrt[3]{x^2}$ 在 $x = 0$ 处是不可微的.
+</div>
+
+<p>函数 $y = \sqrt[3]{x^2}$ 虽然不是 $(-\infty, +\infty)$ 上的可微函数，但它在 $(-\infty, 0)$ 和 $(0, +\infty)$ 上却都是可微的（留作习题）.</p>
+
+<p>需要注意的是，若函数 $f(x)$ 在 $x$ 处是可微的，那么当 $\Delta x \to 0$ 时必有 $\Delta y \to 0$，即 $f(x)$ 在 $x$ 处连续，所以我们有<b>可微必定连续</b>的结论. 但要注意该结论的逆命题不成立，如上例中的函数 $y = \sqrt[3]{x^2}$，它在 $x = 0$ 处显然连续，但我们已经知道它在这一点处不可微.</p>
+
+<h4 class="subsection-title" id="sec1-3">微分和导数</h4>
+
+<p>若 $f(x)$ 在 $x_0$ 处可微，则有关系式</p>
+
+$$\Delta y = g(x_0)\Delta x + o(\Delta x),$$
+
+<p>由于 $g(x_0)$ 与 $\Delta x$ 无关，即知 $g(x_0)$ 是当 $\Delta x \to 0$ 时，因变量的差分与自变量的差分之比 $\dfrac{\Delta y}{\Delta x}$（称为<b>差商</b>）的极限值.</p>
+
+<div class="definition-box">
+<span class="box-title">定义 4.1.2</span>
+若函数 $y = f(x)$ 在其定义域中的一点 $x_0$ 处极限
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}$$
+存在，则称 $f(x)$ 在 $x_0$ 处<b>可导</b>，并称这个极限值为 $f(x)$ 在 $x_0$ 处的<b>导数</b>，记为 $f'(x_0)$（或 $y'(x_0), \left.\dfrac{\mathrm{d}f}{\mathrm{d}x}\right|_{x=x_0}, \left.\dfrac{\mathrm{d}y}{\mathrm{d}x}\right|_{x=x_0}$）.
+</div>
+
+<p>若函数 $y = f(x)$ 在某一区间上的每一点都可导，则称 $f(x)$ 在该区间上<b>可导</b>.</p>
+
+<p>显然，$f(x)$ 在 $x_0$ 处的导数还有如下的等价定义</p>
+
+$$f'(x_0) = \lim_{x \to x_0}\frac{f(x) - f(x_0)}{x - x_0}.$$
+
+<p>函数 $f(x)$ 的所有可导点的集合是 $f(x)$ 定义域的子集，定义 4.1.2 中的导数值 $f'(x)$ 可看成定义在这一子集上的一个新的函数，我们将它称为函数 $f(x)$ 的<b>导函数</b>，记为 $f'(x)$（或 $y'(x), \dfrac{\mathrm{d}f}{\mathrm{d}x}, \dfrac{\mathrm{d}y}{\mathrm{d}x}$），导函数一般就简称为导数.</p>
+
+<p>由上面的讨论可以知道，若 $f(x)$ 在 $x$ 处可微，则它必定在 $x$ 处可导，而前面所述的函数 $g(x)$ 不是别的，正是它在这一点的导数值 $f'(x)$. 于是，差分的无穷小量关系式和微分关系式分别成为</p>
+
+$$\Delta y = f'(x)\Delta x + o(\Delta x)$$
+
+<p>和</p>
+
+$$\mathrm{d}y = f'(x)\mathrm{d}x.$$
+
+<p>因此，导数也可以看成是函数在可微的情况下，因变量的微分与自变量的微分之比，所以导数又被称为"微商". 这样，$\dfrac{\mathrm{d}y}{\mathrm{d}x}$ 既可以看成是一个完整的记号，也可以看成是微分之间的一种除法运算——这种观点有助于更深刻地理解微分和导数的本质及其相互关系.</p>
+
+<div class="page-divider" data-page="原书第 103 页 [PDF P.122]" id="p103"></div>
+
+<p>反过来，$f(x)$ 在 $x$ 处可导也足以保证它在 $x$ 处可微. 由定义 4.1.2，这时存在极限</p>
+
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = f'(x),$$
+
+<p>即</p>
+
+$$\lim_{\Delta x \to 0}\left[\frac{\Delta y}{\Delta x} - f'(x)\right] = 0.$$
+
+<p>由无穷小量的定义，有</p>
+
+$$\frac{\Delta y}{\Delta x} - f'(x) = o(1),$$
+
+<p>也就是</p>
+
+$$\Delta y - f'(x)\Delta x = o(1)\Delta x = o(\Delta x),$$
+
+<p>由定义 4.1.1，$f(x)$ 在 $x$ 处可微.</p>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.1.1</span>
+函数 $y = f(x)$ 在 $x$ 处可微的充分必要条件是它在 $x$ 处可导.
+</div>
+
+<p>定理 4.1.1 告诉我们，对一元函数来说，它在任一点的可微性与可导性是等价的. 因此，一元函数的微分与导数总是形影相随，是密切难分的"孪生兄弟".</p>
+
+<section id="ex4-1" class="exercise-container">
+<h3>习 题</h3>
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">1.</span>
+半径为 $1\,\mathrm{cm}$ 的铁球表面要镀一层厚度为 $0.01\,\mathrm{cm}$ 的铜，试用求微分的方法算出每只球需要用铜多少克？（铜的密度为 $8.9\,\mathrm{g/cm^3}$.）
+</li>
+<li class="exercise-item">
+<span class="exercise-number">2.</span>
+用定义证明：函数 $y = \sqrt[3]{x^2}$ 在它的整个定义域中，除了 $x = 0$ 这一点之外都是可微的.
+</li>
+</ul>
+</section>
+</section>
+<section id="sec2">
+<h3 class="section-title">§2 导数的意义和性质</h3>
+
+<h4 class="subsection-title" id="sec2-1">产生导数的实际背景</h4>
+
+<div class="page-divider" data-page="原书第 104 页 [PDF P.123]" id="p104"></div>
+
+<p>从数学的发展历史来看，导数是伴随着微分的诞生而顺理成章地产生的，也就是说，人们先是有了微分的概念，随后才发现，对于处理微分问题来说，像</p>
+
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}$$
+
+<p class="no-indent">这么一种特定形式的极限，即导数，是一个有力的工具.</p>
+
+<p>说导数是处理微分问题的有力工具，是因为一方面从微分形式</p>
+
+$$\mathrm{d}y = f'(x)\mathrm{d}x$$
+
+<p class="no-indent">来看，函数在任一点处的微分事实上都必须通过函数在这一点的导数来表达和计算；另一方面，在比较复杂的情况下（比如以后会学到的高阶微分和高阶导数，以及多元函数的微分和导数等），无论是形式地思考还是实际地处理问题，由导数入手都要比由微分入手更容易和简洁一些. 以后，人们进一步认识到，导数有它本身的意义，在数学研究及其实际应用方面都扮演着重要的角色.</p>
+
+<p>微积分的发明人之一——Newton 最早用导数研究的是如何确定力学中运动物体的瞬时速度问题.</p>
+
+<p>设一个运动物体在时刻 $t$ 的位移可以用函数 $s = s(t)$ 来描述，那么如何来求出它在这一时刻的速度呢？</p>
+
+<p>因为它在时间段 $[t, t + \Delta t]$ 中位移的改变量为 $\Delta s = s(t + \Delta t) - s(t)$，所以当 $\Delta t$ 很小的时候，它在时刻 $t$ 的瞬时速度可以近似地用它在 $[t, t + \Delta t]$ 中的平均速度</p>
+
+$$\bar{v}(t) = \frac{\Delta s}{\Delta t} = \frac{s(t + \Delta t) - s(t)}{\Delta t}$$
+
+<p class="no-indent">来代替. 但是，对于任意给定的 $\Delta t > 0$，这么算出的都只是平均速度而不是瞬时速度，真正的瞬时速度显然是当 $\Delta t \to 0$ 时 $\bar{v}(t)$ 的极限值，即</p>
+
+$$v(t) = \lim_{\Delta t \to 0}\frac{\Delta s}{\Delta t} = \lim_{\Delta t \to 0}\frac{s(t + \Delta t) - s(t)}{\Delta t}.$$
+
+<p class="no-indent">于是</p>
+
+<div class="page-divider" data-page="原书第 105 页 [PDF P.124]" id="p105"></div>
+
+$$v(t) = s'(t),$$
+
+<p class="no-indent">也即运动物体的速度是它的位移函数的导数.</p>
+
+<p>我们可以将"速度"这个概念加以推广——凡是牵涉某个量的变化快慢的，诸如物理学中的光热磁电的各种传导率、化学中的反应速率、经济学中的资金流动速率、人口学中的人口增长速率，等等，统统都可以看成是广义的"速度"，因而都可以用导数来表达. 换句话说，导数实际上是因变量关于自变量的变化率.</p>
+
+<p>比如，设函数 $p = p(t)$ 表示某个地区在时刻 $t$ 的人口数量，那么在时刻 $t + \Delta t$ 的人口数量就是 $p(t + \Delta t)$ 了，因此这个地区在从 $t$ 到 $t + \Delta t$ 的时段中，增加的人口数应为</p>
+
+$$\Delta p = p(t + \Delta t) - p(t).$$
+
+<p>将单位时间中的人口增长数称为人口的增长速率，于是在 $[t, t + \Delta t]$ 时段中，该地区的人口平均增长速率为</p>
+
+$$\frac{\Delta p}{\Delta t} = \frac{p(t + \Delta t) - p(t)}{\Delta t},$$
+
+<p>当 $\Delta t \to 0$ 时，便求得了该地区在时刻 $t$ 的人口增长速率为</p>
+
+$$p'(t) = \lim_{\Delta t \to 0}\frac{\Delta p}{\Delta t} = \lim_{\Delta t \to 0}\frac{p(t + \Delta t) - p(t)}{\Delta t},$$
+
+<p class="no-indent">即人口增长速率是人口数量函数的导数.</p>
+
+<h4 class="subsection-title" id="sec2-2">导数的几何意义</h4>
+
+<p>导数研究的另一重大动力来自于数学本身——如何求出一条给定的曲线在曲线上某一点处的切线？</p>
+
+<p>这个问题的起源可以追溯到古希腊时代对圆锥曲线的切线的研究. 到了 17 世纪前叶，在法国数学家 Descartes 和 Fermat 分别独立完成了解析几何的发明之后，它便转化成了如何确定方程为 $y = f(x)$ 的曲线在某一点处的切线斜率问题.</p>
+
+<p>Descartes 和 Fermat 本人以及英国的数学和物理学家 Barrow（Newton 的老师）都对这一问题进行过深入的研究并取得一定的成果，而最终对此找到了系统而行之有效的分析方法的是微积分的另一位发明人、德国数学家 Leibniz.</p>
+
+<p>我们首先来定义什么是切线.</p>
+
+<p>在中学的解析几何里，我们学过圆和椭圆的切线（如图 4.2.1）. 那时的定义是：若一条直线与圆（椭圆）只相交于一点，那么称这条直线为该圆（椭圆）的切线. 但是要将这个定义运用到一般的曲线上去是不行的. 例如，对任意常数 $a$，直线 $x = a$ 与抛物线 $y = x^2$ 只有一个交点（如图 4.2.2），但它显然不是切线.</p>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_1.svg" alt="图 4.2.1 圆的切线">
+<div class="figure-caption">图 4.2.1 圆的切线</div>
+</div>
+
+<p>设 $y = f(x)$ 是平面上的一条光滑的连续曲线，$(x, f(x))$ 是曲线上的一个定点，而 $(x + \Delta x, f(x + \Delta x))$ 是曲线上的一个动点（一般假定它就在点 $(x, f(x))$ 的附近）. 显然，过 $(x, f(x))$ 和 $(x + \Delta x, f(x + \Delta x))$ 两点可以惟一确定曲线的一条过点 $(x, f(x))$ 的<b>割线</b>，并且，当点 $(x + \Delta x, f(x + \Delta x))$ 在曲线上移动时将引起割线位置的不断变化. 曲线的切线的严格定义应该是这样的：如果在点 $(x + \Delta x, f(x + \Delta x))$ 沿着曲线无限趋近于点 $(x, f(x))$（即 $\Delta x \to 0$）时，这些变化的割线存在着惟一的极限位置，则处于这个极限位置的直线就被称为曲线 $y = f(x)$ 在点 $(x, f(x))$ 处的<b>切线</b>（如图 4.2.3）.</p>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_2.svg" alt="图 4.2.2 直线与抛物线的交点">
+<div class="figure-caption">图 4.2.2 直线与抛物线的交点</div>
+</div>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_3.svg" alt="图 4.2.3 曲线的割线与切线">
+<div class="figure-caption">图 4.2.3 曲线的割线与切线</div>
+</div>
+
+<p>设过点 $(x, f(x))$ 的切线已经作出，我们来求它的斜率. 从图中可以看出，割线的斜率为</p>
+
+$$\frac{\Delta y}{\Delta x} = \frac{f(x + \Delta x) - f(x)}{\Delta x},$$
+
+<p>随着 $\Delta x$ 越来越接近于 $0$，$\dfrac{\Delta y}{\Delta x}$ 也就越来越接近切线的斜率. 因此，过点 $(x, f(x))$ 的切线斜率就是极限</p>
+
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}$$
+
+<p class="no-indent">的值，即 $f(x)$ 在 $x$ 处的导数值 $f'(x)$——这就是导数的几何意义.</p>
+
+<p>由此进一步可得，曲线 $y = f(x)$ 在点 $P_0(x_0, f(x_0))$ 处的切线方程是</p>
+
+$$y - f(x_0) = f'(x_0)(x - x_0).$$
+
+<p>过 $P_0$ 点且与切线垂直的直线称为曲线 $y = f(x)$ 在点 $P_0$ 处的<b>法线</b>，于是当 $f'(x_0) \ne 0$ 时，在点 $P_0$ 处的法线方程是</p>
+
+$$y - f(x_0) = -\frac{1}{f'(x_0)}(x - x_0).$$
+
+<p>Leibniz 的巨大贡献之一，就是发现了曲线的切线斜率与函数的导数之间的联系，同时得到了计算导数的一般方法. 从这个意义上来说，对任意一个能够写出表达式的函数，求它的曲线在任意一点处（只要在该点的切线存在）的切线方程问题已经迎刃而解了.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.2.1</span>
+求抛物线 $y^2 = 2px\,(p > 0)$ 上任意一点 $(x_0, y_0)$ 处的切线斜率.
+<div class="proof">
+<span class="proof-title">解</span>
+设 $(x_0, y_0)$ 属于上半平面（属于下半平面时是类似的），将方程改写成
+$$y = f(x) = \sqrt{2px}\quad (x \ge 0),$$
+则它在 $(x_0, y_0)$ 处的切线斜率应为
+$$\lim_{\Delta x \to 0}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x} = \lim_{\Delta x \to 0}\frac{\sqrt{2p(x_0 + \Delta x)} - \sqrt{2px_0}}{\Delta x}$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 106 页 [PDF P.125]" id="p106"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">$$= \sqrt{2p}\lim_{\Delta x \to 0}\frac{\Delta x}{(\sqrt{x_0 + \Delta x} + \sqrt{x_0}) \cdot \Delta x} = \frac{\sqrt{p}}{\sqrt{2x_0}},$$</p>
+<p class="no-indent">由此很容易求得它在任意一点处的切线方程.</p>
+<p>从这个结论出发可以得到抛物线的一个重要的光学性质.</p>
+<p>记抛物线的方程为 $y^2 = 2px\,(p > 0)$，如图 4.2.4，设它在点 $(x_0, y_0)$ 处的切线与 $x$ 轴的夹角为 $\theta_1$，由于 $y_0 = \sqrt{2px_0}$，该切线的斜率可以写成</p>
+$$\tan\theta_1 = \frac{\sqrt{p}}{\sqrt{2x_0}} = \frac{p}{y_0},$$
+<p>再记点 $(x_0, y_0)$ 与抛物线的焦点 $\left(\dfrac{p}{2}, 0\right)$ 的连线与 $x$ 轴的夹角为 $\theta_2$，该连线与抛物线在点 $(x_0, y_0)$ 处的切线的夹角为 $\theta$，则有</p>
+$$\tan\theta_2 = \frac{y_0}{x_0 - \dfrac{p}{2}},$$
+<p>于是</p>
+$$\tan\theta = \frac{\tan\theta_2 - \tan\theta_1}{1 + \tan\theta_2 \cdot \tan\theta_1} = \frac{\dfrac{y_0}{x_0 - \dfrac{p}{2}} - \dfrac{p}{y_0}}{1 + \dfrac{y_0}{x_0 - \dfrac{p}{2}} \cdot \dfrac{p}{y_0}} = \frac{p}{y_0} = \tan\theta_1,$$
+<p class="no-indent">即 $\theta$ 恰好等于切线与 $x$ 轴的夹角 $\theta_1$.</p>
+</div>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_4.svg" alt="图 4.2.4 抛物线的光学性质">
+<div class="figure-caption">图 4.2.4 抛物线的光学性质</div>
+</div>
+
+<p>根据光的反射定律，入射角（入射光线与反射面的法线的夹角）等于反射角（反射光线与反射面的法线的夹角），可知任意一束从抛物线焦点处出发的光线，经抛物线的反射，反射光线与抛物线的对称轴平行. 根据这一原理，将抛物线绕它的对称轴旋转，得到一个旋转抛物面，于是，放在焦点处的点光源发出的光线，经过旋转抛物面反射后，成为一束平行于对称轴的光线射出；反过来，由于光路的可逆性，平行于旋转抛物面对称轴的入射光线，经过旋转抛物面的反射，汇聚于它的焦点上. 探照灯、伞形太阳灶、抛物面天线等都是这一原理实际应用的例子.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.2.2</span>
+求椭圆 $\dfrac{x^2}{a^2} + \dfrac{y^2}{b^2} = 1\,(a, b > 0)$ 上任一点 $(x_0, y_0)$ 处的切线方程.
+<div class="proof">
+<span class="proof-title">解</span>
+设 $(x_0, y_0)$ 属于上半平面（属于下半平面时是类似的），将此区域中的椭圆方程改写成
+$$y = f(x) = \frac{b}{a}\sqrt{a^2 - x^2}\quad (-a < x < a),$$
+则它在 $(x_0, y_0)$ 处的切线斜率应为
+$$\lim_{\Delta x \to 0}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x} = \frac{b}{a}\lim_{\Delta x \to 0}\frac{\sqrt{a^2 - (x_0 + \Delta x)^2} - \sqrt{a^2 - x_0^2}}{\Delta x}$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 107 页 [PDF P.126]" id="p107"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">$$= \frac{b}{a}\lim_{\Delta x \to 0}\frac{x_0^2 - (x_0 + \Delta x)^2}{(\sqrt{a^2 - (x_0 + \Delta x)^2} + \sqrt{a^2 - x_0^2}) \cdot \Delta x} = \frac{b}{a}\frac{-x_0}{\sqrt{a^2 - x_0^2}}.$$</p>
+<p class="no-indent">于是它在 $(x_0, y_0)$ 处的切线方程为</p>
+$$y - y_0 = \frac{b}{a}\frac{-x_0}{\sqrt{a^2 - x_0^2}}(x - x_0),$$
+<p>注意到 $(x_0, y_0)$ 位于椭圆上，即满足</p>
+$$y_0 = \frac{b}{a}\sqrt{a^2 - x_0^2},$$
+<p>两边整理后便得到切线方程</p>
+$$\frac{x_0 \cdot x}{a^2} + \frac{y_0 \cdot y}{b^2} = 1,$$
+<p class="no-indent">这正是我们在平面解析几何中已知的结论.</p>
+<p>用与例 4.2.1 类似的方法可以证明椭圆的一个光学性质：从椭圆的一个焦点发出的任意一束光线，经椭圆反射后，反射光线必定经过它的另一个焦点（如图 4.2.5）（留作习题）.</p>
+</div>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_5.svg" alt="图 4.2.5 椭圆的光学性质">
+<div class="figure-caption">图 4.2.5 椭圆的光学性质</div>
+</div>
+
+<p>利用导数的几何意义以及导数和微分的关系很容易给出微分的几何意义：它是用底边为 $\mathrm{d}x$、底角为 $\arctan f'(x)$ 的直角三角形的高 $\mathrm{d}y = f'(x)\mathrm{d}x$ 来近似代替 $\Delta y = f(x + \Delta x) - f(x)$（如图 4.2.6），其误差是 $\mathrm{d}x$ 的高阶无穷小量.</p>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_6.svg" alt="图 4.2.6 微分的几何意义">
+<div class="figure-caption">图 4.2.6 微分的几何意义</div>
+</div>
+
+</section>
+<section id="sec2-cont2" class="continued">
+
+<h4 class="subsection-title" id="sec2-3">单侧导数</h4>
+
+<div class="page-divider" data-page="原书第 108 页 [PDF P.127]" id="p108"></div>
+
+<p>由于</p>
+
+$$f'(x_0) = \lim_{\Delta x \to 0}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x},$$
+
+<p>由极限存在的定义，函数 $f(x)$ 在 $x_0$ 处可导的充分必要条件是相应的左极限</p>
+
+$$f'_-(x_0) = \lim_{\Delta x \to 0-}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}$$
+
+<p>和右极限</p>
+
+$$f'_+(x_0) = \lim_{\Delta x \to 0+}\frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}$$
+
+<p>存在并且相等，我们把它们分别称为 $f(x)$ 在 $x_0$ 处的<b>左导数</b>和<b>右导数</b>. 换句话说，若 $f(x)$ 在 $x_0$ 处的左右导数中至少有一个不存在，或是左右导数都存在但不相等的话，$f(x)$ 在 $x_0$ 处就是不可导的.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.2.3</span>
+考察函数 $f(x) = |x|$ 在 $x = 0$ 处的可导情况.
+<div class="proof">
+<span class="proof-title">解</span>
+如图 4.2.7，当 $x < 0$，$f(x) = |x| = -x$，所以 $f(x)$ 在 $x = 0$ 处的左导数为
+$$f'_-(0) = \lim_{\Delta x \to 0-}\frac{-\Delta x}{\Delta x} = -1.$$
+而当 $x > 0$，$f(x) = |x| = x$，所以 $f(x)$ 在 $x = 0$ 处的右导数为
+$$f'_+(0) = \lim_{\Delta x \to 0+}\frac{\Delta x}{\Delta x} = 1.$$
+因此 $f(x) = |x|$ 在 $x = 0$ 处的左右导数都存在但不相等，由定义，它在 $x = 0$ 处不可导.
+</div>
+</div>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_2_7.svg" alt="图 4.2.7 函数 y=|x| 的图像">
+<div class="figure-caption">图 4.2.7 函数 $y = |x|$ 的图像</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.2.4</span>
+考察函数
+$$f(x) = \begin{cases}x\sin\dfrac{1}{x}, & x > 0,\\ 0, & x \le 0\end{cases}$$
+在 $x = 0$ 处的可导情况.
+<div class="proof">
+<span class="proof-title">解</span>
+当 $\Delta x < 0$ 时，$f(\Delta x) = 0$，显然有
+$$f'_-(0) = \lim_{\Delta x \to 0-}\frac{f(\Delta x) - f(0)}{\Delta x} = 0,$$
+而当 $\Delta x > 0$ 时，
+$$\frac{f(\Delta x) - f(0)}{\Delta x} = \frac{\Delta x \cdot \sin\dfrac{1}{\Delta x}}{\Delta x} = \sin\frac{1}{\Delta x},$$
+当 $\Delta x \to 0+$ 时，上式的极限不存在，即函数在 $x = 0$ 处的右导数不存在，由定义，它在这一点点不可导.
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.2.5</span>
+设函数
+$$f(x) = \begin{cases}x^2 + b, & x > 2,\\ ax + 1, & x \le 2,\end{cases}$$
+确定 $a, b$，使得 $f(x)$ 在 $x = 2$ 处可导.
+<div class="proof">
+<span class="proof-title">解</span>
+要使 $f(x)$ 在 $x = 2$ 处可导，首先它必须在 $x = 2$ 处连续. 因此
+$$\lim_{x \to 2+}f(x) = \lim_{x \to 2-}(x^2 + b) = f(2),$$
+即
+$$4 + b = 2a + 1.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 109 页 [PDF P.128]" id="p109"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">要使 $f(x)$ 在 $x = 2$ 处可导，必须成立 $f'_-(2) = f'_+(2)$，由定义及上式，</p>
+$$f'_-(2) = \lim_{x \to 2-}\frac{f(x) - f(2)}{x - 2} = \lim_{x \to 2-}\frac{ax + 1 - (2a + 1)}{x - 2} = a;$$
+$$f'_+(2) = \lim_{x \to 2+}\frac{f(x) - f(2)}{x - 2} = \lim_{x \to 2+}\frac{x^2 + b - (4 + b)}{x - 2} = \lim_{x \to 2+}\frac{x^2 - 4}{x - 2} = 4.$$
+<p class="no-indent">因此 $a = 4$. 将 $a = 4$ 代入 $4 + b = 2a + 1$ 即得 $b = 5$. 这时 $f'(2) = 4$.</p>
+</div>
+
+<p>需要指出的是，对于在闭区间 $[a, b]$ 上定义的函数 $y = f(x)$，如果 $f(x)$ 在开区间 $(a, b)$ 可导，并且 $f(x)$ 在 $x = a$ 的右导数与在 $x = b$ 的左导数存在，则称 $f(x)$ 在闭区间 $[a, b]$ 可导. 如例 4.2.2 中的函数 $f(x) = \dfrac{b}{a}\sqrt{a^2 - x^2}$，当 $x = \pm a$ 时，相应的左右导数为 $f'_+(a) = -\infty$，$f'_-(-a) = +\infty$，我们称函数 $f(x) = \dfrac{b}{a}\sqrt{a^2 - x^2}$ 在 $x = a$ 的左导数与在 $x = -a$ 的右导数不存在，即 $f(x)$ 的可导区间为 $(-a, a)$. 但若将函数改为 $g(x) = \sqrt{(a^2 - x^2)^3}$，则容易验证 $g(x)$ 在闭区间 $[-a, a]$ 是可导的.</p>
+
+<p>另外请注意，虽然同样都是单侧导数不存在，但例 4.2.2 中的函数曲线（即上半椭圆）在 $x = \pm a$ 处的切线是存在的，只是切线的倾角是 $\dfrac{\pi}{2}$ 而已，而例 4.2.4 中的函数曲线在 $x = 0$ 处的右侧根本就没有切线存在. 因此，在讨论问题时应注意区分这两种不同的情况.</p>
+
+<div class="page-divider" data-page="原书第 110 页 [PDF P.129]" id="p110"></div>
+
+<section id="ex4-2" class="exercise-container">
+<h3>习 题</h3>
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">1.</span>
+设 $f'(x_0)$ 存在，求下列各式的值：
+<div class="exercise-subitem">(1) $\displaystyle\lim_{\Delta x \to 0}\frac{f(x_0 - \Delta x) - f(x_0)}{\Delta x}$；</div>
+<div class="exercise-subitem">(2) $\displaystyle\lim_{x \to x_0}\frac{f(x) - f(x_0)}{x - x_0}$；</div>
+<div class="exercise-subitem">(3) $\displaystyle\lim_{h \to 0}\frac{f(x_0 + h) - f(x_0 - h)}{h}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">2.</span>
+(1) 用定义求抛物线 $y = 2x^2 + 3x - 1$ 的导函数；
+<div class="exercise-subitem">(2) 求该抛物线上过点 $(-1, -2)$ 处的切线方程；</div>
+<div class="exercise-subitem">(3) 求该抛物线上过点 $(-2, 1)$ 处的法线方程；</div>
+<div class="exercise-subitem">(4) 问该抛物线上是否有点 $(a, b)$，过该点的切线与抛物线顶点与焦点的连线平行？</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">3.</span>
+设 $f(x)$ 为 $(-\infty, +\infty)$ 上的可导函数，且在 $x = 0$ 的某个邻域上成立
+$$f(1 + \sin x) - 3f(1 - \sin x) = 8x + \alpha(x),$$
+其中 $\alpha(x)$ 是当 $x \to 0$ 时比 $x$ 高阶的无穷小量. 求曲线 $y = f(x)$ 在 $(1, f(1))$ 处的切线方程.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">4.</span>
+证明：从椭圆的一个焦点发出的任一束光线，经椭圆反射后，反射光必定经过它的另一个焦点（如图 4.2.5）.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">5.</span>
+证明：双曲线 $xy = a^2$ 上任一点处的切线与两坐标轴构成的直角三角形的面积恒为 $2a^2$.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">6.</span>
+求函数在不可导点处的左导数和右导数.
+<div class="exercise-subitem">(1) $y = |\sin x|$；</div>
+<div class="exercise-subitem">(2) $y = \sqrt{1 - \cos x}$；</div>
+<div class="exercise-subitem">(3) $y = e^{-|x|}$；</div>
+<div class="exercise-subitem">(4) $y = |\ln(x + 1)|$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">7.</span>
+讨论下列函数在 $x = 0$ 处的可导性：
+<div class="exercise-subitem">(1) $y = \begin{cases}|x|^{1+\alpha}\sin\dfrac{1}{x}\,(\alpha > 0), & x \ne 0,\\ 0, & x = 0;\end{cases}$</div>
+<div class="exercise-subitem">(2) $y = \begin{cases}x^2, & x > 0,\\ ax + b, & x \le 0;\end{cases}$</div>
+<div class="exercise-subitem">(3) $y = \begin{cases}x e^x, & x > 0,\\ ax^2, & x \le 0;\end{cases}$</div>
+<div class="exercise-subitem">(4) $y = \begin{cases}e^{\frac{a}{x^2}}, & x \ne 0,\\ 0, & x = 0.\end{cases}$</div>
+</li>
+</ul>
+
+<div class="page-divider" data-page="原书第 111 页 [PDF P.130]" id="p111"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">8.</span>
+设 $f(x)$ 在 $x = 0$ 处可导，在什么情况下，$|f(x)|$ 在 $x = 0$ 处也可导？
+</li>
+<li class="exercise-item">
+<span class="exercise-number">9.</span>
+设 $f(x)$ 在 $[a, b]$ 上连续，$f(a) = f(b) = 0$，且 $f'_+(a) \cdot f'_-(b) > 0$，证明 $f(x)$ 在 $(a, b)$ 至少存在一个零点.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">10.</span>
+设 $f(x)$ 在有限区间 $(a, b)$ 内可导，
+<div class="exercise-subitem">(1) 若 $\displaystyle\lim_{x \to a+}f(x) = \infty$，那么能否断定也有 $\displaystyle\lim_{x \to a+}f'(x) = \infty$？</div>
+<div class="exercise-subitem">(2) 若 $\displaystyle\lim_{x \to a+}f'(x) = \infty$，那么能否断定也有 $\displaystyle\lim_{x \to a+}f(x) = \infty$？</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">11.</span>
+设函数 $f(x)$ 满足 $f(0) = 0$. 证明 $f(x)$ 在 $x = 0$ 处可导的充分必要条件是：存在在 $x = 0$ 处连续的函数 $g(x)$，使得 $f(x) = xg(x)$，且此时成立 $f'(0) = g(0)$.
+</li>
+</ul>
+</section>
+
+</section>
+
+<section id="sec3">
+<h3 class="section-title">§3 导数四则运算和反函数求导法则</h3>
+
+<h4 class="subsection-title" id="sec3-1">从定义出发求导函数</h4>
+
+<p>计算一个函数的导函数的运算称为对这个函数<b>求导</b>.</p>
+
+<p>一些简单函数可以直接通过导数的定义（即差商的极限形式）来求导，当然也可以直接使用微分的定义（即差分的等价无穷小量关系）来求导，下面我们来分别看几个例子.</p>
+
+<p>显然，常数函数 $y = C$ 的导数恒等于零.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.3.1</span>
+求 $y = \sin x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为
+$$\sin(x + \Delta x) - \sin x = 2\cos\left(x + \frac{\Delta x}{2}\right)\sin\frac{\Delta x}{2},$$
+由 $\cos x$ 的连续性与 $\sin\dfrac{\Delta x}{2} \sim \dfrac{\Delta x}{2}\,(\Delta x \to 0)$，可知
+$$\lim_{\Delta x \to 0}\frac{\sin(x + \Delta x) - \sin x}{\Delta x} = \lim_{\Delta x \to 0}\cos\left(x + \frac{\Delta x}{2}\right) \cdot \lim_{\Delta x \to 0}\frac{\sin\dfrac{\Delta x}{2}}{\dfrac{\Delta x}{2}} = \cos x,$$
+根据定义，即得
+$$(\sin x)' = \cos x.$$
+同理可得
+$$(\cos x)' = -\sin x.$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.2</span>
+求 $y = \ln x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为
+$$\ln(x + \Delta x) - \ln x = \ln\frac{x + \Delta x}{x} = \ln\left(1 + \frac{\Delta x}{x}\right),$$
+由 $\ln\left(1 + \dfrac{\Delta x}{x}\right) \sim \dfrac{\Delta x}{x}\,(\Delta x \to 0)$，可知
+$$\lim_{\Delta x \to 0}\frac{\ln(x + \Delta x) - \ln x}{\Delta x} = \frac{1}{x}\lim_{\Delta x \to 0}\frac{\ln\left(1 + \dfrac{\Delta x}{x}\right)}{\dfrac{\Delta x}{x}} = \frac{1}{x},$$
+根据定义，即有
+$$(\ln x)' = \frac{1}{x}.$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.3</span>
+求 $y = e^x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+利用等价关系式 $e^{\Delta x} - 1 \sim \Delta x\,(\Delta x \to 0)$，可得
+$$\lim_{\Delta x \to 0}\frac{e^{x + \Delta x} - e^x}{\Delta x} = e^x \cdot \lim_{\Delta x \to 0}\frac{e^{\Delta x} - 1}{\Delta x} = e^x,$$
+即有
+$$(e^x)' = e^x.$$
+</div>
+</div>
+
+<p>进一步，利用等价关系 $a^{\Delta x} - 1 \sim \Delta x \cdot \ln a\,(a > 0, a \ne 1)$，可以得到</p>
+
+$$(a^x)' = (\ln a)\,a^x.$$
+
+<p>由例 4.3.3，$y = e^x$ 的导函数恰为它的本身，这就是高等数学中讨论指数函数和对数函数时经常将底数取成 $e$ 的缘故. 以后我们会知道，若一个函数的导函数等于它本身，那么这个函数与 $y = e^x$ 至多相差一个常数因子，即它必为</p>
+
+$$y = Ce^x$$
+
+<p class="no-indent">的形式.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.3.4</span>
+求幂函数 $y = x^\alpha\,(x > 0)$ 的导函数，其中 $\alpha$ 为任意实数.
+<div class="proof">
+<span class="proof-title">解</span>
+利用等价关系 $\left(1 + \dfrac{\Delta x}{x}\right)^\alpha - 1 \sim \dfrac{\alpha\Delta x}{x}\,(\Delta x \to 0)$，有
+$$\lim_{\Delta x \to 0}\frac{(x + \Delta x)^\alpha - x^\alpha}{\Delta x} = \lim_{\Delta x \to 0}\frac{x^\alpha\left[\left(1 + \dfrac{\Delta x}{x}\right)^\alpha - 1\right]}{x \cdot \dfrac{\Delta x}{x}} = x^{\alpha - 1}\lim_{\Delta x \to 0}\frac{\left(1 + \dfrac{\Delta x}{x}\right)^\alpha - 1}{\dfrac{\Delta x}{x}} = \alpha x^{\alpha - 1},$$
+于是得到
+$$(x^\alpha)' = \alpha x^{\alpha - 1}.$$
+</div>
+</div>
+
+<p>注意，对于具体给定的实数 $\alpha$，幂函数 $y = x^\alpha$ 的定义域与可导范围可能扩大，例如：</p>
+
+<p>$y = x^n$（$n$ 为自然数）的定义域为 $(-\infty, +\infty)$，它的导函数为</p>
+
+$$y' = nx^{n - 1},\quad x \in (-\infty, +\infty);$$
+
+<p>$y = \dfrac{1}{x^n}$（$n$ 为自然数）的定义域为 $(-\infty, 0) \cup (0, +\infty)$，它的导函数为</p>
+
+$$y' = \frac{-n}{x^{n + 1}},\quad x \in (-\infty, 0) \cup (0, +\infty);$$
+
+<div class="page-divider" data-page="原书第 112 页 [PDF P.131]" id="p112"></div>
+
+<p>$y = x^{\frac{2}{3}}$ 的定义域为 $(-\infty, +\infty)$，它的导函数为</p>
+
+$$y' = \frac{2}{3\sqrt[3]{x}},\quad x \in (-\infty, 0) \cup (0, +\infty);$$
+
+<p>$y = x^{\frac{1}{2}}$ 的定义域为 $[0, +\infty)$，它的导函数为</p>
+
+$$y' = \frac{1}{2\sqrt{x}},\quad x \in (0, +\infty).$$
+
+</section>
+<section id="sec3-cont2" class="continued">
+
+<div class="page-divider" data-page="原书第 113 页 [PDF P.132]" id="p113"></div>
+
+<p>除了少数几个最简单的函数之外，可以直接用定义较方便地求出导数的函数实在是微乎其微，因而就有必要对一般的函数导出一系列的求导运算法则，主要包括四则运算法则、反函数求导法则和复合函数求导法则，本节中我们先讨论前两个问题.</p>
+
+<h4 class="subsection-title" id="sec3-2">求导的四则运算法则</h4>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.3.1</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，则对任意常数 $c_1$ 和 $c_2$，它们的线性组合 $c_1f(x) + c_2g(x)$ 也在该区间上可导，且满足如下的线性运算关系
+$$[c_1f(x) + c_2g(x)]' = c_1f'(x) + c_2g'(x).$$
+</div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+由 $f(x)$ 和 $g(x)$ 的可导性，根据导数的定义，可得
+$$\begin{aligned}
+[c_1f(x) + c_2g(x)]' &= \lim_{\Delta x \to 0}\frac{[c_1f(x + \Delta x) + c_2g(x + \Delta x)] - [c_1f(x) + c_2g(x)]}{\Delta x}\\
+&= c_1 \cdot \lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x} + c_2 \cdot \lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x}\\
+&= c_1f'(x) + c_2g'(x).
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div>
+
+<p>对于函数 $c_1f(x) + c_2g(x)$ 的微分，也有类似的结果：</p>
+
+$$\mathrm{d}[c_1f(x) + c_2g(x)] = c_1\mathrm{d}[f(x)] + c_2\mathrm{d}[g(x)].$$
+
+<p>因为 $\log_a x = \dfrac{\ln x}{\ln a}$，由定理 4.3.1 和前面得到的对数函数的导数公式，即有</p>
+
+$$(\log_a x)' = \frac{1}{\ln a}(\ln x)' = \frac{1}{x\ln a}.$$
+
+<div class="example-box">
+<span class="box-title">例 4.3.5</span>
+求 $y = 5\log_a x + 3\sqrt{x}$ 的导函数（$a > 0, a \ne 1$）.
+<div class="proof">
+<span class="proof-title">解</span>
+由定理 4.3.1 和前面得到的对数函数和幂函数的导数公式，即有
+$$y' = (5\log_a x + 3\sqrt{x})' = 5(\log_a x)' + 3(\sqrt{x})' = \frac{5}{x\ln a} + \frac{3}{2\sqrt{x}}.$$
+</div>
+</div>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.3.2</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，则它们的积函数也在该区间上可导，且满足
+$$[f(x) \cdot g(x)]' = f'(x)g(x) + f(x)g'(x);$$
+相应的微分表达式为
+$$\mathrm{d}[f(x) \cdot g(x)] = g(x)\mathrm{d}[f(x)] + f(x)\mathrm{d}[g(x)].$$
+</div>
+
+<div class="page-divider" data-page="原书第 114 页 [PDF P.133]" id="p114"></div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+因为
+$$\frac{f(x + \Delta x) \cdot g(x + \Delta x) - f(x) \cdot g(x)}{\Delta x}$$
+$$= \frac{[f(x + \Delta x) \cdot g(x + \Delta x) - f(x + \Delta x) \cdot g(x)] + [f(x + \Delta x) \cdot g(x) - f(x) \cdot g(x)]}{\Delta x}$$
+$$= f(x + \Delta x)\frac{g(x + \Delta x) - g(x)}{\Delta x} + g(x)\frac{f(x + \Delta x) - f(x)}{\Delta x},$$
+由 $f(x)$ 和 $g(x)$ 的可导性（显然 $f(x)$ 也具有连续性），即可得到
+$$\begin{aligned}
+[f(x) \cdot g(x)]' &= \lim_{\Delta x \to 0}\frac{f(x + \Delta x) \cdot g(x + \Delta x) - f(x) \cdot g(x)}{\Delta x}\\
+&= \lim_{\Delta x \to 0}f(x + \Delta x)\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x} + g(x)\lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}\\
+&= f'(x)g(x) + f(x)g'(x).
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.6</span>
+求 $y = 3^x\cos x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由定理 4.3.2，
+$$\begin{aligned}
+y' &= (3^x\cos x)' = (3^x)'\cos x + 3^x(\cos x)'\\
+&= \ln 3 \cdot (3^x) \cdot \cos x - 3^x\sin x = 3^x(\ln 3 \cdot \cos x - \sin x).
+\end{aligned}$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.7</span>
+求 $y = \dfrac{\sin x}{x}$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由定理 4.3.2，
+$$y' = \left(\frac{\sin x}{x}\right)' = (\sin x)'\frac{1}{x} + \sin x\left(\frac{1}{x}\right)' = \frac{1}{x}\cos x - \frac{1}{x^2}\sin x = \frac{x\cos x - \sin x}{x^2}.$$
+</div>
+</div>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.3.3</span>
+设 $g(x)$ 在某一区间上可导，且 $g(x) \ne 0$，则它的倒数也在该区间上可导，且满足
+$$\left[\frac{1}{g(x)}\right]' = -\frac{g'(x)}{[g(x)]^2};$$
+相应的微分表达式为
+$$\mathrm{d}\left[\frac{1}{g(x)}\right] = -\frac{1}{[g(x)]^2}\mathrm{d}[g(x)].$$
+</div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+记 $y = \dfrac{1}{g(x)}$，则有
+$$\begin{aligned}
+\left[\frac{1}{g(x)}\right]' &= \lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{\dfrac{1}{g(x + \Delta x)} - \dfrac{1}{g(x)}}{\Delta x} = \lim_{\Delta x \to 0}\frac{g(x) - g(x + \Delta x)}{g(x + \Delta x) \cdot g(x) \cdot \Delta x}\\
+&= \frac{-1}{g(x)}\left(\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x}\right)\left(\lim_{\Delta x \to 0}\frac{1}{g(x + \Delta x)}\right).
+\end{aligned}$$
+根据定理的条件，有
+$$\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x} = g'(x),\quad \lim_{\Delta x \to 0}g(x + \Delta x) = g(x) \ne 0,$$
+代入后即知定理结论成立.
+<span class="proof-qed">证毕</span>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.8</span>
+求 $y = \sec x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为 $\sec x = \dfrac{1}{\cos x}$，于是
+$$(\sec x)' = \left(\frac{1}{\cos x}\right)' = \frac{-(\cos x)'}{\cos^2 x} = \frac{\sin x}{\cos^2 x} = \tan x\sec x.$$
+同理可得
+$$(\csc x)' = -\cot x\csc x.$$
+</div>
+</div>
+
+<p>结合定理 4.3.2 和定理 4.3.3，即有如下推论：</p>
+
+<div class="theorem-box">
+<span class="box-title">推 论</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，且 $g(x) \ne 0$，则它们的商函数也在该区间上可导，且满足
+$$\left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2};$$
+这一结论的微分形式为
+$$\mathrm{d}\left[\frac{f(x)}{g(x)}\right] = \frac{g(x)\mathrm{d}[f(x)] - f(x)\mathrm{d}[g(x)]}{[g(x)]^2}.$$
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.9</span>
+求 $y = \tan x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为 $\tan x = \dfrac{\sin x}{\cos x}$，由上述推论，
+$$(\tan x)' = \left(\frac{\sin x}{\cos x}\right)' = \frac{(\sin x)'\cos x - \sin x(\cos x)'}{\cos^2 x} = \frac{\cos^2 x + \sin^2 x}{\cos^2 x} = \sec^2 x.$$
+同理可得
+$$(\cot x)' = -\csc^2 x.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 115 页 [PDF P.134]" id="p115"></div>
+
+<h4 class="subsection-title" id="sec3-3">反函数求导法则</h4>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.3.4（反函数求导定理）</span>
+若函数 $y = f(x)$ 在 $(a, b)$ 上连续、严格单调、可导并且 $f'(x) \ne 0$，记 $\alpha = \min(f(a+), f(b-))$，$\beta = \max(f(a+), f(b-))$，则它的反函数 $x = f^{-1}(y)$ 在 $(\alpha, \beta)$ 上可导，且有
+$$[f^{-1}(y)]' = \frac{1}{f'(x)}.$$
+</div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+因为函数 $y = f(x)$ 在 $(a, b)$ 上连续且严格单调，由反函数连续定理，它的反函数 $x = f^{-1}(y)$ 在 $(\alpha, \beta)$ 上存在、连续，且严格单调，这时 $\Delta y = f(x + \Delta x) - f(x) \ne 0$ 等价于 $\Delta x = f^{-1}(y + \Delta y) - f^{-1}(y) \ne 0$，并且当 $\Delta y \to 0$ 时有 $\Delta x \to 0$. 因此
+$$\begin{aligned}
+[f^{-1}(y)]' &= \lim_{\Delta y \to 0}\frac{f^{-1}(y + \Delta y) - f^{-1}(y)}{\Delta y} = \lim_{\Delta x \to 0}\frac{\Delta x}{f(x + \Delta x) - f(x)}\\
+&= \frac{1}{\displaystyle\lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}} = \frac{1}{f'(x)}.
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.10</span>
+求 $y = \arctan x$ 和 $y = \arcsin x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+容易验证 $x = \tan y$ 满足定理 4.3.4 的所有条件，将 $y = \arctan x$ 看成它的反函数，于是有
+$$(\arctan x)' = \frac{1}{(\tan y)'} = \frac{1}{\sec^2 y} = \frac{1}{1 + \tan^2 y} = \frac{1}{1 + x^2}.$$
+类似地，将 $y = \arcsin x$ 看成 $x = \sin y$ 的反函数，便可得到
+$$(\arcsin x)' = \frac{1}{(\sin y)'} = \frac{1}{\cos y} = \frac{1}{\sqrt{1 - \sin^2 y}} = \frac{1}{\sqrt{1 - x^2}}.$$
+</div>
+</div>
+
+</section>
+<section id="sec3-cont3" class="continued">
+
+<div class="page-divider" data-page="原书第 116 页 [PDF P.135]" id="p116"></div>
+
+<p>读者不难由同样途径得到</p>
+
+$$(\arccos x)' = -\frac{1}{\sqrt{1 - x^2}}$$
+
+<p>和</p>
+
+$$(\operatorname{arccot} x)' = -\frac{1}{1 + x^2}.$$
+
+<div class="example-box">
+<span class="box-title">例 4.3.11</span>
+求双曲函数及反双曲函数的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由于
+$$(e^{-x})' = \left(\frac{1}{e^x}\right)' = \frac{-(e^x)'}{(e^x)^2} = -\frac{e^x}{e^{2x}} = -e^{-x},$$
+于是
+$$(\operatorname{sh} x)' = \left(\frac{e^x - e^{-x}}{2}\right)' = \frac{e^x + e^{-x}}{2} = \operatorname{ch} x.$$
+同理可得
+$$(\operatorname{ch} x)' = \operatorname{sh} x.$$
+由于 $\operatorname{th} x = \dfrac{e^x - e^{-x}}{e^x + e^{-x}} = \dfrac{\operatorname{sh} x}{\operatorname{ch} x}$ 和 $\operatorname{cth} x = \dfrac{1}{\operatorname{th} x} = \dfrac{\operatorname{ch} x}{\operatorname{sh} x}$，利用定理 4.3.3 的推论，可以求得
+$$(\operatorname{th} x)' = \frac{1}{\operatorname{ch}^2 x} = \operatorname{sech}^2 x$$
+和
+$$(\operatorname{cth} x)' = -\frac{1}{\operatorname{sh}^2 x} = -\operatorname{csch}^2 x.$$
+反双曲函数的导函数可按反三角函数类似导出，如
+$$(\operatorname{sh}^{-1} x)' = \frac{1}{(\operatorname{sh} y)'} = \frac{1}{\operatorname{ch} y} = \frac{1}{\sqrt{1 + \operatorname{sh}^2 y}} = \frac{1}{\sqrt{1 + x^2}},$$
+这里利用了双曲函数的关系 $\operatorname{ch}^2 x - \operatorname{sh}^2 x = 1$.
+</div>
+</div>
+
+<p>作为习题，请读者自行导出其他反双曲函数的导函数</p>
+
+$$(\operatorname{ch}^{-1} x)' = \frac{1}{\sqrt{x^2 - 1}}$$
+
+<p>和</p>
+
+$$(\operatorname{th}^{-1} x)' = (\operatorname{cth}^{-1} x)' = \frac{1}{1 - x^2}.$$
+
+<p>将双曲函数（及其反函数）的导数与三角函数（及其反函数）的相应结果加以比较的话，就可以发现，不仅双曲函数本身间的函数关系与三角函数有类似之处，而且它们（乃至它们的反函数）的导函数也有颇为相像的相互关系.</p>
+
+<p>下面我们列出基本初等函数的导数和微分公式：</p>
+
+<div class="page-divider" data-page="原书第 117 页 [PDF P.136]" id="p117"></div>
+
+<table style="margin:1em auto; border-collapse:collapse; font-family:var(--font-serif);">
+<thead>
+<tr><th style="border-bottom:1px solid var(--border-color); padding:6px 16px;">导数公式</th><th style="border-bottom:1px solid var(--border-color); padding:6px 16px;">微分公式</th></tr>
+</thead>
+<tbody>
+<tr><td style="padding:4px 16px; text-align:left;">$(C)' = 0$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(C) = 0 \cdot \mathrm{d}x = 0$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(x^\alpha)' = \alpha x^{\alpha - 1}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(x^\alpha) = \alpha x^{\alpha - 1}\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\sin x)' = \cos x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\sin x) = \cos x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\cos x)' = -\sin x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\cos x) = -\sin x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\tan x)' = \sec^2 x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\tan x) = \sec^2 x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\cot x)' = -\csc^2 x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\cot x) = -\csc^2 x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\sec x)' = \tan x\sec x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\sec x) = \tan x\sec x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\csc x)' = -\cot x\csc x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\csc x) = -\cot x\csc x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\arcsin x)' = \dfrac{1}{\sqrt{1 - x^2}}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\arcsin x) = \dfrac{\mathrm{d}x}{\sqrt{1 - x^2}}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\arccos x)' = -\dfrac{1}{\sqrt{1 - x^2}}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\arccos x) = -\dfrac{\mathrm{d}x}{\sqrt{1 - x^2}}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\arctan x)' = \dfrac{1}{1 + x^2}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\arctan x) = \dfrac{\mathrm{d}x}{1 + x^2}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{arccot} x)' = -\dfrac{1}{1 + x^2}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{arccot} x) = -\dfrac{\mathrm{d}x}{1 + x^2}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(a^x)' = \ln a \cdot a^x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(a^x) = \ln a \cdot a^x\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left; padding-left:2em;">特别地 $(e^x)' = e^x$</td><td style="padding:4px 16px; text-align:left; padding-left:2em;">特别地 $\mathrm{d}(e^x) = e^x\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\log_a x)' = \dfrac{1}{\ln a} \cdot \dfrac{1}{x}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\log_a x) = \dfrac{1}{\ln a} \cdot \dfrac{\mathrm{d}x}{x}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left; padding-left:2em;">特别地 $(\ln x)' = \dfrac{1}{x}$</td><td style="padding:4px 16px; text-align:left; padding-left:2em;">特别地 $\mathrm{d}(\ln x) = \dfrac{\mathrm{d}x}{x}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{sh} x)' = \operatorname{ch} x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{sh} x) = \operatorname{ch} x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{ch} x)' = \operatorname{sh} x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{ch} x) = \operatorname{sh} x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{th} x)' = \operatorname{sech}^2 x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{th} x) = \operatorname{sech}^2 x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{cth} x)' = -\operatorname{csch}^2 x$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{cth} x) = -\operatorname{csch}^2 x\,\mathrm{d}x$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{sh}^{-1} x)' = \dfrac{1}{\sqrt{1 + x^2}}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{sh}^{-1} x) = \dfrac{\mathrm{d}x}{\sqrt{1 + x^2}}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{ch}^{-1} x)' = \dfrac{1}{\sqrt{x^2 - 1}}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{ch}^{-1} x) = \dfrac{\mathrm{d}x}{\sqrt{x^2 - 1}}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">$(\operatorname{th}^{-1} x)' = (\operatorname{cth}^{-1} x)' = \dfrac{1}{1 - x^2}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(\operatorname{th}^{-1} x) = \mathrm{d}(\operatorname{cth}^{-1} x) = \dfrac{\mathrm{d}x}{1 - x^2}$</td></tr>
+</tbody>
+</table>
+
+<div class="page-divider" data-page="原书第 118 页 [PDF P.137]" id="p118"></div>
+
+<p>从表中可以看出，所有基本初等函数的导函数都仍然是基本初等函数的有限次四则运算和复合，所以，在这些函数的定义域内，至多除去有限个点，它们不仅可导而且导函数连续.（这有限个点属于这些函数本身的定义域而不属于它们的导函数的定义域，如 $y = \sqrt[3]{x^2}$ 在整个 $(-\infty, +\infty)$ 上连续，但其导函数</p>
+
+$$y' = \frac{2}{3\sqrt[3]{x}}$$
+
+<p>在 $x = 0$ 处无定义，所以它的导数存在并连续的范围仅限于 $(-\infty, 0) \cup (0, +\infty)$.）</p>
+
+<p>定理 4.3.1 和定理 4.3.2 的结论可以推广到多个函数的情况：</p>
+
+<p>(1) 多个函数线性组合的导数</p>
+
+$$\left[\sum_{i=1}^{n}c_if_i(x)\right]' = \sum_{i=1}^{n}c_if_i'(x),$$
+
+<p>其中 $c_i\,(i = 1, 2, \dots, n)$ 为常数.</p>
+
+<p>(2) 多个函数乘积的导数</p>
+
+$$\left[\prod_{i=1}^{n}f_i(x)\right]' = \sum_{i=1}^{n}\left\{f_i'(x)\prod_{\substack{j=1\\j \ne i}}^{n}f_j(x)\right\}.$$
+
+<p>请读者利用数学归纳法自行证明这两个公式，下面我们分别举一个例子.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.3.12</span>
+求 $n$ 次多项式 $y = a_nx^n + a_{n-1}x^{n-1} + \dots + a_1x + a_0$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由多个函数线性组合的导数公式
+$$\begin{aligned}
+y' &= (a_nx^n + a_{n-1}x^{n-1} + \dots + a_1x + a_0)'\\
+&= (a_nx^n)' + (a_{n-1}x^{n-1})' + \dots + (a_1x)' + (a_0)'\\
+&= a_nnx^{n-1} + a_{n-1}(n-1)x^{n-2} + \dots + a_1,
+\end{aligned}$$
+也就是说，$n$ 次多项式的导函数是 $n - 1$ 次多项式.
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.3.13</span>
+求函数 $y = e^x(x^2 + 3x - 1)\arcsin x$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由多个函数乘积的导数公式
+$$\begin{aligned}
+y' &= [e^x(x^2 + 3x - 1)\arcsin x]'\\
+&= (e^x)'(x^2 + 3x - 1)\arcsin x + e^x(x^2 + 3x - 1)'\arcsin x + e^x(x^2 + 3x - 1)(\arcsin x)'\\
+&= e^x(x^2 + 3x - 1)\arcsin x + e^x(2x + 3)\arcsin x + e^x\frac{x^2 + 3x - 1}{\sqrt{1 - x^2}}\\
+&= e^x\left[(x^2 + 5x + 2)\arcsin x + \frac{x^2 + 3x - 1}{\sqrt{1 - x^2}}\right].
+\end{aligned}$$
+</div>
+</div>
+
+<section id="ex4-3" class="exercise-container">
+<h3>习 题</h3>
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">1.</span>
+用定义证明 $(\cos x)' = -\sin x$.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">2.</span>
+证明：
+<div class="exercise-subitem">(1) $(\csc x)' = -\cot x\csc x$；</div>
+<div class="exercise-subitem">(2) $(\cot x)' = -\csc^2 x$；</div>
+<div class="exercise-subitem">(3) $(\arccos x)' = -\dfrac{1}{\sqrt{1 - x^2}}$；</div>
+<div class="exercise-subitem">(4) $(\operatorname{arccot} x)' = -\dfrac{1}{1 + x^2}$；</div>
+<div class="exercise-subitem">(5) $(\operatorname{ch}^{-1} x)' = \dfrac{1}{\sqrt{x^2 - 1}}$；</div>
+<div class="exercise-subitem">(6) $(\operatorname{th}^{-1} x)' = (\operatorname{cth}^{-1} x)' = \dfrac{1}{1 - x^2}$.</div>
+</li>
+</ul>
+
+<div class="page-divider" data-page="原书第 119 页 [PDF P.138]" id="p119"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">3.</span>
+求下列函数的导函数：
+<div class="exercise-subitem">(1) $f(x) = 3\sin x + \ln x - \sqrt{x}$；</div>
+<div class="exercise-subitem">(2) $f(x) = x\cos x + x^2 + 3$；</div>
+<div class="exercise-subitem">(3) $f(x) = (x^2 + 7x - 5)\sin x$；</div>
+<div class="exercise-subitem">(4) $f(x) = x^2(3\tan x + 2\sec x)$；</div>
+<div class="exercise-subitem">(5) $f(x) = e^x\sin x - 4\cos x + \dfrac{3}{\sqrt{x}}$；</div>
+<div class="exercise-subitem">(6) $f(x) = \dfrac{2\sin x + x - 2^x}{\sqrt[3]{x^2}}$；</div>
+<div class="exercise-subitem">(7) $f(x) = \dfrac{1}{x + \cos x}$；</div>
+<div class="exercise-subitem">(8) $f(x) = \dfrac{x\sin x - 2\ln x}{\sqrt{x} + 1}$；</div>
+<div class="exercise-subitem">(9) $f(x) = \dfrac{x^2 + \cot x}{\ln x}$；</div>
+<div class="exercise-subitem">(10) $f(x) = \dfrac{x\sin x + \cos x}{x\sin x - \cos x}$；</div>
+<div class="exercise-subitem">(11) $f(x) = (e^x + \log_3 x)\arcsin x$；</div>
+<div class="exercise-subitem">(12) $f(x) = (\csc x - 3\ln x)x^2\operatorname{sh} x$；</div>
+<div class="exercise-subitem">(13) $f(x) = \dfrac{x + \sec x}{x - \csc x}$；</div>
+<div class="exercise-subitem">(14) $f(x) = \dfrac{x + \sin x}{\arctan x}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">4.</span>
+求曲线 $y = \ln x$ 在 $(e, 1)$ 处的切线方程和法线方程.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">5.</span>
+当 $a$ 取何值时，直线 $y = x$ 能与曲线 $y = \log_a x$ 相切，切点在哪里？
+</li>
+<li class="exercise-item">
+<span class="exercise-number">6.</span>
+求曲线 $y = x^n\,(n \in \mathbb{N}^*)$ 上过点 $(1, 1)$ 的切线与 $x$ 轴的交点的横坐标 $x_n$，并求出极限 $\displaystyle\lim_{n \to \infty}y(x_n)$.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">7.</span>
+对于抛物线 $y = ax^2 + bx + c$，设集合
+$$S_1 = \{(x, y)\,|\,\text{过 }(x, y)\text{ 可以作该抛物线的两条切线}\},$$
+$$S_2 = \{(x, y)\,|\,\text{过 }(x, y)\text{ 只可以作该抛物线的一条切线}\},$$
+$$S_3 = \{(x, y)\,|\,\text{过 }(x, y)\text{ 不能作该抛物线的切线}\},$$
+请分别求出这三个集合中的元素所满足的条件.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">8.</span>
+(1) 设 $f(x)$ 在 $x = x_0$ 处可导，$g(x)$ 在 $x = x_0$ 处不可导，证明 $c_1f(x) + c_2g(x)\,(c_2 \ne 0)$ 在 $x = x_0$ 处也不可导.
+<div class="exercise-subitem">(2) 设 $f(x)$ 与 $g(x)$ 在 $x = x_0$ 处都不可导，能否断定 $c_1f(x) + c_2g(x)$ 在 $x = x_0$ 处一定可导或一定不可导？</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">9.</span>
+在上题的条件下，讨论 $f(x)g(x)$ 在 $x = x_0$ 处的可导情况.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">10.</span>
+设 $f_{ij}(x)\,(i, j = 1, 2, \dots, n)$ 为同一区间上的可导函数，证明在该区间上成立
+$$\frac{\mathrm{d}}{\mathrm{d}x}\begin{vmatrix}
+f_{11}(x) & f_{12}(x) & \cdots & f_{1n}(x)\\
+f_{21}(x) & f_{22}(x) & \cdots & f_{2n}(x)\\
+\vdots & \vdots & & \vdots\\
+f_{n1}(x) & f_{n2}(x) & \cdots & f_{nn}(x)
+\end{vmatrix}
+= \sum_{k=1}^{n}\begin{vmatrix}
+f_{11}(x) & f_{12}(x) & \cdots & f_{1n}(x)\\
+\vdots & \vdots & & \vdots\\
+f'_{k1}(x) & f'_{k2}(x) & \cdots & f'_{kn}(x)\\
+\vdots & \vdots & & \vdots\\
+f_{n1}(x) & f_{n2}(x) & \cdots & f_{nn}(x)
+\end{vmatrix}.$$
+</li>
+</ul>
+</section>
+
+</section>
+
+<section id="sec4">
+<h3 class="section-title">§4 复合函数求导法则及其应用</h3>
+
+<h4 class="subsection-title" id="sec4-1">复合函数求导法则</h4>
+
+<p>对于复合函数的求导，我们有如下的结论.</p>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.4.1（复合函数求导法则）</span>
+设函数 $u = g(x)$ 在 $x = x_0$ 可导，而函数 $y = f(u)$ 在 $u = u_0 = g(x_0)$ 处可导，则复合函数 $y = f(g(x))$ 在 $x = x_0$ 可导，且有
+$$[f(g(x))]'_{x=x_0} = f'(u_0)g'(x_0) = f'(g(x_0))g'(x_0).$$
+</div>
+
+</section>
+<section id="sec4-cont2" class="continued">
+
+<div class="page-divider" data-page="原书第 120 页 [PDF P.139]" id="p120"></div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+因为 $y = f(u)$ 在 $u_0$ 处可导，所以可微. 由可微的定义，对任意一个充分小的 $\Delta u \ne 0$，都有
+$$f(u_0 + \Delta u) - f(u_0) = f'(u_0)\Delta u + \alpha\Delta u,$$
+其中 $\displaystyle\lim_{\Delta u \to 0}\alpha = 0$. 因为当 $\Delta u = 0$ 时 $\Delta y = 0$，不妨规定当 $\Delta u = 0$ 时 $\alpha = 0$，因而上式对 $\Delta u = 0$ 也成立.
+
+设 $\Delta u = g(x_0 + \Delta x) - g(x_0)\,(\Delta x \ne 0)$，在上式两边同时除以 $\Delta x$，则有
+$$\frac{f(g(x_0 + \Delta x)) - f(g(x_0))}{\Delta x} = f'(u_0)\frac{\Delta u}{\Delta x} + \alpha\frac{\Delta u}{\Delta x},$$
+由函数 $u = g(x)$ 在 $x = x_0$ 可导，即有 $\displaystyle\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} = g'(x_0)$，且此式也蕴含了 $\displaystyle\lim_{\Delta x \to 0}\Delta u = 0$. 注意到在 $\Delta x \to 0$ 的过程中，或者有 $\Delta u = 0$，这时有 $\alpha = 0$；或者有 $\Delta u \ne 0$，但 $\Delta u$ 趋于 $0$，因此由 $\displaystyle\lim_{\Delta u \to 0}\alpha = 0$，可知 $\displaystyle\lim_{\Delta x \to 0}\alpha = 0$. 于是令 $\Delta x \to 0$，得到
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \lim_{\Delta x \to 0}\frac{f(g(x_0 + \Delta x)) - f(g(x_0))}{\Delta x} = f'(u_0)\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} + \lim_{\Delta x \to 0}\alpha\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} = f'(u_0)g'(x_0).$$
+<span class="proof-qed">证毕</span>
+</div>
+
+<p>复合函数的求导规则可以写成</p>
+
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}u}{\mathrm{d}x}.$$
+
+<p class="no-indent">我们一般称它为<b>链式法则</b>.</p>
+
+<p>由导数与微分的关系，复合函数的微分公式为</p>
+
+$$\mathrm{d}[f(g(x))] = f'(u)g'(x)\mathrm{d}x.$$
+
+<div class="example-box">
+<span class="box-title">例 4.4.1</span>
+求幂函数 $y = x^\alpha\,(x > 0)$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+在例 4.3.4 我们已由定义求出了 $(x^\alpha)' = \alpha x^{\alpha - 1}$，现在我们改用复合函数的求导公式再来做一次.
+
+利用对数恒等式，把 $y = x^\alpha = e^{\alpha\ln x}$ 看成是由
+$$\begin{cases}y = e^u,\\ u = \alpha\ln x\end{cases}$$
+复合而成的函数，则由链式法则
+$$(x^\alpha)' = (e^u)' \cdot (\alpha\ln x)' = \left.(e^u)'\right|_{u = \alpha\ln x} \cdot \frac{\alpha}{x} = x^\alpha \cdot \frac{\alpha}{x} = \alpha x^{\alpha - 1}.$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.4.2</span>
+求 $y = e^{\cos x}$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+把 $y = e^{\cos x}$ 看成是由
+$$\begin{cases}y = e^u,\\ u = \cos x\end{cases}$$
+复合而成的函数，则由链式法则
+$$y' = (e^u)' \cdot (\cos x)' = \left.(e^u)'\right|_{u = \cos x} \cdot (-\sin x) = -e^{\cos x} \cdot \sin x.$$
+</div>
+</div>
+
+<p>对于函数 $y = e^{-x}$，令 $y = e^u, u = -x$，便可得到</p>
+
+$$\frac{\mathrm{d}}{\mathrm{d}x}(e^{-x}) = \frac{\mathrm{d}}{\mathrm{d}u}(e^u)\frac{\mathrm{d}u}{\mathrm{d}x} = \left.(e^u)'\right|_{u = -x} \cdot \frac{\mathrm{d}(-x)}{\mathrm{d}x} = -e^{-x}.$$
+
+<p>这就是例 4.3.11 中求双曲函数的导函数时所得过的结论.</p>
+
+<p>读者在运算熟练之后，就可以默记 $u$ 后直接求导，而不必写出 $u$ 关于 $x$ 的表达式，如</p>
+
+$$(\sqrt{1 + x^2})' = \frac{1}{2\sqrt{1 + x^2}} \cdot (1 + x^2)' = \frac{x}{\sqrt{1 + x^2}}.$$
+
+<p>关于复合函数的求导，我们指出以下几点：</p>
+
+<p>(1) 无论在理论分析还是解决实际问题中，遇到的函数一般都是复合函数，即便如最简单的正弦波</p>
+
+$$y = A\sin(\omega t + \varphi)$$
+
+<p class="no-indent">也是复合函数. 因此，复合函数的链式求导法则是最常用的求导工具之一.</p>
+
+<p>(2) 上述的链式法则可以推广到多重复合函数的情况：</p>
+
+$$\frac{\mathrm{d}}{\mathrm{d}x}(f_1(f_2(f_3(\cdots f_n(x)\cdots)))) = \frac{\mathrm{d}f_1}{\mathrm{d}f_2} \cdot \frac{\mathrm{d}f_2}{\mathrm{d}f_3} \cdot \cdots \cdot \frac{\mathrm{d}f_{n-1}}{\mathrm{d}f_n} \cdot \frac{\mathrm{d}f_n}{\mathrm{d}x},$$
+
+<p class="no-indent">读者可用数学归纳法自行证明.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.4.3</span>
+求函数 $y = e^{\sqrt{1 + \cos x}}$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+将 $y = y(x) = e^{\sqrt{1 + \cos x}}$ 看成是由
+$$\begin{cases}y = f(u) = e^u,\\ u = g(v) = \sqrt{v},\\ v = h(x) = 1 + \cos x\end{cases}$$
+复合而成的函数 $y(x) = f(g(h(x)))$，运用上面的公式，
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}f}{\mathrm{d}u} \cdot \frac{\mathrm{d}g}{\mathrm{d}v} \cdot \frac{\mathrm{d}h}{\mathrm{d}x} = e^u \cdot \frac{1}{2\sqrt{v}} \cdot (-\sin x) = -\frac{e^{\sqrt{1 + \cos x}} \cdot \sin x}{2\sqrt{1 + \cos x}}.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 121 页 [PDF P.140]" id="p121"></div>
+
+<p>(3) 形如</p>
+
+$$y = f(x) = u(x)^{v(x)}$$
+
+<p>的函数称为<b>幂指函数</b>，对于幂指函数的求导，常采用的方法叫<b>对数求导法</b>，计算时，先对两边取对数，令</p>
+
+$$z(x) = \ln y = v(x)\ln u(x),$$
+
+<p class="no-indent">再分别求导. 一方面，</p>
+
+$$z'(x) = [v(x)\ln u(x)]' = v'(x)\ln u(x) + v(x)\frac{u'(x)}{u(x)},$$
+
+<p>另一方面，将 $z(x) = \ln y$ 看作复合函数</p>
+
+$$\begin{cases}z = \ln y,\\ y = f(x),\end{cases}$$
+
+<p class="no-indent">则有</p>
+
+$$z'(x) = \frac{y'}{y}.$$
+
+<p>综合两式，就得到</p>
+
+$$y' = y\left[v'(x)\ln u(x) + v(x)\frac{u'(x)}{u(x)}\right] = u(x)^{v(x)}\left[v'(x)\ln u(x) + v(x)\frac{u'(x)}{u(x)}\right].$$
+
+<p>读者应掌握这个方法的思想并会实际应用，而不必死记上面的公式.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.4.4</span>
+求函数 $y = (\sin x)^{\cos x}$ 的导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+对等式两边取对数，
+$$\ln y = \cos x\ln\sin x,$$
+再分别求导
+$$(\ln y)' = (\cos x)'\ln\sin x + \cos x\frac{(\sin x)'}{\sin x},$$
+也即
+$$\frac{y'}{y} = -\sin x\ln\sin x + \cos x\frac{\cos x}{\sin x},$$
+于是求得
+$$y' = (\sin x)^{\cos x}\left(\frac{\cos^2 x}{\sin x} - \sin x\ln\sin x\right).$$
+</div>
+</div>
+
+<p>(4) 到目前为止我们所得到的全套的求导和求微分的运算规则（包括函数的四则运算、反函数、复合函数的求导和求微分公式）可以列表如下：</p>
+
+<table style="margin:1em auto; border-collapse:collapse; font-family:var(--font-serif);">
+<thead>
+<tr><th style="border-bottom:1px solid var(--border-color); padding:6px 16px;">导数运算法则</th><th style="border-bottom:1px solid var(--border-color); padding:6px 16px;">微分运算法则</th></tr>
+</thead>
+<tbody>
+<tr><td style="padding:4px 16px; text-align:left;">线性组合　$(c_1f + c_2g)' = c_1f' + c_2g'$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(c_1f + c_2g) = c_1\mathrm{d}f + c_2\mathrm{d}g$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">乘　法　$(f \cdot g)' = f'g + fg'$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}(f \cdot g) = g\mathrm{d}f + f\mathrm{d}g$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">除　法　$\left(\dfrac{f}{g}\right)' = \dfrac{f'g - fg'}{g^2}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}\left(\dfrac{f}{g}\right) = \dfrac{g\mathrm{d}f - f\mathrm{d}g}{g^2}$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">反函数　$[f^{-1}(y)]' = \dfrac{1}{f'(x)}$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}x = \dfrac{\mathrm{d}y}{f'(x)} = [f^{-1}(y)]'\mathrm{d}y$</td></tr>
+<tr><td style="padding:4px 16px; text-align:left;">复合函数　$[f(g(x))]' = f'(u)g'(x)$</td><td style="padding:4px 16px; text-align:left;">$\mathrm{d}[f(g(x))] = f'(u)g'(x)\mathrm{d}x$</td></tr>
+</tbody>
+</table>
+
+<p>由于初等函数是由基本初等函数经过有限次四则运算和复合的产物，有了 §3 中的基本初等函数的导函数表再加上这张表，初等函数的求导和求微分问题已经得到解决.</p>
+
+<h4 class="subsection-title" id="sec4-2">一阶微分的形式不变性</h4>
+
+<p>复合函数的微分公式为</p>
+
+$$\mathrm{d}[f(g(x))] = f'(u)g'(x)\mathrm{d}x,$$
+
+<p>由于 $\mathrm{d}u = g'(x)\mathrm{d}x$，代入上式就得到它的等价表示形式</p>
+
+$$\mathrm{d}[f(u)] = f'(u)\mathrm{d}u,$$
+
+<p>这里 $u = g(x)$ 是中间变量，$x$ 才是真正的自变量. 但我们发现，它与以 $u$ 为自变量的函数 $y = f(u)$ 的微分式</p>
+
+$$\mathrm{d}[f(u)] = f'(u)\mathrm{d}u$$
+
+<p class="no-indent">一模一样. 换句话说，不论 $u$ 是自变量还是中间变量，函数 $y = f(u)$ 的微分形式是相同的，这被称为"<b>一阶微分的形式不变性</b>".</p>
+
+<p>这是一阶微分的一个非常重要的性质，有了这个"形式不变性"作保证，我们拿到一个函数 $y = f(u)$ 之后，就可以按 $u$ 是自变量去求得它的微分 $f'(u)\mathrm{d}u$，而无须顾忌此时 $u$ 究竟真的是自变量，还是一个受自变量 $x$ 制约的中间变量.</p>
+
+<h4 class="subsection-title" id="sec4-3">隐函数求导与求微分</h4>
+
+<div class="page-divider" data-page="原书第 122 页 [PDF P.141]" id="p122"></div>
+
+<p>从第一章中已经知道，在满足一定的条件下（我们将在学习多元函数的微分学时再来详细探讨这些条件），方程</p>
+
+$$F(x, y) = 0$$
+
+<p class="no-indent">决定了一个 $y$ 关于 $x$ 的函数 $y = y(x)$，我们称它为<b>隐函数</b>. 有些隐函数可以通过某种方法解出 $y$ 关于 $x$ 的一般变化规律，化成显函数 $y = f(x)$ 形式（称为<b>隐函数的显化</b>），如椭圆的标准方程</p>
+
+$$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$$
+
+<p class="no-indent">确定了上下半平面上的两个显函数</p>
+
+$$y = \pm\frac{b}{a}\sqrt{a^2 - x^2}\quad (-a \le x \le a).$$
+
+<p>但是更多的是隐函数不能被显化的情况，如高次的二元代数方程</p>
+
+$$F(x, y) = y^5 + ax^2y^4 + bxy^2 + cxy + d = 0,$$
+
+<p>尽管由代数基本定理，对任意实数 $x$，至少存在一个实数 $y$ 使得 $F(x, y) = 0$，即 $F(x, y) = 0$ 至少决定了一个 $y$ 关于 $x$ 的隐函数，但由 Galois 理论，一般不能找到它的显函数形式.</p>
+
+<p>对于隐函数的求导与求微分问题，可以利用复合函数的求导法则或一阶微分的形式不变性来求得，而无须从隐函数解出显函数.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.4.5</span>
+求由方程 $e^{xy} + x^2y - 1 = 0$ 确定的隐函数 $y = y(x)$ 的导函数 $y'(x)$.
+<div class="proof">
+<span class="proof-title">解</span>
+对方程
+$$e^{xy} + x^2y - 1 = 0$$
+的两边关于 $x$ 求导，注意到 $y$ 是 $x$ 的函数，由复合函数的求导法则，
+$$(e^{xy} + x^2y - 1)' = (e^{xy})'(xy)' + (x^2y)' = e^{xy}(y + xy') + (2xy + x^2y') = 0,$$
+解出
+$$y' = -\frac{e^{xy}y + 2xy}{e^{xy}x + x^2} = -\frac{(e^{xy} + 2x)y}{(e^{xy} + x)x}.$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.4.6</span>
+求由方程 $\sin y^2 = \cos\sqrt{x}$ 确定的隐函数 $y = y(x)$ 的导函数 $y'(x)$.
+<div class="proof">
+<span class="proof-title">解</span>
+对方程
+$$\sin y^2 = \cos\sqrt{x}$$
+的两边求微分，
+$$\mathrm{d}(\sin y^2) = \mathrm{d}(\cos\sqrt{x}).$$
+对等式的左边应用一阶微分的形式不变性，得到
+$$\mathrm{d}(\sin y^2) = \cos y^2 \cdot 2y\mathrm{d}y,$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 123 页 [PDF P.142]" id="p123"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">而等式的右边为</p>
+$$\mathrm{d}(\cos\sqrt{x}) = -\frac{\sin\sqrt{x}}{2\sqrt{x}}\mathrm{d}x,$$
+<p class="no-indent">所以</p>
+$$2y(\cos y^2)\mathrm{d}y = -\frac{\sin\sqrt{x}}{2\sqrt{x}}\mathrm{d}x,$$
+<p class="no-indent">即得到 $y$ 的导数</p>
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = -\frac{\sin\sqrt{x}}{4\sqrt{x}\,y(\cos y^2)}.$$
+</div>
+
+<p>注意本例也可以通过对方程两边求导，利用复合函数的求导法则来求得. 读者也可对本例中的隐函数的显式形式</p>
+
+$$y = \pm\sqrt{\arcsin(\cos\sqrt{x})}$$
+
+<p class="no-indent">直接求导函数 $y'(x)$，并将运算过程加以比较.</p>
+
+<p>对方程两边同时求导或求微分的方法，无论对于显函数、可显化的隐函数抑或不可显化的隐函数都能有效地使用，可以说是最重要的方法之一. 要提醒注意的是，在用求导的方法时，要将 $y$ 看作是 $x$ 的函数，从而利用复合函数的求导法则；至于求微分的方法，在目前阶段，只适用于一部分隐函数，而对于一般的隐函数，则要用到多元函数的一阶微分形式不变性，这将在多元函数的微分学部分加以讨论.</p>
+
+<p>这样求出的导函数中大多仍然含有隐函数 $y$，但就具体使用而言，一般来说是无妨于事的，相反有时使用起来更为方便.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.4.7</span>
+求由方程 $e^{x+y} - xy - e = 0$ 所确定的隐函数曲线在点 $(0, 1)$ 处的切线方程.
+<div class="proof">
+<span class="proof-title">解</span>
+对方程
+$$e^{x+y} - xy - e = 0$$
+的两边关于 $x$ 求导，经与例 4.4.5 同样的过程，得到
+$$y' = \frac{y - e^{x+y}}{e^{x+y} - x}.$$
+因为点 $(0, 1)$ 位于隐函数所确定的曲线上，将 $x = 0$ 和 $y = 1$ 代入 $y'$ 的表达式，即得
+$$y'(0) = \frac{1 - e}{e},$$
+于是得到曲线 $y = y(x)$ 在点 $(0, 1)$ 处的切线方程为
+$$y = \left(\frac{1 - e}{e}\right)x + 1.$$
+</div>
+</div>
+
+<h4 class="subsection-title" id="sec4-4">复合函数求导法则的其他应用</h4>
+
+<p>复合函数的求导法则给出了一个相当一般的求导方法，许多求导公式都可以看成是它的特例.</p>
+
+<p>例如，可以将 $y = \dfrac{1}{g(x)}$ 看成是由</p>
+
+$$\begin{cases}y = \dfrac{1}{u},\\ u = g(x)\end{cases}$$
+
+<p class="no-indent">复合而成的函数，则由复合函数的求导公式，</p>
+
+$$\left(\frac{1}{g(x)}\right)' = \left(\frac{1}{u}\right)' \cdot g'(x) = -\frac{g'(x)}{u^2} = -\frac{g'(x)}{[g(x)]^2},$$
+
+<p class="no-indent">这就是前面得到的函数的倒数的求导公式.</p>
+
+<p>再比如，假定 $y = f(x)$ 满足反函数求导定理的条件，将它的反函数记为 $x = f^{-1}(y)$，则成立</p>
+
+$$x = f^{-1}(f(x)),$$
+
+<p class="no-indent">对这个式子两边求导，右边利用链式法则，即有</p>
+
+$$1 = (x)' = [f^{-1}(f(x))]' = [f^{-1}(y)]' \cdot f'(x),$$
+
+<p class="no-indent">或者写成</p>
+
+$$[f^{-1}(y)]' = \frac{1}{f'(x)},$$
+
+<p class="no-indent">这正是反函数求导定理的结论. 因此，反函数求导公式也可以看成是复合函数求导法则的特殊情况.</p>
+
+<p>作为一个实际应用的例子，下面我们用它来导出参数形式的函数的导数公式.</p>
+
+<p>设自变量 $x$ 和因变量 $y$ 的函数关系由参数形式</p>
+
+$$\begin{cases}x = \varphi(t),\\ y = \psi(t),\end{cases}\quad \alpha \le t \le \beta$$
+
+<p class="no-indent">确定，其中 $\varphi(t)$ 和 $\psi(t)$ 都是 $t$ 的可微函数，$\varphi(t)$ 严格单调且 $\varphi'(t) \ne 0$.</p>
+
+<p>由反函数求导法则（定理 4.3.4），可知 $x = \varphi(t)$ 的反函数 $t = \varphi^{-1}(x)$ 存在，且成立</p>
+
+$$(\varphi^{-1}(x))' = \frac{1}{\varphi'(t)},$$
+
+<p class="no-indent">这样，$y$ 关于 $x$ 的函数关系可以写成</p>
+
+$$y = \psi(t) = \psi(\varphi^{-1}(x)),$$
+
+<p class="no-indent">由复合函数求导法则，即得到</p>
+
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}t} \cdot \frac{\mathrm{d}t}{\mathrm{d}x} = \frac{\mathrm{d}(\psi(t))}{\mathrm{d}t} \cdot \frac{\mathrm{d}(\varphi^{-1}(x))}{\mathrm{d}t} = \frac{\psi'(t)}{\varphi'(t)},$$
+
+<p class="no-indent">这就是参数形式的函数的导数公式，它也可以看成是由微分形式</p>
+
+$$\begin{cases}\mathrm{d}y = \psi'(t)\mathrm{d}t,\\ \mathrm{d}x = \varphi'(t)\mathrm{d}t,\end{cases}$$
+
+<p class="no-indent">两边分别相除的结果.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.4.8</span>
+求由参数方程
+$$\begin{cases}x = t - \sin t,\\ y = 1 - \cos t,\end{cases}\quad 0 \le t \le \pi$$
+所确定的函数 $y = f(x)$ 的导函数 $y'$.
+<div class="proof">
+<span class="proof-title">解</span>
+这是位于上半平面与 $x$ 轴相切的单位圆沿 $x$ 轴无滑动地滚动一周时，圆周上
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 124 页 [PDF P.143]" id="p124"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">的一点的运动轨迹，也就是<b>摆线</b>（即旋轮线）的方程（如图 1.2.6 和图 7.4.7）.</p>
+<p>由参数形式的函数的求导公式，即得</p>
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{(1 - \cos t)'}{(t - \sin t)'} = \frac{\sin t}{1 - \cos t} = \cot\frac{t}{2}.$$
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.4.9</span>
+设抛射体运动在 $t = 0$ 时刻的水平速度和垂直速度分别等于 $v_1$ 和 $v_2$，问在什么时刻该物体的飞行倾角恰与地面平行？
+<div class="proof">
+<span class="proof-title">解</span>
+将抛射体运动视为水平方向和垂直方向上的运动的合成，即得参数方程
+$$\begin{cases}x = v_1t,\\ y = v_2t - \dfrac{1}{2}gt^2,\end{cases}\quad 0 \le t \le \frac{2v_2}{g}.$$
+于是，由导数的几何意义，如图 4.4.1，物体在任一时刻 $t$ 的飞行倾角 $\theta$ 应为
+$$\theta = \arctan\left(\frac{\mathrm{d}y}{\mathrm{d}x}\right)\bigg|_{x = v_1t} = \arctan\frac{\left(v_2t - \dfrac{1}{2}gt^2\right)'}{(v_1t)'} = \arctan\frac{v_2 - gt}{v_1}.$$
+显然，要使飞行倾角与地面平行，即 $\theta = 0$，只要 $\dfrac{v_2 - gt}{v_1} = 0$，即解得
+$$t = \frac{v_2}{g},$$
+这是我们在中学力学中熟知的结果.
+</div>
+</div>
+
+<div class="figure-wrapper">
+<img src="figures/fig_4_4_1.svg" alt="图 4.4.1 抛射体运动">
+<div class="figure-caption">图 4.4.1 抛射体运动</div>
+</div>
+
+<p>最后指出，显式表示、隐式表示和参数表示是表达函数的三种重要形式，各有不同的适用场合，有很多函数只能用其中的某一种来表达. 即使有些函数能够用它们中的任何一种来表达，运算的难易和繁简程度也可以大相径庭，因此必须全面地掌握相应的求导公式，根据实际情况选择使用.</p>
+
+<p>举一个简单的例子，如果想求出椭圆上某一点的导数，既可以从它的显函数形式</p>
+
+$$y = \pm\frac{b}{a}\sqrt{a^2 - x^2}\quad (-a \le x \le a)$$
+
+<p class="no-indent">入手，得到</p>
+
+$$y' = \pm\frac{b}{a}\frac{1}{2}\frac{-2x}{\sqrt{a^2 - x^2}} = \mp\frac{b}{a}\frac{x}{\sqrt{a^2 - x^2}}\left(= -\frac{b^2}{a^2}\frac{x}{\pm\dfrac{b}{a}\sqrt{a^2 - x^2}} = -\frac{b^2x}{a^2y}\right);$$
+
+<p>也可以通过它的参数方程</p>
+
+$$\begin{cases}x = a\cos t,\\ y = b\sin t,\end{cases}\quad 0 \le t \le 2\pi,$$
+
+<p class="no-indent">由参数形式的函数的求导公式，得到</p>
+
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{(b\sin t)'}{(a\cos t)'} = \frac{b\cos t}{-a\sin t}\left(= -\frac{b^2(a\cos t)}{a^2(b\sin t)} = -\frac{b^2x}{a^2y}\right);$$
+
+<div class="page-divider" data-page="原书第 125 页 [PDF P.144]" id="p125"></div>
+
+<p>但最简洁的是从它的标准方程即隐函数</p>
+
+$$\frac{x^2}{a^2} + \frac{y^2}{b^2} = 1$$
+
+<p class="no-indent">入手，利用复合函数的求导法则或一阶微分形式的不变性，由</p>
+
+$$\mathrm{d}\left(\frac{x^2}{a^2}\right) + \mathrm{d}\left(\frac{y^2}{b^2}\right) = \frac{2x}{a^2}\mathrm{d}x + \frac{2y}{b^2}\mathrm{d}y = 0,$$
+
+<p class="no-indent">就直接得出</p>
+
+$$y' = \frac{\mathrm{d}y}{\mathrm{d}x} = -\frac{b^2x}{a^2y}.$$
+
+</section>
+<section id="ex4-4" class="exercise-container">
+<h3>习 题</h3>
+
+<div class="page-divider" data-page="原书第 126 页 [PDF P.145]" id="p126"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">1.</span>
+求下列函数的导数：
+<div class="exercise-subitem">(1) $y = (2x^2 - x + 1)^2$；</div>
+<div class="exercise-subitem">(2) $y = e^{2x}\sin 3x$；</div>
+<div class="exercise-subitem">(3) $y = \dfrac{1}{\sqrt{1 + x^3}}$；</div>
+<div class="exercise-subitem">(4) $y = \sqrt{\dfrac{\ln x}{x}}$；</div>
+<div class="exercise-subitem">(5) $y = \sin x^3$；</div>
+<div class="exercise-subitem">(6) $y = \cos\sqrt{x}$；</div>
+<div class="exercise-subitem">(7) $y = \sqrt{x + 1} - \ln(x + \sqrt{x + 1})$；</div>
+<div class="exercise-subitem">(8) $y = \arcsin(e^{-x^2})$；</div>
+<div class="exercise-subitem">(9) $y = \ln\left(x^2 - \dfrac{1}{x^2}\right)$；</div>
+<div class="exercise-subitem">(10) $y = \dfrac{1}{(2x^2 + \sin x)^2}$；</div>
+<div class="exercise-subitem">(11) $y = \dfrac{1 + \ln^2 x}{x\sqrt{1 - x^2}}$；</div>
+<div class="exercise-subitem">(12) $y = \dfrac{x}{\sqrt{1 + \csc x^2}}$；</div>
+<div class="exercise-subitem">(13) $y = \dfrac{2}{\sqrt[3]{2x^2 - 1}} + \dfrac{3}{\sqrt[4]{3x^3 + 1}}$；</div>
+<div class="exercise-subitem">(14) $y = e^{-\sin^2 x}$；</div>
+<div class="exercise-subitem">(15) $y = x\sqrt{a^2 - x^2} + \dfrac{x}{\sqrt{a^2 - x^2}}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">2.</span>
+求下列函数的导数：
+<div class="exercise-subitem">(1) $y = \ln\sin x$；</div>
+<div class="exercise-subitem">(2) $y = \ln(\csc x - \cot x)$；</div>
+<div class="exercise-subitem">(3) $y = \dfrac{1}{2}\left(x\sqrt{a^2 - x^2} + a^2\arcsin\dfrac{x}{a}\right)$；</div>
+<div class="exercise-subitem">(4) $y = \ln(x + \sqrt{x^2 + a^2})$；</div>
+<div class="exercise-subitem">(5) $y = \dfrac{1}{2}\left(x\sqrt{x^2 - a^2} - a^2\ln(x + \sqrt{x^2 - a^2})\right)$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">3.</span>
+设 $f(x)$ 可导，求下列函数的导数：
+<div class="exercise-subitem">(1) $f(\sqrt[3]{x^2})$；</div>
+<div class="exercise-subitem">(2) $f\left(\dfrac{1}{\ln x}\right)$；</div>
+<div class="exercise-subitem">(3) $\sqrt{f(x)}$；</div>
+<div class="exercise-subitem">(4) $\arctan f(x)$；</div>
+<div class="exercise-subitem">(5) $f(f(e^{x^2}))$；</div>
+<div class="exercise-subitem">(6) $\sin(f(\sin x))$；</div>
+<div class="exercise-subitem">(7) $f\left(\dfrac{1}{f(x)}\right)$；</div>
+<div class="exercise-subitem">(8) $\dfrac{1}{f(f(x))}$.</div>
+</li>
+</ul>
+
+<div class="page-divider" data-page="原书第 127 页 [PDF P.146]" id="p127"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">4.</span>
+用对数求导法求下列函数的导数：
+<div class="exercise-subitem">(1) $y = x^x$；</div>
+<div class="exercise-subitem">(2) $y = (x^3 + \sin x)^{\frac{1}{x}}$；</div>
+<div class="exercise-subitem">(3) $y = \cos^x x$；</div>
+<div class="exercise-subitem">(4) $y = \ln^x(2x + 1)$；</div>
+<div class="exercise-subitem">(5) $y = x\dfrac{\sqrt{1 - x^2}}{\sqrt{1 + x^3}}$；</div>
+<div class="exercise-subitem">(6) $y = \prod_{i=1}^{n}(x - x_i)$；</div>
+<div class="exercise-subitem">(7) $y = \sin x^{x^x}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">5.</span>
+对下列隐函数求 $\dfrac{\mathrm{d}y}{\mathrm{d}x}$：
+<div class="exercise-subitem">(1) $y = x + \arctan y$；</div>
+<div class="exercise-subitem">(2) $y + x e^y = 1$；</div>
+<div class="exercise-subitem">(3) $\sqrt{x - \cos y} = \sin y - x$；</div>
+<div class="exercise-subitem">(4) $xy - \ln(y + 1) = 0$；</div>
+<div class="exercise-subitem">(5) $e^{x^2 + y} - xy^2 = 0$；</div>
+<div class="exercise-subitem">(6) $\tan(x + y) - xy = 0$；</div>
+<div class="exercise-subitem">(7) $2y\sin x + x\ln y = 0$；</div>
+<div class="exercise-subitem">(8) $x^3 + y^3 - 3axy = 0$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">6.</span>
+设所给的函数可导，证明：
+<div class="exercise-subitem">(1) 奇函数的导函数是偶函数；偶函数的导函数是奇函数；</div>
+<div class="exercise-subitem">(2) 周期函数的导函数仍是周期函数.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">7.</span>
+求曲线 $xy + \ln y = 1$ 在 $M(1, 1)$ 处的切线和法线方程.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">8.</span>
+对下列参数形式的函数求 $\dfrac{\mathrm{d}y}{\mathrm{d}x}$：
+<div class="exercise-subitem">(1) $\begin{cases}x = at^2,\\ y = bt^3;\end{cases}$</div>
+<div class="exercise-subitem">(2) $\begin{cases}x = 1 - t^2,\\ y = t - t^3;\end{cases}$</div>
+<div class="exercise-subitem">(3) $\begin{cases}x = t^2\sin t,\\ y = t^2\cos t;\end{cases}$</div>
+<div class="exercise-subitem">(4) $\begin{cases}x = a e^{-t},\\ y = b e^t;\end{cases}$</div>
+<div class="exercise-subitem">(5) $\begin{cases}x = a\cos^3 t,\\ y = a\sin^3 t;\end{cases}$</div>
+<div class="exercise-subitem">(6) $\begin{cases}x = \operatorname{sh} at,\\ y = \operatorname{ch} bt;\end{cases}$</div>
+<div class="exercise-subitem">(7) $\begin{cases}x = \dfrac{t + 1}{t},\\ y = \dfrac{t - 1}{t};\end{cases}$</div>
+<div class="exercise-subitem">(8) $\begin{cases}x = \sqrt{1 + t},\\ y = \sqrt{1 - t};\end{cases}$</div>
+<div class="exercise-subitem">(9) $\begin{cases}x = e^{-2t}\cos^2 t,\\ y = e^{-2t}\sin^2 t;\end{cases}$</div>
+<div class="exercise-subitem">(10) $\begin{cases}x = \ln(1 + t^2),\\ y = t - \arctan t.\end{cases}$</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">9.</span>
+求曲线 $x = \dfrac{2t + t^2}{1 + t^3}, y = \dfrac{2t - t^2}{1 + t^3}$ 上与 $t = 1$ 对应的点处的切线和法线方程.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">10.</span>
+设方程
+$$\begin{cases}e^x = 3t^2 + 2t + 1,\\ t\sin y - y + \dfrac{\pi}{2} = 0\end{cases}$$
+确定 $y$ 为 $x$ 的函数，其中 $t$ 为参变量，求 $\left.\dfrac{\mathrm{d}y}{\mathrm{d}x}\right|_{t=0}$.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">11.</span>
+证明曲线
+$$\begin{cases}x = a(\cos t + t\sin t),\\ y = a(\sin t - t\cos t)\end{cases}$$
+上任一点的法线到原点的距离等于 $|a|$.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">12.</span>
+设函数 $u = g(x)$ 在 $x = x_0$ 处连续，$y = f(u)$ 在 $u = u_0 = g(x_0)$ 处连续. 请举例说明，在以下情况中，复合函数 $y = f(g(x))$ 在 $x = x_0$ 处并非一定不可导：
+<div class="exercise-subitem">(1) $u = g(x)$ 在 $x_0$ 处可导，而 $y = f(u)$ 在 $u_0$ 处不可导；</div>
+<div class="exercise-subitem">(2) $u = g(x)$ 在 $x_0$ 处不可导，而 $y = f(u)$ 在 $u_0$ 处可导；</div>
+<div class="exercise-subitem">(3) $u = g(x)$ 在 $x_0$ 处不可导，$y = f(u)$ 在 $u_0$ 处也不可导.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">13.</span>
+设函数 $f(u), g(u)$ 和 $h(u)$ 可微，且 $h(u) > 1, u = \varphi(x)$ 也是可微函数，利用一阶微分的形式不变性求下列复合函数的微分：
+<div class="exercise-subitem">(1) $f(u)g(u)h(u)$；</div>
+<div class="exercise-subitem">(2) $\dfrac{f(u)g(u)}{h(u)}$；</div>
+<div class="exercise-subitem">(3) $h(u)^{g(u)}$；</div>
+<div class="exercise-subitem">(4) $\log_{h(u)}g(u)$；</div>
+<div class="exercise-subitem">(5) $\arctan\dfrac{f(u)}{h(u)}$；</div>
+<div class="exercise-subitem">(6) $\dfrac{1}{\sqrt{f^2(u) + h^2(u)}}$.</div>
+</li>
+</ul>
+</section>
+
+<section id="sec5">
+<h3 class="section-title">§5 高阶导数和高阶微分</h3>
+
+<h4 class="subsection-title" id="sec5-1">高阶导数的实际背景及定义</h4>
+
+<p>一个函数的导数仍然是一个函数，因此若有必要的话，可以对它继续进行求导. 事实上，大量实际问题的研究中都会遇到这类情况.</p>
+
+<p>Newton 在研究物体的运动规律的时候发现，一个受力物体的速度的改变量 $\Delta v = v(t + \Delta t) - v(t)$ 与所受的力 $F$ 及受力的时间 $\Delta t$ 成正比，而与它的质量 $m$ 成反比，在定义了合适的单位之后，其比例系数可以取为 $1$，即</p>
+
+$$F\Delta t = m\Delta v,$$
+
+<p class="no-indent">这就是熟悉的冲量定律.</p>
+
+<p>将上式改写成</p>
+
+$$F = m\frac{\Delta v}{\Delta t},$$
+
+<p>对于匀变速运动来讲，相同时间中的速度改变量 $\dfrac{\Delta v}{\Delta t}$ 是常数，记这个常数为 $a$，就得到了著名的 Newton 第二运动定律在中学物理中的形式</p>
+
+$$F = ma.$$
+
+<p>在一般的变速运动中，加速度 $a$ 并非是常值，而是随时间变化而变化的函数 $a(t)$. 通过与 §2 类似的讨论就可以知道，物体在时刻 $t$ 的瞬时加速度应为当 $\Delta t \to 0$ 时，它的平均加速度 $\dfrac{\Delta v}{\Delta t}$ 的极限值，即</p>
+
+$$a(t) = \lim_{\Delta t \to 0}\frac{\Delta v}{\Delta t} = \lim_{\Delta t \to 0}\frac{v(t + \Delta t) - v(t)}{\Delta t} = v'(t),$$
+
+<p class="no-indent">也就是说，加速度函数 $a(t)$ 是速度函数 $v(t)$ 的导函数. 而从前面已经知道，$v(t)$ 是位移函数 $s(t)$ 的导函数，那么 $a(t)$ 就成了 $s(t)$ 的导函数的导函数，我们将它称为 $s(t)$ 的<b>二阶导数</b>.（与此同时，Leibniz 也引进并运用二阶导数来研究曲线的曲率问题，我们将在以后讨论这个问题.）</p>
+
+<div class="page-divider" data-page="原书第 128 页 [PDF P.147]" id="p128"></div>
+
+<p>设 $y = f(x)$ 可导，若它的导函数 $f'(x)$（或 $y'(x), \dfrac{\mathrm{d}f}{\mathrm{d}x}, \dfrac{\mathrm{d}y}{\mathrm{d}x}$）仍是个可导函数，则 $f'(x)$ 的导数 $[f'(x)]'$（或 $[y'(x)]', \dfrac{\mathrm{d}}{\mathrm{d}x}\left(\dfrac{\mathrm{d}f}{\mathrm{d}x}\right), \dfrac{\mathrm{d}}{\mathrm{d}x}\left(\dfrac{\mathrm{d}y}{\mathrm{d}x}\right)$）被称为 $f(x)$ 的<b>二阶导数</b>，记为</p>
+
+$$f''(x)\ \left(\text{或 }y''(x), \frac{\mathrm{d}^2f}{\mathrm{d}x^2}, \frac{\mathrm{d}^2y}{\mathrm{d}x^2}\right),$$
+
+<p>这时我们称 $f(x)$ 是<b>二阶可导函数</b>（简称 $f(x)$ 二阶可导）或者 $f(x)$ 的二阶导数存在.</p>
+
+<p>若 $f''(x)$ 仍是个可导函数，则它的导数被称为 $f(x)$ 的<b>三阶导数</b>，记为</p>
+
+$$f'''(x)\ \left(\text{或 }y'''(x), \frac{\mathrm{d}^3f}{\mathrm{d}x^3}, \frac{\mathrm{d}^3y}{\mathrm{d}x^3}\right),$$
+
+<p>并称 $f(x)$ 是<b>三阶可导函数</b>（简称 $f(x)$ 三阶可导）或者 $f(x)$ 的三阶导数存在.</p>
+
+<p>以此类推，我们可以定义一般的 $n$ 阶导数（$n \ge 2$ 时称为<b>高阶导数</b>）：</p>
+
+<div class="definition-box">
+<span class="box-title">定义 4.5.1</span>
+设函数 $y = f(x)$ 的 $n - 1$ 阶导数 $f^{(n-1)}(x)$（或 $y^{(n-1)}(x), \dfrac{\mathrm{d}^{n-1}f}{\mathrm{d}x^{n-1}}, \dfrac{\mathrm{d}^{n-1}y}{\mathrm{d}x^{n-1}}$）$(n = 2, 3, \dots)$ 仍是个可导函数，则它的导数 $[f^{(n-1)}(x)]'$（或 $[y^{(n-1)}(x)]', \dfrac{\mathrm{d}}{\mathrm{d}x}\left(\dfrac{\mathrm{d}^{n-1}f}{\mathrm{d}x^{n-1}}\right), \dfrac{\mathrm{d}}{\mathrm{d}x}\left(\dfrac{\mathrm{d}^{n-1}y}{\mathrm{d}x^{n-1}}\right)$）被称为 $f(x)$ 的 $n$ 阶导数，记为
+$$f^{(n)}(x)\ \left(\text{或 }y^{(n)}(x), \frac{\mathrm{d}^nf}{\mathrm{d}x^n}, \frac{\mathrm{d}^ny}{\mathrm{d}x^n}\right),$$
+并称 $f(x)$ 是<b>$n$ 阶可导函数</b>（简称 $f(x)$ $n$ 阶可导）或者 $f(x)$ 的 $n$ 阶导数存在.
+</div>
+
+<p>显然，若 $f(x)$ 的 $n$ 阶导数存在，则它的低于 $n$ 阶的导数都存在.</p>
+
+<p>利用上述记号，加速度函数可以写成</p>
+
+$$a(t) = s''(t) = \frac{\mathrm{d}^2s}{\mathrm{d}t^2},$$
+
+<p class="no-indent">于是 Newton 第二运动定律可以写成</p>
+
+$$F = m\frac{\mathrm{d}^2s}{\mathrm{d}t^2}.$$
+
+<p>可见，高阶导数与一阶导数一样，也完全来自研究实际问题的需要.</p>
+
+<p>由高阶导数的定义，只要按求导法则对 $f(x)$ 逐次求导，就能得到它的任意阶的导函数. 作为例子，我们先来求几个常用的基本初等函数的高阶导数.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.5.1</span>
+求 $y = e^x$ 的 $n$ 阶导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由
+$$(e^x)' = e^x,$$
+显然有
+$$(e^x)' = (e^x)'' = (e^x)''' = \cdots = (e^x)^{(n)} = e^x.$$
+类似可以得到
+$$(a^x)^{(n)} = (\ln a)^n a^x.$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.5.2</span>
+求 $y = \sin x$ 和 $y = \cos x$ 的 $n$ 阶导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为
+$$(\sin x)' = \cos x = \sin\left(x + \frac{\pi}{2}\right),$$
+利用复合函数的求导法则
+$$(\sin x)'' = \left(\sin\left(x + \frac{\pi}{2}\right)\right)' = \cos\left(x + \frac{\pi}{2}\right) = \sin\left(x + \frac{2\pi}{2}\right),$$
+这样以此类推，用数学归纳法容易证明
+$$(\sin x)^{(n)} = \sin\left(x + \frac{n\pi}{2}\right).$$
+同理，$y = \cos x$ 的 $n$ 阶导数为
+$$(\cos x)^{(n)} = \cos\left(x + \frac{n\pi}{2}\right).$$
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.5.3</span>
+求幂函数 $y = x^m$（$m$ 是正整数）的 $n$ 阶导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+由幂函数的导函数形式，有
+$$\begin{aligned}
+(x^m)' &= mx^{m-1},\\
+(x^m)'' &= m(m-1)x^{m-2},\\
+(x^m)''' &= m(m-1)(m-2)x^{m-3},\\
+&\cdots\cdots
+\end{aligned}$$
+因此，不难得到它的 $n$ 阶导函数的一般形式为
+$$(x^m)^{(n)} = \begin{cases}m(m-1)\cdots(m-n+1)x^{m-n}, & n \le m,\\ 0, & n > m,\end{cases}$$
+特别地
+$$(x^m)^{(m)} = m!.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 129 页 [PDF P.148]" id="p129"></div>
+
+<div class="example-box">
+<span class="box-title">例 4.5.4</span>
+求 $y = \ln x$ 的 $n$ 阶导函数.
+<div class="proof">
+<span class="proof-title">解</span>
+因为
+$$(\ln x)' = \frac{1}{x} = x^{-1},$$
+于是
+$$\begin{aligned}
+(\ln x)'' &= (x^{-1})' = -x^{-2},\\
+(\ln x)''' &= (-x^{-2})' = 2x^{-3},\\
+(\ln x)^{(4)} &= (2x^{-3})' = -3 \cdot 2x^{-4},\\
+&\cdots\cdots
+\end{aligned}$$
+以此类推就可以导出它的一般规律
+$$(\ln x)^{(n)} = (-1)^{n-1}(n-1) \cdot (n-2) \cdot \cdots \cdot 3 \cdot 2x^{-n} = (-1)^{n-1}\frac{(n-1)!}{x^n}.$$
+我们还附带地得到了
+$$\left(\frac{1}{x}\right)^{(n)} = (\ln x)^{(n+1)} = (-1)^n\frac{n!}{x^{n+1}}.$$
+</div>
+</div>
+
+</section>
+<section id="sec5-cont2" class="continued">
+
+<h4 class="subsection-title" id="sec5-2">高阶导数的运算法则</h4>
+
+<div class="page-divider" data-page="原书第 130 页 [PDF P.149]" id="p130"></div>
+
+<p>对于两个函数的线性组合和乘积的高阶导数有如下运算法则：</p>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.5.1</span>
+设 $f(x)$ 和 $g(x)$ 都是 $n$ 阶可导的，则对任意常数 $c_1$ 和 $c_2$，它们的线性组合 $c_1f(x) + c_2g(x)$ 也是 $n$ 阶可导的，且满足如下的线性运算关系
+$$[c_1f(x) + c_2g(x)]^{(n)} = c_1f^{(n)}(x) + c_2g^{(n)}(x).$$
+</div>
+
+<p>这个结论可以推广到多个函数线性组合的情况：</p>
+
+$$\left[\sum_{i=1}^{n}c_if_i(x)\right]^{(n)} = \sum_{i=1}^{n}c_if_i^{(n)}(x),$$
+
+<p class="no-indent">证明从略.</p>
+
+<div class="theorem-box">
+<span class="box-title">定理 4.5.2（Leibniz 公式）</span>
+设 $f(x)$ 和 $g(x)$ 都是 $n$ 阶可导函数，则它们的积函数也 $n$ 阶可导，且成立公式
+$$[f(x) \cdot g(x)]^{(n)} = \sum_{k=0}^{n}C_n^k f^{(n-k)}(x)g^{(k)}(x),$$
+这里 $C_n^k = \dfrac{n!}{k!(n-k)!}$ 是组合系数.
+</div>
+
+<div class="proof">
+<span class="proof-title">证</span>
+用数学归纳法.
+
+当 $n = 1$ 时，上式为
+$$[f(x) \cdot g(x)]' = C_1^0f'(x)g(x) + C_1^1f(x)g'(x) = f'(x)g(x) + f(x)g'(x).$$
+这正是 §3 中的结论.
+
+设当 $n = m$ 时 Leibniz 公式成立，即有
+$$[f(x) \cdot g(x)]^{(m)} = \sum_{k=0}^{m}C_m^k f^{(m-k)}(x)g^{(k)}(x),$$
+则当 $n = m + 1$ 时，利用归纳法假设
+$$\begin{aligned}
+[f(x) \cdot g(x)]^{(m+1)} &= \{[f(x) \cdot g(x)]^{(m)}\}'\\
+&= \sum_{k=0}^{m}C_m^k[f^{(m-k)}(x) \cdot g^{(k)}(x)]'\\
+&= \sum_{k=0}^{m}C_m^k\{[f^{(m-k)}(x)]'g^{(k)}(x) + f^{(m-k)}(x)[g^{(k)}(x)]'\}\\
+&= \sum_{k=0}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x) + \sum_{k=0}^{m}C_m^k f^{(m-k)}(x)g^{(k+1)}(x).
+\end{aligned}$$
+将右边的第一项改写成
+$$\sum_{k=0}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x) = f^{(m+1)}(x)g^{(0)}(x) + \sum_{k=1}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x),$$
+而将右边的第二项改写成
+$$\begin{aligned}
+\sum_{j=0}^{m}C_m^j f^{(m-j)}(x)g^{(j+1)}(x) &= \sum_{k=1}^{m+1}C_m^{k-1}f^{(m+1-k)}(x)g^{(k)}(x)\qquad (\text{令 }k = j + 1)\\
+&= \sum_{k=1}^{m}C_m^{k-1}f^{(m+1-k)}(x)g^{(k)}(x) + f^{(0)}(x)g^{(m+1)}(x).
+\end{aligned}$$
+两式合并后利用组合恒等式
+</div>
+
+<div class="page-divider" data-page="原书第 131 页 [PDF P.150]" id="p131"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">$$C_m^{k-1} + C_m^k = C_{m+1}^k\quad \text{和}\quad C_m^0 = C_{m+1}^0 = C_m^m = C_{m+1}^{m+1} = 1,$$</p>
+<p class="no-indent">便有</p>
+$$[f(x) \cdot g(x)]^{(m+1)} = \sum_{k=0}^{m+1}C_{m+1}^k f^{(m+1-k)}(x)g^{(k)}(x),$$
+<p class="no-indent">即公式对 $n = m + 1$ 也成立.</p>
+<p class="no-indent">所以，定理结论对任意正整数成立.</p>
+<span class="proof-qed">证毕</span>
+</div>
+
+<p>请读者将 Leibniz 公式和二项式展开公式</p>
+
+$$(a + b)^n = \sum_{k=0}^{n}C_n^k a^{n-k}b^k$$
+
+<p class="no-indent">的形式加以比较，以便于记忆.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.5.5</span>
+求函数 $y = (3x^2 - 2)\sin 2x$ 的 100 阶导数.
+<div class="proof">
+<span class="proof-title">解</span>
+由幂函数的高阶导数的表达式，
+$$(3x^2 - 2)' = 6x,\quad (3x^2 - 2)'' = 6,\quad (3x^2 - 2)^{(n)} = 0\quad (n \ge 3),$$
+因此 Leibniz 公式中的和式中，只有三项不为零. 而由例 4.5.2 容易知道
+$$(\sin 2x)^{(n)} = 2^n\sin\left(2x + \frac{n\pi}{2}\right),$$
+于是
+$$\begin{aligned}
+y^{(100)} &= \sum_{k=0}^{100}C_{100}^k(\sin 2x)^{(100-k)}(3x^2 - 2)^{(k)}\\
+&= C_{100}^0(\sin 2x)^{(100)}(3x^2 - 2) + C_{100}^1(\sin 2x)^{(99)}(3x^2 - 2)' + C_{100}^2(\sin 2x)^{(98)}(3x^2 - 2)''\\
+&= 2^{100}(3x^2 - 2)\sin 2x - 100 \cdot 2^{99} \cdot (6x)\cos 2x - 4\,950 \cdot 2^{98} \cdot 6 \cdot \sin 2x\\
+&= 2^{98}[(12x^2 - 29\,708)\sin 2x - 1\,200x\cos 2x].
+\end{aligned}$$
+</div>
+</div>
+
+<p>两个函数之商的 $n$ 阶导数 $\left[\dfrac{f(x)}{g(x)}\right]^{(n)}$ 可以化为乘积型 $\left[f(x) \cdot \dfrac{1}{g(x)}\right]^{(n)}$，再用 Leibniz 公式来算.</p>
+
+<p>复合函数、隐函数和参数形式的函数的高阶导数十分复杂，比如对复合函数 $y = f(g(x))$，即</p>
+
+$$\begin{cases}y = f(u),\\ u = g(x),\end{cases}$$
+
+<p class="no-indent">其求导的链式法则为</p>
+
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}u}{\mathrm{d}x},$$
+
+<p>由乘积的求导公式，$y$ 关于 $x$ 的二阶导数为</p>
+
+$$\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}x}\right) = \frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}u}{\mathrm{d}x}\right) = \frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}u}\right) \cdot \frac{\mathrm{d}u}{\mathrm{d}x} + \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}u}{\mathrm{d}x}\right).$$
+
+<p>这里，第二项中的 $\dfrac{\mathrm{d}}{\mathrm{d}x}\left(\dfrac{\mathrm{d}u}{\mathrm{d}x}\right) = \dfrac{\mathrm{d}^2u}{\mathrm{d}x^2}$ 当然是没有问题的，但要注意，第一项中的 $\dfrac{\mathrm{d}y}{\mathrm{d}u}$ 仍然是 $u$ 的函数，即仍然是 $x$ 的复合函数，因此 $\dfrac{\mathrm{d}y}{\mathrm{d}u}$ 关于 $x$ 的导数仍然必须遵循链式法则，即</p>
+
+$$\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}u}\right) = \frac{\mathrm{d}}{\mathrm{d}u}\left(\frac{\mathrm{d}y}{\mathrm{d}u}\right) \cdot \frac{\mathrm{d}u}{\mathrm{d}x} = \frac{\mathrm{d}^2y}{\mathrm{d}u^2} \cdot \frac{\mathrm{d}u}{\mathrm{d}x},$$
+
+<p class="no-indent">代入前式，得到</p>
+
+$$\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}x}\right) = \frac{\mathrm{d}^2y}{\mathrm{d}u^2} \cdot \left(\frac{\mathrm{d}u}{\mathrm{d}x}\right)^2 + \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}^2u}{\mathrm{d}x^2}.$$
+
+<p>初学者很容易从</p>
+
+$$y'(x) = f'(u)g'(x)$$
+
+<p class="no-indent">想当然地得出</p>
+
+$$y''(x) = [f'(u)g'(x)]' = f''(u)g'(x) + f'(u)g''(x)$$
+
+<p class="no-indent">的错误结论，请多加注意.</p>
+
+<p>$y$ 关于 $x$ 的三阶以上的导数的表达式就更加复杂了，这里不再一一列出. 实际上，只要很好地掌握了求复合函数、隐函数和参数形式的函数的一阶导数的方法，再加上耐心和仔细，就不难求出它们的高阶导数.</p>
+
+<p>下面各举一个求二阶导数的例子.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.5.6</span>
+求复合函数 $y = e^{\sin x}$ 的二阶导数.
+<div class="proof">
+<span class="proof-title">解</span>
+把 $y = e^{\sin x}$ 看成是由
+$$\begin{cases}y = e^u,\\ u = \sin x\end{cases}$$
+复合而成的函数，代入公式
+$$\frac{\mathrm{d}}{\mathrm{d}x}\left(\frac{\mathrm{d}y}{\mathrm{d}x}\right) = \frac{\mathrm{d}^2y}{\mathrm{d}u^2} \cdot \left(\frac{\mathrm{d}u}{\mathrm{d}x}\right)^2 + \frac{\mathrm{d}y}{\mathrm{d}u} \cdot \frac{\mathrm{d}^2u}{\mathrm{d}x^2},$$
+便有
+$$(e^{\sin x})'' = (e^u)'' \cdot \cos^2x + (e^u)' \cdot (-\sin x) = e^{\sin x}(\cos^2x - \sin x).$$
+但更直截了当的做法是对
+$$(e^{\sin x})' = e^{\sin x} \cdot \cos x$$
+再求一次导数，就有
+$$\begin{aligned}
+(e^{\sin x})'' &= (e^{\sin x} \cdot \cos x)' = (e^{\sin x})'\cos x + e^{\sin x}(\cos x)'\\
+&= e^{\sin x}\cos^2x - e^{\sin x}\sin x = e^{\sin x}(\cos^2x - \sin x).
+\end{aligned}$$
+这样做，不必去记什么公式，也不容易出错.
+</div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 4.5.7</span>
+求由方程 $e^{xy} + x^2y - 1 = 0$ 确定的隐函数 $y = y(x)$ 的二阶导数 $y''(x)$.
+<div class="proof">
+<span class="proof-title">解</span>
+在例 4.4.5 中，我们由复合函数的求导法则，通过对方程
+$$e^{xy} + x^2y - 1 = 0$$
+的两边关于 $x$ 求导，已经求得
+$$(e^{xy})'(y + xy') + (2xy + x^2y') = 0,$$
+对上式的两边再次关于 $x$ 求导，并注意到 $y$ 和 $y'$ 都是 $x$ 的函数，便有
+$$\begin{aligned}
+&[(e^{xy})'(y + xy') + (2xy + x^2y')]'\\
+=\;&(e^{xy})''(y + xy')^2 + (e^{xy})'(y' + y' + xy'') + (2y + 4xy' + x^2y'')\\
+=\;&0,
+\end{aligned}$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 132 页 [PDF P.151]" id="p132"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">整理后有</p>
+$$y'' = -\frac{(e^{xy})'[(y + xy')^2 + 2y'] + (2y + 4xy')}{x(e^{xy} + x)};$$
+<p>将已经解出的</p>
+$$y' = -\frac{(e^{xy} + 2x)y}{(e^{xy} + x)x}$$
+<p>代入，就得到了隐函数 $y(x)$ 的二阶导数</p>
+$$y'' = \frac{2y e^{3xy} + 8xy e^{2xy} + (12x^2y - x^3y^2)e^{xy} + 6x^3y}{x^2(e^{xy} + x)^3}.$$
+</div>
+
+<p>对参数形式的函数</p>
+
+$$\begin{cases}x = \varphi(t),\\ y = \psi(t),\end{cases}\quad \alpha \le t \le \beta,$$
+
+<p class="no-indent">已知其关于 $x$ 的导函数为</p>
+
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\psi'(t)}{\varphi'(t)},$$
+
+<p>因此 $\dfrac{\mathrm{d}^2y}{\mathrm{d}x^2}$ 实际上是另一参数形式的函数</p>
+
+$$\begin{cases}x = \varphi(t),\\ \dfrac{\mathrm{d}y}{\mathrm{d}x} = \dfrac{\psi'(t)}{\varphi'(t)} = \xi(t)\end{cases}$$
+
+<p class="no-indent">关于 $x$ 的导数. 对它再使用参数形式的函数的求导公式</p>
+
+$$\frac{\mathrm{d}^2y}{\mathrm{d}x^2} = \frac{\dfrac{\mathrm{d}}{\mathrm{d}t}\left(\dfrac{\mathrm{d}y}{\mathrm{d}x}\right)}{\dfrac{\mathrm{d}x}{\mathrm{d}t}} = \frac{\xi'(t)}{\varphi'(t)},$$
+
+<p class="no-indent">就得到了</p>
+
+$$\frac{\mathrm{d}^2y}{\mathrm{d}x^2} = \frac{\psi''(t)\varphi'(t) - \psi'(t)\varphi''(t)}{[\varphi'(t)]^3}.$$
+
+<p>在实际计算时，读者应抓住本质对所给的函数逐次求导，同样不必拘泥于死记公式. 另外，要特别注意，</p>
+
+$$\frac{\mathrm{d}^2y}{\mathrm{d}x^2} \ne \frac{\psi''(t)}{\varphi''(t)},$$
+
+<p class="no-indent">这也是初学者易犯的错误的地方.</p>
+
+<div class="example-box">
+<span class="box-title">例 4.5.8</span>
+求摆线
+$$\begin{cases}x = t - \sin t,\\ y = 1 - \cos t,\end{cases}\quad 0 \le t \le 2\pi$$
+在 $t = \pi$ 处的二阶导函数 $\dfrac{\mathrm{d}^2y}{\mathrm{d}x^2}$ 的值.
+<div class="proof">
+<span class="proof-title">解</span>
+由例 4.4.8，
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{(1 - \cos t)'}{(t - \sin t)'} = \frac{\sin t}{1 - \cos t} = \cot\frac{t}{2}.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 133 页 [PDF P.152]" id="p133"></div>
+
+<div class="proof no-indent">
+<p class="no-indent">再对函数</p>
+$$\begin{cases}x = t - \sin t,\\ \dfrac{\mathrm{d}y}{\mathrm{d}x} = \cot\dfrac{t}{2}\end{cases}$$
+<p class="no-indent">求关于 $x$ 的导数，得到</p>
+$$\frac{\mathrm{d}^2y}{\mathrm{d}x^2} = \frac{\left(\cot\dfrac{t}{2}\right)'}{(t - \sin t)'} = \frac{-\dfrac{1}{2}\csc^2\dfrac{t}{2}}{1 - \cos t} = -\frac{1}{4}\csc^4\frac{t}{2},$$
+<p class="no-indent">所以当 $t = \pi$ 时，$\dfrac{\mathrm{d}^2y}{\mathrm{d}x^2}$ 的值为 $-\dfrac{1}{4}$.</p>
+</div>
+
+</section>
+<section id="sec5-cont3" class="continued">
+
+<h4 class="subsection-title" id="sec5-3">高阶微分</h4>
+
+<div class="page-divider" data-page="原书第 134 页 [PDF P.153]" id="p134"></div>
+
+<p>我们可以通过与定义高阶导数类似的方法来定义高阶微分. 如 $\mathrm{d}y$ 是函数 $y = f(x)$ 的一阶微分，则称 $\mathrm{d}y$ 的微分</p>
+
+$$\mathrm{d}(\mathrm{d}y) = \mathrm{d}^2y$$
+
+<p class="no-indent">为 $y$ 的<b>二阶微分</b>；$\mathrm{d}^2y$ 的微分</p>
+
+$$\mathrm{d}(\mathrm{d}^2y) = \mathrm{d}^3y$$
+
+<p class="no-indent">为 $y$ 的<b>三阶微分</b>. 一般地，若 $y$ 的 $n - 1$ 阶微分为 $\mathrm{d}^{n-1}y$，定义 $y$ 的 $n$ 阶微分为</p>
+
+$$\mathrm{d}^ny = \mathrm{d}(\mathrm{d}^{n-1}y),\quad n = 2, 3, \dots$$
+
+<p>（如果 $\mathrm{d}^{n-1}y$ 的微分存在的话）.</p>
+
+<p>下面我们来求 $y$ 的 $n$ 阶微分的表达式. 对 $y = f(x)$ 的一阶微分</p>
+
+$$\mathrm{d}y = f'(x)\mathrm{d}x$$
+
+<p class="no-indent">的两边求微分，利用乘积的微分公式，则有</p>
+
+$$\mathrm{d}^2y = \mathrm{d}[f'(x)\mathrm{d}x] = \mathrm{d}[f'(x)] \cdot \mathrm{d}x + f'(x) \cdot \mathrm{d}(\mathrm{d}x).$$
+
+<p>在右边的第一项中，显然有</p>
+
+$$\mathrm{d}[f'(x)] = f''(x)\mathrm{d}x,$$
+
+<p>而在第二项中，由于 $\mathrm{d}x$（即 $\Delta x$）与自变量 $x$ 无关，我们视它为常量，因此有 $\mathrm{d}(\mathrm{d}x) = 0$，这样，我们就得到了 $y$ 的二阶微分为</p>
+
+$$\mathrm{d}^2y = f''(x)\mathrm{d}x^2,$$
+
+<p>其中 $\mathrm{d}x^2$ 表示 $(\mathrm{d}x)^2$. 以此类推，我们可以导出 $y$ 的 $n$ 阶微分的表达式</p>
+
+$$\mathrm{d}^ny = f^{(n)}(x)\mathrm{d}x^n,\quad n = 2, 3, \dots,$$
+
+<p>其中 $\mathrm{d}x^n$ 表示 $(\mathrm{d}x)^n$.</p>
+
+<p>这个公式建立了高阶导数与高阶微分之间的关系，即 $y$ 的 $n$ 阶微分等于它的 $n$ 阶导数乘上自变量的微分的 $n$ 次方，这也是我们用 $\dfrac{\mathrm{d}^ny}{\mathrm{d}x^n}$ 来记 $f^{(n)}(x)$ 的原因（请读者区别记号 $\mathrm{d}(x^2), \mathrm{d}x^2$ 和 $\mathrm{d}^2x$：$\mathrm{d}(x^2)$ 表示对函数 $y = x^2$ 的微分，它等于 $2x\mathrm{d}x$；$\mathrm{d}x^2$ 表示自变量的微分的平方，即 $(\mathrm{d}x)^2$；而 $\mathrm{d}^2x$ 则表示自变量的两次微分 $\mathrm{d}(\mathrm{d}x)$，它的值为零.）</p>
+
+<p>但要注意的是，上述公式不能推广到中间变量的情况.</p>
+
+<p>对于复合函数</p>
+
+$$\begin{cases}y = f(u),\\ u = g(x),\end{cases}$$
+
+<p class="no-indent">这里只有 $x$ 才是自变量，$u$ 只是中间变量. 由一阶微分的形式不变性，$y$ 的一阶微分公式既可以写成自变量的形式</p>
+
+$$\mathrm{d}y = [f(g(x))]'\mathrm{d}x\,(= f'(u)g'(x)\mathrm{d}x),$$
+
+<p class="no-indent">也可以写成中间变量的形式</p>
+
+$$\mathrm{d}y = f'(u)\mathrm{d}u.$$
+
+<p>那么，$y$ 的二阶微分公式</p>
+
+$$\mathrm{d}^2y = [f(g(x))]''\mathrm{d}x^2,$$
+
+<p class="no-indent">是否也可以依样画葫芦地写成中间变量的形式</p>
+
+$$\mathrm{d}^2y = f''(u)\mathrm{d}u^2$$
+
+<p class="no-indent">呢？回答是否定的，让我们先来看一个简单的例子.</p>
+
+<div class="page-divider" data-page="原书第 136 页 [PDF P.155]" id="p136"></div>
+
+<div class="example-box">
+<span class="box-title">例 4.5.9</span>
+求函数 $y = e^{\sin x}$ 的二阶微分.
+<div class="proof">
+<span class="proof-title">解</span>
+在例 4.5.6 中已经解出
+$$y'' = e^{\sin x}(\cos^2x - \sin x),$$
+所以
+$$\mathrm{d}^2y = y''\mathrm{d}x^2 = e^{\sin x}(\cos^2x - \sin x)\mathrm{d}x^2.$$
+但若把 $y = e^{\sin x}$ 看成是由
+$$\begin{cases}y = e^u,\\ u = \sin x\end{cases}$$
+复合而成的函数，则
+$$f''(u) = (e^u)'' = e^u,\quad \mathrm{d}u^2 = [\mathrm{d}(\sin x)]^2 = \cos^2x\mathrm{d}x^2,$$
+因此
+$$f''(u)\mathrm{d}u^2 = e^u\cos^2x\mathrm{d}x^2 = e^{\sin x}\cos^2x\mathrm{d}x^2 \ne e^{\sin x}(\cos^2x - \sin x)\mathrm{d}x^2,$$
+即
+$$f''(u)\mathrm{d}u^2 \ne \mathrm{d}^2y.$$
+</div>
+</div>
+
+<div class="page-divider" data-page="原书第 135 页 [PDF P.154]" id="p135"></div>
+
+<p>事实上，对 $\mathrm{d}y = f'(u)\mathrm{d}u$ 两边求微分时，可知 $\mathrm{d}^2y$ 应为</p>
+
+$$\mathrm{d}^2y = \mathrm{d}[f'(u)] \cdot \mathrm{d}u + f'(u) \cdot \mathrm{d}(\mathrm{d}u) = f''(u)\mathrm{d}u^2 + f'(u)\mathrm{d}^2u,$$
+
+<p>这时由于 $u$ 是中间变量而非自变量，$\mathrm{d}^2u$ 一般不会等于零，若不小心舍弃了后一项就会造成计算的错误.</p>
+
+<p>在例 4.5.9 的计算中，只要加上一项</p>
+
+$$f'(u)\mathrm{d}^2u = e^u\mathrm{d}^2(\sin x) = e^{\sin x}(\sin x)''\mathrm{d}x^2 = -e^{\sin x}\sin x\mathrm{d}x^2,$$
+
+<p class="no-indent">答案就正确了.</p>
+
+<p>作为一个练习，请读者自行推导用中间变量 $u$ 表示的 $y$ 的三阶微分 $\mathrm{d}^3y$.</p>
+
+<p>总而言之，关于自变量和中间变量的微分形式的不变性只是对一阶微分成立，而对于高阶微分来讲，这一性质已经不复存在了. 因此在求高阶微分的时候，一定要仔细分清楚自变量和中间变量，区别对待，否则将会导致谬误.</p>
+
+</section>
+<section id="ex4-5" class="exercise-container">
+<h3>习 题</h3>
+
+<div class="page-divider" data-page="原书第 137 页 [PDF P.156]" id="p137"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">1.</span>
+求下列函数的高阶导数：
+<div class="exercise-subitem">(1) $y = x^3 + 2x^2 - x + 1$，求 $y'''$；</div>
+<div class="exercise-subitem">(2) $y = x^4\ln x$，求 $y''$；</div>
+<div class="exercise-subitem">(3) $y = \dfrac{x^2}{\sqrt{1 + x}}$，求 $y''$；</div>
+<div class="exercise-subitem">(4) $y = \dfrac{\ln x}{x^2}$，求 $y''$；</div>
+<div class="exercise-subitem">(5) $y = \sin x^3$，求 $y''$、$y'''$；</div>
+<div class="exercise-subitem">(6) $y = x^3\cos\sqrt{x}$，求 $y''$、$y'''$；</div>
+<div class="exercise-subitem">(7) $y = x^2 e^{3x}$，求 $y'''$；</div>
+<div class="exercise-subitem">(8) $y = e^{-x}\arcsin x$，求 $y''$；</div>
+<div class="exercise-subitem">(9) $y = x^3\cos 2x$，求 $y^{(80)}$；</div>
+<div class="exercise-subitem">(10) $y = (2x^2 + 1)\operatorname{sh} x$，求 $y^{(99)}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">2.</span>
+求下列函数的 $n$ 阶导数 $y^{(n)}$：
+<div class="exercise-subitem">(1) $y = \sin^2\omega x$；</div>
+<div class="exercise-subitem">(2) $y = 2^x\ln x$；</div>
+<div class="exercise-subitem">(3) $y = \dfrac{e^x}{x}$；</div>
+<div class="exercise-subitem">(4) $y = \dfrac{1}{x^2 - 5x + 6}$；</div>
+<div class="exercise-subitem">(5) $y = e^{\alpha x}\cos\beta x$；</div>
+<div class="exercise-subitem">(6) $y = \sin^4x + \cos^4x$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">3.</span>
+研究函数
+$$f(x) = \begin{cases}x^2, & x \ge 0,\\ -x^2, & x < 0\end{cases}$$
+的各阶导数.
+</li>
+<li class="exercise-item">
+<span class="exercise-number">4.</span>
+设 $f(x)$ 任意次可微，求
+<div class="exercise-subitem">(1) $[f(x^2)]'''$；</div>
+<div class="exercise-subitem">(2) $\left[f\left(\dfrac{1}{x}\right)\right]'''$；</div>
+<div class="exercise-subitem">(3) $[f(\ln x)]''$；</div>
+<div class="exercise-subitem">(4) $[\ln f(x)]''$；</div>
+<div class="exercise-subitem">(5) $[f(e^{-x})]'''$；</div>
+<div class="exercise-subitem">(6) $[f(\arctan x)]''$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">5.</span>
+利用 Leibniz 公式计算 $y^{(n)}(0)$：
+<div class="exercise-subitem">(1) $y = \arctan x$；</div>
+<div class="exercise-subitem">(2) $y = \arcsin x$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">6.</span>
+对下列隐函数求 $\dfrac{\mathrm{d}^2y}{\mathrm{d}x^2}$：
+<div class="exercise-subitem">(1) $e^{x^2 + y} - x^2y = 0$；</div>
+<div class="exercise-subitem">(2) $\tan(x + y) - xy = 0$；</div>
+<div class="exercise-subitem">(3) $2y\sin x + x\ln y = 0$；</div>
+<div class="exercise-subitem">(4) $x^3 + y^3 - 3axy = 0$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">7.</span>
+对下列参数形式的函数求 $\dfrac{\mathrm{d}^2y}{\mathrm{d}x^2}$：
+<div class="exercise-subitem">(1) $\begin{cases}x = at^2,\\ y = bt^3;\end{cases}$</div>
+<div class="exercise-subitem">(2) $\begin{cases}x = at\cos t,\\ y = at\sin t;\end{cases}$</div>
+<div class="exercise-subitem">(3) $\begin{cases}x = t(1 - \sin t),\\ y = t\cos t;\end{cases}$</div>
+<div class="exercise-subitem">(4) $\begin{cases}x = a e^{-t},\\ y = b e^t;\end{cases}$</div>
+<div class="exercise-subitem">(5) $\begin{cases}x = \sqrt{1 + t},\\ y = \sqrt{1 - t};\end{cases}$</div>
+<div class="exercise-subitem">(6) $\begin{cases}x = \sin at,\\ y = \cos bt.\end{cases}$</div>
+</li>
+</ul>
+
+<div class="page-divider" data-page="原书第 138 页 [PDF P.157]" id="p138"></div>
+
+<ul class="exercise-list">
+<li class="exercise-item">
+<span class="exercise-number">8.</span>
+利用反函数的求导公式 $\dfrac{\mathrm{d}x}{\mathrm{d}y} = \dfrac{1}{y'}$，证明：
+<div class="exercise-subitem">(1) $\dfrac{\mathrm{d}^2x}{\mathrm{d}y^2} = -\dfrac{y''}{(y')^3}$；</div>
+<div class="exercise-subitem">(2) $\dfrac{\mathrm{d}^3x}{\mathrm{d}y^3} = \dfrac{3(y'')^2 - y'y'''}{(y')^5}$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">9.</span>
+求下列函数的高阶微分：
+<div class="exercise-subitem">(1) $y = \sqrt[3]{x - \tan x}$，求 $\mathrm{d}^2y$；</div>
+<div class="exercise-subitem">(2) $y = x^4 e^{-x}$，求 $\mathrm{d}^2y$；</div>
+<div class="exercise-subitem">(3) $y = \dfrac{\sqrt{1 + x^2}}{x}$，求 $\mathrm{d}^2y$；</div>
+<div class="exercise-subitem">(4) $y = \dfrac{\sec x}{\sqrt{x^2 - 1}}$，求 $\mathrm{d}^2y$；</div>
+<div class="exercise-subitem">(5) $y = x\sin 3x$，求 $\mathrm{d}^3y$；</div>
+<div class="exercise-subitem">(6) $y = x^x$，求 $\mathrm{d}^2y$；</div>
+<div class="exercise-subitem">(7) $y = \dfrac{\ln x}{x}$，求 $\mathrm{d}^ny$；</div>
+<div class="exercise-subitem">(8) $y = x^n\cos 2x$，求 $\mathrm{d}^ny$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">10.</span>
+求 $\mathrm{d}^2(e^x)$，其中
+<div class="exercise-subitem">(1) $x$ 是自变量；</div>
+<div class="exercise-subitem">(2) $x = \varphi(t)$ 是中间变量.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">11.</span>
+设 $f(u), g(u)$ 任意次可微，且 $g(u) > 0$.
+<div class="exercise-subitem">(1) 当 $u = \tan x$ 时，求 $\mathrm{d}^2f$；</div>
+<div class="exercise-subitem">(2) 当 $u = \sqrt{v}, v = \ln x$ 时，求 $\mathrm{d}^2g$；</div>
+<div class="exercise-subitem">(3) $\mathrm{d}^2[f(u)g(u)]$；</div>
+<div class="exercise-subitem">(4) $\mathrm{d}^2[\ln g(u)]$；</div>
+<div class="exercise-subitem">(5) $\mathrm{d}^2\left[\dfrac{f(u)}{g(u)}\right]$.</div>
+</li>
+<li class="exercise-item">
+<span class="exercise-number">12.</span>
+利用数学归纳法证明：
+$$\left(x^{n-1}e^{\frac{1}{x}}\right)^{(n)} = \frac{(-1)^n}{x^{n+1}}e^{\frac{1}{x}}.$$
+</li>
+</ul>
+
+<div class="page-divider" data-page="原书第 139 页 [PDF P.158]" id="p139"></div>
+
+<div class="footnote">
+<p class="no-indent" style="text-align:center; font-weight:700;">补充习题</p>
+</div>
+
+</section>
+    </main>
+  </div>
+</div>
+
+<script>
+  const themeBtn = document.getElementById('themeToggleBtn');
+  let currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeBtn.innerText = '切换日间模式';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+      themeBtn.innerText = '切换夜间模式';
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeBtn.innerText = '切换日间模式';
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  const sections = document.querySelectorAll('section, h3, h4, .exercise-container');
+  const navLinks = document.querySelectorAll('.toc-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 120;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>
