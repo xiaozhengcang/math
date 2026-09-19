@@ -17,8 +17,8 @@
       delimiters: [
         {left: '$$', right: '$$', display: true},
         {left: '$', right: '$', display: false},
-        {left: '\(', right: '\)', display: false},
-        {left: '\[', right: '\]', display: true}
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
       ],
       throwOnError: false
     });"></script>
@@ -188,13 +188,9 @@ body {
   gap: 2.25rem;
 }
 
-@media (max-width: 1024px) {
-  .main-layout {
-    grid-template-columns: 1fr;
-  }
-  .sidebar-toc {
-    display: none;
-  }
+.main-content {
+  min-width: 0;
+  width: 100%;
 }
 
 /* Sidebar Quick Jump */
@@ -208,9 +204,127 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 14px;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+  z-index: 100;
+}
+
+.toc-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toc-close-btn {
+  display: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.toc-close-btn:hover {
+  background: rgba(244, 63, 94, 0.2);
+  color: #fb7185;
+  border-color: rgba(244, 63, 94, 0.4);
+}
+
+.toc-backdrop {
+  display: none;
+}
+
+.toc-toggle-btn {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+    padding: 1.25rem 1rem 4rem;
+    gap: 1.5rem;
+  }
+
+  .sidebar-toc {
+    position: fixed;
+    top: 0;
+    left: -330px;
+    width: 310px;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0 16px 16px 0;
+    z-index: 2000;
+    background: rgba(11, 17, 33, 0.96);
+    border-right: 1px solid rgba(56, 189, 248, 0.3);
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.6);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 1.5rem 1.25rem 2.5rem;
+  }
+
+  .sidebar-toc.open {
+    transform: translateX(330px);
+  }
+
+  .toc-close-btn {
+    display: inline-flex;
+  }
+
+  .toc-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .toc-backdrop.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .toc-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: fixed;
+    bottom: 1.75rem;
+    right: 1.5rem;
+    z-index: 1500;
+    padding: 0.65rem 1.15rem;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(99, 102, 241, 0.95));
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 9999px;
+    box-shadow: 0 8px 25px rgba(56, 189, 248, 0.45), 0 4px 12px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .toc-toggle-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 30px rgba(56, 189, 248, 0.6);
+  }
+
+  .toc-toggle-btn:active {
+    transform: translateY(0) scale(0.98);
+  }
 }
 
 .toc-title {
@@ -793,8 +907,11 @@ body {
 
 <div class="main-layout">
   <!-- Left Sticky TOC -->
-  <aside class="sidebar-toc">
-    <div class="toc-title">📑 章节内容导航</div>
+  <aside class="sidebar-toc" id="sidebar-toc">
+    <div class="toc-title toc-header-bar">
+      <span>📑 章节内容导航</span>
+      <button class="toc-close-btn" id="toc-close-btn" onclick="toggleToc(false)" aria-label="关闭导航">✕</button>
+    </div>
     <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
     
     <div class="toc-group-title">📖 本章核心定义 (3)</div>
@@ -1593,7 +1710,50 @@ $$[f(x) \cdot g(x)]^{(m+1)} = \sum_{k=0}^{m+1}C_{m+1}^k f^{(m+1-k)}(x)g^{(k)}(x)
   </main>
 </div>
 
+<div class="toc-backdrop" id="toc-backdrop" onclick="toggleToc(false)"></div>
+<button class="toc-toggle-btn" id="toc-toggle-btn" onclick="toggleToc(true)" title="展开章节目录">
+  <span>📑</span>
+  <span class="toc-toggle-text">章节导航</span>
+</button>
+
 <script>
+function toggleToc(open) {
+  const sidebar = document.getElementById('sidebar-toc');
+  const backdrop = document.getElementById('toc-backdrop');
+  if (!sidebar) return;
+  const willOpen = open !== undefined ? open : !sidebar.classList.contains('open');
+  if (willOpen) {
+    sidebar.classList.add('open');
+    if (backdrop) backdrop.classList.add('open');
+    document.body.style.overflow = window.innerWidth <= 1024 ? 'hidden' : '';
+  } else {
+    sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+
+function initTocLinks() {
+  document.querySelectorAll('.toc-link').forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 1024) {
+        toggleToc(false);
+      }
+    });
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initTocLinks);
+} else {
+  initTocLinks();
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    toggleToc(false);
+  }
+});
+
 function filterToc() {
   const query = document.getElementById('toc-filter').value.toLowerCase();
   const links = document.querySelectorAll('.toc-link');
