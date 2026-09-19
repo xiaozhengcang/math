@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>第三章 · 函数极限与连续性 · 定理与完整证明全书</title>
+  <title>第三章 · 函数极限与连续性 · 核心定义与定理证明全书</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,7 +70,7 @@ body {
   z-index: 1000;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  background: rgba(8, 12, 22, 0.85);
+  background: rgba(8, 12, 22, 0.88);
   border-bottom: 1px solid var(--border-color);
   padding: 0.75rem 1.5rem;
   display: flex;
@@ -118,77 +118,77 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
+  padding: 0.35rem 0.8rem;
   border-radius: 8px;
   font-size: 0.82rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-decoration: none;
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-color);
-  text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
   color: #fff;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: var(--border-highlight);
-  transform: translateY(-1px);
-}
-
-.nav-btn.active-hub {
-  color: var(--accent-blue);
-  background: rgba(56, 189, 248, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   border-color: var(--accent-blue);
 }
 
-/* Chapter Switcher Pills Bar */
 .chapter-pills-bar {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   overflow-x: auto;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.2rem;
   scrollbar-width: thin;
 }
 
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
 .ch-pill {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.78rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   font-weight: 600;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
   text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .ch-pill:hover {
   color: var(--text-primary);
-  border-color: var(--accent-blue);
-  background: rgba(56, 189, 248, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .ch-pill.current-ch {
   color: #fff;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
 }
 
-/* Main Container Layout */
+/* Two-column Layout */
 .main-layout {
-  max-width: 1240px;
+  max-width: 1380px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: 2rem 1.5rem 5rem;
   display: grid;
   grid-template-columns: 280px 1fr;
-  gap: 2rem;
+  gap: 2.25rem;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .main-layout {
     grid-template-columns: 1fr;
   }
@@ -200,8 +200,8 @@ body {
 /* Sidebar Quick Jump */
 .sidebar-toc {
   position: sticky;
-  top: 6.5rem;
-  max-height: calc(100vh - 8rem);
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
   overflow-y: auto;
   padding: 1.25rem;
   background: var(--bg-card);
@@ -210,7 +210,7 @@ body {
   backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .toc-title {
@@ -239,17 +239,29 @@ body {
   border-color: var(--accent-blue);
 }
 
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .toc-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.82rem;
+  gap: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .toc-link {
   display: block;
-  padding: 0.35rem 0.6rem;
+  padding: 0.3rem 0.55rem;
   border-radius: 6px;
   color: var(--text-secondary);
   text-decoration: none;
@@ -262,62 +274,187 @@ body {
 .toc-link:hover {
   color: #fff;
   background: rgba(56, 189, 248, 0.1);
-  padding-left: 0.85rem;
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
 }
 
 /* Chapter Hero Banner */
 .chapter-hero {
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
   position: relative;
-  overflow: hidden;
-}
-
-.chapter-hero::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0; width: 300px; height: 100%;
-  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
-  pointer-events: none;
 }
 
 .ch-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .ch-number-badge {
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: var(--accent-blue);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.2rem 0.7rem;
-  border-radius: 9999px;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
 }
 
 .ch-count-badge {
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
 }
 
 .ch-main-title {
-  font-size: 1.85rem;
+  font-size: 2.1rem;
   font-weight: 800;
   color: #fff;
-  line-height: 1.3;
   margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
 }
 
 .ch-desc-text {
-  font-size: 0.95rem;
   color: var(--text-secondary);
-  max-width: 800px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
 }
 
 /* Theorem Card Styles */
@@ -378,98 +515,116 @@ body {
 .thm-tag {
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
 }
 
 .thm-tag.routine-ref {
-  background: rgba(168, 85, 247, 0.15);
-  border-color: rgba(168, 85, 247, 0.35);
-  color: #d8b4fe;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .thm-tag.routine-ref:hover {
-  background: rgba(168, 85, 247, 0.25);
-  color: #fff;
+  background: var(--accent-blue);
+  color: #070a12;
 }
 
 .anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.85rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .anchor-btn:hover {
-  color: var(--accent-blue);
+  color: #fff;
   border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
 }
 
-/* Verbatim Theorem Statement Box */
+/* Verbatim Statement Box */
 .verbatim-statement-box {
-  background: rgba(15, 23, 42, 0.65);
-  border-left: 4px solid var(--accent-blue);
-  border-radius: 0 12px 12px 0;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.25rem;
-  color: #e2e8f0;
-  font-size: 1rem;
-}
-
-.section-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent-blue);
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-/* Verbatim Original Proof Box */
-.verbatim-proof-box {
-  background: rgba(9, 14, 26, 0.75);
+  background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
-  color: #cbd5e1;
-  font-size: 0.95rem;
   line-height: 1.8;
 }
 
-.proof-label {
-  font-size: 0.78rem;
+.section-label {
+  font-size: 0.75rem;
   font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--accent-emerald);
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
-/* Layman Commentary Box (Four-Layer Structure) */
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
 .layman-commentary-box {
-  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  gap: 1.15rem;
 }
 
 .commentary-header {
@@ -479,111 +634,95 @@ body {
   flex-wrap: wrap;
   gap: 0.6rem;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .commentary-badge {
   font-size: 0.82rem;
   font-weight: 700;
-  color: #d8b4fe;
+  color: #fcd34d;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .routine-link-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(168, 85, 247, 0.2);
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  color: #e9d5ff;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .routine-link-pill:hover {
-  background: rgba(168, 85, 247, 0.35);
-  color: #fff;
-  transform: translateY(-1px);
+  background: var(--accent-blue);
+  color: #070a12;
 }
 
 .essence-line {
-  background: rgba(56, 189, 248, 0.1);
-  border-left: 3px solid var(--accent-blue);
-  padding: 0.6rem 0.9rem;
-  border-radius: 0 8px 8px 0;
   font-size: 0.95rem;
-  color: #e0f2fe;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
 }
 
 .layman-quote {
   background: rgba(0, 0, 0, 0.25);
-  border-left: 3px solid var(--accent-amber);
-  padding: 0.85rem 1.1rem;
-  border-radius: 0 8px 8px 0;
-  font-size: 0.93rem;
-  color: #fde68a;
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
   line-height: 1.7;
 }
 
 .metaphor-box {
-  background: rgba(16, 185, 129, 0.08);
-  border-left: 3px solid var(--accent-emerald);
-  padding: 0.85rem 1.1rem;
-  border-radius: 0 8px 8px 0;
-  font-size: 0.92rem;
-  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
   line-height: 1.7;
 }
 
 .keypoints-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
 }
 
 .keypoints-title {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--accent-cyan);
-  margin-bottom: 0.5rem;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .keypoints-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  padding-left: 0.2rem;
-}
-
-.keypoints-list li {
-  position: relative;
-  padding-left: 1.25rem;
+  margin-left: 1.25rem;
   font-size: 0.88rem;
   color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   line-height: 1.6;
 }
 
-.keypoints-list li::before {
-  content: '▸';
-  position: absolute;
-  left: 0;
-  color: var(--accent-blue);
-  font-weight: bold;
-}
-
-/* Chapter Bottom Pagination */
+/* Pagination Bar */
 .chapter-pagination {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
+  margin-top: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -621,23 +760,32 @@ body {
   <div class="nav-upper">
     <a href="index.html" class="brand-title">
       <span>📐 高等数学与数学分析</span>
-      <span class="brand-badge">定理与证明全书</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
     </a>
     <div class="nav-links">
-      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
       <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
       <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
     </div>
   </div>
   <div class="chapter-pills-bar">
-    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
-<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
-<a href="chapter_03_theorems.html" class="ch-pill current-ch">第3章 (23)</a>
-<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
-<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
-<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
-<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
-<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill current-ch">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
 
   </div>
 </header>
@@ -646,32 +794,48 @@ body {
 <div class="main-layout">
   <!-- Left Sticky TOC -->
   <aside class="sidebar-toc">
-    <div class="toc-title">📑 本章定理导航 (23)</div>
-    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
-    <ul class="toc-list" id="toc-list">
-      <li><a href="#thm-3-1-1" class="toc-link" title="定理 3.1.1 函数极限的唯一性">定理 3.1.1 函数极限的唯一性</a></li>
-<li><a href="#thm-3-1-2" class="toc-link" title="定理 3.1.2 函数极限的局部保序与保号性">定理 3.1.2 函数极限的局部保序与保号性</a></li>
-<li><a href="#thm-3-1-cor1" class="toc-link" title="推论 1 极限非零则局部严格有下界">推论 1 极限非零则局部严格有下界</a></li>
-<li><a href="#thm-3-1-cor2" class="toc-link" title="推论 2 函数不等式极限保序性">推论 2 函数不等式极限保序性</a></li>
-<li><a href="#thm-3-1-cor3" class="toc-link" title="推论 3 函数极限的局部有界性">推论 3 函数极限的局部有界性</a></li>
-<li><a href="#thm-3-1-3" class="toc-link" title="定理 3.1.3 函数极限的两面夹定理 (夹逼准则)">定理 3.1.3 函数极限的两面夹定理 (夹逼准则)</a></li>
-<li><a href="#thm-3-1-4" class="toc-link" title="定理 3.1.4 函数极限的四则运算法则">定理 3.1.4 函数极限的四则运算法则</a></li>
-<li><a href="#thm-3-1-5" class="toc-link" title="定理 3.1.5 Heine 定理 (海涅归结原理)">定理 3.1.5 Heine 定理 (海涅归结原理)</a></li>
-<li><a href="#thm-3-1-5p" class="toc-link" title="定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)">定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)</a></li>
-<li><a href="#thm-3-1-6" class="toc-link" title="定理 3.1.6 无穷远处极限与数列极限归结定理">定理 3.1.6 无穷远处极限与数列极限归结定理</a></li>
-<li><a href="#thm-3-2-1" class="toc-link" title="定理 3.2.1 反函数存在性定理">定理 3.2.1 反函数存在性定理</a></li>
-<li><a href="#thm-3-2-2" class="toc-link" title="定理 3.2.2 反函数连续性定理">定理 3.2.2 反函数连续性定理</a></li>
-<li><a href="#thm-3-2-3" class="toc-link" title="定理 3.2.3 复合函数连续性定理">定理 3.2.3 复合函数连续性定理</a></li>
-<li><a href="#thm-3-2-4" class="toc-link" title="定理 3.2.4 一切初等函数在其定义区间上连续">定理 3.2.4 一切初等函数在其定义区间上连续</a></li>
-<li><a href="#thm-3-3-1" class="toc-link" title="定理 3.3.1 等价无穷小代换定理">定理 3.3.1 等价无穷小代换定理</a></li>
-<li><a href="#thm-3-4-1" class="toc-link" title="定理 3.4.1 闭区间连续函数的有界性定理">定理 3.4.1 闭区间连续函数的有界性定理</a></li>
-<li><a href="#thm-3-4-2" class="toc-link" title="定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)">定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)</a></li>
-<li><a href="#thm-3-4-3" class="toc-link" title="定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)">定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)</a></li>
-<li><a href="#thm-3-4-4" class="toc-link" title="定理 3.4.4 介值定理 (中间值定理)">定理 3.4.4 介值定理 (中间值定理)</a></li>
-<li><a href="#thm-3-4-cor" class="toc-link" title="推论 闭区间连续函数的值域必为闭区间">推论 闭区间连续函数的值域必为闭区间</a></li>
-<li><a href="#thm-3-4-5" class="toc-link" title="定理 3.4.5 一致连续性的充要条件 (点列判据准则)">定理 3.4.5 一致连续性的充要条件 (点列判据准则)</a></li>
-<li><a href="#thm-3-4-6" class="toc-link" title="定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)">定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)</a></li>
-<li><a href="#thm-3-4-7" class="toc-link" title="定理 3.4.7 开区间上连续函数的一致连续性延拓定理">定理 3.4.7 开区间上连续函数的一致连续性延拓定理</a></li>
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (9)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch3-3-1-1" class="toc-link def-link" title="定义 3.1.1 函数在去心邻域极限 (ε-δ 语言)">📖 定义 3.1.1 函数在去心邻域极限 (ε-δ 语言)</a></li>
+<li><a href="#def-ch3-3-1-2" class="toc-link def-link" title="定义 3.1.2 函数的单侧极限 (左极限与右极限)">📖 定义 3.1.2 函数的单侧极限 (左极限与右极限)</a></li>
+<li><a href="#def-ch3-3-2-1" class="toc-link def-link" title="定义 3.2.1 函数在一点处的连续性">📖 定义 3.2.1 函数在一点处的连续性</a></li>
+<li><a href="#def-ch3-3-2-2" class="toc-link def-link" title="定义 3.2.2 开区间上的连续函数">📖 定义 3.2.2 开区间上的连续函数</a></li>
+<li><a href="#def-ch3-3-2-3" class="toc-link def-link" title="定义 3.2.3 单侧连续 (左连续与右连续)">📖 定义 3.2.3 单侧连续 (左连续与右连续)</a></li>
+<li><a href="#def-ch3-3-2-4" class="toc-link def-link" title="定义 3.2.4 闭区间上的连续函数">📖 定义 3.2.4 闭区间上的连续函数</a></li>
+<li><a href="#def-ch3-3-3-1" class="toc-link def-link" title="定义 3.3.1 无穷小量 (Infinitesimals)">📖 定义 3.3.1 无穷小量 (Infinitesimals)</a></li>
+<li><a href="#def-ch3-3-3-2" class="toc-link def-link" title="定义 3.3.2 无穷大量 (Infinities)">📖 定义 3.3.2 无穷大量 (Infinities)</a></li>
+<li><a href="#def-ch3-3-4-1" class="toc-link def-link" title="定义 3.4.1 函数的一致连续性 (Uniform Continuity)">📖 定义 3.4.1 函数的一致连续性 (Uniform Continuity)</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (23)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-3-1-1" class="toc-link" title="定理 3.1.1 函数极限的唯一性">📐 定理 3.1.1 函数极限的唯一性</a></li>
+<li><a href="#thm-3-1-2" class="toc-link" title="定理 3.1.2 函数极限的局部保序与保号性">📐 定理 3.1.2 函数极限的局部保序与保号性</a></li>
+<li><a href="#thm-3-1-cor1" class="toc-link" title="推论 1 极限非零则局部严格有下界">📐 推论 1 极限非零则局部严格有下界</a></li>
+<li><a href="#thm-3-1-cor2" class="toc-link" title="推论 2 函数不等式极限保序性">📐 推论 2 函数不等式极限保序性</a></li>
+<li><a href="#thm-3-1-cor3" class="toc-link" title="推论 3 函数极限的局部有界性">📐 推论 3 函数极限的局部有界性</a></li>
+<li><a href="#thm-3-1-3" class="toc-link" title="定理 3.1.3 函数极限的两面夹定理 (夹逼准则)">📐 定理 3.1.3 函数极限的两面夹定理 (夹逼准则)</a></li>
+<li><a href="#thm-3-1-4" class="toc-link" title="定理 3.1.4 函数极限的四则运算法则">📐 定理 3.1.4 函数极限的四则运算法则</a></li>
+<li><a href="#thm-3-1-5" class="toc-link" title="定理 3.1.5 Heine 定理 (海涅归结原理)">📐 定理 3.1.5 Heine 定理 (海涅归结原理)</a></li>
+<li><a href="#thm-3-1-5p" class="toc-link" title="定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)">📐 定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)</a></li>
+<li><a href="#thm-3-1-6" class="toc-link" title="定理 3.1.6 无穷远处极限与数列极限归结定理">📐 定理 3.1.6 无穷远处极限与数列极限归结定理</a></li>
+<li><a href="#thm-3-2-1" class="toc-link" title="定理 3.2.1 反函数存在性定理">📐 定理 3.2.1 反函数存在性定理</a></li>
+<li><a href="#thm-3-2-2" class="toc-link" title="定理 3.2.2 反函数连续性定理">📐 定理 3.2.2 反函数连续性定理</a></li>
+<li><a href="#thm-3-2-3" class="toc-link" title="定理 3.2.3 复合函数连续性定理">📐 定理 3.2.3 复合函数连续性定理</a></li>
+<li><a href="#thm-3-2-4" class="toc-link" title="定理 3.2.4 一切初等函数在其定义区间上连续">📐 定理 3.2.4 一切初等函数在其定义区间上连续</a></li>
+<li><a href="#thm-3-3-1" class="toc-link" title="定理 3.3.1 等价无穷小代换定理">📐 定理 3.3.1 等价无穷小代换定理</a></li>
+<li><a href="#thm-3-4-1" class="toc-link" title="定理 3.4.1 闭区间连续函数的有界性定理">📐 定理 3.4.1 闭区间连续函数的有界性定理</a></li>
+<li><a href="#thm-3-4-2" class="toc-link" title="定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)">📐 定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)</a></li>
+<li><a href="#thm-3-4-3" class="toc-link" title="定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)">📐 定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)</a></li>
+<li><a href="#thm-3-4-4" class="toc-link" title="定理 3.4.4 介值定理 (中间值定理)">📐 定理 3.4.4 介值定理 (中间值定理)</a></li>
+<li><a href="#thm-3-4-cor" class="toc-link" title="推论 闭区间连续函数的值域必为闭区间">📐 推论 闭区间连续函数的值域必为闭区间</a></li>
+<li><a href="#thm-3-4-5" class="toc-link" title="定理 3.4.5 一致连续性的充要条件 (点列判据准则)">📐 定理 3.4.5 一致连续性的充要条件 (点列判据准则)</a></li>
+<li><a href="#thm-3-4-6" class="toc-link" title="定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)">📐 定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)</a></li>
+<li><a href="#thm-3-4-7" class="toc-link" title="定理 3.4.7 开区间上连续函数的一致连续性延拓定理">📐 定理 3.4.7 开区间上连续函数的一致连续性延拓定理</a></li>
 
     </ul>
   </aside>
@@ -681,12 +845,228 @@ body {
     <section class="chapter-hero">
       <div class="ch-badge-row">
         <span class="ch-number-badge">CHAPTER 03</span>
-        <span class="ch-count-badge">共收录 23 个重要定理与引理</span>
+        <span class="ch-count-badge">收录 9 个基础定义 · 23 个重要定理与引理</span>
       </div>
       <h1 class="ch-main-title">第三章 · 函数极限与连续性</h1>
-      <p class="ch-desc-text">ε-δ 语言、海涅归结原理、一致连续性 Cantor 定理与闭区间连续函数性质</p>
+      <p class="ch-desc-text">ε-δ 语言、单侧极限、Heine归结原理、一致连续性 Cantor 定理与闭区间连续函数性质</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_03/chapter_03.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 3 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
     </section>
 
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 9 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch3-3-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.1.1 函数在去心邻域极限 (ε-δ 语言)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">函数极限</span><span class="def-tag">去心邻域</span><span class="def-tag">ε-δ语言</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-1-1" class="anchor-btn" title="复制锚点链接"># 定义 3.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 设函数 $y = f(x)$ 在点 $x_0$ 的某个去心邻域中有定义，即存在 $\rho &gt; 0$，使得 $O^\circ(x_0, \rho) \subset D(f)$. 如果存在实数 $A$，对于任意给定的 $\varepsilon &gt; 0$，可以找到 $\delta &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$|f(x) - A| &lt; \varepsilon,$$
+<p class="no-indent">则称 $A$ 是函数 $f(x)$ 在点 $x_0$ 的<strong>极限</strong>，记为</p>
+$$\lim_{x \to x_0} f(x) = A \quad \text{或} \quad f(x) \to A \ (x \to x_0).$$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-1-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.1.2 函数的单侧极限 (左极限与右极限)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">左极限</span><span class="def-tag">右极限</span><span class="def-tag">单侧逼近</span><span class="def-tag">极限充要条件</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-1-2" class="anchor-btn" title="复制锚点链接"># 定义 3.1.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 设 $f(x)$ 在 $(x_0 - \rho, x_0)$ 有定义（$\rho &gt; 0$）. 如果存在实数 $B$，对于任意给定的 $\varepsilon &gt; 0$，可以找到 $\delta &gt; 0$，使得当 $-\delta &lt; x - x_0 &lt; 0$ 时，成立</p>
+$$|f(x) - B| &lt; \varepsilon,$$
+<p class="no-indent">则称 $B$ 是函数 $f(x)$ 在点 $x_0$ 的<strong>左极限</strong>，记为</p>
+$$\lim_{x \to x_0^-} f(x) = f(x_0^-) = B.$$
+<p>类似地，如果 $f(x)$ 在 $(x_0, x_0 + \rho)$ 有定义（$\rho &gt; 0$），并且存在实数 $C$，对于任意给定的 $\varepsilon &gt; 0$，可以找到 $\delta &gt; 0$，使得当 $0 &lt; x - x_0 &lt; \delta$ 时，成立</p>
+$$|f(x) - C| &lt; \varepsilon,$$
+<p class="no-indent">则称 $C$ 是函数 $f(x)$ 在点 $x_0$ 的<strong>右极限</strong>，记为</p>
+$$\lim_{x \to x_0^+} f(x) = f(x_0^+) = C.$$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.2.1 函数在一点处的连续性</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">点连续性</span><span class="def-tag">极限等于函数值</span><span class="def-tag">连续微元</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-2-1" class="anchor-btn" title="复制锚点链接"># 定义 3.2.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 设函数 $f(x)$ 在点 $x_0$ 的某个邻域中有定义，并且成立</p>
+
+$$\lim_{x \to x_0} f(x) = f(x_0),$$
+<p class="no-indent">则称函数 $f(x)$ 在点 $x_0$ <strong>连续</strong>，而称 $x_0$ 是函数 $f(x)$ 的<strong>连续点</strong>.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-2-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.2.2 开区间上的连续函数</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">开区间连续</span><span class="def-tag">整体连续性</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-2-2" class="anchor-btn" title="复制锚点链接"># 定义 3.2.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 若函数 $f(x)$ 在区间 $(a, b)$ 的每一点都连续，则称函数 $f(x)$ 在开区间 $(a, b)$ 上<strong>连续</strong>.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-2-3">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.2.3 单侧连续 (左连续与右连续)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">左连续</span><span class="def-tag">右连续</span><span class="def-tag">单侧连续</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-2-3" class="anchor-btn" title="复制锚点链接"># 定义 3.2.3</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 若 $\lim_{x \to x_0^-} f(x) = f(x_0)$，则称函数 $f(x)$ 在 $x_0$ <strong>左连续</strong>；若 $\lim_{x \to x_0^+} f(x) = f(x_0)$，则称函数 $f(x)$ 在 $x_0$ <strong>右连续</strong>.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-2-4">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.2.4 闭区间上的连续函数</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">闭区间连续</span><span class="def-tag">端点单侧连续</span><span class="def-tag">紧致区间性质</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-2-4" class="anchor-btn" title="复制锚点链接"># 定义 3.2.4</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 若 $f(x)$ 在 $(a, b)$ 连续，且在左端点 $a$ 右连续，在右端点 $b$ 左连续，则称函数 $f(x)$ 在闭区间 $[a, b]$ 上<strong>连续</strong>.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-3-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.3.1 无穷小量 (Infinitesimals)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无穷小</span><span class="def-tag">极限为零</span><span class="def-tag">阶的比较</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-3-1" class="anchor-btn" title="复制锚点链接"># 定义 3.3.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 若 $\lim_{x \to x_0} f(x) = 0$，则称当 $x \to x_0$ 时，$f(x)$ 是<strong>无穷小量</strong>.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-3-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.3.2 无穷大量 (Infinities)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无穷大</span><span class="def-tag">无界增长</span><span class="def-tag">倒数关系</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-3-2" class="anchor-btn" title="复制锚点链接"># 定义 3.3.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 若 $\lim_{x \to x_0} f(x) = \infty$（或 $\pm\infty$），则称当 $x \to x_0$ 时，$f(x)$ 是<strong>无穷大量</strong>（或正、负无穷大量）.</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch3-3-4-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 3.4.1 函数的一致连续性 (Uniform Continuity)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">一致连续</span><span class="def-tag">全局δ控制</span><span class="def-tag">Cantor紧致定理</span>
+      </div>
+    </div>
+    <a href="#def-ch3-3-4-1" class="anchor-btn" title="复制锚点链接"># 定义 3.4.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p> 设函数 $f(x)$ 在区间 $X$ 上定义，若对于任意给定的 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，只要 $x', x'' \in X$ 满足 $|x' - x''| &lt; \delta$，就成立</p>
+$$|f(x') - f(x'')| &lt; \varepsilon,$$
+<p class="no-indent">则称函数 $f(x)$ 在区间 $X$ 上<strong>一致连续</strong>.</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 23 个定理 · 完整数学推导与四层点评</span>
+    </div>
     <div class="theorems-container" id="theorems-container">
       
 <article class="theorem-card" id="thm-3-1-1">
@@ -1928,7 +2308,7 @@ $$\xi = \sup V,$$
 <p>由函数在点 $a$ 与 $b$ 的连续性，存在 $\delta_1 &gt; 0, \forall x \in [a, a + \delta_1) : f(x) &lt; 0$；存在 $\delta_2 &gt; 0, \forall x \in (b - \delta_2, b] : f(x) &gt; 0$. 于是可知</p>
 $$a + \delta_1 \le \xi \le b - \delta_2,$$
 <p class="no-indent">即 $\xi \in (a, b)$.</p>
-<p>取 $x_n \in V$ ($n = 1, 2, \dots$)，$x_n \le \xi$ ($n \to \infty$)，因 $f(x_n) &lt; 0$，可以得到</p>
+<p>取 $x_n \in V$ ($n = 1, 2, \dots$)，$x_n \to \xi$ ($n \to \infty$)，因 $f(x_n) &lt; 0$，可以得到</p>
 $$f(\xi) = \lim_{n \to \infty} f(x_n) \le 0.$$
 <p>若 $f(\xi) &lt; 0$，则由局部保号性，存在 $\delta_3 &gt; 0$，当 $x \in (\xi - \delta_3, \xi + \delta_3)$ 时，$f(x) &lt; 0$，这就与 $\xi = \sup V$ 产生矛盾. 于是必然有</p>
 $$f(\xi) = 0.$$
@@ -2346,7 +2726,7 @@ $$|f(x_n) - f(x_m)| &lt; \varepsilon.$$
 function filterToc() {
   const query = document.getElementById('toc-filter').value.toLowerCase();
   const links = document.querySelectorAll('.toc-link');
-  const cards = document.querySelectorAll('.theorem-card');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
   
   links.forEach(link => {
     const text = link.textContent.toLowerCase();

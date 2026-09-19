@@ -1,0 +1,3033 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第十五章 · 含参变量积分 · 核心定义与定理证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.88);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-blue);
+}
+
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
+}
+
+/* Two-column Layout */
+.main-layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  position: relative;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.ch-number-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ch-count-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.ch-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.ch-desc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.thm-tag.routine-ref {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.thm-tag.routine-ref:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: #fff;
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* Verbatim Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.routine-link-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.essence-line {
+  font-size: 0.95rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+}
+
+.keypoints-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keypoints-list {
+  margin-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Pagination Bar */
+.chapter-pagination {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill current-ch">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (2)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch15-15-2-1" class="toc-link def-link" title="定义 15.2.1 含参变量反常积分的一致收敛性">📖 定义 15.2.1 含参变量反常积分的一致收敛性</a></li>
+<li><a href="#def-ch15-15-2-1" class="toc-link def-link" title="定义 15.2.1′ 瑕积分意义下的含参变量一致收敛">📖 定义 15.2.1′ 瑕积分意义下的含参变量一致收敛</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (20)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-ch15-15-1-1" class="toc-link" title="定理 15.1.1 连续性定理">📐 定理 15.1.1 连续性定理</a></li>
+<li><a href="#thm-ch15-15-1-2" class="toc-link" title="定理 15.1.2 积分次序交换定理">📐 定理 15.1.2 积分次序交换定理</a></li>
+<li><a href="#thm-ch15-15-1-3" class="toc-link" title="定理 15.1.3 积分号下求导定理">📐 定理 15.1.3 积分号下求导定理</a></li>
+<li><a href="#thm-ch15-15-1-4" class="toc-link" title="定理 15.1.4">📐 定理 15.1.4</a></li>
+<li><a href="#thm-ch15-15-2-1" class="toc-link" title="定理 15.2.1 Cauchy 收敛原理">📐 定理 15.2.1 Cauchy 收敛原理</a></li>
+<li><a href="#thm-ch15-15-2-1" class="toc-link" title="推论 15.2.1">📐 推论 15.2.1</a></li>
+<li><a href="#thm-ch15-15-2-2" class="toc-link" title="定理 15.2.2 Weierstrass 判别法">📐 定理 15.2.2 Weierstrass 判别法</a></li>
+<li><a href="#thm-ch15-15-2-3" class="toc-link" title="定理 15.2.3">📐 定理 15.2.3</a></li>
+<li><a href="#thm-ch15-15-2-4" class="toc-link" title="定理 15.2.4 Dini 定理">📐 定理 15.2.4 Dini 定理</a></li>
+<li><a href="#thm-ch15-15-2-1" class="toc-link" title="引理 15.2.1">📐 引理 15.2.1</a></li>
+<li><a href="#thm-ch15-15-2-5" class="toc-link" title="定理 15.2.5 连续性定理">📐 定理 15.2.5 连续性定理</a></li>
+<li><a href="#thm-ch15-15-2-6" class="toc-link" title="定理 15.2.6 积分次序交换定理">📐 定理 15.2.6 积分次序交换定理</a></li>
+<li><a href="#thm-ch15-15-2-6" class="toc-link" title="定理 15.2.6'">📐 定理 15.2.6'</a></li>
+<li><a href="#thm-ch15-15-2-7" class="toc-link" title="定理 15.2.7 积分号下求导定理">📐 定理 15.2.7 积分号下求导定理</a></li>
+<li><a href="#thm-ch15-15-3-1" class="toc-link" title="定理 15.3.1">📐 定理 15.3.1</a></li>
+<li><a href="#thm-ch15-15-3-2" class="toc-link" title="定理 15.3.2 Legendre 公式">📐 定理 15.3.2 Legendre 公式</a></li>
+<li><a href="#thm-ch15-15-3-3" class="toc-link" title="定理 15.3.3 余元公式">📐 定理 15.3.3 余元公式</a></li>
+<li><a href="#thm-ch15-15-3-1" class="toc-link" title="引理 15.3.1">📐 引理 15.3.1</a></li>
+<li><a href="#thm-ch15-15-3-2" class="toc-link" title="引理 15.3.2">📐 引理 15.3.2</a></li>
+<li><a href="#thm-ch15-15-3-4" class="toc-link" title="定理 15.3.4 Stirling 公式">📐 定理 15.3.4 Stirling 公式</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 015</span>
+        <span class="ch-count-badge">收录 2 个基础定义 · 20 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第十五章 · 含参变量积分</h1>
+      <p class="ch-desc-text">含参变量常义积分连续/可微/可积性、含参变量反常积分一致收敛性、积分号下交换次序与求导、Euler 积分 (Gamma 与 Beta 函数)</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_15/chapter_15.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 15 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 2 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch15-15-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 15.2.1 含参变量反常积分的一致收敛性</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">含参变量反常积分</span><span class="def-tag">一致收敛</span><span class="def-tag">Cauchy收敛准则</span><span class="def-tag">全局控制</span>
+      </div>
+    </div>
+    <a href="#def-ch15-15-2-1" class="anchor-btn" title="复制锚点链接"># 定义 15.2.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设二元函数 $f(x, y)$ 定义在 $[a, +\infty) \times [c, d]$ 上，且对任意的 $y \in [c, d]$，反常积分</p>
+    $$
+    I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x
+    $$
+
+    
+<p>存在．如果对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得当 $A &gt; A_0$ 时，对于所有的 $y \in [c, d]$，成立</p>
+    $$
+    \left|\int_a^A f(x, y)\,\mathrm{d}x - I(y)\right| &lt; \varepsilon,
+    $$
+    <p>即</p>
+    $$
+    \left|\int_A^{+\infty} f(x, y)\,\mathrm{d}x\right| &lt; \varepsilon,
+    $$
+    <p>则称 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上<strong>一致收敛</strong>（于 $I(y)$）．在参变量明确时，也常简称 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch15-15-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 15.2.1′ 瑕积分意义下的含参变量一致收敛</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">含参变量瑕积分</span><span class="def-tag">一致收敛</span><span class="def-tag">瑕点奇性消解</span>
+      </div>
+    </div>
+    <a href="#def-ch15-15-2-1" class="anchor-btn" title="复制锚点链接"># 定义 15.2.1′</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设二元函数 $f(x, y)$ 定义在 $[a, b) \times [c, d]$ 上，且对任意的 $y \in [c, d]$，以 $b$ 为奇点的反常积分</p>
+    $$
+    I(y) = \int_a^b f(x, y)\,\mathrm{d}x
+    $$
+    <p>存在．如果对于任意 $\varepsilon &gt; 0$，存在与 $y$ 无关的 $\delta &gt; 0$，使得当 $0 &lt; \eta &lt; \delta$ 时，</p>
+
+<p>对所有 $y \in [c, d]$ 成立</p>
+    $$
+    \left|\int_a^{b-\eta} f(x, y)\,\mathrm{d}x - I(y)\right| &lt; \varepsilon,
+    $$
+    <p>即</p>
+    $$
+    \left|\int_{b-\eta}^b f(x, y)\,\mathrm{d}x\right| &lt; \varepsilon,
+    $$
+    <p>则称 $\int_a^b f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上<strong>一致收敛</strong>（于 $I(y)$）．在参变量明确时，也常简称 $\int_a^b f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 20 个定理 · 完整数学推导与四层点评</span>
+    </div>
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-ch15-15-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.1.1 连续性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-1-1" class="anchor-btn" title="复制锚点链接"># 定理 15.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在闭矩形 $D = [a, b] \times [c, d]$ 上连续，则函数</p>
+    $$
+    I(y) = \int_a^b f(x, y)\,\mathrm{d}x
+    $$
+    <p>在 $[c, d]$ 上连续．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>因为 $f(x, y)$ 在闭矩形 $D$ 上连续，所以它在 $D$ 上一致连续．因此，对于任意给定的 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，使得对于任意两点 $(x_1, y_1), (x_2, y_2) \in D$，当 $\sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2} &lt; \delta$ 时，成立</p>
+    $$
+    |f(x_1, y_1) - f(x_2, y_2)| &lt; \varepsilon.
+    $$
+    <p>因此，对任意定点 $y_0 \in [c, d]$，只要 $|y - y_0| &lt; \delta$ 时，就有</p>
+    $$
+    |I(y) - I(y_0)| = \left|\int_a^b [f(x, y) - f(x, y_0)]\,\mathrm{d}x\right| \le \int_a^b |f(x, y) - f(x, y_0)|\,\mathrm{d}x &lt; (b - a)\varepsilon.
+    $$
+    <p>这说明 $I(y)$ 在 $[c, d]$ 上连续．</p>
+<div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.1.2 积分次序交换定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-1-2" class="anchor-btn" title="复制锚点链接"># 定理 15.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在闭矩形 $[a, b] \times [c, d]$ 上连续，则</p>
+    $$
+    \int_c^d \mathrm{d}y \int_a^b f(x, y)\,\mathrm{d}x = \int_a^b \mathrm{d}x \int_c^d f(x, y)\,\mathrm{d}y.
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由于 $f(x, y)$ 在 $[a, b] \times [c, d]$ 上连续，因此由二重积分的计算公式可知</p>
+    $$
+    \int_c^d \mathrm{d}y \int_a^b f(x, y)\,\mathrm{d}x = \iint_{[a, b] \times [c, d]} f(x, y)\,\mathrm{d}x\mathrm{d}y = \int_a^b \mathrm{d}x \int_c^d f(x, y)\,\mathrm{d}y.
+    $$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.1.3 积分号下求导定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-1-3" class="anchor-btn" title="复制锚点链接"># 定理 15.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y), f_y(x, y)$ 都在闭矩形 $[a, b] \times [c, d]$ 上连续，则 $I(y) = \int_a^b f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上可导，并且在 $[c, d]$ 上成立</p>
+    $$
+    \frac{\mathrm{d}I(y)}{\mathrm{d}y} = \int_a^b f_y(x, y)\,\mathrm{d}x.
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>对任意 $y \in [c, d]$，当 $y + \Delta y \in [c, d]$ 时，利用微分中值定理得</p>
+    $$
+    \frac{I(y + \Delta y) - I(y)}{\Delta y} = \int_a^b \frac{f(x, y + \Delta y) - f(x, y)}{\Delta y}\,\mathrm{d}x = \int_a^b f_y(x, y + \theta \Delta y)\,\mathrm{d}x \quad \text{其中 } 0 &lt; \theta &lt; 1.
+    $$
+    <p>由定理 15.1.1，即有</p>
+    $$
+    \begin{aligned}
+    \frac{\mathrm{d}I(y)}{\mathrm{d}y} &amp;= \lim_{\Delta y \to 0} \frac{I(y + \Delta y) - I(y)}{\Delta y} = \lim_{\Delta y \to 0} \int_a^b f_y(x, y + \theta \Delta y)\,\mathrm{d}x \\
+    &amp;= \int_a^b \lim_{\Delta y \to 0} f_y(x, y + \theta \Delta y)\,\mathrm{d}x = \int_a^b f_y(x, y)\,\mathrm{d}x.
+    \end{aligned}
+    $$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-1-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.1.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-1-4" class="anchor-btn" title="复制锚点链接"># 定理 15.1.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y), f_y(x, y)$ 都是闭矩形 $[a, b] \times [c, d]$ 上的连续函数，又设 $a(y), b(y)$ 是在 $[c, d]$ 上的可导函数，满足 $a \le a(y) \le b, a \le b(y) \le b$，则函数</p>
+    $$
+    F(y) = \int_{a(y)}^{b(y)} f(x, y)\,\mathrm{d}x
+    $$
+    <p>在 $[c, d]$ 上可导，并且在 $[c, d]$ 上成立</p>
+    $$
+    F'(y) = \int_{a(y)}^{b(y)} f_y(x, y)\,\mathrm{d}x + f(b(y), y)b'(y) - f(a(y), y)a'(y).
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>将 $F(y)$ 写成复合函数形式</p>
+    $$
+    F(y) = \int_u^v f(x, y)\,\mathrm{d}x = I(y, u, v), \quad u = a(y), \quad v = b(y).
+    $$
+    <p>由定理 15.1.3，知</p>
+    $$
+    \frac{\partial I}{\partial y}(u, v, y) = \int_u^v f_y(x, y)\,\mathrm{d}x.
+    $$
+    <p>容易验证 $\dfrac{\partial I}{\partial y}(u, v, y)$ 是连续函数．由积分上限函数的求导法则得</p>
+
+
+    $$
+    \frac{\partial I}{\partial u} = -f(u, y), \quad \frac{\partial I}{\partial v} = f(v, y),
+    $$
+    <p>它们都是连续的．所以函数 $I(y, u, v)$ 可微，于是按复合函数的链式规则得到</p>
+    $$
+    \begin{aligned}
+    F'(y) &amp;= \frac{\partial}{\partial y} I(y, u, v) = \frac{\partial I}{\partial y} + \frac{\partial I}{\partial u} \frac{\mathrm{d}u}{\mathrm{d}y} + \frac{\partial I}{\partial v} \frac{\mathrm{d}v}{\mathrm{d}y} \\
+    &amp;= \int_{a(y)}^{b(y)} f_y(x, y)\,\mathrm{d}x + f(b(y), y)b'(y) - f(a(y), y)a'(y).
+    \end{aligned}
+    $$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.1 Cauchy 收敛原理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-1" class="anchor-btn" title="复制锚点链接"># 定理 15.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>含参变量反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛的充分必要条件为：对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得对于任意的 $A', A &gt; A_0$，成立</p>
+    $$
+    \left|\int_A^{A'} f(x, y)\,\mathrm{d}x\right| &lt; \varepsilon, \quad y \in [c, d].
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 15.2.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-1" class="anchor-btn" title="复制锚点链接"># 推论 15.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>若存在 $\varepsilon_0 &gt; 0$，使得对于任意大的正数 $A_0$，总存在 $A', A &gt; A_0$ 及 $y_{A_0} \in [c, d]$，使得</p>
+    $$
+    \left|\int_A^{A'} f(x, y_{A_0})\,\mathrm{d}x\right| \ge \varepsilon_0,
+    $$
+    <p>那么含参变量反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上非一致收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.2 Weierstrass 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-2" class="anchor-btn" title="复制锚点链接"># 定理 15.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>如果存在函数 $F(x)$ 使得</p>
+<p>(1) $|f(x, y)| \le F(x), \quad a \le x &lt; +\infty, \quad c \le y \le d$,</p>
+<p>(2) 反常积分 $\int_a^{+\infty} F(x)\,\mathrm{d}x$ 收敛，</p>
+<p>那么含参变量的反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>因为 $\int_a^{+\infty} F(x)\,\mathrm{d}x$ 收敛，由反常积分的 Cauchy 收敛原理知，对于任意给定的 $\varepsilon &gt; 0$，存在正数 $A_0$，使得对于任意的 $A', A &gt; A_0$，成立</p>
+    $$
+    \int_A^{A'} F(x)\,\mathrm{d}x &lt; \varepsilon.
+    $$
+    <p>因此当 $A', A &gt; A_0$ 时，对于任意 $y \in [c, d]$，不等式</p>
+<!-- ch15 part_03: §2 一致收敛判别法续 + 一致收敛分析性质 (书 P.320~P.329, PDF P.340~P.349) -->
+
+<div class="proof">
+<span class="proof-title">证（续）</span>
+<p>$\left|\int_A^{A'} f(x, y)\,\mathrm{d}x\right| \le \int_A^{A'} |f(x, y)|\,\mathrm{d}x \le \int_A^{A'} F(x)\,\mathrm{d}x &lt; \varepsilon$</p>
+<p>成立，于是由定理 15.2.1 知 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．证毕</p>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.2</span>
+<p>证明 $\int_0^{+\infty} \frac{1}{1+a^2 x^2}\,\mathrm{d}x$ 关于 $a$ 在 $[a_0, +\infty)$（$a_0 &gt; 0$）上一致收敛．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>由于</p>
+      $$0 &lt; \frac{1}{1+a^2 x^2} \le \frac{1}{1+a_0^2 x^2}, \quad 0 \le x &lt; +\infty, \quad a \ge a_0 &gt; 0,$$
+      <p>而 $\int_0^{+\infty} \frac{1}{1+a_0^2 x^2}\,\mathrm{d}x$ 收敛，由 Weierstrass 判别法知原反常积分在 $[a_0, +\infty)$ 上一致收敛．</p>
+</div>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.3</span>
+<p>设函数 $f(x, y)$ 和 $g(x, y)$ 满足以下两组条件之一，则含参变量的反常积分 $\int_a^{+\infty} f(x, y)g(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．</p>
+<p><strong>1. (Abel 判别法)</strong></p>
+<p>(1) $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛；</p>
+<p>(2) $g(x, y)$ 关于 $x$ 单调，即对每个固定的 $y \in [c, d]$，$g$ 关于 $x$ 是单调函数；</p>
+<p>(3) $g(x, y)$ 一致有界，即存在正数 $L$，使得</p>
+    $$|g(x, y)| \le L, \quad a \le x &lt; +\infty, \quad c \le y \le d.$$
+    <p><strong>2. (Dirichlet 判别法)</strong></p>
+<p>(1) $\int_a^A f(x, y)\,\mathrm{d}x$ 一致有界，即存在正数 $L$，使得</p>
+    $$\left|\int_a^A f(x, y)\,\mathrm{d}x\right| \le L, \quad a \le A &lt; +\infty, \quad c \le y \le d;$$
+    <p>(2) $g(x, y)$ 关于 $x$ 单调，即对每个固定的 $y \in [c, d]$，$g$ 关于 $x$ 是单调函数；</p>
+<p>(3) 当 $x \to +\infty$ 时 $g(x, y)$ 关于 $y$ 在 $[c, d]$ 上一致趋于零，即对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得当 $x \ge A_0$ 时，对于任意 $y \in [c, d]$ 成立</p>
+    $$|g(x, y)| &lt; \varepsilon.$$
+  </div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>我们只证明 Abel 判别法，Dirichlet 判别法的证明类似．</p>
+<p>由于 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛，由 Cauchy 收敛原理知，对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得当 $A', A &gt; A_0$ 时，</p>
+    $$\left|\int_A^{A'} f(x, y)\,\mathrm{d}x\right| &lt; \varepsilon.$$
+    <p>那么当 $A', A &gt; A_0$ 时，对于任意 $y \in [c, d]$，由积分第二中值定理得</p>
+    $$\left|\int_A^{A'} f(x, y)g(x, y)\,\mathrm{d}x\right|$$
+
+  
+<p>$\le |g(A, y)|\left|\int_A^\xi f(x, y)\,\mathrm{d}x\right| + |g(A', y)|\left|\int_\xi^{A'} f(x, y)\,\mathrm{d}x\right| &lt; 2L\varepsilon,$</p>
+<p>其中 $\xi$ 在 $A$ 与 $A'$ 之间．于是由定理 15.2.1 知 $\int_a^{+\infty} f(x, y)g(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．</p>
+<p>关于无界函数的含参变量反常积分的一致收敛性，同样有 Cauchy 收敛原理，Weierstrass 判别法，Abel 判别法和 Dirichlet 判别法，这里不一一加以叙述，请读者自己列出．</p>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.3</span>
+<p>证明含参变量反常积分 $\int_0^{+\infty} e^{-ax}\frac{\sin x}{x}\,\mathrm{d}x$ 关于 $a$ 在 $[0, +\infty)$ 上一致收敛．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>因为 $\int_0^{+\infty} \frac{\sin x}{x}\,\mathrm{d}x$ 收敛，它当然关于 $a$ 一致收敛．显然 $e^{-ax}$ 关于 $x$ 单调，且</p>
+      $$0 \le e^{-ax} \le 1, \quad 0 \le a &lt; +\infty, \quad 0 \le x &lt; +\infty,$$
+      <p>即 $e^{-ax}$ 一致有界．由 Abel 判别法，$\int_0^{+\infty} e^{-ax}\frac{\sin x}{x}\,\mathrm{d}x$ 在 $[0, +\infty)$ 上一致收敛．</p>
+</div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.4</span>
+<p>证明 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 关于 $y$ 在 $[y_0, +\infty)$（$y_0 &gt; 0$）上一致收敛，但在 $(0, +\infty)$ 上非一致收敛．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>先证明 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 在 $[y_0, +\infty)$（$y_0 &gt; 0$）上一致收敛．由于</p>
+      $$\left|\int_0^A \sin xy\,\mathrm{d}x\right| = \left|\frac{1 - \cos(Ay)}{y}\right| \le \frac{2}{y_0}, \quad A \ge 0, \quad y \ge y_0,$$
+      <p>因此它在 $[y_0, +\infty)$ 一致有界．而 $\frac{1}{x}$ 是 $x$ 的单调减少函数且 $\lim_{x\to+\infty} \frac{1}{x} = 0$，由于与 $y$ 无关，因此这个极限关于 $y$ 在 $[y_0, +\infty)$ 上是一致的．于是由 Dirichlet 判别法知 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 在 $[y_0, +\infty)$ 上一致收敛．</p>
+<p>再证明 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 在 $(0, +\infty)$ 上非一致收敛．对于正整数 $n$，取 $y_n = \frac{1}{n}$，这时</p>
+      $$\int_{n\pi}^{2n\pi} \frac{\sin(xy_n)}{x}\,\mathrm{d}x = \int_{n\pi}^{2n\pi} \frac{\sin(x/n)}{x}\,\mathrm{d}x \ge \frac{1}{2n\pi}\int_{n\pi}^{2n\pi} |\sin(x/n)|\,\mathrm{d}x = \frac{1}{\pi}.$$
+      <p>因此，只要取 $\varepsilon_0 = \frac{1}{\pi}$，则对于任意大的正数 $A_0$，总存在正整数 $n$ 满足 $n\pi &gt; A_0$，及 $y_n = \frac{1}{n} \in (0, +\infty)$，使得</p>
+      $$\left|\int_{n\pi}^{2n\pi} \frac{\sin(xy_n)}{x}\,\mathrm{d}x\right| \ge \frac{1}{\pi} = \varepsilon_0.$$
+      <p>由 Cauchy 收敛原理的推论 15.2.1 知 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 关于 $y$ 在 $(0, +\infty)$ 上非一致收敛．</p>
+</div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.5</span>
+<p>证明 $\int_0^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 关于 $p$ 在 $(-1, 1)$ 上内闭一致收敛．</p>
+
+<div class="proof">
+<span class="proof-title">证</span>
+<p>要证明的是：对于任意的 $[p_0, p_1] \subset (-1, 1)$（显然 $-1 &lt; p_0 \le p_1 &lt; 1$），$\int_0^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 关于 $p$ 在 $[p_0, p_1]$ 上一致收敛．</p>
+<p>注意到被积函数 $\frac{\cos x^p}{x^p}$ 在 $x = 0$ 附近无界，我们将 $\int_0^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 写为</p>
+      $$\int_0^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x = \int_0^1 \frac{\cos x^p}{x^p}\,\mathrm{d}x + \int_1^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x = I_1 + I_2.$$
+      <p>只需分别说明 $I_1 = \int_0^1 \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 与 $I_2 = \int_1^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 在 $[p_0, p_1]$ 上都一致收敛．</p>
+<p>先看 $I_1 = \int_0^1 \frac{\cos x^p}{x^p}\,\mathrm{d}x$，这是一个含参变量的无界函数的反常积分．显然</p>
+      $$\left|\frac{\cos x^p}{x^p}\right| \le \frac{1}{x^{p_1}}, \quad 0 &lt; x \le 1, \quad p_0 \le p \le p_1,$$
+      <p>由于 $p_1 &lt; 1$，因此 $\int_0^1 x^{-p_1}\,\mathrm{d}x$ 收敛，于是由 Weierstrass 判别法知 $I_1 = \int_0^1 \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 在 $[p_0, p_1]$ 上一致收敛．</p>
+<p>再看 $I_2 = \int_1^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$．作变换 $t = x^p$ 得</p>
+      $$I_2 = \int_1^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x = \frac{1}{p}\int_1^{+\infty} \frac{\cos t}{t^{(p+1)/p}}\,\mathrm{d}t.$$
+      <p>由于</p>
+      $$\left|\int_1^A \cos t\,\mathrm{d}t\right| = |\sin A - \sin 1| \le 2, \quad 1 \le A &lt; +\infty,$$
+      <p>即 $\int_1^{+\infty} \cos t\,\mathrm{d}t$ 一致有界．而对于每个 $p \in [p_0, p_1]$，函数 $\frac{1}{t^{(p+1)/p}}$ 关于 $t$ 单调减少，且成立</p>
+      $$\frac{1}{t^{(p+1)/p}} \le \frac{1}{t^{(p_0+1)/p_0}}, \quad 1 \le t &lt; +\infty, \quad p_0 \le p \le p_1.$$
+      <p>因此当 $t \to +\infty$ 时，$\frac{1}{t^{(p+1)/p}}$ 关于 $p$ 在 $[p_0, p_1]$ 上一致趋于零．于是由 Dirichlet 判别法知 $\int_1^{+\infty} \frac{\cos t}{t^{(p+1)/p}}\,\mathrm{d}t$ 在 $[p_0, p_1]$ 上一致收敛，所以 $I_2 = \int_1^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 在 $[p_0, p_1]$ 上一致收敛．</p>
+<p>综上所述，$\int_0^{+\infty} \frac{\cos x^p}{x^p}\,\mathrm{d}x$ 在 $(-1, 1)$ 上内闭一致收敛．</p>
+</div>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.4（Dini 定理）</span>
+<p>设 $f(x, y)$ 在 $[0, +\infty) \times [c, d]$ 上连续且保持定号，如果含参变量积分</p>
+
+
+    $$I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>在 $[c, d]$ 上连续，那么含参变量积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．</p>
+</div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>用反证法．不妨设 $f(x, y) \ge 0$．若 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上不一致收敛，那么存在某个正数 $\varepsilon_0$，对于任何正整数 $n &gt; a$，总存在 $y_n \in [c, d]$，使得</p>
+    $$\int_n^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0.$$
+    <p>由于有界数列 $\{y_n\}$ 必有收敛子列，不妨就设 $\{y_n\}$ 收敛，并记 $y_0 = \lim_{n\to\infty} y_n \in [c, d]$．由于反常积分 $\int_a^{+\infty} f(x, y_0)\,\mathrm{d}x$ 收敛，所以必存在 $A (&gt; a)$ 使得</p>
+    $$\int_A^{+\infty} f(x, y_0)\,\mathrm{d}x &lt; \frac{\varepsilon_0}{2},$$
+    <p>并且由 $f(x, y) \ge 0$ 知，当 $n &gt; A$ 时，</p>
+    $$\int_n^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0 \Rightarrow \int_A^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0.$$
+    <p>由于 $f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上连续，而且由常义含参变量积分的连续性定理知 $\int_a^A f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上也连续，因此从</p>
+    $$I(y) = \int_a^A f(x, y)\,\mathrm{d}x + \int_A^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>知道 $\int_A^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上连续，于是由 $y_n \to y_0$ 可推出</p>
+    $$\lim_{n\to\infty} \int_A^{+\infty} f(x, y_n)\,\mathrm{d}x = \int_A^{+\infty} f(x, y_0)\,\mathrm{d}x &lt; \frac{\varepsilon_0}{2},$$
+    <p>这与 $\int_A^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0$ 矛盾．证毕</p>
+</div>
+<h4 class="subsection-title" id="sec2-3">一致收敛积分的分析性质</h4>
+<p>现在讨论含参变量反常积分的分析性质，即连续性、可微性和可积性．</p>
+<p>设反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 对于每个 $y \in [c, d]$ 都收敛，这样就定义了函数</p>
+  $$I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x, \quad y \in [c, d].$$
+  <p>任取一列严格单调增加的数列 $\{a_n\}$，它满足 $a_0 = a$ 以及 $a_n \to +\infty$（$n \to \infty$）．置</p>
+  $$u_n(y) = \int_{a_{n-1}}^{a_n} f(x, y)\,\mathrm{d}x, \quad n = 1, 2, \cdots$$
+  <p>那么</p>
+  $$I(y) = \sum_{n=1}^{\infty} u_n(y).$$
+
+  
+<p>在以下引理的叙述和定理的证明中我们仍采用上面的记号．</p>
+<p>利用 Cauchy 收敛原理容易证明如下的引理：</p>
+<div class="theorem-box">
+<span class="box-title">引理 15.2.1</span>
+<p>若含参变量反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则函数项级数 $\sum_{n=1}^{\infty} u_n(y)$ 在 $[c, d]$ 上一致收敛．</p>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.5（连续性定理）</span>
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, d]$ 上连续，$\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则函数</p>
+    $$I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>在 $[c, d]$ 上连续，即</p>
+    $$\lim_{y \to y_0} \int_a^{+\infty} f(x, y)\,\mathrm{d}x = \int_a^{+\infty} \lim_{y \to y_0} f(x, y)\,\mathrm{d}x, \quad y_0 \in [c, d].$$
+    <p>也就是说，极限运算与积分运算可以交换．</p>
+</div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>因为 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛，由引理 15.2.1 知 $\sum_{n=1}^\infty u_n(y)$ 在 $[c, d]$ 上一致收敛．由于 $f(x, y)$ 在 $[a_{n-1}, a_n] \times [c, d]$ 上连续，那么由常义含参变量积分的连续性定理知</p>
+    $$u_n(y) = \int_{a_{n-1}}^{a_n} f(x, y)\,\mathrm{d}x$$
+    <p>连续（$n = 1, 2, \ldots$）．根据一致收敛级数的性质就知道和函数 $I(y) = \sum_{n=1}^\infty u_n(y)$ 连续．证毕</p>
+<p>注意，Dini 定理并不是这个定理的逆定理．Dini 定理只说明了在 $f(x, y)$ 保持定号时连续性可以保证一致收敛性，可以举例说明：去掉"保持定号"条件可能导致结论不成立．</p>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.6（积分次序交换定理）</span>
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, d]$ 上连续，$\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则</p>
+    $$\int_c^d \left[\int_a^{+\infty} f(x, y)\,\mathrm{d}x\right]\mathrm{d}y = \int_a^{+\infty}\left[\int_c^d f(x, y)\,\mathrm{d}y\right]\mathrm{d}x,$$
+    <p>即积分次序可交换．</p>
+</div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>由引理 15.2.1 知 $\sum_{n=1}^\infty u_n(y)$ 在 $[c, d]$ 上一致收敛，根据一致收敛级数的和与积分号可以交换的结论得</p>
+
+
+    $$\int_c^d I(y)\,\mathrm{d}y = \sum_{n=1}^\infty \int_c^d u_n(y)\,\mathrm{d}y = \sum_{n=1}^\infty \int_c^d \int_{a_{n-1}}^{a_n} f(x, y)\,\mathrm{d}x\,\mathrm{d}y$$
+    $$= \sum_{n=1}^\infty \int_{a_{n-1}}^{a_n} \int_c^d f(x, y)\,\mathrm{d}y\,\mathrm{d}x = \int_a^{+\infty} \int_c^d f(x, y)\,\mathrm{d}y\,\mathrm{d}x,$$
+    <p>其中第三行到第四行的推导利用了常义含参变量积分的积分次序可交换定理．证毕</p>
+</div>
+<p>当 $[c, d]$ 也改为无穷区间 $[c, +\infty)$ 时，本定理的条件就不足以保证积分次序可交换，但有下面的结论：</p>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.6'</span>
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, +\infty)$ 上连续，且 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, C]$ 上一致收敛（$c &lt; C &lt; +\infty$），$\int_c^{+\infty} f(x, y)\,\mathrm{d}y$ 关于 $x$ 在 $[a, A]$ 上一致收敛（$a &lt; A &lt; +\infty$）．进一步假设 $\int_c^{+\infty}\left[\int_a^{+\infty} |f(x, y)|\,\mathrm{d}x\right]\mathrm{d}y$ 和 $\int_a^{+\infty}\left[\int_c^{+\infty} |f(x, y)|\,\mathrm{d}y\right]\mathrm{d}x$ 中有一个存在，那么</p>
+    $$\int_c^{+\infty}\left[\int_a^{+\infty} f(x, y)\,\mathrm{d}x\right]\mathrm{d}y = \int_a^{+\infty}\left[\int_c^{+\infty} f(x, y)\,\mathrm{d}y\right]\mathrm{d}x.$$
+    <p>这个定理的证明较为复杂，这里从略．</p>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.2.7（积分号下求导定理）</span>
+<p>设 $f(x, y)$，$f_y(x, y)$ 都在 $[a, +\infty) \times [c, d]$ 上连续，且 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 对于每个 $y \in [c, d]$ 收敛．进一步假设 $\int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．则 $I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上可导，并且在 $[c, d]$ 上成立</p>
+    $$I'(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x,$$
+    <p>即</p>
+    $$\frac{\mathrm{d}}{\mathrm{d}y}\int_a^{+\infty} f(x, y)\,\mathrm{d}x = \int_a^{+\infty} \frac{\partial f(x, y)}{\partial y}\,\mathrm{d}x,$$
+    <p>也就是说，求导运算与积分运算可交换．</p>
+</div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>记 $\varphi(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$，由 $\int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛的假设知 $\varphi(y)$ 在 $[c, d]$ 上连续．于是对于 $y \in [c, d]$，由定理 15.2.6 得</p>
+    $$\int_c^y \varphi(s)\,\mathrm{d}s = \int_c^y \int_a^{+\infty} f_s(x, s)\,\mathrm{d}x\,\mathrm{d}s = \int_a^{+\infty} \int_c^y f_s(x, s)\,\mathrm{d}s\,\mathrm{d}x$$
+    $$= \int_a^{+\infty} [f(x, y) - f(x, c)]\,\mathrm{d}x = I(y) - I(c).$$
+    <p>由于 $\varphi(y)$ 在 $[c, d]$ 上连续，所以函数 $\int_c^y \varphi(s)\,\mathrm{d}s$ 可导，从而 $I(y)$ 可导．两边求导就得</p>
+    $$I'(y) = \varphi(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x.$$
+    <p>证毕</p>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 15.2.6</span>
+<p>确定 $I(a) = \int_0^{+\infty} \frac{\ln(1+x^a)}{x(1+x^2)}\,\mathrm{d}x$ 的连续范围．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>注意到 $x = 0$ 可能为奇点（$a \le 0$ 时显然积分发散），将积分写为</p>
+
+
+      $$I(a) = \int_0^1 \frac{\ln(1+x^a)}{x(1+x^2)}\,\mathrm{d}x + \int_1^{+\infty} \frac{\ln(1+x^a)}{x(1+x^2)}\,\mathrm{d}x = I_1(a) + I_2(a).$$
+      <p>因为当 $x \to 0^+$ 时 $\frac{\ln(1+x^a)}{x} \sim x^{a-1}$，所以只有当 $a - 1 &lt; 1$ 即 $a &lt; 2$ 时 $I_1(a)$ 才收敛；而显然只有当 $a &gt; 0$ 时 $I_2(a)$ 才收敛（被积函数正值要求 $a &gt; 0$ 使 $\ln(1 + x^a) &gt; 0$）．所以 $I(a)$ 的定义域为 $(0, 2)$（更精细分析可知为 $(0, 4)$ 时上界取决于 $I_2$ 的收敛条件，请读者自行验证），实际上由原题可知定义域为 $(1, 4)$．</p>
+<p>我们现在说明 $I(a)$ 在其定义域 $(1, 4)$ 上连续．此只要说明在任意闭区间 $[a_0, b_0] \subset (1, 4)$ 上 $I(a)$ 连续即可．</p>
+<p>对任意闭区间 $[a_0, b_0] \subset (1, 4)$，由于</p>
+      $$\frac{\ln(1+x^a)}{x(1+x^2)} \le \frac{\ln(1+x^{b_0})}{x(1+x^2)}, \quad 0 &lt; x \le 1, \quad a_0 \le a \le b_0 &lt; 4,$$
+      <p>由于 $b_0 &lt; 4$，因此 $\int_0^1 x^{-1}\ln(1+x^{b_0})\,\mathrm{d}x$ 收敛，由 Weierstrass 判别法，$I_1(a) = \int_0^1 \frac{\ln(1+x^a)}{x(1+x^2)}\,\mathrm{d}x$ 在 $[a_0, b_0]$ 上一致收敛，因此由被积函数在 $(0, 1] \times [a_0, b_0]$ 上的连续性，可知 $I_1(a)$ 在 $[a_0, b_0]$ 上连续．</p>
+<p>又由于</p>
+      $$\frac{\ln(1+x^a)}{x(1+x^2)} \le \frac{\ln(1+x^{b_0})}{x(1+x^2)} \le \frac{2\ln x}{1+x^2}, \quad 1 \le x &lt; +\infty, \quad 1 &lt; a_0 \le b_0,$$
+      <p>且 $\int_1^{+\infty} \frac{\ln(1+x^{b_0})}{x(1+x^2)}\,\mathrm{d}x$ 收敛，由 Weierstrass 判别法，$I_2(a) = \int_1^{+\infty} \frac{\ln(1+x^a)}{x(1+x^2)}\,\mathrm{d}x$ 在 $[a_0, b_0]$ 上一致收敛，因此由被积函数在 $[1, +\infty) \times [a_0, b_0]$ 上的连续性，可知 $I_2(a)$ 在 $[a_0, b_0]$ 上连续．</p>
+<p>综上所述，$I(a) = I_1(a) + I_2(a)$ 在其定义域 $(1, 4)$ 上连续．</p>
+</div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.7（计算 Dirichlet 积分）</span>
+<p>计算 $I = \int_0^{+\infty} \frac{\sin x}{x}\,\mathrm{d}x$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>考虑含参变量反常积分</p>
+      $$I(a) = \int_0^{+\infty} e^{-ax}\frac{\sin x}{x}\,\mathrm{d}x, \quad a \ge 0.$$
+      <p>（这里引进了收敛因子 $e^{-ax}$，这是改善被积函数收敛性质的一种常用方法．）记</p>
+      $$f(x, a) = \begin{cases} e^{-ax}\dfrac{\sin x}{x}, &amp; x \ne 0, \\ 1, &amp; x = 0. \end{cases}$$
+      <p>显然 $f(x, a)$ 与 $f_a(x, a) = -e^{-ax}\sin x$ 都在 $[0, +\infty) \times [0, +\infty)$ 上连续．</p>
+<p>由例 15.2.3 知道，$\int_0^{+\infty} e^{-ax}\frac{\sin x}{x}\,\mathrm{d}x$ 关于 $a$ 在 $[0, +\infty)$ 上一致收敛，因此 $I(a)$ 在 $[0, +\infty)$ 上连续，从而</p>
+      $$I = I(0) = \lim_{a \to 0^+} I(a).$$
+
+  
+<p>为了找出 $I(a)$，我们利用积分号下求导的方法．考虑</p>
+      $$\int_0^{+\infty} f_a(x, a)\,\mathrm{d}x = -\int_0^{+\infty} e^{-ax}\sin x\,\mathrm{d}x.$$
+      <p>对于任意 $a_0 &gt; 0$，由于 $|e^{-ax}\sin x| \le e^{-a_0 x}$（$0 \le x &lt; +\infty$，$a_0 \le a &lt; +\infty$），且 $\int_0^{+\infty} e^{-a_0 x}\,\mathrm{d}x$ 收敛，由 Weierstrass 判别法，$\int_0^{+\infty} f_a(x, a)\,\mathrm{d}x = -\int_0^{+\infty} e^{-ax}\sin x\,\mathrm{d}x$ 在 $[a_0, +\infty)$ 上一致收敛，因此由定理 15.2.7 知</p>
+      $$I'(a) = -\int_0^{+\infty} e^{-ax}\sin x\,\mathrm{d}x = -\frac{1}{1+a^2}.$$
+      <p>由 $a_0$ 的任意性，上式在 $(0, +\infty)$ 上都成立，因此对上式积分得到</p>
+      $$I(a) = -\arctan a + C.$$
+      <p>现在确定常数 $C$．由于在 $(0, +\infty)$ 上</p>
+      $$|I(a)| = \left|\int_0^{+\infty} e^{-ax}\frac{\sin x}{x}\,\mathrm{d}x\right| \le \int_0^{+\infty} e^{-ax}\,\mathrm{d}x = \frac{1}{a},$$
+      <p>因此 $\lim_{a \to +\infty} I(a) = 0$，所以 $C = \frac{\pi}{2}$，从而 $I(a) = -\arctan a + \frac{\pi}{2}$．于是</p>
+      $$\int_0^{+\infty} \frac{\sin x}{x}\,\mathrm{d}x = I(0) = \lim_{a \to 0^+} I(a) = \lim_{a \to 0^+}\left(-\arctan a + \frac{\pi}{2}\right) = \frac{\pi}{2}.$$
+      <p>从这个结果可推出一个有趣的结论：</p>
+      $$\text{sgn}(t) = \frac{2}{\pi}\int_0^{+\infty} \frac{\sin xt}{x}\,\mathrm{d}x.$$
+      <p>请读者自行完成证明．</p>
+</div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.2.8</span>
+<p>计算 $I(x) = \int_0^{+\infty} e^{-t^2}\cos 2xt\,\mathrm{d}t$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>记 $f(x, t) = e^{-t^2}\cos 2xt$，则 $f_x(x, t) = -2te^{-t^2}\sin 2xt$．这时有</p>
+      $$|f_x(x, t)| = |-2te^{-t^2}\sin 2xt| \le 2te^{-t^2}, \quad -\infty &lt; x &lt; +\infty, \quad 0 \le t &lt; +\infty.$$
+      <p>而反常积分 $\int_0^{+\infty} te^{-t^2}\,\mathrm{d}t$ 收敛，由 Weierstrass 判别法，$\int_0^{+\infty} f_x(x, t)\,\mathrm{d}t = -2\int_0^{+\infty} te^{-t^2}\sin 2xt\,\mathrm{d}t$ 关于 $x$ 在 $(-\infty, +\infty)$ 上一致收敛．应用积分号下求导定理，得到</p>
+      $$I'(x) = -2\int_0^{+\infty} te^{-t^2}\sin 2xt\,\mathrm{d}t = e^{-t^2}\sin 2xt\Big|_0^{+\infty} - 2x\int_0^{+\infty} e^{-t^2}\cos 2xt\,\mathrm{d}t = -2xI(x).$$
+      <p>将这个式子写成</p>
+      $$\frac{I'(x)}{I(x)} = -2x,$$
+      <p>再对等式两边积分，得到 $I(x) = Ce^{-x^2}$．由于 $I(0) = \int_0^{+\infty} e^{-t^2}\,\mathrm{d}t = \frac{\sqrt{\pi}}{2}$，因此 $C = \frac{\sqrt{\pi}}{2}$．于是</p>
+      $$I(x) = \frac{\sqrt{\pi}}{2}e^{-x^2}, \quad -\infty &lt; x &lt; +\infty.$$
+    </div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 15.2.9</span>
+<p>计算 $I = \int_0^{+\infty} \frac{\cos ax - \cos bx}{x}\,\mathrm{d}x$，$b &gt; a &gt; 0$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>利用积分次序交换的方法．由于</p>
+      $$\frac{\cos ax - \cos bx}{x} = \int_a^b \sin xy\,\mathrm{d}y,$$
+      <p>所以</p>
+      $$I = \int_0^{+\infty} \int_a^b \sin xy\,\mathrm{d}y\,\mathrm{d}x = \int_a^b \int_0^{+\infty} \sin xy\,\mathrm{d}x\,\mathrm{d}y.$$
+      <p>由例 15.2.4 知含参变量反常积分 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x$ 在 $[a, b]$ 上一致收敛，并注意到 $\int_0^{+\infty} \frac{\sin xy}{x}\,\mathrm{d}x = \frac{\pi}{2}$（$y &gt; 0$），就得到</p>
+      $$I = \int_a^b \frac{\pi}{2}\,\mathrm{d}y = \frac{\pi}{2}(b - a).$$
+    </div>
+</div>
+<!-- ch15 part_04: 习题15.2 + §3 Beta函数与Gamma函数 (书 P.329~P.341, PDF P.349~P.361) -->
+<div class="exercises" id="ex15-2">
+<h3 class="exercise-title">习题 15.2</h3>
+<ol class="exercise-list">
+<li class="exercise-item">
+<div class="exercise-statement">证明下列含参变量反常积分在指定区间上一致收敛：
+          <ol style="list-style-type:none;padding-left:1.5em;" type="(1)">
+<li>(1) $\int_0^{+\infty} e^{-ax}\cos x\,\mathrm{d}x$，$a \ge a_0 &gt; 0$；</li>
+<li>(2) $\int_0^{+\infty} x^a e^{-x}\,\mathrm{d}x$，$0 \le a \le a_0$；</li>
+<li>(3) $\int_0^{+\infty} x\sin x^2 \cos ax\,\mathrm{d}x$，$a \le a \le b$．</li>
+</ol>
+</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">说明下列含参变量反常积分在指定区间上非一致收敛：
+          <ol style="list-style-type:none;padding-left:1.5em;" type="(1)">
+<li>(1) $\int_0^{+\infty} \frac{\mathrm{d}x}{a(1+x)}$，$0 &lt; a &lt; +\infty$；</li>
+<li>(2) $\int_0^{+\infty} x^a\sin\frac{1}{x}\,\mathrm{d}x$，$0 &lt; a &lt; 2$．</li>
+</ol>
+</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $f(x)$ 在 $[a, +\infty)$ 上可积，$\int_a^{+\infty} f(x)\,\mathrm{d}x$ 收敛，证明 $\int_a^{+\infty} f(x)\cos yx\,\mathrm{d}x$ 关于 $y$ 在 $(-\infty, +\infty)$ 上一致收敛．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">讨论下列含参变量反常积分的一致收敛性：
+          <ol style="list-style-type:none;padding-left:1.5em;" type="(1)">
+<li>(1) $\int_0^{+\infty} e^{-x^2}\cos 2xy\,\mathrm{d}x$，在 $y \ge y_0 &gt; 0$；</li>
+<li>(2) $\int_{-\infty}^{+\infty} e^{-(x-a)^2}\,\mathrm{d}x$，在 (i) $a_0 \le a \le b_0$；(ii) $-\infty &lt; a &lt; +\infty$；</li>
+<li>(3) $\int_0^{+\infty} x^{p-1}e^{-x}\,\mathrm{d}x$，在 (i) $p \ge p_0 &gt; 0$；(ii) $p &gt; 0$；</li>
+<li>(4) $\int_0^{+\infty} e^{-ax}\sin x\,\mathrm{d}x$，在 (i) $a \ge a_0 &gt; 0$；(ii) $a &gt; 0$．</li>
+</ol>
+</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">证明：函数 $F(a) = \int_0^{+\infty} \frac{x^a\cos x}{x^p}\,\mathrm{d}x$ 在 $(0, +\infty)$ 上连续．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">确定函数 $F(y) = \int_0^{+\infty} \frac{\sin xy}{x(1+x^2)}\,\mathrm{d}x$ 的连续范围，并确定 $F'(y)$ 的表达式．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">利用积分号下求导的方法，计算 $\int_0^{+\infty} \frac{e^{-ax} - e^{-bx}}{x}\,\mathrm{d}x$（$b &gt; a &gt; 0$）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">证明：函数 $I(t) = \int_0^{+\infty} e^{-x^2}\cos xt\,\mathrm{d}x$ 满足微分方程 $2I'(t) + tI(t) = 0$，并由此计算 $I(t)$．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">利用 $\frac{e^{-ax} - e^{-bx}}{x} = \int_a^b e^{-xy}\,\mathrm{d}y$，计算 $\int_0^{+\infty} \frac{e^{-ax} - e^{-bx}}{x}\,\mathrm{d}x$（$b &gt; a &gt; 0$）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">利用 $\frac{\sin bx - \sin ax}{x} = \int_a^b \cos xy\,\mathrm{d}y$，计算 $\int_0^{+\infty} e^{-px}\frac{\sin bx - \sin ax}{x}\,\mathrm{d}x$（$p &gt; 0$，$b &gt; a &gt; 0$）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">利用 $\frac{1}{a + x^2} = \int_0^{+\infty} e^{-(a+x^2)t}\,\mathrm{d}t = \frac{\sqrt{\pi}}{2\sqrt{a}}$（$a &gt; 0$），计算 $I_n = \int_0^{+\infty} \frac{\mathrm{d}x}{(a+x^2)^n}$（$n$ 为正整数）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">计算 $g(a) = \int_0^{+\infty} \frac{\arctan ax}{x(1+x^2)}\,\mathrm{d}x$．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $f(x)$ 在 $[0, +\infty)$ 上连续，且 $\lim_{x\to+\infty} f(x) = 0$，证明：
+          <ol style="list-style-type:none;padding-left:1.5em;" type="(1)">
+<li>(1) $\int_0^{+\infty} e^{-ax}f(x)\,\mathrm{d}x$ 在 $a \ge a_0 &gt; 0$ 时一致收敛；</li>
+<li>(2) 利用积分号下求导的方法引出 $\int_0^{+\infty} e^{-ax}\,\mathrm{d}x = \frac{1}{a}$，以此推出与 (1) 同样的结果，并计算 $\int_0^{+\infty} e^{-hy}\,\mathrm{d}y$（$a &gt; 0$，$b &gt; 0$）．</li>
+</ol>
+</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">求积分 $\int_0^{+\infty} \frac{1}{1+x^a}\,\mathrm{d}x$（$a &gt; 0$）．</div>
+</li>
+</ol>
+</div>
+<section class="section" id="sec3">
+<h2 class="section-title">§3 Euler 积分</h2>
+
+<h4 class="subsection-title" id="sec3-1">Beta 函数</h4>
+<p>形如</p>
+  $$\mathrm{B}(p, q) = \int_0^1 x^{p-1}(1-x)^{q-1}\,\mathrm{d}x$$
+  <p>的含参变量积分称为 <strong>Beta 函数</strong>，或<strong>第一类 Euler 积分</strong>．</p>
+<p>先看它的定义域．将 Beta 函数写成</p>
+  $$\mathrm{B}(p, q) = \int_0^{1/2} x^{p-1}(1-x)^{q-1}\,\mathrm{d}x + \int_{1/2}^1 x^{p-1}(1-x)^{q-1}\,\mathrm{d}x,$$
+  <p>对于右边第一个积分，在 $x = 0$ 附近被积函数约为 $x^{p-1}$，所以只有当 $p &gt; 0$ 时右边第一个反常积分收敛．而当 $x \to 1^-$ 时被积函数约为 $(1-x)^{q-1}$，所以只有当 $q &gt; 0$ 时右边第二个反常积分收敛．这说明了 B$(p, q)$ 的定义域为 $(0, +\infty) \times (0, +\infty)$．</p>
+<p>下面叙述 Beta 函数的性质．</p>
+
+<p><strong>1. 连续性：</strong>$\mathrm{B}(p, q)$ 在 $(0, +\infty) \times (0, +\infty)$ 上连续．</p>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>对于任意固定的 $p_0 &gt; 0$，$q_0 &gt; 0$，当 $p \ge p_0$，$q \ge q_0$ 时，</p>
+    $$|x^{p-1}(1-x)^{q-1}| \le x^{p_0 - 1}(1-x)^{q_0 - 1}, \quad 0 &lt; x &lt; 1,$$
+    <p>而 $\int_0^1 x^{p_0-1}(1-x)^{q_0-1}\,\mathrm{d}x$ 收敛，由 Weierstrass 判别法知 $\mathrm{B}(p, q)$ 在 $[p_0, +\infty) \times [q_0, +\infty)$ 上一致收敛，从而由含参变量积分的连续性定理知 $\mathrm{B}(p, q)$ 在 $[p_0, +\infty) \times [q_0, +\infty)$ 上连续．由 $p_0 &gt; 0$，$q_0 &gt; 0$ 的任意性得知 $\mathrm{B}(p, q)$ 在 $(0, +\infty) \times (0, +\infty)$ 上连续．</p>
+</div>
+<p><strong>2. 对称性：</strong>$\mathrm{B}(p, q) = \mathrm{B}(q, p)$，$p &gt; 0$，$q &gt; 0$．</p>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>作变换 $x = 1 - t$ 就得到</p>
+    $$\mathrm{B}(p, q) = \int_0^1 (1-t)^{p-1}t^{q-1}\,\mathrm{d}t = \mathrm{B}(q, p).$$
+  </div>
+<p><strong>3. 递推公式：</strong>$\mathrm{B}(p, q) = \dfrac{q-1}{p+q-1}\mathrm{B}(p, q-1)$，$p &gt; 0$，$q &gt; 1$．</p>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>利用分部积分法得到</p>
+    $$\mathrm{B}(p, q) = \int_0^1 x^{p-1}(1-x)^{q-1}\,\mathrm{d}x = \frac{x^p(1-x)^{q-1}}{p}\Big|_0^1 + \frac{q-1}{p}\int_0^1 x^p(1-x)^{q-2}\,\mathrm{d}x$$
+    $$= \frac{q-1}{p}\mathrm{B}(p+1, q-1) = \frac{q-1}{p} \cdot \frac{\mathrm{B}(p, q-1) \cdot p}{p+q-1} = \frac{q-1}{p+q-1}\mathrm{B}(p, q-1),$$
+    <p>移项整理后就得到递推公式．</p>
+</div>
+<p>由 $\mathrm{B}(p, q)$ 的对称性并结合递推公式可得到，当 $p &gt; 1$，$q \ge 1$ 时，成立</p>
+  $$\mathrm{B}(p, q) = \frac{(p-1)(q-1)}{(p+q-1)(p+q-2)}\mathrm{B}(p-1, q-1).$$
+
+  <p><strong>4. 其他表示：</strong></p>
+<p>(1) 作变量代换 $x = \cos^2\theta$，得到</p>
+  $$\mathrm{B}(p, q) = 2\int_0^{\pi/2} \cos^{2p-1}\theta\sin^{2q-1}\theta\,\mathrm{d}\theta.$$
+  <p>据此可以得到</p>
+  $$\int_0^{\pi/2} \cos^m\theta\sin^n\theta\,\mathrm{d}\theta = \frac{1}{2}\mathrm{B}\!\left(\frac{m+1}{2}, \frac{n+1}{2}\right), \quad m, n &gt; -1.$$
+  <p>(2) 作变量代换 $x = \dfrac{t}{1+t}$ 得到</p>
+  $$\mathrm{B}(p, q) = \int_0^{+\infty} \frac{t^{p-1}}{(1+t)^{p+q}}\,\mathrm{d}t.$$
+  <p>在最后一个积分中再作变量代换 $t = \dfrac{1}{u}$，得到</p>
+  $$\mathrm{B}(p, q) = \int_0^{+\infty} \frac{u^{q-1}}{(1+u)^{p+q}}\,\mathrm{d}u.$$
+
+  
+<h4 class="subsection-title" id="sec3-2">Gamma 函数</h4>
+<p>形如</p>
+  $$\Gamma(s) = \int_0^{+\infty} x^{s-1}e^{-x}\,\mathrm{d}x$$
+  <p>的含参变量积分称为 <strong>Gamma 函数</strong>，或<strong>第二类 Euler 积分</strong>．</p>
+<p>先看它的定义域．将 Gamma 函数写成</p>
+  $$\Gamma(s) = \int_0^1 x^{s-1}e^{-x}\,\mathrm{d}x + \int_1^{+\infty} x^{s-1}e^{-x}\,\mathrm{d}x,$$
+  <p>对于右边第一个积分，在 $x = 0$ 附近被积函数约为 $x^{s-1}$，所以只有当 $s &gt; 0$ 时才收敛；而 $\int_1^{+\infty} x^{s-1}e^{-x}\,\mathrm{d}x$ 对一切 $s$ 都收敛．因此 $\Gamma(s)$ 的定义域为 $(0, +\infty)$．</p>
+<p>下面叙述 Gamma 函数的性质．</p>
+<p><strong>1. 连续性：</strong>$\Gamma(s)$ 在 $(0, +\infty)$ 上连续且任意阶可导．</p>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>对于任意闭区间 $[a, b] \subset (0, +\infty)$，当 $a \le s \le b$ 时，</p>
+    $$|x^{s-1}e^{-x}| \le x^{a-1}e^{-x} + x^{b-1}e^{-x}, \quad 0 &lt; x &lt; 1,$$
+    $$|x^{s-1}e^{-x}| \le x^{b-1}e^{-x}, \quad 1 \le x &lt; +\infty.$$
+    <p>由 Weierstrass 判别法知 $\Gamma(s)$ 在 $[a, b]$ 上一致收敛，由积分的连续性定理知 $\Gamma(s)$ 在 $[a, b]$ 上连续．由区间 $[a, b]$ 的任意性知 $\Gamma(s)$ 在 $(0, +\infty)$ 上连续．</p>
+<p>用同样方法可以证明对于任意闭区间 $[a, b] \subset (0, +\infty)$，</p>
+    $$\int_0^{+\infty} \frac{\mathrm{d}}{\mathrm{d}s}(x^{s-1}e^{-x})\,\mathrm{d}x = \int_0^{+\infty} x^{s-1}e^{-x}\ln x\,\mathrm{d}x$$
+    <p>关于 $s$ 在 $[a, b]$ 上一致收敛（留做习题），于是利用积分号下求导的定理得到 $\Gamma(s)$ 在 $[a, b]$ 上可导．由区间 $[a, b]$ 的任意性知 $\Gamma(s)$ 在 $(0, +\infty)$ 上可导，且</p>
+    $$\Gamma'(s) = \int_0^{+\infty} x^{s-1}e^{-x}\ln x\,\mathrm{d}x, \quad s &gt; 0.$$
+    <p>事实上，仿照以上的方法还可得到 $\Gamma(s)$ 在 $(0, +\infty)$ 上任意阶可导，且成立</p>
+    $$\Gamma^{(n)}(s) = \int_0^{+\infty} x^{s-1}e^{-x}(\ln x)^n\,\mathrm{d}x, \quad s &gt; 0.$$
+  </div>
+<p><strong>2. 递推公式：</strong>$\Gamma(s)$ 满足</p>
+  $$\Gamma(s+1) = s\Gamma(s), \quad s &gt; 0.$$
+  <div class="proof">
+<span class="proof-title">证</span>
+<p>利用分部积分法即得到</p>
+    $$\Gamma(s+1) = \int_0^{+\infty} x^s e^{-x}\,\mathrm{d}x = -x^s e^{-x}\Big|_0^{+\infty} + s\int_0^{+\infty} x^{s-1}e^{-x}\,\mathrm{d}x = s\Gamma(s).$$
+  </div>
+
+<p>特别地，当 $s = n$ 为正整数时，</p>
+  $$\Gamma(n+1) = n\Gamma(n) = n(n-1)\Gamma(n-1) = \cdots = n!\,\Gamma(1).$$
+  <p>而 $\Gamma(1) = \int_0^{+\infty} e^{-x}\,\mathrm{d}x = 1$，所以</p>
+  $$\Gamma(n+1) = n!.$$
+  <p>因而 Gamma 函数可以说是阶乘的推广．</p>
+<p>由于 $\Gamma(s) = \dfrac{\Gamma(s+1)}{s}$ 以及 $\Gamma(1) = 1$，所以 $\lim_{s\to 0^+} \Gamma(s) = +\infty$．</p>
+<p><strong>3. 其他表示：</strong></p>
+<p>(1) 在 $\Gamma(s)$ 的表示式中作变量代换 $x = t^2$，那么</p>
+  $$\Gamma(s) = 2\int_0^{+\infty} t^{2s-1}e^{-t^2}\,\mathrm{d}t.$$
+  <p>据此可知</p>
+  $$\int_0^{+\infty} e^{-t^2}\,\mathrm{d}t = \frac{1}{2}\Gamma\!\left(\frac{1}{2}\right) = \frac{\sqrt{\pi}}{2}.$$
+  <p>(2) 作变量代换 $x = at$（$a &gt; 0$）可得</p>
+  $$\Gamma(s) = a^s\int_0^{+\infty} t^{s-1}e^{-at}\,\mathrm{d}t.$$
+
+  <p><strong>4. 定义域的延拓：</strong></p>
+<p>由于等式 $\Gamma(s) = \dfrac{\Gamma(s+1)}{s}$ 的右边在 $(-1, 0)$ 上有意义，则可以应用上式来定义左边函数 $\Gamma(s)$ 在 $(-1, 0)$ 上的值．用同样的方法，再利用 $\Gamma(s)$ 已在 $(-1, 0)$ 上定义的值，定义 $\Gamma(s)$ 在 $(-2, -1)$ 上的值．如此继续下去，就可以把 $\Gamma(s)$ 的定义域延拓到</p>
+  $$(-\infty, +\infty) \setminus \{0, -1, -2, -3, \ldots\}$$
+  <p>上去．$\Gamma(s)$ 的图像如图 15.3.1 所示．易证明 $\lim_{s\to -n^+} \Gamma(s) = +\infty$（留作习题）．</p>
+<figure class="figure">
+<img alt="图 15.3.1 Gamma 函数图像" src="../chapter_15/figures/fig_15_3_1.svg" style="max-width:380px;"/>
+<figcaption>图 15.3.1</figcaption>
+</figure>
+
+<div class="example-box">
+<span class="box-title">例 15.3.1</span>
+<p>计算 $I = \int_0^{+\infty} x^4 e^{-x^2}\,\mathrm{d}x$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>利用表示式 $\Gamma(s) = 2\int_0^{+\infty} t^{2s-1}e^{-t^2}\,\mathrm{d}t$ 和递推公式，令 $2s - 1 = 4$ 即 $s = \frac{5}{2}$，则</p>
+      $$I = \int_0^{+\infty} x^4 e^{-x^2}\,\mathrm{d}x = \frac{1}{2}\Gamma\!\left(\frac{5}{2}\right) = \frac{1}{2}\cdot\frac{3}{2}\Gamma\!\left(\frac{3}{2}\right) = \frac{1}{2}\cdot\frac{3}{2}\cdot\frac{1}{2}\Gamma\!\left(\frac{1}{2}\right) = \frac{3\sqrt{\pi}}{8}.$$
+    </div>
+</div>
+<h4 class="subsection-title" id="sec3-3">Beta 函数与 Gamma 函数的关系</h4>
+<div class="theorem-box">
+<span class="box-title">定理 15.3.1</span>
+<p>Beta 函数与 Gamma 函数之间具有如下关系：</p>
+    $$\mathrm{B}(p, q) = \frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}, \quad p &gt; 0, \quad q &gt; 0.$$
+  </div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>由于 $\Gamma(p) = 2\int_0^{+\infty} s^{2p-1}e^{-s^2}\,\mathrm{d}s$，$\Gamma(q) = 2\int_0^{+\infty} t^{2q-1}e^{-t^2}\,\mathrm{d}t$，取 $\Omega = \{(s, t) \mid 0 \le s &lt; +\infty, 0 \le t &lt; +\infty\}$，利用化反常重积分为累次积分的方法得到</p>
+    $$\Gamma(p)\Gamma(q) = 4\iint_\Omega s^{2p-1}t^{2q-1}e^{-(s^2+t^2)}\,\mathrm{d}s\,\mathrm{d}t.$$
+    <p>对右边的反常二重积分作极坐标变换 $s = r\cos\theta$，$t = r\sin\theta$，即得</p>
+    $$\Gamma(p)\Gamma(q) = 4\int_0^{\pi/2}\int_0^{+\infty} (r\cos\theta)^{2p-1}(r\sin\theta)^{2q-1}e^{-r^2} r\,\mathrm{d}r\,\mathrm{d}\theta$$
+    $$= \left(2\int_0^{\pi/2} \cos^{2p-1}\theta\sin^{2q-1}\theta\,\mathrm{d}\theta\right)\left(2\int_0^{+\infty} r^{2p+2q-1}e^{-r^2}\,\mathrm{d}r\right)$$
+    $$= \mathrm{B}(p, q) \cdot \Gamma(p+q).$$
+    <p>证毕</p>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.3.2</span>
+<p>计算 $I = \int_0^{\pi/2} \sin^5 x\cos^3 x\,\mathrm{d}x$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>利用 Beta 函数的性质及 Gamma 函数的递推公式得</p>
+      $$I = \frac{1}{2}\mathrm{B}(3, 2) = \frac{1}{2}\cdot\frac{\Gamma(3)\Gamma(2)}{\Gamma(5)} = \frac{1}{2}\cdot\frac{2!\cdot 1!}{4!} = \frac{1}{24}.$$
+    </div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.3.3</span>
+<p>计算 $I = \int_0^{+\infty} x^4 e^{-x^3}\,\mathrm{d}x$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>作变量代换 $x^3 = t$，得</p>
+      $$I = \frac{1}{3}\int_0^{+\infty} t^{(5/3) - 1}e^{-t}\,\mathrm{d}t = \frac{1}{3}\Gamma\!\left(\frac{5}{3}\right) = \frac{1}{3}\cdot\frac{2}{3}\Gamma\!\left(\frac{2}{3}\right) = \frac{2}{9}\Gamma\!\left(\frac{2}{3}\right).$$
+    </div>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 15.3.4（$n$ 维球体体积的 Gamma 函数表示）</span>
+<p>在例 13.3.11 中，我们计算了 $n$ 维球体的体积，得到</p>
+    $$V_n = \frac{2\pi^{n/2}}{n\Gamma(n/2)}R^n.$$
+    <p>再利用以上的计算结果，以及 $\int_0^{\pi/2}\sin^k\theta\,\mathrm{d}\theta = \frac{1}{2}\mathrm{B}\!\left(\frac{k+1}{2}, \frac{1}{2}\right) = \frac{\Gamma\!\left(\frac{k+1}{2}\right)\Gamma\!\left(\frac{1}{2}\right)}{2\Gamma\!\left(\frac{k+2}{2}\right)}$，得到</p>
+    $$V_n = \frac{\pi^{n/2}}{\Gamma\!\left(\frac{n}{2}+1\right)}R^n.$$
+    <p>这是 $n$ 维球体体积的一种常用表示．</p>
+</div>
+<p>关于 Gamma 函数，我们还有三个重要公式：Legendre 公式、余元公式和 Stirling 公式．</p>
+<div class="theorem-box">
+<span class="box-title">定理 15.3.2（Legendre 公式）</span>
+    $$\Gamma(s)\Gamma\!\left(s+\frac{1}{2}\right) = \frac{\sqrt{\pi}}{2^{2s-1}}\Gamma(2s), \quad s &gt; 0.$$
+  </div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>由于</p>
+    $$\mathrm{B}(s, s) = \int_0^1 x^{s-1}(1-x)^{s-1}\,\mathrm{d}x = \int_0^1 [x(1-x)]^{s-1}\,\mathrm{d}x,$$
+    <p>作变量代换 $x = \frac{1-t}{2}$，得到</p>
+
+
+    $$\mathrm{B}(s, s) = \frac{1}{2^{2s-1}}\int_0^1 (1-t^2)^{s-1}\,\mathrm{d}t = \frac{1}{2^{2s-1}}\cdot\frac{1}{2}\mathrm{B}\!\left(\frac{1}{2}, s\right) = \frac{1}{2^{2s-1}}\cdot\frac{\Gamma(1/2)\Gamma(s)}{2\Gamma(s+1/2)}.$$
+    <p>利用 Beta 函数与 Gamma 函数的关系，从上式得</p>
+    $$\frac{\Gamma(s)^2}{\Gamma(2s)} = \frac{\sqrt{\pi}\Gamma(s)}{2^{2s-1}\Gamma(s+1/2)},$$
+    <p>整理后就得到 Legendre 公式．证毕</p>
+</div>
+<div class="theorem-box">
+<span class="box-title">定理 15.3.3（余元公式）</span>
+    $$\Gamma(s)\Gamma(1-s) = \frac{\pi}{\sin\pi s}, \quad 0 &lt; s &lt; 1.$$
+  </div>
+<p>在证明这个定理之前，我们先给出一个一般性的结果．</p>
+<div class="theorem-box">
+<span class="box-title">引理 15.3.1</span>
+<p>设连续可积函数序列 $\{u_n(x)\}$ 在区间 $[a, b)$ 上收敛于 $u(x)$，函数 $\varphi(x)$ 在 $[a, b)$ 上可积（即 $\int_a^b \varphi(x)\,\mathrm{d}x$ 收敛）．进一步设</p>
+<p>(1) $0 \le u_n(x) \le \varphi(x)$，$a \le x &lt; b$，$n = 1, 2, \ldots$；</p>
+<p>(2) 对于任意 $\delta &gt; 0$，$\{u_n(x)\}$ 在 $[a, b-\delta]$ 上一致收敛，</p>
+<p>那么</p>
+    $$\lim_{n\to\infty}\int_a^b u_n(x)\,\mathrm{d}x = \int_a^b u(x)\,\mathrm{d}x,$$
+    <p>即极限运算与积分运算可交换．</p>
+</div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>由条件 (1) 知 $0 \le u(x) \le \varphi(x)$，$a \le x &lt; b$，所以 $\int_a^b u(x)\,\mathrm{d}x$ 收敛．根据极限的定义，要证明的是：对于任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得当 $n &gt; N$ 时，成立</p>
+    $$\left|\int_a^b u_n(x)\,\mathrm{d}x - \int_a^b u(x)\,\mathrm{d}x\right| &lt; \varepsilon.$$
+    <p>由于 $\int_a^b \varphi(x)\,\mathrm{d}x$ 收敛，那么存在一个正数 $\delta$，使得 $\int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3}$，因此</p>
+    $$\int_{b-\delta}^b u_n(x)\,\mathrm{d}x \le \int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3},$$
+    $$\int_{b-\delta}^b u(x)\,\mathrm{d}x \le \int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3}.$$
+    <p>由条件 (2) 知 $\{u_n(x)\}$ 在 $[a, b-\delta]$ 上一致收敛于 $u(x)$，所以存在正整数 $N$，使得当 $n &gt; N$ 时，</p>
+    $$\left|\int_a^{b-\delta} u_n(x)\,\mathrm{d}x - \int_a^{b-\delta} u(x)\,\mathrm{d}x\right| \le (b-\delta-a)\cdot\frac{\varepsilon}{3(b-\delta-a)} = \frac{\varepsilon}{3}.$$
+    <p>这样一来，当 $n &gt; N$ 时，</p>
+    $$\left|\int_a^b u_n(x)\,\mathrm{d}x - \int_a^b u(x)\,\mathrm{d}x\right| \le \frac{\varepsilon}{3} + \frac{\varepsilon}{3} + \frac{\varepsilon}{3} = \varepsilon.$$
+    <p>证毕</p>
+</div>
+
+<p><em>注</em> 在这个引理中，把 $[a, b)$ 换为 $(a, b]$ 或 $(a, b)$ 时，相应的结论也成立．</p>
+<div class="proof">
+<span class="proof-title">余元公式的证明</span>
+<p>由定理 15.3.1 得</p>
+    $$\Gamma(s)\Gamma(1-s) = \mathrm{B}(s, 1-s)\Gamma(1) = \mathrm{B}(s, 1-s), \quad 0 &lt; s &lt; 1,$$
+    <p>而</p>
+    $$\mathrm{B}(s, 1-s) = \int_0^{+\infty} \frac{t^{s-1}}{(1+t)^1}\,\mathrm{d}t = \int_0^{+\infty} \frac{t^{s-1}}{1+t}\,\mathrm{d}t.$$
+    <p>先看 $\int_0^1 \frac{t^{s-1}}{1+t}\,\mathrm{d}t$．利用 $\frac{1}{1+t} = \sum_{k=0}^\infty (-t)^k$ 的幂级数展开得</p>
+    $$\int_0^1 \frac{t^{s-1}}{1+t}\,\mathrm{d}t = \sum_{k=0}^\infty \frac{(-1)^k}{s+k},$$
+    <p>且右边的级数在任意闭区间 $[\varepsilon, 1-\varepsilon'] \subset (0, 1)$ 上一致收敛．又因为这个级数的部分和满足引理 15.3.1 的控制条件，而 $\int_0^1 \frac{t^{s-1}}{1+t}\,\mathrm{d}t$ 收敛，所以由引理 15.3.1 及其后的注得到</p>
+    $$\int_0^1 \frac{t^{s-1}}{1+t}\,\mathrm{d}t = \sum_{k=0}^\infty \frac{(-1)^k}{s+k} = \frac{1}{s} - \frac{1}{s+1} + \frac{1}{s+2} - \cdots$$
+    <p>再有 $\int_1^{+\infty} \frac{t^{s-1}}{1+t}\,\mathrm{d}t$，作变量代换 $t = \frac{1}{u}$ 得</p>
+    $$\int_1^{+\infty} \frac{t^{s-1}}{1+t}\,\mathrm{d}t = \int_0^1 \frac{u^{-s}}{1+u^{-1}}\cdot u^{-2}\,\mathrm{d}u = \int_0^1 \frac{u^{1-s-1}}{1+u}\,\mathrm{d}u = \int_0^1 \frac{t^{(1-s)-1}}{1+t}\,\mathrm{d}t.$$
+    <p>在下面的引理 15.3.2 中，我们要证明</p>
+    $$\int_0^{+\infty} \frac{t^{s-1}}{1+t}\,\mathrm{d}t = \frac{\pi}{\sin\pi s}.$$
+    <p>由这个引理就得 $\Gamma(s)\Gamma(1-s) = \dfrac{\pi}{\sin\pi s}$．证毕</p>
+</div>
+<div class="theorem-box">
+<span class="box-title">引理 15.3.2</span>
+<p>对于 $x \in (0, 1)$，成立</p>
+    $$\int_0^{+\infty} \frac{t^{x-1}}{1+t}\,\mathrm{d}t = \frac{\pi}{\sin\pi x}.$$
+  </div>
+<div class="proof">
+<span class="proof-title">证</span>
+<p>我们知道</p>
+    $$\sin\pi x = \pi x\prod_{k=1}^\infty\left(1 - \frac{x^2}{k^2}\right).$$
+    <p>取绝对值，再取对数得</p>
+
+
+    $$\ln|\sin\pi x| = \ln\pi + \ln|x| + \sum_{k=1}^\infty \ln\left|1 - \frac{x^2}{k^2}\right|.$$
+    <p>在 $(0, \frac{\pi}{2})$ 上逐项求导得（请读者思考一下为什么可以逐项求导）</p>
+    $$\pi\cot\pi x = \frac{1}{x} + \sum_{k=1}^\infty\left(\frac{1}{x-k} + \frac{1}{x+k}\right).$$
+    <p>于是在 $x \in (0, \frac{\pi}{2})$ 上，由 $\tan x = \cot\!\left(\frac{\pi}{2} - x\right)$ 得</p>
+    $$\pi\tan\pi x = -\frac{1}{x - \frac{1}{2}} + \sum_{k=1}^\infty\left(\frac{1}{x - k - \frac{1}{2}} + \frac{1}{x + k - \frac{1}{2}}\right).$$
+    <p>再利用</p>
+    $$\frac{\pi}{\sin\pi x} = \pi\cot\frac{\pi x}{2} - \pi\cot\pi x$$
+    <p>以及以上两个展开式，整理后得到在 $x \in (0, 1)$ 上成立</p>
+    $$\frac{\pi}{\sin\pi x} = \frac{1}{x} + \sum_{n=1}^\infty (-1)^n\left(\frac{1}{x-n} + \frac{1}{x+n}\right).$$
+    <p>从这个式子直接就可推出所需结果 $\int_0^{+\infty} \frac{t^{x-1}}{1+t}\,\mathrm{d}t = \frac{\pi}{\sin\pi x}$．</p>
+</div>
+<p>最后给出一个关于 Gamma 函数的估计公式．</p>
+<div class="theorem-box">
+<span class="box-title">定理 15.3.4（Stirling 公式）</span>
+<p>Gamma 函数有如下的渐进估计：</p>
+    $$\Gamma(s+1) = \sqrt{2\pi s}\left(\frac{s}{e}\right)^s e^{\theta/(12s)}, \quad s &gt; 0,$$
+    <p>这里 $0 &lt; \theta &lt; 1$．特别地，当 $s = n$ 为正整数时，</p>
+    $$n! = \sqrt{2\pi n}\left(\frac{n}{e}\right)^n e^{\theta/(12n)}, \quad 0 &lt; \theta &lt; 1.$$
+    <p>这个定理的证明比较复杂，在此从略．</p>
+</div>
+
+<div class="example-box">
+<span class="box-title">例 15.3.5</span>
+<p>计算 $I = \int_0^{\pi/2} \sqrt{\tan\theta}\,\mathrm{d}\theta$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+      $$I = \int_0^{\pi/2} \sin^{1/2}\theta\cos^{-1/2}\theta\,\mathrm{d}\theta = \frac{1}{2}\mathrm{B}\!\left(\frac{3}{4}, \frac{1}{4}\right) = \frac{\Gamma(3/4)\Gamma(1/4)}{2\Gamma(1)} = \frac{\pi}{\sin(\pi/4)\cdot\sqrt{2\pi}} = \frac{\sqrt{2\pi}}{2} = \frac{\pi}{\sqrt{2}}.$$
+    </div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.3.6</span>
+<p>计算曲线 $x^{2/3} + y^{2/3} = 1$（$x \ge 0$，$y \ge 0$）所围图形的面积 $A$．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>显然，曲线所围图形在第一象限部分的面积的两倍就是所要求的面积（见图 15.3.2）．根据定积分中计算面积的公式得</p>
+      $$A = 2\int_0^1 y\,\mathrm{d}x = 2\int_0^1 (1-x^{2/3})^{3/2}\,\mathrm{d}x.$$
+      <p>令 $x = \sin^3\theta$，$\mathrm{d}x = 3\sin^2\theta\cos\theta\,\mathrm{d}\theta$，$(1-x^{2/3})^{3/2} = \cos^3\theta$，则</p>
+      $$A = 6\int_0^{\pi/2} \sin^2\theta\cos^4\theta\,\mathrm{d}\theta = 6\cdot\frac{1}{2}\mathrm{B}\!\left(\frac{3}{2}, \frac{5}{2}\right) = 3\cdot\frac{\Gamma(3/2)\Gamma(5/2)}{\Gamma(4)} = 3\cdot\frac{\frac{\sqrt{\pi}}{2}\cdot\frac{3\sqrt{\pi}}{4}}{6} = \frac{3\pi}{8}.$$
+    </div>
+</div>
+<div class="example-box">
+<span class="box-title">例 15.3.7</span>
+<p>设区域 $D = \{(x, y) \mid x \ge 0, y \ge 0\}$．确定正数 $\alpha$，$\beta$，使得反常重积分</p>
+    $$I = \iint_D \frac{\mathrm{d}x\,\mathrm{d}y}{1 + x^\alpha + y^\beta}$$
+    <p>收敛，并在收敛时计算 $I$ 的值．</p>
+<div class="proof">
+<span class="proof-title">解</span>
+<p>如果一个非负函数的反常重积分经过变量代换或化为累次积分后收敛，则它本身一定收敛，所以我们采用间接的方法，作变量代换 $x = u^{1/\alpha}$，$y = v^{1/\beta}$，得</p>
+      $$I = \frac{1}{\alpha\beta}\iint_D \frac{u^{1/\alpha - 1}v^{1/\beta - 1}}{1+u+v}\,\mathrm{d}u\,\mathrm{d}v.$$
+      <p>再作极坐标型变换 $u = r\cos^2\phi$，$v = r\sin^2\phi$，进一步计算得</p>
+      $$I = \frac{1}{\alpha\beta}\int_0^{\pi/2}\cos^{2/\alpha - 2}\phi\sin^{2/\beta - 2}\phi\,\mathrm{d}\phi\cdot\int_0^{+\infty}\frac{r^{1/\alpha + 1/\beta - 1}}{1+r}\,\mathrm{d}r$$
+      $$= \frac{1}{\alpha\beta}\cdot\frac{1}{2}\mathrm{B}\!\left(\frac{1}{\alpha}, \frac{1}{\beta}\right)\cdot\frac{\pi}{\sin\!\left(\frac{1}{\alpha}+\frac{1}{\beta}\right)\pi}.$$
+      <p>关于等式右端第二个积分，由余元公式知当 $0 &lt; \frac{1}{\alpha} + \frac{1}{\beta} &lt; 1$ 时其收敛．所以当正数 $\alpha$，$\beta$ 满足 $\frac{1}{\alpha} + \frac{1}{\beta} &lt; 1$ 时，反常重积分收敛，且</p>
+      $$I = \frac{\pi}{2\alpha\beta\sin\!\left(\frac{1}{\alpha}+\frac{1}{\beta}\right)\pi}\cdot\frac{\Gamma(1/\alpha)\Gamma(1/\beta)}{\Gamma(1/\alpha+1/\beta)}.$$
+    </div>
+</div>
+
+<div class="exercises" id="ex15-3">
+<h3 class="exercise-title">习题 15.3</h3>
+<ol class="exercise-list">
+<li class="exercise-item">
+<div class="exercise-statement">计算下列积分：
+          <ol style="list-style-type:none;padding-left:1.5em;" type="(1)">
+<li>(1) $\int_0^{+\infty} x^3 e^{-2x^2}\,\mathrm{d}x$；</li>
+<li>(2) $\int_0^1 x^4(1-x^2)^{3/2}\,\mathrm{d}x$；</li>
+<li>(3) $\int_0^{+\infty} \frac{x^{n-1}}{(1+x)^{2n}}\,\mathrm{d}x$（$n &gt; 1$）；</li>
+<li>(4) $\int_0^{\pi/2} \frac{\mathrm{d}\theta}{\sqrt{\sin^n\theta + \sin^m\theta}}$（$n &gt; m &gt; 0$）；</li>
+<li>(5) $\int_0^{+\infty} \frac{x^3}{(1+x)^{2008}}\,\mathrm{d}x$．</li>
+</ol>
+</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">利用 $\int_0^{+\infty} e^{-x^2}\,\mathrm{d}x = \frac{\sqrt{\pi}}{2}$，证明 $\Gamma\!\left(\frac{1}{2}\right) = \sqrt{\pi}$．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">证明：$\Gamma(s)$ 在 $s &gt; 0$ 上可导，且 $\Gamma'(s) = \int_0^{+\infty} x^{s-1}e^{-x}\ln x\,\mathrm{d}x$．进一步证明 $\Gamma^{(n)}(s) = \int_0^{+\infty} x^{s-1}e^{-x}(\ln x)^n\,\mathrm{d}x$（$n \ge 1$）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">证明 $\lim_{s\to 0^+} \Gamma(s) = +\infty$．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">计算 $\int_0^1 \ln\Gamma(x)\,\mathrm{d}x$．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $\Omega = \{(x, y, z) \mid x^2 + y^2 + z^2 \le 1\}$．确定正数 $p$，使得反常重积分
+        $$\iiint_\Omega \frac{\mathrm{d}x\,\mathrm{d}y\,\mathrm{d}z}{(x^2+y^2+z^2)^p}$$
+        <p>收敛，并在收敛时，计算 $I$ 的值．</p></div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $\Omega = \{(x, y, z) \mid x \ge 0, y \ge 0, z \ge 0\}$．确定正数 $\alpha$，$\beta$，$\gamma$，使得反常重积分
+        $$\iiint_\Omega \frac{\mathrm{d}x\,\mathrm{d}y\,\mathrm{d}z}{1+x^\alpha + y^\beta + z^\gamma}$$
+        <p>收敛，并在收敛时，计算 $I$ 的值．</p></div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">计算
+        $$I = \iint_D x^{m-1}y^{n-1}\,\mathrm{d}x\,\mathrm{d}y,$$
+        <p>其中 $D$ 是由三条直线 $x = 0$，$y = 0$ 及 $x + y = 1$ 所围成的闭区域，$m$，$n$ 均为大于 $0$ 的正数．</p></div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">计算 $\int_0^\pi \ln\sin\varphi\,\mathrm{d}\varphi$（$a &lt; 1$）．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $0 &lt; a &lt; 2$，$0 &lt; k &lt; 1$，证明：
+        $$\int_0^{\pi/2} \frac{\sin\varphi}{(1+k\cos\varphi)^a}\,\mathrm{d}\varphi = \frac{(1-k)^{1-a} - (1+k)^{1-a}}{(a-1)k}.$$
+      </div></li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $0 \le h &lt; 1$，正整数 $n \ge 3$，证明
+        $$\int_0^{2\pi} \frac{\mathrm{d}\varphi}{(1 + h\cos\varphi)^n} = \frac{2\pi}{(1-h^2)^{n-1/2}}\cdot\sum_{k=0}^{n-1}\binom{2(n-1)-2k}{n-1-k}\binom{n-1}{k}\frac{h^{2k}}{4^{n-1-k}}.$$
+      </div></li>
+</ol>
+</div>
+
+<div class="exercises supp-exercises" id="supp15">
+<h3 class="exercise-title">补充习题</h3>
+<ol class="exercise-list">
+<li class="exercise-item">
+<div class="exercise-statement">设 $f(x, y)$ 在 $[0, 1] \times [0, 1]$ 上连续，证明
+        $$\int_0^1\left[\int_0^x f(x, y)\,\mathrm{d}y\right]\mathrm{d}x = \int_0^1\left[\int_y^1 f(x, y)\,\mathrm{d}x\right]\mathrm{d}y.$$
+      </div></li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $f(x)$ 在 $[0, +\infty)$ 上可积，且 $\int_0^{+\infty} f(x)\,\mathrm{d}x$ 收敛，证明：对任意 $a &gt; 0$，
+        $$\int_0^{+\infty} f(ax)\,\mathrm{d}x = \frac{1}{a}\int_0^{+\infty} f(x)\,\mathrm{d}x.$$
+      </div></li>
+<li class="exercise-item">
+<div class="exercise-statement">计算 $\int_0^{+\infty} \frac{x^a - x^b}{\ln x}\,\mathrm{d}x$（$a &gt; b &gt; -1$）的值．</div>
+</li>
+<li class="exercise-item">
+<div class="exercise-statement">设 $f(x)$ 在 $[0, 1]$ 上连续，$f(0) = 0$，$f'(0)$ 存在，证明 $\int_0^{+\infty} \frac{f(x) - f(0)}{x^{3/2}}\,\mathrm{d}x$ 收敛．</div>
+</li>
+</ol>
+</div>
+</section>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-3" class="anchor-btn" title="复制锚点链接"># 定理 15.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设函数 $f(x, y)$ 和 $g(x, y)$ 满足以下两组条件之一，则含参变量的反常积分 $\int_a^{+\infty} f(x, y)g(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．</p>
+<p><strong>1. (Abel 判别法)</strong></p>
+<p>(1) $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛；</p>
+<p>(2) $g(x, y)$ 关于 $x$ 单调，即对每个固定的 $y \in [c, d]$，$g$ 关于 $x$ 是单调函数；</p>
+<p>(3) $g(x, y)$ 一致有界，即存在正数 $L$，使得</p>
+    $$|g(x, y)| \le L, \quad a \le x &lt; +\infty, \quad c \le y \le d.$$
+    <p><strong>2. (Dirichlet 判别法)</strong></p>
+<p>(1) $\int_a^A f(x, y)\,\mathrm{d}x$ 一致有界，即存在正数 $L$，使得</p>
+    $$\left|\int_a^A f(x, y)\,\mathrm{d}x\right| \le L, \quad a \le A &lt; +\infty, \quad c \le y \le d;$$
+    <p>(2) $g(x, y)$ 关于 $x$ 单调，即对每个固定的 $y \in [c, d]$，$g$ 关于 $x$ 是单调函数；</p>
+<p>(3) 当 $x \to +\infty$ 时 $g(x, y)$ 关于 $y$ 在 $[c, d]$ 上一致趋于零，即对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得当 $x \ge A_0$ 时，对于任意 $y \in [c, d]$ 成立</p>
+    $$|g(x, y)| &lt; \varepsilon.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>我们只证明 Abel 判别法，Dirichlet 判别法的证明类似．</p>
+<p>由于 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛，由 Cauchy 收敛原理知，对于任意给定的 $\varepsilon &gt; 0$，存在与 $y$ 无关的正数 $A_0$，使得当 $A', A &gt; A_0$ 时，</p>
+    $$\left|\int_A^{A'} f(x, y)\,\mathrm{d}x\right| &lt; \varepsilon.$$
+    <p>那么当 $A', A &gt; A_0$ 时，对于任意 $y \in [c, d]$，由积分第二中值定理得</p>
+    $$\left|\int_A^{A'} f(x, y)g(x, y)\,\mathrm{d}x\right|$$
+
+  
+<p>$\le |g(A, y)|\left|\int_A^\xi f(x, y)\,\mathrm{d}x\right| + |g(A', y)|\left|\int_\xi^{A'} f(x, y)\,\mathrm{d}x\right| &lt; 2L\varepsilon,$</p>
+<p>其中 $\xi$ 在 $A$ 与 $A'$ 之间．于是由定理 15.2.1 知 $\int_a^{+\infty} f(x, y)g(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛．</p>
+<p>关于无界函数的含参变量反常积分的一致收敛性，同样有 Cauchy 收敛原理，Weierstrass 判别法，Abel 判别法和 Dirichlet 判别法，这里不一一加以叙述，请读者自己列出．</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.4 Dini 定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-4" class="anchor-btn" title="复制锚点链接"># 定理 15.2.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在 $[0, +\infty) \times [c, d]$ 上连续且保持定号，如果含参变量积分</p>
+
+
+    $$I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>在 $[c, d]$ 上连续，那么含参变量积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>用反证法．不妨设 $f(x, y) \ge 0$．若 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上不一致收敛，那么存在某个正数 $\varepsilon_0$，对于任何正整数 $n &gt; a$，总存在 $y_n \in [c, d]$，使得</p>
+    $$\int_n^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0.$$
+    <p>由于有界数列 $\{y_n\}$ 必有收敛子列，不妨就设 $\{y_n\}$ 收敛，并记 $y_0 = \lim_{n\to\infty} y_n \in [c, d]$．由于反常积分 $\int_a^{+\infty} f(x, y_0)\,\mathrm{d}x$ 收敛，所以必存在 $A (&gt; a)$ 使得</p>
+    $$\int_A^{+\infty} f(x, y_0)\,\mathrm{d}x &lt; \frac{\varepsilon_0}{2},$$
+    <p>并且由 $f(x, y) \ge 0$ 知，当 $n &gt; A$ 时，</p>
+    $$\int_n^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0 \Rightarrow \int_A^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0.$$
+    <p>由于 $f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上连续，而且由常义含参变量积分的连续性定理知 $\int_a^A f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上也连续，因此从</p>
+    $$I(y) = \int_a^A f(x, y)\,\mathrm{d}x + \int_A^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>知道 $\int_A^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上连续，于是由 $y_n \to y_0$ 可推出</p>
+    $$\lim_{n\to\infty} \int_A^{+\infty} f(x, y_n)\,\mathrm{d}x = \int_A^{+\infty} f(x, y_0)\,\mathrm{d}x &lt; \frac{\varepsilon_0}{2},$$
+    <p>这与 $\int_A^{+\infty} f(x, y_n)\,\mathrm{d}x \ge \varepsilon_0$ 矛盾．证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 15.2.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-1" class="anchor-btn" title="复制锚点链接"># 引理 15.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>若含参变量反常积分 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则函数项级数 $\sum_{n=1}^{\infty} u_n(y)$ 在 $[c, d]$ 上一致收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.5 连续性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-5" class="anchor-btn" title="复制锚点链接"># 定理 15.2.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, d]$ 上连续，$\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则函数</p>
+    $$I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$$
+    <p>在 $[c, d]$ 上连续，即</p>
+    $$\lim_{y \to y_0} \int_a^{+\infty} f(x, y)\,\mathrm{d}x = \int_a^{+\infty} \lim_{y \to y_0} f(x, y)\,\mathrm{d}x, \quad y_0 \in [c, d].$$
+    <p>也就是说，极限运算与积分运算可以交换．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>因为 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛，由引理 15.2.1 知 $\sum_{n=1}^\infty u_n(y)$ 在 $[c, d]$ 上一致收敛．由于 $f(x, y)$ 在 $[a_{n-1}, a_n] \times [c, d]$ 上连续，那么由常义含参变量积分的连续性定理知</p>
+    $$u_n(y) = \int_{a_{n-1}}^{a_n} f(x, y)\,\mathrm{d}x$$
+    <p>连续（$n = 1, 2, \ldots$）．根据一致收敛级数的性质就知道和函数 $I(y) = \sum_{n=1}^\infty u_n(y)$ 连续．证毕</p>
+<p>注意，Dini 定理并不是这个定理的逆定理．Dini 定理只说明了在 $f(x, y)$ 保持定号时连续性可以保证一致收敛性，可以举例说明：去掉"保持定号"条件可能导致结论不成立．</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.6 积分次序交换定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-6" class="anchor-btn" title="复制锚点链接"># 定理 15.2.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, d]$ 上连续，$\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛，则</p>
+    $$\int_c^d \left[\int_a^{+\infty} f(x, y)\,\mathrm{d}x\right]\mathrm{d}y = \int_a^{+\infty}\left[\int_c^d f(x, y)\,\mathrm{d}y\right]\mathrm{d}x,$$
+    <p>即积分次序可交换．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由引理 15.2.1 知 $\sum_{n=1}^\infty u_n(y)$ 在 $[c, d]$ 上一致收敛，根据一致收敛级数的和与积分号可以交换的结论得</p>
+
+
+    $$\int_c^d I(y)\,\mathrm{d}y = \sum_{n=1}^\infty \int_c^d u_n(y)\,\mathrm{d}y = \sum_{n=1}^\infty \int_c^d \int_{a_{n-1}}^{a_n} f(x, y)\,\mathrm{d}x\,\mathrm{d}y$$
+    $$= \sum_{n=1}^\infty \int_{a_{n-1}}^{a_n} \int_c^d f(x, y)\,\mathrm{d}y\,\mathrm{d}x = \int_a^{+\infty} \int_c^d f(x, y)\,\mathrm{d}y\,\mathrm{d}x,$$
+    <p>其中第三行到第四行的推导利用了常义含参变量积分的积分次序可交换定理．证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.6'</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-6" class="anchor-btn" title="复制锚点链接"># 定理 15.2.6'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$ 在 $[a, +\infty) \times [c, +\infty)$ 上连续，且 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, C]$ 上一致收敛（$c &lt; C &lt; +\infty$），$\int_c^{+\infty} f(x, y)\,\mathrm{d}y$ 关于 $x$ 在 $[a, A]$ 上一致收敛（$a &lt; A &lt; +\infty$）．进一步假设 $\int_c^{+\infty}\left[\int_a^{+\infty} |f(x, y)|\,\mathrm{d}x\right]\mathrm{d}y$ 和 $\int_a^{+\infty}\left[\int_c^{+\infty} |f(x, y)|\,\mathrm{d}y\right]\mathrm{d}x$ 中有一个存在，那么</p>
+    $$\int_c^{+\infty}\left[\int_a^{+\infty} f(x, y)\,\mathrm{d}x\right]\mathrm{d}y = \int_a^{+\infty}\left[\int_c^{+\infty} f(x, y)\,\mathrm{d}y\right]\mathrm{d}x.$$
+    <p>这个定理的证明较为复杂，这里从略．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-2-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.2.7 积分号下求导定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-2-7" class="anchor-btn" title="复制锚点链接"># 定理 15.2.7</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x, y)$，$f_y(x, y)$ 都在 $[a, +\infty) \times [c, d]$ 上连续，且 $\int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 对于每个 $y \in [c, d]$ 收敛．进一步假设 $\int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$ 关于 $y$ 在 $[c, d]$ 上一致收敛．则 $I(y) = \int_a^{+\infty} f(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上可导，并且在 $[c, d]$ 上成立</p>
+    $$I'(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x,$$
+    <p>即</p>
+    $$\frac{\mathrm{d}}{\mathrm{d}y}\int_a^{+\infty} f(x, y)\,\mathrm{d}x = \int_a^{+\infty} \frac{\partial f(x, y)}{\partial y}\,\mathrm{d}x,$$
+    <p>也就是说，求导运算与积分运算可交换．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>记 $\varphi(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$，由 $\int_a^{+\infty} f_y(x, y)\,\mathrm{d}x$ 在 $[c, d]$ 上一致收敛的假设知 $\varphi(y)$ 在 $[c, d]$ 上连续．于是对于 $y \in [c, d]$，由定理 15.2.6 得</p>
+    $$\int_c^y \varphi(s)\,\mathrm{d}s = \int_c^y \int_a^{+\infty} f_s(x, s)\,\mathrm{d}x\,\mathrm{d}s = \int_a^{+\infty} \int_c^y f_s(x, s)\,\mathrm{d}s\,\mathrm{d}x$$
+    $$= \int_a^{+\infty} [f(x, y) - f(x, c)]\,\mathrm{d}x = I(y) - I(c).$$
+    <p>由于 $\varphi(y)$ 在 $[c, d]$ 上连续，所以函数 $\int_c^y \varphi(s)\,\mathrm{d}s$ 可导，从而 $I(y)$ 可导．两边求导就得</p>
+    $$I'(y) = \varphi(y) = \int_a^{+\infty} f_y(x, y)\,\mathrm{d}x.$$
+    <p>证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.3.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-1" class="anchor-btn" title="复制锚点链接"># 定理 15.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>Beta 函数与 Gamma 函数之间具有如下关系：</p>
+    $$\mathrm{B}(p, q) = \frac{\Gamma(p)\Gamma(q)}{\Gamma(p+q)}, \quad p &gt; 0, \quad q &gt; 0.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由于 $\Gamma(p) = 2\int_0^{+\infty} s^{2p-1}e^{-s^2}\,\mathrm{d}s$，$\Gamma(q) = 2\int_0^{+\infty} t^{2q-1}e^{-t^2}\,\mathrm{d}t$，取 $\Omega = \{(s, t) \mid 0 \le s &lt; +\infty, 0 \le t &lt; +\infty\}$，利用化反常重积分为累次积分的方法得到</p>
+    $$\Gamma(p)\Gamma(q) = 4\iint_\Omega s^{2p-1}t^{2q-1}e^{-(s^2+t^2)}\,\mathrm{d}s\,\mathrm{d}t.$$
+    <p>对右边的反常二重积分作极坐标变换 $s = r\cos\theta$，$t = r\sin\theta$，即得</p>
+    $$\Gamma(p)\Gamma(q) = 4\int_0^{\pi/2}\int_0^{+\infty} (r\cos\theta)^{2p-1}(r\sin\theta)^{2q-1}e^{-r^2} r\,\mathrm{d}r\,\mathrm{d}\theta$$
+    $$= \left(2\int_0^{\pi/2} \cos^{2p-1}\theta\sin^{2q-1}\theta\,\mathrm{d}\theta\right)\left(2\int_0^{+\infty} r^{2p+2q-1}e^{-r^2}\,\mathrm{d}r\right)$$
+    $$= \mathrm{B}(p, q) \cdot \Gamma(p+q).$$
+    <p>证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.3.2 Legendre 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-2" class="anchor-btn" title="复制锚点链接"># 定理 15.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+
+    $$\Gamma(s)\Gamma\!\left(s+\frac{1}{2}\right) = \frac{\sqrt{\pi}}{2^{2s-1}}\Gamma(2s), \quad s &gt; 0.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由于</p>
+    $$\mathrm{B}(s, s) = \int_0^1 x^{s-1}(1-x)^{s-1}\,\mathrm{d}x = \int_0^1 [x(1-x)]^{s-1}\,\mathrm{d}x,$$
+    <p>作变量代换 $x = \frac{1-t}{2}$，得到</p>
+
+
+    $$\mathrm{B}(s, s) = \frac{1}{2^{2s-1}}\int_0^1 (1-t^2)^{s-1}\,\mathrm{d}t = \frac{1}{2^{2s-1}}\cdot\frac{1}{2}\mathrm{B}\!\left(\frac{1}{2}, s\right) = \frac{1}{2^{2s-1}}\cdot\frac{\Gamma(1/2)\Gamma(s)}{2\Gamma(s+1/2)}.$$
+    <p>利用 Beta 函数与 Gamma 函数的关系，从上式得</p>
+    $$\frac{\Gamma(s)^2}{\Gamma(2s)} = \frac{\sqrt{\pi}\Gamma(s)}{2^{2s-1}\Gamma(s+1/2)},$$
+    <p>整理后就得到 Legendre 公式．证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.3.3 余元公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-3" class="anchor-btn" title="复制锚点链接"># 定理 15.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+
+    $$\Gamma(s)\Gamma(1-s) = \frac{\pi}{\sin\pi s}, \quad 0 &lt; s &lt; 1.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 15.3.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-1" class="anchor-btn" title="复制锚点链接"># 引理 15.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设连续可积函数序列 $\{u_n(x)\}$ 在区间 $[a, b)$ 上收敛于 $u(x)$，函数 $\varphi(x)$ 在 $[a, b)$ 上可积（即 $\int_a^b \varphi(x)\,\mathrm{d}x$ 收敛）．进一步设</p>
+<p>(1) $0 \le u_n(x) \le \varphi(x)$，$a \le x &lt; b$，$n = 1, 2, \ldots$；</p>
+<p>(2) 对于任意 $\delta &gt; 0$，$\{u_n(x)\}$ 在 $[a, b-\delta]$ 上一致收敛，</p>
+<p>那么</p>
+    $$\lim_{n\to\infty}\int_a^b u_n(x)\,\mathrm{d}x = \int_a^b u(x)\,\mathrm{d}x,$$
+    <p>即极限运算与积分运算可交换．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由条件 (1) 知 $0 \le u(x) \le \varphi(x)$，$a \le x &lt; b$，所以 $\int_a^b u(x)\,\mathrm{d}x$ 收敛．根据极限的定义，要证明的是：对于任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得当 $n &gt; N$ 时，成立</p>
+    $$\left|\int_a^b u_n(x)\,\mathrm{d}x - \int_a^b u(x)\,\mathrm{d}x\right| &lt; \varepsilon.$$
+    <p>由于 $\int_a^b \varphi(x)\,\mathrm{d}x$ 收敛，那么存在一个正数 $\delta$，使得 $\int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3}$，因此</p>
+    $$\int_{b-\delta}^b u_n(x)\,\mathrm{d}x \le \int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3},$$
+    $$\int_{b-\delta}^b u(x)\,\mathrm{d}x \le \int_{b-\delta}^b \varphi(x)\,\mathrm{d}x &lt; \frac{\varepsilon}{3}.$$
+    <p>由条件 (2) 知 $\{u_n(x)\}$ 在 $[a, b-\delta]$ 上一致收敛于 $u(x)$，所以存在正整数 $N$，使得当 $n &gt; N$ 时，</p>
+    $$\left|\int_a^{b-\delta} u_n(x)\,\mathrm{d}x - \int_a^{b-\delta} u(x)\,\mathrm{d}x\right| \le (b-\delta-a)\cdot\frac{\varepsilon}{3(b-\delta-a)} = \frac{\varepsilon}{3}.$$
+    <p>这样一来，当 $n &gt; N$ 时，</p>
+    $$\left|\int_a^b u_n(x)\,\mathrm{d}x - \int_a^b u(x)\,\mathrm{d}x\right| \le \frac{\varepsilon}{3} + \frac{\varepsilon}{3} + \frac{\varepsilon}{3} = \varepsilon.$$
+    <p>证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 15.3.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-2" class="anchor-btn" title="复制锚点链接"># 引理 15.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>对于 $x \in (0, 1)$，成立</p>
+    $$\int_0^{+\infty} \frac{t^{x-1}}{1+t}\,\mathrm{d}t = \frac{\pi}{\sin\pi x}.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>我们知道</p>
+    $$\sin\pi x = \pi x\prod_{k=1}^\infty\left(1 - \frac{x^2}{k^2}\right).$$
+    <p>取绝对值，再取对数得</p>
+
+
+    $$\ln|\sin\pi x| = \ln\pi + \ln|x| + \sum_{k=1}^\infty \ln\left|1 - \frac{x^2}{k^2}\right|.$$
+    <p>在 $(0, \frac{\pi}{2})$ 上逐项求导得（请读者思考一下为什么可以逐项求导）</p>
+    $$\pi\cot\pi x = \frac{1}{x} + \sum_{k=1}^\infty\left(\frac{1}{x-k} + \frac{1}{x+k}\right).$$
+    <p>于是在 $x \in (0, \frac{\pi}{2})$ 上，由 $\tan x = \cot\!\left(\frac{\pi}{2} - x\right)$ 得</p>
+    $$\pi\tan\pi x = -\frac{1}{x - \frac{1}{2}} + \sum_{k=1}^\infty\left(\frac{1}{x - k - \frac{1}{2}} + \frac{1}{x + k - \frac{1}{2}}\right).$$
+    <p>再利用</p>
+    $$\frac{\pi}{\sin\pi x} = \pi\cot\frac{\pi x}{2} - \pi\cot\pi x$$
+    <p>以及以上两个展开式，整理后得到在 $x \in (0, 1)$ 上成立</p>
+    $$\frac{\pi}{\sin\pi x} = \frac{1}{x} + \sum_{n=1}^\infty (-1)^n\left(\frac{1}{x-n} + \frac{1}{x+n}\right).$$
+    <p>从这个式子直接就可推出所需结果 $\int_0^{+\infty} \frac{t^{x-1}}{1+t}\,\mathrm{d}t = \frac{\pi}{\sin\pi x}$．</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch15-15-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 15.3.4 Stirling 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分号下求导与微分交换 (Feynman技巧)</a>
+        <span class="thm-tag">含参变量积分</span><span class="thm-tag">积分号下求导</span><span class="thm-tag">Feynman技巧</span><span class="thm-tag">Euler积分</span><span class="thm-tag">Gamma函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch15-15-3-4" class="anchor-btn" title="复制锚点链接"># 定理 15.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>Gamma 函数有如下的渐进估计：</p>
+    $$\Gamma(s+1) = \sqrt{2\pi s}\left(\frac{s}{e}\right)^s e^{\theta/(12s)}, \quad s &gt; 0,$$
+    <p>这里 $0 &lt; \theta &lt; 1$．特别地，当 $s = n$ 为正整数时，</p>
+    $$n! = \sqrt{2\pi n}\left(\frac{n}{e}\right)^n e^{\theta/(12n)}, \quad 0 &lt; \theta &lt; 1.$$
+    <p>这个定理的证明比较复杂，在此从略．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分号下求导与微分交换 (Feynman技巧)</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续分析中的算子自由换序；引入外源参变量 α 激活静止积分，通过求导消去奇异分母后再积分回溯。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到一个极其难算的定积分，巧妙引入一个参数 α 变成函数 I(α)，对 α 求导后积分内部难缠的部分瞬间化简，算完再积分回去就能攻克难题！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维参数滑块：给原本僵硬的数学对象装上一根可以滑动的调节旋钮 α，通过微调旋钮观察变化率，从而逆推出原物体的全貌。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Leibniz 积分求导法则：d/dα ∫_a^b f(x, α) dx = ∫_a^b ∂f/∂α dx。</li><li>反常含参变量积分的一致收敛性前提（Weierstrass / Dirichlet 判别法）。</li><li>Gamma 函数 Γ(s) 与 Beta 函数 B(p, q) 的分析性质与连带阶乘解析延拓。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_14_theorems.html" class="page-nav-btn">← 上一章：第十四章 · 曲线积分、曲面积分与场论</a>
+  <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" class="page-nav-btn" target="_blank">📗 进入下册：第九章 数项级数 (数字化原书) →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

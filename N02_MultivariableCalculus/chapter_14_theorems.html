@@ -1,0 +1,1937 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第十四章 · 曲线积分、曲面积分与场论 · 核心定义与定理证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.88);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-blue);
+}
+
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
+}
+
+/* Two-column Layout */
+.main-layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  position: relative;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.ch-number-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ch-count-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.ch-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.ch-desc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.thm-tag.routine-ref {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.thm-tag.routine-ref:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: #fff;
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* Verbatim Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.routine-link-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.essence-line {
+  font-size: 0.95rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+}
+
+.keypoints-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keypoints-list {
+  margin-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Pagination Bar */
+.chapter-pagination {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill current-ch">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (10)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch14-14-1-1" class="toc-link def-link" title="定义 14.1.1 第一类曲线积分 (对弧长的积分)">📖 定义 14.1.1 第一类曲线积分 (对弧长的积分)</a></li>
+<li><a href="#def-ch14-14-1-2" class="toc-link def-link" title="定义 14.1.2 第二类曲线积分 (向量场做功线积分)">📖 定义 14.1.2 第二类曲线积分 (向量场做功线积分)</a></li>
+<li><a href="#def-ch14-14-2-1" class="toc-link def-link" title="定义 14.2.1 第一类曲面积分 (对面积的积分)">📖 定义 14.2.1 第一类曲面积分 (对面积的积分)</a></li>
+<li><a href="#def-ch14-14-2-2" class="toc-link def-link" title="定义 14.2.2 双侧曲面与曲面侧的连续定向">📖 定义 14.2.2 双侧曲面与曲面侧的连续定向</a></li>
+<li><a href="#def-ch14-14-2-3" class="toc-link def-link" title="定义 14.2.3 第二类曲面积分 (向量场通量积分)">📖 定义 14.2.3 第二类曲面积分 (向量场通量积分)</a></li>
+<li><a href="#def-ch14-14-3-1" class="toc-link def-link" title="定义 14.3.1 向量场的环量与旋度 (Curl / Rot)">📖 定义 14.3.1 向量场的环量与旋度 (Curl / Rot)</a></li>
+<li><a href="#def-ch14-14-5-1" class="toc-link def-link" title="定义 14.5.1 向量场的通量与散度 (Divergence)">📖 定义 14.5.1 向量场的通量与散度 (Divergence)</a></li>
+<li><a href="#def-ch14-14-5-2" class="toc-link def-link" title="定义 14.5.2 无源场与螺线场 (Solenoidal Fields)">📖 定义 14.5.2 无源场与螺线场 (Solenoidal Fields)</a></li>
+<li><a href="#def-ch14-14-5-3" class="toc-link def-link" title="定义 14.5.3 无旋场与保守场 (Conservative Fields)">📖 定义 14.5.3 无旋场与保守场 (Conservative Fields)</a></li>
+<li><a href="#def-ch14-14-5-4" class="toc-link def-link" title="定义 14.5.4 调和场与 Laplace 方程">📖 定义 14.5.4 调和场与 Laplace 方程</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (11)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-ch14-14-1-1" class="toc-link" title="定理 14.1.1">📐 定理 14.1.1</a></li>
+<li><a href="#thm-ch14-14-1-2" class="toc-link" title="定理 14.1.2">📐 定理 14.1.2</a></li>
+<li><a href="#thm-ch14-14-3-1" class="toc-link" title="定理 14.3.1 Green 公式">📐 定理 14.3.1 Green 公式</a></li>
+<li><a href="#thm-ch14-14-3-2" class="toc-link" title="定理 14.3.2 Green 定理">📐 定理 14.3.2 Green 定理</a></li>
+<li><a href="#thm-ch14-14-3-3" class="toc-link" title="定理 14.3.3">📐 定理 14.3.3</a></li>
+<li><a href="#thm-ch14-14-3-4" class="toc-link" title="定理 14.3.4 Gauss 公式">📐 定理 14.3.4 Gauss 公式</a></li>
+<li><a href="#thm-ch14-14-3-5" class="toc-link" title="定理 14.3.5 Stokes 公式">📐 定理 14.3.5 Stokes 公式</a></li>
+<li><a href="#thm-ch14-14-5-1" class="toc-link" title="定理 14.5.1">📐 定理 14.5.1</a></li>
+<li><a href="#thm-ch14-14-5-2" class="toc-link" title="定理 14.5.2">📐 定理 14.5.2</a></li>
+<li><a href="#thm-ch14-14-5-3" class="toc-link" title="定理 14.5.3">📐 定理 14.5.3</a></li>
+<li><a href="#thm-ch14-14-5-4" class="toc-link" title="定理 14.5.4">📐 定理 14.5.4</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 014</span>
+        <span class="ch-count-badge">收录 10 个基础定义 · 11 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第十四章 · 曲线积分、曲面积分与场论</h1>
+      <p class="ch-desc-text">第一/二类曲线曲面积分、Green 公式与平面向量场、Gauss 公式与散度定理、Stokes 公式与旋度定理、保守场与势函数</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_14/chapter_14.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 14 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 10 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch14-14-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.1.1 第一类曲线积分 (对弧长的积分)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">第一类曲线积分</span><span class="def-tag">弧长微元ds</span><span class="def-tag">线密度质量</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-1-1" class="anchor-btn" title="复制锚点链接"># 定义 14.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $L$ 是空间 $\mathbb{R}^3$ 上一条可求长的连续曲线，其端点为 $A$ 和 $B$，函数 $f(x, y, z)$ 在 $L$ 上有界．令 $A = P_0$，$B = P_n$，在 $L$ 上从 $A$ 到 $B$ 顺序地插入分点 $P_1, P_2, \ldots, P_{n-1}$，再分别在每个小弧段 $P_{i-1}P_i$ 上任取一点 $(\xi_i, \eta_i, \zeta_i)$，并记第 $i$ 个小弧段 $P_{i-1}P_i$ 的长度为 $\Delta s_i$ ($i = 1, 2, \ldots, n$)，作和式</p>
+    $$\sum_{i=1}^n f(\xi_i, \eta_i, \zeta_i)\Delta s_i.$$
+    <p>如果当所有小弧段的最大长度 $\lambda = \max_{1\le i\le n}\Delta s_i$ 趋于零时，这个和式的极限存在，且与分点 $P_i$ 的取法及 $P_{i-1}P_i$ 上的点 $(\xi_i, \eta_i, \zeta_i)$ 的取法无关，则称这个极限值为 $f(x, y, z)$ 在曲线 $L$ 上的<strong>第一类曲线积分</strong>，记为</p>
+    $$\int_L f(x, y, z)\,\mathrm{d}s \quad \text{或} \quad \int_L f(P)\,\mathrm{d}s.$$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-1-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.1.2 第二类曲线积分 (向量场做功线积分)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">第二类曲线积分</span><span class="def-tag">向量场做功</span><span class="def-tag">有向线微元dr</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-1-2" class="anchor-btn" title="复制锚点链接"># 定义 14.1.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设曲面 $\Sigma$ 为有界光滑（或分片光滑）曲面，函数 $u = f(x, y, z)$ 在 $\Sigma$ 上有界．将曲面 $\Sigma$ 用一个光滑曲线网分成几片小曲面 $\Delta\Sigma_1, \Delta\Sigma_2, \ldots, \Delta\Sigma_n$，并记 $\Delta\Sigma_i$ 的面积为 $\Delta S_i$．在每片 $\Delta\Sigma_i$ 上任取一点 $(\xi_i, \eta_i, \zeta_i)$，作和式</p>
+    $$\sum_{i=1}^n f(\xi_i, \eta_i, \zeta_i)\Delta S_i.$$
+    <p>如果当所有小曲面 $\Delta\Sigma_i$ 的最大直径 $\lambda$ 趋于零时，这个和式的极限存在，且极限值与小曲面的分法和点 $(\xi_i, \eta_i, \zeta_i)$ 的取法无关，则称此极限值为 $f(x, y, z)$ 在曲面 $\Sigma$ 上的<strong>第一类曲面积分</strong>，记为 $\iint_\Sigma f(x, y, z)\,\mathrm{d}S$，即</p>
+    $$\iint_\Sigma f(x, y, z)\,\mathrm{d}S = \lim_{\lambda \to 0} \sum_{i=1}^n f(\xi_i, \eta_i, \zeta_i)\Delta S_i,$$
+    <p>其中 $f(x, y, z)$ 称为被积函数，$\Sigma$ 称为积分曲面．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.2.1 第一类曲面积分 (对面积的积分)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">第一类曲面积分</span><span class="def-tag">面积微元dS</span><span class="def-tag">曲面质量薄壳</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-2-1" class="anchor-btn" title="复制锚点链接"># 定义 14.2.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $L$ 为一条定向的光滑曲线，起点为 $A$，终点为 $B$．在 $L$ 上每一点取单位切向量 $T = (\cos\alpha, \cos\beta, \cos\gamma)$，使它与 $L$ 的定向相一致．设</p>
+    $$f(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$$
+    <p>是定义在 $L$ 上的向量值函数，则称</p>
+    $$\int_L f \cdot T\,\mathrm{d}s = \int_L [P(x, y, z)\cos\alpha + Q(x, y, z)\cos\beta + R(x, y, z)\cos\gamma]\,\mathrm{d}s$$
+    <p>为 $f$ 在 $L$ 上的<strong>第二类曲线积分</strong>（如果右面的第一类曲线积分存在的话）．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-2-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.2.2 双侧曲面与曲面侧的连续定向</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">双侧曲面</span><span class="def-tag">单位法向量场</span><span class="def-tag">曲面定向</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-2-2" class="anchor-btn" title="复制锚点链接"># 定义 14.2.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $\Sigma$ 是一张光滑曲面，$P$ 为 $\Sigma$ 上任一点，$\Gamma_P$ 是过 $P$ 点且不越过曲面边界的任意一条闭曲线．取定 $\Sigma$ 在 $P$ 点的一个单位法向量，让它沿 $\Gamma_P$ 连续移动，使它与所过之点处的一个单位法向量连续地相合．如果当它再回到 $P$ 点时，法向量的指向仍与原选的方向相同，则称 $\Sigma$ 为<strong>双侧曲面</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-2-3">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.2.3 第二类曲面积分 (向量场通量积分)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">第二类曲面积分</span><span class="def-tag">流体通量</span><span class="def-tag">有向曲面微元</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-2-3" class="anchor-btn" title="复制锚点链接"># 定义 14.2.3</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $\Sigma$ 为定向的光滑曲面，曲面上的每一点指定了单位法向量 $n = (\cos\alpha, \cos\beta, \cos\gamma)$，使它与 $\Sigma$ 的定向一致．设 $f(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$ 为定义在 $\Sigma$ 上的向量值函数，称</p>
+    $$\iint_\Sigma f \cdot n\,\mathrm{d}S = \iint_\Sigma [P(x, y, z)\cos\alpha + Q(x, y, z)\cos\beta + R(x, y, z)\cos\gamma]\,\mathrm{d}S$$
+    <p>为 $f$ 在 $\Sigma$ 上的<strong>第二类曲面积分</strong>（如果右面的第一类曲面积分存在）．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-3-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.3.1 向量场的环量与旋度 (Curl / Rot)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">旋度</span><span class="def-tag">环量密度</span><span class="def-tag">∇×F</span><span class="def-tag">微观漩涡</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-3-1" class="anchor-btn" title="复制锚点链接"># 定义 14.3.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $D$ 为平面区域，$P(x, y), Q(x, y)$ 为 $D$ 上的连续函数．如果对于 $D$ 内任意两点 $A, B$，积分值</p>
+    $$\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y$$
+    <p>只与 $A, B$ 两点有关，而与从 $A$ 到 $B$ 的路径 $L$（这里只考虑光滑或分段光滑曲线）无关，就称曲线积分 $\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y$ 与<strong>路径无关</strong>，否则称为与路径有关．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-5-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.5.1 向量场的通量与散度 (Divergence)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">散度</span><span class="def-tag">通量密度</span><span class="def-tag">∇·F</span><span class="def-tag">点源与汇</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-5-1" class="anchor-btn" title="复制锚点链接"># 定义 14.5.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设</p>
+    $$a(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$$
+    <p>是一个向量场，$P(x, y, z), Q(x, y, z), R(x, y, z)$ 在 $\Omega$ 上具有连续偏导数．$\Sigma$ 为场中的定向曲面，称曲面积分</p>
+    $$\Phi = \iint_\Sigma a \cdot \mathrm{d}S = \iint_\Sigma P\,\mathrm{d}y\mathrm{d}z + Q\,\mathrm{d}z\mathrm{d}x + R\,\mathrm{d}x\mathrm{d}y$$
+    <p>为向量场 $a$ 沿指定侧通过曲面 $\Sigma$ 的<strong>通量</strong>．</p>
+<p>设 $M$ 为这个场中任一点．称</p>
+    $$\operatorname{div} a(M) = \frac{\partial P}{\partial x}(M) + \frac{\partial Q}{\partial y}(M) + \frac{\partial R}{\partial z}(M)$$
+    <p>为向量场 $a$ 在 $M$ 点的<strong>散度</strong>，记为 $\operatorname{div} a(M)$．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-5-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.5.2 无源场与螺线场 (Solenoidal Fields)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无源场</span><span class="def-tag">div F = 0</span><span class="def-tag">矢量势</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-5-2" class="anchor-btn" title="复制锚点链接"># 定义 14.5.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $a(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$ 是一个向量场，$P(x, y, z), Q(x, y, z), R(x, y, z)$ 在 $\Omega$ 上具有连续偏导数．设 $\Gamma$ 为场中的定向曲线，称曲线积分</p>
+    $$\oint_\Gamma a \cdot \mathrm{d}s = \oint_\Gamma P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z$$
+    <p>为向量场 $a$ 沿定向曲线 $\Gamma$ 的<strong>环量</strong>．</p>
+<p>设 $M$ 为这个场中任一点．称向量</p>
+    $$\operatorname{rot} a(M) = \begin{vmatrix} i &amp; j &amp; k \\ \dfrac{\partial}{\partial x} &amp; \dfrac{\partial}{\partial y} &amp; \dfrac{\partial}{\partial z} \\ P &amp; Q &amp; R \end{vmatrix} = \left(\frac{\partial R}{\partial y} - \frac{\partial Q}{\partial z}\right)i + \left(\frac{\partial P}{\partial z} - \frac{\partial R}{\partial x}\right)j + \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)k$$
+    <p>为向量场 $a$ 在 $M$ 点的<strong>旋度</strong>，记为 $\operatorname{rot} a(M)$ 或 $\operatorname{curl} a(M)$．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-5-3">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.5.3 无旋场与保守场 (Conservative Fields)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无旋场</span><span class="def-tag">保守场</span><span class="def-tag">curl F = 0</span><span class="def-tag">势函数</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-5-3" class="anchor-btn" title="复制锚点链接"># 定义 14.5.3</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $a(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$ 为向量场，其中 $P(x, y, z), Q(x, y, z), R(x, y, z)$ 在区域 $\Omega$ 上连续．若存在函数 $U(x, y, z)$ 满足 $a = \operatorname{grad} U$，则称向量场 $a$ 为<strong>有势场</strong>，并称函数 $V = -U$ 为<strong>势函数</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch14-14-5-4">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 14.5.4 调和场与 Laplace 方程</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">调和场</span><span class="def-tag">Laplace方程</span><span class="def-tag">Δu = 0</span><span class="def-tag">无源无旋</span>
+      </div>
+    </div>
+    <a href="#def-ch14-14-5-4" class="anchor-btn" title="复制锚点链接"># 定义 14.5.4</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果对于 $\Omega$ 内任意两点 $A, B$，积分值</p>
+    $$\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z$$
+    <p>只与 $A, B$ 两点有关，而与从 $A$ 到 $B$ 的路径（这里只考虑光滑或分段光滑曲线）$L$ 无关，就称曲线积分 $\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z$ 与<strong>路径无关</strong>．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 11 个定理 · 完整数学推导与四层点评</span>
+    </div>
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-ch14-14-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.1.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-1-1" class="anchor-btn" title="复制锚点链接"># 定理 14.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $L$ 为光滑曲线，函数 $f(x, y, z)$ 在 $L$ 上连续．则 $f(x, y, z)$ 在 $L$ 上的第一类曲线积分存在，且</p>
+    $$\int_L f(x, y, z)\,\mathrm{d}s = \int_\alpha^\beta f(x(t), y(t), z(t))\sqrt{(x'(t))^2 + (y'(t))^2 + (z'(t))^2}\,\mathrm{d}t.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>记</p>
+    $$I = \int_\alpha^\beta f(x(t), y(t), z(t))\sqrt{(x'(t))^2 + (y'(t))^2 + (z'(t))^2}\,\mathrm{d}t.$$
+    <p>将区间 $[\alpha, \beta]$ 分成 $n$ 个小区间 $[t_{i-1}, t_i]$，对应于 $L$ 上的分点 $P_i(x(t_i), y(t_i), z(t_i))$．记小弧段 $P_{i-1}P_i$ 的长度为 $\Delta s_i$，那么它的弧长为</p>
+    $$\Delta s_i = \int_{t_{i-1}}^{t_i} \sqrt{(x'(t))^2 + (y'(t))^2 + (z'(t))^2}\,\mathrm{d}t = \sqrt{(x'(\tau_i))^2 + (y'(\tau_i))^2 + (z'(\tau_i))^2}\Delta t_i,$$
+    <p>其中 $\tau_i \in [t_{i-1}, t_i]$，$\Delta t_i = t_i - t_{i-1}$．取 $(\xi_i, \eta_i, \zeta_i) = (x(\tau_i), y(\tau_i), z(\tau_i))$，那么作出的和式</p>
+    $$\sigma = \sum_{i=1}^n f(x(\tau_i), y(\tau_i), z(\tau_i))\sqrt{(x'(\tau_i))^2 + (y'(\tau_i))^2 + (z'(\tau_i))^2}\Delta t_i$$
+    <p>正好是定积分 $I$ 的一个 Riemann 和．对于每个小弧段 $P_{i-1}P_i$ 上任取的点 $(\xi_i, \eta_i, \zeta_i) = (x(t_i^*), y(t_i^*), z(t_i^*))$ ($t_i^* \in [t_{i-1}, t_i]$)，我们有</p>
+    $$\left|\sum_{i=1}^n f(x(t_i^*), y(t_i^*), z(t_i^*))\Delta s_i - \sigma\right| \le \sum_{i=1}^n \left|f(x(t_i^*), y(t_i^*), z(t_i^*)) - f(x(\tau_i), y(\tau_i), z(\tau_i))\right|\Delta s_i.$$
+
+    
+<p>设 $L$ 的弧长为 $s$．由于 $f(x, y, z)$ 在紧集 $L$ 上连续，因此一致连续．所以对任意给定的正数 $\varepsilon$，当 $\lambda = \max(\Delta s_i)$ 充分小时，$f(x, y, z)$ 在每个弧段 $P_{i-1}P_i$ 上的振幅均小于 $\varepsilon/s$．于是成立</p>
+    $$\left|\sum_{i=1}^n f(x(t_i^*), y(t_i^*), z(t_i^*))\Delta s_i - \sigma\right| &lt; \frac{\varepsilon}{s}\sum_{i=1}^n \Delta s_i = \frac{\varepsilon}{s}\int_\alpha^\beta \sqrt{(x'(t))^2 + (y'(t))^2 + (z'(t))^2}\,\mathrm{d}t = \frac{\varepsilon}{s} s = \varepsilon.$$
+    <p>即</p>
+    $$\int_L f(x, y, z)\,\mathrm{d}s = \lim_{\lambda \to 0} \sigma = I.$$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.1.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 外微分、Stokes 广义对偶与边界积分转移</a>
+        <span class="thm-tag">Green公式</span><span class="thm-tag">Gauss散度定理</span><span class="thm-tag">Stokes旋度定理</span><span class="thm-tag">微积分基本定理高维形式</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-1-2" class="anchor-btn" title="复制锚点链接"># 定理 14.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>对满足上述假设条件的曲面 $\Sigma$，它的面积为</p>
+    $$S = \iint_D \sqrt{EG - F^2}\,\mathrm{d}u\mathrm{d}v,$$
+    <p>其中</p>
+    $$E = r_u \cdot r_u = x_u^2 + y_u^2 + z_u^2,$$
+    $$F = r_u \cdot r_v = x_u x_v + y_u y_v + z_u z_v,$$
+    $$G = r_v \cdot r_v = x_v^2 + y_v^2 + z_v^2,$$
+    <p>它们称为曲面的 <strong>Gauss 系数</strong>（或曲面的第一基本形式系数）．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>由于</p>
+    $$r_u \times r_v = \begin{vmatrix} i &amp; j &amp; k \\ \dfrac{\partial x}{\partial u} &amp; \dfrac{\partial y}{\partial u} &amp; \dfrac{\partial z}{\partial u} \\ \dfrac{\partial x}{\partial v} &amp; \dfrac{\partial y}{\partial v} &amp; \dfrac{\partial z}{\partial v} \end{vmatrix} = \frac{\partial(y, z)}{\partial(u, v)}i + \frac{\partial(z, x)}{\partial(u, v)}j + \frac{\partial(x, y)}{\partial(u, v)}k,$$
+    <p>则</p>
+    $$\|r_u \times r_v\|^2 = \left(\frac{\partial(y, z)}{\partial(u, v)}\right)^2 + \left(\frac{\partial(z, x)}{\partial(u, v)}\right)^2 + \left(\frac{\partial(x, y)}{\partial(u, v)}\right)^2,$$
+    <p>而直接计算就得知</p>
+    $$\left(\frac{\partial(y, z)}{\partial(u, v)}\right)^2 + \left(\frac{\partial(z, x)}{\partial(u, v)}\right)^2 + \left(\frac{\partial(x, y)}{\partial(u, v)}\right)^2 = EG - F^2.$$
+    <p>因此</p>
+    $$\|r_u \times r_v\| = \sqrt{EG - F^2}.$$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 外微分、Stokes 广义对偶与边界积分转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 人类数学史上最壮丽的对称统一律：区域内部的微分增量总和，等于边界流形上的环量或通量积分（∫_∂Ω ω = ∫_Ω dω）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      内部所有微观小漩涡互相抵消后，只剩下最外圈边缘的总体宏观环流；内部所有微观喷泉的流量加起来，等于从包围圈漏出去的总通量。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      蜂巢里的无数小漩涡：每个六边形小格里的顺时针环流，在公共内壁上全部反向抵消，最终只留下整个蜂巢外轮廓边缘的宏观环流。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Green 公式将平面闭曲线积分化为二重旋度积分：∮ P dx + Q dy = ∬ (∂Q/∂x - ∂P/∂y) dx dy。</li><li>Gauss 公式将闭曲面积分化为三重散度积分：∯ F · n dS = ∭ div F dV。</li><li>Stokes 公式将空间曲面边界线积分化为旋度通量积分：∮ F · dr = ∬ curl F · n dS。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.3.1 Green 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 外微分、Stokes 广义对偶与边界积分转移</a>
+        <span class="thm-tag">Green公式</span><span class="thm-tag">Gauss散度定理</span><span class="thm-tag">Stokes旋度定理</span><span class="thm-tag">微积分基本定理高维形式</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-3-1" class="anchor-btn" title="复制锚点链接"># 定理 14.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $D$ 为 $xy$ 平面上由光滑或分段光滑的简单闭曲线所围的单连通闭区域．如果函数 $P(x, y), Q(x, y)$ 在 $D$ 上具有连续偏导数，那么</p>
+    $$\oint_{\partial D} P\,\mathrm{d}x + Q\,\mathrm{d}y = \iint_D \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y,$$
+    <p>其中 $\partial D$ 取正向，即诱导定向．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>我们先证明 $D$ 可同时表为以下两种形式</p>
+    $$D = \{(x, y) \mid a \le x \le b, y_1(x) \le y \le y_2(x)\} = \{(x, y) \mid c \le y \le d, x_1(y) \le x \le x_2(y)\}$$
+    <p>的情形（这时平行于 $x$ 轴或 $y$ 轴的直线与区域 $D$ 的边界至多交两点）．这样的区域称为标准区域（参见图 14.3.2）．</p>
+<div class="figure-container">
+<img alt="标准区域" src="figures/fig_14_3_2.svg"/>
+<div class="figure-caption">图 14.3.2</div>
+</div>
+<p>在这种情况下，</p>
+    $$\iint_D \frac{\partial P}{\partial y}\,\mathrm{d}x\mathrm{d}y = \int_a^b \mathrm{d}x \int_{y_1(x)}^{y_2(x)} \frac{\partial P}{\partial y}\,\mathrm{d}y = \int_a^b [P(x, y_2(x)) - P(x, y_1(x))]\,\mathrm{d}x$$
+    $$= -\left[\int_a^b P(x, y_1(x))\,\mathrm{d}x - \int_a^b P(x, y_2(x))\,\mathrm{d}x\right] = -\oint_{\partial D} P(x, y)\,\mathrm{d}x,$$
+    <p>式中最后一步是利用了曲线积分的计算公式．同理又有</p>
+    $$\iint_D \frac{\partial Q}{\partial x}\,\mathrm{d}x\mathrm{d}y = \int_c^d \mathrm{d}y \int_{x_1(y)}^{x_2(y)} \frac{\partial Q}{\partial x}\,\mathrm{d}x = \int_c^d [Q(x_2(y), y) - Q(x_1(y), y)]\,\mathrm{d}y = \oint_{\partial D} Q(x, y)\,\mathrm{d}y.$$
+    <p>两式合并就得所需结果．</p>
+<p>再证区域 $D$ 可分成有限块标准区域的情形．我们只考虑如图 14.3.3 的区域，在这种区域上，平行于 $y$ 轴的直线与 $D$ 的边界的交点可能会多于两个．如图所示用光滑曲线 $AB$ 将 $D$ 分割成两个标准区域 $D_1$ 与 $D_2$（$D_1$ 的边界为曲线 $ABMA, D_2$ 的边界为曲线 $ANBA$）．因此可以应用 Green 公式得</p>
+    $$\oint_{\partial D_1} P\,\mathrm{d}x + Q\,\mathrm{d}y = \iint_{D_1} \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y,$$
+    $$\oint_{\partial D_2} P\,\mathrm{d}x + Q\,\mathrm{d}y = \iint_{D_2} \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y.$$
+
+    <div class="figure-container">
+<img alt="可分割为标准区域的区域" src="figures/fig_14_3_3.svg"/>
+<div class="figure-caption">图 14.3.3</div>
+</div>
+
+<p>注意 $D_1$ 与 $D_2$ 的公共边界 $AB$，其方向相对于 $\partial D_1$ 而言是从 $A$ 到 $B$，相对于 $\partial D_2$ 而言是从 $B$ 到 $A$，两者方向正好相反，所以将上面的两式相加便得</p>
+    $$\oint_{\partial D} P\,\mathrm{d}x + Q\,\mathrm{d}y = \iint_D \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y.$$
+    <p>对于 Green 公式一般情形的证明比较复杂，这里从略．</p>
+<div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 外微分、Stokes 广义对偶与边界积分转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 人类数学史上最壮丽的对称统一律：区域内部的微分增量总和，等于边界流形上的环量或通量积分（∫_∂Ω ω = ∫_Ω dω）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      内部所有微观小漩涡互相抵消后，只剩下最外圈边缘的总体宏观环流；内部所有微观喷泉的流量加起来，等于从包围圈漏出去的总通量。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      蜂巢里的无数小漩涡：每个六边形小格里的顺时针环流，在公共内壁上全部反向抵消，最终只留下整个蜂巢外轮廓边缘的宏观环流。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Green 公式将平面闭曲线积分化为二重旋度积分：∮ P dx + Q dy = ∬ (∂Q/∂x - ∂P/∂y) dx dy。</li><li>Gauss 公式将闭曲面积分化为三重散度积分：∯ F · n dS = ∭ div F dV。</li><li>Stokes 公式将空间曲面边界线积分化为旋度通量积分：∮ F · dr = ∬ curl F · n dS。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.3.2 Green 定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 外微分、Stokes 广义对偶与边界积分转移</a>
+        <span class="thm-tag">Green公式</span><span class="thm-tag">Gauss散度定理</span><span class="thm-tag">Stokes旋度定理</span><span class="thm-tag">微积分基本定理高维形式</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-3-2" class="anchor-btn" title="复制锚点链接"># 定理 14.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $D$ 为平面上的单连通区域，$P(x, y), Q(x, y)$ 在 $D$ 上具有连续偏导数．则下面的四个命题等价：</p>
+<p>（1）对于 $D$ 内的任意一条光滑（或分段光滑）闭曲线 $L$，</p>
+    $$\oint_L P\,\mathrm{d}x + Q\,\mathrm{d}y = 0;$$
+    <p>（2）曲线积分 $\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y$ 与路径无关；</p>
+<p>（3）存在 $D$ 上的可微函数 $U(x, y)$，使得</p>
+    $$\mathrm{d}U = P\,\mathrm{d}x + Q\,\mathrm{d}y,$$
+
+    
+<p>即 $P\,\mathrm{d}x + Q\,\mathrm{d}y$ 为 $U(x, y)$ 的全微分，这时称 $U(x, y)$ 为 1-形式 $P\,\mathrm{d}x + Q\,\mathrm{d}y$ 的<strong>原函数</strong>；</p>
+<p>（4）在 $D$ 内成立等式</p>
+    $$\frac{\partial P}{\partial y} = \frac{\partial Q}{\partial x}.$$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>（1）$\implies$（2）：设 $A, B$ 为 $D$ 内任意两点，$L_1$ 和 $L_2$ 是 $D$ 中从 $A$ 到 $B$ 的任意两条路径，则 $C = L_1 + (-L_2)$ 就是 $D$ 中的一条闭曲线．因此</p>
+    $$0 = \oint_C (P\,\mathrm{d}x + Q\,\mathrm{d}y) = \left(\int_{L_1} + \int_{-L_2}\right)(P\,\mathrm{d}x + Q\,\mathrm{d}y) = \int_{L_1} (P\,\mathrm{d}x + Q\,\mathrm{d}y) - \int_{L_2} (P\,\mathrm{d}x + Q\,\mathrm{d}y),$$
+    <p>于是</p>
+    $$\int_{L_1} P\,\mathrm{d}x + Q\,\mathrm{d}y = \int_{L_2} P\,\mathrm{d}x + Q\,\mathrm{d}y,$$
+    <p>因此曲线积分与路径无关．</p>
+<p>（2）$\implies$（3）：取一定点 $(x_0, y_0) \in D$，作函数</p>
+    $$U(x, y) = \int_{(x_0, y_0)}^{(x, y)} P\,\mathrm{d}x + Q\,\mathrm{d}y,$$
+    <p>这里积分沿从 $(x_0, y_0)$ 到 $(x, y)$ 的任意路径．由于曲线积分与路径无关，因此 $U(x, y)$ 是有确定意义的．当取如图 14.3.10 所示的积分路径时，就成立</p>
+<div class="figure-container">
+<img alt="原函数构造路径" src="figures/fig_14_3_10.svg"/>
+<div class="figure-caption">图 14.3.10</div>
+</div>
+
+    $$U(x+\Delta x, y) - U(x, y) = \int_{(x, y)}^{(x+\Delta x, y)} P\,\mathrm{d}x + Q\,\mathrm{d}y = \int_x^{x+\Delta x} P(t, y)\,\mathrm{d}t = P(\xi, y)\Delta x,$$
+    <p>其中 $\xi$ 在 $x$ 与 $x+\Delta x$ 之间，这是利用了积分中值定理．因此</p>
+    $$\frac{\partial U}{\partial x} = \lim_{\Delta x \to 0}\frac{U(x+\Delta x, y) - U(x, y)}{\Delta x} = \lim_{\Delta x \to 0} P(\xi, y) = P(x, y).$$
+    <p>同理可证</p>
+    $$\frac{\partial U}{\partial y} = Q(x, y).$$
+    <p>所以在 $D$ 内成立 $\mathrm{d}U = P\,\mathrm{d}x + Q\,\mathrm{d}y$．</p>
+<p>（3）$\implies$（4）：由于存在 $D$ 上的可微函数 $U$，使得 $\mathrm{d}U = P\,\mathrm{d}x + Q\,\mathrm{d}y$，那么</p>
+    $$\frac{\partial U}{\partial x} = P(x, y), \quad \frac{\partial U}{\partial y} = Q(x, y).$$
+    <p>又由于函数 $P(x, y)$ 和 $Q(x, y)$ 在 $D$ 内具有连续偏导数，于是</p>
+    $$\frac{\partial P}{\partial y} = \frac{\partial^2 U}{\partial y\partial x} = \frac{\partial^2 U}{\partial x\partial y} = \frac{\partial Q}{\partial x}.$$
+    <p>（4）$\implies$（1）：对于包含在 $D$ 内的光滑（或分段光滑）闭曲线 $L$，设它包围的图形是 $\overline{D}$，那么由 Green 公式就得</p>
+    $$\oint_L P\,\mathrm{d}x + Q\,\mathrm{d}y = \iint_{\overline{D}} \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y = 0.$$
+    <div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 外微分、Stokes 广义对偶与边界积分转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 人类数学史上最壮丽的对称统一律：区域内部的微分增量总和，等于边界流形上的环量或通量积分（∫_∂Ω ω = ∫_Ω dω）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      内部所有微观小漩涡互相抵消后，只剩下最外圈边缘的总体宏观环流；内部所有微观喷泉的流量加起来，等于从包围圈漏出去的总通量。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      蜂巢里的无数小漩涡：每个六边形小格里的顺时针环流，在公共内壁上全部反向抵消，最终只留下整个蜂巢外轮廓边缘的宏观环流。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Green 公式将平面闭曲线积分化为二重旋度积分：∮ P dx + Q dy = ∬ (∂Q/∂x - ∂P/∂y) dx dy。</li><li>Gauss 公式将闭曲面积分化为三重散度积分：∯ F · n dS = ∭ div F dV。</li><li>Stokes 公式将空间曲面边界线积分化为旋度通量积分：∮ F · dr = ∬ curl F · n dS。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.3.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-3-3" class="anchor-btn" title="复制锚点链接"># 定理 14.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $D$ 为平面单连通区域，$P(x, y)$ 和 $Q(x, y)$ 为 $D$ 上的连续函数，那么曲线积分 $\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y$ 与路径无关的充分必要条件是在 $D$ 上存在 $P\,\mathrm{d}x + Q\,\mathrm{d}y$ 的一个原函数 $U(x, y)$．此时，公式</p>
+    $$\int_L P\,\mathrm{d}x + Q\,\mathrm{d}y = U(B) - U(A)$$
+    <p>成立，其中 $AB$ 为任意从 $A$ 到 $B$ 的路径．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.3.4 Gauss 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 外微分、Stokes 广义对偶与边界积分转移</a>
+        <span class="thm-tag">Green公式</span><span class="thm-tag">Gauss散度定理</span><span class="thm-tag">Stokes旋度定理</span><span class="thm-tag">微积分基本定理高维形式</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-3-4" class="anchor-btn" title="复制锚点链接"># 定理 14.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\Omega$ 是 $\mathbb{R}^3$ 上由光滑（或分片光滑）的封闭曲面所围成的二维单连通闭区域，函数 $P(x, y, z), Q(x, y, z)$ 和 $R(x, y, z)$ 在 $\Omega$ 上具有连续偏导数，则成立</p>
+    $$\iint_{\partial\Omega} P\,\mathrm{d}y\mathrm{d}z + Q\,\mathrm{d}z\mathrm{d}x + R\,\mathrm{d}x\mathrm{d}y = \iiint_\Omega \left(\frac{\partial P}{\partial x} + \frac{\partial Q}{\partial y} + \frac{\partial R}{\partial z}\right)\mathrm{d}x\mathrm{d}y\mathrm{d}z,$$
+    <p>这里 $\partial\Omega$ 的定向为外侧，它称为 $\Omega$ 的诱导定向．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>考虑 $\Omega$ 可同时表为以下三种形式</p>
+    $$\Omega = \{(x, y, z) \mid (x, y) \in \Omega_{xy}, z_1(x, y) \le z \le z_2(x, y)\}$$
+    $$= \{(x, y, z) \mid (y, z) \in \Omega_{yz}, x_1(y, z) \le x \le x_2(y, z)\}$$
+    $$= \{(x, y, z) \mid (z, x) \in \Omega_{zx}, y_1(z, x) \le y \le y_2(z, x)\}$$
+    <p>的情形，其中 $\Omega_{xy}, \Omega_{yz}, \Omega_{zx}$ 分别为 $\Omega$ 在 $xy, yz, zx$ 平面的投影（见图 14.3.14），这样的区域称为标准区域．</p>
+<div class="figure-container">
+<img alt="空间标准区域" src="figures/fig_14_3_14.svg"/>
+<div class="figure-caption">图 14.3.14</div>
+</div>
+<p>设 $\Sigma_1$ 为曲面 $z = z_1(x, y), (x, y) \in \Omega_{xy}$，$\Sigma_2$ 为曲面 $z = z_2(x, y), (x, y) \in \Omega_{xy}$，按照所规定的定向，$\Sigma_1$ 的定向为下侧，$\Sigma_2$ 的定向为上侧．那么利用 $\Omega$ 的第一种表示就有</p>
+    $$\iiint_\Omega \frac{\partial R}{\partial z}\,\mathrm{d}x\mathrm{d}y\mathrm{d}z = \iint_{\Omega_{xy}} \mathrm{d}x\mathrm{d}y \int_{z_1(x, y)}^{z_2(x, y)} \frac{\partial R}{\partial z}\,\mathrm{d}z = \iint_{\Omega_{xy}} [R(x, y, z_2(x, y)) - R(x, y, z_1(x, y))]\,\mathrm{d}x\mathrm{d}y$$
+    $$= \iint_{\Sigma_2} R(x, y, z)\,\mathrm{d}x\mathrm{d}y + \iint_{\Sigma_1} R(x, y, z)\,\mathrm{d}x\mathrm{d}y = \iint_{\partial\Omega} R(x, y, z)\,\mathrm{d}x\mathrm{d}y.$$
+
+    
+<p>同理利用 $\Omega$ 的第二种表示和第三种表示可证</p>
+    $$\iiint_\Omega \frac{\partial Q}{\partial y}\,\mathrm{d}x\mathrm{d}y\mathrm{d}z = \iint_{\partial\Omega} Q(x, y, z)\,\mathrm{d}z\mathrm{d}x,$$
+    $$\iiint_\Omega \frac{\partial P}{\partial x}\,\mathrm{d}x\mathrm{d}y\mathrm{d}z = \iint_{\partial\Omega} P(x, y, z)\,\mathrm{d}y\mathrm{d}z.$$
+    <p>三式相加就是 Gauss 公式．</p>
+<p>当 $\Omega$ 可分成有限块标准区域时，可添加辅助曲面（见图 14.3.15），将其分成一块块标准区域．如同讨论 Green 公式的情形一样，对每块标准区域应用 Gauss 公式，再把它们加起来．注意到如果一片曲面为两块不同标准区域的共同边界时，会出现沿它不同侧面的两个曲面积分，在相加时它们就会互相抵消，最后只留下的是沿 $\partial\Omega$ 的曲面积分，这种情况就得到证明．</p>
+<p>更一般的情况比较复杂，这里从略．</p>
+<div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 外微分、Stokes 广义对偶与边界积分转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 人类数学史上最壮丽的对称统一律：区域内部的微分增量总和，等于边界流形上的环量或通量积分（∫_∂Ω ω = ∫_Ω dω）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      内部所有微观小漩涡互相抵消后，只剩下最外圈边缘的总体宏观环流；内部所有微观喷泉的流量加起来，等于从包围圈漏出去的总通量。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      蜂巢里的无数小漩涡：每个六边形小格里的顺时针环流，在公共内壁上全部反向抵消，最终只留下整个蜂巢外轮廓边缘的宏观环流。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Green 公式将平面闭曲线积分化为二重旋度积分：∮ P dx + Q dy = ∬ (∂Q/∂x - ∂P/∂y) dx dy。</li><li>Gauss 公式将闭曲面积分化为三重散度积分：∯ F · n dS = ∭ div F dV。</li><li>Stokes 公式将空间曲面边界线积分化为旋度通量积分：∮ F · dr = ∬ curl F · n dS。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-3-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.3.5 Stokes 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 外微分、Stokes 广义对偶与边界积分转移</a>
+        <span class="thm-tag">Green公式</span><span class="thm-tag">Gauss散度定理</span><span class="thm-tag">Stokes旋度定理</span><span class="thm-tag">微积分基本定理高维形式</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-3-5" class="anchor-btn" title="复制锚点链接"># 定理 14.3.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\Sigma$ 为光滑曲面，其边界 $\partial\Sigma$ 为分段光滑闭曲线．若函</p>
+
+<p>数 $P(x, y, z), Q(x, y, z), R(x, y, z)$ 在 $\Sigma$ 及其边界 $\partial\Sigma$ 上具有连续偏导数，则成立</p>
+    $$\oint_{\partial\Sigma} P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z = \iint_\Sigma \left(\frac{\partial R}{\partial y} - \frac{\partial Q}{\partial z}\right)\mathrm{d}y\mathrm{d}z + \left(\frac{\partial P}{\partial z} - \frac{\partial R}{\partial x}\right)\mathrm{d}z\mathrm{d}x + \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\mathrm{d}x\mathrm{d}y,$$
+    <p>其中 $\partial\Sigma$ 取诱导定向．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>只证明 $\Sigma$ 可同时表为以下三种形式</p>
+    $$\Sigma = \{(x, y, z) \mid (x, y) \in \Sigma_{xy}, z = z(x, y)\} = \{(x, y, z) \mid (y, z) \in \Sigma_{yz}, x = x(y, z)\} = \{(x, y, z) \mid (z, x) \in \Sigma_{zx}, y = y(z, x)\}$$
+    <p>的情形，其中 $\Sigma_{xy}, \Sigma_{yz}, \Sigma_{zx}$ 分别为 $\Sigma$ 在 $xy, yz, zx$ 平面的投影（见图 14.3.18），这样的曲面称为标准曲面．其他复杂情况从略．</p>
+<div class="figure-container">
+<img alt="Stokes 定理的标准曲面" src="figures/fig_14_3_18.svg"/>
+<div class="figure-caption">图 14.3.18</div>
+</div>
+<p>不妨设 $\Sigma$ 的定向为上侧．利用曲线积分的计算公式，由 $\Sigma$ 的第一种表示易得</p>
+    $$\oint_{\partial\Sigma} P(x, y, z)\,\mathrm{d}x = \oint_{\partial\Sigma_{xy}} P(x, y, z(x, y))\,\mathrm{d}x,$$
+    <p>其中 $\partial\Sigma_{xy}$ 为 $\Sigma_{xy}$ 的正向边界，再对后一式应用 Green 公式得</p>
+    $$\oint_{\partial\Sigma_{xy}} P(x, y, z(x, y))\,\mathrm{d}x = -\iint_{\Sigma_{xy}} \frac{\partial}{\partial y} P(x, y, z(x, y))\,\mathrm{d}x\mathrm{d}y = -\iint_{\Sigma_{xy}} \left[\frac{\partial P}{\partial y}(x, y, z(x, y)) + \frac{\partial P}{\partial z}(x, y, z(x, y))\frac{\partial z}{\partial y}\right]\mathrm{d}x\mathrm{d}y.$$
+    <p>注意到曲面取上侧，则 $\Sigma$ 的法向量的方向余弦为</p>
+    $$(\cos\alpha, \cos\beta, \cos\gamma) = \frac{1}{\sqrt{1 + z_x^2 + z_y^2}}(-z_x, -z_y, 1),$$
+    <p>因此</p>
+    $$\frac{\partial z}{\partial y} = -\frac{\cos\beta}{\cos\gamma}.$$
+    <p>所以</p>
+    $$\frac{\partial P}{\partial z}\frac{\partial z}{\partial y}\,\mathrm{d}x\mathrm{d}y = -\frac{\partial P}{\partial z}\frac{\cos\beta}{\cos\gamma}\cos\gamma\,\mathrm{d}S = -\frac{\partial P}{\partial z}\cos\beta\,\mathrm{d}S = -\frac{\partial P}{\partial z}\,\mathrm{d}z\mathrm{d}x.$$
+    <p>结合这几式就得</p>
+
+
+    $$\oint_{\partial\Sigma} P(x, y, z)\,\mathrm{d}x = \iint_\Sigma \frac{\partial P}{\partial z}\,\mathrm{d}z\mathrm{d}x - \frac{\partial P}{\partial y}\,\mathrm{d}x\mathrm{d}y.$$
+    <p>同理可证</p>
+    $$\oint_{\partial\Sigma} Q(x, y, z)\,\mathrm{d}y = \iint_\Sigma \frac{\partial Q}{\partial x}\,\mathrm{d}x\mathrm{d}y - \frac{\partial Q}{\partial z}\,\mathrm{d}y\mathrm{d}z,$$
+    $$\oint_{\partial\Sigma} R(x, y, z)\,\mathrm{d}z = \iint_\Sigma \frac{\partial R}{\partial y}\,\mathrm{d}y\mathrm{d}z - \frac{\partial R}{\partial x}\,\mathrm{d}z\mathrm{d}x.$$
+    <p>三式相加即得 Stokes 公式．</p>
+<div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 外微分、Stokes 广义对偶与边界积分转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 人类数学史上最壮丽的对称统一律：区域内部的微分增量总和，等于边界流形上的环量或通量积分（∫_∂Ω ω = ∫_Ω dω）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      内部所有微观小漩涡互相抵消后，只剩下最外圈边缘的总体宏观环流；内部所有微观喷泉的流量加起来，等于从包围圈漏出去的总通量。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      蜂巢里的无数小漩涡：每个六边形小格里的顺时针环流，在公共内壁上全部反向抵消，最终只留下整个蜂巢外轮廓边缘的宏观环流。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Green 公式将平面闭曲线积分化为二重旋度积分：∮ P dx + Q dy = ∬ (∂Q/∂x - ∂P/∂y) dx dy。</li><li>Gauss 公式将闭曲面积分化为三重散度积分：∯ F · n dS = ∭ div F dV。</li><li>Stokes 公式将空间曲面边界线积分化为旋度通量积分：∮ F · dr = ∬ curl F · n dS。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-5-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.5.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-5-1" class="anchor-btn" title="复制锚点链接"># 定理 14.5.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>$a$ 的散度是通量关于体积的变化率，即</p>
+    $$\operatorname{div} a(M) = \lim_{V \to M} \frac{\iint_{\partial V} a \cdot \mathrm{d}S}{m(V)}.$$
+    <p>换句话说，散度就是穿出单位体积边界的通量．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-5-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.5.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-5-2" class="anchor-btn" title="复制锚点链接"># 定理 14.5.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>向量场 $a$ 在 $M$ 点处的旋度就是这样一个向量：$a$ 在 $M$ 点处沿旋度方向的环量面密度最大，而且最大值就是 $\|\operatorname{rot} a(M)\|$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+<p>对于包含 $M(x, y, z)$ 的小平面片 $\Sigma$，及它的法向量 $n$，按右手定则取定 $\partial\Sigma$ 的方向．记单位法向量 $n = (\cos\alpha, \cos\beta, \cos\gamma)$．由 Stokes 公式，并利用积分中值定理得</p>
+    $$\oint_{\partial\Sigma} a \cdot \mathrm{d}s = \iint_\Sigma \operatorname{rot} a \cdot n\,\mathrm{d}S = \left.\left[\left(\frac{\partial R}{\partial y} - \frac{\partial Q}{\partial z}\right)\cos\alpha + \left(\frac{\partial P}{\partial z} - \frac{\partial R}{\partial x}\right)\cos\beta + \left(\frac{\partial Q}{\partial x} - \frac{\partial P}{\partial y}\right)\cos\gamma\right]\right|_{M^*} m(\Sigma),$$
+    <p>其中 $M^*$ 为 $\Sigma$ 上某一点．因此当 $\Sigma \to M$ 时，$a$ 在 $M$ 点沿方向 $n$ 的环量面密度为</p>
+    $$\lim_{\Sigma \to M} \frac{\oint_{\partial\Sigma} a \cdot \mathrm{d}s}{m(\Sigma)} = \operatorname{rot} a(M) \cdot n = \|\operatorname{rot} a(M)\| \cos(\operatorname{rot} a(M), n) \le \|\operatorname{rot} a(M)\|,$$
+    <p>因此 $a$ 在 $M$ 点处沿旋度方向的环量面密度最大，且最大值为 $\|\operatorname{rot} a(M)\|$．</p>
+<div class="proof-end">证毕</div>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-5-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.5.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-5-3" class="anchor-btn" title="复制锚点链接"># 定理 14.5.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\Omega \subset \mathbb{R}^3$ 为单连通区域，在 $\Omega$ 上定义了向量场 $a(x, y, z) = P(x, y, z)i + Q(x, y, z)j + R(x, y, z)k$，$P(x, y, z), Q(x, y, z), R(x, y, z)$ 在 $\Omega$ 上具有连续偏导数．则以下三个命题等价：</p>
+<p>（1） $a$ 是保守场；</p>
+<p>（2） $a$ 是有势场；</p>
+<p>（3） $a$ 是无旋场．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch14-14-5-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 14.5.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 曲线曲面参数化投影与微元标积</a>
+        <span class="thm-tag">第一类曲线积分</span><span class="thm-tag">第二类曲线积分</span><span class="thm-tag">曲线积分与路径无关</span><span class="thm-tag">保守场势函数</span>
+      </div>
+    </div>
+    <a href="#thm-ch14-14-5-4" class="anchor-btn" title="复制锚点链接"># 定理 14.5.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设函数 $P(x, y, z), Q(x, y, z)$ 和 $R(x, y, z)$ 在单连通区域 $\Omega$ 上连续，若 $U(x, y, z)$ 是 1-形式 $P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z$ 的一个原函数（即在 $\Omega$ 上恒有 $\mathrm{d}U = P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z$），则</p>
+    $$\int_{\widehat{AB}} P\,\mathrm{d}x + Q\,\mathrm{d}y + R\,\mathrm{d}z = U(x_B, y_B, z_B) - U(x_A, y_A, z_A),$$
+    <p>其中 $\widehat{AB}$ 为从 $A$ 到 $B$ 的任意路径．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 曲线曲面参数化投影与微元标积</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 将力场沿运动轨迹的做功累加，投影为切向量方向的有向线微元；保守场中能量只与起点终点有关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在重力场中推箱子，不管你走直线还是绕一大圈山路，只要起点和终点高度一样，重力做的总功就完全相同。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      登山路径与重力势能：无论你选择攀登陡峭的悬崖还是盘旋的公路，只要登顶相同海拔，重力势能差就分毫不差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两类曲线积分的联系：∮ P dx + Q dy = ∮ (P cos α + Q cos β) ds。</li><li>曲线积分与路径无关的充要条件：∂Q/∂x = ∂P/∂y 且单连通。</li><li>全微分方程与原函数势能场 U(x, y) 构造法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_13_theorems.html" class="page-nav-btn">← 上一章：第十三章 · 重积分</a>
+  <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" class="page-nav-btn" target="_blank">📗 进入下册：第九章 数项级数 (数字化原书) →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

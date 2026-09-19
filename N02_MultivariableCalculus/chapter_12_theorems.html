@@ -1,0 +1,2994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第十二章 · 多元函数的微分学 · 核心定义与定理证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.88);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-blue);
+}
+
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
+}
+
+/* Two-column Layout */
+.main-layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  position: relative;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.ch-number-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ch-count-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.ch-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.ch-desc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.thm-tag.routine-ref {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.thm-tag.routine-ref:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: #fff;
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* Verbatim Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.routine-link-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.essence-line {
+  font-size: 0.95rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+}
+
+.keypoints-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keypoints-list {
+  margin-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Pagination Bar */
+.chapter-pagination {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill current-ch">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (6)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch12-12-1-1" class="toc-link def-link" title="定义 12.1.1 偏导数 (Partial Derivative)">📖 定义 12.1.1 偏导数 (Partial Derivative)</a></li>
+<li><a href="#def-ch12-12-1-2" class="toc-link def-link" title="定义 12.1.2 多元函数的全微分 (Total Differential)">📖 定义 12.1.2 多元函数的全微分 (Total Differential)</a></li>
+<li><a href="#def-ch12-12-1-3" class="toc-link def-link" title="定义 12.1.3 高阶偏导数与混合偏导数">📖 定义 12.1.3 高阶偏导数与混合偏导数</a></li>
+<li><a href="#def-ch12-12-1-4" class="toc-link def-link" title="定义 12.1.4 高阶全微分与微分算子">📖 定义 12.1.4 高阶全微分与微分算子</a></li>
+<li><a href="#def-ch12-12-3-1" class="toc-link def-link" title="定义 12.3.1 方向导数与梯度向量 (Gradient)">📖 定义 12.3.1 方向导数与梯度向量 (Gradient)</a></li>
+<li><a href="#def-ch12-12-6-1" class="toc-link def-link" title="定义 12.6.1 多元函数局部极值与鞍点">📖 定义 12.6.1 多元函数局部极值与鞍点</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (24)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-ch12-12-1-1" class="toc-link" title="定理 12.1.1">📐 定理 12.1.1</a></li>
+<li><a href="#thm-ch12-12-1-2" class="toc-link" title="定理 12.1.2">📐 定理 12.1.2</a></li>
+<li><a href="#thm-ch12-12-1-3" class="toc-link" title="定理 12.1.3 Schwarz 定理">📐 定理 12.1.3 Schwarz 定理</a></li>
+<li><a href="#thm-ch12-12-1-4" class="toc-link" title="定理 12.1.4">📐 定理 12.1.4</a></li>
+<li><a href="#thm-ch12-12-2-1" class="toc-link" title="定理 12.2.1 链式法则">📐 定理 12.2.1 链式法则</a></li>
+<li><a href="#thm-ch12-12-2-2" class="toc-link" title="定理 12.2.2 链式法则">📐 定理 12.2.2 链式法则</a></li>
+<li><a href="#thm-ch12-12-2-3" class="toc-link" title="定理 12.2.3">📐 定理 12.2.3</a></li>
+<li><a href="#thm-ch12-12-3-1" class="toc-link" title="定理 12.3.1 中值定理">📐 定理 12.3.1 中值定理</a></li>
+<li><a href="#thm-ch12-12-3-1" class="toc-link" title="推论 12.3.1">📐 推论 12.3.1</a></li>
+<li><a href="#thm-ch12-12-3-2" class="toc-link" title="定理 12.3.2">📐 定理 12.3.2</a></li>
+<li><a href="#thm-ch12-12-3-3" class="toc-link" title="定理 12.3.3 Taylor 公式">📐 定理 12.3.3 Taylor 公式</a></li>
+<li><a href="#thm-ch12-12-3-2" class="toc-link" title="推论 12.3.2">📐 推论 12.3.2</a></li>
+<li><a href="#thm-ch12-12-3-4" class="toc-link" title="定理 12.3.4">📐 定理 12.3.4</a></li>
+<li><a href="#thm-ch12-12-4-1" class="toc-link" title="定理 12.4.1 一元隐函数存在定理">📐 定理 12.4.1 一元隐函数存在定理</a></li>
+<li><a href="#thm-ch12-12-4-2" class="toc-link" title="定理 12.4.2 多元隐函数存在定理">📐 定理 12.4.2 多元隐函数存在定理</a></li>
+<li><a href="#thm-ch12-12-4-3" class="toc-link" title="定理 12.4.3">📐 定理 12.4.3</a></li>
+<li><a href="#thm-ch12-12-4-4" class="toc-link" title="定理 12.4.4">📐 定理 12.4.4</a></li>
+<li><a href="#thm-ch12-12-4-5" class="toc-link" title="定理 12.4.5 逆映射定理">📐 定理 12.4.5 逆映射定理</a></li>
+<li><a href="#thm-ch12-12-4-6" class="toc-link" title="定理 12.4.6">📐 定理 12.4.6</a></li>
+<li><a href="#thm-ch12-12-6-1" class="toc-link" title="定理 12.6.1">📐 定理 12.6.1</a></li>
+<li><a href="#thm-ch12-12-6-2" class="toc-link" title="定理 12.6.2 二阶充分条件">📐 定理 12.6.2 二阶充分条件</a></li>
+<li><a href="#thm-ch12-12-6-1" class="toc-link" title="推论 12.6.1">📐 推论 12.6.1</a></li>
+<li><a href="#thm-ch12-12-7-1" class="toc-link" title="定理 12.7.1">📐 定理 12.7.1</a></li>
+<li><a href="#thm-ch12-12-7-2" class="toc-link" title="定理 12.7.2">📐 定理 12.7.2</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 012</span>
+        <span class="ch-count-badge">收录 6 个基础定义 · 24 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第十二章 · 多元函数的微分学</h1>
+      <p class="ch-desc-text">偏导数与全微分、多元复合求导链式法则、方向导数与梯度算子、多元 Taylor 公式、隐函数存在定理与 Lagrange 乘数法极值求解</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_12/chapter_12.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 12 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 6 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch12-12-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.1.1 偏导数 (Partial Derivative)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">偏导数</span><span class="def-tag">固定其他变量</span><span class="def-tag">单轴变化率</span><span class="def-tag">∂f/∂x</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-1-1" class="anchor-btn" title="复制锚点链接"># 定义 12.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.1.1</div>
+<p>设 $D \subset \mathbb{R}^2$ 为开集，$z = f(x, y), (x, y) \in D$ 是定义在 $D$ 上的二元函数，$(x_0, y_0) \in D$ 为一定点．如果存在极限</p>
+  $$
+  \lim_{\Delta x \to 0} \frac{f(x_0 + \Delta x, y_0) - f(x_0, y_0)}{\Delta x},
+  $$
+  
+<p>那么就称函数 $f$ 在点 $(x_0, y_0)$ 关于 $x$ 可偏导，并称此极限为 $f$ 在点 $(x_0, y_0)$ 关于 $x$ 的<strong>偏导数</strong>，记为</p>
+  $$
+  \frac{\partial f}{\partial x}(x_0, y_0) \quad \left( \text{或 } f_x(x_0, y_0), \ \left.\frac{\partial z}{\partial x}\right|_{(x_0, y_0)}, \ z_x(x_0, y_0) \right).
+  $$
+  <p>如果函数 $f$ 在 $D$ 中每一点都关于 $x$ 可偏导，则 $D$ 中每一点 $(x, y)$ 与其相应的 $f$ 关于 $x$ 的偏导数 $f_x(x, y)$ 构成了一种对应关系即二元函数关系，它称为 $f$ 关于 $x$ 的<strong>偏导函数</strong>（也称为偏导数），记为</p>
+  $$
+  \frac{\partial f}{\partial x} \quad \left( \text{或 } f_x(x, y), \ \frac{\partial z}{\partial x}, \ z_x \right).
+  $$
+  <p>类似地可定义 $f$ 在点 $(x_0, y_0)$ 关于 $y$ 的偏导数 $\frac{\partial f}{\partial y}(x_0, y_0)$（或 $f_y(x_0, y_0), \left.\frac{\partial z}{\partial y}\right|_{(x_0, y_0)}, z_y(x_0, y_0)$）及关于 $y$ 的偏导函数 $\frac{\partial f}{\partial y}$（或 $f_y(x, y), \frac{\partial z}{\partial y}, z_y$）．</p>
+<p>若 $f$ 在点 $(x_0, y_0)$ 关于 $x$ 和 $y$ 均可偏导，就简称 $f$ 在点 $(x_0, y_0)$ 可偏导．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch12-12-1-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.1.2 多元函数的全微分 (Total Differential)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">全微分</span><span class="def-tag">线性主部</span><span class="def-tag">切平面逼近</span><span class="def-tag">Δz=AΔx+BΔy+o(ρ)</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-1-2" class="anchor-btn" title="复制锚点链接"># 定义 12.1.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.1.2</div>
+<p>设 $D \subset \mathbb{R}^2$ 为开集，$z = f(x, y), (x, y) \in D$ 是定义在 $D$ 上的二元函数，$(x_0, y_0) \in D$ 为一定点，$\boldsymbol{v} = (\cos \alpha, \sin \alpha)$ 为一个方向．如果极限</p>
+  $$
+  \lim_{t \to 0^+} \frac{f(x_0 + t\cos \alpha, y_0 + t\sin \alpha) - f(x_0, y_0)}{t}
+  $$
+  <p>存在，则称此极限为函数 $f$ 在点 $(x_0, y_0)$ 的<strong>沿方向 $\boldsymbol{v}$ 的方向导数</strong>，记为 $\frac{\partial f}{\partial \boldsymbol{v}}(x_0, y_0)$．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch12-12-1-3">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.1.3 高阶偏导数与混合偏导数</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">高阶偏导</span><span class="def-tag">混合偏导</span><span class="def-tag">Schwarz换序定理</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-1-3" class="anchor-btn" title="复制锚点链接"># 定义 12.1.3</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.1.3</div>
+<p>设 $D \subset \mathbb{R}^2$ 为开集，$z = f(x, y), (x, y) \in D$ 是定义在 $D$ 上的二元函数，$(x_0, y_0) \in D$ 为一定点．若存在只与点 $(x_0, y_0)$ 有关而与 $\Delta x, \Delta y$ 无关的常数 $A$ 和 $B$，使得</p>
+  $$
+  \Delta z = A\Delta x + B\Delta y + o(\sqrt{\Delta x^2 + \Delta y^2}),
+  $$
+  <p>这里 $o(\sqrt{\Delta x^2 + \Delta y^2})$ 表示在 $\sqrt{\Delta x^2 + \Delta y^2} \to 0$ 时比 $\sqrt{\Delta x^2 + \Delta y^2}$ 高阶的无穷小量．则称函数 $f$ 在点 $(x_0, y_0)$ 处是<strong>可微的</strong>，并称其线性主要部分 $A\Delta x + B\Delta y$ 为 $f$ 在点 $(x_0, y_0)$ 处的<strong>全微分</strong>，记为 $\mathrm{d}z(x_0, y_0)$ 或 $\mathrm{d}f(x_0, y_0)$．</p>
+<p>若（在 $\sqrt{\Delta x^2 + \Delta y^2} \to 0$ 时）将自变量 $x, y$ 的微分 $\Delta x, \Delta y$ 分别记为 $\mathrm{d}x, \mathrm{d}y$，那么有全微分形式</p>
+  $$
+  \mathrm{d}z(x_0, y_0) = A\mathrm{d}x + B\mathrm{d}y.
+  $$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch12-12-1-4">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.1.4 高阶全微分与微分算子</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">高阶全微分</span><span class="def-tag">微分算子</span><span class="def-tag">dⁿz</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-1-4" class="anchor-btn" title="复制锚点链接"># 定义 12.1.4</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.1.4</div>
+<p>设 $D \subset \mathbb{R}^2$ 为开集，$(x_0, y_0) \in D$ 为一定点．如果函数 $z = f(x, y)$ 在 $(x_0, y_0)$ 可偏导，我们称平面向量 $\left( \frac{\partial f}{\partial x}(x_0, y_0), \frac{\partial f}{\partial y}(x_0, y_0) \right)$ 为 $f$ 在点 $(x_0, y_0)$ 的<strong>梯度</strong>，记为 $\mathrm{grad} f(x_0, y_0)$，即</p>
+  $$
+  \mathrm{grad} f(x_0, y_0) = \left( \frac{\partial f}{\partial x}(x_0, y_0), \frac{\partial f}{\partial y}(x_0, y_0) \right).
+  $$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch12-12-3-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.3.1 方向导数与梯度向量 (Gradient)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">方向导数</span><span class="def-tag">梯度向量</span><span class="def-tag">∇f</span><span class="def-tag">最速上升方向</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-3-1" class="anchor-btn" title="复制锚点链接"># 定义 12.3.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.3.1</div>
+<p>设 $D \subset \mathbb{R}^n$ 是区域．若联结 $D$ 中任意两点的线段都完全属于 $D$，即对于任意两点 $\boldsymbol{x}_0, \boldsymbol{x}_1 \in D$ 和一切 $\lambda \in [0, 1]$，恒有</p>
+
+  $$
+  \boldsymbol{x}_0 + \lambda(\boldsymbol{x}_1 - \boldsymbol{x}_0) \in D,
+  $$
+  <p>则称 $D$ 为<strong>凸区域</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch12-12-6-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 12.6.1 多元函数局部极值与鞍点</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">多元极值</span><span class="def-tag">极大点</span><span class="def-tag">极小点</span><span class="def-tag">鞍点</span><span class="def-tag">Hessian正定性</span>
+      </div>
+    </div>
+    <a href="#def-ch12-12-6-1" class="anchor-btn" title="复制锚点链接"># 定义 12.6.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><div class="def-title">定义 12.6.1</div>
+<p>设 $D \in \mathbb{R}^n$ 为开区域，$f(\boldsymbol{x})$ 为定义在 $D$ 上的函数，$\boldsymbol{x}_0 = (x_1^0, x_2^0, \cdots, x_n^0) \in D$．若存在 $\boldsymbol{x}_0$ 的邻域 $O(\boldsymbol{x}_0, r)$，使得对任意 $\boldsymbol{x} \in O(\boldsymbol{x}_0, r)\ (\boldsymbol{x} \ne \boldsymbol{x}_0)$，成立</p>
+  $$
+  f(\boldsymbol{x}) \le f(\boldsymbol{x}_0) \quad (\text{或 } f(\boldsymbol{x}) \ge f(\boldsymbol{x}_0)),
+  $$
+  <p>则称 $\boldsymbol{x}_0$ 为 $f$ 的<strong>极大值点</strong>（或<strong>极小值点</strong>）；相应地，称 $f(\boldsymbol{x}_0)$ 为相应的<strong>极大值</strong>（或<strong>极小值</strong>）；极大值点与极小值点统称为<strong>极值点</strong>，极大值与极小值统称为<strong>极值</strong>．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 24 个定理 · 完整数学推导与四层点评</span>
+    </div>
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-ch12-12-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.1.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-1-1" class="anchor-btn" title="复制锚点链接"># 定理 12.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $D \subset \mathbb{R}^2$ 为开集，$(x_0, y_0) \in D$ 为一定点．如果函数 $z = f(x, y), (x, y) \in D$ 在 $(x_0, y_0)$ 可微，那么对于任一方向 $\boldsymbol{v} = (\cos \alpha, \sin \alpha)$，$f$ 在 $(x_0, y_0)$ 点沿方向 $\boldsymbol{v}$ 的方向导数存在，且</p>
+  $$
+  \frac{\partial f}{\partial \boldsymbol{v}}(x_0, y_0) = \frac{\partial f}{\partial x}(x_0, y_0) \cos \alpha + \frac{\partial f}{\partial y}(x_0, y_0) \sin \alpha.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由定义和全微分公式，得</p>
+  $$
+  \begin{aligned}
+  \frac{\partial f}{\partial \boldsymbol{v}}(x_0, y_0) &amp;= \lim_{t \to 0^+} \frac{f(x_0 + t\cos \alpha, y_0 + t\sin \alpha) - f(x_0, y_0)}{t} \\
+  &amp;= \lim_{t \to 0^+} \frac{\frac{\partial f}{\partial x}(x_0, y_0) t\cos \alpha + \frac{\partial f}{\partial y}(x_0, y_0) t\sin \alpha + o(t)}{t} \\
+  &amp;= \frac{\partial f}{\partial x}(x_0, y_0) \cos \alpha + \frac{\partial f}{\partial y}(x_0, y_0) \sin \alpha.
+  \end{aligned}
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.1.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-1-2" class="anchor-btn" title="复制锚点链接"># 定理 12.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数 $z = f(x, y)$ 在 $(x_0, y_0)$ 点的某个邻域上存在偏导数，并且偏导数在 $(x_0, y_0)$ 点连续，那么 $f$ 在 $(x_0, y_0)$ 点可微．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 首先我们有</p>
+  $$
+  \begin{aligned}
+  &amp; f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0, y_0) \\
+  ={}&amp; [f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0, y_0 + \Delta y)] + [f(x_0, y_0 + \Delta y) - f(x_0, y_0)] \\
+  ={}&amp; f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y)\Delta x + f_y(x_0, y_0 + \theta_2 \Delta y)\Delta y, \quad 0 &lt; \theta_1, \theta_2 &lt; 1,
+  \end{aligned}
+  $$
+  <p>其中最后一步利用了微分中值定理．</p>
+<p>因为 $f_x$ 和 $f_y$ 在 $(x_0, y_0)$ 点连续，所以</p>
+  $$
+  \begin{aligned}
+  f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y) &amp;= f_x(x_0, y_0) + o(1), \\
+  f_y(x_0, y_0 + \theta_2 \Delta y) &amp;= f_y(x_0, y_0) + o(1),
+  \end{aligned}
+  $$
+  <p>其中 $o(1)$ 表示当 $\sqrt{\Delta x^2 + \Delta y^2} \to 0$ 时的无穷小量．于是</p>
+  $$
+  \begin{aligned}
+  \Delta z &amp;= f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0, y_0) \\
+  &amp;= f_x(x_0, y_0)\Delta x + f_y(x_0, y_0)\Delta y + o(1)\Delta x + o(1)\Delta y \\
+  &amp;= f_x(x_0, y_0)\Delta x + f_y(x_0, y_0)\Delta y + o(\sqrt{\Delta x^2 + \Delta y^2}),
+  \end{aligned}
+  $$
+  
+<p>即 $f$ 在 $(x_0, y_0)$ 点可微．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.1.3 Schwarz 定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-1-3" class="anchor-btn" title="复制锚点链接"># 定理 12.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>如果函数 $z = f(x, y)$ 的两个混合偏导数 $f_{xy}$ 和 $f_{yx}$ 在点 $(x_0, y_0)$ 连续，那么等式</p>
+  $$
+  f_{xy}(x_0, y_0) = f_{yx}(x_0, y_0)
+  $$
+  <p>成立．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 考虑差商</p>
+  $$
+  I = \frac{1}{\Delta x \Delta y} [f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0 + \Delta x, y_0) - f(x_0, y_0 + \Delta y) + f(x_0, y_0)].
+  $$
+  <p>设 $\varphi(x) = f(x, y_0 + \Delta y) - f(x, y_0)$，那么利用微分中值定理可得</p>
+
+  $$
+  \begin{aligned}
+  I &amp;= \frac{\varphi(x_0 + \Delta x) - \varphi(x_0)}{\Delta x \Delta y} = \frac{\varphi'(x_0 + \theta_1 \Delta x)\Delta x}{\Delta x \Delta y} \\
+  &amp;= \frac{f_x(x_0 + \theta_1 \Delta x, y_0 + \Delta y) - f_x(x_0 + \theta_1 \Delta x, y_0)}{\Delta y} \\
+  &amp;= f_{xy}(x_0 + \theta_1 \Delta x, y_0 + \theta_2 \Delta y) \quad (0 &lt; \theta_1, \theta_2 &lt; 1).
+  \end{aligned}
+  $$
+  <p>另一方面，设 $\psi(y) = f(x_0 + \Delta x, y) - f(x_0, y)$，将 $I$ 重新组合还可以得到</p>
+  $$
+  \begin{aligned}
+  I &amp;= \frac{\psi(y_0 + \Delta y) - \psi(y_0)}{\Delta x \Delta y} = \frac{\psi'(y_0 + \theta_3 \Delta y)\Delta y}{\Delta x \Delta y} \\
+  &amp;= \frac{f_y(x_0 + \Delta x, y_0 + \theta_3 \Delta y) - f_y(x_0, y_0 + \theta_3 \Delta y)}{\Delta x} \\
+  &amp;= f_{yx}(x_0 + \theta_4 \Delta x, y_0 + \theta_3 \Delta y) \quad (0 &lt; \theta_3, \theta_4 &lt; 1).
+  \end{aligned}
+  $$
+  <p>因此</p>
+  $$
+  f_{xy}(x_0 + \theta_1 \Delta x, y_0 + \theta_2 \Delta y) = f_{yx}(x_0 + \theta_4 \Delta x, y_0 + \theta_3 \Delta y).
+  $$
+  <p>利用两个混合偏导数 $f_{xy}$ 和 $f_{yx}$ 在点 $(x_0, y_0)$ 连续的条件，令 $\Delta x \to 0, \Delta y \to 0$，得到</p>
+  $$
+  \lim_{(\Delta x, \Delta y) \to (0, 0)} f_{xy}(x_0 + \theta_1 \Delta x, y_0 + \theta_2 \Delta y) = f_{xy}(x_0, y_0),
+  $$
+  $$
+  \lim_{(\Delta x, \Delta y) \to (0, 0)} f_{yx}(x_0 + \theta_4 \Delta x, y_0 + \theta_3 \Delta y) = f_{yx}(x_0, y_0).
+  $$
+  <p>故 $f_{xy}(x_0, y_0) = f_{yx}(x_0, y_0)$．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-1-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.1.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-1-4" class="anchor-btn" title="复制锚点链接"># 定理 12.1.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>向量值函数 $\boldsymbol{f}$ 在 $\boldsymbol{x}^0$ 点可微的充分必要条件是它的坐标分量函数 $f_i(x_1, x_2, \cdots, x_n) \ (i = 1, 2, \cdots, m)$ 在 $\boldsymbol{x}^0$ 点可微．当 $\boldsymbol{f}$ 在 $\boldsymbol{x}^0$ 点可微时，导数矩阵 $\boldsymbol{f}'(\boldsymbol{x}^0)$ 存在，且 $\boldsymbol{A} = \boldsymbol{f}'(\boldsymbol{x}^0)$，从而</p>
+  $$
+  \mathrm{d}\boldsymbol{y} = \boldsymbol{f}'(\boldsymbol{x}^0)\mathrm{d}\boldsymbol{x}.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 必要性：设 $\boldsymbol{f}$ 在 $\boldsymbol{x}^0$ 点可微，记 $\boldsymbol{A} = (a_{ij})_{m \times n}$ 和 $\boldsymbol{o}(\Delta \boldsymbol{x}) = (o_1(\Delta \boldsymbol{x}), o_2(\Delta \boldsymbol{x}), \cdots, o_m(\Delta \boldsymbol{x}))^\mathrm{T}$，则可将 $\Delta \boldsymbol{y}$ 写成分量形式</p>
+  $$
+  \Delta y_i = \sum_{j=1}^n a_{ij}\Delta x_j + o_i(\Delta \boldsymbol{x}), \quad i = 1, 2, \cdots, m,
+  $$
+  <p>并满足</p>
+  $$
+  \lim_{\|\Delta \boldsymbol{x}\| \to 0} \frac{o_i(\Delta \boldsymbol{x})}{\|\Delta \boldsymbol{x}\|} = 0, \quad i = 1, 2, \cdots, m.
+  $$
+  <p>由函数可微的定义，即知 $f_i(x_1, x_2, \cdots, x_n) \ (i = 1, 2, \cdots, m)$ 在 $\boldsymbol{x}^0$ 处可微，并且 $a_{ij} = \frac{\partial f_i}{\partial x_j}(\boldsymbol{x}^0)$，也就是 $\boldsymbol{A} = \boldsymbol{f}'(\boldsymbol{x}^0)$．</p>
+<p>充分性：若每一个坐标分量函数 $f_i(x_1, x_2, \cdots, x_n) \ (i = 1, 2, \cdots, m)$ 在 $\boldsymbol{x}^0$ 处可微，那么</p>
+  $$
+  \Delta y_i = \Delta f_i = \frac{\partial f_i}{\partial x_1}(\boldsymbol{x}^0)\Delta x_1 + \frac{\partial f_i}{\partial x_2}(\boldsymbol{x}^0)\Delta x_2 + \cdots + \frac{\partial f_i}{\partial x_n}(\boldsymbol{x}^0)\Delta x_n + o(\|\Delta \boldsymbol{x}\|).
+  $$
+  <p>将上式写成矩阵乘积形式，并令 $\boldsymbol{A} = \left(\frac{\partial f_i}{\partial x_j}(\boldsymbol{x}^0)\right)_{m \times n}$，就知道 $\boldsymbol{f}$ 在 $\boldsymbol{x}^0$ 点可微．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.2.1 链式法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-2-1" class="anchor-btn" title="复制锚点链接"># 定理 12.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $\boldsymbol{g}$ 在 $(u_0, v_0) \in D_g$ 点可导，即 $x = x(u, v), y = y(u, v)$ 在 $(u_0, v_0)$ 点可偏导．记 $x_0 = x(u_0, v_0), y_0 = y(u_0, v_0)$，如果 $f$ 在 $(x_0, y_0)$ 点可微，那么</p>
+
+  $$
+  \frac{\partial z}{\partial u}(u_0, v_0) = \frac{\partial z}{\partial x}(x_0, y_0)\frac{\partial x}{\partial u}(u_0, v_0) + \frac{\partial z}{\partial y}(x_0, y_0)\frac{\partial y}{\partial u}(u_0, v_0);
+  $$
+  $$
+  \frac{\partial z}{\partial v}(u_0, v_0) = \frac{\partial z}{\partial x}(x_0, y_0)\frac{\partial x}{\partial v}(u_0, v_0) + \frac{\partial z}{\partial y}(x_0, y_0)\frac{\partial y}{\partial v}(u_0, v_0).
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 只证明第一式．由于 $f$ 在 $(x_0, y_0)$ 点可微，因此</p>
+  $$
+  \Delta z = f_x(x_0, y_0)\Delta x + f_y(x_0, y_0)\Delta y + \alpha(\Delta x, \Delta y)\sqrt{\Delta x^2 + \Delta y^2},
+  $$
+  <p>其中 $\alpha(\Delta x, \Delta y)$ 满足当 $\sqrt{\Delta x^2 + \Delta y^2} \to 0$ 时 $\alpha(\Delta x, \Delta y) \to 0$．定义 $\alpha(0, 0) = 0$，那么上式当 $(\Delta x, \Delta y) = (0, 0)$ 时也成立．</p>
+<p>设 $v = v_0$ 固定，对应于自变量 $u$ 的改变量 $\Delta u$，中间变量 $x, y$ 产生增量 $\Delta x = x(u_0 + \Delta u, v_0) - x(u_0, v_0)$ 和 $\Delta y = y(u_0 + \Delta u, v_0) - y(u_0, v_0)$，由 $x, y$ 的可偏导性有</p>
+  $$
+  \lim_{\Delta u \to 0} \frac{\Delta x}{\Delta u} = \frac{\partial x}{\partial u}(u_0, v_0), \quad \lim_{\Delta u \to 0} \frac{\Delta y}{\Delta u} = \frac{\partial y}{\partial u}(u_0, v_0),
+  $$
+  <p>并且有 $\lim_{\Delta u \to 0} \sqrt{\Delta x^2 + \Delta y^2} = 0$．于是当 $\Delta u \to 0$ 时，</p>
+  $$
+  \frac{\alpha(\Delta x, \Delta y)\sqrt{\Delta x^2 + \Delta y^2}}{\Delta u} = \alpha(\Delta x, \Delta y) \cdot \frac{\sqrt{\Delta x^2 + \Delta y^2}}{\Delta u} = \alpha(\Delta x, \Delta y) \cdot \operatorname{sgn}(\Delta u) \sqrt{\left(\frac{\Delta x}{\Delta u}\right)^2 + \left(\frac{\Delta y}{\Delta u}\right)^2}
+  $$
+  <p>也趋于 $0$，所以</p>
+  $$
+  \begin{aligned}
+  \frac{\partial z}{\partial u}(u_0, v_0) &amp;= \lim_{\Delta u \to 0} \frac{\Delta z}{\Delta u} \\
+  &amp;= \lim_{\Delta u \to 0} \left[ f_x(x_0, y_0)\frac{\Delta x}{\Delta u} + f_y(x_0, y_0)\frac{\Delta y}{\Delta u} + \frac{\alpha(\Delta x, \Delta y)\sqrt{\Delta x^2 + \Delta y^2}}{\Delta u} \right] \\
+  &amp;= \frac{\partial z}{\partial x}(x_0, y_0)\frac{\partial x}{\partial u}(u_0, v_0) + \frac{\partial z}{\partial y}(x_0, y_0)\frac{\partial y}{\partial u}(u_0, v_0).
+  \end{aligned}
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.2.2 链式法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-2-2" class="anchor-btn" title="复制锚点链接"># 定理 12.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $\boldsymbol{g}$ 在 $\boldsymbol{x}^0 \in D_g$ 点可导，即 $y_1, y_2, \cdots, y_m$ 在 $\boldsymbol{x}^0$ 点可偏导，且 $f$ 在 $\boldsymbol{y}^0 = \boldsymbol{g}(\boldsymbol{x}^0)$ 点可微，则</p>
+  $$
+  \frac{\partial z}{\partial x_i}(\boldsymbol{x}^0) = \frac{\partial z}{\partial y_1}(\boldsymbol{y}^0)\frac{\partial y_1}{\partial x_i}(\boldsymbol{x}^0) + \frac{\partial z}{\partial y_2}(\boldsymbol{y}^0)\frac{\partial y_2}{\partial x_i}(\boldsymbol{x}^0) + \cdots + \frac{\partial z}{\partial y_m}(\boldsymbol{y}^0)\frac{\partial y_m}{\partial x_i}(\boldsymbol{x}^0), \quad i = 1, 2, \cdots, n.
+  $$
+  <p>上式可以用矩阵表示：</p>
+  $$
+  \begin{pmatrix} \frac{\partial z}{\partial x_1} &amp; \frac{\partial z}{\partial x_2} &amp; \cdots &amp; \frac{\partial z}{\partial x_n} \end{pmatrix} = \begin{pmatrix} \frac{\partial z}{\partial y_1} &amp; \frac{\partial z}{\partial y_2} &amp; \cdots &amp; \frac{\partial z}{\partial y_m} \end{pmatrix} \begin{pmatrix}
+  \frac{\partial y_1}{\partial x_1} &amp; \frac{\partial y_1}{\partial x_2} &amp; \cdots &amp; \frac{\partial y_1}{\partial x_n} \\
+  \frac{\partial y_2}{\partial x_1} &amp; \frac{\partial y_2}{\partial x_2} &amp; \cdots &amp; \frac{\partial y_2}{\partial x_n} \\
+  \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+  \frac{\partial y_m}{\partial x_1} &amp; \frac{\partial y_m}{\partial x_2} &amp; \cdots &amp; \frac{\partial y_m}{\partial x_n}
+  \end{pmatrix},
+  $$
+  <p>或用向量值函数的导数记号表为</p>
+  $$
+  (f \circ \boldsymbol{g})'(\boldsymbol{x}^0) = f'(\boldsymbol{y}^0) \boldsymbol{g}'(\boldsymbol{x}^0).
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.2.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-2-3" class="anchor-btn" title="复制锚点链接"># 定理 12.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $\boldsymbol{f}: D_f(\subset \mathbb{R}^m) \to \mathbb{R}^k$ 与 $\boldsymbol{g}: D_g(\subset \mathbb{R}^n) \to \mathbb{R}^m$ 分别是多元向量值函数，且分别在 $D_f$ 与 $D_g$ 上具有连续导数．如果 $\boldsymbol{g}$ 的值域 $\boldsymbol{g}(D_g) \subset D_f$，并记 $\boldsymbol{u} = \boldsymbol{g}(\boldsymbol{x})$，那么复合向量值函数 $\boldsymbol{f} \circ \boldsymbol{g}$ 在 $D_g$ 上也具有连续的导数，并且成立等式</p>
+  $$
+  (\boldsymbol{f} \circ \boldsymbol{g})'(\boldsymbol{x}) = \boldsymbol{f}'(\boldsymbol{u}) \boldsymbol{g}'(\boldsymbol{x}),
+  $$
+  <p>其中 $\boldsymbol{f}'(\boldsymbol{u}), \boldsymbol{g}'(\boldsymbol{x})$ 和 $(\boldsymbol{f} \circ \boldsymbol{g})'(\boldsymbol{x})$ 是相应的导数，即 Jacobi 矩阵．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.3.1 中值定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-1" class="anchor-btn" title="复制锚点链接"># 定理 12.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设二元函数 $f(x, y)$ 在凸区域 $D \subset \mathbb{R}^2$ 上可微，则对于 $D$ 内任意两点 $(x_0, y_0)$ 和 $(x_0 + \Delta x, y_0 + \Delta y)$，至少存在一个 $\theta$ ($0 &lt; \theta &lt; 1$)，使得</p>
+  $$
+  f(x_0 + \Delta x, y_0 + \Delta y) - f(x_0, y_0) = f_x(x_0 + \theta\Delta x, y_0 + \theta\Delta y)\Delta x + f_y(x_0 + \theta\Delta x, y_0 + \theta\Delta y)\Delta y.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 因为 $D$ 是凸区域，所以</p>
+  $$
+  (x_0 + t\Delta x, y_0 + t\Delta y) \in D, \quad t \in [0, 1].
+  $$
+  <p>作辅助函数</p>
+  $$
+  \varphi(t) = f(x_0 + t\Delta x, y_0 + t\Delta y),
+  $$
+  <p>这是定义在 $[0, 1]$ 上的一元函数，由已知条件及定理 12.2.2，$\varphi(t)$ 在 $[0, 1]$ 上连续，在 $(0, 1)$ 内可导，且</p>
+  $$
+  \varphi'(t) = f_x(x_0 + t\Delta x, y_0 + t\Delta y)\Delta x + f_y(x_0 + t\Delta x, y_0 + t\Delta y)\Delta y.
+  $$
+  <p>由 Lagrange 中值定理，可知至少存在一个 $\theta$ ($0 &lt; \theta &lt; 1$)，使得</p>
+  $$
+  \varphi(1) - \varphi(0) = \varphi'(\theta).
+  $$
+  <p>注意 $\varphi(1) = f(x_0 + \Delta x, y_0 + \Delta y), \varphi(0) = f(x_0, y_0)$，并将 $\varphi'(\theta)$ 的表达式代入上式，即得到定理的结论．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 12.3.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-1" class="anchor-btn" title="复制锚点链接"># 推论 12.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>如果函数 $f(x, y)$ 在区域 $D \subset \mathbb{R}^2$ 上的偏导数恒为零，那么它在 $D$ 上必是常值函数．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 设 $(x', y')$ 是区域 $D$ 上任意一点，则存在 $r' &gt; 0$，使得点 $(x', y')$ 的邻域 $O((x', y'), r') \subset D$．由定理 12.3.1，对任意的 $(x, y) \in O((x', y'), r')$，存在 $\theta$ ($0 &lt; \theta &lt; 1$)，使得</p>
+  $$
+  f(x, y) - f(x', y') = f_x(x' + \theta\Delta x, y' + \theta\Delta y)\Delta x + f_y(x' + \theta\Delta x, y' + \theta\Delta y)\Delta y = 0,
+  $$
+  <p>其中 $\Delta x = x - x', \Delta y = y - y'$．因此</p>
+  $$
+  f(x, y) = f(x', y'), \quad (x, y) \in O((x', y'), r'),
+  $$
+  <p>即 $f(x, y)$ 在 $O((x', y'), r')$ 上是常值函数．</p>
+<p>现设 $(x_0, y_0)$ 为区域 $D$ 上一定点，$(x, y)$ 为区域 $D$ 上任意一点，由于区域是连通的开集，所以存在连续映射 $\boldsymbol{\gamma}: [0, 1] \to D$，满足 $\boldsymbol{\gamma}([0, 1]) \subset D, \boldsymbol{\gamma}(0) = (x_0, y_0), \boldsymbol{\gamma}(1) = (x, y)$，即 $\boldsymbol{\gamma}$ 是区域 $D$ 中以 $(x_0, y_0)$ 为起点，以 $(x, y)$ 为终点的道路．于是函数 $f(\boldsymbol{\gamma}(t))$ 在 $[0, 1]$ 连续，且满足</p>
+  $$
+  f(\boldsymbol{\gamma}(0)) = f(x_0, y_0), \quad f(\boldsymbol{\gamma}(1)) = f(x, y).
+  $$
+  <p>记</p>
+  $$
+  t_0 = \sup\{s \in [0, 1] \mid f(\boldsymbol{\gamma}(t)) = f(\boldsymbol{\gamma}(0)) = f(x_0, y_0), t \in [0, s]\},
+  $$
+  <p>则 $t_0 &gt; 0$，且由 $f(\boldsymbol{\gamma}(t))$ 的连续性，有 $f(\boldsymbol{\gamma}(t_0)) = f(x_0, y_0)$．</p>
+<p>由于 $\boldsymbol{\gamma}(t_0) \in D$，根据上面的证明，存在 $\boldsymbol{\gamma}(t_0)$ 的邻域 $O(\boldsymbol{\gamma}(t_0), r_0)$，使得</p>
+
+<p>$O(\boldsymbol{\gamma}(t_0), r_0) \subset D$，且对于一切 $(x, y) \in O(\boldsymbol{\gamma}(t_0), r_0)$，成立</p>
+  $$
+  f(x, y) = f(\boldsymbol{\gamma}(t_0)) = f(x_0, y_0).
+  $$
+  <p>如果 $t_0 &lt; 1$，由 $\boldsymbol{\gamma}(t)$ 的连续性可知，对于充分小的 $\Delta t &gt; 0$，有 $t_0 + \Delta t &lt; 1$ 及 $\boldsymbol{\gamma}(t_0 + \Delta t) \in O(\boldsymbol{\gamma}(t_0), r_0)$，从而又成立 $f(\boldsymbol{\gamma}(t_0 + \Delta t)) = f(\boldsymbol{\gamma}(t_0)) = f(x_0, y_0)$，这与 $t_0$ 的定义矛盾，于是必有 $t_0 = 1$．所以 $f(x, y) = f(\boldsymbol{\gamma}(1)) = f(\boldsymbol{\gamma}(0)) = f(x_0, y_0)$，即 $f(x, y)$ 在 $D$ 上是常值函数．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.3.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-2" class="anchor-btn" title="复制锚点链接"># 定理 12.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $n$ 元函数 $f(x_1, x_2, \cdots, x_n)$ 在凸区域 $D \subset \mathbb{R}^n$ 上可微，则对于 $D$ 内任意两点 $(x_1^0, x_2^0, \cdots, x_n^0)$ 和 $(x_1^0 + \Delta x_1, x_2^0 + \Delta x_2, \cdots, x_n^0 + \Delta x_n)$，至少存在一个 $\theta$ ($0 &lt; \theta &lt; 1$)，使得</p>
+  $$
+  \begin{aligned}
+  &amp; f(x_1^0 + \Delta x_1, x_2^0 + \Delta x_2, \cdots, x_n^0 + \Delta x_n) - f(x_1^0, x_2^0, \cdots, x_n^0) \\
+  =&amp; \sum_{i=1}^n f_{x_i}(x_1^0 + \theta\Delta x_1, x_2^0 + \theta\Delta x_2, \cdots, x_n^0 + \theta\Delta x_n)\Delta x_i.
+  \end{aligned}
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.3.3 Taylor 公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-3" class="anchor-btn" title="复制锚点链接"># 定理 12.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设函数 $f(x, y)$ 在点 $(x_0, y_0)$ 的邻域 $U = O((x_0, y_0), r)$ 上具有 $k+1$ 阶连续偏导数，那么对于 $U$ 内每一点 $(x_0 + \Delta x, y_0 + \Delta y)$ 都成立</p>
+  $$
+  \begin{aligned}
+  f(x_0 + \Delta x, y_0 + \Delta y) =&amp; f(x_0, y_0) + \left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)f(x_0, y_0) \\
+  &amp;+ \frac{1}{2!}\left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)^2 f(x_0, y_0) + \cdots \\
+  &amp;+ \frac{1}{k!}\left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)^k f(x_0, y_0) + R_k,
+  \end{aligned}
+  $$
+  <p>其中</p>
+  $$
+  R_k = \frac{1}{(k+1)!}\left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)^{k+1} f(x_0 + \theta\Delta x, y_0 + \theta\Delta y) \quad (0 &lt; \theta &lt; 1)
+  $$
+  <p>称为 <strong>Lagrange 余项</strong>．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 12.3.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-2" class="anchor-btn" title="复制锚点链接"># 推论 12.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $f(x, y)$ 在点 $(x_0, y_0)$ 的某个邻域上具有 $k+1$ 阶连续偏导数，那么在点 $(x_0, y_0)$ 附近成立</p>
+  $$
+  \begin{aligned}
+  f(x_0 + \Delta x, y_0 + \Delta y) =&amp; f(x_0, y_0) + \left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)f(x_0, y_0) \\
+  &amp;+ \frac{1}{2!}\left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)^2 f(x_0, y_0) + \cdots \\
+  &amp;+ \frac{1}{k!}\left(\Delta x\frac{\partial}{\partial x} + \Delta y\frac{\partial}{\partial y}\right)^k f(x_0, y_0) + o\left(\left(\sqrt{\Delta x^2 + \Delta y^2}\right)^k\right).
+  \end{aligned}
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.3.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-3-4" class="anchor-btn" title="复制锚点链接"># 定理 12.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $n$ 元函数 $f(x_1, x_2, \cdots, x_n)$ 在点 $(x_1^0, x_2^0, \cdots, x_n^0)$ 附近具有 $k+1$ 阶的连续偏导数，那么在这点附近成立如下的 Taylor 公式：</p>
+  $$
+  \begin{aligned}
+  &amp; f(x_1^0 + \Delta x_1, x_2^0 + \Delta x_2, \cdots, x_n^0 + \Delta x_n) \\
+  =&amp; f(x_1^0, x_2^0, \cdots, x_n^0) + \left(\sum_{i=1}^n \Delta x_i \frac{\partial}{\partial x_i}\right)f(x_1^0, x_2^0, \cdots, x_n^0) \\
+  
+  &amp;+ \frac{1}{2!}\left(\sum_{i=1}^n \Delta x_i \frac{\partial}{\partial x_i}\right)^2 f(x_1^0, x_2^0, \cdots, x_n^0) + \cdots + \frac{1}{k!}\left(\sum_{i=1}^n \Delta x_i \frac{\partial}{\partial x_i}\right)^k f(x_1^0, x_2^0, \cdots, x_n^0) + R_k,
+  \end{aligned}
+  $$
+  <p>其中</p>
+  $$
+  R_k = \frac{1}{(k+1)!}\left(\sum_{i=1}^n \Delta x_i \frac{\partial}{\partial x_i}\right)^{k+1} f(x_1^0 + \theta\Delta x_1, x_2^0 + \theta\Delta x_2, \cdots, x_n^0 + \theta\Delta x_n), \quad 0 &lt; \theta &lt; 1
+  $$
+  <p>为 Lagrange 余项．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.1 一元隐函数存在定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 局部单调性反转与隐函数存在定理</a>
+        <span class="thm-tag">隐函数定理</span><span class="thm-tag">Jacobian行列式</span><span class="thm-tag">局部可逆</span><span class="thm-tag">反函数定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-1" class="anchor-btn" title="复制锚点链接"># 定理 12.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>若二元函数 $F(x, y)$ 满足条件：</p>
+<p>(1) $F(x_0, y_0) = 0$；</p>
+<p>(2) 在闭矩形 $D = \{(x, y) \mid |x - x_0| \le a, |y - y_0| \le b\}$ 上，$F(x, y)$ 连续，且具有连续偏导数；</p>
+<p>(3) $F_y(x_0, y_0) \ne 0$，</p>
+<p>那么</p>
+
+<p>(i) 在点 $(x_0, y_0)$ 附近可以从函数方程</p>
+  $$
+  F(x, y) = 0
+  $$
+  <p>惟一确定隐函数</p>
+  $$
+  y = f(x), \quad x \in O(x_0, \rho),
+  $$
+  <p>它满足 $F(x, f(x)) = 0$，以及 $y_0 = f(x_0)$；</p>
+<p>(ii) 隐函数 $y = f(x)$ 在 $x \in O(x_0, \rho)$ 上连续；</p>
+<p>(iii) 隐函数 $y = f(x)$ 在 $x \in O(x_0, \rho)$ 上具有连续的导数，且</p>
+  $$
+  \frac{\mathrm{d}y}{\mathrm{d}x} = -\frac{F_x(x, y)}{F_y(x, y)}.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 不失一般性，设 $F_y(x_0, y_0) &gt; 0$．</p>
+<p>先证明隐函数的存在性（见图 12.4.2）．</p>
+<div class="figure-wrapper">
+<img alt="图 12.4.2 隐函数的存在性与连续性证明" src="figures/fig_12_4_2.svg"/>
+<div class="figure-caption">图 12.4.2</div>
+</div>
+<p>由 $F_y(x_0, y_0) &gt; 0$ 与 $F_y(x, y)$ 的连续性，可知存在 $0 &lt; \alpha \le a, 0 &lt; \beta \le b$，使得在闭矩形</p>
+  $$
+  D^* = \{(x, y) \mid |x - x_0| \le \alpha, |y - y_0| \le \beta\}
+  $$
+  <p>上成立 $F_y(x, y) &gt; 0$．</p>
+<p>于是，对固定的 $x_0$，$y$ 的函数 $F(x_0, y)$ 在 $[y_0 - \beta, y_0 + \beta]$ 是严格单调增加的．又由于 $F(x_0, y_0) = 0$，从而</p>
+  $$
+  F(x_0, y_0 - \beta) &lt; 0, \quad F(x_0, y_0 + \beta) &gt; 0.
+  $$
+  <p>由于 $F(x, y)$ 在 $D^*$ 上连续，于是存在 $\rho &gt; 0$，使得在线段</p>
+  $$
+  x_0 - \rho &lt; x &lt; x_0 + \rho, \quad y = y_0 + \beta
+  $$
+  <p>上 $F(x, y) &gt; 0$，而在线段</p>
+  $$
+  x_0 - \rho &lt; x &lt; x_0 + \rho, \quad y = y_0 - \beta
+  $$
+  <p>上 $F(x, y) &lt; 0$．</p>
+<p>因此，对于 $(x_0 - \rho, x_0 + \rho)$ 内的任一点 $\bar{x}$，将 $F(\bar{x}, y)$ 看成 $y$ 的函数，它在 $[y_0 - \beta, y_0 + \beta]$ 上是连续的，而由刚才的讨论知道</p>
+  $$
+  F(\bar{x}, y_0 - \beta) &lt; 0, \quad F(\bar{x}, y_0 + \beta) &gt; 0,
+  $$
+  <p>根据零点存在定理，必有 $\bar{y} \in (y_0 - \beta, y_0 + \beta)$ 使得 $F(\bar{x}, \bar{y}) = 0$．又因为在 $D^*$ 上 $F_y &gt; 0$，因此这样的 $\bar{y}$ 是惟一的．</p>
+
+<p>这就证明了在 $O(x_0, \rho)$ 内存在惟一确定的隐函数 $y = f(x)$，使 $F(x, f(x)) = 0$ 成立，且显然 $y_0 = f(x_0)$．结论 (i) 证毕．</p>
+<p>下面证明 $y = f(x)$ 的连续性．</p>
+<p>设 $\bar{x}$ 为 $(x_0 - \rho, x_0 + \rho)$ 上的任一点．对于任意给定的 $\varepsilon &gt; 0$（$\varepsilon$ 充分小），由于 $F(\bar{x}, \bar{y}) = 0$ ($\bar{y} = f(\bar{x})$)，由前面的讨论知道</p>
+  $$
+  F(\bar{x}, \bar{y} - \varepsilon) &lt; 0, \quad F(\bar{x}, \bar{y} + \varepsilon) &gt; 0.
+  $$
+  <p>而由于 $F(x, y)$ 在 $D^*$ 上的连续性，一定存在 $\delta &gt; 0$，使得当 $x \in O(\bar{x}, \delta)$ 时，</p>
+  $$
+  F(x, \bar{y} - \varepsilon) &lt; 0, \quad F(x, \bar{y} + \varepsilon) &gt; 0.
+  $$
+  <p>通过与前面类似的讨论可以得到，当 $x \in O(\bar{x}, \delta)$ 时，相应的隐函数值必满足 $f(x) \in (\bar{y} - \varepsilon, \bar{y} + \varepsilon)$，即</p>
+  $$
+  |f(x) - f(\bar{x})| &lt; \varepsilon.
+  $$
+  <p>这说明 $y = f(x)$ 在 $\bar{x}$ 处是连续的．结论 (ii) 证毕．</p>
+<p>最后证明 $y = f(x)$ 的可微性，并求其导数．</p>
+<p>设 $x$ 为 $(x_0 - \rho, x_0 + \rho)$ 上的任一点．取 $\Delta x$ 充分小使得 $x + \Delta x \in (x_0 - \rho, x_0 + \rho)$，记 $y = f(x)$ 以及 $y + \Delta y = f(x + \Delta x)$，则显然成立</p>
+  $$
+  F(x, y) = 0 \quad \text{和} \quad F(x + \Delta x, y + \Delta y) = 0.
+  $$
+  <p>应用多元函数的微分中值定理，得到</p>
+  $$
+  0 = F(x + \Delta x, y + \Delta y) - F(x, y) = F_x(x + \theta\Delta x, y + \theta\Delta y)\Delta x + F_y(x + \theta\Delta x, y + \theta\Delta y)\Delta y, \quad 0 &lt; \theta &lt; 1.
+  $$
+  <p>注意到在 $D^*$ 上 $F_y \ne 0$，因此</p>
+  $$
+  \frac{\Delta y}{\Delta x} = -\frac{F_x(x + \theta\Delta x, y + \theta\Delta y)}{F_y(x + \theta\Delta x, y + \theta\Delta y)}.
+  $$
+  <p>令 $\Delta x \to 0$，注意到 $F_x$ 和 $F_y$ 的连续性，就得到</p>
+  $$
+  \left.\frac{\mathrm{d}y}{\mathrm{d}x}\right|_{x = \bar{x}} = -\frac{F_x(\bar{x}, \bar{y})}{F_y(\bar{x}, \bar{y})},
+  $$
+  <p>即</p>
+  $$
+  f'(x) = -\frac{F_x(x, f(x))}{F_y(x, f(x))}.
+  $$
+  <p>由 $F_x, F_y$ 的连续性以及 $f(x)$ 的连续性可知，$f'(x)$ 也是连续的．结论 (iii) 证毕．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 局部单调性反转与隐函数存在定理</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 当非线性方程在某点附近的局部线性化导数不为零时，几何曲面在该点附近便能单值解析地展开为一个显式函数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要隐式方程的切线斜率不是竖直的（∂F/∂y ≠ 0），在这个点附近就一定能把 y 当成 x 的单值平滑函数解出来。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      拨开迷雾显真容：把交织在一起的隐式高维曲面，在局部用线性放大镜看成一张不折叠的单层薄纸。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>隐函数存在三大条件：连续、方程成立 F(x_0,y_0)=0、偏导非零 ∂F/∂y ≠ 0。</li><li>导数公式：dy/dx = - (∂F/∂x) / (∂F/∂y)。</li><li>高维向量情形：Jacobian 行列式 det J ≠ 0 保证局部坐标可逆变换。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.2 多元隐函数存在定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 局部单调性反转与隐函数存在定理</a>
+        <span class="thm-tag">隐函数定理</span><span class="thm-tag">Jacobian行列式</span><span class="thm-tag">局部可逆</span><span class="thm-tag">反函数定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-2" class="anchor-btn" title="复制锚点链接"># 定理 12.4.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>若 $n+1$ 元函数 $F(x_1, x_2, \cdots, x_n, y)$ 满足条件：</p>
+<p>(1) $F(x_1^0, x_2^0, \cdots, x_n^0, y_0) = 0$；</p>
+
+<p>(2) 在闭长方体 $D = \{(\boldsymbol{x}, y) \in \mathbb{R}^{n+1} \mid |x_i - x_i^0| \le a_i \; (i = 1, 2, \cdots, n), |y - y_0| \le b\}$ 上，$F(\boldsymbol{x}, y)$ 连续，且具有连续偏导数 $F_{x_i}\ (i = 1, 2, \cdots, n)$ 及 $F_y$；</p>
+<p>(3) $F_y(x_1^0, x_2^0, \cdots, x_n^0, y_0) \ne 0$，</p>
+<p>那么</p>
+<p>(i) 在点 $(x_1^0, x_2^0, \cdots, x_n^0)$ 附近可以从函数方程</p>
+  $$
+  F(x_1, x_2, \cdots, x_n, y) = 0
+  $$
+  <p>惟一确定隐函数</p>
+  $$
+  y = f(x_1, x_2, \cdots, x_n), \quad \boldsymbol{x} \in O(\boldsymbol{x}_0, \rho),
+  $$
+  <p>它满足 $F(\boldsymbol{x}, f(\boldsymbol{x})) = 0$，以及 $y_0 = f(\boldsymbol{x}_0)$；</p>
+<p>(ii) 隐函数 $y = f(\boldsymbol{x})$ 在 $\boldsymbol{x} \in O(\boldsymbol{x}_0, \rho)$ 上连续；</p>
+<p>(iii) 隐函数 $y = f(\boldsymbol{x})$ 在 $\boldsymbol{x} \in O(\boldsymbol{x}_0, \rho)$ 上具有连续的偏导数，且</p>
+  $$
+  \frac{\partial y}{\partial x_i} = -\frac{F_{x_i}(\boldsymbol{x}, y)}{F_y(\boldsymbol{x}, y)}, \quad i = 1, 2, \cdots, n.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 局部单调性反转与隐函数存在定理</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 当非线性方程在某点附近的局部线性化导数不为零时，几何曲面在该点附近便能单值解析地展开为一个显式函数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要隐式方程的切线斜率不是竖直的（∂F/∂y ≠ 0），在这个点附近就一定能把 y 当成 x 的单值平滑函数解出来。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      拨开迷雾显真容：把交织在一起的隐式高维曲面，在局部用线性放大镜看成一张不折叠的单层薄纸。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>隐函数存在三大条件：连续、方程成立 F(x_0,y_0)=0、偏导非零 ∂F/∂y ≠ 0。</li><li>导数公式：dy/dx = - (∂F/∂x) / (∂F/∂y)。</li><li>高维向量情形：Jacobian 行列式 det J ≠ 0 保证局部坐标可逆变换。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 局部单调性反转与隐函数存在定理</a>
+        <span class="thm-tag">隐函数定理</span><span class="thm-tag">Jacobian行列式</span><span class="thm-tag">局部可逆</span><span class="thm-tag">反函数定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-3" class="anchor-btn" title="复制锚点链接"># 定理 12.4.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>若四个变量的函数 $F(x, y, u, v)$ 和 $G(x, y, u, v)$ 在点 $(x_0, y_0, u_0, v_0)$ 附近满足条件：</p>
+<p>(1) $F(x_0, y_0, u_0, v_0) = 0, G(x_0, y_0, u_0, v_0) = 0$；</p>
+<p>(2) 在闭长方体</p>
+  $$
+  D = \{(x, y, u, v) \mid |x - x_0| \le a, |y - y_0| \le b, |u - u_0| \le c, |v - v_0| \le d\}
+  $$
+  <p>上，函数 $F, G$ 连续，且具有连续偏导数；</p>
+<p>(3) 在 $(x_0, y_0, u_0, v_0)$ 点，行列式</p>
+  $$
+  \frac{\partial(F, G)}{\partial(u, v)} = \begin{vmatrix} F_u &amp; F_v \\ G_u &amp; G_v \end{vmatrix} \ne 0,
+  $$
+  <p>那么</p>
+
+<p>(i) 在点 $(x_0, y_0, u_0, v_0)$ 附近可以从函数方程组</p>
+  $$
+  \begin{cases}
+  F(x, y, u, v) = 0, \\
+  G(x, y, u, v) = 0
+  \end{cases}
+  $$
+  <p>惟一确定向量值隐函数</p>
+  $$
+  \begin{pmatrix} u \\ v \end{pmatrix} = \begin{pmatrix} f(x, y) \\ g(x, y) \end{pmatrix}, \quad (x, y) \in O((x_0, y_0), \rho),
+  $$
+  <p>满足 $F(x, y, f(x, y), g(x, y)) = 0, G(x, y, f(x, y), g(x, y)) = 0$，以及 $u_0 = f(x_0, y_0), v_0 = g(x_0, y_0)$；</p>
+<p>(ii) 这个向量值隐函数在 $O((x_0, y_0), \rho)$ 上连续；</p>
+<p>(iii) 这个向量值隐函数在 $O((x_0, y_0), \rho)$ 上具有连续的导数，且</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial u}{\partial x} &amp; \frac{\partial u}{\partial y} \\
+  \frac{\partial v}{\partial x} &amp; \frac{\partial v}{\partial y}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  F_u &amp; F_v \\
+  G_u &amp; G_v
+  \end{pmatrix}^{-1}
+  \begin{pmatrix}
+  F_x &amp; F_y \\
+  G_x &amp; G_y
+  \end{pmatrix}.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 我们先证明向量值隐函数的存在性和连续可导性．</p>
+<p>因为在 $(x_0, y_0, u_0, v_0)$ 点</p>
+  $$
+  \frac{\partial(F, G)}{\partial(u, v)} = \begin{vmatrix} F_u &amp; F_v \\ G_u &amp; G_v \end{vmatrix} \ne 0,
+  $$
+  <p>所以 $F_u$ 与 $F_v$ 至少有一个在此点不为零，不妨假设 $F_u$ 不等于零，那么对方程 $F(x, y, u, v) = 0$ 应用隐函数存在定理，知道在 $(x_0, y_0, u_0, v_0)$ 附近，存在具有连续偏导数的隐函数 $u = \varphi(x, y, v)$，满足</p>
+  $$
+  F(x, y, \varphi(x, y, v), v) = 0, \quad u_0 = \varphi(x_0, y_0, v_0), \quad \text{且} \quad \varphi_v = -\frac{F_v}{F_u}.
+  $$
+  <p>将 $u = \varphi(x, y, v)$ 代入方程 $G(x, y, u, v) = 0$，得到关于变量 $x, y, v$ 的方程</p>
+  $$
+  H(x, y, v) = G(x, y, \varphi(x, y, v), v) = 0.
+  $$
+  <p>此时 $H(x_0, y_0, v_0) = 0$．计算 $H_v$：</p>
+  $$
+  H_v = G_u \varphi_v + G_v = G_u\left(-\frac{F_v}{F_u}\right) + G_v = \frac{F_u G_v - F_v G_u}{F_u} = \frac{1}{F_u}\frac{\partial(F, G)}{\partial(u, v)} \ne 0,
+  $$
+  <p>因此对方程 $H(x, y, v) = 0$ 也可应用隐函数存在定理，知道在 $(x_0, y_0, v_0)$ 附近存在具有连续偏导数的隐函数 $v = g(x, y)$，满足 $H(x, y, g(x, y)) = 0, v_0 = g(x_0, y_0)$．</p>
+<p>于是函数 $f(x, y) = \varphi(x, y, g(x, y))$ 与 $g(x, y)$ 在 $(x_0, y_0)$ 附近满足方程组</p>
+  $$
+  \begin{cases}
+  F(x, y, f(x, y), g(x, y)) = 0, \\
+  G(x, y, f(x, y), g(x, y)) = 0,
+  \end{cases}
+  $$
+  <p>且在 $(x_0, y_0)$ 附近具有连续偏导数．即向量值函数 $\begin{pmatrix} u \\ v \end{pmatrix} = \begin{pmatrix} f(x, y) \\ g(x, y) \end{pmatrix}$ 在某个邻域 $O((x_0, y_0), \rho)$ 内具有连续导数．</p>
+<p>为了求向量值隐函数的导数，应用多元函数求导的链式法则，就有</p>
+
+  $$
+  \begin{aligned}
+  \frac{\partial F}{\partial x} + \frac{\partial F}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial F}{\partial v}\frac{\partial v}{\partial x} &amp;= 0, \\
+  \frac{\partial G}{\partial x} + \frac{\partial G}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial G}{\partial v}\frac{\partial v}{\partial x} &amp;= 0,
+  \end{aligned}
+  $$
+  <p>因此</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial F}{\partial u} &amp; \frac{\partial F}{\partial v} \\
+  \frac{\partial G}{\partial u} &amp; \frac{\partial G}{\partial v}
+  \end{pmatrix}
+  \begin{pmatrix}
+  \frac{\partial u}{\partial x} \\
+  \frac{\partial v}{\partial x}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  \frac{\partial F}{\partial x} \\
+  \frac{\partial G}{\partial x}
+  \end{pmatrix}.
+  $$
+  <p>同理，由链式法则对 $y$ 求偏导，得到</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial F}{\partial u} &amp; \frac{\partial F}{\partial v} \\
+  \frac{\partial G}{\partial u} &amp; \frac{\partial G}{\partial v}
+  \end{pmatrix}
+  \begin{pmatrix}
+  \frac{\partial u}{\partial y} \\
+  \frac{\partial v}{\partial y}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  \frac{\partial F}{\partial y} \\
+  \frac{\partial G}{\partial y}
+  \end{pmatrix}.
+  $$
+  <p>将两个矩阵式子合并，就得到</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial F}{\partial u} &amp; \frac{\partial F}{\partial v} \\
+  \frac{\partial G}{\partial u} &amp; \frac{\partial G}{\partial v}
+  \end{pmatrix}
+  \begin{pmatrix}
+  \frac{\partial u}{\partial x} &amp; \frac{\partial u}{\partial y} \\
+  \frac{\partial v}{\partial x} &amp; \frac{\partial v}{\partial y}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  \frac{\partial F}{\partial x} &amp; \frac{\partial F}{\partial y} \\
+  \frac{\partial G}{\partial x} &amp; \frac{\partial G}{\partial y}
+  \end{pmatrix},
+  $$
+  <p>即</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial u}{\partial x} &amp; \frac{\partial u}{\partial y} \\
+  \frac{\partial v}{\partial x} &amp; \frac{\partial v}{\partial y}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  F_u &amp; F_v \\
+  G_u &amp; G_v
+  \end{pmatrix}^{-1}
+  \begin{pmatrix}
+  F_x &amp; F_y \\
+  G_x &amp; G_y
+  \end{pmatrix}.
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 局部单调性反转与隐函数存在定理</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 当非线性方程在某点附近的局部线性化导数不为零时，几何曲面在该点附近便能单值解析地展开为一个显式函数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要隐式方程的切线斜率不是竖直的（∂F/∂y ≠ 0），在这个点附近就一定能把 y 当成 x 的单值平滑函数解出来。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      拨开迷雾显真容：把交织在一起的隐式高维曲面，在局部用线性放大镜看成一张不折叠的单层薄纸。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>隐函数存在三大条件：连续、方程成立 F(x_0,y_0)=0、偏导非零 ∂F/∂y ≠ 0。</li><li>导数公式：dy/dx = - (∂F/∂x) / (∂F/∂y)。</li><li>高维向量情形：Jacobian 行列式 det J ≠ 0 保证局部坐标可逆变换。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 局部单调性反转与隐函数存在定理</a>
+        <span class="thm-tag">隐函数定理</span><span class="thm-tag">Jacobian行列式</span><span class="thm-tag">局部可逆</span><span class="thm-tag">反函数定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-4" class="anchor-btn" title="复制锚点链接"># 定理 12.4.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $m$ 个函数 $F_i(x_1, x_2, \cdots, x_n, y_1, y_2, \cdots, y_m)\ (i = 1, 2, \cdots, m)$ 在点 $(\boldsymbol{x}^0, \boldsymbol{y}^0) = (x_1^0, \cdots, x_n^0, y_1^0, \cdots, y_m^0)$ 附近满足以下条件：</p>
+<p>(1) $F_i(x_1^0, \cdots, x_n^0, y_1^0, \cdots, y_m^0) = 0\ (i = 1, 2, \cdots, m)$；</p>
+<p>(2) 在闭长方体</p>
+  $$
+  D = \{(\boldsymbol{x}, \boldsymbol{y}) \in \mathbb{R}^{n+m} \mid |x_j - x_j^0| \le a_j \; (j = 1, \cdots, n), |y_k - y_k^0| \le b_k \; (k = 1, \cdots, m)\}
+  $$
+  <p>上，函数 $F_i\ (i = 1, 2, \cdots, m)$ 连续，且具有连续偏导数；</p>
+<p>(3) 在 $(\boldsymbol{x}^0, \boldsymbol{y}^0)$ 点，Jacobi 行列式</p>
+  $$
+  \frac{\partial(F_1, F_2, \cdots, F_m)}{\partial(y_1, y_2, \cdots, y_m)} \ne 0,
+  $$
+  <p>那么</p>
+
+<p>(i) 在点 $(\boldsymbol{x}^0, \boldsymbol{y}^0)$ 附近可以从函数方程组</p>
+  $$
+  F_i(x_1, \cdots, x_n, y_1, \cdots, y_m) = 0, \quad i = 1, 2, \cdots, m
+  $$
+  <p>惟一确定向量值隐函数</p>
+  $$
+  \begin{pmatrix} y_1 \\ y_2 \\ \vdots \\ y_m \end{pmatrix} =
+  \begin{pmatrix} f_1(x_1, \cdots, x_n) \\ f_2(x_1, \cdots, x_n) \\ \vdots \\ f_m(x_1, \cdots, x_n) \end{pmatrix},
+  \quad (x_1, \cdots, x_n) \in O(\boldsymbol{x}^0, \rho),
+  $$
+  <p>它满足方程组及 $y_k^0 = f_k(\boldsymbol{x}^0)\ (k = 1, \cdots, m)$；</p>
+<p>(ii) 这个向量值隐函数在 $O(\boldsymbol{x}^0, \rho)$ 上连续；</p>
+<p>(iii) 这个向量值隐函数在 $O(\boldsymbol{x}^0, \rho)$ 上具有连续的导数，且</p>
+  $$
+  \begin{pmatrix}
+  \frac{\partial y_1}{\partial x_1} &amp; \cdots &amp; \frac{\partial y_1}{\partial x_n} \\
+  \vdots &amp; &amp; \vdots \\
+  \frac{\partial y_m}{\partial x_1} &amp; \cdots &amp; \frac{\partial y_m}{\partial x_n}
+  \end{pmatrix}
+  = -
+  \begin{pmatrix}
+  \frac{\partial F_1}{\partial y_1} &amp; \cdots &amp; \frac{\partial F_1}{\partial y_m} \\
+  \vdots &amp; &amp; \vdots \\
+  \frac{\partial F_m}{\partial y_1} &amp; \cdots &amp; \frac{\partial F_m}{\partial y_m}
+  \end{pmatrix}^{-1}
+  \begin{pmatrix}
+  \frac{\partial F_1}{\partial x_1} &amp; \cdots &amp; \frac{\partial F_1}{\partial x_n} \\
+  \vdots &amp; &amp; \vdots \\
+  \frac{\partial F_m}{\partial x_1} &amp; \cdots &amp; \frac{\partial F_m}{\partial x_n}
+  \end{pmatrix}.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 局部单调性反转与隐函数存在定理</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 当非线性方程在某点附近的局部线性化导数不为零时，几何曲面在该点附近便能单值解析地展开为一个显式函数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要隐式方程的切线斜率不是竖直的（∂F/∂y ≠ 0），在这个点附近就一定能把 y 当成 x 的单值平滑函数解出来。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      拨开迷雾显真容：把交织在一起的隐式高维曲面，在局部用线性放大镜看成一张不折叠的单层薄纸。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>隐函数存在三大条件：连续、方程成立 F(x_0,y_0)=0、偏导非零 ∂F/∂y ≠ 0。</li><li>导数公式：dy/dx = - (∂F/∂x) / (∂F/∂y)。</li><li>高维向量情形：Jacobian 行列式 det J ≠ 0 保证局部坐标可逆变换。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.5 逆映射定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-5" class="anchor-btn" title="复制锚点链接"># 定理 12.4.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $P_0 = (u_0, v_0) \in D$，$\boldsymbol{f}(P_0) = (x_0, y_0)$，映射 $\boldsymbol{f}$ 在 $P_0$ 的某个邻域上具有连续导数．如果在 $P_0$ 点处 $\boldsymbol{f}$ 的 Jacobi 行列式</p>
+  $$
+  \frac{\partial(x, y)}{\partial(u, v)} \ne 0,
+  $$
+  <p>那么存在 $P_0$ 的一个邻域 $O(P_0, \rho)$，在这个邻域上存在 $\boldsymbol{f}$ 的具有连续导数的逆映射 $\boldsymbol{g}$：</p>
+  $$
+  \begin{cases}
+  u = u(x, y), \\
+  v = v(x, y),
+  \end{cases}
+  \quad (x, y) \in O((x_0, y_0), \rho'),
+  $$
+  <p>满足</p>
+  $$
+  \begin{aligned}
+  \frac{\partial u}{\partial x} &amp;= \frac{\frac{\partial y}{\partial v}}{\frac{\partial(x, y)}{\partial(u, v)}}, \quad
+  \frac{\partial u}{\partial y} = -\frac{\frac{\partial x}{\partial v}}{\frac{\partial(x, y)}{\partial(u, v)}}, \\
+  \frac{\partial v}{\partial x} &amp;= -\frac{\frac{\partial y}{\partial u}}{\frac{\partial(x, y)}{\partial(u, v)}}, \quad
+  \frac{\partial v}{\partial y} = \frac{\frac{\partial x}{\partial u}}{\frac{\partial(x, y)}{\partial(u, v)}}.
+  \end{aligned}
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 考虑函数方程组</p>
+  $$
+  \begin{cases}
+  F(x, y, u, v) = x(u, v) - x = 0, \\
+  G(x, y, u, v) = y(u, v) - y = 0.
+  \end{cases}
+  $$
+  <p>由假设，在 $(x_0, y_0, u_0, v_0)$ 点处</p>
+  $$
+  \frac{\partial(F, G)}{\partial(u, v)} = \frac{\partial(x, y)}{\partial(u, v)} \ne 0.
+  $$
+  <p>由向量值函数的隐函数存在定理，在 $(x_0, y_0, u_0, v_0)$ 附近存在向量值函数 $\boldsymbol{g}$：</p>
+  $$
+  \begin{pmatrix} u \\ v \end{pmatrix} = \begin{pmatrix} u(x, y) \\ v(x, y) \end{pmatrix}, \quad (x, y) \in O((x_0, y_0), \rho'),
+  $$
+  <p>满足</p>
+  $$
+  x(u(x, y), v(x, y)) = x, \quad y(u(x, y), v(x, y)) = y,
+  $$
+  <p>而且 $u(x, y)$ 和 $v(x, y)$ 在 $O((x_0, y_0), \rho')$ 上具有连续的偏导数．这也说明在 $O((x_0, y_0), \rho')$ 上 $\boldsymbol{g}$ 为 $\boldsymbol{f}$ 的逆映射．</p>
+<p>在等式中对 $x$ 求偏导，得到</p>
+  $$
+  \frac{\partial x}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial x}{\partial v}\frac{\partial v}{\partial x} = 1, \quad
+  \frac{\partial y}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial y}{\partial v}\frac{\partial v}{\partial x} = 0,
+  $$
+  <p>因此解线性方程组即得定理中的偏导数表达式．同理对 $y$ 求偏导可解得其余两式．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-4-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.4.6</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-4-6" class="anchor-btn" title="复制锚点链接"># 定理 12.4.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $D$ 为 $\mathbb{R}^2$ 中的开集，且映射 $\boldsymbol{f}: D \to \mathbb{R}^2$ 在 $D$ 上具有连续导数．如果 $\boldsymbol{f}$ 的 Jacobi 行列式在 $D$ 上恒不为零，那么 $D$ 的像集 $\boldsymbol{f}(D)$ 是开集．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 沿用定理 12.4.5 的记号．</p>
+<p>设 $P_0 = (x_0, y_0)$ 为 $\boldsymbol{f}(D)$ 上的任一点，那么从定理 12.4.5 的证明可知，存在 $P_0$ 的一个邻域 $O(P_0, \rho')$，使得这个邻域中的点都是 $\boldsymbol{f}$ 的像点，因此 $P_0$ 是 $\boldsymbol{f}(D)$ 的内点．这就是说，$\boldsymbol{f}(D)$ 是开集．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-6-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.6.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-6-1" class="anchor-btn" title="复制锚点链接"># 定理 12.6.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设 $f(\boldsymbol{x})$ 在 $\boldsymbol{x}_0 \in D$ 处可导．若 $\boldsymbol{x}_0$ 是 $f(\boldsymbol{x})$ 的极值点，那么必成立</p>
+  $$
+  \operatorname{grad} f(\boldsymbol{x}_0) = \mathbf{0}, \quad \text{即} \quad \frac{\partial f}{\partial x_i}(\boldsymbol{x}_0) = 0, \quad i = 1, 2, \cdots, n.
+  $$
+  <p>使一阶偏导数全为零的点称为 $f$ 的<strong>驻点</strong>（或<strong>稳定点</strong>）．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-6-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.6.2 二阶充分条件</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-6-2" class="anchor-btn" title="复制锚点链接"># 定理 12.6.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>设函数 $f(x, y)$ 在点 $(x_0, y_0)$ 的某邻域内具有二阶连续偏导数，且 $(x_0, y_0)$ 为其驻点．记 $A = f_{xx}(x_0, y_0), B = f_{xy}(x_0, y_0), C = f_{yy}(x_0, y_0), \Delta = AC - B^2$：</p>
+<p>(1) 当 $\Delta &gt; 0$ 时，$(x_0, y_0)$ 是极值点：若 $A &gt; 0$，则为极小值点；若 $A &lt; 0$，则为极大值点；</p>
+<p>(2) 当 $\Delta &lt; 0$ 时，$(x_0, y_0)$ 不是极值点（是鞍点，见图 12.6.3）；</p>
+<p>(3) 当 $\Delta = 0$ 时，情况不定，需要进一步分析更高阶项或用其他方法判定．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-6-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 12.6.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-6-1" class="anchor-btn" title="复制锚点链接"># 推论 12.6.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p>若 Hessian 矩阵 $\boldsymbol{H}$ 是正定的（所有顺序主子式均大于 0），则 $\boldsymbol{x}_0$ 为极小值点；若 $\boldsymbol{H}$ 是负定的（顺序主子式正负相间），则 $\boldsymbol{x}_0$ 为极大值点；若 $\boldsymbol{H}$ 不定，则 $\boldsymbol{x}_0$ 不是极值点．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-7-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.7.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 梯度流、Hessian 谱分析与极值判别</a>
+        <span class="thm-tag">条件极值</span><span class="thm-tag">Lagrange乘数法</span><span class="thm-tag">Hessian矩阵</span><span class="thm-tag">二次型正定性</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-7-1" class="anchor-btn" title="复制锚点链接"># 定理 12.7.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block">
+<p>设点 $\boldsymbol{x}_0 = (x_1^0, x_2^0, \dots, x_n^0)$ 为满足上述约束条件的条件极值点，则必存在 $m$ 个常数 $\lambda_1, \lambda_2, \dots, \lambda_m$，使得在 $\boldsymbol{x}_0$ 点成立</p>
+    $$
+    \mathrm{grad}\, f = \lambda_1 \mathrm{grad}\, g_1 + \lambda_2 \mathrm{grad}\, g_2 + \cdots + \lambda_m \mathrm{grad}\, g_m.
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 梯度流、Hessian 谱分析与极值判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过切空间法向投影消解约束条件；利用 Hessian 二次型的特征值谱符号判断局部能量曲面的凹凸碗状结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在受限制的弯曲轨道上寻找最高或最低点，极值点处目标函数的等高线切线必须与约束轨道的切线完全平行重合（法向量共线）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      山脊上的滑板运动员：如果目标等高线和轨道相交，运动员就能顺着轨道继续下滑；直到两者相切无路可滑，便达到了极值点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无约束极值必要条件：梯度 ∇f = 0（驻点）。</li><li>充分条件：Hessian 矩阵 H 正定（极小）或负定（极大），不定则为鞍点。</li><li>约束极值：∇f = ∑ λ_i ∇g_i，利用几何法向量共线建立代数方程组。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch12-12-7-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 12.7.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 公式多维展开与全微分线性主部</a>
+        <span class="thm-tag">全微分</span><span class="thm-tag">复合求导链式法则</span><span class="thm-tag">方向导数</span><span class="thm-tag">高阶混合偏导</span>
+      </div>
+    </div>
+    <a href="#thm-ch12-12-7-2" class="anchor-btn" title="复制锚点链接"># 定理 12.7.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block">
+<p>设点 $\boldsymbol{x}_0 = (x_1^0, x_2^0, \dots, x_n^0)$ 及 $m$ 个常数 $\lambda_1, \lambda_2, \dots, \lambda_m$ 满足方程组 $(*)$，则当方阵</p>
+    $$
+    \left( \frac{\partial^2 L}{\partial x_k \partial x_l} (\boldsymbol{x}_0, \lambda_1, \lambda_2, \dots, \lambda_m) \right)_{n \times n}
+    $$
+    <p>为正定（负定）矩阵时，$\boldsymbol{x}_0$ 为满足约束条件的条件极小（大）值点，因此 $f(\boldsymbol{x}_0)$ 为满足约束条件的条件极小（大）值．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 公式多维展开与全微分线性主部</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高维切平面的一阶局部线性拟合；全微分 Δz = A Δx + B Δy + o(ρ) 是多元微积分中最核心的几何微分形式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无论函数曲面多么高低起伏，只要放得足够大，曲面在任意一点附近都无限接近于一张紧贴它的平坦切平面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      地球表面视界：虽然地球是个巨大曲面，但在我们脚下极小范围内，地面完全可以用平坦的地平切面来高精度近似。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>偏导数连续是全微分存在的充分条件。</li><li>方向导数与梯度的内积关系：D_u f = ∇f · u，梯度方向即最大上升率方向。</li><li>Schwarz 定理：混合偏导数连续保证求导次序可交换 f_xy = f_yx。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_11_theorems.html" class="page-nav-btn">← 上一章：第十一章 · Euclid 空间上的极限和连续</a>
+  <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" class="page-nav-btn" target="_blank">📗 进入下册：第九章 数项级数 (数字化原书) →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

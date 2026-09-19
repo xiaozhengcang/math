@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>第七章 · 定积分 · 定理与完整证明全书</title>
+  <title>第七章 · 定积分 · 核心定义与定理证明全书</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -70,7 +70,7 @@ body {
   z-index: 1000;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  background: rgba(8, 12, 22, 0.85);
+  background: rgba(8, 12, 22, 0.88);
   border-bottom: 1px solid var(--border-color);
   padding: 0.75rem 1.5rem;
   display: flex;
@@ -118,77 +118,77 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
+  padding: 0.35rem 0.8rem;
   border-radius: 8px;
   font-size: 0.82rem;
-  font-weight: 500;
+  font-weight: 600;
+  text-decoration: none;
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border-color);
-  text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .nav-btn:hover {
   color: #fff;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: var(--border-highlight);
-  transform: translateY(-1px);
-}
-
-.nav-btn.active-hub {
-  color: var(--accent-blue);
-  background: rgba(56, 189, 248, 0.15);
+  background: rgba(255, 255, 255, 0.08);
   border-color: var(--accent-blue);
 }
 
-/* Chapter Switcher Pills Bar */
 .chapter-pills-bar {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   overflow-x: auto;
-  padding-bottom: 0.25rem;
+  padding-bottom: 0.2rem;
   scrollbar-width: thin;
 }
 
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
 .ch-pill {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.78rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
   font-weight: 600;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
   text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
 }
 
 .ch-pill:hover {
   color: var(--text-primary);
-  border-color: var(--accent-blue);
-  background: rgba(56, 189, 248, 0.08);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .ch-pill.current-ch {
   color: #fff;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
 }
 
-/* Main Container Layout */
+/* Two-column Layout */
 .main-layout {
-  max-width: 1240px;
+  max-width: 1380px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 4rem;
+  padding: 2rem 1.5rem 5rem;
   display: grid;
   grid-template-columns: 280px 1fr;
-  gap: 2rem;
+  gap: 2.25rem;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .main-layout {
     grid-template-columns: 1fr;
   }
@@ -200,8 +200,8 @@ body {
 /* Sidebar Quick Jump */
 .sidebar-toc {
   position: sticky;
-  top: 6.5rem;
-  max-height: calc(100vh - 8rem);
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
   overflow-y: auto;
   padding: 1.25rem;
   background: var(--bg-card);
@@ -210,7 +210,7 @@ body {
   backdrop-filter: blur(12px);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .toc-title {
@@ -239,17 +239,29 @@ body {
   border-color: var(--accent-blue);
 }
 
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
 .toc-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  font-size: 0.82rem;
+  gap: 0.25rem;
+  font-size: 0.8rem;
 }
 
 .toc-link {
   display: block;
-  padding: 0.35rem 0.6rem;
+  padding: 0.3rem 0.55rem;
   border-radius: 6px;
   color: var(--text-secondary);
   text-decoration: none;
@@ -262,62 +274,187 @@ body {
 .toc-link:hover {
   color: #fff;
   background: rgba(56, 189, 248, 0.1);
-  padding-left: 0.85rem;
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
 }
 
 /* Chapter Hero Banner */
 .chapter-hero {
-  margin-bottom: 2rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
   position: relative;
-  overflow: hidden;
-}
-
-.chapter-hero::before {
-  content: '';
-  position: absolute;
-  top: 0; right: 0; width: 300px; height: 100%;
-  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
-  pointer-events: none;
 }
 
 .ch-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
 }
 
 .ch-number-badge {
-  background: rgba(56, 189, 248, 0.15);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  color: var(--accent-blue);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.2rem 0.7rem;
-  border-radius: 9999px;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
 }
 
 .ch-count-badge {
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
 }
 
 .ch-main-title {
-  font-size: 1.85rem;
+  font-size: 2.1rem;
   font-weight: 800;
   color: #fff;
-  line-height: 1.3;
   margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
 }
 
 .ch-desc-text {
-  font-size: 0.95rem;
   color: var(--text-secondary);
-  max-width: 800px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
 }
 
 /* Theorem Card Styles */
@@ -378,98 +515,116 @@ body {
 .thm-tag {
   font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.15rem 0.55rem;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
   color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
 }
 
 .thm-tag.routine-ref {
-  background: rgba(168, 85, 247, 0.15);
-  border-color: rgba(168, 85, 247, 0.35);
-  color: #d8b4fe;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
   text-decoration: none;
+  transition: all 0.2s ease;
 }
 
 .thm-tag.routine-ref:hover {
-  background: rgba(168, 85, 247, 0.25);
-  color: #fff;
+  background: var(--accent-blue);
+  color: #070a12;
 }
 
 .anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.85rem;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
 .anchor-btn:hover {
-  color: var(--accent-blue);
+  color: #fff;
   border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
 }
 
-/* Verbatim Theorem Statement Box */
+/* Verbatim Statement Box */
 .verbatim-statement-box {
-  background: rgba(15, 23, 42, 0.65);
-  border-left: 4px solid var(--accent-blue);
-  border-radius: 0 12px 12px 0;
-  padding: 1.25rem 1.5rem;
-  margin-bottom: 1.25rem;
-  color: #e2e8f0;
-  font-size: 1rem;
-}
-
-.section-label {
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--accent-blue);
-  margin-bottom: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-/* Verbatim Original Proof Box */
-.verbatim-proof-box {
-  background: rgba(9, 14, 26, 0.75);
+  background: rgba(15, 23, 42, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 1.25rem 1.5rem;
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
   margin-bottom: 1.5rem;
-  color: #cbd5e1;
-  font-size: 0.95rem;
   line-height: 1.8;
 }
 
-.proof-label {
-  font-size: 0.78rem;
+.section-label {
+  font-size: 0.75rem;
   font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--accent-emerald);
-  margin-bottom: 0.6rem;
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
-/* Layman Commentary Box (Four-Layer Structure) */
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
 .layman-commentary-box {
-  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  gap: 1.15rem;
 }
 
 .commentary-header {
@@ -479,111 +634,95 @@ body {
   flex-wrap: wrap;
   gap: 0.6rem;
   padding-bottom: 0.6rem;
-  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .commentary-badge {
   font-size: 0.82rem;
   font-weight: 700;
-  color: #d8b4fe;
+  color: #fcd34d;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .routine-link-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
-  background: rgba(168, 85, 247, 0.2);
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  color: #e9d5ff;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
   text-decoration: none;
   transition: all 0.2s ease;
 }
 
 .routine-link-pill:hover {
-  background: rgba(168, 85, 247, 0.35);
-  color: #fff;
-  transform: translateY(-1px);
+  background: var(--accent-blue);
+  color: #070a12;
 }
 
 .essence-line {
-  background: rgba(56, 189, 248, 0.1);
-  border-left: 3px solid var(--accent-blue);
-  padding: 0.6rem 0.9rem;
-  border-radius: 0 8px 8px 0;
   font-size: 0.95rem;
-  color: #e0f2fe;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
 }
 
 .layman-quote {
   background: rgba(0, 0, 0, 0.25);
-  border-left: 3px solid var(--accent-amber);
-  padding: 0.85rem 1.1rem;
-  border-radius: 0 8px 8px 0;
-  font-size: 0.93rem;
-  color: #fde68a;
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
   line-height: 1.7;
 }
 
 .metaphor-box {
-  background: rgba(16, 185, 129, 0.08);
-  border-left: 3px solid var(--accent-emerald);
-  padding: 0.85rem 1.1rem;
-  border-radius: 0 8px 8px 0;
-  font-size: 0.92rem;
-  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
   line-height: 1.7;
 }
 
 .keypoints-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  padding: 1rem 1.25rem;
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
 }
 
 .keypoints-title {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 700;
-  color: var(--accent-cyan);
-  margin-bottom: 0.5rem;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .keypoints-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  padding-left: 0.2rem;
-}
-
-.keypoints-list li {
-  position: relative;
-  padding-left: 1.25rem;
+  margin-left: 1.25rem;
   font-size: 0.88rem;
   color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   line-height: 1.6;
 }
 
-.keypoints-list li::before {
-  content: '▸';
-  position: absolute;
-  left: 0;
-  color: var(--accent-blue);
-  font-weight: bold;
-}
-
-/* Chapter Bottom Pagination */
+/* Pagination Bar */
 .chapter-pagination {
-  margin-top: 3rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border-color);
+  margin-top: 3.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -621,23 +760,32 @@ body {
   <div class="nav-upper">
     <a href="index.html" class="brand-title">
       <span>📐 高等数学与数学分析</span>
-      <span class="brand-badge">定理与证明全书</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
     </a>
     <div class="nav-links">
-      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
       <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
       <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
     </div>
   </div>
   <div class="chapter-pills-bar">
-    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
-<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
-<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
-<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
-<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
-<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
-<a href="chapter_07_theorems.html" class="ch-pill current-ch">第7章 (19)</a>
-<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill current-ch">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
 
   </div>
 </header>
@@ -646,28 +794,41 @@ body {
 <div class="main-layout">
   <!-- Left Sticky TOC -->
   <aside class="sidebar-toc">
-    <div class="toc-title">📑 本章定理导航 (19)</div>
-    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
-    <ul class="toc-list" id="toc-list">
-      <li><a href="#lem-7-1-1" class="toc-link" title="引理 7.1.1 划分加细大和小和单调性定理">引理 7.1.1 划分加细大和小和单调性定理</a></li>
-<li><a href="#lem-7-1-2" class="toc-link" title="引理 7.1.2 任意两划分小和不大于大和引理">引理 7.1.2 任意两划分小和不大于大和引理</a></li>
-<li><a href="#lem-7-1-3" class="toc-link" title="引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)">引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)</a></li>
-<li><a href="#thm-7-1-1" class="toc-link" title="定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)">定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)</a></li>
-<li><a href="#thm-7-1-2" class="toc-link" title="定理 7.1.2 振幅可积准则">定理 7.1.2 振幅可积准则</a></li>
-<li><a href="#thm-7-1-cor1" class="toc-link" title="推论 1 闭区间上的连续函数必定可积">推论 1 闭区间上的连续函数必定可积</a></li>
-<li><a href="#thm-7-1-cor2" class="toc-link" title="推论 2 闭区间上的单调函数必定可积">推论 2 闭区间上的单调函数必定可积</a></li>
-<li><a href="#thm-7-1-3" class="toc-link" title="定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)">定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)</a></li>
-<li><a href="#thm-7-1-cor3" class="toc-link" title="推论 3 闭区间上只有有限个间断点的有界函数必可积">推论 3 闭区间上只有有限个间断点的有界函数必可积</a></li>
-<li><a href="#thm-7-3-1" class="toc-link" title="定理 7.3.1 变上限积分函数的连续性与可微性定理">定理 7.3.1 变上限积分函数的连续性与可微性定理</a></li>
-<li><a href="#thm-7-3-2" class="toc-link" title="定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)">定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)</a></li>
-<li><a href="#thm-7-3-3" class="toc-link" title="定理 7.3.3 定积分的分部积分法">定理 7.3.3 定积分的分部积分法</a></li>
-<li><a href="#thm-7-3-4" class="toc-link" title="定理 7.3.4 定积分的换元积分法">定理 7.3.4 定积分的换元积分法</a></li>
-<li><a href="#thm-7-3-5" class="toc-link" title="定理 7.3.5 奇偶函数在对称区间上的积分性质定理">定理 7.3.5 奇偶函数在对称区间上的积分性质定理</a></li>
-<li><a href="#thm-7-3-6" class="toc-link" title="定理 7.3.6 周期函数定积分的区间平移不变性定理">定理 7.3.6 周期函数定积分的区间平移不变性定理</a></li>
-<li><a href="#thm-7-4-1" class="toc-link" title="定理 7.4.1 平面曲线的弧长积分公式">定理 7.4.1 平面曲线的弧长积分公式</a></li>
-<li><a href="#thm-7-6-1" class="toc-link" title="定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理">定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理</a></li>
-<li><a href="#cor-7-6-1" class="toc-link" title="推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n">推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n</a></li>
-<li><a href="#cor-7-6-2" class="toc-link" title="推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1">推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1</a></li>
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (6)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch7-7-1-1" class="toc-link def-link" title="定义 7.1.1 区间划分、Riemann 和与定积分">📖 定义 7.1.1 区间划分、Riemann 和与定积分</a></li>
+<li><a href="#def-ch7-7-1-2" class="toc-link def-link" title="定义 7.1.2 Darboux 上积分与下积分">📖 定义 7.1.2 Darboux 上积分与下积分</a></li>
+<li><a href="#def-ch7-7-3-1" class="toc-link def-link" title="定义 7.3.1 正交函数族与正交函数列">📖 定义 7.3.1 正交函数族与正交函数列</a></li>
+<li><a href="#def-ch7-7-4-1" class="toc-link def-link" title="定义 7.4.1 光滑曲线与正则参数表示">📖 定义 7.4.1 光滑曲线与正则参数表示</a></li>
+<li><a href="#def-ch7-7-6-1" class="toc-link def-link" title="定义 7.6.1 数值求积公式的 n 次代数精度">📖 定义 7.6.1 数值求积公式的 n 次代数精度</a></li>
+<li><a href="#def-ch7-7-6-2" class="toc-link def-link" title="定义 7.6.2 Gauss 型求积公式">📖 定义 7.6.2 Gauss 型求积公式</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (19)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#lem-7-1-1" class="toc-link" title="引理 7.1.1 划分加细大和小和单调性定理">📐 引理 7.1.1 划分加细大和小和单调性定理</a></li>
+<li><a href="#lem-7-1-2" class="toc-link" title="引理 7.1.2 任意两划分小和不大于大和引理">📐 引理 7.1.2 任意两划分小和不大于大和引理</a></li>
+<li><a href="#lem-7-1-3" class="toc-link" title="引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)">📐 引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)</a></li>
+<li><a href="#thm-7-1-1" class="toc-link" title="定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)">📐 定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)</a></li>
+<li><a href="#thm-7-1-2" class="toc-link" title="定理 7.1.2 振幅可积准则">📐 定理 7.1.2 振幅可积准则</a></li>
+<li><a href="#thm-7-1-cor1" class="toc-link" title="推论 1 闭区间上的连续函数必定可积">📐 推论 1 闭区间上的连续函数必定可积</a></li>
+<li><a href="#thm-7-1-cor2" class="toc-link" title="推论 2 闭区间上的单调函数必定可积">📐 推论 2 闭区间上的单调函数必定可积</a></li>
+<li><a href="#thm-7-1-3" class="toc-link" title="定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)">📐 定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)</a></li>
+<li><a href="#thm-7-1-cor3" class="toc-link" title="推论 3 闭区间上只有有限个间断点的有界函数必可积">📐 推论 3 闭区间上只有有限个间断点的有界函数必可积</a></li>
+<li><a href="#thm-7-3-1" class="toc-link" title="定理 7.3.1 变上限积分函数的连续性与可微性定理">📐 定理 7.3.1 变上限积分函数的连续性与可微性定理</a></li>
+<li><a href="#thm-7-3-2" class="toc-link" title="定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)">📐 定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)</a></li>
+<li><a href="#thm-7-3-3" class="toc-link" title="定理 7.3.3 定积分的分部积分法">📐 定理 7.3.3 定积分的分部积分法</a></li>
+<li><a href="#thm-7-3-4" class="toc-link" title="定理 7.3.4 定积分的换元积分法">📐 定理 7.3.4 定积分的换元积分法</a></li>
+<li><a href="#thm-7-3-5" class="toc-link" title="定理 7.3.5 奇偶函数在对称区间上的积分性质定理">📐 定理 7.3.5 奇偶函数在对称区间上的积分性质定理</a></li>
+<li><a href="#thm-7-3-6" class="toc-link" title="定理 7.3.6 周期函数定积分的区间平移不变性定理">📐 定理 7.3.6 周期函数定积分的区间平移不变性定理</a></li>
+<li><a href="#thm-7-4-1" class="toc-link" title="定理 7.4.1 平面曲线的弧长积分公式">📐 定理 7.4.1 平面曲线的弧长积分公式</a></li>
+<li><a href="#thm-7-6-1" class="toc-link" title="定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理">📐 定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理</a></li>
+<li><a href="#cor-7-6-1" class="toc-link" title="推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n">📐 推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n</a></li>
+<li><a href="#cor-7-6-2" class="toc-link" title="推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1">📐 推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1</a></li>
 
     </ul>
   </aside>
@@ -677,12 +838,198 @@ body {
     <section class="chapter-hero">
       <div class="ch-badge-row">
         <span class="ch-number-badge">CHAPTER 07</span>
-        <span class="ch-count-badge">共收录 19 个重要定理与引理</span>
+        <span class="ch-count-badge">收录 6 个基础定义 · 19 个重要定理与引理</span>
       </div>
       <h1 class="ch-main-title">第七章 · 定积分</h1>
-      <p class="ch-desc-text">Darboux 准则、黎曼可积充分必要条件、微积分基本定理 (N-L 公式) 与数值求积</p>
+      <p class="ch-desc-text">Riemann和与Darboux准则、可积充分必要条件、微积分基本定理 (N-L 公式) 与数值求积</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_07/chapter_07.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 7 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
     </section>
 
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 6 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch7-7-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.1.1 区间划分、Riemann 和与定积分</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">定积分</span><span class="def-tag">Riemann和</span><span class="def-tag">网格模λ→0</span><span class="def-tag">极限存在</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-1-1" class="anchor-btn" title="复制锚点链接"># 定义 7.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text">设 $f(x)$ 是定义在 $[a, b]$ 上的有界函数，在 $[a, b]$ 上任意取分点 $\{x_i\}_{i=0}^n$，作成一种划分
+$$
+P: a = x_0 &lt; x_1 &lt; x_2 &lt; \cdots &lt; x_n = b,
+$$
+在每个小区间 $[x_{i-1}, x_i]$ 上任意取点 $\xi_i \in [x_{i-1}, x_i]$．记小区间的长度为 $\Delta x_i = x_i - x_{i-1}$，并令 $\lambda = \max\limits_{1\le i\le n}(\Delta x_i)$．若当 $\lambda \to 0$ 时，极限
+$$
+\lim_{\lambda\to 0}\sum_{i=1}^n f(\xi_i)\Delta x_i
+$$
+存在，并且该极限值与对区间 $[a, b]$ 的划分方式 $P$ 以及样本点 $\xi_i$ 的选取均无关，则称函数 $f(x)$ 在 $[a, b]$ 上是<strong>可积的</strong>（Integrable，或更确切地说是 <strong>Riemann 可积的</strong>），并称此极限值为函数 $f(x)$ 在区间 $[a, b]$ 上的<strong>定积分</strong>（Definite Integral，或 <strong>Riemann 积分</strong>），记作
+$$
+\int_a^b f(x)\,\mathrm{d}x,
+$$
+即
+$$
+\int_a^b f(x)\,\mathrm{d}x = \lim_{\lambda\to 0}\sum_{i=1}^n f(\xi_i)\Delta x_i.
+$$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch7-7-1-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.1.2 Darboux 上积分与下积分</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">上积分</span><span class="def-tag">下积分</span><span class="def-tag">Darboux和</span><span class="def-tag">振幅振荡</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-1-2" class="anchor-btn" title="复制锚点链接"># 定义 7.1.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text">称
+$$
+\underline{I} = \sup_P \underline{S}(P)
+$$
+为函数 $f(x)$ 在 $[a, b]$ 上的<strong>下积分</strong>（Lower Integral），记作 $\underline{\int_a^b} f(x)\,\mathrm{d}x$；称
+$$
+\overline{I} = \inf_P \overline{S}(P)
+$$
+为函数 $f(x)$ 在 $[a, b]$ 上的<strong>上积分</strong>（Upper Integral），记作 $\overline{\int_a^b} f(x)\,\mathrm{d}x$．</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch7-7-3-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.3.1 正交函数族与正交函数列</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">正交函数</span><span class="def-tag">三角正交系</span><span class="def-tag">内积空间</span><span class="def-tag">Fourier分析</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-3-1" class="anchor-btn" title="复制锚点链接"># 定义 7.3.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $\{g_n(x)\}$ 是定义在 $[a, b]$ 上的一列函数 ($n = 0, 1, 2, \cdots$)，若对任意的 $m$ 和 $n$，$g_m(x)g_n(x)$ 在 $[a, b]$ 上可积，且有</p>
+  $$
+  \int_a^b g_m(x)g_n(x)\,\mathrm{d}x = \begin{cases}
+  0, &amp; m \ne n, \\
+  \displaystyle\int_a^b g_n^2(x)\,\mathrm{d}x &gt; 0, &amp; m = n,
+  \end{cases}
+  $$
+  <p>则称 $\{g_n(x)\}$ 是 $[a, b]$ 上的<strong>正交函数列</strong>．特别地，当 $g_n(x)$ 是 $n$ 次多项式时，称 $\{g_n(x)\}$ 是 $[a, b]$ 上的<strong>正交多项式列</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch7-7-4-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.4.1 光滑曲线与正则参数表示</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">光滑曲线</span><span class="def-tag">弧长参数</span><span class="def-tag">切向量</span><span class="def-tag">微元积分</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-4-1" class="anchor-btn" title="复制锚点链接"># 定义 7.4.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>若 $x'(t)$ 和 $y'(t)$ 在 $[T_1, T_2]$ 上连续，且 $[x'(t)]^2 + [y'(t)]^2 \ne 0$，则由参数方程</p>
+  $$
+  \begin{cases}
+  x = x(t), \\
+  y = y(t),
+  \end{cases} \quad t \in [T_1, T_2]
+  $$
+  <p>确定的曲线称为<strong>光滑曲线</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch7-7-6-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.6.1 数值求积公式的 n 次代数精度</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">代数精度</span><span class="def-tag">数值积分</span><span class="def-tag">多项式精确度</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-6-1" class="anchor-btn" title="复制锚点链接"># 定义 7.6.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>若一个数值求积公式在被积函数是任意不高于 $n$ 次的多项式时都精确成立，而存在着一个 $n+1$ 次多项式使公式不能精确成立，则称该求积公式具有 <strong>$n$ 次代数精度</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch7-7-6-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 7.6.2 Gauss 型求积公式</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">Gauss求积</span><span class="def-tag">最优正交节点</span><span class="def-tag">2n+1次精度</span>
+      </div>
+    </div>
+    <a href="#def-ch7-7-6-2" class="anchor-btn" title="复制锚点链接"># 定义 7.6.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设使用 $[a, b]$ 上 $n+1$ 个节点 $\{x_i\}_{i=0}^n$ 的近似求积公式</p>
+    $$
+    \int_a^b f(x)\,\mathrm{d}x \approx \sum_{i=0}^n a_i^{(n)} f(x_i)
+    $$
+    <p>对于 $2n+1$ 次的任意多项式 $p_{2n+1}(x)$，都有</p>
+    $$
+    \int_a^b p_{2n+1}(x)\,\mathrm{d}x = \sum_{i=0}^n a_i^{(n)} p_{2n+1}(x_i),
+    $$
+    <p>则称该求和公式为 $[a, b]$ 上的 <strong>Gauss 型求积公式</strong>．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 19 个定理 · 完整数学推导与四层点评</span>
+    </div>
     <div class="theorems-container" id="theorems-container">
       
 <article class="theorem-card" id="lem-7-1-1">
@@ -2113,7 +2460,7 @@ $$R_n(f) \equiv 0.$$
 function filterToc() {
   const query = document.getElementById('toc-filter').value.toLowerCase();
   const links = document.querySelectorAll('.toc-link');
-  const cards = document.querySelectorAll('.theorem-card');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
   
   links.forEach(link => {
     const text = link.textContent.toLowerCase();

@@ -1,0 +1,2644 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第十章 · 函数项级数 · 核心定义与定理证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.88);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-blue);
+}
+
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
+}
+
+/* Two-column Layout */
+.main-layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  position: relative;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.ch-number-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ch-count-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.ch-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.ch-desc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.thm-tag.routine-ref {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.thm-tag.routine-ref:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: #fff;
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* Verbatim Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.routine-link-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.essence-line {
+  font-size: 0.95rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+}
+
+.keypoints-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keypoints-list {
+  margin-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Pagination Bar */
+.chapter-pagination {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill current-ch">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (4)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch10-10-1-1" class="toc-link def-link" title="定义 10.1.1 函数项级数与点态收敛域 (Pointwise Convergence)">📖 定义 10.1.1 函数项级数与点态收敛域 (Pointwise Convergence)</a></li>
+<li><a href="#def-ch10-10-1-2" class="toc-link def-link" title="定义 10.1.2 函数序列的点态收敛">📖 定义 10.1.2 函数序列的点态收敛</a></li>
+<li><a href="#def-ch10-10-1-3" class="toc-link def-link" title="定义 10.1.3 函数项级数的一致收敛性 (Uniform Convergence)">📖 定义 10.1.3 函数项级数的一致收敛性 (Uniform Convergence)</a></li>
+<li><a href="#def-ch10-10-5-1" class="toc-link def-link" title="定义 10.5.1 幂级数与收敛区间 (Power Series)">📖 定义 10.5.1 幂级数与收敛区间 (Power Series)</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (21)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-ch10-10-1-1" class="toc-link" title="定理 10.1.1">📐 定理 10.1.1</a></li>
+<li><a href="#thm-ch10-10-1-2" class="toc-link" title="定理 10.1.2">📐 定理 10.1.2</a></li>
+<li><a href="#thm-ch10-10-2-1" class="toc-link" title="定理 10.2.1 函数项级数一致收敛的 Cauchy 收敛原理">📐 定理 10.2.1 函数项级数一致收敛的 Cauchy 收敛原理</a></li>
+<li><a href="#thm-ch10-10-2-2" class="toc-link" title="定理 10.2.2 Weierstrass 判别法">📐 定理 10.2.2 Weierstrass 判别法</a></li>
+<li><a href="#thm-ch10-10-2-3" class="toc-link" title="定理 10.2.3">📐 定理 10.2.3</a></li>
+<li><a href="#thm-ch10-10-2-4" class="toc-link" title="定理 10.2.4 连续性定理">📐 定理 10.2.4 连续性定理</a></li>
+<li><a href="#thm-ch10-10-2-4" class="toc-link" title="定理 10.2.4'">📐 定理 10.2.4'</a></li>
+<li><a href="#thm-ch10-10-2-5" class="toc-link" title="定理 10.2.5">📐 定理 10.2.5</a></li>
+<li><a href="#thm-ch10-10-2-5" class="toc-link" title="定理 10.2.5' 逐项积分定理">📐 定理 10.2.5' 逐项积分定理</a></li>
+<li><a href="#thm-ch10-10-2-6" class="toc-link" title="定理 10.2.6">📐 定理 10.2.6</a></li>
+<li><a href="#thm-ch10-10-2-6" class="toc-link" title="定理 10.2.6' 逐项求导定理">📐 定理 10.2.6' 逐项求导定理</a></li>
+<li><a href="#thm-ch10-10-2-7" class="toc-link" title="定理 10.2.7 Dini 定理">📐 定理 10.2.7 Dini 定理</a></li>
+<li><a href="#thm-ch10-10-2-7" class="toc-link" title="定理 10.2.7'">📐 定理 10.2.7'</a></li>
+<li><a href="#thm-ch10-10-3-1" class="toc-link" title="定理 10.3.1 Cauchy-Hadamard 定理">📐 定理 10.3.1 Cauchy-Hadamard 定理</a></li>
+<li><a href="#thm-ch10-10-3-2" class="toc-link" title="定理 10.3.2 d'Alembert 判别法">📐 定理 10.3.2 d'Alembert 判别法</a></li>
+<li><a href="#thm-ch10-10-3-3" class="toc-link" title="定理 10.3.3 Abel 第二定理">📐 定理 10.3.3 Abel 第二定理</a></li>
+<li><a href="#thm-ch10-10-3-4" class="toc-link" title="定理 10.3.4">📐 定理 10.3.4</a></li>
+<li><a href="#thm-ch10-10-3-5" class="toc-link" title="定理 10.3.5">📐 定理 10.3.5</a></li>
+<li><a href="#thm-ch10-10-3-6" class="toc-link" title="定理 10.3.6">📐 定理 10.3.6</a></li>
+<li><a href="#thm-ch10-10-4-1" class="toc-link" title="定理 10.4.1">📐 定理 10.4.1</a></li>
+<li><a href="#thm-ch10-10-5-1" class="toc-link" title="定理 10.5.1 Weierstrass 第一逼近定理">📐 定理 10.5.1 Weierstrass 第一逼近定理</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 010</span>
+        <span class="ch-count-badge">收录 4 个基础定义 · 21 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第十章 · 函数项级数</h1>
+      <p class="ch-desc-text">一致收敛性判别法 (Cauchy/Weierstrass/Abel/Dirichlet)、分析性质三大交换定理 (连续/求导/积分)、幂级数收敛半径与 Taylor 级数展开</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_10/chapter_10.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 10 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 4 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch10-10-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 10.1.1 函数项级数与点态收敛域 (Pointwise Convergence)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">函数项级数</span><span class="def-tag">收敛域</span><span class="def-tag">和函数</span><span class="def-tag">逐点收敛</span>
+      </div>
+    </div>
+    <a href="#def-ch10-10-1-1" class="anchor-btn" title="复制锚点链接"># 定义 10.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $u_n(x)\ (n=1,2,3,\dots)$ 在 $E$ 上定义．对于任意固定的 $x_0 \in E$，若数项级数 $\sum_{n=1}^\infty u_n(x_0)$ 收敛，则称函数项级数 $\sum_{n=1}^\infty u_n(x)$ 在点 $x_0$ 收敛，或称 $x_0$ 是 $\sum_{n=1}^\infty u_n(x)$ 的收敛点．</p>
+<p>函数项级数 $\sum_{n=1}^\infty u_n(x)$ 的收敛点全体所构成的集合称为 $\sum_{n=1}^\infty u_n(x)$ 的收敛域．</p>
+<p>设 $\sum_{n=1}^\infty u_n(x)$ 的收敛域为 $D \subset E$，则 $\sum_{n=1}^\infty u_n(x)$ 就定义了集合 $D$ 上的一个函数</p>
+  $$
+  S(x) = \sum_{n=1}^\infty u_n(x), \quad x \in D.
+  $$
+  <p>$S(x)$ 称为 $\sum_{n=1}^\infty u_n(x)$ 的和函数．由于这是通过逐点定义的方式得到的，因此称 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上点态收敛于 $S(x)$．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch10-10-1-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 10.1.2 函数序列的点态收敛</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">函数列</span><span class="def-tag">极限函数</span><span class="def-tag">点态极限</span>
+      </div>
+    </div>
+    <a href="#def-ch10-10-1-2" class="anchor-btn" title="复制锚点链接"># 定义 10.1.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设 $\{S_n(x)\}\ (x \in D)$ 是一函数序列，若对任意给定的 $\varepsilon &gt; 0$，存在仅与 $\varepsilon$ 有关的正整数 $N(\varepsilon)$，当 $n &gt; N(\varepsilon)$ 时，</p>
+  $$
+  |S_n(x) - S(x)| &lt; \varepsilon
+  $$
+  <p>对一切 $x \in D$ 成立，则称 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$，记为 $S_n(x) \overset{D}{\rightrightarrows} S(x)$．</p>
+<p>若函数项级数 $\sum_{n=1}^\infty u_n(x)\ (x \in D)$ 的部分和函数序列 $\{S_n(x)\}$，其中 $S_n(x) = \sum_{k=1}^n u_k(x)$，在 $D$ 上一致收敛于 $S(x)$，则我们称 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛于 $S(x)$．</p>
+<p>采用符号表述的话，就是“$S_n(x) \overset{D}{\rightrightarrows} S(x)$” $\iff \forall \varepsilon &gt; 0, \exists N, \forall n &gt; N, \forall x \in D:$</p>
+  $$
+  |S_n(x) - S(x)| &lt; \varepsilon;
+  $$
+  <p>和“$\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛于 $S(x)$” $\iff \forall \varepsilon &gt; 0, \exists N, \forall n &gt; N, \forall x \in D:$</p>
+  $$
+  \left|\sum_{k=1}^n u_k(x) - S(x)\right| = |S_n(x) - S(x)| &lt; \varepsilon.
+  $$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch10-10-1-3">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 10.1.3 函数项级数的一致收敛性 (Uniform Convergence)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">一致收敛</span><span class="def-tag">全局控制</span><span class="def-tag">分析学分水岭</span><span class="def-tag">一致范数</span>
+      </div>
+    </div>
+    <a href="#def-ch10-10-1-3" class="anchor-btn" title="复制锚点链接"># 定义 10.1.3</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>若对于任意给定的闭区间 $[a, b] \subset D$，函数序列 $\{S_n(x)\}$ 在 $[a, b]$ 上一致收敛于 $S(x)$，则称 $\{S_n(x)\}$ 在 $D$ 上内闭一致收敛于 $S(x)$．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch10-10-5-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 10.5.1 幂级数与收敛区间 (Power Series)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">幂级数</span><span class="def-tag">收敛半径</span><span class="def-tag">收敛圆盘</span><span class="def-tag">Abel定理</span>
+      </div>
+    </div>
+    <a href="#def-ch10-10-5-1" class="anchor-btn" title="复制锚点链接"># 定义 10.5.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>设函数 $f(x)$ 在闭区间 $[a, b]$ 上有定义，如果存在多项式序列 $\{P_n(x)\}$ 在 $[a, b]$ 上一致收敛于 $f(x)$，则称 $f(x)$ 在这闭区间上可以用多项式<strong>一致逼近</strong>．</p>
+<p>应用分析语言，“$f(x)$ 在 $[a, b]$ 上可以用多项式一致逼近”可等价表述为：对任意给定的 $\varepsilon &gt; 0$，存在多项式 $P(x)$，使得</p>
+  $$
+  |P(x) - f(x)| &lt; \varepsilon
+  $$
+  <p>对一切 $x \in [a, b]$ 成立．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 21 个定理 · 完整数学推导与四层点评</span>
+    </div>
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-ch10-10-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.1.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-1-1" class="anchor-btn" title="复制锚点链接"># 定理 10.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 在集合 $D$ 上点态收敛于 $S(x)$，定义 $S_n(x)$ 与 $S(x)$ 的“距离”为</p>
+  $$
+  d(S_n, S) = \sup_{x\in D} |S_n(x) - S(x)|,
+  $$
+  
+<p>则 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$ 的充分必要条件是：</p>
+  $$
+  \lim_{n\to\infty} d(S_n, S) = 0.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 设 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$，则对任意给定的 $\varepsilon &gt; 0$，存在 $N = N(\varepsilon)$，当 $n &gt; N$ 时，</p>
+  $$
+  |S_n(x) - S(x)| &lt; \frac{\varepsilon}{2}
+  $$
+  <p>对一切 $x \in D$ 成立，于是对 $n &gt; N$，</p>
+  $$
+  d(S_n, S) \leqslant \frac{\varepsilon}{2} &lt; \varepsilon,
+  $$
+  <p>这就说明</p>
+  $$
+  \lim_{n\to\infty} d(S_n, S) = 0.
+  $$
+  <p>反过来，若 $\lim_{n\to\infty} d(S_n, S) = 0$，则对任意给定的 $\varepsilon &gt; 0$，存在 $N = N(\varepsilon)$，当 $n &gt; N$ 时，</p>
+  $$
+  d(S_n, S) &lt; \varepsilon,
+  $$
+  <p>此式表明</p>
+  $$
+  |S_n(x) - S(x)| &lt; \varepsilon
+  $$
+  <p>对一切 $x \in D$ 成立，所以 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.1.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-1-2" class="anchor-btn" title="复制锚点链接"># 定理 10.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 在集合 $D$ 上点态收敛于 $S(x)$，则 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$ 的充分必要条件是：对任意数列 $\{x_n\}, x_n \in D$，成立</p>
+  $$
+  \lim_{n\to\infty}(S_n(x_n) - S(x_n)) = 0.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 先证必要性．设 $\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$，则</p>
+  $$
+  d(S_n, S) = \sup_{x\in D}|S_n(x) - S(x)| \to 0 \quad (n\to\infty).
+  $$
+  <p>于是对任意数列 $\{x_n\}, x_n \in D$，成立</p>
+  $$
+  |S_n(x_n) - S(x_n)| \leqslant d(S_n, S) \to 0 \quad (n\to\infty).
+  $$
+  <p>关于充分性，我们采用反证法，也就是证明：若 $\{S_n(x)\}$ 在 $D$ 上不一致收敛于 $S(x)$，则一定能找到数列 $\{x_n\}, x_n \in D$，使得 $S_n(x_n) - S(x_n) \not\to 0\ (n\to\infty)$．</p>
+<p>由于命题“$\{S_n(x)\}$ 在 $D$ 上一致收敛于 $S(x)$”可以表述为</p>
+  $$
+  \forall \varepsilon &gt; 0, \exists N, \forall n &gt; N, \forall x \in D : |S_n(x) - S(x)| &lt; \varepsilon,
+  $$
+  <p>因此它的否定命题“$\{S_n(x)\}$ 在 $D$ 上不一致收敛于 $S(x)$”可以表述为：</p>
+  $$
+  \exists \varepsilon_0 &gt; 0, \forall N &gt; 0, \exists n &gt; N, \exists x \in D : |S_n(x) - S(x)| \geqslant \varepsilon_0.
+  $$
+  <p>于是，下述步骤可以依次进行：</p>
+  $$
+  \begin{aligned}
+  \text{取 } N_1 = 1, &amp;\quad \exists n_1 &gt; 1, \exists x_{n_1} \in D : |S_{n_1}(x_{n_1}) - S(x_{n_1})| \geqslant \varepsilon_0, \\
+  \text{取 } N_2 = n_1, &amp;\quad \exists n_2 &gt; n_1, \exists x_{n_2} \in D : |S_{n_2}(x_{n_2}) - S(x_{n_2})| \geqslant \varepsilon_0, \\
+  &amp;\dots\dots
+  \end{aligned}
+  $$
+
+
+$$
+\text{取 } N_k = n_{k-1}, \quad \exists n_k &gt; n_{k-1}, \exists x_{n_k} \in D : |S_{n_k}(x_{n_k}) - S(x_{n_k})| \geqslant \varepsilon_0,
+$$
+$$
+\dots\dots
+$$
+<p>对于 $m \in \mathbf{N}^* \setminus \{n_1, n_2, \dots, n_k, \dots\}$，可以任取 $x_m \in D$，这样就得到数列 $\{x_n\}, x_n \in D$，由于它的子列 $\{x_{n_k}\}$ 使得</p>
+$$
+|S_{n_k}(x_{n_k}) - S(x_{n_k})| \geqslant \varepsilon_0,
+$$
+<p>显然不可能成立</p>
+$$
+\lim_{n\to\infty}(S_n(x_n) - S(x_n)) = 0.
+$$
+<div class="proof-end">证毕</div>
+<p>定理 10.1.2 常用于判断函数序列的不一致收敛．</p>
+<p>如对例 10.1.7 中的 $S_n(x) = x^n, x \in [0, 1)$，可以取 $x_n = 1 - \frac{1}{n} \in [0, 1)$，则</p>
+$$
+S_n(x_n) - S(x_n) = \left(1 - \frac{1}{n}\right)^n \to \frac{1}{\mathrm{e}} \quad (n\to\infty),
+$$
+<p>这说明 $\{S_n(x)\}$ 在 $[0, 1)$ 上不一致收敛于 $S(x) = 0$；对例 10.1.8 中的 $S_n(x) = \frac{nx}{1+n^2 x^2}, x \in (0, +\infty)$，可以取 $x_n = \frac{1}{n}$，则</p>
+$$
+S_n(x_n) - S(x_n) = \frac{1}{2},
+$$
+<p>同样也说明 $\{S_n(x)\}$ 在 $(0, +\infty)$ 上不一致收敛于 $S(x) = 0$．</p>
+<div class="example-box">
+<h4>例 10.1.11</h4>
+<p>设 $S_n(x) = nx(1-x^2)^n, x \in [0, 1]$（见例 10.1.5），则 $\{S_n(x)\}$ 在 $[0, 1]$ 上收敛于 $S(x) = 0$．取 $x_n = \frac{1}{n} \in [0, 1]$，则</p>
+  $$
+  S_n(x_n) - S(x_n) = \left(1 - \frac{1}{n^2}\right)^n \to 1 \quad (n\to\infty),
+  $$
+  <p>这说明 $\{S_n(x)\}$ 在 $[0, 1]$ 上不一致收敛于 $S(x) = 0$．</p>
+</div>
+<div class="example-box">
+<h4>例 10.1.12</h4>
+<p>设 $S_n(x) = \left(1+\frac{x}{n}\right)^n$，则 $\{S_n(x)\}$ 在 $[0, +\infty)$ 上收敛于 $S(x) = \mathrm{e}^x$．证明 $\{S_n(x)\}$ 在 $[0, +\infty)$ 上不一致收敛（见例 10.1.10）．</p>
+<p><strong>证</strong> 取 $x_n = n$，则</p>
+  $$
+  S_n(x_n) - S(x_n) = 2^n - \mathrm{e}^n \to -\infty \quad (n\to\infty),
+  $$
+  <p>由定理 10.1.2，$\{S_n(x)\}$ 在 $[0, +\infty)$ 上不一致收敛于 $S(x) = \mathrm{e}^x$．</p>
+<div class="proof-end">证毕</div>
+</div>
+<div class="example-box">
+<h4>例 10.1.13</h4>
+<p>证明函数项级数 $\sum_{n=1}^\infty n\left(x+\frac{1}{n}\right)^n$ 在 $(-1, 1)$ 上不一致收敛（请读者自行证明该函数项级数的收敛域为 $(-1, 1)$）．</p>
+<p><strong>证</strong> 记</p>
+  $$
+  u_n(x) = n\left(x+\frac{1}{n}\right)^n,
+  $$
+  
+<p>则函数序列 $\{u_n(x)\}$ 在 $(-1, 1)$ 上收敛于 $u(x) = 0$．</p>
+<p>由推论 10.1.1 知，要证明 $\sum_{n=1}^\infty n\left(x+\frac{1}{n}\right)^n$ 在 $(-1, 1)$ 上不一致收敛，只要证明函数序列 $\{u_n(x)\}$ 在 $(-1, 1)$ 上不一致收敛于 $u(x) = 0$ 即可．</p>
+<p>取 $x_n = 1 - \frac{1}{2n} \in (-1, 1)$，则</p>
+  $$
+  u_n(x_n) - u(x_n) = n\left(1 + \frac{1}{2n}\right)^n \to \infty \quad (n\to\infty),
+  $$
+  <p>由定理 10.1.2，$\{u_n(x)\}$ 在 $(-1, 1)$ 上不一致收敛于 $u(x) = 0$．</p>
+<div class="proof-end">证毕</div>
+</div>
+<div class="exercise-box" id="ex10-1">
+<h3>习题 10.1</h3>
+<ol>
+<li>
+<p>讨论下列函数序列在指定区间上的一致收敛性：</p>
+<p>(1) $S_n(x) = \mathrm{e}^{-nx}$，(i) $x \in (0, 1)$，(ii) $x \in (1, +\infty)$；</p>
+<p>(2) $S_n(x) = x\mathrm{e}^{-nx}$，$x \in (0, +\infty)$；</p>
+<p>(3) $S_n(x) = \sin\frac{x}{n}$，(i) $x \in (-\infty, +\infty)$，(ii) $x \in [-A, A]\ (A &gt; 0)$；</p>
+<p>(4) $S_n(x) = \arctan nx$，(i) $x \in (0, 1)$，(ii) $x \in (1, +\infty)$；</p>
+<p>(5) $S_n(x) = \sqrt{x^2 + \frac{1}{n^2}}$，$x \in (-\infty, +\infty)$；</p>
+<p>(6) $S_n(x) = nx(1-x)^n$，$x \in [0, 1]$；</p>
+<p>(7) $S_n(x) = \frac{x}{n}\ln\frac{x}{n}$，(i) $x \in (0, 1)$，(ii) $x \in (1, +\infty)$；</p>
+<p>(8) $S_n(x) = \frac{x^n}{1+x^n}$，(i) $x \in (0, 1)$，(ii) $x \in (1, +\infty)$；</p>
+<p>(9) $S_n(x) = (\sin x)^n$，$x \in [0, \pi]$；</p>
+<p>(10) $S_n(x) = (\sin x)^{\frac{1}{n}}$，(i) $x \in [0, \pi]$，(ii) $x \in [\delta, \pi-\delta]\ (\delta &gt; 0)$；</p>
+<p>(11) $S_n(x) = \left(1+\frac{x}{n}\right)^n$，(i) $x \in (-\infty, +\infty)$，(ii) $x \in [-A, A]\ (A &gt; 0)$；</p>
+<p>(12) $S_n(x) = n\left(\sqrt{x+\frac{1}{n}} - \sqrt{x}\right)$，(i) $x \in (0, +\infty)$，(ii) $x \in [\delta, +\infty), \delta &gt; 0$．</p>
+</li>
+<li>
+<p>设 $S_n(x) = n(x^n - x^{2n})$，则函数序列 $\{S_n(x)\}$ 在 $[0, 1]$ 上收敛但不一致收敛，且极限运算与积分运算不能交换，即</p>
+      $$
+      \lim_{n\to\infty} \int_0^1 S_n(x)\,\mathrm{d}x \neq \int_0^1 \lim_{n\to\infty} S_n(x)\,\mathrm{d}x.
+      $$
+    </li>
+<li>
+<p>设 $S_n(x) = \frac{x}{1+n^2 x^2}$，则</p>
+<p>(1) 函数序列 $\{S_n(x)\}$ 在 $(-\infty, +\infty)$ 上一致收敛；</p>
+<p>(2) $\left\{\frac{\mathrm{d}}{\mathrm{d}x} S_n(x)\right\}$ 在 $(-\infty, +\infty)$ 上不一致收敛；</p>
+
+<p>(3) 极限运算与求导运算不能交换，即</p>
+      $$
+      \lim_{n\to\infty}\frac{\mathrm{d}}{\mathrm{d}x}S_n(x) = \frac{\mathrm{d}}{\mathrm{d}x}\lim_{n\to\infty}S_n(x)
+      $$
+      <p>并不对一切 $x \in (-\infty, +\infty)$ 成立．</p>
+</li>
+<li>
+<p>设 $S_n(x) = \frac{1}{n}\arctan x^n$，则函数序列 $\{S_n(x)\}$ 在 $(0, +\infty)$ 上一致收敛；试问极限运算与求导运算能否交换，即</p>
+      $$
+      \lim_{n\to\infty}\frac{\mathrm{d}}{\mathrm{d}x}S_n(x) = \frac{\mathrm{d}}{\mathrm{d}x}\lim_{n\to\infty}S_n(x)
+      $$
+      <p>是否成立？</p>
+</li>
+<li>
+<p>设 $S_n(x) = n^\alpha x \mathrm{e}^{-nx}$，其中 $\alpha$ 是参数．求 $\alpha$ 的取值范围，使得函数序列 $\{S_n(x)\}$ 在 $[0, 1]$ 上</p>
+<p>(1) 一致收敛；</p>
+<p>(2) 积分运算与极限运算可以交换，即</p>
+      $$
+      \lim_{n\to\infty}\int_0^1 S_n(x)\,\mathrm{d}x = \int_0^1 \lim_{n\to\infty}S_n(x)\,\mathrm{d}x;
+      $$
+      <p>(3) 求导运算与极限运算可以交换，即对一切 $x \in [0, 1]$ 成立</p>
+      $$
+      \lim_{n\to\infty}\frac{\mathrm{d}}{\mathrm{d}x}S_n(x) = \frac{\mathrm{d}}{\mathrm{d}x}\lim_{n\to\infty}S_n(x).
+      $$
+    </li>
+<li>
+<p>设 $S'(x)$ 在区间 $(a, b)$ 上连续，</p>
+      $$
+      S_n(x) = n\left[S\left(x+\frac{1}{n}\right) - S(x)\right],
+      $$
+      <p>证明：$\{S_n(x)\}$ 在 $(a, b)$ 上内闭一致收敛于 $S'(x)$．</p>
+</li>
+<li>
+<p>设 $S_0(x)$ 在 $[0, a]$ 上连续，令</p>
+      $$
+      S_n(x) = \int_0^x S_{n-1}(t)\,\mathrm{d}t, \quad n=1,2,\dots.
+      $$
+      <p>证明：$\{S_n(x)\}$ 在 $[0, a]$ 上一致收敛于 $0$．</p>
+</li>
+<li>
+<p>设 $S(x)$ 在 $[0, 1]$ 上连续，且 $S(1) = 0$．证明：$\{x^n S(x)\}$ 在 $[0, 1]$ 上一致收敛．</p>
+</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.1 函数项级数一致收敛的 Cauchy 收敛原理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-1" class="anchor-btn" title="复制锚点链接"># 定理 10.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>函数项级数 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛的充分必要条件是：对于任意给定的 $\varepsilon &gt; 0$，存在正整数 $N = N(\varepsilon)$，使得</p>
+  $$
+  |u_{n+1}(x) + u_{n+2}(x) + \dots + u_m(x)| &lt; \varepsilon
+  $$
+  
+<p>对一切正整数 $m &gt; n &gt; N$ 与一切 $x \in D$ 成立．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 必要性．设 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛，记和函数为 $S(x)$，则对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N = N(\varepsilon)$，使得对一切 $n &gt; N$ 与一切 $x \in D$，成立</p>
+  $$
+  \left|\sum_{k=1}^n u_k(x) - S(x)\right| &lt; \frac{\varepsilon}{2}.
+  $$
+  <p>于是对一切 $m &gt; n &gt; N$ 与一切 $x \in D$，成立</p>
+  $$
+  \begin{aligned}
+  |u_{n+1}(x) + u_{n+2}(x) + \dots + u_m(x)| &amp;= \left|\sum_{k=1}^m u_k(x) - \sum_{k=1}^n u_k(x)\right| \\
+  &amp;\leqslant \left|\sum_{k=1}^m u_k(x) - S(x)\right| + \left|\sum_{k=1}^n u_k(x) - S(x)\right| &lt; \varepsilon.
+  \end{aligned}
+  $$
+  <p>充分性．设对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N = N(\varepsilon)$，使得对一切 $m &gt; n &gt; N$ 与一切 $x \in D$，成立</p>
+  $$
+  |u_{n+1}(x) + u_{n+2}(x) + \dots + u_m(x)| = \left|\sum_{k=1}^m u_k(x) - \sum_{k=1}^n u_k(x)\right| &lt; \frac{\varepsilon}{2}.
+  $$
+  <p>固定 $x \in D$，则数项级数 $\sum_{n=1}^\infty u_n(x)$ 满足 Cauchy 收敛原理，因而收敛．设</p>
+  $$
+  S(x) = \sum_{n=1}^\infty u_n(x), \quad x \in D,
+  $$
+  <p>在 $\left|\sum_{k=1}^m u_k(x) - \sum_{k=1}^n u_k(x)\right| &lt; \frac{\varepsilon}{2}$ 中固定 $n$，令 $m \to \infty$，则得到</p>
+  $$
+  \left|\sum_{k=1}^n u_k(x) - S(x)\right| \leqslant \frac{\varepsilon}{2} &lt; \varepsilon
+  $$
+  <p>对一切 $x \in D$ 成立，因而 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛于 $S(x)$．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.2 Weierstrass 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-2" class="anchor-btn" title="复制锚点链接"># 定理 10.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数项级数 $\sum_{n=1}^\infty u_n(x)\ (x \in D)$ 的每一项 $u_n(x)$ 满足</p>
+  $$
+  |u_n(x)| \leqslant a_n, \quad x \in D,
+  $$
+  <p>并且数项级数 $\sum_{n=1}^\infty a_n$ 收敛，则 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由于对一切 $x \in D$ 和正整数 $m &gt; n$，有</p>
+  $$
+  |u_{n+1}(x) + u_{n+2}(x) + \dots + u_m(x)| \leqslant |u_{n+1}(x)| + |u_{n+2}(x)| + \dots + |u_m(x)| \leqslant a_{n+1} + a_{n+2} + \dots + a_m,
+  $$
+  <p>由定理 10.2.1 和数项级数的 Cauchy 收敛原理，即得到 $\sum_{n=1}^\infty u_n(x)$ 在 $D$ 上一致收敛．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-3" class="anchor-btn" title="复制锚点链接"># 定理 10.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数项级数 $\sum_{n=1}^\infty a_n(x)b_n(x)\ (x \in D)$ 满足如下两个条件之一，则 $\sum_{n=1}^\infty a_n(x)b_n(x)$ 在 $D$ 上一致收敛．</p>
+<p><strong>(1)（Abel 判别法）</strong> 函数序列 $\{a_n(x)\}$ 对每一固定的 $x \in D$ 关于 $n$ 是单调的，且 $\{a_n(x)\}$ 在 $D$ 上一致有界：</p>
+  $$
+  |a_n(x)| \leqslant M, \quad x \in D, n \in \mathbf{N}^*;
+  $$
+  <p>同时，函数项级数 $\sum_{n=1}^\infty b_n(x)$ 在 $D$ 上一致收敛．</p>
+<p><strong>(2)（Dirichlet 判别法）</strong> 函数序列 $\{a_n(x)\}$ 对每一固定的 $x \in D$ 关于 $n$ 是单调的，且 $\{a_n(x)\}$ 在 $D$ 上一致收敛于 $0$；同时，函数项级数 $\sum_{n=1}^\infty b_n(x)$ 的部分和序列在 $D$ 上一致有界：</p>
+  $$
+  \left|\sum_{k=1}^n b_k(x)\right| \leqslant M, \quad x \in D, n \in \mathbf{N}^*.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> (1) 由 $\sum_{n=1}^\infty b_n(x)$ 在 $D$ 上的一致收敛性，对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N = N(\varepsilon)$，使</p>
+  $$
+  \left|\sum_{k=n+1}^m b_k(x)\right| &lt; \varepsilon
+  $$
+  <p>对一切 $m &gt; n &gt; N$ 与一切 $x \in D$ 成立．应用 Abel 引理，得到</p>
+  $$
+  \left|\sum_{k=n+1}^m a_k(x)b_k(x)\right| \leqslant \varepsilon(|a_{n+1}(x)| + 2|a_m(x)|) \leqslant 3M\varepsilon
+  $$
+  <p>对一切 $m &gt; n &gt; N$ 与一切 $x \in D$ 成立，根据 Cauchy 收敛原理（定理 10.2.1），$\sum_{n=1}^\infty a_n(x)b_n(x)$ 在 $D$ 上一致收敛．这就证明了 Abel 判别法．</p>
+<p>(2) 由 $\{a_n(x)\}$ 在 $D$ 上一致收敛于 $0$，对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N = N(\varepsilon)$，当 $n &gt; N$ 时，对一切 $x \in D$ 成立</p>
+  $$
+  |a_n(x)| &lt; \varepsilon.
+  $$
+  <p>由于对一切 $m &gt; n &gt; N$，</p>
+  $$
+  \left|\sum_{k=n+1}^m b_k(x)\right| = \left|\sum_{k=1}^m b_k(x) - \sum_{k=1}^n b_k(x)\right| \leqslant 2M,
+  $$
+  <p>应用 Abel 引理，得到</p>
+  $$
+  \left|\sum_{k=n+1}^m a_k(x)b_k(x)\right| \leqslant 2M(|a_{n+1}(x)| + 2|a_m(x)|) &lt; 6M\varepsilon
+  $$
+  <p>对一切 $x \in D$ 成立．根据 Cauchy 收敛原理（定理 10.2.1），$\sum_{n=1}^\infty a_n(x)b_n(x)$ 在 $D$ 上一致收敛．这就证明了 Dirichlet 判别法．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.4 连续性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-4" class="anchor-btn" title="复制锚点链接"># 定理 10.2.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 的每一项 $S_n(x)$ 在 $[a, b]$ 上连续，且在 $[a, b]$ 上一致收敛于 $S(x)$，则 $S(x)$ 在 $[a, b]$ 上也连续．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 设 $x_0$ 是 $[a, b]$ 中任意一点．</p>
+<p>由 $\{S_n(x)\}$ 在 $[a, b]$ 上一致收敛于 $S(x)$，可知对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得</p>
+  $$
+  |S_N(x) - S(x)| &lt; \frac{\varepsilon}{3}
+  $$
+  <p>对一切 $x \in [a, b]$ 成立．特别，对 $x_0$ 与任意的 $x_0 + h \in [a, b]$，成立</p>
+  $$
+  |S_N(x_0) - S(x_0)| &lt; \frac{\varepsilon}{3},
+  $$
+  $$
+  |S_N(x_0 + h) - S(x_0 + h)| &lt; \frac{\varepsilon}{3}.
+  $$
+  <p>由于 $S_N(x)$ 在 $[a, b]$ 上连续，所以存在 $\delta &gt; 0$，当 $|h| &lt; \delta$ 时，</p>
+  $$
+  |S_N(x_0 + h) - S_N(x_0)| &lt; \frac{\varepsilon}{3}.
+  $$
+
+  
+<p>于是当 $|h| &lt; \delta$ 时，</p>
+  $$
+  \begin{aligned}
+  |S(x_0 + h) - S(x_0)| &amp;\leqslant |S(x_0 + h) - S_N(x_0 + h)| + |S_N(x_0 + h) - S_N(x_0)| + |S_N(x_0) - S(x_0)| \\
+  &amp;&lt; \varepsilon,
+  \end{aligned}
+  $$
+  <p>即 $S(x)$ 在 $x_0$ 连续．</p>
+<p>由 $x_0$ 在 $[a, b]$ 中的任意性，就得到 $S(x)$ 在 $[a, b]$ 上连续．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.4'</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-4" class="anchor-btn" title="复制锚点链接"># 定理 10.2.4'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设对每个 $n$，$u_n(x)$ 在 $[a, b]$ 上连续，且 $\sum_{n=1}^\infty u_n(x)$ 在 $[a, b]$ 上一致收敛于 $S(x)$，则 $S(x)$ 在 $[a, b]$ 上连续．这时，对任意 $x_0 \in [a, b]$，成立</p>
+  $$
+  \lim_{x \to x_0} \sum_{n=1}^\infty u_n(x) = \sum_{n=1}^\infty \lim_{x \to x_0} u_n(x),
+  $$
+  <p>即极限运算与无限求和运算可以交换次序．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.5</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-5" class="anchor-btn" title="复制锚点链接"># 定理 10.2.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 的每一项 $S_n(x)$ 在 $[a, b]$ 上连续，且在 $[a, b]$ 上一致收敛于 $S(x)$，则 $S(x)$ 在 $[a, b]$ 上可积，且</p>
+  $$
+  \int_a^b S(x)\,dx = \lim_{n \to \infty} \int_a^b S_n(x)\,dx.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由定理 10.2.4，$S(x)$ 在 $[a, b]$ 上连续，因而在 $[a, b]$ 上可积．由于 $\{S_n(x)\}$ 在 $[a, b]$ 上一致收敛于 $S(x)$，所以对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，当 $n &gt; N$ 时，</p>
+  $$
+  |S_n(x) - S(x)| &lt; \varepsilon
+  $$
+  <p>对一切 $x \in [a, b]$ 成立，于是</p>
+
+
+  $$
+  \left|\int_a^b S_n(x)\,dx - \int_a^b S(x)\,dx\right| \leqslant \int_a^b |S_n(x) - S(x)|\,dx &lt; (b - a)\varepsilon.
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.5' 逐项积分定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-5" class="anchor-btn" title="复制锚点链接"># 定理 10.2.5'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设对每个 $n$，$u_n(x)$ 在 $[a, b]$ 上连续，且 $\sum_{n=1}^\infty u_n(x)$ 在 $[a, b]$ 上一致收敛于 $S(x)$，则 $S(x)$ 在 $[a, b]$ 上可积，且</p>
+  $$
+  \int_a^b S(x)\,dx = \int_a^b \sum_{n=1}^\infty u_n(x)\,dx = \sum_{n=1}^\infty \int_a^b u_n(x)\,dx,
+  $$
+  <p>即积分运算可以和无限求和运算交换次序．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.6</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-6" class="anchor-btn" title="复制锚点链接"># 定理 10.2.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 满足</p>
+<p>(1) $S_n(x)\ (n=1,2,\cdots)$ 在 $[a, b]$ 上有连续的导函数；</p>
+<p>(2) $\{S_n(x)\}$ 在 $[a, b]$ 上点态收敛于 $S(x)$；</p>
+<p>(3) $\{S_n'(x)\}$ 在 $[a, b]$ 上一致收敛于 $\sigma(x)$，</p>
+<p>则 $S(x)$ 在 $[a, b]$ 上可导，且</p>
+  $$
+  \frac{d}{dx} S(x) = \sigma(x).
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由定理 10.2.4 与定理 10.2.5，可知 $\sigma(x)$ 在 $[a, b]$ 上连续，且</p>
+  $$
+  \int_a^x \sigma(t)\,dt = \lim_{n \to \infty} \int_a^x S_n'(t)\,dt = \lim_{n \to \infty} [S_n(x) - S_n(a)] = S(x) - S(a).
+  $$
+  <p>由于上式左端可导，可知 $S(x)$ 也可导，且</p>
+  $$
+  S'(x) = \sigma(x).
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.6' 逐项求导定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-6" class="anchor-btn" title="复制锚点链接"># 定理 10.2.6'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设函数项级数 $\sum_{n=1}^\infty u_n(x)$ 满足</p>
+<p>(1) $u_n(x)\ (n=1,2,\cdots)$ 在 $[a, b]$ 上有连续的导函数；</p>
+<p>(2) $\sum_{n=1}^\infty u_n(x)$ 在 $[a, b]$ 上点态收敛于 $S(x)$；</p>
+<p>(3) $\sum_{n=1}^\infty u_n'(x)$ 在 $[a, b]$ 上一致收敛于 $\sigma(x)$，</p>
+<p>则 $S(x) = \sum_{n=1}^\infty u_n(x)$ 在 $[a, b]$ 上可导，且</p>
+
+
+  $$
+  \frac{d}{dx}\sum_{n=1}^\infty u_n(x) = \sum_{n=1}^\infty \frac{d}{dx}u_n(x),
+  $$
+  <p>即求导运算可以与无限求和运算交换次序．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.7 Dini 定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-7" class="anchor-btn" title="复制锚点链接"># 定理 10.2.7</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设函数序列 $\{S_n(x)\}$ 在闭区间 $[a, b]$ 上点态收敛于 $S(x)$，如果</p>
+<p>(1) $S_n(x)\ (n=1,2,\cdots)$ 在 $[a, b]$ 上连续；</p>
+<p>(2) $S(x)$ 在 $[a, b]$ 上连续；</p>
+<p>(3) $\{S_n(x)\}$ 关于 $n$ 单调，即对任意固定的 $x \in [a, b]$，$\{S_n(x)\}$ 是单调数列，</p>
+<p>则 $\{S_n(x)\}$ 在 $[a, b]$ 上一致收敛于 $S(x)$．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 用反证法．设 $\{S_n(x)\}$ 在 $[a, b]$ 上不一致收敛于 $S(x)$，则</p>
+  $$
+  \exists \varepsilon_0 &gt; 0,\ \forall N &gt; 0,\ \exists n &gt; N,\ \exists x \in [a, b]: |S_n(x) - S(x)| \geqslant \varepsilon_0.
+  $$
+  <p>依次取：</p>
+  $$
+  \begin{aligned}
+  N &amp;= 1,\ \exists n_1 &gt; 1,\ \exists x_1 \in [a, b]: |S_{n_1}(x_1) - S(x_1)| \geqslant \varepsilon_0, \\
+  N &amp;= n_1,\ \exists n_2 &gt; n_1,\ \exists x_2 \in [a, b]: |S_{n_2}(x_2) - S(x_2)| \geqslant \varepsilon_0, \\
+  &amp;\cdots\cdots \\
+  N &amp;= n_{k-1},\ \exists n_k &gt; n_{k-1},\ \exists x_k \in [a, b]: |S_{n_k}(x_k) - S(x_k)| \geqslant \varepsilon_0, \\
+  &amp;\cdots\cdots
+  \end{aligned}
+  $$
+  <p>于是得到数列 $\{x_k\},\ x_k \in [a, b]$．</p>
+<p>由 Weierstrass 定理知，数列 $\{x_k\}$ 必有收敛子列．为了叙述方便，不妨设 $x_k \to \xi \in [a, b]\ (k \to \infty)$．由于 $\lim_{n \to \infty} S_n(\xi) = S(\xi)$，所以对 $\varepsilon_0 &gt; 0$，存在 $N$，成立</p>
+  $$
+  |S_N(\xi) - S(\xi)| &lt; \frac{\varepsilon_0}{2}.
+  $$
+  <p>由条件 (1) 与 (2)，$S_N(x) - S(x)$ 在 $x = \xi$ 连续，由于 $x_k \to \xi\ (k \to \infty)$，存在正整数 $K$，使</p>
+  $$
+  |S_N(x_k) - S(x_k)| &lt; \varepsilon_0
+  $$
+  <p>对一切 $k &gt; K$ 成立．</p>
+<p>现利用条件 (3)，即 $\{S_n(x)\}$ 关于 $n$ 的单调性，则当 $n &gt; N$ 与 $k &gt; K$ 时，</p>
+  $$
+  |S_n(x_k) - S(x_k)| \leqslant |S_N(x_k) - S(x_k)| &lt; \varepsilon_0.
+  $$
+  <p>由于 $n_k \to \infty\ (k \to \infty)$，当 $k$ 充分大时，总能满足 $k &gt; K$ 与 $n_k &gt; N$，于是成立</p>
+  $$
+  |S_{n_k}(x_k) - S(x_k)| &lt; \varepsilon_0,
+  $$
+  <p>这就与</p>
+  $$
+  |S_{n_k}(x_k) - S(x_k)| \geqslant \varepsilon_0 \quad (k \in \mathbb{N}^*)
+  $$
+  <p>产生矛盾．</p>
+
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-2-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.2.7'</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-2-7" class="anchor-btn" title="复制锚点链接"># 定理 10.2.7'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设函数项级数 $\sum_{n=1}^\infty u_n(x)$ 在闭区间 $[a, b]$ 上点态收敛于 $S(x)$，如果</p>
+<p>(1) $u_n(x)\ (n=1,2,\cdots)$ 在 $[a, b]$ 上连续；</p>
+<p>(2) $S(x)$ 在 $[a, b]$ 上连续；</p>
+<p>(3) 对任意固定的 $x \in [a, b]$，$\sum_{n=1}^\infty u_n(x)$ 是正项级数或负项级数，</p>
+<p>则 $\sum_{n=1}^\infty u_n(x)$ 在 $[a, b]$ 上一致收敛于 $S(x)$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.1 Cauchy-Hadamard 定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 级数局部逼近与幂级数分析</a>
+        <span class="thm-tag">幂级数</span><span class="thm-tag">收敛半径</span><span class="thm-tag">Cauchy-Hadamard公式</span><span class="thm-tag">Abel第一定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-1" class="anchor-btn" title="复制锚点链接"># 定理 10.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>幂级数 $\sum_{n=0}^\infty a_n x^n$ 当 $|x| &lt; R\ (R &gt; 0)$ 时绝对收敛；当 $|x| &gt; R$ 时发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 级数局部逼近与幂级数分析</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 由内向外的收敛圆盘特性；一旦在某一点收敛，必在更靠近原点的整个闭区间内绝对且一致收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      幂级数就像向外扩散的同心圆波纹，只要水波能抵达外圈某一点，圈内的所有水面必定已经全部风平浪静地绝对收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      防御辐射半径：核心安全区的半径就是收敛半径 R，进入半径之内一切安全收敛，踏出半径之外必然发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 第一定理的几何推论：|x| < |x_0| 上的几何级数压制。</li><li>Cauchy-Hadamard 公式确定收敛半径 R = 1 / lim sup |a_n|^{1/n}。</li><li>区间端点收敛性与 Abel 第二定理的连续性延续。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.2 d'Alembert 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 级数局部逼近与幂级数分析</a>
+        <span class="thm-tag">幂级数</span><span class="thm-tag">收敛半径</span><span class="thm-tag">Cauchy-Hadamard公式</span><span class="thm-tag">Abel第一定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-2" class="anchor-btn" title="复制锚点链接"># 定理 10.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>如果对幂级数 $\sum_{n=0}^\infty a_n x^n$ 成立</p>
+  $$
+  \lim_{n \to \infty} \left|\frac{a_{n+1}}{a_n}\right| = A,
+  $$
+  <p>则此幂级数的收敛半径为 $R = \frac{1}{A}$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 级数局部逼近与幂级数分析</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 由内向外的收敛圆盘特性；一旦在某一点收敛，必在更靠近原点的整个闭区间内绝对且一致收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      幂级数就像向外扩散的同心圆波纹，只要水波能抵达外圈某一点，圈内的所有水面必定已经全部风平浪静地绝对收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      防御辐射半径：核心安全区的半径就是收敛半径 R，进入半径之内一切安全收敛，踏出半径之外必然发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 第一定理的几何推论：|x| < |x_0| 上的几何级数压制。</li><li>Cauchy-Hadamard 公式确定收敛半径 R = 1 / lim sup |a_n|^{1/n}。</li><li>区间端点收敛性与 Abel 第二定理的连续性延续。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.3 Abel 第二定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-3" class="anchor-btn" title="复制锚点链接"># 定理 10.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设幂级数 $\sum_{n=0}^\infty a_n x^n$ 的收敛半径为 $R$，则</p>
+<p>(i) $\sum_{n=0}^\infty a_n x^n$ 在 $(-R, R)$ 上内闭一致收敛，即在任意闭区间 $[a, b] \subset (-R, R)$ 上一致收敛；</p>
+<p>(ii) 若 $\sum_{n=0}^\infty a_n x^n$ 在 $x = R$ 收敛，则它在任意闭区间 $[a, R] \subset (-R, R]$ 上一致收敛．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> (i) 记 $\xi = \max\{|a|, |b|\}$，对一切 $x \in [a, b]$，成立</p>
+  $$
+  |a_n x^n| \leqslant |a_n \xi^n|.
+  $$
+  <p>由于 $|\xi| &lt; R$，所以 $\sum_{n=0}^\infty |a_n \xi^n|$ 收敛，由 Weierstrass 判别法，可知 $\sum_{n=0}^\infty a_n x^n$ 在 $[a, b]$ 上一致收敛．</p>
+<p>(ii) 先证明 $\sum_{n=0}^\infty a_n x^n$ 在 $[0, R]$ 上一致收敛．</p>
+<p>当 $\sum_{n=0}^\infty a_n R^n$ 收敛时，由于 $\left(\frac{x}{R}\right)^n$ 在 $[0, R]$ 一致有界（$0 \leqslant \left(\frac{x}{R}\right)^n \leqslant 1$），且关于 $n$ 单调，</p>
+
+<p>根据 Abel 判别法，</p>
+  $$
+  \sum_{n=0}^\infty a_n x^n = \sum_{n=0}^\infty (a_n R^n)\left(\frac{x}{R}\right)^n
+  $$
+  <p>在 $[0, R]$ 上一致收敛．</p>
+<p>于是当 $a \geqslant 0$ 时，$\sum_{n=0}^\infty a_n x^n$ 在 $[a, R]$ 上一致收敛；当 $-R &lt; a &lt; 0$ 时，由 (i)，$\sum_{n=0}^\infty a_n x^n$ 在 $[a, 0]$ 上一致收敛，结合 $\sum_{n=0}^\infty a_n x^n$ 在 $[0, R]$ 上的一致收敛性就得到 $\sum_{n=0}^\infty a_n x^n$ 在 $[a, R]$ 上一致收敛．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与三段式误差拆解</a>
+        <span class="thm-tag">极限交换次序</span><span class="thm-tag">连续性传递</span><span class="thm-tag">逐项求导</span><span class="thm-tag">逐项积分</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-4" class="anchor-btn" title="复制锚点链接"># 定理 10.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $\sum_{n=0}^\infty a_n x^n$ 的收敛半径为 $R$，则和函数在 $(-R, R)$ 上连续；若 $\sum_{n=0}^\infty a_n x^n$ 在 $x = R$（或 $x = -R$）收敛，则和函数在 $x = R$（或 $x = -R$）左（右）连续．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 幂级数的一般项是幂函数，显然是连续函数．由 Abel 第二定理，$\sum_{n=0}^\infty a_n x^n$ 在其收敛域上内闭一致收敛，根据一致收敛函数项级数的和函数的连续性，$\sum_{n=0}^\infty a_n x^n$ 在包含于收敛域中的任意闭区间上连续，因而在它的整个收敛域上连续．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与三段式误差拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 经典 ε/3 拆分法；将总误差拆为『逼近项-和函数』、『函数项连续微元』与『尾部余项』三段分别控制。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      要把极限符号和积分/微分符号对调，核心是证明两者的差可以任意小；通过加一项减一项拆成三段，利用一致收敛逐一击破。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      接力传递的三棒火炬：每一棒的传递误差都被预先控制在 ε/3，最终交接时的累计误差依然完美小于 ε。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>|S(x) - S(x_0)| ≤ |S(x) - S_n(x)| + |S_n(x) - S_n(x_0)| + |S_n(x_0) - S(x_0)|。</li><li>首尾两项由一致收敛控制，中间项由有限项连续性控制。</li><li>微分交换中需对导数级数应用一致收敛性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.5</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与三段式误差拆解</a>
+        <span class="thm-tag">极限交换次序</span><span class="thm-tag">连续性传递</span><span class="thm-tag">逐项求导</span><span class="thm-tag">逐项积分</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-5" class="anchor-btn" title="复制锚点链接"># 定理 10.3.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $a, b$ 是幂级数 $\sum_{n=0}^\infty a_n x^n$ 收敛域中任意二点，则</p>
+  $$
+  \int_a^b \sum_{n=0}^\infty a_n x^n\,dx = \sum_{n=0}^\infty \int_a^b a_n x^n\,dx,
+  $$
+  <p>特别地，取 $a = 0, b = x$，则有</p>
+  $$
+  \int_0^x \sum_{n=0}^\infty a_n t^n\,dt = \sum_{n=0}^\infty \frac{a_n}{n+1} x^{n+1},
+  $$
+  <p>且逐项积分所得幂级数 $\sum_{n=0}^\infty \frac{a_n}{n+1} x^{n+1}$ 与原幂级数 $\sum_{n=0}^\infty a_n x^n$ 具有相同的收敛半径．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由 Abel 第二定理，$\sum_{n=0}^\infty a_n x^n$ 在其收敛域上内闭一致收敛，应用一致收敛函数项级数的逐项积分定理，即得到幂级数的逐项可积性．</p>
+
+<p>由于</p>
+  $$
+  \lim_{n \to \infty} \sqrt[n+1]{\frac{|a_n|}{n+1}} = \lim_{n \to \infty} \sqrt[n]{|a_n|},
+  $$
+  <p>可知 $\sum_{n=0}^\infty \frac{a_n}{n+1} x^{n+1}$ 与 $\sum_{n=0}^\infty a_n x^n$ 具有相同的收敛半径．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与三段式误差拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 经典 ε/3 拆分法；将总误差拆为『逼近项-和函数』、『函数项连续微元』与『尾部余项』三段分别控制。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      要把极限符号和积分/微分符号对调，核心是证明两者的差可以任意小；通过加一项减一项拆成三段，利用一致收敛逐一击破。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      接力传递的三棒火炬：每一棒的传递误差都被预先控制在 ε/3，最终交接时的累计误差依然完美小于 ε。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>|S(x) - S(x_0)| ≤ |S(x) - S_n(x)| + |S_n(x) - S_n(x_0)| + |S_n(x_0) - S(x_0)|。</li><li>首尾两项由一致收敛控制，中间项由有限项连续性控制。</li><li>微分交换中需对导数级数应用一致收敛性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-3-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.3.6</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 级数局部逼近与幂级数分析</a>
+        <span class="thm-tag">幂级数</span><span class="thm-tag">收敛半径</span><span class="thm-tag">Cauchy-Hadamard公式</span><span class="thm-tag">Abel第一定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-3-6" class="anchor-btn" title="复制锚点链接"># 定理 10.3.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $\sum_{n=0}^\infty a_n x^n$ 的收敛半径为 $R$，则它在 $(-R, R)$ 上可以逐项求导，即</p>
+  $$
+  \frac{d}{dx} \sum_{n=0}^\infty a_n x^n = \sum_{n=0}^\infty \frac{d}{dx} a_n x^n = \sum_{n=1}^\infty n a_n x^{n-1},
+  $$
+  <p>且逐项求导所得的幂级数 $\sum_{n=1}^\infty n a_n x^{n-1}$ 的收敛半径也是 $R$．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 首先我们有</p>
+  $$
+  \varlimsup_{n \to \infty} \sqrt[n-1]{n|a_n|} = \varlimsup_{n \to \infty} \sqrt[n]{|a_n|},
+  $$
+  <p>即 $\sum_{n=1}^\infty n a_n x^{n-1}$ 的收敛半径也是 $R$，因此 $\sum_{n=1}^\infty n a_n x^{n-1}$ 在 $(-R, R)$ 上内闭一致收敛．再由于 $\sum_{n=0}^\infty a_n x^n$ 在 $(-R, R)$ 上收敛，应用函数项级数的逐项求导定理，即得到幂级数的逐项可导性．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 级数局部逼近与幂级数分析</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 由内向外的收敛圆盘特性；一旦在某一点收敛，必在更靠近原点的整个闭区间内绝对且一致收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      幂级数就像向外扩散的同心圆波纹，只要水波能抵达外圈某一点，圈内的所有水面必定已经全部风平浪静地绝对收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      防御辐射半径：核心安全区的半径就是收敛半径 R，进入半径之内一切安全收敛，踏出半径之外必然发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 第一定理的几何推论：|x| < |x_0| 上的几何级数压制。</li><li>Cauchy-Hadamard 公式确定收敛半径 R = 1 / lim sup |a_n|^{1/n}。</li><li>区间端点收敛性与 Abel 第二定理的连续性延续。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.4.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: Taylor 级数局部逼近与幂级数分析</a>
+        <span class="thm-tag">幂级数</span><span class="thm-tag">收敛半径</span><span class="thm-tag">Cauchy-Hadamard公式</span><span class="thm-tag">Abel第一定理</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-4-1" class="anchor-btn" title="复制锚点链接"># 定理 10.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $f(x)$ 在 $O(x_0, r)$ 上任意阶可导，则</p>
+  $$
+  f(x) = \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!} (x-x_0)^k + r_n(x), \quad x \in O(x_0, r),
+  $$
+  <p>其中</p>
+  $$
+  r_n(x) = \frac{1}{n!} \int_{x_0}^x f^{(n+1)}(t)(x-t)^n\,dt.
+  $$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 由表达式</p>
+  $$
+  r_n(x) = f(x) - \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!} (x-x_0)^k
+  $$
+  <p>出发，逐次对等式两端进行求导运算，可依次得到</p>
+  $$
+  \begin{aligned}
+  r_n'(x) &amp;= f'(x) - \sum_{k=1}^n \frac{f^{(k)}(x_0)}{(k-1)!} (x-x_0)^{k-1}, \\
+  r_n''(x) &amp;= f''(x) - \sum_{k=2}^n \frac{f^{(k)}(x_0)}{(k-2)!} (x-x_0)^{k-2}, \\
+  &amp;\cdots\cdots \\
+  r_n^{(n)}(x) &amp;= f^{(n)}(x) - f^{(n)}(x_0), \\
+  r_n^{(n+1)}(x) &amp;= f^{(n+1)}(x).
+  \end{aligned}
+  $$
+  <p>令 $x = x_0$，便有</p>
+  $$
+  r_n(x_0) = r_n'(x_0) = r_n''(x_0) = \cdots = r_n^{(n)}(x_0) = 0.
+  $$
+  <p>逐次应用分部积分法，可得</p>
+  $$
+  \begin{aligned}
+  r_n(x) &amp;= r_n(x) - r_n(x_0) = \int_{x_0}^x r_n'(t)\,dt \\
+  &amp;= \int_{x_0}^x r_n'(t)\,d(t-x) = \int_{x_0}^x r_n''(t)(x-t)\,dt \\
+  &amp;= -\frac{1}{2!} \int_{x_0}^x r_n''(t)\,d(t-x)^2 = \frac{1}{2!} \int_{x_0}^x r_n'''(t)(x-t)^2\,dt \\
+  &amp;\cdots\cdots \\
+  &amp;= \frac{1}{n!} \int_{x_0}^x r_n^{(n+1)}(t)(x-t)^n\,dt = \frac{1}{n!} \int_{x_0}^x f^{(n+1)}(t)(x-t)^n\,dt.
+  \end{aligned}
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: Taylor 级数局部逼近与幂级数分析</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 由内向外的收敛圆盘特性；一旦在某一点收敛，必在更靠近原点的整个闭区间内绝对且一致收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      幂级数就像向外扩散的同心圆波纹，只要水波能抵达外圈某一点，圈内的所有水面必定已经全部风平浪静地绝对收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      防御辐射半径：核心安全区的半径就是收敛半径 R，进入半径之内一切安全收敛，踏出半径之外必然发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 第一定理的几何推论：|x| < |x_0| 上的几何级数压制。</li><li>Cauchy-Hadamard 公式确定收敛半径 R = 1 / lim sup |a_n|^{1/n}。</li><li>区间端点收敛性与 Abel 第二定理的连续性延续。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch10-10-5-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 10.5.1 Weierstrass 第一逼近定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 一致收敛性与极限换序判别</a>
+        <span class="thm-tag">一致收敛</span><span class="thm-tag">Weierstrass判别法</span><span class="thm-tag">全局优级数</span><span class="thm-tag">M判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch10-10-5-1" class="anchor-btn" title="复制锚点链接"># 定理 10.5.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $f(x)$ 是闭区间 $[a, b]$ 上的连续函数，则对任意给定的 $\varepsilon &gt; 0$，存在多项式 $P(x)$，使得</p>
+  $$
+  |P(x) - f(x)| &lt; \varepsilon
+  $$
+  <p>对一切 $x \in [a, b]$ 成立．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 不失一般性，我们设 $[a, b]$ 为 $[0, 1]$．</p><p>设 $X$ 是 $[0, 1]$ 上连续函数全体构成的集合，$Y$ 是多项式全体构成的集合，现定义映射</p><p>这里 $B_n(f, x)$ 表示 $f \in X$ 在映射 $B_n$ 作用下的像，它是以 $x$ 为变量的 $n$ 次多项式，称为 <strong>Bernstein 多项式</strong>．</p><p>关于映射 $B_n$，直接从定义出发，可证明它具有下述基本性质与基本关系式：</p><p>(1) $B_n$ 是线性映射，即对于任意 $f, g \in X$ 及 $\alpha, \beta \in \mathbb{R}$，成立</p><p>(2) $B_n$ 具有单调性，即对于任意 $f, g \in X$，若 $f(t) \geqslant g(t)$ 对一切 $t \in [0, 1]$ 成立，则</p><p>对一切 $x \in [0, 1]$ 成立；</p><p>(3)</p><p>综合上述三式，考虑函数 $(t - s)^2$ 在 $B_n$ 映射下的像，注意 $s$ 在这里被视为常数，我们得到</p><p>现在我们来证明定理．</p><p>由于函数 $f$ 在 $[0, 1]$ 上连续，所以必定有界，即存在 $M &gt; 0$，对于一切 $t \in [0, 1]$，成立</p><p>根据 Cantor 定理，$f$ 在 $[0, 1]$ 上一致连续，于是对任意给定的 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，对一切 $t, s \in [0, 1]$，当 $|t - s| &lt; \delta$ 时，成立</p><p>当 $|t - s| \geqslant \delta$ 时，成立</p><p>也就是说，对一切 $t, s \in [0, 1]$，成立</p><p>考虑上式的左端、中间、右端三式（关于 $t$ 的连续函数）在映射 $B_n$ 作用下的像（关于 $x$ 的多项式），注意 $f(s)$ 在这里被视为常数，即 $B_n(f(s), x) = f(s)$，并根据上面性质 (1)、(2) 与 (3)，得到对一切 $x, s \in [0, 1]$，成立</p><p>令 $s = x$，且注意 $x(1 - x) \leqslant \frac{1}{4}$，即得</p><p>取 $N = \left[\frac{M}{\delta^2 \varepsilon}\right]$，当 $n &gt; N$ 时，</p><p>对一切 $x \in [0, 1]$ 成立．</p><div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 一致收敛性与极限换序判别</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 寻找与自变量 x 无关的常数优级数 ∑ Mₙ，以绝对一致的刚性边界压制函数项的各处波动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数序列在整个定义域各处的最大波动幅度，都能被一个收敛的正数级数压住，那么它在整个区间上就是步调一致地收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      同一张密不透风的厚毯子：不管函数曲面在底下怎么起伏，常数 M 级数就像平整的地毯直接把它完全压平在地面上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Weierstrass M 判别法：|u_n(x)| ≤ M_n 且 ∑ M_n 收敛。</li><li>避开点态收敛中 N 依赖于 x 的致命陷阱。</li><li>保证连续性、可微性与积分号交换次序的根本前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_09_theorems.html" class="page-nav-btn">← 上一章：第九章 · 数项级数</a>
+  <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" class="page-nav-btn" target="_blank">📗 进入下册：第九章 数项级数 (数字化原书) →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第九章 · 数项级数 · 核心定义与定理证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.88);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent-blue);
+}
+
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.chapter-pills-bar::-webkit-scrollbar {
+  height: 4px;
+}
+
+.chapter-pills-bar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(56, 189, 248, 0.4);
+  font-weight: 700;
+}
+
+/* Two-column Layout */
+.main-layout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.25rem;
+}
+
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 7rem;
+  max-height: calc(100vh - 8.5rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-group-title {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.75rem;
+}
+
+.toc-link.def-link:hover {
+  background: rgba(16, 185, 129, 0.12);
+  color: #34d399;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2.25rem;
+  padding: 2.25rem;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  position: relative;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.ch-number-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--accent-blue);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+}
+
+.ch-count-badge {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+}
+
+.ch-main-title {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.ch-desc-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 860px;
+}
+
+/* Section Divider */
+.section-divider-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 2.75rem 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(56, 189, 248, 0.25);
+}
+
+.section-divider-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Definition Card Styles */
+.definitions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.definition-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+  border-radius: 14px;
+  padding: 1.6rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.definition-card:hover {
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+.def-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.def-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.def-title-main {
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.def-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.def-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.def-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.verbatim-definition-box {
+  background: rgba(8, 12, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-emerald);
+  border-radius: 10px;
+  padding: 1.25rem;
+  line-height: 1.8;
+}
+
+.verbatim-definition-box .section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #34d399;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.def-content-text {
+  color: #e2e8f0;
+  font-size: 0.95rem;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.thm-tag.routine-ref {
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--accent-blue);
+  border-color: rgba(56, 189, 248, 0.3);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.thm-tag.routine-ref:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.anchor-btn {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: #fff;
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+}
+
+/* Verbatim Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid var(--accent-cyan);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.thm-content-text {
+  color: #f1f5f9;
+  font-size: 0.98rem;
+}
+
+/* Verbatim Proof Box */
+.verbatim-proof-box {
+  background: rgba(7, 10, 18, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 4px solid #6366f1;
+  border-radius: 10px;
+  padding: 1.35rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.85;
+}
+
+.proof-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: #818cf8;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.proof-content-text {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.proof-end {
+  float: right;
+  font-size: 0.8rem;
+  color: var(--accent-emerald);
+  font-weight: 700;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+}
+
+/* Layman Commentary Box (Four Layers) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 36, 64, 0.65) 0%, rgba(15, 23, 42, 0.85) 100%);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fcd34d;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.routine-link-pill {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: var(--accent-blue);
+  color: #070a12;
+}
+
+.essence-line {
+  font-size: 0.95rem;
+  color: #fff;
+  line-height: 1.6;
+}
+
+.essence-line strong {
+  color: var(--accent-amber);
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid #f59e0b;
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.9rem;
+  color: #e2e8f0;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+  font-size: 0.9rem;
+  color: #d1fae5;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(56, 189, 248, 0.05);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 1rem 1.15rem;
+}
+
+.keypoints-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.keypoints-list {
+  margin-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  line-height: 1.6;
+}
+
+/* Pagination Bar */
+.chapter-pagination {
+  margin-top: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">核心定义与定理证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回 N02 目录</a>
+      <a href="../TextBook-MathAnalysis/index.html" class="nav-btn" target="_blank">📖 原书教材 (16章)</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (7定义·4定理)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (10定义·19定理)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (9定义·23定理)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (3定义·9定理)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (3定义·17定理)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (2定义·3定理)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (6定义·19定理)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (4定义·12定理)</a>
+<a href="chapter_09_theorems.html" class="ch-pill current-ch">第9章 (9定义·30定理)</a>
+<a href="chapter_10_theorems.html" class="ch-pill">第10章 (4定义·21定理)</a>
+<a href="chapter_11_theorems.html" class="ch-pill">第11章 (18定义·21定理)</a>
+<a href="chapter_12_theorems.html" class="ch-pill">第12章 (6定义·24定理)</a>
+<a href="chapter_13_theorems.html" class="ch-pill">第13章 (5定义·13定理)</a>
+<a href="chapter_14_theorems.html" class="ch-pill">第14章 (10定义·11定理)</a>
+<a href="chapter_15_theorems.html" class="ch-pill">第15章 (2定义·20定理)</a>
+<a href="chapter_16_theorems.html" class="ch-pill">第16章 (5定义·21定理)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 章节内容导航</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定义与定理..." oninput="filterToc()">
+    
+    <div class="toc-group-title">📖 本章核心定义 (9)</div>
+    <ul class="toc-list" id="toc-list-defs">
+      <li><a href="#def-ch9-9-1-1" class="toc-link def-link" title="定义 9.1.1 数项级数与部分和收敛性">📖 定义 9.1.1 数项级数与部分和收敛性</a></li>
+<li><a href="#def-ch9-9-2-1" class="toc-link def-link" title="定义 9.2.1 正项级数 (非负通项)">📖 定义 9.2.1 正项级数 (非负通项)</a></li>
+<li><a href="#def-ch9-9-2-2" class="toc-link def-link" title="定义 9.2.2 级数的渐近等价比较">📖 定义 9.2.2 级数的渐近等价比较</a></li>
+<li><a href="#def-ch9-9-2-1" class="toc-link def-link" title="定义 9.2.1′ 积分审敛法的连续非负递减条件">📖 定义 9.2.1′ 积分审敛法的连续非负递减条件</a></li>
+<li><a href="#def-ch9-9-3-1" class="toc-link def-link" title="定义 9.3.1 交错级数 (Alternating Series)">📖 定义 9.3.1 交错级数 (Alternating Series)</a></li>
+<li><a href="#def-ch9-9-4-1" class="toc-link def-link" title="定义 9.4.1 级数的绝对收敛与条件收敛">📖 定义 9.4.1 级数的绝对收敛与条件收敛</a></li>
+<li><a href="#def-ch9-9-4-2" class="toc-link def-link" title="定义 9.4.2 级数的重排 (Rearrangement)">📖 定义 9.4.2 级数的重排 (Rearrangement)</a></li>
+<li><a href="#def-ch9-9-5-1" class="toc-link def-link" title="定义 9.5.1 无穷乘积的收敛性与部分积">📖 定义 9.5.1 无穷乘积的收敛性与部分积</a></li>
+<li><a href="#def-ch9-9-5-2" class="toc-link def-link" title="定义 9.5.2 无穷乘积的绝对收敛性">📖 定义 9.5.2 无穷乘积的绝对收敛性</a></li>
+
+    </ul>
+
+    <div class="toc-group-title" style="margin-top: 0.85rem;">📐 核心定理与证明 (30)</div>
+    <ul class="toc-list" id="toc-list-thms">
+      <li><a href="#thm-ch9-9-1-1" class="toc-link" title="定理 9.1.1 级数收敛的必要条件">📐 定理 9.1.1 级数收敛的必要条件</a></li>
+<li><a href="#thm-ch9-9-1-2" class="toc-link" title="定理 9.1.2 线性性">📐 定理 9.1.2 线性性</a></li>
+<li><a href="#thm-ch9-9-1-3" class="toc-link" title="定理 9.1.3">📐 定理 9.1.3</a></li>
+<li><a href="#thm-ch9-9-2-1" class="toc-link" title="定理 9.2.1">📐 定理 9.2.1</a></li>
+<li><a href="#thm-ch9-9-2-2" class="toc-link" title="定理 9.2.2">📐 定理 9.2.2</a></li>
+<li><a href="#thm-ch9-9-2-2" class="toc-link" title="定理 9.2.2′">📐 定理 9.2.2′</a></li>
+<li><a href="#thm-ch9-9-2-3" class="toc-link" title="定理 9.2.3">📐 定理 9.2.3</a></li>
+<li><a href="#thm-ch9-9-2-4" class="toc-link" title="定理 9.2.4">📐 定理 9.2.4</a></li>
+<li><a href="#thm-ch9-9-2-5" class="toc-link" title="定理 9.2.5">📐 定理 9.2.5</a></li>
+<li><a href="#thm-ch9-9-2-6" class="toc-link" title="定理 9.2.6">📐 定理 9.2.6</a></li>
+<li><a href="#thm-ch9-9-3-1" class="toc-link" title="定理 9.3.1 正项级数的收敛原理">📐 定理 9.3.1 正项级数的收敛原理</a></li>
+<li><a href="#thm-ch9-9-3-2" class="toc-link" title="定理 9.3.2 比较判别法">📐 定理 9.3.2 比较判别法</a></li>
+<li><a href="#thm-ch9-9-3-2" class="toc-link" title="定理 9.3.2′ 比较判别法的极限形式">📐 定理 9.3.2′ 比较判别法的极限形式</a></li>
+<li><a href="#thm-ch9-9-3-3" class="toc-link" title="定理 9.3.3 Cauchy 判别法">📐 定理 9.3.3 Cauchy 判别法</a></li>
+<li><a href="#thm-ch9-9-3-4" class="toc-link" title="定理 9.3.4 d'Alembert 判别法">📐 定理 9.3.4 d'Alembert 判别法</a></li>
+<li><a href="#thm-ch9-9-3-1" class="toc-link" title="引理 9.3.1">📐 引理 9.3.1</a></li>
+<li><a href="#thm-ch9-9-3-5" class="toc-link" title="定理 9.3.5 Raabe 判别法">📐 定理 9.3.5 Raabe 判别法</a></li>
+<li><a href="#thm-ch9-9-3-6" class="toc-link" title="定理 9.3.6 积分判别法">📐 定理 9.3.6 积分判别法</a></li>
+<li><a href="#thm-ch9-9-4-1" class="toc-link" title="定理 9.4.1 级数的 Cauchy 收敛原理">📐 定理 9.4.1 级数的 Cauchy 收敛原理</a></li>
+<li><a href="#thm-ch9-9-4-2" class="toc-link" title="定理 9.4.2 Leibniz 判别法">📐 定理 9.4.2 Leibniz 判别法</a></li>
+<li><a href="#thm-ch9-9-4-1" class="toc-link" title="引理 9.4.1 Abel 变换">📐 引理 9.4.1 Abel 变换</a></li>
+<li><a href="#thm-ch9-9-4-2" class="toc-link" title="引理 9.4.2 Abel 引理">📐 引理 9.4.2 Abel 引理</a></li>
+<li><a href="#thm-ch9-9-4-3" class="toc-link" title="定理 9.4.3 级数的 A-D 判别法">📐 定理 9.4.3 级数的 A-D 判别法</a></li>
+<li><a href="#thm-ch9-9-4-4" class="toc-link" title="定理 9.4.4">📐 定理 9.4.4</a></li>
+<li><a href="#thm-ch9-9-4-5" class="toc-link" title="定理 9.4.5">📐 定理 9.4.5</a></li>
+<li><a href="#thm-ch9-9-4-6" class="toc-link" title="定理 9.4.6 Riemann 重排定理">📐 定理 9.4.6 Riemann 重排定理</a></li>
+<li><a href="#thm-ch9-9-4-7" class="toc-link" title="定理 9.4.7">📐 定理 9.4.7</a></li>
+<li><a href="#thm-ch9-9-5-1" class="toc-link" title="定理 9.5.1">📐 定理 9.5.1</a></li>
+<li><a href="#thm-ch9-9-5-2" class="toc-link" title="定理 9.5.2">📐 定理 9.5.2</a></li>
+<li><a href="#thm-ch9-9-5-3" class="toc-link" title="定理 9.5.3">📐 定理 9.5.3</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 09</span>
+        <span class="ch-count-badge">收录 9 个基础定义 · 30 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第九章 · 数项级数</h1>
+      <p class="ch-desc-text">正项级数比较/积分/比值/根值审敛法、任意项级数Abel/Dirichlet审敛法、绝对收敛与条件收敛、Riemann重排定理与无穷乘积</p>
+      <div style="margin-top: 0.85rem;">
+        <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" target="_blank" style="display:inline-flex; align-items:center; gap:0.4rem; font-size:0.82rem; font-weight:600; color:var(--accent-blue); background:rgba(56,189,248,0.12); padding:0.3rem 0.8rem; border-radius:9999px; text-decoration:none; border:1px solid rgba(56,189,248,0.25); transition: all 0.2s;">📖 对照阅读《数学分析》原书第 9 章（高保真数字化排版·含课后习题） ➔</a>
+      </div>
+    </section>
+
+    <!-- Definitions Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📖 一、本章核心数学概念定义 (Definitions)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-emerald); font-weight: 600;">共 9 个概念定义</span>
+    </div>
+    <div class="definitions-container" id="definitions-container">
+      
+<article class="definition-card" id="def-ch9-9-1-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.1.1 数项级数与部分和收敛性</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">数项级数</span><span class="def-tag">部分和序列</span><span class="def-tag">极限和</span><span class="def-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-1-1" class="anchor-btn" title="复制锚点链接"># 定义 9.1.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果部分和数列 $\{S_n\}$ 收敛于有限数 $S$，则称无穷级数 $\sum_{n=1}^\infty x_n$ <strong>收敛</strong>，且称它的和为 $S$，记为</p>
+  $$
+  \sum_{n=1}^\infty x_n = S \quad \left(\text{或 } \sum_{n=1}^\infty x_n = x_1 + x_2 + \dots + x_n + \dots = S\right).
+  $$
+  <p>如果部分和数列 $\{S_n\}$ 发散，则称无穷级数 $\sum_{n=1}^\infty x_n$ <strong>发散</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.2.1 正项级数 (非负通项)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">正项级数</span><span class="def-tag">单调部分和</span><span class="def-tag">确界存在</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-2-1" class="anchor-btn" title="复制锚点链接"># 定义 9.2.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>在有界数列 $\{x_n\}$ 中，若存在它的一个子列 $\{x_{n_k}\}$ 使得</p>
+  $$
+  \lim_{k\to\infty} x_{n_k} = \xi,
+  $$
+  <p>则称 $\xi$ 为数列 $\{x_n\}$ 的一个<strong>极限点</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-2-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.2.2 级数的渐近等价比较</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">渐近等价</span><span class="def-tag">同阶无穷小</span><span class="def-tag">极限比较</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-2-2" class="anchor-btn" title="复制锚点链接"># 定义 9.2.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>$E$ 的最大值 $H = \max E$ 称为数列 $\{x_n\}$ 的<strong>上极限</strong>，记为</p>
+  $$
+  H = \varlimsup_{n\to\infty} x_n;
+  $$
+  <p>$E$ 的最小值 $h = \min E$ 称为数列 $\{x_n\}$ 的<strong>下极限</strong>，记为</p>
+  $$
+  h = \varliminf_{n\to\infty} x_n.
+  $$</div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-2-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.2.1′ 积分审敛法的连续非负递减条件</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">积分审敛法</span><span class="def-tag">单调递减</span><span class="def-tag">反常积分对照</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-2-1" class="anchor-btn" title="复制锚点链接"># 定义 9.2.1′</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>在数列 $\{x_n\}$ 中，若存在它的一个子列 $\{x_{n_k}\}$ 使得</p>
+  $$
+  \lim_{k\to\infty} x_{n_k} = \xi \quad (-\infty \leqslant \xi \leqslant +\infty),
+  $$
+  <p>则称 $\xi$ 为数列 $\{x_n\}$ 的一个<strong>极限点</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-3-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.3.1 交错级数 (Alternating Series)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">交错级数</span><span class="def-tag">符号交替</span><span class="def-tag">Leibniz判别法</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-3-1" class="anchor-btn" title="复制锚点链接"># 定义 9.3.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果级数 $\sum_{n=1}^\infty x_n$ 的各项都是非负实数，即</p>
+  $$
+  x_n \geqslant 0, \quad n = 1, 2, \dots,
+  $$
+  <p>则称此级数为<strong>正项级数</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-4-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.4.1 级数的绝对收敛与条件收敛</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">绝对收敛</span><span class="def-tag">条件收敛</span><span class="def-tag">模长级数</span><span class="def-tag">收敛稳定性</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-4-1" class="anchor-btn" title="复制锚点链接"># 定义 9.4.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果级数 $\sum_{n=1}^\infty x_n = \sum_{n=1}^\infty (-1)^{n+1}u_n$ ($u_n &gt; 0$)，则称此级数为<strong>交错级数</strong>．</p>
+<p>进一步，若级数 $\sum_{n=1}^\infty (-1)^{n+1}u_n$ ($u_n &gt; 0$) 满足 $\{u_n\}$ 单调减少且收敛于 0，则称这样的交错级数为 <strong>Leibniz 级数</strong>．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-4-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.4.2 级数的重排 (Rearrangement)</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">级数重排</span><span class="def-tag">双射置换</span><span class="def-tag">Riemann重排定理</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-4-2" class="anchor-btn" title="复制锚点链接"># 定义 9.4.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果级数 $\sum_{n=1}^\infty |x_n|$ 收敛，则称 $\sum_{n=1}^\infty x_n$ 为<strong>绝对收敛级数</strong>．如果级数 $\sum_{n=1}^\infty x_n$ 收敛而 $\sum_{n=1}^\infty |x_n|$ 发散，则称 $\sum_{n=1}^\infty x_n$ 为<strong>条件收敛级数</strong>．</p>
+<p>由定义，$\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}$ 即是一个条件收敛级数．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-5-1">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.5.1 无穷乘积的收敛性与部分积</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无穷乘积</span><span class="def-tag">部分积数列</span><span class="def-tag">非零极限</span><span class="def-tag">对数化化归</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-5-1" class="anchor-btn" title="复制锚点链接"># 定义 9.5.1</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>如果部分积数列 $\{P_n\}$ 收敛于一个非零的有限数 $P$，则称无穷乘积 $\prod_{n=1}^\infty p_n$ 收敛，且称 $P$ 为它的积，记为</p>
+  $$
+  \prod_{n=1}^\infty p_n = P.
+  $$
+  <p>如果 $\{P_n\}$ 发散或 $\{P_n\}$ 收敛于 $0$，则称无穷乘积 $\prod_{n=1}^\infty p_n$ 发散．</p></div>
+  </div>
+</article>
+
+<article class="definition-card" id="def-ch9-9-5-2">
+  <div class="def-card-header">
+    <div class="def-header-left">
+      <h3 class="def-title-main">
+        <span>📖 定义 9.5.2 无穷乘积的绝对收敛性</span>
+      </h3>
+      <div class="def-tags-row">
+        <span class="def-badge">核心概念定义</span>
+        <span class="def-tag">无穷乘积</span><span class="def-tag">绝对收敛</span><span class="def-tag">对数级数</span>
+      </div>
+    </div>
+    <a href="#def-ch9-9-5-2" class="anchor-btn" title="复制锚点链接"># 定义 9.5.2</a>
+  </div>
+
+  <div class="verbatim-definition-box">
+    <div class="section-label">📜 原文定义陈述 (Verbatim Definition)</div>
+    <div class="def-content-text"><p>当级数 $\sum_{n=1}^\infty \ln p_n$ 绝对收敛时，称无穷乘积 $\prod_{n=1}^\infty p_n$ 绝对收敛．</p></div>
+  </div>
+</article>
+
+    </div>
+
+    <!-- Theorems Section -->
+    <div class="section-divider-bar">
+      <div class="section-divider-title">
+        <span>📐 二、核心定理与完整原书证明 (Theorems & Proofs)</span>
+      </div>
+      <span style="font-size: 0.82rem; color: var(--accent-blue); font-weight: 600;">共 30 个定理 · 完整数学推导与四层点评</span>
+    </div>
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-ch9-9-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.1.1 级数收敛的必要条件</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-1-1" class="anchor-btn" title="复制锚点链接"># 定理 9.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设级数 $\sum_{n=1}^\infty x_n$ 收敛，则其通项所构成的数列 $\{x_n\}$ 是无穷小量，即</p>
+  $$
+  \lim_{n \to \infty} x_n = 0.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $\sum_{n=1}^\infty x_n = S$，则对 $S_n = \sum_{k=1}^n x_k$，成立</p>
+  $$
+  \lim_{n \to \infty} S_n = \lim_{n \to \infty} S_{n-1} = S,
+  $$
+  <p>于是得到</p>
+  $$
+  \lim_{n \to \infty} x_n = \lim_{n \to \infty} (S_n - S_{n-1}) = S - S = 0.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.1.2 线性性</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-1-2" class="anchor-btn" title="复制锚点链接"># 定理 9.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty a_n = A$，$\sum_{n=1}^\infty b_n = B$，$\alpha, \beta$ 是两个常数，则</p>
+  $$
+  \sum_{n=1}^\infty (\alpha a_n + \beta b_n) = \alpha A + \beta B.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $\sum_{n=1}^\infty a_n$ 的部分和数列为 $\{S_n^{(1)}\}$，$\sum_{n=1}^\infty b_n$ 的部分和数列为 $\{S_n^{(2)}\}$，则对 $\sum_{n=1}^\infty (\alpha a_n + \beta b_n)$ 的部分和数列 $\{S_n\}$ 有</p>
+  $$
+  S_n = \alpha S_n^{(1)} + \beta S_n^{(2)},
+  $$
+  <p>于是成立</p>
+  $$
+  \lim_{n \to \infty} S_n = \alpha \lim_{n \to \infty} S_n^{(1)} + \beta \lim_{n \to \infty} S_n^{(2)} = \alpha A + \beta B.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.1.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-1-3" class="anchor-btn" title="复制锚点链接"># 定理 9.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设级数 $\sum_{n=1}^\infty x_n$ 收敛，则在它的求和表达式中任意添加括号后所得的级数仍然收敛，且其和不变．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $\sum_{n=1}^\infty x_n$ 添加括号后表示为</p>
+  $$
+  (x_1 + x_2 + \dots + x_{n_1}) + (x_{n_1+1} + x_{n_1+2} + \dots + x_{n_2}) + \dots + (x_{n_{k-1}+1} + x_{n_{k-1}+2} + \dots + x_{n_k}) + \dots,
+  $$
+  <p>令</p>
+  $$
+  \begin{aligned}
+  y_1 &amp;= x_1 + x_2 + \dots + x_{n_1}, \\
+  y_2 &amp;= x_{n_1+1} + x_{n_1+2} + \dots + x_{n_2}, \\
+  &amp;\dots\dots \\
+  y_k &amp;= x_{n_{k-1}+1} + x_{n_{k-1}+2} + \dots + x_{n_k}, \\
+  &amp;\dots\dots
+  \end{aligned}
+  $$
+  <p>则 $\sum_{n=1}^\infty x_n$ 按上面方式添加括号后所得的级数为 $\sum_{n=1}^\infty y_n$．令 $\sum_{n=1}^\infty x_n$ 的部分和数列为 $\{S_n\}$，$\sum_{n=1}^\infty y_n$ 的部分和数列为 $\{U_n\}$，则</p>
+$$
+  \begin{aligned}
+  U_1 &amp;= S_{n_1}, \\
+  U_2 &amp;= S_{n_2}, \\
+  &amp;\dots\dots \\
+  U_k &amp;= S_{n_k}, \\
+  &amp;\dots\dots
+  \end{aligned}
+  $$
+  <p>显然 $\{U_k\}$ 是 $\{S_n\}$ 的一个子列，于是由 $\{S_n\}$ 的收敛性即得到 $\{U_k\}$ 的收敛性，且极限相同．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-1" class="anchor-btn" title="复制锚点链接"># 定理 9.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>$E$ 的上确界 $H$ 和下确界 $h$ 均属于 $E$，即</p>
+  $$
+  H = \max E, \quad h = \min E.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 由 $H = \sup E$ 可知，存在 $\xi_k \in E$ ($k=1, 2, \dots$)，使得</p>
+  $$
+  \lim_{k\to\infty} \xi_k = H.
+  $$
+  <p>取 $\varepsilon_k = \frac{1}{k}$ ($k=1, 2, \dots$)．</p>
+<p>因为 $\xi_1$ 是 $\{x_n\}$ 的极限点，所以在 $O(\xi_1, \varepsilon_1)$ 中有 $\{x_n\}$ 的无穷多个项，取 $x_{n_1} \in O(\xi_1, \varepsilon_1)$；</p>
+<p>因为 $\xi_2$ 是 $\{x_n\}$ 的极限点，所以在 $O(\xi_2, \varepsilon_2)$ 中有 $\{x_n\}$ 的无穷多个项，可以取 $n_2 &gt; n_1$，使得 $x_{n_2} \in O(\xi_2, \varepsilon_2)$；</p>
+<p>$\dots\dots$</p>
+<p>因为 $\xi_k$ 是 $\{x_n\}$ 的极限点，所以在 $O(\xi_k, \varepsilon_k)$ 中有 $\{x_n\}$ 的无穷多个项，可以取 $n_k &gt; n_{k-1}$，使得 $x_{n_k} \in O(\xi_k, \varepsilon_k)$；</p>
+<p>$\dots\dots$</p>
+<p>这么一直做下去，便得到 $\{x_n\}$ 的子列 $\{x_{n_k}\}$，满足</p>
+  $$
+  |x_{n_k} - \xi_k| &lt; \frac{1}{k},
+  $$
+  <p>于是有</p>
+  $$
+  \lim_{k\to\infty} x_{n_k} = \lim_{k\to\infty} \xi_k = H.
+  $$
+  <p>由定义 9.2.1，$H$ 是 $\{x_n\}$ 的极限点，也就是说，$H \in E$．</p>
+<p>同理可证 $h \in E$．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-2" class="anchor-btn" title="复制锚点链接"># 定理 9.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{x_n\}$ 是有界数列，则 $\{x_n\}$ 收敛的充分必要条件是</p>
+  $$
+  \varlimsup_{n\to\infty} x_n = \varliminf_{n\to\infty} x_n.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 若 $\{x_n\}$ 是收敛的，则它的任一子列收敛于同一极限（定理 2.4.4），因而此时 $E$ 中只有一个元素，于是成立</p>
+  $$
+  \varlimsup_{n\to\infty} x_n = \varliminf_{n\to\infty} x_n = \lim_{n\to\infty} x_n.
+  $$
+  <p>若 $\{x_n\}$ 不收敛，则至少存在它的两个子列收敛于不同极限，因此有</p>
+  $$
+  \varlimsup_{n\to\infty} x_n &gt; \varliminf_{n\to\infty} x_n.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.2′</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-2" class="anchor-btn" title="复制锚点链接"># 定理 9.2.2′</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>$\lim_{n\to\infty} x_n$ 存在（有限数、$+\infty$ 或 $-\infty$）的充分必要条件是</p>
+  $$
+  \varlimsup_{n\to\infty} x_n = \varliminf_{n\to\infty} x_n.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-3" class="anchor-btn" title="复制锚点链接"># 定理 9.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{x_n\}$ 是有界数列，则</p>
+<p>(1) $\varlimsup_{n\to\infty} x_n = H$ 的充分必要条件是：对任意给定的 $\varepsilon &gt; 0$，</p>
+<p style="text-indent: 2em;">(i) 存在正整数 $N$，使得</p>
+  $$
+  x_n &lt; H + \varepsilon
+  $$
+  <p style="text-indent: 2em;">对一切 $n &gt; N$ 成立；</p>
+<p style="text-indent: 2em;">(ii) $\{x_n\}$ 中有无穷多项，满足</p>
+  $$
+  x_n &gt; H - \varepsilon.
+  $$
+  <p>(2) $\varliminf_{n\to\infty} x_n = h$ 的充分必要条件是：对任意给定的 $\varepsilon &gt; 0$，</p>
+<p style="text-indent: 2em;">(i) 存在正整数 $N$，使得</p>
+  $$
+  x_n &gt; h - \varepsilon
+  $$
+  <p style="text-indent: 2em;">对一切 $n &gt; N$ 成立；</p>
+<p style="text-indent: 2em;">(ii) $\{x_n\}$ 中有无穷多项，满足</p>
+  $$
+  x_n &lt; h + \varepsilon.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 下面只给出 (1) 的证明，(2) 的证明类似．</p>
+<p><strong>必要性</strong>：由于 $H$ 是 $\{x_n\}$ 的最大极限点，因此对于任意给定的 $\varepsilon &gt; 0$，在区间 $[H + \varepsilon, +\infty)$ 上至多只有 $\{x_n\}$ 中的有限项（请读者考虑为什么）．设这有限项中最大的下标为 $n_0$．显然，只要取 $N = n_0$，当 $n &gt; N$ 时，必有</p>
+  $$
+  x_n &lt; H + \varepsilon,
+  $$
+  <p>这就证明了 (i)．</p>
+<p>由于 $H$ 是 $\{x_n\}$ 的极限点，因此 $\{x_n\}$ 中有无穷多项属于 $H$ 的 $\varepsilon$ 邻域，因此这无穷多个项满足</p>
+  $$
+  x_n &gt; H - \varepsilon,
+  $$
+  <p>这就证明了 (ii)．</p>
+<p><strong>充分性</strong>：由 (i)，对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得当 $n &gt; N$ 时，成立 $x_n &lt; H + \varepsilon$，于是 $\varlimsup_{n\to\infty} x_n \leqslant H + \varepsilon$．由 $\varepsilon$ 的任意性知</p>
+  $$
+  \varlimsup_{n\to\infty} x_n \leqslant H.
+  $$
+  <p>由 (ii)，$\{x_n\}$ 中有无穷多项，满足 $x_n &gt; H - \varepsilon$，于是 $\varlimsup_{n\to\infty} x_n \geqslant H - \varepsilon$．由 $\varepsilon$ 的任意性又可知</p>
+  $$
+  \varlimsup_{n\to\infty} x_n \geqslant H.
+  $$
+  <p>结合上述两式，就得到</p>
+  $$
+  \varlimsup_{n\to\infty} x_n = H.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-4" class="anchor-btn" title="复制锚点链接"># 定理 9.2.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{x_n\}, \{y_n\}$ 是两数列，则</p>
+<p>(1) $\varlimsup_{n\to\infty} (x_n + y_n) \leqslant \varlimsup_{n\to\infty} x_n + \varlimsup_{n\to\infty} y_n, \quad \varliminf_{n\to\infty} (x_n + y_n) \geqslant \varliminf_{n\to\infty} x_n + \varliminf_{n\to\infty} y_n$；</p>
+<p>(2) 若 $\lim_{n\to\infty} x_n$ 存在，则</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n + y_n) = \lim_{n\to\infty} x_n + \varlimsup_{n\to\infty} y_n, \quad \varliminf_{n\to\infty} (x_n + y_n) = \lim_{n\to\infty} x_n + \varliminf_{n\to\infty} y_n.
+  $$
+  <p>（要求上述诸式的右端不是待定型，即不为 $(+\infty) + (-\infty)$ 等．）</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 下面只给出 (1) 与 (2) 中第一式的证明，并假定式中出现的上极限是有限数（上极限是 $+\infty$ 或 $-\infty$ 的情况留给读者自证）．</p>
+<p>记 $\varlimsup_{n\to\infty} x_n = H_1, \varlimsup_{n\to\infty} y_n = H_2$．</p>
+<p>由定理 9.2.3，对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，对一切 $n &gt; N$ 成立</p>
+  $$
+  x_n &lt; H_1 + \varepsilon, \quad y_n &lt; H_2 + \varepsilon,
+  $$
+  <p>即</p>
+  $$
+  x_n + y_n &lt; H_1 + H_2 + 2\varepsilon.
+  $$
+  <p>所以</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n + y_n) \leqslant H_1 + H_2 + 2\varepsilon.
+  $$
+  <p>由 $\varepsilon$ 的任意性，即得到</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n + y_n) \leqslant H_1 + H_2 = \varlimsup_{n\to\infty} x_n + \varlimsup_{n\to\infty} y_n.
+  $$
+  <p>这就是 (1) 的第一式．</p>
+<p>若 $\lim_{n\to\infty} x_n$ 存在，则由 (1) 的第一式，</p>
+  $$
+  \varlimsup_{n\to\infty} y_n = \varlimsup_{n\to\infty} [(x_n + y_n) - x_n] \leqslant \varlimsup_{n\to\infty} (x_n + y_n) + \varlimsup_{n\to\infty} (-x_n),
+  $$
+  <p>此式即为</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n + y_n) \geqslant \lim_{n\to\infty} x_n + \varlimsup_{n\to\infty} y_n.
+  $$
+  <p>将上式结合</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n + y_n) \leqslant \lim_{n\to\infty} x_n + \varlimsup_{n\to\infty} y_n,
+  $$
+  <p>即得到 (2) 的第一式．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.5</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-5" class="anchor-btn" title="复制锚点链接"># 定理 9.2.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{x_n\}, \{y_n\}$ 是两数列，</p>
+<p>(1) 若 $x_n \geqslant 0, y_n \geqslant 0$，则</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n y_n) \leqslant \varlimsup_{n\to\infty} x_n \cdot \varlimsup_{n\to\infty} y_n,
+  $$
+  $$
+  \varliminf_{n\to\infty} (x_n y_n) \geqslant \varliminf_{n\to\infty} x_n \cdot \varliminf_{n\to\infty} y_n;
+  $$
+  <p>(2) 若 $\lim_{n\to\infty} x_n = x, 0 &lt; x &lt; +\infty$，则</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n y_n) = \lim_{n\to\infty} x_n \cdot \varlimsup_{n\to\infty} y_n,
+  $$
+  $$
+  \varliminf_{n\to\infty} (x_n y_n) = \lim_{n\to\infty} x_n \cdot \varliminf_{n\to\infty} y_n.
+  $$
+  <p>（要求上述诸式的右端不是待定型，即不为 $0 \cdot (+\infty)$ 等．）</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 下面只给出 (2) 的第一式的证明，并假定 $\varlimsup_{n\to\infty} y_n$ 是有限数．</p>
+<p>由 $\lim_{n\to\infty} x_n = x, 0 &lt; x &lt; +\infty$，可知对任意给定的 $\varepsilon$ ($0 &lt; \varepsilon &lt; x$)，存在正整数 $N_1$，对一切 $n &gt; N_1$ 成立</p>
+  $$
+  0 &lt; x - \varepsilon &lt; x_n &lt; x + \varepsilon.
+  $$
+  <p>记 $\varlimsup_{n\to\infty} y_n = H_2$，由定理 9.2.3，对上述 $\varepsilon$ ($0 &lt; \varepsilon &lt; x$)，存在正整数 $N_2$，对一切 $n &gt; N_2$ 成立</p>
+  $$
+  y_n &lt; H_2 + \varepsilon.
+  $$
+  <p>取 $N = \max\{N_1, N_2\}$，则当 $n &gt; N$ 时，成立</p>
+  $$
+  x_n y_n &lt; \max\{(x - \varepsilon)(H_2 + \varepsilon), (x + \varepsilon)(H_2 + \varepsilon)\},
+  $$
+  <p>于是有</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n y_n) \leqslant \max\{(x - \varepsilon)(H_2 + \varepsilon), (x + \varepsilon)(H_2 + \varepsilon)\},
+  $$
+  <p>由 $\varepsilon$ 的任意性，即得到</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n y_n) \leqslant x \cdot H_2 = \lim_{n\to\infty} x_n \cdot \varlimsup_{n\to\infty} y_n.
+  $$
+  <p>由于</p>
+  $$
+  \varlimsup_{n\to\infty} y_n = \varlimsup_{n\to\infty} \left[(x_n y_n) \cdot \frac{1}{x_n}\right] \leqslant \varlimsup_{n\to\infty} (x_n y_n) \cdot \lim_{n\to\infty} \frac{1}{x_n},
+  $$
+  <p>即</p>
+  $$
+  \varlimsup_{n\to\infty} (x_n y_n) \geqslant \lim_{n\to\infty} x_n \cdot \varlimsup_{n\to\infty} y_n,
+  $$
+  <p>两式结合即得到 (2) 的第一式．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-2-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.2.6</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-2-6" class="anchor-btn" title="复制锚点链接"># 定理 9.2.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>$H^*$ 是 $\{x_n\}$ 的最大极限点，$h^*$ 是 $\{x_n\}$ 的最小极限点．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 首先证明，$\{x_n\}$ 的任意一个极限点 $\xi$（有限数或 $+\infty$ 或 $-\infty$）满足</p>
+  $$
+  h^* \leqslant \xi \leqslant H^*.
+  $$
+  <p>设 $\lim_{k\to\infty} x_{n_k} = \xi$，则对一切 $k \in \mathbf{N}^+$，成立</p>
+  $$
+  a_{n_k-1} \leqslant x_{n_k} \leqslant b_{n_k-1},
+  $$
+  <p>由 $\lim_{n\to\infty} a_n = h^*$, $\lim_{n\to\infty} b_n = H^*$ 与 $\lim_{k\to\infty} x_{n_k} = \xi$，得到</p>
+  $$
+  h^* \leqslant \xi \leqslant H^*.
+  $$
+  <p>其次证明，存在 $\{x_n\}$ 的子列 $\{x_{n_k}\}$ 与 $\{x_{m_k}\}$，使得</p>
+  $$
+  \lim_{k\to\infty} x_{n_k} = H^*, \quad \lim_{k\to\infty} x_{m_k} = h^*.
+  $$
+  <p>设 $\{x_n\}$ 的上极限 $H$ 与下极限 $h$ 都是有限数，取 $\varepsilon_k = \frac{1}{k}$, $k=1, 2, \dots$．</p>
+<p>对 $\varepsilon_1 = 1$，由 $b_1 = \sup_{i&gt;1} \{x_i\}$，$\exists\, n_1: b_1 - 1 &lt; x_{n_1} \leqslant b_1$；</p>
+<p>对 $\varepsilon_2 = \frac{1}{2}$，由 $b_{n_1} = \sup_{i&gt;n_1} \{x_i\}$，$\exists\, n_2 &gt; n_1: b_{n_1} - \frac{1}{2} &lt; x_{n_2} \leqslant b_{n_1}$；</p>
+<p>$\dots\dots$</p>
+<p>对 $\varepsilon_{k+1} = \frac{1}{k+1}$，由 $b_{n_k} = \sup_{i&gt;n_k} \{x_i\}$，$\exists\, n_{k+1} &gt; n_k: b_{n_k} - \frac{1}{k+1} &lt; x_{n_{k+1}} \leqslant b_{n_k}$；</p>
+<p>$\dots\dots$</p>
+<p>令 $k \to \infty$，由数列极限的夹逼性，得到</p>
+  $$
+  \lim_{k\to\infty} x_{n_k} = \lim_{k\to\infty} b_{n_k} = \lim_{n\to\infty} b_n = H^*.
+  $$
+  <p>同理可证存在子列 $\{x_{m_k}\}$，使得 $\lim_{k\to\infty} x_{m_k} = h^*$．</p>
+<p>若 $\{x_n\}$ 无上界，即 $H^* = +\infty$，则显然存在子列 $\{x_{n_k}\}$ 是正无穷大量，即 $\lim_{k\to\infty} x_{n_k} = H^* = +\infty$；若 $H^* = -\infty$，前面已经指出 $\lim_{n\to\infty} x_n = H^* = -\infty$；若 $\{x_n\}$ 无下界，即 $h^* = -\infty$，则显然存在子列 $\{x_{m_k}\}$ 是负无穷大量，即 $\lim_{k\to\infty} x_{m_k} = h^* = -\infty$；若 $h^* = +\infty$，前面也已经指出 $\lim_{n\to\infty} x_n = h^* = +\infty$．</p>
+<p>所以</p>
+  $$
+  H^* = \max E = \varlimsup_{n\to\infty} x_n, \quad h^* = \min E = \varliminf_{n\to\infty} x_n.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.1 正项级数的收敛原理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-1" class="anchor-btn" title="复制锚点链接"># 定理 9.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>正项级数收敛的充分必要条件是它的部分和数列有上界．</p>
+<p>若正项级数的部分和数列无上界，则其必发散到 $+\infty$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.2 比较判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-05" class="thm-tag routine-ref" target="_blank">🏷️ 套路 05: 双向不等式挤压与几何级数标杆</a>
+        <span class="thm-tag">正项级数审敛</span><span class="thm-tag">等比级数标杆</span><span class="thm-tag">比值判别法</span><span class="thm-tag">根值判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-2" class="anchor-btn" title="复制锚点链接"># 定理 9.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty x_n$ 与 $\sum_{n=1}^\infty y_n$ 是两个正项级数，若存在常数 $A &gt; 0$，使得</p>
+  $$
+  x_n \leqslant A y_n, \quad n = 1, 2, \dots,
+  $$
+  <p>则</p>
+<p>(1) 当 $\sum_{n=1}^\infty y_n$ 收敛时，$\sum_{n=1}^\infty x_n$ 也收敛；</p>
+<p>(2) 当 $\sum_{n=1}^\infty x_n$ 发散时，$\sum_{n=1}^\infty y_n$ 也发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设级数 $\sum_{n=1}^\infty x_n$ 的部分和数列为 $\{S_n\}$，级数 $\sum_{n=1}^\infty y_n$ 的部分和数列为 $\{T_n\}$，则显然有</p>
+  $$
+  S_n \leqslant A T_n, \quad n = 1, 2, \dots.
+  $$
+  <p>于是当 $\{T_n\}$ 有上界时，$\{S_n\}$ 也有上界，而当 $\{S_n\}$ 无上界时，$\{T_n\}$ 必定无上界．由定理 9.3.1 即得结论．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-05" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 05: 双向不等式挤压与几何级数标杆</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 以公比小于 1 的等比级数 ∑ qⁿ 为绝对标杆，通过局部增长比率将复杂级数单向压制收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要你的通项衰减速度比公比为 q (q < 1) 的等比数列还要快，你的级数就稳稳被等比级数的有限总和罩在下面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      指数防洪堤坝：等比级数是一座固若金汤的坚固堤坝，任何衰减快于堤坝的溪流都会被瞬间容纳。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>确界与几何公比比较：利用 lim sup (x_{n+1}/x_n) < 1 构造 q < 1。</li><li>从有限步 N 之后开始放缩截断。</li><li>极限形式与原始不等式形式的等价化归。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.2′ 比较判别法的极限形式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-05" class="thm-tag routine-ref" target="_blank">🏷️ 套路 05: 双向不等式挤压与几何级数标杆</a>
+        <span class="thm-tag">正项级数审敛</span><span class="thm-tag">等比级数标杆</span><span class="thm-tag">比值判别法</span><span class="thm-tag">根值判别法</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-2" class="anchor-btn" title="复制锚点链接"># 定理 9.3.2′</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty x_n$ 与 $\sum_{n=1}^\infty y_n$ 是两个正项级数，且</p>
+  $$
+  \lim_{n\to\infty} \frac{x_n}{y_n} = l \quad (0 \leqslant l \leqslant +\infty),
+  $$
+  <p>则</p>
+<p>(1) 若 $0 \leqslant l &lt; +\infty$，则当 $\sum_{n=1}^\infty y_n$ 收敛时，$\sum_{n=1}^\infty x_n$ 也收敛；</p>
+<p>(2) 若 $0 &lt; l \leqslant +\infty$，则当 $\sum_{n=1}^\infty y_n$ 发散时，$\sum_{n=1}^\infty x_n$ 也发散．</p>
+<p>所以当 $0 &lt; l &lt; +\infty$ 时，$\sum_{n=1}^\infty x_n$ 与 $\sum_{n=1}^\infty y_n$ 同时收敛或同时发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 下面只给出 (1) 的证明，(2) 的证明类似．</p>
+<p>由于 $\lim_{n\to\infty} \frac{x_n}{y_n} = l &lt; +\infty$，由极限的性质知，存在正整数 $N$，当 $n &gt; N$ 时，</p>
+  $$
+  \frac{x_n}{y_n} &lt; l + 1,
+  $$
+  <p>因此</p>
+  $$
+  x_n &lt; (l + 1)y_n.
+  $$
+  <p>由定理 9.3.2 即得所需结论．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-05" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 05: 双向不等式挤压与几何级数标杆</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 以公比小于 1 的等比级数 ∑ qⁿ 为绝对标杆，通过局部增长比率将复杂级数单向压制收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要你的通项衰减速度比公比为 q (q < 1) 的等比数列还要快，你的级数就稳稳被等比级数的有限总和罩在下面。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      指数防洪堤坝：等比级数是一座固若金汤的坚固堤坝，任何衰减快于堤坝的溪流都会被瞬间容纳。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>确界与几何公比比较：利用 lim sup (x_{n+1}/x_n) < 1 构造 q < 1。</li><li>从有限步 N 之后开始放缩截断。</li><li>极限形式与原始不等式形式的等价化归。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.3 Cauchy 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 分拆控制法与尾部解耦</a>
+        <span class="thm-tag">Cauchy收敛原理</span><span class="thm-tag">尾部和任意小</span><span class="thm-tag">实数完备性</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-3" class="anchor-btn" title="复制锚点链接"># 定理 9.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty x_n$ 是正项级数，$r = \varlimsup_{n\to\infty} \sqrt[n]{x_n}$，则</p>
+<p>(1) 当 $r &lt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 收敛；</p>
+<p>(2) 当 $r &gt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 发散；</p>
+<p>(3) 当 $r = 1$ 时，判别法失效，即级数可能收敛，也可能发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 当 $r &lt; 1$ 时，取 $q$ 满足 $r &lt; q &lt; 1$，由定理 9.2.3，可知存在正整数 $N$，使得对一切 $n &gt; N$，成立</p>
+  $$
+  \sqrt[n]{x_n} &lt; q,
+  $$
+  <p>从而</p>
+  $$
+  x_n &lt; q^n, \quad 0 &lt; q &lt; 1,
+  $$
+  <p>由定理 9.3.2 可知 $\sum_{n=1}^\infty x_n$ 收敛．</p>
+<p>当 $r &gt; 1$ 时，由于 $r$ 是数列 $\{\sqrt[n]{x_n}\}$ 的极限点，可知存在无穷多个 $n$ 满足 $\sqrt[n]{x_n} &gt; 1$，这说明数列 $\{x_n\}$ 不是无穷小量，从而 $\sum_{n=1}^\infty x_n$ 发散．</p>
+<p>当 $r = 1$，可以通过级数 $\sum_{n=1}^\infty \frac{1}{n^2}$ 与 $\sum_{n=1}^\infty \frac{1}{n}$ 知道判别法失效．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 分拆控制法与尾部解耦</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无需事先猜测和数极限值，仅凭尾部任意多项切片的局部振幅一致压制在 ε 之内即可判定收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要数列尾巴上的任意一段连续切片总和都能随意压紧到头发丝以内，这个级数就必然收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      长途旅行的尾声：不管你在路程后半段再走多少步，剩下的总距离累计都不会超过哪怕一毫米。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>数列 Cauchy 原理到级数的自然投影：S_m - S_n = x_{n+1} + ... + x_m。</li><li>内蕴收敛特性：摆脱了对和值 S 的先验依赖。</li><li>绝对收敛与条件收敛分流的基础判据。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.4 d'Alembert 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-4" class="anchor-btn" title="复制锚点链接"># 定理 9.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty x_n$ ($x_n \neq 0$) 是正项级数，则</p>
+<p>(1) 当 $\varlimsup_{n\to\infty} \frac{x_{n+1}}{x_n} = \bar{r} &lt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 收敛；</p>
+<p>(2) 当 $\varliminf_{n\to\infty} \frac{x_{n+1}}{x_n} = \underline{r} &gt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 发散；</p>
+<p>(3) 当 $\bar{r} \geqslant 1$ 或 $\underline{r} \leqslant 1$ 时，判别法失效，即级数可能收敛，也可能发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 9.3.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-1" class="anchor-btn" title="复制锚点链接"># 引理 9.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{x_n\}$ 是正项数列，则</p>
+  $$
+  \varliminf_{n\to\infty} \frac{x_{n+1}}{x_n} \leqslant \varliminf_{n\to\infty} \sqrt[n]{x_n} \leqslant \varlimsup_{n\to\infty} \sqrt[n]{x_n} \leqslant \varlimsup_{n\to\infty} \frac{x_{n+1}}{x_n}.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设</p>
+  $$
+  \bar{r} = \varlimsup_{n\to\infty} \frac{x_{n+1}}{x_n},
+  $$
+  <p>由定理 9.2.3，对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得对一切 $n &gt; N$，成立</p>
+  $$
+  \frac{x_{n+1}}{x_n} &lt; \bar{r} + \varepsilon,
+  $$
+  <p>于是</p>
+  $$
+  x_n &lt; (\bar{r} + \varepsilon)^{n-N-1} \cdot x_{N+1} \quad (n &gt; N + 1),
+  $$
+  <p>从而</p>
+  $$
+  \varlimsup_{n\to\infty} \sqrt[n]{x_n} \leqslant \lim_{n\to\infty} \sqrt[n]{(\bar{r} + \varepsilon)^{n-N-1} \cdot x_{N+1}} = \bar{r} + \varepsilon,
+  $$
+  <p>由 $\varepsilon$ 的任意性，即得到</p>
+  $$
+  \varlimsup_{n\to\infty} \sqrt[n]{x_n} \leqslant \bar{r} = \varlimsup_{n\to\infty} \frac{x_{n+1}}{x_n}.
+  $$
+  <p>读者可以按类似思路，自己证明</p>
+  $$
+  \varliminf_{n\to\infty} \frac{x_{n+1}}{x_n} \leqslant \varliminf_{n\to\infty} \sqrt[n]{x_n}.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.5 Raabe 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-5" class="anchor-btn" title="复制锚点链接"># 定理 9.3.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\sum_{n=1}^\infty x_n$ ($x_n \neq 0$) 是正项级数，$\lim_{n\to\infty} n\left(\frac{x_n}{x_{n+1}} - 1\right) = r$，则</p>
+<p>(1) 当 $r &gt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 收敛；</p>
+<p>(2) 当 $r &lt; 1$ 时，级数 $\sum_{n=1}^\infty x_n$ 发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $s &gt; t &gt; 1$，$f(x) = 1 + sx - (1 + x)^t$，由 $f(0) = 0$ 与 $f'(0) = s - t &gt; 0$，可知存在 $\delta &gt; 0$，当 $0 &lt; x &lt; \delta$ 时，成立</p>
+  $$
+  1 + sx &gt; (1 + x)^t. \tag{*}
+  $$
+  <p>当 $r &gt; 1$ 时，取 $s, t$ 满足 $r &gt; s &gt; t &gt; 1$．由 $\lim_{n\to\infty} n\left(\frac{x_n}{x_{n+1}} - 1\right) = r &gt; s &gt; t$ 与不等式 (*)，可知对于充分大的 $n$，成立</p>
+  $$
+  \frac{x_n}{x_{n+1}} &gt; 1 + \frac{s}{n} &gt; \left(1 + \frac{1}{n}\right)^t = \frac{(n+1)^t}{n^t}.
+  $$
+  <p>这说明正项数列 $\{n^t x_n\}$ 从某一项开始单调减少，因而其必有上界，设</p>
+  $$
+  n^t x_n \leqslant A,
+  $$
+  <p>于是</p>
+  $$
+  x_n \leqslant \frac{A}{n^t}.
+  $$
+  <p>由于 $t &gt; 1$，因而 $\sum_{n=1}^\infty \frac{1}{n^t}$ 收敛，根据比较判别法即得到 $\sum_{n=1}^\infty x_n$ 的收敛性．</p>
+<p>当 $\lim_{n\to\infty} n\left(\frac{x_n}{x_{n+1}} - 1\right) = r &lt; 1$，则对于充分大的 $n$，成立</p>
+  $$
+  \frac{x_n}{x_{n+1}} &lt; 1 + \frac{1}{n} = \frac{n+1}{n},
+  $$
+  <p>这说明正项数列 $\{n x_n\}$ 从某一项开始单调增加，因而存在正整数 $N$ 与实数 $\alpha &gt; 0$，使得对一切 $n &gt; N$ 成立，于是</p>
+  $$
+  n x_n &gt; \alpha,
+  $$
+  $$
+  x_n &gt; \frac{\alpha}{n}.
+  $$
+  <p>由于 $\sum_{n=1}^\infty \frac{1}{n}$ 发散，根据比较判别法即得到 $\sum_{n=1}^\infty x_n$ 发散．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-3-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.3.6 积分判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-3-6" class="anchor-btn" title="复制锚点链接"># 定理 9.3.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 与正项级数 $\sum_{n=1}^\infty u_n$ 同时收敛或同时发散于 $+\infty$，且</p>
+  $$
+  \int_a^{+\infty} f(x)\mathrm{d}x = \sum_{n=1}^\infty u_n = \sum_{n=1}^\infty \int_{a_n}^{a_{n+1}} f(x)\mathrm{d}x.
+  $$
+  <p>特别地，当 $f(x)$ 单调减少时，取 $a_n = n$，则反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 与正项级数 $\sum_{n=N}^\infty f(n)$ ($N = [a] + 1$) 同时收敛或同时发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设正项级数 $\sum_{n=1}^\infty u_n$ 的部分和数列为 $\{S_n\}$，则对任意 $A &gt; a$，存在正整数 $n$，成立 $a_n \leqslant A &lt; a_{n+1}$，于是</p>
+  $$
+  S_{n-1} \leqslant \int_a^A f(x)\mathrm{d}x \leqslant S_n.
+  $$
+  <p>当 $\{S_n\}$ 有界，即 $\sum_{n=1}^\infty u_n$ 收敛时，则有 $\lim_{A\to+\infty} \int_a^A f(x)\mathrm{d}x$ 收敛，且根据极限的夹逼性，它们收敛于相同的极限；当 $\{S_n\}$ 无界，即 $\sum_{n=1}^\infty u_n$ 发散于 $+\infty$ 时，则同样有 $\lim_{A\to+\infty} \int_a^A f(x)\mathrm{d}x = +\infty$．由此得到下述关系：</p>
+  $$
+  \int_a^{+\infty} f(x)\mathrm{d}x = \sum_{n=1}^\infty u_n = \sum_{n=1}^\infty \int_{a_n}^{a_{n+1}} f(x)\mathrm{d}x.
+  $$
+  <p>特别，当 $f(x)$ 单调减少时，取 $a_n = n$，则当 $n \geqslant N = [a] + 1$，</p>
+  $$
+  f(n+1) \leqslant u_n = \int_n^{n+1} f(x)\mathrm{d}x \leqslant f(n),
+  $$
+  <p>由比较判别法可知 $\sum_{n=N}^\infty f(n)$ 与 $\sum_{n=N}^\infty u_n$ 同时收敛或同时发散，从而与 $\int_a^{+\infty} f(x)\mathrm{d}x$ 同时收敛或同时发散．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.1 级数的 Cauchy 收敛原理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-1" class="anchor-btn" title="复制锚点链接"># 定理 9.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>级数 $\sum_{n=1}^\infty x_n$ 收敛的充分必要条件是：对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得</p>
+  $$
+  |x_{n+1} + x_{n+2} + \dots + x_m| = \left|\sum_{k=n+1}^m x_k\right| &lt; \varepsilon
+  $$
+  <p>对一切 $m &gt; n &gt; N$ 成立．</p>
+<p>定理结论还可以叙述为：对任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得</p>
+  $$
+  |x_{n+1} + x_{n+2} + \dots + x_{n+p}| = \left|\sum_{k=1}^p x_{n+k}\right| &lt; \varepsilon
+  $$
+  <p>对一切 $n &gt; N$ 与一切正整数 $p$ 成立．</p>
+<p>取 $p = 1$，上式即为 $|x_{n+1}| &lt; \varepsilon$，于是就得到级数收敛的必要条件 $\lim_{n\to\infty} x_n = 0$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><em>（注：原书本定理推导过程已在正文相关讨论中阐述，或留作课后练习由读者推导）</em></p></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.2 Leibniz 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-2" class="anchor-btn" title="复制锚点链接"># 定理 9.4.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>Leibniz 级数必定收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 首先有</p>
+  $$
+  |x_{n+1} + x_{n+2} + \dots + x_{n+p}| = |u_{n+1} - u_{n+2} + u_{n+3} - \dots + (-1)^{p+1}u_{n+p}|.
+  $$
+  <p>当 $p$ 是奇数时，</p>
+  $$
+  \begin{aligned}
+  u_{n+1} - u_{n+2} + u_{n+3} - \dots + (-1)^{p+1}u_{n+p} &amp;= (u_{n+1} - u_{n+2}) + (u_{n+3} - u_{n+4}) + \dots + u_{n+p} &gt; 0, \\
+  &amp;= u_{n+1} - (u_{n+2} - u_{n+3}) - \dots - (u_{n+p-1} - u_{n+p}) \leqslant u_{n+1};
+  \end{aligned}
+  $$
+  <p>当 $p$ 是偶数时，</p>
+
+  $$
+  u_{n+1} - u_{n+2} + u_{n+3} - \dots + (-1)^{p+1}u_{n+p} = \begin{cases}
+  (u_{n+1} - u_{n+2}) + (u_{n+3} - u_{n+4}) + \dots + (u_{n+p-1} - u_{n+p}) \geqslant 0, \\
+  u_{n+1} - (u_{n+2} - u_{n+3}) - \dots - u_{n+p} &lt; u_{n+1},
+  \end{cases}
+  $$
+  <p>因而成立</p>
+  $$
+  |x_{n+1} + x_{n+2} + \dots + x_{n+p}| = |u_{n+1} - u_{n+2} + u_{n+3} - \dots + (-1)^{p+1}u_{n+p}| \leqslant u_{n+1}.
+  $$
+  <p>由于 $\lim_{n\to\infty} u_n = 0$，所以对于任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得对一切 $n &gt; N$，成立</p>
+  $$
+  u_{n+1} &lt; \varepsilon.
+  $$
+  <p>于是，对一切正整数 $p$ 成立</p>
+  $$
+  |x_{n+1} + x_{n+2} + \dots + x_{n+p}| \leqslant u_{n+1} &lt; \varepsilon.
+  $$
+  <p>根据定理 9.4.1，Leibniz 级数 $\sum_{n=1}^\infty (-1)^{n+1}u_n$ 收敛．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 9.4.1 Abel 变换</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-15" class="thm-tag routine-ref" target="_blank">🏷️ 套路 15: 级数正负项分离与 Abel 变换</a>
+        <span class="thm-tag">Abel判别法</span><span class="thm-tag">Dirichlet判别法</span><span class="thm-tag">分部求和</span><span class="thm-tag">条件收敛</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-1" class="anchor-btn" title="复制锚点链接"># 引理 9.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设 $\{a_n\}, \{b_n\}$ 是两数列，记 $B_k = \sum_{i=1}^k b_i$ ($k = 1, 2, \dots$)，则</p>
+  $$
+  \sum_{k=1}^p a_k b_k = a_p B_p - \sum_{k=1}^{p-1} (a_{k+1} - a_k) B_k.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong></p>
+  $$
+  \begin{aligned}
+  \sum_{k=1}^p a_k b_k &amp;= a_1 B_1 + \sum_{k=2}^p a_k(B_k - B_{k-1}) = a_1 B_1 + \sum_{k=2}^p a_k B_k - \sum_{k=2}^p a_k B_{k-1} \\
+  &amp;= \sum_{k=1}^{p-1} a_k B_k - \sum_{k=1}^{p-1} a_{k+1} B_k + a_p B_p = a_p B_p - \sum_{k=1}^{p-1} (a_{k+1} - a_k) B_k.
+  \end{aligned}
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-15" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 15: 级数正负项分离与 Abel 变换</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 离散世界的分部积分法；通过部分和有界性与单调趋零项的交叉消解，化解正负符号交替振荡。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      一个量虽然单调递减，另一个量虽然正负振荡但总体有界，两者的乘积累加通过离散分部求和互相制约，最终平稳收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双人推拉秋千：一人用力单调减弱，秋千虽然来回摆动但振幅受限，两者配合最终让秋千静止在中心。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 分部求和恒等式：∑ a_k b_k 的离散转移。</li><li>Dirichlet 条件：A_n 有界且 b_n 单调趋于 0。</li><li>Abel 条件：∑ a_n 收敛且 b_n 单调有界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 9.4.2 Abel 引理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-15" class="thm-tag routine-ref" target="_blank">🏷️ 套路 15: 级数正负项分离与 Abel 变换</a>
+        <span class="thm-tag">Abel判别法</span><span class="thm-tag">Dirichlet判别法</span><span class="thm-tag">分部求和</span><span class="thm-tag">条件收敛</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-2" class="anchor-btn" title="复制锚点链接"># 引理 9.4.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设</p>
+<p>(1) $\{a_k\}$ 为单调数列；</p>
+<p>(2) $\{B_k\}$ ($B_k = \sum_{i=1}^k b_i, k = 1, 2, \dots$) 为有界数列，即存在 $M &gt; 0$，对一切 $k$，成立 $|B_k| \leqslant M$，则</p>
+  $$
+  \left|\sum_{k=1}^p a_k b_k\right| \leqslant M(|a_1| + 2|a_p|).
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 由 Abel 变换得</p>
+
+  $$
+  \left|\sum_{k=1}^p a_k b_k\right| \leqslant |a_p B_p| + \sum_{k=1}^{p-1} |a_{k+1} - a_k| \cdot |B_k| \leqslant M\left(|a_p| + \sum_{k=1}^{p-1} |a_{k+1} - a_k|\right).
+  $$
+  <p>由于 $\{a_k\}$ 单调，所以</p>
+  $$
+  \sum_{k=1}^{p-1} |a_{k+1} - a_k| = \left|\sum_{k=1}^{p-1} (a_{k+1} - a_k)\right| = |a_p - a_1|,
+  $$
+  <p>于是得到</p>
+  $$
+  \left|\sum_{k=1}^p a_k b_k\right| \leqslant M(|a_1| + 2|a_p|).
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-15" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 15: 级数正负项分离与 Abel 变换</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 离散世界的分部积分法；通过部分和有界性与单调趋零项的交叉消解，化解正负符号交替振荡。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      一个量虽然单调递减，另一个量虽然正负振荡但总体有界，两者的乘积累加通过离散分部求和互相制约，最终平稳收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双人推拉秋千：一人用力单调减弱，秋千虽然来回摆动但振幅受限，两者配合最终让秋千静止在中心。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 分部求和恒等式：∑ a_k b_k 的离散转移。</li><li>Dirichlet 条件：A_n 有界且 b_n 单调趋于 0。</li><li>Abel 条件：∑ a_n 收敛且 b_n 单调有界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.3 级数的 A-D 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-15" class="thm-tag routine-ref" target="_blank">🏷️ 套路 15: 级数正负项分离与 Abel 变换</a>
+        <span class="thm-tag">Abel判别法</span><span class="thm-tag">Dirichlet判别法</span><span class="thm-tag">分部求和</span><span class="thm-tag">条件收敛</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-3" class="anchor-btn" title="复制锚点链接"># 定理 9.4.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>若下列两个条件之一满足，则级数 $\sum_{n=1}^\infty a_n b_n$ 收敛：</p>
+<p>(1)（Abel 判别法）$\{a_n\}$ 单调有界，$\sum_{n=1}^\infty b_n$ 收敛；</p>
+<p>(2)（Dirichlet 判别法）$\{a_n\}$ 单调趋于 0，$\left\{\sum_{i=1}^n b_i\right\}$ 有界．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> (1) 若 Abel 判别法条件满足，设 $|a_n| \leqslant M$，由于 $\sum_{n=1}^\infty b_n$ 收敛，则对于任意给定的 $\varepsilon &gt; 0$，存在正整数 $N$，使得对于一切 $n &gt; N$ 和 $p \in \mathbb{N}^+$，成立</p>
+  $$
+  \left|\sum_{k=n+1}^{n+p} b_k\right| &lt; \varepsilon.
+  $$
+  <p>对 $\sum_{k=n+1}^{n+p} a_k b_k$ 应用 Abel 引理，即得</p>
+  $$
+  \left|\sum_{k=n+1}^{n+p} a_k b_k\right| &lt; \varepsilon (|a_{n+1}| + 2|a_{n+p}|) \leqslant 3M\varepsilon.
+  $$
+  <p>(2) 若 Dirichlet 判别法条件满足，由于 $\lim_{n\to\infty} a_n = 0$，因此对于任意给定的 $\varepsilon &gt; 0$，存在 $N$，使得对于一切 $n &gt; N$，成立</p>
+  $$
+  |a_n| &lt; \varepsilon.
+  $$
+  <p>设 $\left|\sum_{i=1}^n b_i\right| \leqslant M$，令 $B_k = \sum_{i=n+1}^{n+k} b_i$ ($k = 1, 2, \dots$)，则</p>
+  $$
+  |B_k| = \left|\sum_{i=1}^{n+k} b_i - \sum_{i=1}^n b_i\right| \leqslant 2M.
+  $$
+  <p>应用 Abel 引理，同样可得</p>
+  $$
+  \left|\sum_{k=n+1}^{n+p} a_k b_k\right| \leqslant 2M(|a_{n+1}| + 2|a_{n+p}|) &lt; 6M\varepsilon
+  $$
+  <p>对一切 $n &gt; N$ 与一切正整数 $p$ 成立．</p>
+<p>根据 Cauchy 收敛原理（定理 9.4.1），即知 $\sum_{n=1}^\infty a_n b_n$ 收敛．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-15" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 15: 级数正负项分离与 Abel 变换</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 离散世界的分部积分法；通过部分和有界性与单调趋零项的交叉消解，化解正负符号交替振荡。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      一个量虽然单调递减，另一个量虽然正负振荡但总体有界，两者的乘积累加通过离散分部求和互相制约，最终平稳收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双人推拉秋千：一人用力单调减弱，秋千虽然来回摆动但振幅受限，两者配合最终让秋千静止在中心。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Abel 分部求和恒等式：∑ a_k b_k 的离散转移。</li><li>Dirichlet 条件：A_n 有界且 b_n 单调趋于 0。</li><li>Abel 条件：∑ a_n 收敛且 b_n 单调有界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.4</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-4" class="anchor-btn" title="复制锚点链接"># 定理 9.4.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>若 $\sum_{n=1}^\infty x_n$ 绝对收敛，则 $\sum_{n=1}^\infty x_n^+$ 与 $\sum_{n=1}^\infty x_n^-$ 都收敛；若 $\sum_{n=1}^\infty x_n$ 条件收敛，则 $\sum_{n=1}^\infty x_n^+$ 与 $\sum_{n=1}^\infty x_n^-$ 都发散到 $+\infty$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 先设 $\sum_{n=1}^\infty x_n$ 绝对收敛，由于</p>
+  $$
+  0 \leqslant x_n^+ \leqslant |x_n|, \quad 0 \leqslant x_n^- \leqslant |x_n|, \quad n = 1, 2, \dots,
+  $$
+  <p>则由 $\sum_{n=1}^\infty |x_n|$ 的收敛性，立刻得到 $\sum_{n=1}^\infty x_n^+$ 与 $\sum_{n=1}^\infty x_n^-$ 的收敛性．</p>
+<p>现设 $\sum_{n=1}^\infty x_n$ 条件收敛，若 $\sum_{n=1}^\infty x_n^+$（或 $\sum_{n=1}^\infty x_n^-$）也收敛，则由</p>
+  $$
+  \sum_{n=1}^\infty x_n^- = \sum_{n=1}^\infty x_n^+ - \sum_{n=1}^\infty x_n \quad \left(\text{或 } \sum_{n=1}^\infty x_n^+ = \sum_{n=1}^\infty x_n^- + \sum_{n=1}^\infty x_n\right)
+  $$
+  <p>可知 $\sum_{n=1}^\infty x_n^-$（或 $\sum_{n=1}^\infty x_n^+$）也收敛，于是得到</p>
+  $$
+  \sum_{n=1}^\infty |x_n| = \sum_{n=1}^\infty x_n^+ + \sum_{n=1}^\infty x_n^-
+  $$
+  <p>的收敛性，从而产生矛盾．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.5</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-5" class="anchor-btn" title="复制锚点链接"># 定理 9.4.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>若级数 $\sum_{n=1}^\infty x_n$ 绝对收敛，则它的更序级数 $\sum_{n=1}^\infty x'_n$ 也绝对收敛，且和不变，即</p>
+  $$
+  \sum_{n=1}^\infty x'_n = \sum_{n=1}^\infty x_n.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 我们分两步来证明定理．</p>
+<p>(1) 先设 $\sum_{n=1}^\infty x_n$ 是正项级数，则对一切 $n \in \mathbb{N}^+$，</p>
+
+  $$
+  \sum_{k=1}^n x'_k \leqslant \sum_{n=1}^\infty x_n,
+  $$
+  <p>于是可知 $\sum_{n=1}^\infty x'_n$ 收敛，且</p>
+  $$
+  \sum_{n=1}^\infty x'_n \leqslant \sum_{n=1}^\infty x_n;
+  $$
+  <p>反过来，也可以将 $\sum_{n=1}^\infty x_n$ 看成是 $\sum_{n=1}^\infty x'_n$ 的更序级数，又有</p>
+  $$
+  \sum_{n=1}^\infty x_n \leqslant \sum_{n=1}^\infty x'_n.
+  $$
+  <p>结合上述两式即得</p>
+  $$
+  \sum_{n=1}^\infty x'_n = \sum_{n=1}^\infty x_n.
+  $$
+  <p>(2) 现设 $\sum_{n=1}^\infty x_n$ 是任意项级数，则由定理 9.4.4，正项级数 $\sum_{n=1}^\infty x_n^+$ 与 $\sum_{n=1}^\infty x_n^-$ 都收敛，且</p>
+  $$
+  \sum_{n=1}^\infty x_n = \sum_{n=1}^\infty x_n^+ - \sum_{n=1}^\infty x_n^-, \quad \sum_{n=1}^\infty |x_n| = \sum_{n=1}^\infty x_n^+ + \sum_{n=1}^\infty x_n^-.
+  $$
+  <p>对于更序级数 $\sum_{n=1}^\infty x'_n$，同样构作正项级数 $\sum_{n=1}^\infty x_n'^+$ 与 $\sum_{n=1}^\infty x_n'^-$，由于 $\sum_{n=1}^\infty x_n'^+$ 即为 $\sum_{n=1}^\infty x_n^+$ 的更序级数，$\sum_{n=1}^\infty x_n'^-$ 即为 $\sum_{n=1}^\infty x_n^-$ 的更序级数，根据 (1) 的结论，</p>
+  $$
+  \sum_{n=1}^\infty x_n'^+ = \sum_{n=1}^\infty x_n^+, \quad \sum_{n=1}^\infty x_n'^- = \sum_{n=1}^\infty x_n^-,
+  $$
+  <p>于是得到 $\sum_{n=1}^\infty |x'_n| = \sum_{n=1}^\infty x_n'^+ + \sum_{n=1}^\infty x_n'^-$ 收敛，即 $\sum_{n=1}^\infty x'_n$ 绝对收敛，且</p>
+  $$
+  \sum_{n=1}^\infty x'_n = \sum_{n=1}^\infty x_n'^+ - \sum_{n=1}^\infty x_n'^- = \sum_{n=1}^\infty x_n^+ - \sum_{n=1}^\infty x_n^- = \sum_{n=1}^\infty x_n.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.6 Riemann 重排定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-6" class="anchor-btn" title="复制锚点链接"># 定理 9.4.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>设级数 $\sum_{n=1}^\infty x_n$ 条件收敛，则对任意给定的 $a$，$-\infty \leqslant a \leqslant +\infty$，必定存在 $\sum_{n=1}^\infty x_n$ 的更序级数 $\sum_{n=1}^\infty x'_n$ 满足</p>
+  $$
+  \sum_{n=1}^\infty x'_n = a.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 我们只证 $a$ 为有限数的情况，$a = \pm\infty$ 的情况留给读者考虑．</p>
+<p>由于 $\sum_{n=1}^\infty x_n$ 条件收敛，由定理 9.4.4，</p>
+  $$
+  \sum_{n=1}^\infty x_n^+ = +\infty, \quad \sum_{n=1}^\infty x_n^- = +\infty.
+  $$
+  
+<p>依次计算 $\sum_{n=1}^\infty x_n^+$ 的部分和，必定存在最小的正整数 $n_1$，满足</p>
+  $$
+  x_1^+ + x_2^+ + \dots + x_{n_1}^+ &gt; a,
+  $$
+  <p>再依次计算 $\sum_{n=1}^\infty x_n^-$ 的部分和，也必定存在最小的正整数 $m_1$，满足</p>
+  $$
+  x_1^+ + x_2^+ + \dots + x_{n_1}^+ - x_1^- - x_2^- - \dots - x_{m_1}^- &lt; a,
+  $$
+  <p>类似地可找到最小的正整数 $n_2 &gt; n_1, m_2 &gt; m_1$，满足</p>
+  $$
+  x_1^+ + x_2^+ + \dots + x_{n_1}^+ - x_1^- - x_2^- - \dots - x_{m_1}^- + x_{n_1+1}^+ + \dots + x_{n_2}^+ &gt; a
+  $$
+  <p>和</p>
+  $$
+  x_1^+ + x_2^+ + \dots + x_{n_1}^+ - x_1^- - x_2^- - \dots - x_{m_1}^- + x_{n_1+1}^+ + \dots + x_{n_2}^+ - x_{m_1+1}^- - \dots - x_{m_2}^- &lt; a,
+  $$
+  $$
+  \dots\dots\dots\dots
+  $$
+  <p>这样的步骤可一直继续下去，由此得到 $\sum_{n=1}^\infty x_n$ 的一个更序级数 $\sum_{n=1}^\infty x'_n$，它的部分和摆动于 $a + x_{n_k}^+$ 与 $a - x_{m_k}^-$ 之间．</p>
+<p>由于 $\sum_{n=1}^\infty x_n$ 收敛，可知</p>
+  $$
+  \lim_{n\to\infty} x_n^+ = \lim_{n\to\infty} x_n^- = 0,
+  $$
+  <p>于是得到</p>
+  $$
+  \sum_{n=1}^\infty x'_n = a.
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-4-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.4.7</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-4-7" class="anchor-btn" title="复制锚点链接"># 定理 9.4.7</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<p>如果级数 $\sum_{n=1}^\infty a_n$ 与 $\sum_{n=1}^\infty b_n$ 绝对收敛，则将 $a_i b_j$ ($i = 1, 2, \dots; j = 1, 2, \dots$) 按任意方式排列求和而成的级数也绝对收敛，且其和等于 $\left(\sum_{n=1}^\infty a_n\right)\left(\sum_{n=1}^\infty b_n\right)$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $a_{i_k} b_{j_k}$ ($k = 1, 2, \dots$) 是所有 $a_i b_j$ ($i = 1, 2, \dots; j = 1, 2, \dots$) 的任意一种排列，对任意的 $n$，取</p>
+  $$
+  N = \max_{1 \leqslant k \leqslant n} \{i_k, j_k\},
+  $$
+  <p>则</p>
+  $$
+  \sum_{k=1}^n |a_{i_k} b_{j_k}| \leqslant \sum_{i=1}^N |a_i| \cdot \sum_{j=1}^N |b_j| \leqslant \sum_{n=1}^\infty |a_n| \cdot \sum_{n=1}^\infty |b_n|,
+  $$
+  <p>因此 $\sum_{k=1}^\infty a_{i_k} b_{j_k}$ 绝对收敛．由定理 9.4.5，$\sum_{k=1}^\infty a_{i_k} b_{j_k}$ 的任意更序级数也绝对收敛，且和不变．</p>
+
+<p>设 $\sum_{n=1}^\infty d_n$ 是级数 $\sum_{n=1}^\infty a_n$ 与 $\sum_{n=1}^\infty b_n$ 按正方形排列所得的乘积，则 $\sum_{n=1}^\infty d_n$ 是 $\sum_{k=1}^\infty a_{i_k} b_{j_k}$ 更序后再添加括号所成的级数，于是得到</p>
+  $$
+  \sum_{k=1}^\infty a_{i_k} b_{j_k} = \sum_{n=1}^\infty d_n = \left(\sum_{n=1}^\infty a_n\right)\left(\sum_{n=1}^\infty b_n\right).
+  $$
+  <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-5-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.5.1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-5-1" class="anchor-btn" title="复制锚点链接"># 定理 9.5.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>如果无穷乘积 $\prod_{n=1}^\infty p_n$ 收敛，则</p>
+<p>(1) $\lim_{n\to\infty} p_n = 1$；</p>
+<p>(2) $\lim_{m\to\infty} \prod_{n=m+1}^\infty p_n = 1$．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 设 $\prod_{n=1}^\infty p_n$ 的部分积数列为 $\{P_n\}$，则</p>
+  $$
+  \lim_{n\to\infty} p_n = \lim_{n\to\infty} \frac{P_n}{P_{n-1}} = 1;
+  $$
+  
+  $$
+  \lim_{m\to\infty} \prod_{n=m+1}^\infty p_n = \lim_{m\to\infty} \frac{\prod_{n=1}^\infty p_n}{\prod_{n=1}^m p_n} = 1.
+  $$
+  <div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-5-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.5.2</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 极限语言化验法</a>
+        <span class="thm-tag">级数收敛必要条件</span><span class="thm-tag">通项趋零</span><span class="thm-tag">发散判别</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-5-2" class="anchor-btn" title="复制锚点链接"># 定理 9.5.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>无穷乘积 $\prod_{n=1}^\infty p_n$ 收敛的充分必要条件是级数 $\sum_{n=1}^\infty \ln p_n$ 收敛．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 设 $\prod_{n=1}^\infty p_n$ 的部分积数列为 $\{P_n\}$，$\sum_{n=1}^\infty \ln p_n$ 的部分和数列为 $\{S_n\}$，则</p>
+  $$
+  P_n = \mathrm{e}^{S_n},
+  $$
+  <p>由此得到 $\{P_n\}$ 收敛于非零实数的充分必要条件是 $\{S_n\}$ 收敛．特别，$\{P_n\}$ 收敛于 $0$，即 $\prod_{n=1}^\infty p_n$ 发散于 $0$ 的充分必要条件是 $\{S_n\}$ 发散于 $-\infty$．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 极限语言化验法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无限累加能够平息成有限数的前提，是后续注入的增量必须衰减至绝对虚无（lim x_n = 0）。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个水池不断注入微量水流，若注入速度不趋向于零，水位必定漫溢发散；通项趋于零是收敛的门槛准入证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      汽车减速刹车图景：如果车速没有降至绝对的 0，车辆行进的总路程就永远不可能收敛为一个定值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>部分和递推关系：x_n = S_n - S_{n-1}。</li><li>收敛极限运算：lim x_n = lim S_n - lim S_{n-1} = S - S = 0。</li><li>逆命题不成立：调和级数 ∑ 1/n 通项趋于零却发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-ch9-9-5-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 9.5.3</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛三步法</a>
+        <span class="thm-tag">正项级数</span><span class="thm-tag">部分和单调有界</span><span class="thm-tag">收敛判定</span>
+      </div>
+    </div>
+    <a href="#thm-ch9-9-5-3" class="anchor-btn" title="复制锚点链接"># 定理 9.5.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><p>设 $a_n &gt; -1, n=1,2,\dots$，则下述三命题等价：</p>
+<p>(1) 无穷乘积 $\prod_{n=1}^\infty (1+a_n)$ 绝对收敛；</p>
+<p>(2) 无穷乘积 $\prod_{n=1}^\infty (1+|a_n|)$ 收敛；</p>
+<p>(3) 级数 $\sum_{n=1}^\infty |a_n|$ 收敛．</p></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><p><strong>证</strong> 首先命题 (1)，(2)，(3) 的必要条件都是 $\lim_{n\to\infty} a_n = 0$．而在 $\lim_{n\to\infty} a_n = 0$ 的条件下，我们有</p>
+  $$
+  \lim_{n\to\infty} \frac{|\ln(1+a_n)|}{|a_n|} = 1,
+  $$
+  $$
+  \lim_{n\to\infty} \frac{\ln(1+|a_n|)}{|a_n|} = 1,
+  $$
+  
+<p>由正项级数的比较判别法，即得到定理的结论．</p>
+<div class="proof-end">证毕</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛三步法</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 正项级数的部分和天然单调递增，收敛与否完全等价于部分和数列是否有上界。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      正数不断累加，数值只能一直向上走，只要头顶有一块天花板挡住，它就必定会停在某个确界极限上。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单向电梯与天花板：电梯只能向上开，只要楼顶高度有限，电梯就绝不会飞出太空。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性天然保证：S_n - S_{n-1} = x_n ≥ 0。</li><li>实数完备性确界定理直接推论。</li><li>将收敛性判别转化为寻找任意统一上界。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_08_theorems.html" class="page-nav-btn">← 上一章：第八章 · 反常积分</a>
+  <a href="../TextBook-MathAnalysis/chapter_09/chapter_09.html" class="page-nav-btn" target="_blank">📗 进入下册：第九章 数项级数 (数字化原书) →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card, .definition-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>
