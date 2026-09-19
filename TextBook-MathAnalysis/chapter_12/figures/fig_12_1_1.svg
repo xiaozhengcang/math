@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 380" width="100%" height="auto">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0" />
+    </marker>
+  </defs>
+  <style>
+    .axis { stroke: #2d3748; stroke-width: 1.5; fill: none; }
+    .plane { fill: rgba(226, 232, 240, 0.5); stroke: #4a5568; stroke-width: 1.5; }
+    .surface { fill: rgba(66, 153, 225, 0.15); stroke: #3182ce; stroke-width: 1.5; }
+    .curve { stroke: #e53e3e; stroke-width: 2.2; fill: none; }
+    .tangent { stroke: #2b6cb0; stroke-width: 2; stroke-dasharray: none; fill: none; }
+    .dash { stroke: #718096; stroke-width: 1.2; stroke-dasharray: 4,4; fill: none; }
+    .label { font-family: "Times New Roman", STSong, serif; font-style: italic; font-size: 15px; fill: #1a202c; }
+    .sub { font-size: 11px; }
+  </style>
+
+  <!-- Axes -->
+  <!-- Z axis -->
+  <line x1="250" y1="280" x2="250" y2="40" class="axis" marker-end="url(#arrow)" />
+  <text x="240" y="35" class="label">z</text>
+
+  <!-- X axis (oblique down-left) -->
+  <line x1="250" y1="280" x2="110" y2="355" class="axis" marker-end="url(#arrow)" />
+  <text x="100" y="360" class="label">x</text>
+
+  <!-- Y axis (right) -->
+  <line x1="250" y1="280" x2="440" y2="280" class="axis" marker-end="url(#arrow)" />
+  <text x="445" y="285" class="label">y</text>
+  <text x="235" y="295" class="label">O</text>
+
+  <!-- Surface patch z = f(x, y) -->
+  <path d="M 180 230 C 230 140, 310 110, 420 160 C 370 230, 300 250, 220 280 Z" class="surface" />
+  <text x="375" y="145" class="label">z = f(x, y)</text>
+
+  <!-- Intersecting plane y = y_0 -->
+  <polygon points="170 330 360 215 360 90 170 205" class="plane" />
+  
+  <!-- Coordinate y0 -->
+  <text x="345" y="235" class="label">y<tspan class="sub">0</tspan></text>
+  <text x="145" y="325" class="label">x<tspan class="sub">0</tspan></text>
+
+  <!-- Intersection Curve l -->
+  <path d="M 185 205 Q 260 140 335 155" class="curve" />
+  <text x="325" y="135" class="label" fill="#e53e3e">l</text>
+
+  <!-- Point P0 on curve -->
+  <!-- Tangent line T -->
+  <line x1="220" y1="210" x2="290" y2="120" class="tangent" marker-end="url(#arrow-blue)" />
+  <text x="268" y="130" class="label" fill="#2b6cb0">T</text>
+  
+  <!-- Dashed vertical projections -->
+  <line x1="255" y1="165" x2="255" y2="280" class="dash" />
+  <circle cx="255" cy="165" r="3" fill="#2b6cb0" />
+</svg>

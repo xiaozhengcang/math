@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 280" width="100%" height="auto">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    </marker>
+    <marker id="arr-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c53030" />
+    </marker>
+  </defs>
+  <style>
+    .axis { stroke: #4a5568; stroke-width: 1.4; fill: none; }
+    .contour { stroke: #2b6cb0; stroke-width: 1.6; fill: none; }
+    .vector { stroke: #c53030; stroke-width: 2.2; fill: none; }
+    .label { font-family: "Times New Roman", STSong, serif; font-style: italic; font-size: 15px; fill: #1a202c; }
+  </style>
+
+  <!-- Axes -->
+  <line x1="40" y1="140" x2="420" y2="140" class="axis" marker-end="url(#arr)" />
+  <text x="415" y="155" class="label">x</text>
+  <line x1="230" y1="260" x2="230" y2="20" class="axis" marker-end="url(#arr)" />
+  <text x="218" y="25" class="label">y</text>
+  <text x="218" y="155" class="label">O</text>
+
+  <!-- Concentric Ellipses (Level Curves) -->
+  <ellipse cx="230" cy="140" rx="35" ry="18" class="contour" />
+  <ellipse cx="230" cy="140" rx="65" ry="32" class="contour" />
+  <ellipse cx="230" cy="140" rx="100" ry="50" class="contour" />
+  <ellipse cx="230" cy="140" rx="140" ry="70" class="contour" />
+  <ellipse cx="230" cy="140" rx="175" ry="88" class="contour" />
+
+  <!-- Gradient Vectors orthogonal to contours -->
+  <line x1="230" y1="140" x2="230" y2="40" class="vector" marker-end="url(#arr-red)" />
+  <line x1="230" y1="140" x2="230" y2="240" class="vector" marker-end="url(#arr-red)" />
+  
+  <line x1="230" y1="140" x2="330" y2="70" class="vector" marker-end="url(#arr-red)" />
+  <text x="338" y="72" class="label" fill="#c53030" font-weight="bold">grad f</text>
+
+  <line x1="230" y1="140" x2="130" y2="70" class="vector" marker-end="url(#arr-red)" />
+</svg>

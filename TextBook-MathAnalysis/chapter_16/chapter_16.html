@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第十六章 Fourier 级数 - 数学分析（第三版）下册</title>
+  <link rel="stylesheet" href="../styles/book.css">
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false}
+      ],
+      throwOnError: false
+    });"></script>
+</head>
+<body>
+<div class="book-layout">
+  <!-- Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-title">数学分析（第三版）下册</div>
+    <div class="sidebar-subtitle">陈纪修 於崇华 金路 著</div>
+    <ul class="toc-list">
+      <li class="toc-item"><a href="../index.html" class="toc-link">← 返回全书目录</a></li>
+      <li class="toc-item">
+        <a href="#ch-top" class="toc-link active">第十六章 Fourier 级数</a>
+        <ul class="toc-sublist">
+          <li class="toc-item"><a href="#sec1" class="toc-link">§1 函数的 Fourier 级数展开</a>
+<ul class="toc-sublist">
+<li><a href="#sec1-1" class="toc-link">周期为 2π 的函数的 Fourier 展开</a></li>
+<li><a href="#sec1-2" class="toc-link">正弦级数和余弦级数</a></li>
+<li><a href="#sec1-3" class="toc-link">任意周期的函数的 Fourier 展开</a></li>
+<li><a href="#ex16-1" class="toc-link">习题 16.1</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec2" class="toc-link">§2 Fourier 级数的收敛判别法</a>
+<ul class="toc-sublist">
+<li><a href="#sec2-1" class="toc-link">Dirichlet 积分</a></li>
+<li><a href="#sec2-2" class="toc-link">Riemann 引理及其推论</a></li>
+<li><a href="#sec2-3" class="toc-link">Fourier 级数的收敛判别法</a></li>
+<li><a href="#ex16-2" class="toc-link">习题 16.2</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec3" class="toc-link">§3 Fourier 级数的性质</a>
+<ul class="toc-sublist">
+<li><a href="#sec3-1" class="toc-link">Fourier 级数的分析性质</a></li>
+<li><a href="#sec3-2" class="toc-link">Fourier 级数的逼近性质</a></li>
+<li><a href="#sec3-3" class="toc-link">等周问题</a></li>
+<li><a href="#ex16-3" class="toc-link">习题 16.3</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec4" class="toc-link">§4 Fourier 变换和 Fourier 积分</a>
+<ul class="toc-sublist">
+<li><a href="#sec4-1" class="toc-link">Fourier 变换及其逆变换</a></li>
+<li><a href="#sec4-2" class="toc-link">Fourier 变换的性质</a></li>
+<li><a href="#sec4-3" class="toc-link">卷积</a></li>
+<li><a href="#ex16-4" class="toc-link">习题 16.4</a></li>
+</ul>
+</li>
+<li class="toc-item"><a href="#sec5" class="toc-link">§5 快速 Fourier 变换</a>
+<ul class="toc-sublist">
+<li><a href="#sec5-1" class="toc-link">离散 Fourier 变换</a></li>
+<li><a href="#sec5-2" class="toc-link">快速 Fourier 变换</a></li>
+<li><a href="#ex16-5" class="toc-link">习题 16.5</a></li>
+</ul>
+</li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+    <header class="top-bar">
+      <nav class="top-nav">
+        <a href="../index.html">首页</a>
+        <a href="#ch-top">第十六章 Fourier 级数</a>
+      </nav>
+      <button class="theme-toggle-btn" id="themeToggleBtn">切换夜间模式</button>
+    </header>
+
+    <main class="content-container">
+      <h1 class="book-title" id="ch-top">第十六章 Fourier 级数</h1>
+      <section class="section" id="sec1">
+  <h2 class="section-title">§1 函数的 Fourier 级数展开</h2>
+
+  <div class="page-divider" data-page="原书第 342 页 [PDF P.362]" id="p342"></div>
+
+  <h4 class="subsection-title" id="sec1-1">周期为 $2\pi$ 的函数的 Fourier 展开</h4>
+
+  <p>古往今来，从 Archimedes 开始的众多大数学家，一直在孜孜不倦地寻找用简单函数较好地近似代替复杂函数的途径——除了理论上的需要之外，它对实际应用领域的意义更是不可估量．但在微积分发明之前，这个问题一直没能获得本质上的突破．</p>
+  <p>人们最熟悉的简单函数无非两类：幂函数和三角函数．英国数学家 Taylor 在 18 世纪初找到了用幂函数的（无限）线性组合表示一般函数 $f(x)$ 的方法，即通过 Taylor 展开将函数化成幂级数形式</p>
+  $$f(x) = \sum_{n=0}^\infty \frac{f^{(n)}(x_0)}{n!}(x-x_0)^n,$$
+  <p>经过理论上的完善之后，它很快成为了微分学（乃至整个函数论）的重要工具之一．这方面内容已在前面有关章节中作了介绍．</p>
+  <p>但是，函数的 Taylor 展开在应用中有一定的局限性．首先我们在实际问题中总是（也只能）使用 Taylor 级数的部分和，即 $f(x)$ 的 $n$ 次 Taylor 多项式</p>
+  $$T_n(x) = \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k$$
+  <p>来近似地代替函数 $f(x)$，这时候它要求 $f(x)$ 有至少 $n$ 阶的导数，这一条件对许多实际问题来说是过于苛刻的（特别是在发现了许多不可导甚至不连续的重要函数之后）；同时，一般来说 Taylor 多项式仅在点 $x_0$ 附近与 $f(x)$ 吻合得较为理想，也就是说，它只有局部性质．为此有必要寻找函数的新的级数展开方法．</p>
+  <p>形如</p>
+  $$\frac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$$
+  <p>的函数项级数称为<strong>三角级数</strong>，其中 $a_0$，$a_n$ 和 $b_n$（$n = 1, 2, \ldots$）为常数．</p>
+  <p>19 世纪初，法国数学家和工程师 Fourier 在研究热传导问题时，找到了在有限区间上用三角级数表示一般函数 $f(x)$ 的方法，即把 $f(x)$ 展开成所谓的 <strong>Fourier 级数</strong>．</p>
+  <p>与 Taylor 展开相比，Fourier 展开对于 $f(x)$ 的要求要宽容得多，并且它的部分和在整个区间都与 $f(x)$ 吻合得较为理想．因此，Fourier 级数是比 Taylor 级数更有力、适用性更广的工具，它在声学、光学、热力学、电学等研究领域极有价值，在微分方程求解方面更是起着基本的作用．可以说，Fourier 级数理论在整个现代分析学中占有核心的地位．</p>
+  <p>本章只介绍有关 Fourier 级数的一些基本知识，大致包括三个方面：</p>
+  <ul>
+    <li>如何将一个给定的函数 $f(x)$ 展开为 Fourier 级数（称 Fourier 展开）；</li>
+    <li>Fourier 级数的收敛条件；</li>
+    <li>Fourier 级数的性质及某些相关问题．</li>
+  </ul>
+
+  <div class="page-divider" data-page="原书第 343 页 [PDF P.363]" id="p343"></div>
+
+  <p>以下我们总是设 $f(x)$ 在 $[-\pi, \pi]$ 上 Riemann 可积或在反常积分意义下绝对可积（方便起见，以下简称为"可积或绝对可积"），然后按 $f(x)$ 在 $[-\pi, \pi)$ 上的值周期延拓到 $(-\infty, +\infty)$，换句话说，$f(x)$ 是定义在整个实数范围上的以 $2\pi$ 为周期的周期函数．（本章中除非特别说明，我们总是如此假定，但在实际计算时，对 $f(x)$ 的延拓可以仅仅是观念上的．）</p>
+  <p>Fourier 展开的基础是三角函数的正交性．在例 7.3.17 中已证明了函数族 $1, \sin x, \cos x, \sin 2x, \cos 2x, \ldots, \sin nx, \cos nx, \ldots$ 是任意一个长度为 $2\pi$ 的区间上的正交函数列，即</p>
+  $$\int_{-\pi}^\pi \cos mx\cos nx\,\mathrm{d}x = \int_{-\pi}^\pi \sin mx\sin nx\,\mathrm{d}x = \pi\delta_{m,n}, \quad m, n \in \mathbb{N}^*,$$
+  $$\int_{-\pi}^\pi \cos mx\cdot\sin nx\,\mathrm{d}x = 0, \quad m = 0, 1, 2, \ldots,\quad n \in \mathbb{N}^*,$$
+  $$\int_{-\pi}^\pi 1\cdot\cos mx\,\mathrm{d}x = 2\pi\delta_{m,0}, \quad m = 0, 1, 2, \ldots,$$
+  <p>其中 $\delta_{m,n} = \begin{cases}1, & m = n, \\ 0, & m \ne n.\end{cases}$</p>
+  <p>下面我们先来讨论这样一个问题：假定 $f(x)$ 可以表示成如下形式的级数</p>
+  $$f(x) = \frac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx),$$
+  <p>也就是说假定等式右边的三角级数收敛于 $f(x)$，该如何来确定三角级数中的系数 $a_n$ 和 $b_n$？为了回答这一问题，我们将等式两边同乘以 $\cos mx$（$m = 0, 1, 2, 3, \ldots$），然后对等式两边在 $[-\pi, \pi]$ 上积分，假定等式右边的三角级数可以逐项积分，并利用上述三角函数的正交性，得</p>
+  $$\int_{-\pi}^\pi f(x)\cos mx\,\mathrm{d}x = \frac{a_0}{2}\int_{-\pi}^\pi \cos mx\,\mathrm{d}x + \sum_{n=1}^\infty\left[a_n\int_{-\pi}^\pi\cos nx\cos mx\,\mathrm{d}x + b_n\int_{-\pi}^\pi\sin nx\cos mx\,\mathrm{d}x\right] = a_m\pi,$$
+  <p>从而得到（将下标 $m$ 改写为 $n$）</p>
+  $$a_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\cos nx\,\mathrm{d}x, \quad n = 0, 1, 2, \ldots$$
+
+  <div class="page-divider" data-page="原书第 344 页 [PDF P.364]" id="p344"></div>
+
+  <p>将等式两边同乘以 $\sin mx$（$m = 1, 2, \ldots$）后在 $[-\pi, \pi]$ 上积分，同理可得到</p>
+  $$b_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\sin nx\,\mathrm{d}x, \quad n = 1, 2, \ldots$$
+  <p>上面两式称为 <strong>Euler-Fourier 公式</strong>．注意我们将三角级数的常数项写成 $\dfrac{a_0}{2}$ 而不是 $c_0$，就是为了使系数 $a_n$（$n = 0, 1, 2, \ldots$）有上述统一的表达式．</p>
+  <p>反过来，设周期为 $2\pi$ 的函数 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，则利用 Euler-Fourier 公式就可求出系数 $a_n$，$b_n$，并记</p>
+  $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx).$$
+  <p>右端的三角级数称为 $f(x)$ 的 <strong>Fourier 级数</strong>，相应的 $a_n$ 和 $b_n$ 称为 $f(x)$ 的 <strong>Fourier 系数</strong>．</p>
+  <p>要特别指出的是，目前在 $f(x)$ 和它的 Fourier 级数之间不能用等号而只能用"$\sim$"，因为我们不知道右端的三角级数是否收敛；即使收敛，也不知道它是否收敛到 $f(x)$ 本身．这些问题我们将在下一节讨论．</p>
+
+  <div class="example-box">
+    <span class="box-title">例 16.1.1</span>
+    <p>求 $f(x) = \begin{cases}-1, & x \in [-\pi, 0), \\ 1, & x \in [0, \pi)\end{cases}$ 的 Fourier 级数．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      <p>先计算 $f(x)$ 的 Fourier 系数．</p>
+      $$a_0 = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\,\mathrm{d}x = 0.$$
+      <p>对 $n = 1, 2, \ldots$，</p>
+      $$a_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\cos nx\,\mathrm{d}x = \frac{1}{\pi}\int_0^\pi\cos nx\,\mathrm{d}x - \frac{1}{\pi}\int_{-\pi}^0\cos nx\,\mathrm{d}x = 0.$$
+      $$b_n = \frac{1}{\pi}\int_{-\pi}^\pi f(x)\sin nx\,\mathrm{d}x = \frac{2}{\pi}\int_0^\pi\sin nx\,\mathrm{d}x = \frac{2}{\pi}\cdot\frac{-\cos nx}{n}\Big|_0^\pi = \frac{2[1-(-1)^n]}{n\pi} = \begin{cases}\dfrac{4}{(2k-1)\pi}, & n = 2k-1, \\ 0, & n = 2k.\end{cases}$$
+      <p>于是得到 $f(x)$ 的 Fourier 级数</p>
+      $$f(x) \sim \sum_{n=1}^\infty \frac{(-1)^{n-1}+1}{n\pi}\cdot\frac{2}{\pi}\cdot 2\sin nx = \frac{4}{\pi}\left(\sin x + \frac{\sin 3x}{3} + \frac{\sin 5x}{5} + \cdots + \frac{\sin(2k-1)x}{2k-1} + \cdots\right).$$
+      <p>$f(x)$ 的图形在电工学中称为方波（见图 16.1.1(a)），上式表明它可以由一系列的正弦波（即函数 $A\sin(\omega x + \varphi)$ 表示的图形）叠加来得到．但显然，当 $x = 0$ 和 $\pm\pi$ 时，右端级数的和为 $0$，不等于 $f(x)$ 的值 $\pm 1$．</p>
+    </div>
+  </div>
+
+  <div class="page-divider" data-page="原书第 345 页 [PDF P.365]" id="p345"></div>
+
+  <p>图 16.1.1(b) 给出了在 $[-\pi, \pi]$ 上 $f(x)$ 的 Fourier 级数的前若干项之和的逼近情况，图中的 $S_n$ 表示</p>
+  $$S_n(x) = \frac{a_0}{2} + \sum_{k=1}^n (a_k\cos kx + b_k\sin kx),$$
+  <p>这就是 $f(x)$ 的 Fourier 级数的<strong>部分和</strong>．</p>
+
+  <h4 class="subsection-title" id="sec1-2">正弦级数和余弦级数</h4>
+
+  <p>由定积分的性质，若 $f(x)$ 是奇函数，那么显然有 $a_n = 0$，而</p>
+  $$b_n = \frac{2}{\pi}\int_0^\pi f(x)\sin nx\,\mathrm{d}x, \quad n = 1, 2, \ldots$$
+  <p>这时，相应的 Fourier 级数为</p>
+  $$f(x) \sim \sum_{n=1}^\infty b_n\sin nx.$$
+  <p>形如 $\sum_{n=1}^\infty b_n\sin nx$ 的三角级数称为<strong>正弦级数</strong>，如在例 16.1.1 中，令 $g(x) = f(x) - 1$（即 $f(x)$ 往下移动 $1$），则 $g(x)$ 是奇函数，从上面的结果看到，它的 Fourier 级数确为正弦级数．</p>
+  <p>同样，若 $f(x)$ 是偶函数，那么有 $b_n = 0$ 和</p>
+  $$a_n = \frac{2}{\pi}\int_0^\pi f(x)\cos nx\,\mathrm{d}x, \quad n = 0, 1, 2, \ldots$$
+  <p>相应的 Fourier 级数为</p>
+  $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty a_n\cos nx.$$
+  <p>形如 $\dfrac{a_0}{2} + \sum_{n=1}^\infty a_n\cos nx$ 的三角级数称为<strong>余弦级数</strong>．</p>
+  <p>反过来，在实际问题中，出于某种特定的用途，也经常需要将一个函数展开成正弦级数或余弦级数．</p>
+
+  <div class="example-box">
+    <span class="box-title">例 16.1.2</span>
+    <p>将 $f(x) = x$（$x \in [0, \pi]$）分别展开为余弦级数和正弦级数．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      <p>先考虑余弦级数的情况．按理说，这时应先进行偶延拓，但这一步同样只需在观念上进行，因为只要按余弦级数的情况计算 Fourier 系数，所得的自然就是偶延拓后的函数 $f(x)$ 的 Fourier 级数．经计算得</p>
+      $$a_0 = \frac{2}{\pi}\int_0^\pi x\,\mathrm{d}x = \pi.$$
+
+  <div class="page-divider" data-page="原书第 346 页 [PDF P.366]" id="p346"></div>
+
+      <p>而对 $n = 1, 2, \ldots$，有</p>
+      $$a_n = \frac{2}{\pi}\int_0^\pi x\cos nx\,\mathrm{d}x = \frac{2}{\pi}\cdot\frac{x\sin nx}{n}\Big|_0^\pi - \frac{2}{n\pi}\int_0^\pi\sin nx\,\mathrm{d}x = \frac{2}{\pi}\cdot\frac{\cos nx}{n^2}\Big|_0^\pi = \frac{2[(-1)^n - 1]}{n^2\pi} = \begin{cases}0, & n = 2k, \\ -\dfrac{4}{(2k-1)^2\pi}, & n = 2k-1.\end{cases}$$
+      <p>于是得到 $f(x)$ 的余弦级数</p>
+      $$f(x) \sim \frac{\pi}{2} - \frac{4}{\pi}\left(\cos x + \frac{\cos 3x}{3^2} + \frac{\cos 5x}{5^2} + \cdots + \frac{\cos(2k-1)x}{(2k-1)^2} + \cdots\right).$$
+      <p>这是由一系列的余弦波叠加出来的锯齿波（见图 16.1.2(a)），从图 16.1.2(b) 看出，其逼近情况相当好．</p>
+      <p>再看正弦级数的情况．对 $n = 1, 2, \ldots$，</p>
+      $$b_n = \frac{2}{\pi}\int_0^\pi x\sin nx\,\mathrm{d}x = \frac{2}{\pi}\left(-\frac{x\cos nx}{n}\Big|_0^\pi + \frac{1}{n}\int_0^\pi\cos nx\,\mathrm{d}x\right) = \frac{2}{\pi}\cdot\frac{(-1)^{n+1}\pi}{n} = \frac{2(-1)^{n+1}}{n}.$$
+      <p>于是得到 $f(x)$ 的正弦级数</p>
+      $$f(x) \sim 2\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}\sin nx = 2\left(\sin x - \frac{\sin 2x}{2} + \frac{\sin 3x}{3} - \cdots + \frac{(-1)^{n+1}\sin nx}{n} + \cdots\right).$$
+      <p>它的几何意义是由一系列的正弦波叠加出来的三角波（见图 16.1.3(a)），其逼近情况见图 16.1.3(b)．与例 16.1.1 类似，它在 $x = \pm\pi$ 时的值是 $0$，与 $f(x)$ 的值不相等．</p>
+    </div>
+  </div>
+
+  <div class="page-divider" data-page="原书第 347 页 [PDF P.367]" id="p347"></div>
+
+  <p>请注意，这两种级数的表达形式虽然大相径庭，但我们在下一节就会知道，若限制在 $[0, \pi)$ 上，它们的确表示同一个函数．</p>
+
+  <h4 class="subsection-title" id="sec1-3">任意周期的函数的 Fourier 展开</h4>
+
+  <p>如果 $f(x)$ 的周期为 $2T$，作变换 $x = \dfrac{T}{\pi}t$，则</p>
+  $$\varphi(t) = f\!\left(\frac{T}{\pi}t\right)$$
+  <p>是定义在 $(-\infty, +\infty)$ 上的周期为 $2\pi$ 的函数．利用前面的结果，有</p>
+  $$\varphi(t) \sim \frac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nt + b_n\sin nt).$$
+  <p>代回变量，就有</p>
+  $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty\left(a_n\cos\frac{n\pi}{T}x + b_n\sin\frac{n\pi}{T}x\right),$$
+  <p>相应的 Fourier 系数为</p>
+  $$a_n = \frac{1}{T}\int_{-T}^T f(x)\cos\frac{n\pi}{T}x\,\mathrm{d}x, \quad n = 0, 1, 2, \ldots,$$
+  $$b_n = \frac{1}{T}\int_{-T}^T f(x)\sin\frac{n\pi}{T}x\,\mathrm{d}x, \quad n = 1, 2, \ldots$$
+
+  <div class="example-box">
+    <span class="box-title">例 16.1.3</span>
+    <p>求 $f(x) = \begin{cases}0, & x \in [-1, 0), \\ x, & x \in [0, 1)\end{cases}$ 的 Fourier 级数．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      <p>在上面的公式中令 $T = 1$，计算 $f(x)$ 的 Fourier 系数得</p>
+      $$a_0 = \int_{-1}^1 f(x)\,\mathrm{d}x = \int_0^1 x\,\mathrm{d}x = \frac{1}{2}.$$
+      <p>对 $n = 1, 2, \ldots$，利用分部积分法，</p>
+      $$a_n = \int_{-1}^1 f(x)\cos n\pi x\,\mathrm{d}x = \int_0^1 x\cos n\pi x\,\mathrm{d}x = \frac{(-1)^n - 1}{n^2\pi^2}.$$
+      $$b_n = \int_{-1}^1 f(x)\sin n\pi x\,\mathrm{d}x = \int_0^1 x\sin n\pi x\,\mathrm{d}x = \frac{(-1)^{n+1}}{n\pi}.$$
+      <p>于是得到 $f(x)$ 的 Fourier 级数</p>
+      $$f(x) \sim \frac{1}{4} + \sum_{n=1}^\infty\frac{(-1)^n - 1}{n^2\pi^2}\cos n\pi x + \sum_{n=1}^\infty\frac{(-1)^{n+1}}{n\pi}\sin n\pi x.$$
+    </div>
+  </div>
+
+  <div class="page-divider" data-page="原书第 348 页 [PDF P.368]" id="p348"></div>
+
+  <div class="exercises" id="ex16-1">
+    <h3 class="exercise-title">习题 16.1</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">设交流电的变化规律为 $E(t) = A\sin\omega t$，将它转变为直流电的整流过程有两种类型：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) 半波整流（见图 16.1.5(a)）$F(t) = \begin{cases}A\sin\omega t, & 0 \le \omega t \le \pi, \\ 0, & \pi \le \omega t \le 2\pi;\end{cases}$ 求 $F(t)$ 的 Fourier 级数；</li>
+            <li>(2) 全波整流（见图 16.1.5(b)）$F(t) = A|\sin\omega t|$；求 $F(t)$ 的 Fourier 级数．</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">将下列函数在 $[-\pi, \pi]$ 上展开成 Fourier 级数：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) $f(x) = \mathrm{sgn}\,x$；</li>
+            <li>(2) $f(x) = |\cos x|$；</li>
+            <li>(3) $f(x) = \begin{cases}0, & x \in [-\pi, 0), \\ \sin x, & x \in [0, \pi).\end{cases}$</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">将下列函数展开成正弦级数：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) $f(x) = \cos x$，$x \in [0, \pi]$；</li>
+            <li>(2) $f(x) = \frac{\pi - x}{2}$，$x \in [0, \pi]$；</li>
+            <li>(3) $f(x) = \begin{cases}2x, & x \in (0, \frac{\pi}{2}), \\ 2(\pi - x), & x \in [\frac{\pi}{2}, \pi).\end{cases}$</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">将下列函数展开成余弦级数：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) $f(x) = x(\pi - x)$，$x \in [0, \pi]$；</li>
+            <li>(2) $f(x) = e^x$，$x \in [0, \pi]$；</li>
+            <li>(3) $f(x) = \begin{cases}\sin 2x, & x \in [0, \frac{\pi}{2}), \\ 0, & x \in [\frac{\pi}{2}, \pi].\end{cases}$</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">求定义在任意一个长度为 $2T$ 的区间 $[a, a+2T]$ 上的函数 $f(x)$ 的 Fourier 级数及其系数的计算公式．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">将下列函数在指定区间展开成 Fourier 级数：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) $f(x) = x^2$，$t \in [0, 2\pi]$；</li>
+            <li>(2) $f(x) = e^x$，$t \in [0, 2\pi]$；</li>
+            <li>(3) $f(x) = x$，$x \in [0, l]$（$C$ 是常数）．</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">某可控硅控制电路中的负载电流为</p>
+        $$i(t) = \begin{cases}A\sin\omega t, & \frac{\pi}{\omega}\cdot t_0 \le t \le \frac{\pi}{\omega}(1-t_0), \\ 0, & \text{其他},\end{cases}$$
+        <p>其中 $\omega$ 圆频率，周期 $T = \frac{2\pi}{\omega}$．现设初始导通时间 $t_0 = -\frac{1}{6}$（见图 16.1.6），求 $i(t)$ 在 $[0, T]$ 上的 Fourier 级数．
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，证明：</p>
+        $$\lim_{n\to\infty} a_n = 0, \quad \lim_{n\to\infty} b_n = 0.$$
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 在 $(0, \pi/2)$ 上可积或绝对可积，应分别对它进行怎么样的延拓，才能使它在 $[-\pi, \pi]$ 上的 Fourier 级数的形式为</p>
+        <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+          <li>(1) $\sum_n a_n\cos(2n-1)x$；</li>
+          <li>(2) $\sum_n a_n\sin 2nx$．</li>
+        </ol>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设周期为 $2\pi$ 的函数 $f(x)$ 在 $[-\pi, \pi]$ 上的 Fourier 系数为 $a_n$ 和 $b_n$，求下列函数的 Fourier 系数 $a_n'$ 和 $b_n'$：</p>
+        <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+          <li>(1) $g(x) = f(-x)$；</li>
+          <li>(2) $h(x) = f(x + C)$（$C$ 是常数）；</li>
+          <li>(3) $F(x) = \int_{-\pi}^x [f(t) - 1]\,\mathrm{d}t$（假定积分顺序可以交换）．</li>
+        </ol>
+      </li>
+    </ol>
+  </div>
+</section>
+<section class="section" id="sec2">
+  <h2 class="section-title">§2 Fourier 级数的收敛判别法</h2>
+
+  <div class="page-divider" data-page="原书第 349 页 [PDF P.369]" id="p349"></div>
+
+  <h4 class="subsection-title" id="sec2-1">Dirichlet 积分</h4>
+
+  <p>仔细观察上一节中的几幅图像后可能会产生这样的直觉：对于一般的以 $2\pi$ 为周期的函数 $f(x)$，除了个别点之外（看来是不连续点），当 $m \to \infty$ 时，它的 Fourier 级数的部分和函数序列 $\{S_m(x)\}$，</p>
+  $$S_m(x) = \frac{a_0}{2} + \sum_{n=1}^m (a_n\cos nx + b_n\sin nx),$$
+  <p>是收敛于 $f(x)$ 的，下面我们从理论上来探讨这个问题．</p>
+  <p>事实上，与 Taylor 级数相比，Fourier 级数尽管具有对 $f(x)$ 的要求较弱，以及它的部分和在整个区间上与 $f(x)$ 逼近得较好等优点，但在收敛性问题的讨论上，Taylor 级数相对比较简单，因为对它只要确定收敛半径，并在收敛区间的端点讨论余项的收敛情况就行了，而 Fourier 级数却要复杂得多．</p>
+  <p>由于级数的收敛情况就是部分和函数序列的极限情况，因此，下面的讨论就从部分和函数序列 $\{S_m(x)\}$ 入手．</p>
+  <p>将 Euler-Fourier 公式</p>
+  $$a_n = \frac{1}{\pi}\int_{-\pi}^\pi f(u)\cos nu\,\mathrm{d}u, \quad b_n = \frac{1}{\pi}\int_{-\pi}^\pi f(u)\sin nu\,\mathrm{d}u$$
+  <p>代入 $S_m(x)$，</p>
+
+  <div class="page-divider" data-page="原书第 350 页 [PDF P.370]" id="p350"></div>
+
+  $$S_m(x) = \frac{1}{\pi}\int_{-\pi}^\pi f(u)\left[\frac{1}{2} + \sum_{n=1}^m\cos n(u-x)\right]\mathrm{d}u.$$
+  <p>当 $\theta \ne 0$ 时，由三角函数的积化和差公式，有</p>
+  $$\frac{1}{2} + \sum_{n=1}^m\cos n\theta = \frac{\sin\!\left(m+\frac{1}{2}\right)\theta}{2\sin\frac{\theta}{2}},$$
+  <p>而当 $\theta = 0$ 时，若将右端理解为当 $\theta \to 0$ 时的极限值 $m + \frac{1}{2}$，则等式依然成立．因此，上式对任意 $\theta \in [-\pi, \pi]$ 都是正确的．</p>
+  <p>于是</p>
+  $$S_m(x) = \frac{1}{\pi}\int_{-\pi}^\pi f(u)\frac{\sin\!\left(m+\frac{1}{2}\right)(u-x)}{2\sin\frac{u-x}{2}}\,\mathrm{d}u \xlongequal{t = u-x} \frac{1}{\pi}\int_{-\pi-x}^{\pi-x} f(x+t)\frac{\sin\!\left(m+\frac{1}{2}\right)t}{2\sin\frac{t}{2}}\,\mathrm{d}t$$
+  $$= \frac{1}{\pi}\int_{-\pi}^\pi f(x+u)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u.$$
+  <p>最后一个等式利用了"周期函数在任何一个长度等于其周期的区间上的积分值相等"的性质．</p>
+  <p>这样，就把部分和转化成了积分形式．这个积分称为 <strong>Dirichlet 积分</strong>，是研究 Fourier 级数敛散性的重要工具．</p>
+  <p>将积分区间 $[-\pi, \pi]$ 分成 $[-\pi, 0]$ 和 $[0, \pi]$，稍加整理，就得到了 Dirichlet 积分的惯用形式</p>
+  $$S_m(x) = \frac{1}{\pi}\int_0^\pi [f(x+u) + f(x-u)]\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u.$$
+  <p>由前面的三角函数关系式，有</p>
+  $$\frac{1}{\pi}\int_0^\pi\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u = \frac{1}{2}.$$
+  <p>因此，对任意给定的函数 $\sigma(x)$，有</p>
+  $$S_m(x) - \sigma(x) = \frac{1}{\pi}\int_0^\pi [f(x+u) + f(x-u) - 2\sigma(x)]\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u.$$
+
+  <div class="page-divider" data-page="原书第 351 页 [PDF P.371]" id="p351"></div>
+
+  <p>这样，若记</p>
+  $$\psi(u, x) = f(x+u) + f(x-u) - 2\sigma(x),$$
+  <p>则 $f(x)$ 的 Fourier 级数是否收敛于某个 $\sigma(x)$ 就等价于极限</p>
+  $$\lim_{m\to\infty}\frac{1}{\pi}\int_0^\pi \psi(u, x)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u$$
+  <p>是否存在且等于 $0$．</p>
+
+  <h4 class="subsection-title" id="sec2-2">Riemann 引理及其推论</h4>
+
+  <p>下面首先引进一个重要的结果．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.2.1（Riemann 引理）</span>
+    <p>设函数 $\varphi(x)$ 在 $[0, b]$ 上可积或绝对可积，则成立</p>
+    $$\lim_{p\to+\infty}\int_0^b \varphi(x)\sin px\,\mathrm{d}x = \lim_{p\to+\infty}\int_0^b \varphi(x)\cos px\,\mathrm{d}x = 0.$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>先考虑 $\varphi(x)$ 有界的情况，这时 $\varphi(x)$ Riemann 可积．对于任意给定的 $\varepsilon > 0$，由定理 7.1.3，存在着一种划分 $0 = x_0 &lt; x_1 &lt; \cdots &lt; x_N = b$，满足</p>
+    $$\sum_{i=1}^N (M_i - m_i)(x_i - x_{i-1}) &lt; \varepsilon,$$
+    <p>对于这种固定的划分，记 $m_i$ 是 $\varphi(x)$ 在 $[x_{i-1}, x_i]$ 中的下确界，并取实数 $P > 0$，使得当 $p > P$ 时，对任意 $i$，</p>
+    $$\left|\frac{\cos px_{i-1} - \cos px_i}{p}\right| &lt; \frac{\varepsilon}{N(|m_i|+1)}.$$
+    <p>于是，对于任意给定的 $\varepsilon > 0$，存在实数 $P > 0$，当 $p > P$ 时，有</p>
+    $$\left|\int_0^b \varphi(x)\sin px\,\mathrm{d}x\right| \le \sum_{i=1}^N\int_{x_{i-1}}^{x_i}|\varphi(x) - m_i|\cdot|\sin px|\,\mathrm{d}x + \left|\sum_{i=1}^N m_i\int_{x_{i-1}}^{x_i}\sin px\,\mathrm{d}x\right| &lt; \varepsilon + \varepsilon = 2\varepsilon.$$
+    <p>再考虑 $\varphi(x)$ 无界的情况，这时 $\varphi(x)$ 绝对可积．不妨假设 $b$ 是 $\varphi(x)$ 的唯一奇点．由无界函数反常积分绝对收敛的定义，对于任意给定的 $\varepsilon > 0$，存在 $\delta > 0$，当 $\eta &lt; \delta$ 时，</p>
+    $$\int_{b-\eta}^b |\varphi(x)|\,\mathrm{d}x &lt; \varepsilon.$$
+
+  <div class="page-divider" data-page="原书第 352 页 [PDF P.372]" id="p352"></div>
+
+    <p>固定 $\delta$，则 $\varphi(x)$ 在 $[0, b-\delta]$ 上 Riemann 可积，应用上面的结论，存在实数 $P > 0$，当 $p > P$ 时，</p>
+    $$\left|\int_0^{b-\delta}\varphi(x)\sin px\,\mathrm{d}x\right| &lt; \varepsilon.$$
+    <p>因此，</p>
+    $$\left|\int_0^b\varphi(x)\sin px\,\mathrm{d}x\right| \le \left|\int_0^{b-\delta}\varphi(x)\sin px\,\mathrm{d}x\right| + \int_{b-\delta}^b|\varphi(x)|\,\mathrm{d}x &lt; 2\varepsilon.$$
+    <p>所以无论对哪一种情况，都有 $\lim_{p\to+\infty}\int_0^b \varphi(x)\sin px\,\mathrm{d}x = 0$．同理可证 $\lim_{p\to+\infty}\int_0^b \varphi(x)\cos px\,\mathrm{d}x = 0$．证毕</p>
+  </div>
+
+  <p>由 Riemann 引理可以得到如下的重要结论．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.2.1（局部性原理）</span>
+    <p>可积或绝对可积函数 $f(x)$ 的 Fourier 级数在 $x$ 点是否收敛只与 $f(x)$ 在 $(x - \delta, x + \delta)$ 的性质有关，这里 $\delta$ 是任意小的正常数．</p>
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>因为 $\dfrac{f(x+u) + f(x-u)}{2\sin\frac{u}{2}}$ 关于 $u$ 在 $[\delta, \pi]$ 可积或绝对可积，由 Riemann 引理，</p>
+    $$\lim_{m\to\infty}\frac{1}{\pi}\int_\delta^\pi [f(x+u) + f(x-u)]\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u = 0.$$
+    <p>因此，若将 $S_m(x)$ 的表达式中积分区间分成 $[0, \delta]$ 和 $[\delta, \pi]$ 两部分，则当 $m \to \infty$ 时，$S_m(x)$ 的敛散性显然只与</p>
+    $$\frac{1}{\pi}\int_0^\delta [f(x+u) + f(x-u)]\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u$$
+    <p>有关，而这个积分只涉及 $f(x)$ 在 $(x-\delta, x+\delta)$ 的性质．证毕</p>
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.2.2</span>
+    <p>设函数 $\varphi(u)$ 在 $[0, \delta]$ 上可积或绝对可积，则成立</p>
+    $$\lim_{m\to\infty}\int_0^\delta \varphi(u)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{2\sin\frac{u}{2}}\,\mathrm{d}u = \lim_{m\to\infty}\int_0^\delta \varphi(u)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{u}\,\mathrm{d}u.$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>令 $g(u) = \begin{cases}\dfrac{u}{2\sin\frac{u}{2}} - 1, & u > 0, \\ 0, & u = 0,\end{cases}$ 容易验证 $g(u)$ 是 $[0, \delta]$ 上的连续函数，由 Riemann 引理，当 $m \to \infty$ 时，有</p>
+    $$\int_0^\delta \varphi(u)g(u)\sin\!\left(m+\frac{1}{2}\right)u\,\mathrm{d}u = \int_0^\delta \varphi(u)g(u)\sin\!\left(m+\frac{1}{2}\right)u\,\mathrm{d}u \to 0.$$
+    <p>证毕</p>
+  </div>
+
+  <h4 class="subsection-title" id="sec2-3">Fourier 级数的收敛判别法</h4>
+
+  <p>以上推论进一步告诉我们，如果对点 $x$，能找到适当的 $\sigma(x)$，使得对于充分小的正数 $\delta > 0$，有</p>
+  $$\lim_{m\to\infty}\int_0^\delta \psi(u, x)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{u}\,\mathrm{d}u = 0,$$
+  <p>则 $f(x)$ 的 Fourier 级数在 $x$ 点必定收敛于这个 $\sigma(x)$．</p>
+  <p>我们来粗略分析一下．显而易见，对 $x \in [-\pi, \pi]$，只要存在某个 $\delta > 0$，使 $\dfrac{\psi(u, x)}{u}$ 关于 $u$ 在 $[0, \delta]$ 上可积或绝对可积（这被称为 <strong>Dini 条件</strong>），就可以由 Riemann 引理导出上面的结果．现假设点 $x$ 是 $f(x)$ 的连续点或第一类不连续点，而上述积分的极限存在与否只涉及 $\dfrac{\psi(u, x)}{u}$ 当 $u \to 0$ 时的性质，显然，要满足 Dini 条件首先必须有 $\psi(0, x) = 0$（显然当 $f(x)$ 在点 $x$ 连续时，有 $\sigma(x) = f(x)$），于是，问题最终转化为研究使得</p>
+  $$\lim_{p\to+\infty}\int_0^\delta \frac{f(x+u) + f(x-u) - 2\sigma(x)}{u}\sin pu\,\mathrm{d}u = 0$$
+  <p>成立的条件——这是探索 Fourier 级数收敛性的一把钥匙．</p>
+  <p>德国数学家 Dirichlet 在 1829 年——Fourier 级数问世约四分之一个世纪之后，首先得到了一个函数的 Fourier 级数的收敛条件；又过了约半个世纪，另一位德国数学家 Lipschitz 得到了与之不同的收敛条件．他们的结果经后人完善，可以表述为如下定理：</p>
+
+  <div class="page-divider" data-page="原书第 353 页 [PDF P.373]" id="p353"></div>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.2.2</span>
+    <p>设函数 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，且满足下列两个条件之一，则 $f(x)$ 的 Fourier 级数在点 $x$ 处收敛于 $\dfrac{f(x^+) + f(x^-)}{2}$．</p>
+    <p>(1)（<strong>Dirichlet-Jordan 判别法</strong>）$f(x)$ 在点 $x$ 的某个邻域 $O(x, \delta)$ 上是分段单调有界函数；</p>
+    <p>(2)（<strong>Dini-Lipschitz 判别法</strong>）$f(x)$ 在点 $x$ 处满足指数为 $\alpha \in (0, 1]$ 的 Hölder 条件，即对于充分小的正数 $h$，存在常数 $L > 0$ 和 $\alpha \in (0, 1]$，使得成立</p>
+    $$|f(x+h) - f(x^+)| + |f(x-h) - f(x^-)| \le L h^\alpha.$$
+    <p>（当 $\alpha = 1$ 时也称为 Lipschitz 条件．）</p>
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定义 16.2.1（分段单调函数）</span>
+    <p>设函数 $f$ 在 $[a, b]$（或 $(a, b)$）上有定义．如果在 $[a, b]$（或 $(a, b)$）上存在有限个点 $a = x_0 &lt; x_1 &lt; \cdots &lt; x_N = b$，使得 $f$ 在每个区间 $(x_{i-1}, x_i)$（$i = 1, 2, \ldots, N$）上是单调函数，则称 $f$ 在 $[a, b]$（或 $(a, b)$）上<strong>分段单调</strong>．</p>
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.2.3（Dirichlet 引理）</span>
+    <p>设函数 $\varphi(u)$ 在 $[0, \delta]$ 上单调，则成立</p>
+    $$\lim_{p\to+\infty}\int_0^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u = 0.$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>不妨设 $\varphi(x)$ 单调增加．于是对任意给定的 $\varepsilon > 0$，存在 $\eta \in (0, \delta)$，当 $u \in (0, \eta)$ 时，$0 \le \varphi(u) - \varphi(0^+) &lt; \varepsilon$．将积分分为两部分</p>
+    $$\int_0^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u = \int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u + \int_\eta^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u.$$
+    <p>对等式右边的第一项，由积分第二中值定理，存在 $\xi \in [0, \eta]$，</p>
+    $$\left|\int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| \le \frac{\varepsilon}{\eta}\left|\int_0^\xi \sin pu\,\mathrm{d}u\right| \le \frac{\varepsilon}{\eta}\cdot\frac{2}{p}.$$
+    <p>利用含参变量积分中已经得到的结论，可知存在与 $p$ 无关的常数 $K$，使得 $\left|p\int_0^\xi\sin pu\,\mathrm{d}u\right| \le K$，即</p>
+    $$\left|\int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| &lt; K\varepsilon.$$
+
+  <div class="page-divider" data-page="原书第 354 页 [PDF P.374]" id="p354"></div>
+
+    <p>而对右边的第二项，由于 $\dfrac{\varphi(u) - \varphi(0^+)}{u}$ 在 $[\eta, \delta]$ 上显然是可积或绝对可积的，由 Riemann 引理，存在常数 $P > 0$，当 $p > P$ 时，有</p>
+    $$\left|\int_\eta^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| &lt; \varepsilon.$$
+    <p>综合上述两项估计，即知结论成立．Dirichlet 引理也经常表达为等价形式</p>
+    $$\lim_{p\to+\infty}\int_0^\delta \varphi(u)\frac{\sin pu}{u}\,\mathrm{d}u = \varphi(0^+)\cdot\frac{\pi}{2}.$$
+    <p>如果 $\varphi(u)$ 是分段单调有界函数，易知 Dirichlet 引理依然成立．证毕</p>
+  </div>
+
+  <p>下面证明定理 16.2.2．</p>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>当 $f(x)$ 满足条件 (1) 时，由 Dirichlet 引理，</p>
+    $$\lim_{p\to+\infty}\int_0^\delta \frac{f(x+u) - f(x^+)}{u}\sin pu\,\mathrm{d}u = 0, \quad \lim_{p\to+\infty}\int_0^\delta \frac{f(x-u) - f(x^-)}{u}\sin pu\,\mathrm{d}u = 0,$$
+    <p>两式相加，即有 $\lim_{m\to\infty}\left[S_m(x) - \dfrac{f(x^+) + f(x^-)}{2}\right] = 0$．</p>
+    <p>当 $f(x)$ 满足条件 (2) 时，在 $(0, \delta)$ 上，有</p>
+    $$\frac{|f(x+u) + f(x-u) - f(x^+) - f(x^-)|}{u} \le \frac{L u^\alpha}{u} = L u^{\alpha-1} \quad (0 &lt; \alpha \le 1),$$
+    <p>所以，$\dfrac{\psi(u, x)}{u}$ 在 $[0, \delta]$ 可积或绝对可积，由 Riemann 引理，</p>
+    $$\lim_{m\to\infty}\int_0^\delta \psi(u, x)\frac{\sin\!\left(m+\frac{1}{2}\right)u}{u}\,\mathrm{d}u = 0.$$
+    <p>证毕</p>
+  </div>
+
+  <p>由于"可导"强于"满足 Lipschitz 条件"，且易于验证，因此实际中往往使用如下条件 (2) 的推论（请读者自证）：</p>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.2.3</span>
+    <p>若 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，在点 $x$ 处两个单侧导数 $f'_+(x)$ 和 $f'_-(x)$ 都存在，或更进一步，只要两个拟单侧导数</p>
+    $$\lim_{h\to 0^+}\frac{f(x+h) - f(x^+)}{h} \quad \text{和} \quad \lim_{h\to 0^+}\frac{f(x-h) - f(x^-)}{h}$$
+
+  <div class="page-divider" data-page="原书第 355 页 [PDF P.375]" id="p355"></div>
+
+    <p>都存在，则 $f(x)$ 的 Fourier 级数在点 $x$ 处收敛于 $\dfrac{f(x^+) + f(x^-)}{2}$．</p>
+  </div>
+
+  <p>Dirichlet-Jordan 判别法和 Dini-Lipschitz 判别法都是 Fourier 级数收敛的充分条件，尽管在物理、化学、工程等领域的实际问题中，出现的函数一般都同时满足这两个判别法的条件（容易验证，上节例子和习题中的 $f(x)$ 均是如此），但可以构造例子说明它们确实是互不包含的（参见本节习题 10）．附带指出，直至今天，还没有找到一个判别 Fourier 级数敛散性的既充分又必要的条件．</p>
+
+  <div class="page-divider" data-page="原书第 356 页 [PDF P.376]" id="p356"></div>
+
+  <p>定理 16.2.2 告诉我们，若收敛条件满足，则 $f(x)$ 的 Fourier 级数在连续点收敛于函数值本身，而在第一类不连续点收敛于它左右极限的算术平均值．</p>
+  <p>所以，对于连续的周期函数 $f(x)$，应将 $f(x)$ 与它的（收敛的）Fourier 级数间的"$\sim$"改为"$=$"．如例 16.1.2 中 $f(x)$ 的余弦级数可以直截了当地写成</p>
+  $$\frac{\pi}{2} - \frac{4}{\pi}\left(\cos x + \frac{\cos 3x}{3^2} + \frac{\cos 5x}{5^2} + \cdots + \frac{\cos(2k-1)x}{(2k-1)^2} + \cdots\right) = x, \quad x \in [0, \pi].$$
+  <p>若周期函数 $f(x)$ 有第一类不连续点，那么展成 Fourier 级数后，要对这些点予以特别说明，画图时也要将它们的函数值标为其左右极限的算术平均值．</p>
+  <p>如例 16.1.1，应该写成</p>
+  $$f(x) \sim \frac{4}{\pi}\left(\sin x + \frac{\sin 3x}{3} + \cdots + \frac{\sin(2k-1)x}{2k-1} + \cdots\right) = \begin{cases}-1, & x \in (-\pi, 0), \\ 0, & x = 0, \pm\pi, \\ 1, & x \in (0, \pi).\end{cases}$$
+  <p>因 $x = \dfrac{\pi}{2}$ 属于 Fourier 级数收敛范围，因此有</p>
+  $$\frac{4}{\pi}\left(\sin\frac{\pi}{2} + \frac{\sin\frac{3\pi}{2}}{3} + \frac{\sin\frac{5\pi}{2}}{5} + \cdots + \frac{\sin\frac{(2k-1)\pi}{2}}{2k-1}\right) = 1,$$
+  <p>整理后便有熟知的</p>
+  $$\frac{\pi}{4} = 1 - \frac{1}{3} + \frac{1}{5} - \cdots + \frac{(-1)^k}{2k+1} + \cdots$$
+
+  <div class="page-divider" data-page="原书第 357 页 [PDF P.377]" id="p357"></div>
+
+  <p>例 16.1.2 中 $f(x)$ 的正弦级数应该写成</p>
+  $$2\left(\sin x - \frac{\sin 2x}{2} + \frac{\sin 3x}{3} - \cdots + \frac{(-1)^{n+1}\sin nx}{n} + \cdots\right) = \begin{cases}x, & x \in (-\pi, \pi), \\ 0, & x = 0, \pm\pi.\end{cases}$$
+  <p>例 16.1.3 的式子也应相仿地写成</p>
+  $$\frac{1}{4} + \sum_{n=1}^\infty\frac{(-1)^n - 1}{n^2\pi^2}\cos n\pi x + \sum_{n=1}^\infty\frac{(-1)^{n+1}}{n\pi}\sin n\pi x = \begin{cases}0, & x \in [-1, 0], \\ x, & x \in (0, 1), \\ \frac{1}{2}, & x = \pm 1.\end{cases}$$
+  <p>在证实了这个 Fourier 级数收敛的前提下，可以导出一个非常重要的结果．令 $x = \frac{1}{2}$，注意到这个点是 $f(x)$ 的不连续点，其 Fourier 级数应收敛于 $\frac{f(\frac{1}{2}^+) + f(\frac{1}{2}^-)}{2} = \frac{1}{4}$；稍加整理就可得到</p>
+  $$\frac{\pi^2}{8} = 1 + \frac{1}{3^2} + \frac{1}{5^2} + \cdots + \frac{1}{(2k-1)^2} + \cdots$$
+  <p>由它还可以导出</p>
+  $$\sum_{n=1}^\infty\frac{1}{n^2} = \frac{\pi^2}{6}, \quad \sum_{n=1}^\infty\frac{(-1)^{n+1}}{n^2} = \frac{\pi^2}{12}$$
+  <p>等（留作习题）．</p>
+
+  <div class="page-divider" data-page="原书第 358 页 [PDF P.378]" id="p358"></div>
+
+  <div class="exercises" id="ex16-2">
+    <h3 class="exercise-title">习题 16.2</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $\varphi(x)$ 在 $[0, +\infty)$ 上连续且单调，$\lim_{x\to+\infty}\varphi(x) = 0$，证明</p>
+        $$\lim_{p\to+\infty}\frac{1}{\pi}\int_0^{+\infty}\varphi(x)\sin px\,\mathrm{d}x = 0.$$
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设函数 $\varphi(u)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，在 $u = 0$ 点连续且有单侧导数，证明</p>
+        $$\lim_{p\to\infty}\int_{-\pi}^\pi \varphi(u)\frac{\cos\frac{u}{2} - \cos pu}{2\sin\frac{u}{2}}\,\mathrm{d}u = \pi\varphi(0).$$
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设函数 $\varphi(u)$ 在 $[-\delta, \delta]$ 上单调，证明</p>
+        $$\lim_{p\to\infty}\int_{-\delta}^\delta \varphi(u)\frac{\sin pu}{u}\,\mathrm{d}u = \pi\left[\frac{\varphi(0^+) + \varphi(0^-)}{2}\right].$$
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">证明：Dirichlet 引理对 $\varphi(u)$ 是分段单调有界函数的情况依然成立．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">证明 Lipschitz 判别法的推论 16.2.3．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">对 §16.1 的习题 2、3、4、6 中的函数，验证它们的 Fourier 级数满足收敛判别法的条件，并分别写出这些 Fourier 级数的和函数．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用 $\sum_{n=1}^\infty \dfrac{1}{n^2} = \dfrac{\pi^2}{6}$，证明：</p>
+        <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+          <li>(1) $1 - \dfrac{1}{3^2} + \dfrac{1}{5^2} - \dfrac{1}{7^2} + \cdots = \dfrac{\pi^2}{8}$；</li>
+          <li>(2) $1 - \dfrac{1}{2^2} + \dfrac{1}{3^2} - \dfrac{1}{4^2} + \cdots = \dfrac{\pi^2}{12}$．</li>
+        </ol>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">求 $\sin x$ 全部非零零点的倒数的平方和．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">证明下列关系式：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) 对 $0 &lt; x &lt; 2\pi$ 且 $a \ne 0$，有 $\sum_{n=1}^\infty \dfrac{\sin nx}{n} = \dfrac{\pi - x}{2}$ 和 $\dfrac{1}{a} + \sum_{n=1}^\infty \dfrac{1}{n^2 + a^2} = \dfrac{\pi}{2a\tanh\pi a}$；</li>
+            <li>(2) 对 $0 &lt; x &lt; 2\pi$ 且 $a$ 不是自然数，有 $\sum_{n=1}^\infty \dfrac{a\sin nx + n(\cos ax - 1)\sin nx}{a^2 - n^2}$ 相关展开式．</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">(1) 验证函数</p>
+        $$f(x) = \begin{cases}\frac{1}{\ln|x|}, & x \ne 0, \\ 0, & x = 0\end{cases}$$
+        <p>满足 Dirichlet-Jordan 判别法条件而不满足 Dini-Lipschitz 判别法条件．</p>
+        <p>(2) 验证函数</p>
+        $$g(x) = \begin{cases}x\cos\frac{\pi}{x}, & x \ne 0, \\ 0, & x = 0\end{cases}$$
+        <p>满足 Dini-Lipschitz 判别法条件．（今后会学到，它不满足 Dirichlet-Jordan 判别法条件，在此从略．）</div>
+      </li>
+    </ol>
+  </div>
+</section>
+<section class="section" id="sec3">
+  <h2 class="section-title">§3 Fourier 级数的性质</h2>
+
+  <div class="page-divider" data-page="原书第 359 页 [PDF P.379]" id="p359"></div>
+
+  <h4 class="subsection-title" id="sec3-1">Fourier 级数的分析性质</h4>
+
+  <p>为简单起见，假定 $f(x)$ 的周期为 $2\pi$．</p>
+  <p>首先，利用 Riemann 引理可以直接得出：</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.1</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，则对于 $f(x)$ 的 Fourier 系数 $a_n$ 与 $b_n$，有</p>
+    $$\lim_{n\to\infty} a_n = 0, \quad \lim_{n\to\infty} b_n = 0.$$
+  </div>
+
+  <p>对于函数的 Fourier 级数表示，有必要讨论它的逐项微分和逐项积分问题．关于逐项积分，Fourier 级数有非常好的性质．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.2（Fourier 级数的逐项积分定理）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积，</p>
+    $$f(x) \sim \frac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx),$$
+    <p>则 $f(x)$ 的 Fourier 级数可以逐项积分，即对于任意 $c, x \in [-\pi, \pi]$，</p>
+    $$\int_c^x f(t)\,\mathrm{d}t = \frac{a_0}{2}(x - c) + \sum_{n=1}^\infty\left[a_n\int_c^x\cos nt\,\mathrm{d}t + b_n\int_c^x\sin nt\,\mathrm{d}t\right].$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证（仅对 $f(x)$ 有有限个第一类不连续点的情况）</span>
+    <p>考虑函数</p>
+
+  <div class="page-divider" data-page="原书第 360 页 [PDF P.380]" id="p360"></div>
+
+    $$F(x) = \int_c^x \left[f(t) - \frac{a_0}{2}\right]\mathrm{d}t.$$
+    <p>$F(x)$ 是周期为 $2\pi$ 的连续函数，且由定理 7.3.1 可知，在 $f(x)$ 的连续点，成立 $F'(x) = f(x) - \dfrac{a_0}{2}$，而在 $f(x)$ 的第一类不连续点，$F(x)$ 的两个单侧导数都存在．由 Dini-Lipschitz 判别法的推论，$F(x)$ 可展开为收敛的 Fourier 级数</p>
+    $$F(x) = \frac{A_0}{2} + \sum_{n=1}^\infty (A_n\cos nx + B_n\sin nx).$$
+    <p>利用分部积分法，即有</p>
+    $$A_n = \frac{1}{\pi}\int_{-\pi}^\pi F(x)\cos nx\,\mathrm{d}x = \frac{1}{\pi}\left[\frac{F(x)\sin nx}{n}\Big|_{-\pi}^\pi - \frac{1}{n}\int_{-\pi}^\pi f(x)\sin nx\,\mathrm{d}x\right] = -\frac{b_n}{n}.$$
+    <p>类似可得 $B_n = \dfrac{a_n}{n}$．于是</p>
+    $$F(x) = \frac{A_0}{2} + \sum_{n=1}^\infty\left(-\frac{b_n}{n}\cos nx + \frac{a_n}{n}\sin nx\right).$$
+    <p>令 $x = c$，有</p>
+    $$0 = \frac{A_0}{2} + \sum_{n=1}^\infty\left(-\frac{b_n}{n}\cos nc + \frac{a_n}{n}\sin nc\right).$$
+    <p>两式相减并整理，即得到</p>
+    $$F(x) - F(c) = \int_c^x\left[f(t) - \frac{a_0}{2}\right]\mathrm{d}t = \sum_{n=1}^\infty\left(\frac{b_n(\cos nc - \cos nx)}{n} + \frac{a_n(\sin nx - \sin nc)}{n}\right) = \int_c^x\sum_{n=1}^\infty (a_n\cos nt + b_n\sin nt)\,\mathrm{d}t.$$
+    <p>证毕</p>
+  </div>
+
+  <p>这就是说，只要 $f(x)$ 可以展成 Fourier 级数 $\dfrac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$，哪怕这个级数并不表示 $f(x)$，甚至根本不收敛，它的逐项积分级数也一定能收敛于 $f(x)$ 的积分．</p>
+  <p>从定理 16.3.2 的证明，我们还顺便得到了判断一个三角级数是否为 Fourier 级数的一个必要条件．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.3.1</span>
+    <p>$\dfrac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$ 是某个在 $[-\pi, \pi]$ 上可积或绝对可积函数的 Fourier 级数的必要条件是 $\sum_{n=1}^\infty \dfrac{a_n^2 + b_n^2}{n}$ 收敛．</p>
+  </div>
+
+  <div class="page-divider" data-page="原书第 361 页 [PDF P.381]" id="p361"></div>
+
+  <p>推论 16.3.1 的证明留作习题．因此，并不是随便拿来一个收敛的三角级数就能说它一定是某个函数的 Fourier 级数．比如三角级数 $\sum_{n=2}^\infty \dfrac{\sin nx}{\ln n}$，由 Dirichlet 判别法可知它是点点收敛的，但由于 $\sum_{n=2}^\infty \dfrac{1}{n(\ln n)^2}$ 发散，它不可能是某个可积或绝对可积函数的 Fourier 级数．</p>
+
+  <p>但是，Fourier 级数逐项微分的结果就远没有这么好了．一般说来，Fourier 级数是不能逐项微分的，除非是加上特别的条件．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.3（Fourier 级数的逐项微分定理）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上连续，$f(x) \sim \dfrac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$，$f(-\pi) = f(\pi)$，且除了有限个点外 $f(x)$ 可导．进一步假设 $f'(x)$ 在 $[-\pi, \pi]$ 上可积或绝对可积（注意：$f'(x)$ 在有限个点可能无定义，但这并不影响其可积性）．则 $f'(x)$ 的 Fourier 级数可由 $f(x)$ 的 Fourier 级数逐项微分得到，即</p>
+    $$f'(x) \sim \sum_{n=1}^\infty (-na_n\sin nx + nb_n\cos nx).$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>由所给条件，此时 $f'(x)$ 可展开为 Fourier 级数，记 $f'(x)$ 的 Fourier 系数为 $a_n'$ 和 $b_n'$，则有</p>
+    $$a_0' = \frac{1}{\pi}\int_{-\pi}^\pi f'(x)\,\mathrm{d}x = \frac{1}{\pi}[f(\pi) - f(-\pi)] = 0.$$
+    $$a_n' = \frac{1}{\pi}\int_{-\pi}^\pi f'(x)\cos nx\,\mathrm{d}x = \frac{1}{\pi}\left[f(x)\cos nx\Big|_{-\pi}^\pi + n\int_{-\pi}^\pi f(x)\sin nx\,\mathrm{d}x\right] = nb_n, \quad n = 1, 2, \ldots$$
+    $$b_n' = \frac{1}{\pi}\int_{-\pi}^\pi f'(x)\sin nx\,\mathrm{d}x = \frac{1}{\pi}\left[f(x)\sin nx\Big|_{-\pi}^\pi - n\int_{-\pi}^\pi f(x)\cos nx\,\mathrm{d}x\right] = -na_n, \quad n = 1, 2, \ldots$$
+    <p>于是</p>
+    $$f'(x) \sim \sum_{n=1}^\infty (-na_n\sin nx + nb_n\cos nx).$$
+    <p>证毕</p>
+  </div>
+
+  <h4 class="subsection-title" id="sec3-2">Fourier 级数的逼近性质</h4>
+
+  <p>现在我们来讨论 Fourier 级数的逼近性质．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定义 16.3.1</span>
+    <p>设 $S$ 是一个定义了内积运算 $(\cdot, \cdot)$ 的线性空间，取 $S$ 中的范数为 $\|\cdot\| = \sqrt{(\cdot, \cdot)}$，$T$ 是 $S$ 的一个 $n$ 维子空间，记 $T$ 的一组正交基为 $\varphi_1, \varphi_2, \ldots, \varphi_n$，即 $T = \mathrm{span}\{\varphi_1, \varphi_2, \ldots, \varphi_n\}$．若对于 $x \in S$，有 $x_T = c_1\varphi_1 + c_2\varphi_2 + \cdots + c_n\varphi_n \in T$，使得</p>
+    $$\|x - x_T\| \le \|x - y\|, \quad \forall y \in T,$$
+    <p>则称 $x_T$ 是 $x$ 在 $T$ 中的<strong>最佳平方逼近元素</strong>．</p>
+  </div>
+
+  <div class="page-divider" data-page="原书第 362 页 [PDF P.382]" id="p362"></div>
+
+  <div class="theorem-box">
+    <span class="box-title">引理 16.3.1</span>
+    <p>在上述假定下</p>
+    <p>(1) 对于任意 $x \in S$，$x$ 在 $T$ 中的最佳平方逼近元素 $x_T$ 存在且唯一；</p>
+    <p>(2) $x_T \in T$ 是 $x$ 在 $T$ 中的最佳平方逼近元素的充分必要条件是 $x - x_T \perp T$，即</p>
+    $$c_k = \frac{(x, \varphi_k)}{(\varphi_k, \varphi_k)}, \quad k = 1, 2, \ldots, n;$$
+    <p>(3) 最佳平方逼近的余项满足估计式</p>
+    $$\|x - x_T\|^2 = \|x\|^2 - \sum_{k=1}^n c_k^2\|\varphi_k\|^2.$$
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>令 $c_k = \dfrac{(x, \varphi_k)}{(\varphi_k, \varphi_k)}$，则对于任意的 $y = d_1\varphi_1 + d_2\varphi_2 + \cdots + d_n\varphi_n \in T$，利用 $(\varphi_j, \varphi_k) = 0$（$j \ne k$）得到</p>
+    $$\|x - y\|^2 = \|x\|^2 - 2\sum_{k=1}^n d_k(x, \varphi_k) + \sum_{k=1}^n d_k^2\|\varphi_k\|^2 = \|x\|^2 - \sum_{k=1}^n c_k^2\|\varphi_k\|^2 + \sum_{k=1}^n (d_k - c_k)^2\|\varphi_k\|^2.$$
+    <p>于是，当且仅当 $d_k = c_k$，$k = 1, 2, \ldots, n$ 时，$\|x - y\|$ 达到最小，这就证明了 (1) 和 (3)．</p>
+    <p>再证 (2)．对于每个 $k = 1, 2, \ldots, n$，$x$ 在 $T$ 中的最佳平方逼近元素 $x_T = \sum_{j=1}^n c_j\varphi_j$ 满足</p>
+    $$(x - x_T, \varphi_k) = (x, \varphi_k) - c_k\|\varphi_k\|^2 = 0.$$
+    <p>反之，若 $y = d_1\varphi_1 + \cdots + d_n\varphi_n \in T$ 满足 $(x - y, \varphi_k) = 0$，$k = 1, 2, \ldots, n$，那么 $d_k = c_k$，因此 $y = x_T$．证毕</p>
+  </div>
+
+  <p>现在，具体地取 $S$ 为 $[-\pi, \pi]$ 上 Riemann 可积或在反常积分意义下平方可积（简称"可积或平方可积"）的函数 $f(x)$ 全体；$S$ 中的内积 $(\cdot, \cdot)$ 和范数 $\|\cdot\|$ 定义为</p>
+  $$(f, g) = \int_{-\pi}^\pi f(x)g(x)\,\mathrm{d}x, \quad \|f\| = \sqrt{\int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x}.$$
+  <p>记 $T_n$ 为 $n$ 阶三角多项式 $\dfrac{A_0}{2} + \sum_{k=1}^n (A_k\cos kx + B_k\sin kx)$ 的全体，利用前面已得到的正交性，可将 $T_n$ 表示为</p>
+  $$T_n = \mathrm{span}\{1, \cos x, \sin x, \cos 2x, \sin 2x, \ldots, \cos nx, \sin nx\}.$$
+  <p>这时，有 $\|1\|^2 = 2\pi$ 和 $\|\cos kx\|^2 = \|\sin kx\|^2 = \pi$，$k = 1, 2, \ldots, n$．</p>
+  <p>由 Fourier 系数的 Euler-Fourier 公式，得到 $(f, \cos kx) = \pi a_k$，$(f, \sin kx) = \pi b_k$，于是，由引理 16.3.1 即得到下面的重要结论．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.4（Fourier 级数的平方逼近性质）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或平方可积，则 $f(x)$ 在 $T_n$ 中的最佳平方逼近元素恰为 $f(x)$ 的 Fourier 级数的部分和函数</p>
+    $$S_n(x) = \frac{a_0}{2} + \sum_{k=1}^n (a_k\cos kx + b_k\sin kx),$$
+    <p>逼近的余项为</p>
+    $$\|f - S_n\|^2 = \int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x - \pi\left[\frac{a_0^2}{2} + \sum_{k=1}^n (a_k^2 + b_k^2)\right].$$
+  </div>
+
+  <div class="page-divider" data-page="原书第 363 页 [PDF P.383]" id="p363"></div>
+
+  <p>因为 $\|f - S_n\|^2 \ge 0$，在余项中令 $n \to \infty$，即得到：</p>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.3.2（Bessel 不等式）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或平方可积，则 $f(x)$ 的 Fourier 系数满足不等式</p>
+    $$\frac{a_0^2}{2} + \sum_{n=1}^\infty (a_n^2 + b_n^2) \le \frac{1}{\pi}\int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x.$$
+    <p>这表示 Fourier 系数的平方组成了一个收敛的级数．</p>
+  </div>
+
+  <p>进一步的研究表明，上面的不等式实际上是一个等式，称为 <strong>Parseval 等式</strong>（又称能量恒等式），它在理论和实际问题中都具有重要作用．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.5（Parseval 等式）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或平方可积，则成立等式</p>
+    $$\frac{a_0^2}{2} + \sum_{n=1}^\infty (a_n^2 + b_n^2) = \frac{1}{\pi}\int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x.$$
+    <p>证明从略．</p>
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定义 16.3.2</span>
+    <p>若函数序列 $\{\varphi_n(x)\}$ 满足 $\lim_{n\to\infty}\|f(x) - \varphi_n(x)\|^2 = 0$，这里 $f(x)$ 是某一个固定函数，则称 $\{\varphi_n(x)\}$ 按范数 $\|\cdot\|$ <strong>平方收敛</strong>于 $f(x)$．</p>
+  </div>
+
+  <p>由 Parseval 等式 $\lim_{n\to\infty}\|f - S_n\|^2 = 0$，即得到一个精彩而重要的结论．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">推论 16.3.3（Fourier 级数的平方收敛性质）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上可积或平方可积，则 $f(x)$ 的 Fourier 级数的部分和函数序列平方收敛于 $f(x)$．</p>
+  </div>
+
+  <p>而对一致收敛，我们不加证明地引进一个同样精彩、同样重要的结论．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.6（Weierstrass 第二逼近定理）</span>
+    <p>对周期为 $2\pi$ 的任意一个连续函数 $f(x)$，都存在三角多项式序列</p>
+    $$\left\{\varphi_n(x) = \frac{A_0^{(n)}}{2} + \sum_{k=1}^n (A_k^{(n)}\cos kx + B_k^{(n)}\sin kx)\right\},$$
+    <p>使得 $\{\varphi_n(x)\}$ 在 $(-\infty, +\infty)$ 上一致收敛于 $f(x)$．</p>
+  </div>
+
+  <h4 class="subsection-title" id="sec3-3">等周问题</h4>
+
+  <p>在平面上周长相等的所有简单闭曲线中，怎样的曲线所围图形的面积最大？这就是著名的"<strong>等周问题</strong>"．早在古希腊时期，人们就已经猜测这样的曲线应该是圆周．但这一事实的严格证明是近代才给出的．确切的结论如下：</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.3.7</span>
+    <p>平面上具有定长的所有简单闭曲线中，圆周所围的面积最大．换言之，若 $L$ 是平面上简单闭曲线 $C$ 的长度，$A$ 是曲线 $C$ 所围图形的面积，则</p>
+    $$A \le \frac{L^2}{4\pi},$$
+    <p>且等号成立时，$C$ 必须是圆周．</p>
+    <p><em>注</em> $\dfrac{L^2}{4\pi}$ 就是周长为 $L$ 的圆所围的面积．</p>
+  </div>
+
+  <p>我们现在仅限于对平面上分段光滑的简单闭曲线讨论问题．以下的证明是 Hurwitz 在 1902 年给出的．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">引理 16.3.2（Wirtinger）</span>
+    <p>设 $f(x)$ 在 $[-\pi, \pi]$ 上连续，$f(-\pi) = f(\pi)$，$\int_{-\pi}^\pi f(x)\,\mathrm{d}x = 0$，且除了有限个点外 $f(x)$ 可导，但在不可导的点，$f(x)$ 的单侧导数存在．进一步假设，$f(x)$ 的导数 $f'(x)$ 在 $[-\pi, \pi]$ 上可积或平方可积，则</p>
+    $$\int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x \le \int_{-\pi}^\pi [f'(x)]^2\,\mathrm{d}x,$$
+    <p>等号成立当且仅当 $f(x) = a\cos x + b\sin x$（$a, b$ 为常数）．</p>
+  </div>
+
+  <div class="page-divider" data-page="原书第 364 页 [PDF P.384]" id="p364"></div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>由推论 16.2.3，$f(x)$ 的 Fourier 级数在 $[-\pi, \pi]$ 上点点收敛于 $f(x)$．由于 $a_0 = \dfrac{1}{\pi}\int_{-\pi}^\pi f(x)\,\mathrm{d}x = 0$，所以 $f(x) = \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$．进一步，由定理 16.3.3，$f'(x) \sim \sum_{n=1}^\infty (-na_n\sin nx + nb_n\cos nx)$．于是，由 Parseval 等式得到</p>
+    $$\int_{-\pi}^\pi [f(x)]^2\,\mathrm{d}x = \pi\sum_{n=1}^\infty (a_n^2 + b_n^2),$$
+    $$\int_{-\pi}^\pi [f'(x)]^2\,\mathrm{d}x = \pi\sum_{n=1}^\infty n^2(a_n^2 + b_n^2) \ge \pi\sum_{n=1}^\infty (a_n^2 + b_n^2).$$
+    <p>等号成立当且仅当 $n \ge 2$ 时 $a_n = b_n = 0$，即 $f(x) = a_1\cos x + b_1\sin x$．证毕</p>
+  </div>
+
+  <div class="proof">
+    <span class="proof-title">定理 16.3.7 的证明</span>
+
+  <div class="page-divider" data-page="原书第 365 页 [PDF P.385]" id="p365"></div>
+
+    <p>设曲线 $C$ 以弧长参数的方程为 $x = x(s)$，$y = y(s)$，$s \in [0, L]$，且参数 $s$ 从 $0$ 变到 $L$ 时，点 $(x(s), y(s))$ 沿逆时针方向画出曲线 $C$．因为 $C$ 是闭曲线，可将该曲线的方程改写为 $x = \varphi(t)$，$y = \psi(t)$，$t \in [-\pi, \pi]$，不妨假设 $\int_{-\pi}^\pi \varphi(t)\,\mathrm{d}t = 0$．</p>
+    <p>由于 $s = \dfrac{L}{2\pi}t$，所以 $\dot{x}^2 + \dot{y}^2 = \left(\dfrac{L}{2\pi}\right)^2$，再由弧长的微分公式得</p>
+    $$L^2 = \left(\frac{L}{2\pi}\right)^2 \cdot 2\pi\int_{-\pi}^\pi [\dot{\varphi}^2(t) + \dot{\psi}^2(t)]\,\mathrm{d}t \cdot \frac{1}{1} = \frac{L^2}{4\pi^2}\int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t.$$
+    <p>对上式在 $[-\pi, \pi]$ 上取定积分得</p>
+    $$\frac{L^2}{2\pi} = \int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t.$$
+
+  <div class="page-divider" data-page="原书第 366 页 [PDF P.386]" id="p366"></div>
+
+    <p>其次，$C$ 所围图形的面积 $A$ 可用曲线积分表示</p>
+    $$A = \oint_C x\,\mathrm{d}y = \int_{-\pi}^\pi \varphi(t)\psi'(t)\,\mathrm{d}t,$$
+    <p>因此</p>
+    $$\frac{L^2}{4\pi} - A = \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t - \int_{-\pi}^\pi \varphi(t)\psi'(t)\,\mathrm{d}t = \frac{1}{2}\int_{-\pi}^\pi [\varphi'(t) - \psi'(t)]^2\,\mathrm{d}t + \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t.$$
+    <p>由于 $C$ 是分段光滑曲线，所以 $\varphi(t)$ 满足引理 16.3.2 的条件，因此</p>
+    $$\frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t \ge 0,$$
+    $$\frac{L^2}{4\pi} - A \ge 0.$$
+    <p>等号成立当且仅当</p>
+    $$\int_{-\pi}^\pi [\varphi'(t) - \psi'(t)]^2\,\mathrm{d}t = 0, \quad \int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t = 0,$$
+    <p>等价地，就是</p>
+    $$\varphi(t) = a\cos t + b\sin t, \quad \psi'(t) = \varphi'(t), \quad t \in [-\pi, \pi],$$
+    <p>这时 $C$ 的参数方程为 $x = \varphi(t) = a\cos t + b\sin t$，$y = \psi(t) = a\sin t - b\cos t$，$t \in [-\pi, \pi]$，即 $C$ 是一个圆周．证毕</p>
+  </div>
+
+  <div class="exercises" id="ex16-3">
+    <h3 class="exercise-title">习题 16.3</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">由例 16.1.2 的结果 $x = 2\sum_{n=1}^\infty \frac{(-1)^{n+1}}{n}\sin nx$，$x \in (-\pi, \pi)$，用逐项积分法求 $\sum_{n=1}^\infty \frac{\sin nx}{n}$ 的 Fourier 级数的和．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">证明定理 16.3.2 的推论 16.3.1：$\dfrac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos nx + b_n\sin nx)$ 是某个在 $[-\pi, \pi]$ 上可积或绝对可积函数的 Fourier 级数的必要条件是 $\sum_{n=1}^\infty \dfrac{a_n^2 + b_n^2}{n}$ 收敛．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">说明级数 $\sum_{n=2}^\infty \dfrac{\sin nx}{\ln n}$ 和 $\sum_{n=2}^\infty \dfrac{\sin nx}{n\ln n}$ 都点点收敛，但不可能是任何可积或绝对可积函数的 Fourier 级数．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用例 16.1.1 的结果和 Parseval 等式，证明 $\sum_{n=0}^\infty \dfrac{1}{(2n-1)^4} = \dfrac{\pi^4}{96}$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用例 16.1.2 的结果和 Parseval 等式，求 $\sum_{n=1}^\infty \dfrac{1}{(2n-1)^4}$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用 $\dfrac{\pi^2}{3} - 4\sum_{n=1}^\infty \dfrac{(-1)^n}{n^2}\cos nx$，$x \in (-\pi, \pi)$ 和 Parseval 等式，求 $\sum_{n=1}^\infty \dfrac{1}{n^4}$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 为 $(-\infty, +\infty)$ 上以 $2\pi$ 为周期，且具有二阶连续导数的函数，记 $M_k = \max_{x\in[-\pi,\pi]}|f^{(k)}(x)|$（$k = 0, 1, 2$），证明：若 $\sum_{n=1}^\infty (a_n^2 + b_n^2)^{1/2}$ 绝对收敛，则 $M_0 \le \dfrac{1}{2\pi}\sqrt{2\pi} \cdot M_2$（具体估计留作习题）．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 为 $(-\infty, +\infty)$ 上的以 $2\pi$ 为周期的连续函数．证明：若 $f(x)$ 的 Fourier 系数全为零，则 $f(x) = 0$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 是周期为 $2\pi$ 的任意一个连续函数，证明对于任意给定的 $\varepsilon > 0$，存在三角多项式</p>
+        $$\varphi_n(x) = \frac{A_0}{2} + \sum_{k=1}^n (A_k\cos kx + B_k\sin kx),$$
+        <p>使得 $|f(x) - \varphi_n(x)| &lt; \varepsilon$，$\forall x \in (-\infty, +\infty)$．
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+<section class="section" id="sec4">
+  <h2 class="section-title">§4 Fourier 变换和 Fourier 积分</h2>
+
+  <div class="page-divider" data-page="原书第 367 页 [PDF P.387]" id="p367"></div>
+
+  <h4 class="subsection-title" id="sec4-1">Fourier 变换及其逆变换</h4>
+
+  <p>以上关于 Fourier 级数的论述都是对周期函数而言的，那么对于不具备周期性的函数，又该如何处理呢？</p>
+  <p>在 $(-\infty, +\infty)$ 上可积的非周期函数 $f(x)$ 可以看成是周期函数的极限情况，处理思路是这样的：</p>
+  <ol>
+    <li>先取 $f(x)$ 在 $[-T, T]$ 上的部分（即把它视为仅定义在 $[-T, T]$ 上的函数），再以 $2T$ 为周期，将它延拓为 $(-\infty, +\infty)$ 上的周期函数 $f_T(x)$；</li>
+    <li>对得到的周期函数 $f_T(x)$ 作 Fourier 展开；</li>
+    <li>令 $T$ 趋于无穷大．</li>
+  </ol>
+
+  <div class="page-divider" data-page="原书第 368 页 [PDF P.388]" id="p368"></div>
+
+  <p>下面来导出具体过程．将 Euler 公式 $\cos\theta = \dfrac{e^{i\theta} + e^{-i\theta}}{2}$，$\sin\theta = \dfrac{e^{i\theta} - e^{-i\theta}}{2i}$ 代入周期为 $2T$ 的函数 $f_T(x)$ 的 Fourier 级数，记 $\omega_n$ 是圆频率（下面就简称为频率），$\omega_0 = \dfrac{\pi}{T}$，得到</p>
+  $$f_T(x) \sim \sum_{n=-\infty}^{+\infty} c_n e^{i n\omega_0 x}, \quad c_n = \frac{1}{2T}\int_{-T}^T f_T(t)e^{-in\omega_0 t}\,\mathrm{d}t.$$
+  <p>这称为 <strong>Fourier 级数的复数形式</strong>．将 $c_n$ 的表达式代入，记 $\Delta\omega = \omega_0 = \dfrac{\pi}{T}$，于是当 $T \to +\infty$ 时 $\Delta\omega \to 0$，即得到</p>
+  $$f(x) \sim \frac{1}{2\pi}\int_{-\infty}^{+\infty}\left[\int_{-\infty}^{+\infty} f(t)e^{-i\omega t}\,\mathrm{d}t\right]e^{i\omega x}\,\mathrm{d}\omega.$$
+  <p>我们称方括号中的函数</p>
+  $$F(\omega) = \int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x \quad (\omega \in (-\infty, +\infty))$$
+  <p>为 $f$ 的 <strong>Fourier 变换</strong>（或像函数），记为 $\mathcal{F}[f]$，即</p>
+  $$\mathcal{F}[f](\omega) = \hat{f}(\omega) = \int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x.$$
+
+  <div class="page-divider" data-page="原书第 369 页 [PDF P.389]" id="p369"></div>
+
+  <p>而称函数</p>
+  $$f(x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(\omega)e^{i\omega x}\,\mathrm{d}\omega \quad (x \in (-\infty, +\infty))$$
+  <p>为 $F$ 的 <strong>Fourier 逆变换</strong>（或像原函数），记为 $\mathcal{F}^{-1}[F]$，即</p>
+  $$\mathcal{F}^{-1}[F](x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(\omega)e^{i\omega x}\,\mathrm{d}\omega.$$
+  <p>注意这里假设了像函数与像原函数的存在性．</p>
+  <p>我们称函数</p>
+  $$f(x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty}\mathrm{d}\omega\int_{-\infty}^{+\infty} f(t)e^{-i\omega(t-x)}\,\mathrm{d}t$$
+  <p>为 $f$ 的 <strong>Fourier 积分</strong>．容易想到，在一定条件下，它应与 $f(x)$ 相等，但研究这些条件已超出本课程的要求，我们不加证明地给出以下充分条件．</p>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.4.1</span>
+    <p>设函数 $f$ 在 $(-\infty, +\infty)$ 上绝对可积，且在 $(-\infty, +\infty)$ 中的任何闭区间上分段可导．则 $f$ 的 Fourier 积分满足：对于任意 $x \in (-\infty, +\infty)$ 成立</p>
+    $$\frac{1}{2\pi}\int_{-\infty}^{+\infty}\mathrm{d}\omega\int_{-\infty}^{+\infty} f(t)e^{-i\omega(t-x)}\,\mathrm{d}t = \frac{f(x^+) + f(x^-)}{2}.$$
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定义 16.4.1（分段可导）</span>
+    <p>设函数 $f$ 在 $[a, b]$ 上除有限个点 $a = x_0 &lt; x_1 &lt; \cdots &lt; x_N = b$ 外连续（在 $x_0 = a$ 只要求右极限存在，在 $x_N = b$ 只要求左极限存在），并且极限</p>
+    $$\lim_{h\to 0^-}\frac{f(x_0 + h) - f(x_0^+)}{h} \quad \text{和} \quad \lim_{h\to 0^+}\frac{f(x_0 + h) - f(x_0^+)}{h}$$
+    <p>都存在，那么称 $f$ 在 $[a, b]$ 上<strong>分段可导</strong>．</p>
+  </div>
+
+  <p>注意，若 $x$ 是 $f$ 的连续点，定理 16.4.1 已蕴含了</p>
+  $$\frac{1}{2\pi}\int_{-\infty}^{+\infty}\mathrm{d}\omega\int_{-\infty}^{+\infty} f(t)e^{i\omega(x-t)}\,\mathrm{d}t = f(x).$$
+
+  <div class="example-box">
+    <span class="box-title">例 16.4.1</span>
+    <p>求孤立矩形波 $F(x) = \begin{cases}h, & |x| \le \delta, \\ 0, & |x| > \delta\end{cases}$（见图 16.4.1）的 Fourier 变换 $\hat{F}(\omega)$ 和 $\hat{F}(\omega)$ 的 Fourier 逆变换．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      <p>当 $\omega \ne 0$ 时，</p>
+      $$\hat{F}(\omega) = \int_{-\delta}^\delta h e^{-i\omega x}\,\mathrm{d}x = h\cdot\frac{e^{-i\omega\delta} - e^{i\omega\delta}}{-i\omega} = \frac{2h}{\omega}\sin(\omega\delta).$$
+      <p>当 $\omega = 0$ 时 $\hat{F}(0) = \int_{-\infty}^{+\infty} F(x)\,\mathrm{d}x = 2h\delta = \lim_{\omega\to 0}\hat{F}(\omega)$．</p>
+      <p>而利用熟知的结果 $\int_0^{+\infty}\dfrac{\sin ax}{x}\,\mathrm{d}x = \dfrac{\pi}{2}\mathrm{sgn}(a)$，可以求得 $F$ 的逆变换：</p>
+      $$\mathcal{F}^{-1}[\hat{F}](x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty}\frac{2h\sin(\omega\delta)}{\omega}e^{i\omega x}\,\mathrm{d}\omega = \begin{cases}h, & |x| &lt; \delta, \\ \dfrac{h}{2}, & x = \pm\delta, \\ 0, & |x| > \delta.\end{cases}$$
+    </div>
+  </div>
+
+  <p>设 $f(x)$ 在 $(-\infty, +\infty)$ 上连续，且满足定理 16.4.1 的条件，则将 $f$ 的 Fourier 积分的实部和虚部分开，得到 $f(x)$ 的 <strong>Fourier 积分的三角形式</strong>（也称为实形式）：</p>
+  $$f(x) = \frac{1}{\pi}\int_0^{+\infty}\mathrm{d}\omega\int_{-\infty}^{+\infty} f(t)\cos\omega(x-t)\,\mathrm{d}t.$$
+  <p>当 $f(x)$ 本身是偶函数时，上式又可化成</p>
+  $$f(x) = \frac{2}{\pi}\int_0^{+\infty}\cos\omega x\,\mathrm{d}\omega\int_0^{+\infty} f(t)\cos\omega t\,\mathrm{d}t,$$
+  <p>它可以看成是由 <strong>Fourier 余弦变换</strong></p>
+  $$\mathcal{F}_c[f] = \hat{f}_c(\omega) = \int_0^{+\infty} f(x)\cos\omega x\,\mathrm{d}x$$
+  <p>及其逆变换复合而成的．当 $f(x)$ 本身是奇函数时，可以类似地得到由 <strong>Fourier 正弦变换</strong></p>
+  $$\mathcal{F}_s[f] = \hat{f}_s(\omega) = \int_0^{+\infty} f(x)\sin\omega x\,\mathrm{d}x$$
+  <p>及其逆变换复合而成的公式．</p>
+
+  <div class="page-divider" data-page="原书第 370 页 [PDF P.390]" id="p370"></div>
+
+  <div class="example-box">
+    <span class="box-title">例 16.4.2</span>
+    <p>求 $f(x) = e^{-x}\sin x$（$x \in [0, +\infty)$）的余弦变换．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      $$\hat{f}_c(\omega) = \int_0^{+\infty} e^{-x}\sin x\cos\omega x\,\mathrm{d}x = \frac{1}{2}\int_0^{+\infty} e^{-x}[\sin(1+\omega)x + \sin(1-\omega)x]\,\mathrm{d}x$$
+      $$= \frac{1}{2}\left[\frac{1+\omega}{1+(1+\omega)^2} + \frac{1-\omega}{1+(1-\omega)^2}\right] = \frac{2-\omega^2}{4+\omega^4}.$$
+    </div>
+  </div>
+
+  <h4 class="subsection-title" id="sec4-2">Fourier 变换的性质</h4>
+
+  <p>Fourier 变换和 Fourier 逆变换的下列性质对于理论分析和实际计算都很有用．</p>
+
+  <p><strong>(1) 线性性质</strong></p>
+  <p>设 $c_1, c_2$ 是常数．若 $f, g$ 的 Fourier 变换存在，则</p>
+  $$\mathcal{F}[c_1 f + c_2 g] = c_1\mathcal{F}[f] + c_2\mathcal{F}[g].$$
+
+  <p><strong>(2) 位移性质</strong></p>
+  <p>若函数 $f$ 的 Fourier 变换存在，则</p>
+  $$\mathcal{F}[f(x + x_0)](\omega) = \mathcal{F}[f](\omega)e^{i\omega x_0}.$$
+
+  <div class="page-divider" data-page="原书第 371 页 [PDF P.391]" id="p371"></div>
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    $$\mathcal{F}[f(x+x_0)](\omega) = \int_{-\infty}^{+\infty} f(x+x_0)e^{-i\omega x}\,\mathrm{d}x \xlongequal{u = x+x_0} \int_{-\infty}^{+\infty} f(u)e^{-i\omega(u-x_0)}\,\mathrm{d}u = e^{i\omega x_0}\mathcal{F}[f](\omega).$$
+  </div>
+
+  <p><strong>(3) 时间尺度性和频率尺度性：</strong></p>
+  $$\mathcal{F}[f(ax)](\omega) = \frac{1}{|a|}\hat{f}\!\left(\frac{\omega}{a}\right); \quad \mathcal{F}\!\left[\frac{1}{|a|}f\!\left(\frac{x}{a}\right)\right](\omega) = \hat{f}(a\omega).$$
+
+  <p><strong>(4) 微分性质</strong></p>
+  <p>1) 设函数 $f(x)$ 在 $(-\infty, +\infty)$ 上有连续的导数，且 $f(x)$ 与 $f'(x)$ 在 $(-\infty, +\infty)$ 上绝对可积，若 $\lim_{|x|\to+\infty} f(x) = 0$，则有</p>
+  $$\mathcal{F}[f'] = i\omega\cdot\mathcal{F}[f].$$
+  <p>2) 若 $f(x)$ 和 $xf(x)$ 在 $(-\infty, +\infty)$ 上绝对可积，则</p>
+  $$\mathcal{F}[-ix\cdot f] = (\mathcal{F}[f])'.$$
+
+  <div class="proof">
+    <span class="proof-title">证</span>
+    <p>1) 由分部积分公式得</p>
+    $$\mathcal{F}[f'](\omega) = \int_{-\infty}^{+\infty} f'(x)e^{-i\omega x}\,\mathrm{d}x = f(x)e^{-i\omega x}\Big|_{-\infty}^{+\infty} + i\omega\int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x = i\omega\mathcal{F}[f](\omega).$$
+    <p>2) 对 $\mathcal{F}[f](\omega)$ 关于 $\omega$ 求导，将求导运算与积分运算交换（其理由请读者自行说明），得</p>
+    $$(\mathcal{F}[f])'(\omega) = \frac{\mathrm{d}}{\mathrm{d}\omega}\int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x = \int_{-\infty}^{+\infty} (-ix)f(x)e^{-i\omega x}\,\mathrm{d}x = \mathcal{F}[-ix\cdot f](\omega).$$
+    <p>证毕</p>
+  </div>
+
+  <p><strong>(5) 积分性质</strong></p>
+  <p>设函数 $f(x)$ 和 $\int_{-\infty}^x f(t)\,\mathrm{d}t$ 在 $(-\infty, +\infty)$ 上绝对可积，则</p>
+  $$\mathcal{F}\!\left[\int_{-\infty}^x f(t)\,\mathrm{d}t\right](\omega) = \frac{1}{i\omega}\mathcal{F}[f](\omega).$$
+
+  <div class="page-divider" data-page="原书第 372 页 [PDF P.392]" id="p372"></div>
+
+  <h4 class="subsection-title" id="sec4-3">卷积</h4>
+
+  <div class="theorem-box">
+    <span class="box-title">定义 16.4.2（卷积）</span>
+    <p>设函数 $f$ 和 $g$ 在 $(-\infty, +\infty)$ 上定义，且积分</p>
+    $$(f * g)(x) = \int_{-\infty}^{+\infty} f(x-t)g(t)\,\mathrm{d}t$$
+    <p>存在，则称函数 $f * g$ 为 $f$ 和 $g$ 的<strong>卷积</strong>．显然，卷积具有对称性，即 $f * g = g * f$．</p>
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.4.2（卷积的 Fourier 变换）</span>
+    <p>设函数 $f$ 和 $g$ 在 $(-\infty, +\infty)$ 上绝对可积，则有</p>
+    $$\mathcal{F}[f * g] = \mathcal{F}[f]\cdot\mathcal{F}[g].$$
+  </div>
+
+  <div class="theorem-box">
+    <span class="box-title">定理 16.4.3（Parseval 等式）</span>
+    <p>设函数 $f$ 在 $(-\infty, +\infty)$ 上绝对可积，且 $\int_{-\infty}^{+\infty}[f(x)]^2\,\mathrm{d}x$ 收敛．记 $f$ 的 Fourier 变换为 $\hat{f}$，则</p>
+    $$\int_{-\infty}^{+\infty}[f(x)]^2\,\mathrm{d}x = \frac{1}{2\pi}\int_{-\infty}^{+\infty}|\hat{f}(\omega)|^2\,\mathrm{d}\omega.$$
+  </div>
+
+  <div class="example-box">
+    <span class="box-title">例 16.4.3</span>
+    <p>求解微分方程 $u''(x) - u(x) + 2af(x) = 0$（$a > 0$ 为常数，$x \in (-\infty, +\infty)$）．</p>
+    <div class="proof">
+      <span class="proof-title">解</span>
+      <p>由 Fourier 变换的微分性质得 $\mathcal{F}[u''] = (i\omega)^2\mathcal{F}[u] = -\omega^2\mathcal{F}[u]$．对方程两边作 Fourier 变换，整理后即有</p>
+      $$\mathcal{F}[u] = \frac{2a}{a^2 + \omega^2}\mathcal{F}[f].$$
+      <p>利用 $\mathcal{F}[e^{-a|x|}] = \dfrac{2a}{a^2 + \omega^2}$ 和定理 16.4.2 的结论，得到</p>
+      $$u(x) = \mathcal{F}^{-1}\!\left[\frac{2a}{a^2+\omega^2}\cdot\mathcal{F}[f]\right] = e^{-a|x|} * f(x) = \int_{-\infty}^{+\infty} e^{-a|x-t|}f(t)\,\mathrm{d}t.$$
+    </div>
+  </div>
+
+  <div class="page-divider" data-page="原书第 373 页 [PDF P.393]" id="p373"></div>
+
+  <p><em>注</em> 周期函数实际上就是频率为 $\omega_0 = \dfrac{\pi}{T}$ 的振荡函数：Fourier 级数 $f(x) \sim \dfrac{a_0}{2} + \sum_{n=1}^\infty (a_n\cos n\omega_0 x + b_n\sin n\omega_0 x)$ 揭示了 $f(x)$ 可以通过频率为 $\omega_0$（称为基频）的正弦波 $\sin\omega_0 x$ 和余弦波 $\cos\omega_0 x$（称为基波）及其 $n$ 次谐波 $\sin n\omega_0 x, \cos n\omega_0 x$ 叠加来得到，而谐频为 $n\omega_0$ 的谐波的振幅 $\sqrt{a_n^2 + b_n^2} = |c_n|$ 可理解成该谐波在整体中的强度．</p>
+
+  <div class="exercises" id="ex16-4">
+    <h3 class="exercise-title">习题 16.4</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">求下列定义在 $(-\infty, +\infty)$ 的函数的 Fourier 变换：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) $f(x) = \begin{cases}1, & 0 &lt; t \le \delta, \\ 0, & \text{其他};\end{cases}$</li>
+            <li>(2) $g(x) = e^{-a|x|}$，$a > 0$；</li>
+            <li>(3) $f(x) = xe^{-a|x|}$，$a > 0$；</li>
+            <li>(4) $f(x) = \begin{cases}e^{-ax}, & x \ge 0, \\ e^{bx}, & x &lt; 0,\end{cases}$ $a, b > 0$；</li>
+            <li>(5) $f(x) = \begin{cases}h\cos\omega_0 x, & |x| \le \delta, \\ 0, & |x| > \delta.\end{cases}$</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">求 $f(x) = e^{-ax}$（$x \in [0, +\infty)$，$a > 0$）的正弦变换和余弦变换．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f_+(x) = \begin{cases}e^{-x}, & x \ge 0, \\ 0, & x &lt; 0,\end{cases}$ $g(x) = \begin{cases}\sin x, & \text{其他}, \\ 0, & \text{其他},\end{cases}$ 求 $f_+ * g(x)$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用 Fourier 变换的微分性质，求解微分方程 $u' + au = f(x)$（$a > 0$，$x \in (-\infty, +\infty)$）．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用 Parseval 等式，计算 $\int_0^{+\infty}\dfrac{\sin^2 x}{x^2}\,\mathrm{d}x$．</div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="sec5">
+  <h2 class="section-title">§5 快速 Fourier 变换</h2>
+
+  <div class="page-divider" data-page="原书第 375 页 [PDF P.395]" id="p375"></div>
+
+  <h4 class="subsection-title" id="sec5-1">离散 Fourier 变换</h4>
+
+  <p>人们刚开始利用无线电技术传输信号时，是将连续信号进行某种调制处理后直接传送的，本质上传送的还是连续信号（也叫模拟信号），这样的传输方式抗干扰能力差，失真严重，尤其是经过长距离传送或多级传递后，信号可能面目全非，质量自然难尽人意．</p>
+  <p>以后发展了离散的传输方法，它不是传送连续信号本身，而是每隔一段时间 $\Delta t$，从信号中提取一个数值脉冲（称为数值抽样），将连续信号转化成数据序列 $x(0), x(1), x(2), \ldots, x(N-1)$，再经编码后发送．只要抽取的时间间隔足够小，这列数据就能很好地反映原信号，接收方通过逆向处理，可以复原出所传递的信号．这种方法称为<strong>数字信号传输</strong>，具有抗干扰能力强，信号还原质量高、易于加密和解密等优点，问世后便受到广泛的重视，至今方兴未艾．</p>
+  <p>在抽样之后需要对数据序列 $x(0), x(1), \ldots, x(N-1)$ 进行简化和压缩．后来经研究发现，若对数据序列施以如下的<strong>离散 Fourier 变换</strong></p>
+
+  <div class="page-divider" data-page="原书第 376 页 [PDF P.396]" id="p376"></div>
+
+  $$X(j) = \sum_{n=0}^{N-1} x(n)e^{-2\pi i jn/N}, \quad j = 0, 1, 2, \ldots, N-1,$$
+  <p>就可以有效地解决上面的问题．（之所以称它为"离散 Fourier 变换"，在于它可以看成是 Fourier 变换 $\hat{f}(\omega) = \int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x$ 的一种离散的近似形式的推广．）</p>
+  <p>利用正交关系式</p>
+  $$\frac{1}{N}\sum_{k=0}^{N-1} e^{2\pi i(j-n)k/N} = \delta_{jn},$$
+  <p>可以导出<strong>离散 Fourier 逆变换</strong></p>
+  $$x(k) = \frac{1}{N}\sum_{j=0}^{N-1} X(j)e^{2\pi i jk/N}, \quad k = 0, 1, 2, \ldots, N-1.$$
+  <p>从变换公式容易看出，变换后的序列中的每个 $X(j)$，都包含了原序列中所有信号的信息．因此，即使丢失了某些 $X(j)$，仍可望由其余数据基本正确地还原出原始数据，这当然使得传输过程的抗干扰能力进一步提高，但更重要的是，这可以让我们通过有意剔除某些模较小的数据而使需传输的序列大为缩短．</p>
+
+  <div class="example-box">
+    <span class="box-title">例 16.5.1</span>
+    <p>对长度为 64 的序列 $\{x(k)\}$ 做离散 Fourier 变换，其取值如图 16.5.4(a) 中的"+"所示，变换后的 $|X(j)|$ 的模用"$\circ$"表示．从图中可以看到，$|x(k)|$ 的变化很大，有高低不同的四个起伏．但做了 Fourier 变换后，$|X(j)|$ 只是在序列的起首和终止处附近有两个高的起伏，而处于序列中部的数据，其模的波动范围是不大的．</p>
+    <p>将 $|X(j)|$ 中约有三分之一的点（模接近于零的部分）全部强行置为零后，再对整个序列进行 Fourier 逆变换，图 16.5.4(b) 显示了所得的结果：除了极个别点误差稍大之外，两者的吻合程度是相当令人满意的．</p>
+  </div>
+
+  <div class="page-divider" data-page="原书第 377 页 [PDF P.397]" id="p377"></div>
+
+  <h4 class="subsection-title" id="sec5-2">快速 Fourier 变换</h4>
+
+  <p>尽管早就发现离散 Fourier 变换有如此诱人的好处，但在一个相当长的时期中，人们对它基本上只限于纸上谈兵．这是因为，做一次变换需要进行 $N^2$ 次复数乘法和 $N(N-1)$ 次复数加法，实际使用中的 $N$ 总是极为巨大的，相应的高昂代价令人望而却步．</p>
+  <p>一直到 20 世纪 60 年代中期，Cooley 和 Tukey 发现了计算离散 Fourier 变换的高效方法——<strong>快速 Fourier 变换</strong>（简称 FFT——Fast Fourier Transform）之后，它才真正获得了生命力．可以毫不夸张地说，基于 FFT 的离散 Fourier 变换技术，是当今信息传输、频谱分析、图像处理、数据压缩等领域中最重要的数学工具之一，目前，国际上任何一个综合的数学软件中，必定含有 FFT 的计算程序．</p>
+  <p>下面对 FFT 的思想作一简单介绍（由于逆 FFT 的形式与 FFT 完全相同，因此所有的方法和结论都可以平行地用到逆 FFT 上去）：</p>
+  <p>设 $N = 2m$，将 $j$ 和 $n$ 分别改写成</p>
+  $$j = m_1 j_1 + j_0, \quad j_1 = 0, 1, \ldots, m-1, \quad j_0 = 0, 1,$$
+  $$n = 2n_1 + n_0, \quad n_1 = 0, 1, \ldots, m-1, \quad n_0 = 0, 1,$$
+  <p>记 $W_N = e^{-2\pi i/N}$，则 $W_N^{jn} = W_N^{(m_1 j_1 + j_0)(2n_1 + n_0)} = W_m^{j_1 n_1}(W_N^{j_0})^{n_0}W_N^{j_1 n_0}$．</p>
+  <p>将上式代入离散 Fourier 变换公式，并记 $X(j)$ 为 $X(j_1, j_0)$：</p>
+  $$X(j_1, j_0) = \sum_{n_0=0}^1 \left[(W_N^{j_0})^{n_0}W_N^{j_1 n_0}\sum_{n_1=0}^{m-1} x(2n_1 + n_0)(W_m)^{j_1 n_1}\right].$$
+  <p>将方括号中的部分记为 $\tilde{X}(n_0, j_1)$，则计算 $X(j)$（$j = 0, 1, 2, \ldots, N-1$）可分解为两个步骤进行：</p>
+  $$\tilde{X}(n_0, j_1) = \sum_{n_1=0}^{m-1} x(2n_1 + n_0)(W_m)^{j_1 n_1}, \quad n_0 = 0, 1, \quad j_1 = 0, 1, \ldots, m-1.$$
+  $$X(j_1, j_0) = \sum_{n_0=0}^1 (W_N^{j_0})^{n_0}W_N^{j_1 n_0}\tilde{X}(n_0, j_1).$$
+
+  <div class="page-divider" data-page="原书第 378 页 [PDF P.398]" id="p378"></div>
+
+  <p>容易推导出，对 $N = 2^m$，执行一个以 2 为底的完整的 FFT，只需要进行 $\dfrac{N}{2}\log_2 N$ 次复数乘法和 $N\log_2 N$ 次复数加法．由于</p>
+  $$\frac{N^2}{\frac{N}{2}\log_2 N} = \frac{2N}{\log_2 N} \to \infty, \quad N \to \infty,$$
+  <p>因此它比原来需要 $N^2$ 次运算的直接算法在数量级上有了重大改进，节省的工作量相当惊人．比如，对 $N = 2^{10} = 1024$（对于实际问题来讲，这仅是一个很小的数字），原算法的复数乘法次数就超过 FFT 的 200 倍！</p>
+  <p>FFT 还为离散 Fourier 变换开拓出了许多新的用途，计算数列的卷积就是一个典型的例子．设 $\{x(k)\}_{k=0}^{N-1}$ 和 $\{y(k)\}_{k=0}^{N-1}$ 都是实的或复的数列，定义它们的卷积为</p>
+  $$(x * y)(k) = \sum_{n=0}^{N-1} x(n)y(k-n).$$
+  <p>可以证明，两个数列卷积的离散 Fourier 变换，等于由这两个数列分别的离散 Fourier 变换的对应项乘积构成的数列，即 $\mathcal{F}[x * y] = \mathcal{F}[x]\cdot\mathcal{F}[y]$（其中乘法是逐项乘积）．</p>
+  <p>因此，计算两个数列的卷积可分三步进行：</p>
+  <ol>
+    <li>分别做 $\{x(k)\}$ 和 $\{y(k)\}$ 的离散 Fourier 变换 $\{X(j)\}$ 和 $\{Y(j)\}$；</li>
+    <li>求 $X(j)Y(j)$，$j = 0, 1, \ldots, N-1$；</li>
+    <li>做 $\{X(j)Y(j)\}$ 的离散 Fourier 逆变换，得到 $\{z(k)\}$．</li>
+  </ol>
+  <p>上述过程需要两次离散 Fourier 变换和一次离散 Fourier 逆变换，有了 FFT 之后，总共只需 $4.5N\log_2 N$ 次运算，节省效果相当可观．</p>
+  <p>由 FFT 方法出发，产生了很大一类基于卷积计算的快速算法．比如，要计算两个 $n$ 次多项式 $P_n(x) = \sum_{k=0}^n a_k x^k$ 和 $Q_n(x) = \sum_{k=0}^n b_k x^k$ 的乘积，若令数列 $\{A(k)\}$ 和 $\{B(k)\}$ 分别为 $A(k) = a_k$，$0 \le k \le n$；$B(k) = b_k$，$0 \le k \le n$，则乘积的系数恰好是 $\{A(k)\}$ 和 $\{B(k)\}$ 的卷积——这就是求多项式乘积的快速算法．</p>
+
+  <div class="page-divider" data-page="原书第 379 页 [PDF P.399]" id="p379"></div>
+
+  <div class="exercises" id="ex16-5">
+    <h3 class="exercise-title">习题 16.5</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">说明离散 Fourier 变换 $X(j) = \sum_{n=0}^{N-1} x(n)e^{-2\pi ijn/N}$ 可以看成 Fourier 变换的离散近似形式的推广．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">证明正交关系式 $\dfrac{1}{N}\sum_{k=0}^{N-1} e^{2\pi i(j-n)k/N} = \delta_{jn}$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $N = pq$（$p, q \in \mathbb{N}$），构造只需 $O((p+q)N)$ 次运算的 Fourier 变换算法．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">对 $N = 2^3$，具体写出以 2 为底的 FFT 的计算流程．</div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="page-divider" data-page="原书第 380 页 [PDF P.400]" id="p380"></div>
+
+  <div class="exercises supp-exercises" id="supp16">
+    <h3 class="exercise-title">补充习题</h3>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 在 $[-\pi, \pi]$ 上绝对可积，Fourier 系数为 $a_n, b_n$，证明：
+          $$\lim_{n\to\infty}\int_{-\pi}^\pi f(x)\cos nx\,\mathrm{d}x = 0, \quad \lim_{n\to\infty}\int_{-\pi}^\pi f(x)\sin nx\,\mathrm{d}x = 0.$$
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 是以 $2\pi$ 为周期的连续函数，$\{A_n\}$ 是一个单调趋于 $0$ 的正数列，证明：三角级数 $\sum_{n=1}^\infty A_n\cos nx$ 在 $f(x)$ 的连续点处收敛于 $f(x)$，则必有 $A_n = O\!\left(\dfrac{1}{n}\right)$．</div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">设 $f(x)$ 在 $[0, +\infty)$ 上连续，$\int_0^{+\infty} f^2(x)\,\mathrm{d}x &lt; +\infty$，利用 Parseval 等式，证明</p>
+        $$\int_0^{+\infty} [f_c(\omega)]^2\,\mathrm{d}\omega = \frac{\pi}{2}\int_0^{+\infty} [f(x)]^2\,\mathrm{d}x.$$
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">利用快速 Fourier 变换，设计一个计算大整数乘法的高效算法，并分析其时间复杂度．</div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="exercises" id="comp16">
+    <h3 class="exercise-title">计算实习题</h3>
+    <p>（在教师的指导下，编制程序在电子计算机上实际计算）</p>
+    <ol class="exercise-list">
+      <li class="exercise-item">
+        <div class="exercise-statement">利用现成的数学通用软件（如 MATLAB、Mathematica、Maple 等），对于 $N = 32, 64, 128$：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) 生成实数序列 $\{x(k)\}_{k=0}^{N-1}$；</li>
+            <li>(2) 用 FFT 计算 $\{x(k)\}_{k=0}^{N-1}$ 的离散 Fourier 变换序列 $\{X(j)\}_{j=0}^{N-1}$；</li>
+            <li>(3) 作出 $|x(k)|$ 和 $|X(j)|$ 的图并进行分析；</li>
+            <li>(4) 设定 $\delta_0 > 0$，将 $\{|X(j)|\}$ 中满足 $|X(j)| &lt; \delta_0$ 的数据全部置为零，再进行离散 Fourier 逆变换，将得到的数据与 $\{x(k)\}$ 比较；</li>
+            <li>(5) 改变 $\delta_0$ 的值，重复 (4)，分析不同的 $\delta_0$ 对逆变换所得到的数据的影响．</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">对于 $N = 32, 64, 128$：
+          <ol type="(1)" style="list-style-type:none;padding-left:1.5em;">
+            <li>(1) 生成两个实数序列 $\{a(k)\}$ 和 $\{b(k)\}$；</li>
+            <li>(2) 直接计算卷积 $\{a(k)\} * \{b(k)\}$；</li>
+            <li>(3) 改用离散 Fourier 变换的思想，用 FFT 计算 $\{a(k)\} * \{b(k)\}$；</li>
+            <li>(4) 结合 $N$ 比较两种算法所用的时间．</li>
+          </ol>
+        </div>
+      </li>
+      <li class="exercise-item">
+        <div class="exercise-statement">用 FFT 计算多项式 $\sum_{n=0}^{2n}\dfrac{(-1)^n}{(2n+1)!}x^{2n+1}$ 和 $\sum_{n=0}^{2n}\dfrac{(-1)^n}{(2n)!}x^{2n}$ 的乘积，并与 $x = 2$ 的 Taylor 级数的相应项比较．</div>
+      </li>
+    </ol>
+  </div>
+</section>
+    </main>
+  </div>
+</div>
+
+<script>
+  const themeBtn = document.getElementById('themeToggleBtn');
+  let currentTheme = localStorage.getItem('theme') || 'light';
+  if (currentTheme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    themeBtn.innerText = '切换日间模式';
+  }
+
+  themeBtn.addEventListener('click', () => {
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+      themeBtn.innerText = '切换夜间模式';
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      themeBtn.innerText = '切换日间模式';
+      localStorage.setItem('theme', 'dark');
+    }
+  });
+
+  const sections = document.querySelectorAll('section, h3, h4, .exercise-container');
+  const navLinks = document.querySelectorAll('.toc-link');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 120;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>

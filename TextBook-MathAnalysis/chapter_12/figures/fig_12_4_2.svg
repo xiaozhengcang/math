@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 300" width="100%" height="auto">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    </marker>
+    <style>
+      .axis { stroke: #2d3748; stroke-width: 1.5; fill: none; }
+      .curve { stroke: #2b6cb0; stroke-width: 2.2; fill: none; }
+      .dashed-line { stroke: #718096; stroke-width: 1.2; stroke-dasharray: 4,3; fill: none; }
+      .label { font-family: 'KaTeX_Main', 'Times New Roman', serif; font-size: 15px; fill: #2d3748; }
+      .label-math { font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; font-size: 15px; fill: #2d3748; }
+      .point { fill: #c53030; }
+    </style>
+  </defs>
+
+  <!-- Axes -->
+  <line x1="30" y1="240" x2="430" y2="240" class="axis" marker-end="url(#arrow)" />
+  <text x="430" y="255" class="label-math">x</text>
+  <line x1="60" y1="270" x2="60" y2="30" class="axis" marker-end="url(#arrow)" />
+  <text x="50" y="35" class="label-math">y</text>
+  <text x="48" y="255" class="label">O</text>
+
+  <!-- Dashed box [x0 - rho, x0 + rho] x [y0 - beta, y0 + beta] -->
+  <!-- Let x0 = 230, rho = 70 => x in [160, 300] -->
+  <!-- Let y0 = 140, beta = 60 => y in [80, 200] -->
+  <rect x="160" y="80" width="140" height="120" class="dashed-line" />
+
+  <!-- Horizontal dashed lines extending to y axis -->
+  <line x1="60" y1="80" x2="160" y2="80" class="dashed-line" />
+  <text x="18" y="85" class="label-math">y₀+β</text>
+  <text x="255" y="74" class="label">F &gt; 0</text>
+
+  <line x1="60" y1="140" x2="230" y2="140" class="dashed-line" />
+  <text x="36" y="145" class="label-math">y₀</text>
+
+  <line x1="60" y1="200" x2="160" y2="200" class="dashed-line" />
+  <text x="18" y="205" class="label-math">y₀-β</text>
+  <text x="255" y="195" class="label">F &lt; 0</text>
+
+  <!-- Intermediate y_bar = 165 -->
+  <line x1="60" y1="165" x2="200" y2="165" class="dashed-line" />
+  <text x="42" y="170" class="label-math">ȳ</text>
+
+  <!-- Vertical dashed lines down to x axis -->
+  <line x1="160" y1="80" x2="160" y2="240" class="dashed-line" />
+  <text x="140" y="258" class="label-math">x₀-ρ</text>
+
+  <line x1="200" y1="165" x2="200" y2="240" class="dashed-line" />
+  <text x="195" y="258" class="label-math">x̄</text>
+
+  <line x1="230" y1="140" x2="230" y2="240" class="dashed-line" />
+  <text x="225" y="258" class="label-math">x₀</text>
+
+  <line x1="300" y1="80" x2="300" y2="240" class="dashed-line" />
+  <text x="285" y="258" class="label-math">x₀+ρ</text>
+
+  <!-- Curve y = f(x) passing through (x0, y0) -->
+  <path d="M 120 190 Q 180 180 230 140 T 350 90" class="curve" />
+
+  <!-- Points -->
+  <circle cx="230" cy="140" r="3.5" class="point" />
+  <text x="235" y="135" class="label-math">(x₀, y₀)</text>
+  <circle cx="200" cy="165" r="3" class="point" />
+</svg>
