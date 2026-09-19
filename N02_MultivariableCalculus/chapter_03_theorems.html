@@ -1,0 +1,2372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第三章 · 函数极限与连续性 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill current-ch">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (23)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-3-1-1" class="toc-link" title="定理 3.1.1 函数极限的唯一性">定理 3.1.1 函数极限的唯一性</a></li>
+<li><a href="#thm-3-1-2" class="toc-link" title="定理 3.1.2 函数极限的局部保序与保号性">定理 3.1.2 函数极限的局部保序与保号性</a></li>
+<li><a href="#thm-3-1-cor1" class="toc-link" title="推论 1 极限非零则局部严格有下界">推论 1 极限非零则局部严格有下界</a></li>
+<li><a href="#thm-3-1-cor2" class="toc-link" title="推论 2 函数不等式极限保序性">推论 2 函数不等式极限保序性</a></li>
+<li><a href="#thm-3-1-cor3" class="toc-link" title="推论 3 函数极限的局部有界性">推论 3 函数极限的局部有界性</a></li>
+<li><a href="#thm-3-1-3" class="toc-link" title="定理 3.1.3 函数极限的两面夹定理 (夹逼准则)">定理 3.1.3 函数极限的两面夹定理 (夹逼准则)</a></li>
+<li><a href="#thm-3-1-4" class="toc-link" title="定理 3.1.4 函数极限的四则运算法则">定理 3.1.4 函数极限的四则运算法则</a></li>
+<li><a href="#thm-3-1-5" class="toc-link" title="定理 3.1.5 Heine 定理 (海涅归结原理)">定理 3.1.5 Heine 定理 (海涅归结原理)</a></li>
+<li><a href="#thm-3-1-5p" class="toc-link" title="定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)">定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)</a></li>
+<li><a href="#thm-3-1-6" class="toc-link" title="定理 3.1.6 无穷远处极限与数列极限归结定理">定理 3.1.6 无穷远处极限与数列极限归结定理</a></li>
+<li><a href="#thm-3-2-1" class="toc-link" title="定理 3.2.1 反函数存在性定理">定理 3.2.1 反函数存在性定理</a></li>
+<li><a href="#thm-3-2-2" class="toc-link" title="定理 3.2.2 反函数连续性定理">定理 3.2.2 反函数连续性定理</a></li>
+<li><a href="#thm-3-2-3" class="toc-link" title="定理 3.2.3 复合函数连续性定理">定理 3.2.3 复合函数连续性定理</a></li>
+<li><a href="#thm-3-2-4" class="toc-link" title="定理 3.2.4 一切初等函数在其定义区间上连续">定理 3.2.4 一切初等函数在其定义区间上连续</a></li>
+<li><a href="#thm-3-3-1" class="toc-link" title="定理 3.3.1 等价无穷小代换定理">定理 3.3.1 等价无穷小代换定理</a></li>
+<li><a href="#thm-3-4-1" class="toc-link" title="定理 3.4.1 闭区间连续函数的有界性定理">定理 3.4.1 闭区间连续函数的有界性定理</a></li>
+<li><a href="#thm-3-4-2" class="toc-link" title="定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)">定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)</a></li>
+<li><a href="#thm-3-4-3" class="toc-link" title="定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)">定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)</a></li>
+<li><a href="#thm-3-4-4" class="toc-link" title="定理 3.4.4 介值定理 (中间值定理)">定理 3.4.4 介值定理 (中间值定理)</a></li>
+<li><a href="#thm-3-4-cor" class="toc-link" title="推论 闭区间连续函数的值域必为闭区间">推论 闭区间连续函数的值域必为闭区间</a></li>
+<li><a href="#thm-3-4-5" class="toc-link" title="定理 3.4.5 一致连续性的充要条件 (点列判据准则)">定理 3.4.5 一致连续性的充要条件 (点列判据准则)</a></li>
+<li><a href="#thm-3-4-6" class="toc-link" title="定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)">定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)</a></li>
+<li><a href="#thm-3-4-7" class="toc-link" title="定理 3.4.7 开区间上连续函数的一致连续性延拓定理">定理 3.4.7 开区间上连续函数的一致连续性延拓定理</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 03</span>
+        <span class="ch-count-badge">共收录 23 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第三章 · 函数极限与连续性</h1>
+      <p class="ch-desc-text">ε-δ 语言、海涅归结原理、一致连续性 Cantor 定理与闭区间连续函数性质</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-3-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.1 函数极限的唯一性</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">函数极限</span><span class="thm-tag">唯一性</span><span class="thm-tag">Hausdorff 分离性</span><span class="thm-tag">开球隔离</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-1" class="anchor-btn" title="复制锚点链接"># 定理 3.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.1</strong> 设 $A$ 与 $B$ 都是函数 $f(x)$ 在点 $x_0$ 的极限，则 $A = B$.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 根据函数极限的定义，可知：</p>
+$$\forall \varepsilon &gt; 0, \exists \delta_1 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_1) : |f(x) - A| &lt; \frac{\varepsilon}{2};$$
+$$\exists \delta_2 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_2) : |f(x) - B| &lt; \frac{\varepsilon}{2}.$$
+
+<p>取 $\delta = \min\{\delta_1, \delta_2\}$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，</p>
+$$|A - B| \le |f(x) - A| + |f(x) - B| &lt; \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.$$
+<p class="no-indent">由于 $\varepsilon$ 可以任意接近于 $0$，可知 $A = B$.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 实数度量空间的 Hausdorff 分离公理在函数极限中的映射；相异的目标点拥有互不相交的局部开球，连续轨道无法同时穿入两个空间分离的开集中。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在度量空间中，当自变量 $x$ 沿连续轨道向点 $x_0$ 靠拢时，函数值 $f(x)$ 只能汇聚到唯一的极限真值。
+反证法机制：如果函数同时存在两个不相等的极限 $A \ne B$，在目标空间中取它们距离的一半作为开球半径 $\varepsilon = |A-B|/2$。由于两极限各自要求在 $x_0$ 周围存在半径为 $\delta_1, \delta_2$ 的去心控制邻域，取两邻域之交 $\delta = \min(\delta_1, \delta_2)$。在该公共去心邻域内，函数值 $f(x)$ 必须同时落入以 $A$ 和 $B$ 为中心的开区间内，但两区间完全不相交，直接引爆空间矛盾。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      去心开球与目标空间隔离球的映射图景：
+在自变量横轴上，取去心邻域 $O^\circ(x_0, \delta)$；在因变量纵轴上，以 $A$ 和 $B$ 为中心画出两个半径为 $|A-B|/2$ 的孤立开球。函数 $f$ 是一条连续映射的几何流线。极限定义要求整条去心小区间内的线段像集，全部紧缩在半径极小的开球内部。一条连续的线段像集不可能跨越空间裂隙，同时身处两个相隔很远的纵向开球之中。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Hausdorff $T_2$ 拓扑性质：设定分离容差 $\varepsilon = |A-B|/2 > 0$ 使得开球不相交。</li><li>去心邻域取交集：$\delta = \min(\delta_1, \delta_2) > 0$，保证两套控制不等式在同一点 $x$ 成立。</li><li>三角不等式闭环矛盾：$|A-B| \le |f(x)-A| + |f(x)-B| < \varepsilon + \varepsilon = |A-B|$，推得严格小于自身的荒谬结论。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.2 函数极限的局部保序与保号性</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">保号性</span><span class="thm-tag">保序性</span><span class="thm-tag">开集稳定性</span><span class="thm-tag">严格非零下界</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-2" class="anchor-btn" title="复制锚点链接"># 定理 3.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.2</strong> 若 $\lim_{x \to x_0} f(x) = A, \lim_{x \to x_0} g(x) = B$，且 $A &gt; B$，则存在 $\delta &gt; 0$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$f(x) &gt; g(x).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 取 $\varepsilon_0 = \frac{A - B}{2} &gt; 0$. 由 $\lim_{x \to x_0} f(x) = A$，$\exists \delta_1 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_1)$：</p>
+$$f(x) &gt; A - \varepsilon_0 = \frac{A + B}{2}.$$
+<p>由 $\lim_{x \to x_0} g(x) = B$，$\exists \delta_2 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_2)$：</p>
+$$g(x) &lt; B + \varepsilon_0 = \frac{A + B}{2}.$$
+<p>取 $\delta = \min\{\delta_1, \delta_2\}$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$g(x) &lt; \frac{A + B}{2} &lt; f(x).$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 实数开集的拓扑稳定性；极限真值的宏观偏离，通过连续逼近在局部开邻域内拉开不可逾越的抗微扰安全带。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      当极限值满足严格不等式 $A > B$ 时，两者之间必定存在正的测度间距。
+取该间距的一半 $\varepsilon_0 = (A-B)/2 > 0$ 作为安全容差。根据极限的定义，在 $x_0$ 充分小的局部去心邻域内，$f(x)$ 的下界被托举在 $A - \varepsilon_0 = (A+B)/2$ 之上，而 $g(x)$ 的上界被压制在 $B + \varepsilon_0 = (A+B)/2$ 之下。两者在中线处被完全隔开，从而在局部严格保住了 $f(x) > g(x)$ 的相对序关系。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      相空间水平中线隔离图景：
+极限值 $A$ 与 $B$ 在纵轴上标定了两个不同的基准高度，中点高度为 $(A+B)/2$。当自变量缩进局部邻域 $O^\circ(x_0, \delta)$ 时，曲线 $f(x)$ 整体沉降在 $(A+B)/2$ 上方的一条水平走廊内，而曲线 $g(x)$ 整体悬挂在该水平线下方的一条走廊内。水平隔离线如同一道刚性水平挡板，从几何上彻底阻绝了二者在此邻域内发生交叉的可能。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>设定分界中线：取 $\varepsilon_0 = (A-B)/2$，导出 $f(x) > \frac{A+B}{2} > g(x)$。</li><li>求导与除法运算的核心前提：为后续微分定义中差商分母非零提供了关键的局域正下界支撑。</li><li>序关系的闭合弱化效应：严格不等式在取极限时只能保住弱不等式（如 $x^2 > 0$ 当 $x \to 0$ 时极限为 0）。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-cor1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 1 极限非零则局部严格有下界</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">非零下界</span><span class="thm-tag">保号性推论</span><span class="thm-tag">商函数连续性</span><span class="thm-tag">除法安全性</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-cor1" class="anchor-btn" title="复制锚点链接"># 推论 1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>推论 1</strong> 若 $\lim_{x \to x_0} f(x) = A \ne 0$，则存在 $\delta &gt; 0$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$|f(x)| &gt; \frac{|A|}{2}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由 $\frac{|A|}{2} &lt; |A|$ 及定理 3.1.2，可知存在 $\delta &gt; 0$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$|f(x)| &gt; \frac{|A|}{2}.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 模长在非零去心开球内的正下确界；确保函数值不会向原点无限制衰减塌缩，为除法和求导构建安全底线。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果函数的极限值 $A \ne 0$，那么在靠近点 $x_0$ 的去心邻域内，函数曲线不仅符号保持不变，而且其绝对值必定被牢牢托在 $|A|/2$ 的高度之上，绝对无法穿透进入以原点为中心的紧致小球。
+这在数学推导中具有不可替代的作用：当需要处理商函数 $\frac{1}{f(x)}$ 或者商的求导公式时，分母的绝对值拥有正下界 $|f(x)| \ge |A|/2 > 0$，从根本上杜绝了分母为零或无限制变小导致除法爆炸的奇点灾难。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      原点去心斥力场图景：
+极限非零意味着原点 $0$ 落在极限点 $A$ 的外部。以原点为圆心、半径为 $|A|/2$ 的闭球是一个“禁行区”。由于函数值在 $x_0$ 附近被强力约束在以 $A$ 为中心的邻域内，整段局域曲线被完全排斥在禁行区之外，数轴原点处被撑开了一条绝对安全的非零净空走廊。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>三角不等式反向放缩：$|f(x)| \ge |A| - |f(x) - A| > |A| - |A|/2 = |A|/2$。</li><li>分母安全边界：建立倒数函数有界性 $|\frac{1}{f(x)}| \le \frac{2}{|A|}$ 的分析学根基。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-cor2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 2 函数不等式极限保序性</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-12" class="thm-tag routine-ref" target="_blank">🏷️ 套路 12: 反证法与极端假设破绽攻击</a>
+        <span class="thm-tag">保序性</span><span class="thm-tag">反证法</span><span class="thm-tag">闭包退化</span><span class="thm-tag">弱不等式</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-cor2" class="anchor-btn" title="复制锚点链接"># 推论 2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>推论 2</strong> 若 $\lim_{x \to x_0} f(x) = A, \lim_{x \to x_0} g(x) = B$，且存在 $r &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; r$ 时，成立 $g(x) \le f(x)$，则</p>
+$$B \le A.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 运用反证法. 若 $B &gt; A$，则由定理 3.1.2，存在 $\delta &gt; 0$，当 $0 &lt; |x - x_0| &lt; \min\{\delta, r\}$ 时，</p>
+$$g(x) &gt; f(x),$$
+<p class="no-indent">矛盾.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-12" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 12: 反证法与极端假设破绽攻击</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 拓扑闭包运算对全序关系的保持；沿途的逐点局部从属，在极限点处严格保住宏观单向序结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果在 $x_0$ 附近处处有 $f(x) \le g(x)$，那么它们的极限也必须满足 $A \le B$。
+反证法的机制直接依托定理 3.1.2 的保号性：假设极限反向颠倒 $B < A$，那么由保号性，必然能在 $x_0$ 附近反客为主构造出局部 $f(x) > g(x)$，与已知事实针锋相对。
+【注意等号的产生】：即使沿途处处严格小于 $f(x) < g(x)$，终点极限也可能相等（例如 $x^4 < x^2$ 在 $x \to 0$ 时极限皆为 0）。严格开不等式在极限算子下必然发生闭包退化，产生弱不等式。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      曲线包络线的收敛接触图景：
+在去心邻域内，曲线 $f(x)$ 始终位于曲线 $g(x)$ 的下方。当两条曲线同时向垂直线 $x = x_0$ 汇聚时，下方的曲线绝不可能在终点截面上反超跃升到上方曲线的头顶；它们在终点线上的截面交点要么严格处于下方，要么恰好在此处相互相切咬合在同一点。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>保号性反证闭环：假设 $B < A$ 导出局部 $g(x) < f(x)$ 矛盾。</li><li>开条件向闭条件的拓扑退化：微积分分析学中极易犯错的点，就是将严格小于直接传递给极限导致漏掉等号。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-cor3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 3 函数极限的局部有界性</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: 局部性质到整体性质的过渡</a>
+        <span class="thm-tag">局部有界</span><span class="thm-tag">常数夹持</span><span class="thm-tag">紧致开邻域</span><span class="thm-tag">无界奇异性消除</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-cor3" class="anchor-btn" title="复制锚点链接"># 推论 3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>推论 3（局部有界性）</strong> 若 $\lim_{x \to x_0} f(x) = A$，则存在 $\delta &gt; 0$，使得 $f(x)$ 在 $O^\circ(x_0, \delta)$ 中有界.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证（推论 3）</strong> 取常数 $M$ 与 $m$，满足 $m < A < M$，令 $g(x) = m, h(x) = M$ 为两个常数函数，由定理 3.1.2 可知存在 $\delta > 0$，当 $0 < |x - x_0| < \delta$ 时，有
+$$m < f(x) < M,$$
+即函数 $f(x)$ 在去心邻域 $O^\circ(x_0, \delta)$ 中有界. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: 局部性质到整体性质的过渡</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 有限极限对局部测度的几何约束；有限的目标值迫使连续曲线在近端通道内被完全束缚在上下常数平面的包夹之间。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      只要函数在点 $x_0$ 处的极限是一个确定的有限实数 $A$，那么不论函数在遥远的其他地方如何剧烈起伏，只要靠近 $x_0$ 的去心邻域内，它的曲线高度就绝对不可能冲向无穷大，必然被锁死在上下两条有限水平线 $(m, M)$ 之间。
+这为证明复合运算和乘积定理扫清了障碍，排除了在目标点附近发生纵向无穷发散（奇异性）的可能。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      局部有限包络矩形图景：
+以极限点 $(x_0, A)$ 为核心，画出一个局部的长方形视窗 $(x_0-\delta, x_0+\delta) \times (m, M)$。极限的存在性保证了整条函数曲线在穿过这个横向宽度时，其轨迹完全被囚禁在长方形视窗的上下两道水平边框内部，绝不会从顶底发生无界溢出。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>常数函数充当外围护栏：取 $m < A < M$，由保号性确立 $m < f(x) < M$。</li><li>乘积极限证明的垫脚石：控制 $|f(x)g(x) - AB|$ 时，依赖该推论将前项系数压制在常数 $M$ 之内。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.3 函数极限的两面夹定理 (夹逼准则)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-05" class="thm-tag routine-ref" target="_blank">🏷️ 套路 05: 夹逼准则与双向不等式挤压</a>
+        <span class="thm-tag">夹逼准则</span><span class="thm-tag">两面夹</span><span class="thm-tag">测度收缩</span><span class="thm-tag">重要极限基础</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-3" class="anchor-btn" title="复制锚点链接"># 定理 3.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.3</strong> 若存在 $r &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; r$ 时，成立</p>
+$$g(x) \le f(x) \le h(x),$$
+<p class="no-indent">且 $\lim_{x \to x_0} g(x) = \lim_{x \to x_0} h(x) = A$，则 $\lim_{x \to x_0} f(x) = A$.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由 $\lim_{x \to x_0} h(x) = A$，对 $\forall \varepsilon &gt; 0$，$\exists \delta_1 &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; \delta_1$ 时，成立</p>
+$$h(x) &lt; A + \varepsilon;$$
+<p>由 $\lim_{x \to x_0} g(x) = A$，对上述 $\varepsilon &gt; 0$，$\exists \delta_2 &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; \delta_2$ 时，成立</p>
+$$A - \varepsilon &lt; g(x).$$
+<p>取 $\delta = \min\{\delta_1, \delta_2, r\}$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$A - \varepsilon &lt; g(x) \le f(x) \le h(x) &lt; A + \varepsilon,$$
+<p class="no-indent">此即 $\lim_{x \to x_0} f(x) = A$.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-05" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 05: 夹逼准则与双向不等式挤压</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续序结构与拓扑度量收缩的刚性结合；外侧包络曲线在接触点的同宿闭合，强制消除中间函数的一切未知自由度。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      当一个被积或逼近函数 $f(x)$ 自身极其复杂（如带有剧烈高频震荡、无解析原函数）时，只要能在其上下两侧构造出形态规整、且在 $x_0$ 处极限完全相同的两条边界曲线 $g(x) \le f(x) \le h(x)$。
+由于外侧两曲线在 $x \to x_0$ 时同步汇聚到同一点 $A$，它们之间的垂直测度缝隙 $h(x) - g(x) \to 0$ 被无限压平。被夹在当中的 $f(x)$ 丧失了任何偏离的自由空间，被迫以完全相同的数值收敛于 $A$。著名第一重要极限 $\lim_{x \to 0} \frac{\sin x}{x} = 1$ 的几何证明正是该准则的巅峰应用。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双向收缩漏斗的奇异点挤压图景：
+两条边界曲线在直角坐标系中构成了一个横向放置的几何漏斗，漏斗的上下壁面在顶点 $(x_0, A)$ 处严密重合、无缝焊接。被夹在漏斗内部的曲线无论内部纹理如何盘旋扭曲，当自变量滑动到漏斗尖端的那一瞬间，所有维度的振幅都被强制归零，唯一的拓扑出口就是交会点 $A$。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>三充要支柱：不等式局部成立、两侧极限各自存在、极限目标值严格相等。</li><li>消解奇异震荡的绝技：如 $x \sin(1/x)$ 在 $x 	o 0$ 时震荡不可导，但被 $-|x| \le x \sin(1/x) \le |x|$ 双向封杀，极限瞬间确认为 0。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.4 函数极限的四则运算法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">四则运算法则</span><span class="thm-tag">误差解耦</span><span class="thm-tag">局部有界支撑</span><span class="thm-tag">双线性展开</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-4" class="anchor-btn" title="复制锚点链接"># 定理 3.1.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.4</strong> 设 $\lim_{x \to x_0} f(x) = A, \lim_{x \to x_0} g(x) = B$，则</p>
+<p>(1) $\lim_{x \to x_0} (\alpha f(x) + \beta g(x)) = \alpha A + \beta B$（$\alpha, \beta$ 是常数）；</p>
+<p>(2) $\lim_{x \to x_0} (f(x)g(x)) = AB$；</p>
+<p>(3) $\lim_{x \to x_0} \frac{f(x)}{g(x)} = \frac{A}{B}$（$B \ne 0$）.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 根据定理 3.1.2 的推论 3，可知存在 $M &gt; 0$ 及 $\delta' &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; \delta'$ 时，</p>
+$$|f(x)| \le M,$$
+<p class="no-indent">且 $\forall \varepsilon &gt; 0, \exists \delta_1 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_1)$：</p>
+$$|f(x) - A| &lt; \varepsilon;$$
+<p class="no-indent">再由 $\lim_{x \to x_0} g(x) = B$ 可知，$\exists \delta_2 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_2)$：</p>
+$$|g(x) - B| &lt; \varepsilon.$$
+<p>取 $\delta = \min\{\delta', \delta_1, \delta_2\}$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$|(\alpha f(x) + \beta g(x)) - (\alpha A + \beta B)| \le |\alpha| \cdot |f(x) - A| + |\beta| \cdot |g(x) - B| &lt; (|\alpha| + |\beta|)\varepsilon;$$
+<p class="no-indent">及</p>
+$$|f(x)g(x) - AB| = |f(x)(g(x) - B) + B(f(x) - A)| \le |f(x)| \cdot |g(x) - B| + |B| \cdot |f(x) - A| &lt; (M + |B|)\varepsilon,$$
+<p class="no-indent">因此 (1) 和 (2) 成立.</p>
+<p>利用定理 3.1.2 的推论 1，可知 $\exists \delta_3 &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta_3)$：</p>
+
+$$|g(x)| &gt; \frac{|B|}{2}.$$
+<p class="no-indent">取 $\delta = \min\{\delta_1, \delta_2, \delta_3\}$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，成立</p>
+$$\left| \frac{f(x)}{g(x)} - \frac{A}{B} \right| = \frac{|B(f(x) - A) - A(g(x) - B)|}{|B g(x)|} \le \frac{2(|B| \cdot |f(x) - A| + |A| \cdot |g(x) - B|)}{|B|^2} &lt; \frac{2(|A| + |B|)}{|B|^2}\varepsilon,$$
+<p class="no-indent">因此 (3) 也成立.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 代数环运算在连续极限下的相容性；通过构造交叉项剥离双重扰动，将非线性相乘误差降维分解为一阶微元的受控叠加。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      证明乘积极限 $\lim [f(x)g(x)] = AB$ 的难点在于两个因式同时变动引起的二阶扰动。
+经典恒等变形加一项减一项：$f(x)g(x) - AB = f(x)[g(x)-B] + B[f(x)-A]$。借助推论 3（局部有界性），将变动项 $|f(x)|$ 锁死在有限常数 $M$ 之内；从而将总误差转化为由 $g(x)-B$ 和 $f(x)-A$ 各自独立控制的线性组合。除法则先借保号性保证 $|g(x)| \ge |B|/2$，封死分母坍缩为零的爆裂路径。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      微元面积拆分与导轨稳定图景：
+考虑长宽为 $f(x), g(x)$ 的动态矩形面积。当两者向极限长宽 $A, B$ 移动时，总面积误差被分解为两条相互垂直的边缘长条面积：一条是以 $f(x)$ 为底、误差为高的长条，另一条是以 $B$ 为高、误差为底的长条。局部有界性相当于给底边安装了限位器使其不飞上天，从而使两段边缘长条面积被两侧的公差带彻底压制。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>交叉项恒等变形：$f(x)g(x) - AB = f(x)[g(x)-B] + B[f(x)-A]$。</li><li>推论 3 局部有界性提供模长界限：$|f(x)| \le M$，保证第一项误差放缩合法。</li><li>保号性提供除法下界：$|g(x)| \ge |B|/2$，避免分母趋零发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.5 Heine 定理 (海涅归结原理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">Heine 定理</span><span class="thm-tag">归结原理</span><span class="thm-tag">连续轨道与离散采样</span><span class="thm-tag">否定极限判据</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-5" class="anchor-btn" title="复制锚点链接"># 定理 3.1.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.5（Heine 定理）</strong> $\lim_{x \to x_0} f(x) = A$ 的充分必要条件是：对于任意满足条件 $\lim_{n \to \infty} x_n = x_0$ 且 $x_n \ne x_0$ ($n = 1, 2, 3, \dots$) 的数列 $\{x_n\}$，相应的函数值数列 $\{f(x_n)\}$ 成立</p>
+$$\lim_{n \to \infty} f(x_n) = A.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>必要性</strong>：由 $\lim_{x \to x_0} f(x) = A$ 可知，$\forall \varepsilon &gt; 0, \exists \delta &gt; 0$，当 $0 &lt; |x - x_0| &lt; \delta$ 时，$|f(x) - A| &lt; \varepsilon$. 因为 $\lim_{n \to \infty} x_n = x_0$，且 $x_n \ne x_0$ ($n = 1, 2, 3, \dots$)，对于上述 $\delta &gt; 0, \exists N, \forall n &gt; N$：</p>
+$$0 &lt; |x_n - x_0| &lt; \delta.$$
+<p class="no-indent">于是当 $n &gt; N$ 时，成立</p>
+$$|f(x_n) - A| &lt; \varepsilon,$$
+<p class="no-indent">即 $\lim_{n \to \infty} f(x_n) = A$.</p>
+<p><strong>充分性</strong>：用反证法.</p>
+<p>按函数极限定义，命题“$f(x)$ 在 $x_0$ 点以 $A$ 为极限”可以表述为</p>
+$$\forall \varepsilon &gt; 0, \exists \delta &gt; 0, \forall x (0 &lt; |x - x_0| &lt; \delta) : |f(x) - A| &lt; \varepsilon.$$
+<p class="no-indent">于是它的否定命题“$f(x)$ 在 $x_0$ 点不以 $A$ 为极限”可以对偶地表述为</p>
+$$\exists \varepsilon_0 &gt; 0, \forall \delta &gt; 0, \exists x (0 &lt; |x - x_0| &lt; \delta) : |f(x) - A| \ge \varepsilon_0.$$
+<p>也就是说，存在某个固定正数 $\varepsilon_0$，不管 $\delta$ 取得多么小，总能在 $O^\circ(x_0, \delta)$ 中找到一个 $x$，使 $f(x)$ 与 $A$ 的差的绝对值不小于 $\varepsilon_0$，即 $|f(x) - A| \ge \varepsilon_0$.</p>
+<p>现在取一列 $\{\delta_n\}$，$\delta_n = \frac{1}{n}$ ($n = 1, 2, 3, \dots$). 对 $\delta_1 = 1$，存在 $x_1$ ($0 &lt; |x_1 - x_0| &lt; \delta_1$)，使 $|f(x_1) - A| \ge \varepsilon_0$；对 $\delta_2 = \frac{1}{2}$，存在 $x_2$ ($0 &lt; |x_2 - x_0| &lt; \delta_2$)，使 $|f(x_2) - A| \ge \varepsilon_0$；$\dots$ 对 $\delta_n = \frac{1}{n}$，存在 $x_n$ ($0 &lt; |x_n - x_0| &lt; \delta_n$)，使 $|f(x_n) - A| \ge \varepsilon_0$.</p>
+
+<p>于是得到数列 $\{x_n\}$，满足 $x_n \ne x_0, \lim_{n \to \infty} x_n = x_0$，但相应的函数值数列 $\{f(x_n)\}$ 不可能以 $A$ 为极限. 这与定理条件相矛盾.</p>
+<p>由此推翻假定，得到 $f(x)$ 在 $x_0$ 点以 $A$ 为极限.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续拓扑与离散序列拓扑的对偶等价性；连续轨道极限存在，充要等价于任意以离散点阵逼近时其采样序列的全体一致收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      海涅定理是连接“连续函数极限”与“离散数列极限”的通天神桥。
+定理指出：函数在 $x_0$ 处的极限等于 $A$，当且仅当对于任意一条滑向 $x_0$ 的离散数列 $\{x_n\}$，其对应的函数值数列 $\{f(x_n)\}$ 都无一例外地收敛于同一个数值 $A$。
+【实战价值：否定极限的无上神兵！】如果想证明某个函数极限“不存在”，用 $\varepsilon-\delta$ 往往极其艰难；而海涅定理赋予了我们极其降维的否定工具：只需挑出两组同样奔向 $x_0$ 的离散点列，若算出的两个函数值极限不相等，函数极限立刻宣告死刑（如 $\sin(1/x)$ 在 $x \to 0$ 时取 $1/(2n\pi)$ 与 $1/(2n\pi + \pi/2)$）！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      连续山谷与全方位离散探针图景：
+函数曲线如同空间中的连续山谷地形，目标点是谷底的基准坐标。海涅原理表明：连续谷底的标高测量，等价于从任意路线、不同步幅派出的无数支离散登山探针。若所有探针无论沿何种路径滑入谷底，所回传的终点高程完全一致，谷底标高即得到无争议的确认；反之，只要有两支探针传回的高程产生分歧，说明该处地形存在错位撕裂的悬崖断层。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>充分性的反证法构造：假设函数极限不为 $A$，存在坏 $\varepsilon_0$，在每个 $1/n$ 球内挑出一个叛徒点 $x_n$，拼出坏数列 $x_n \to x_0$ 但 $f(x_n)$ 不收敛到 $A$，打脸题设。</li><li>离散采样证明极限不存在的标准模板：利用数列构造打破海涅归结原理。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-5p">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.5' 海涅归结原理 (自洽收敛充要形式)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-17" class="thm-tag routine-ref" target="_blank">🏷️ 套路 17: 抽屉原理与对角线论证</a>
+        <span class="thm-tag">海涅归结</span><span class="thm-tag">交错交织数列</span><span class="thm-tag">自洽收敛</span><span class="thm-tag">内在一致性</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-5p" class="anchor-btn" title="复制锚点链接"># 定理 3.1.5'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.5'</strong> $\lim_{x \to x_0} f(x)$ 存在的充分必要条件是：对于任意满足条件 $\lim_{n \to \infty} x_n = x_0$ 且 $x_n \ne x_0$ ($n = 1, 2, 3, \dots$) 的数列 $\{x_n\}$，相应的函数值数列 $\{f(x_n)\}$ 收敛.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 必要性由定理 3.1.5（Heine 定理）直接保证。</p>
+<p>充分性：已知对于任意满足 $x_n \to x_0 \ (x_n \ne x_0)$ 的数列 $\{x_n\}$，$\{f(x_n)\}$ 都收敛。我们首先证明这些数列的极限值必相同：</p>
+<p>用反证法。若存在两个数列 $\{x_n'\}$ 与 $\{x_n''\}$，使得 $\lim_{n \to \infty} f(x_n') = A, \lim_{n \to \infty} f(x_n'') = B$，且 $A \ne B$。我们构造一个交叉混合数列：</p>
+$$x_{2n-1} = x_n', \quad x_{2n} = x_n'' \quad (n = 1, 2, 3, \dots).$$
+<p>显然，混合数列 $\{x_n\}$ 依然满足 $\lim_{n \to \infty} x_n = x_0$ 且 $x_n \ne x_0$。但其对应的函数值数列 $\{f(x_n)\}$ 的奇数项子列趋向 $A$，偶数项子列趋向 $B$ ($A \ne B$)，由极限唯一性，该数列发散！这与题设『对任意数列，相应函数值数列必收敛』产生直接矛盾！</p>
+<p>因此一切数列对应极限值必全部相同，记为 $A$。再由定理 3.1.5 即知 $\lim_{x \to x_0} f(x) = A$。证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-17" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 17: 抽屉原理与对角线论证</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 子列交错编织技术；将数列收敛的先验前提转化为函数极限唯一性的构造反证，拉链数列直接撕毁多值发散可能。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      该定理把海涅原理推向了极致：即便我们不知道极限值究竟是哪个数字，只要知道“所有滑向 $x_0$ 的离散数列，其函数值都收敛”，函数极限就必然存在！
+证明的核心在于证明所有数列收敛到的目标值必须严格相同：
+假设有两组数列分别收敛到不同的数值 $A$ 和 $B$ ($A \ne B$)。我们把这两组数列奇偶相间地拼成一条拉链数列 $x_1', x_1'', x_2', x_2'' \dots$。这条混合数列依然合法滑向 $x_0$，但它的函数值在 $A$ 与 $B$ 之间左右反复横跳，变成了一个发散数列！这与“任意数列必收敛”产生直接对撞，从而证明极限唯一。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双重探针轨迹的编织干涉图景：
+两条平稳滑入终点的探针流线分别测得两个不同的物理量。我们将两路信号输入高速切换采样器（交织数列），合成一条单一通道信号。由于两路高程存在差值，合成信号在两基准高度间剧烈振荡失锁，形成发散噪声。为了维持任意合成信号均不发散的先验前提，两条初始流线的终点必须无间隙完全重合。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>拉链交织数列构造法：$x_{2n-1} = x_n', x_{2n} = x_n''$。</li><li>子列极限互斥引爆整体发散：利用定理 2.2.1 极限唯一性推翻假设。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-1-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.1.6 无穷远处极限与数列极限归结定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">无穷远处极限</span><span class="thm-tag">海涅原理推广</span><span class="thm-tag">水平渐近线</span><span class="thm-tag">反证法构造</span>
+      </div>
+    </div>
+    <a href="#thm-3-1-6" class="anchor-btn" title="复制锚点链接"># 定理 3.1.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.1.6</strong> 函数极限 $\lim_{x \to +\infty} f(x)$ 存在而且有限的充分必要条件是：对于任意给定的 $\varepsilon &gt; 0$，存在 $X &gt; 0$，使得对一切 $x', x'' &gt; X$，成立</p>
+$$|f(x') - f(x'')| &lt; \varepsilon.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>必要性</strong>：设 $\lim_{x \to +\infty} f(x) = A$，按照定义，$\forall \varepsilon &gt; 0, \exists X &gt; 0, \forall x &gt; X$：</p>
+$$|f(x) - A| &lt; \frac{\varepsilon}{2}.$$
+<p class="no-indent">于是对一切 $x', x'' &gt; X$，有</p>
+$$|f(x') - f(x'')| \le |f(x') - A| + |f(x'') - A| &lt; \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.$$
+
+<p><strong>充分性</strong>：设 $\forall \varepsilon &gt; 0, \exists X &gt; 0, \forall x', x'' &gt; X$：</p>
+$$|f(x') - f(x'')| &lt; \varepsilon.$$
+<p>任意选取数列 $\{x_n\}$，$\lim_{n \to \infty} x_n = +\infty$，则对上述 $X &gt; 0, \exists N, \forall n &gt; N : x_n &gt; X$. 于是当 $m &gt; n &gt; N$ 时，成立</p>
+$$|f(x_n) - f(x_m)| &lt; \varepsilon.$$
+<p>这说明函数值数列 $\{f(x_n)\}$ 是基本数列，因而必定收敛. 根据相应的 Heine 定理，可知 $\lim_{x \to +\infty} f(x)$ 存在而且有限.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 非紧致无穷远点的离散化约束；通过整数台阶 $M_n = n$ 构造违反渐近态的离散反例点列，将连续渐近线锚定于离散采样。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      当自变量奔向正无穷大 $x \to +\infty$ 时，函数曲线向右延伸是否最终贴近水平渐近线 $y = A$？
+海涅归结原理在无穷远点依然坚不可摧：只需任意奔向正无穷大的离散点列 $x_n \to +\infty$，其函数值都收敛到 $A$。
+反证法同样展示了极简的构造智慧：若函数在天边不收敛到 $A$，对每个自然数阶梯 $n$，都在它右侧抓出一个偏差大于 $\varepsilon_0$ 的坏点 $x_n > n$。这群坏点天然排成了一队奔向无穷的数列，其函数值却永远躲在公差带之外，反手摧毁反证假设。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      水平渐近线与深远空间信标图景：
+函数曲线向右无限延伸如同宇宙深空的探险航线。在横轴每隔单位距离设立一个向外推移的观测站 $n$。如果航线整体没有贴合预设的航线轴 $y=A$，必定能在每一个观测站的外深空域捕获到一个偏航的离散坐标点。这串离散偏航点构成的轨迹，直接证实了航线在深空的整体发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无穷大门槛的离散台阶构造：$M_n = n$，确保所抓取的点列满足 $x_n > n \to +\infty$。</li><li>全域极限向序列极限化归的普适通用性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.2.1 反函数存在性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-12" class="thm-tag routine-ref" target="_blank">🏷️ 套路 12: 反证法与极端假设破绽攻击</a>
+        <span class="thm-tag">反函数</span><span class="thm-tag">严格单调</span><span class="thm-tag">单射与双射</span><span class="thm-tag">无回折映射</span>
+      </div>
+    </div>
+    <a href="#thm-3-2-1" class="anchor-btn" title="复制锚点链接"># 定理 3.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.2.1（反函数存在性定理）</strong> 若函数 $y = f(x)$，$x \in D$，是严格单调增加（减少）的，则存在它的反函数 $x = f^{-1}(y)$，$y \in R(f)$，并且 $f^{-1}(y)$ 也是严格单调增加（减少）的.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 不妨设 $y = f(x)$，$x \in D$，严格单调增加. 对任意两点 $x', x'' \in D$，及它们相应的函数值 $y' = f(x'), y'' = f(x'')$，若 $x' \ne x''$，由于严格单调性，必有 $y' \ne y''$，即 $f$ 是单射，由于逆像的唯一性，所以存在反函数 $x = f^{-1}(y)$，$y \in R(f)$.</p>
+
+<p>对于任意 $y_1, y_2 \in R(f)$，$y_1 &lt; y_2$，令 $x_1 = f^{-1}(y_1), x_2 = f^{-1}(y_2)$. 关于 $x_1, x_2$ 的大小关系有三种可能：(1) $x_1 &gt; x_2$，(2) $x_1 = x_2$，(3) $x_1 &lt; x_2$. 但 $x_1 &gt; x_2$ 违背 $f$ 的严格单调增加性，$x_1 = x_2$ 违背 $f$ 具有像的唯一性，于是必然有 $x_1 &lt; x_2$，这表明 $f^{-1}(y)$ 也是严格单调增加的.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-12" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 12: 反证法与极端假设破绽攻击</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 严格序单调映射的代数单射性；严格单调性消除了水平切线与回折可能，保证每个像元拥有唯一的原象起源。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      一个函数要拥有逆向映射（反函数），充要前提是它是“一一对应的单射”（一个 $y$ 绝不能对应两个不同的 $x$）。
+如果函数严格单调增加，当自变量 $x' < x''$ 时，因变量必然 $f(x') < f(x'')$。这种严格保序性彻底封死了曲线“回折下坡”的一切可能。每个高度 $y$ 对应且仅对应唯一的横坐标 $x$，反向映射 $x = f^{-1}(y)$ 自然水到渠成，而且反函数继承了纯正的严格单调递增性。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      坐标系对称翻折与单叶投影图景：
+几何上，寻找反函数就是将函数曲线关于对称轴 $y=x$ 做对折翻转（交换自变量与因变量轴）。严格单调函数在空间中是一条不断右上攀升、绝无波浪起伏的曲线。任意一条水平线与曲线至多只有 1 个交点；对折翻转后，任意一条新的垂直线也至多只有 1 个交点，完全符合几何上单值函数的定义。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>严格单调导出单射：$x' \ne x'' \implies f(x') \ne f(x'')$，杜绝一多对应的病态映射。</li><li>值域天然作为反函数定义域：反函数在拓扑上将像集 $f(D)$ 完美拉回原象集 $D$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.2.2 反函数连续性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-13" class="thm-tag routine-ref" target="_blank">🏷️ 套路 13: 零点存在与介值连通穿透</a>
+        <span class="thm-tag">反函数连续性</span><span class="thm-tag">拓扑同胚</span><span class="thm-tag">介值连通保持</span><span class="thm-tag">开区间逆映射</span>
+      </div>
+    </div>
+    <a href="#thm-3-2-2" class="anchor-btn" title="复制锚点链接"># 定理 3.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.2.2（反函数连续性定理）</strong> 设函数 $y = f(x)$ 在闭区间 $[a, b]$ 上连续且严格单调增加，$f(a) = \alpha, f(b) = \beta$，则它的反函数 $x = f^{-1}(y)$ 在 $[\alpha, \beta]$ 连续且严格单调增加.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 首先，我们利用例 3.2.8 的结论，证明</p>
+$$f([a, b]) = [\alpha, \beta],$$
+<p class="no-indent">即 $f$ 的值域（也就是 $f^{-1}$ 的定义域）是 $[\alpha, \beta]$.</p>
+<p>显然 $\alpha, \beta \in f([a, b])$. 设 $\gamma \in (\alpha, \beta)$ 是任意一点，记</p>
+$$S = \{x \mid x \in [a, b], f(x) &lt; \gamma\},$$
+<p class="no-indent">则集合 $S$ 非空且有上界，由确界存在定理，$S$ 必有上确界，记 $x_0 = \sup S$，则 $x_0 \in (a, b)$. 当 $x &lt; x_0$ 时，$f(x) &lt; \gamma$；当 $x &gt; x_0$ 时，$f(x) &gt; \gamma$. 于是由例 3.2.8 及由 $f(x)$ 在点 $x_0$ 的连续性，得到 $f(x_0) = f(x_0^+) = f(x_0^-) = \gamma$. 这就说明 $f(x)$ 的值域是闭区间 $[\alpha, \beta]$.</p>
+<p>根据定理 3.2.1，在 $[\alpha, \beta]$ 上必定存在 $f$ 的反函数 $x = f^{-1}(y)$，且 $f^{-1}(y)$ 也是严格单调增加函数.</p>
+<p>现在只需要证明反函数 $x = f^{-1}(y)$ 在 $[\alpha, \beta]$ 上的连续性（如图 3.2.1）.</p>
+<p>设 $y_0 \in (\alpha, \beta)$，相应地有 $f^{-1}(y_0) = x_0 \in (a, b)$. 对于任意给定的 $\varepsilon &gt; 0$，要找出 $\delta &gt; 0$，使当 $|y - y_0| &lt; \delta$ 时，成立</p>
+$$|f^{-1}(y) - f^{-1}(y_0)| = |f^{-1}(y) - x_0| &lt; \varepsilon,$$
+<p class="no-indent">即</p>
+$$x_0 - \varepsilon &lt; f^{-1}(y) &lt; x_0 + \varepsilon.$$
+<p>令 $y_1 = f(x_0 - \varepsilon), y_2 = f(x_0 + \varepsilon)$，取 $\delta = \min\{y_0 - y_1, y_2 - y_0\} &gt; 0$，显然当 $|y - y_0| &lt; \delta$ 时，成立</p>
+$$|f^{-1}(y) - f^{-1}(y_0)| &lt; \varepsilon.$$
+
+<div class="figure-wrapper">
+<img alt="图 3.2.1 单调连续反函数几何示意" src="figures/fig_3_2_1.svg"/>
+<div class="figure-caption">图 3.2.1 单调连续反函数几何示意</div>
+</div>
+<p>如果 $y_0 = \alpha$，则只要证明右连续性；如果 $y_0 = \beta$，则只要证明左连续性，请读者自己给出证明.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-13" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 13: 零点存在与介值连通穿透</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一维闭区间在连续单调映射下的拓扑同胚性；原函数的值域连通无隙，反向映射依然保持开集原象的连续开性。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在闭区间 $[a,b]$ 上连续且严格单调的函数，其反函数不仅必然存在，而且必定也是处处连续的。
+证明的关键在于“连通性无空洞”：由介值定理，连续单调函数的值域完整覆盖了闭区间 $[\alpha, \beta]$，中间没有撕裂的裂隙。在原空间给出一个以 $x_0$ 为中心的开区间 $(x_0-\varepsilon, x_0+\varepsilon)$，通过严格单调性，它在纵轴上必然映射出一个对称的连通开区间 $(y_1, y_2)$。只要因变量扰动落在这个开区间内，反函数拉回的原象就稳稳停留在 $\varepsilon$ 邻域内，严谨确立了反函数的连续性。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      连续弹性绳索的双向同胚图景：
+将一段连续实心橡皮筋 $[a,b]$ 经过连续单调拉伸，变换为 $y$ 轴上的实心线段 $[\alpha, \beta]$。因为原函数连续且单调，橡皮筋既没有被剪断（无断点），也没有被折叠重叠（单调）。倒过来看这个拉伸过程，将橡皮筋松开还原，全过程依然是连续均匀回弹，绝不可能无中生有产生断裂。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>值域闭区间保持：由介值定理确立 $f([a,b]) = [f(a), f(b)]$，消除值域裂隙。</li><li>开区间单调映射求公差：在开区间 $(x_0-\varepsilon, x_0+\varepsilon)$ 的像集内部选取 $\delta = \min(y_0-y_1, y_2-y_0) > 0$ 锁定连续性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.2.3 复合函数连续性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">复合函数</span><span class="thm-tag">开集原象</span><span class="thm-tag">连续性传递</span><span class="thm-tag">邻域递推</span>
+      </div>
+    </div>
+    <a href="#thm-3-2-3" class="anchor-btn" title="复制锚点链接"># 定理 3.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.2.3</strong> 设函数 $u = g(x)$ 在点 $x_0$ 连续，函数 $y = f(u)$ 在点 $u_0 = g(x_0)$ 连续，则复合函数 $y = f \circ g(x)$ 在点 $x_0$ 连续.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 对于任意给定的 $\varepsilon &gt; 0$，由于 $f(u)$ 在 $u_0$ 连续，所以存在 $\eta &gt; 0$，当 $|u - u_0| &lt; \eta$ 时，成立</p>
+$$|f(u) - f(u_0)| &lt; \varepsilon;$$
+<p class="no-indent">对上面这个 $\eta &gt; 0$，由于 $\lim_{x \to x_0} g(x) = g(x_0) = u_0$，所以存在 $\delta &gt; 0$，当 $|x - x_0| &lt; \delta$ 时，成立</p>
+$$|g(x) - u_0| &lt; \eta.$$
+<p class="no-indent">由此得出，当 $|x - x_0| &lt; \delta$ 时，</p>
+$$|f \circ g(x) - f \circ g(x_0)| = |f(g(x)) - f(u_0)| &lt; \varepsilon,$$
+<p class="no-indent">即</p>
+$$\lim_{x \to x_0} f \circ g(x) = f \circ g(x_0).$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 拓扑学开集原象连续传递律；外层连续算子收缩像集开球，内层连续算子将中间开球拉回原输入端，完成二阶段公差无缝对接。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      复合函数连续性保证了极限符号可以穿透函数符号：$\lim f(g(x)) = f(\lim g(x))$。
+证明采用严谨的“两阶段公差反推”：
+第一阶段（外层）：最终输出要控制在 $|f(u) - f(u_0)| < \varepsilon$ 之内。因为外层函数 $f$ 在 $u_0$ 连续，它给出了中间变量的容差门槛：只要中间变量满足 $|u - u_0| < \eta$ 即可；
+第二阶段（内层）：把这个 $\eta$ 当作内层函数 $g$ 的目标容差。因为内层函数 $g$ 在 $x_0$ 连续，它能够根据 $\eta$ 算出源头输入的控制半径 $\delta$。两步接力，源头 $\delta$ 驱动中间 $\eta$，最终完全锁死在目标 $\varepsilon$ 以内。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双级级联公差传递图景：
+外层加工环节向中间工序下达公差要求 $\eta$ 以保证成品公差小于 $\varepsilon$；内层初级加工环节根据中间指标 $\eta$，反求原材料输入端的下料精度 $\delta$。两级闭环控制级联传导，确保源头的微小微扰不会在多级加工中被非线性失真放大。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>两级容差逆推链条：$\varepsilon \xrightarrow{\text{外层}} \eta \xrightarrow{\text{内层}} \delta$。</li><li>极限符号穿透法则：连续性使得 $\lim_{x \to x_0} f(g(x)) = f(\lim_{x \to x_0} g(x))$ 完全合法。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.2.4 一切初等函数在其定义区间上连续</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">初等函数连续性</span><span class="thm-tag">代入法求极限</span><span class="thm-tag">连续算子代数闭包</span><span class="thm-tag">解析式完备</span>
+      </div>
+    </div>
+    <a href="#thm-3-2-4" class="anchor-btn" title="复制锚点链接"># 定理 3.2.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.2.4</strong> 一切初等函数在其定义区间上连续.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 证明分为三步递进完成：</p>
+<p>(1) 基本初等函数（多项式、幂函数、指数函数、对数函数、三角函数、反三角函数）在其定义域内皆为连续函数（已在 §3.2 的前半部分通过定义与三角不等式等性质逐一证实）；</p>
+<p>(2) 由连续函数的四则运算法则，有限个在其公共定义域上连续的函数，经过加、减、乘、除运算后，在分母不为零的定义区间上依然是连续函数；</p>
+<p>(3) 由定理 3.2.3（复合函数连续性定理），有限个连续函数的复合在其定义区间上依然是连续函数。</p>
+<p>由初等函数的定义——由基本初等函数经过有限次四则运算与复合所构成的、并且可以用一个解析式表示的函数，综合上述 (1)(2)(3)，一切初等函数在其定义区间上必定处处连续. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 连续函数在有限代数运算与拓扑复合下的闭包完备性；在初等解析空间中消除极限运算与代入运算的鸿沟。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      这是微积分中最解放生产力的定理：只要一个函数是“初等函数”（由基本初等函数经过有限次加减乘除和复合构成），在它有定义的区间内部，求极限就等于“直接代入自变量的值”：$\lim_{x \to x_0} f(x) = f(x_0)$！
+证明逻辑是纯粹的代数结构闭包：基本初等函数自身连续，而连续性在四则运算下封闭、在复合操作下依然封闭。有限次这种操作生成的一切庞然大物，其连续骨架完好无损。
+【核心警惕点】必须是“定义区间上”，若自变量趋向定义域的边界断点（如 $\tan x$ 在 $\pi/2$），该处不属于定义域，不可直接代入。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      连续几何构件的模块化装配图景：
+将连续函数视为刚性无孔的几何构件。基本初等函数是标准实心基元，加减乘除与复合拼接是无缝咬合的卡扣。有限次拼接组装出的复杂解析构件，其表面宏观拓扑依然是一体连续成型，没有任何微观断裂缝隙。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>生成元族完备性：基本初等函数连续性 $\implies$ 四则运算闭包 $\implies$ 复合闭包 $\implies$ 初等函数处处连续。</li><li>微积分求极限的第一反应：先观察目标点是否处于定义区间内部，若处于内部，直接代入即得极限值。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.3.1 等价无穷小代换定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-18" class="thm-tag routine-ref" target="_blank">🏷️ 套路 18: 等价无穷小代换与局部多项式阶数剥离</a>
+        <span class="thm-tag">等价无穷小</span><span class="thm-tag">主部剥离</span><span class="thm-tag">乘积因子替代</span><span class="thm-tag">渐近展开</span>
+      </div>
+    </div>
+    <a href="#thm-3-3-1" class="anchor-btn" title="复制锚点链接"># 定理 3.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.3.1</strong> 设 $u(x), v(x)$ 和 $u_0(x)$ 在 $x_0$ 的某个去心邻域上有定义，且 $\lim_{x \to x_0} \frac{u(x)}{u_0(x)} = 1$（即 $u(x) \sim u_0(x) \ (x \to x_0)$），那么</p>
+<p>(1) 当 $\lim_{x \to x_0} u_0(x)v(x) = A$ 时，$\lim_{x \to x_0} u(x)v(x) = A$；</p>
+<p>(2) 当 $\lim_{x \to x_0} \frac{u_0(x)}{v(x)} = A$ 时，$\lim_{x \to x_0} \frac{u(x)}{v(x)} = A$.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> (1) 因为 $u(x) \sim u_0(x) \ (x \to x_0)$，即 $\displaystyle\lim_{x \to x_0} \frac{u(x)}{u_0(x)} = 1$。由极限的四则运算法则（乘法乘积法则），有：</p>
+$$\lim_{x \to x_0} u(x)v(x) = \lim_{x \to x_0} \left[ \frac{u(x)}{u_0(x)} \cdot (u_0(x)v(x)) \right] = \left(\lim_{x \to x_0} \frac{u(x)}{u_0(x)}\right) \cdot \left(\lim_{x \to x_0} u_0(x)v(x)\right) = 1 \cdot A = A.$$
+<p>(2) 同理，由除法运算法则，当分母不为零时：</p>
+$$\lim_{x \to x_0} \frac{u(x)}{v(x)} = \lim_{x \to x_0} \left[ \frac{u(x)}{u_0(x)} \cdot \frac{u_0(x)}{v(x)} \right] = 1 \cdot A = A.$$
+<p>定理结论获证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-18" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 18: 等价无穷小代换与局部多项式阶数剥离</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 乘除法运算中局部渐近主部的无损降维；比值极限为 1 的因式在乘积算子下具备单位元因子的恒等替换特权。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在 $x \to 0$ 时，$\sin x \sim x, \tan x \sim x, \ln(1+x) \sim x, e^x - 1 \sim x$。
+定理证明极其简短：在乘积式中将复杂项写成 $\frac{u(x)}{u_0(x)} \cdot u_0(x)v(x)$，由于比值因子趋于 1，乘以 1 绝不改变极限结果。
+【致命陷阱：为什么不能在加减法中替换？】因为加减法涉及主部的抵消！例如求 $\lim_{x \to 0} \frac{\tan x - \sin x}{x^3}$，若在分子分别等价代换为 $x - x = 0$，直接导致高阶关键微元被当场抹杀！等价代换只能用于“整个乘积或商的因式”，加减法必须使用 Taylor 公式保留更高阶项。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      微积分局部的切线主部剥离图景：
+在原点微观视野下，复杂曲线 $\sin x$ 与直线 $x$ 的切线夹角收缩为零，两者在乘积算子中充当尺度缩放因子时具有同等效果。然而在做差运算时，两条曲线的间隙是一阶以上的高阶微元，盲目用切线代换会抹杀真实曲率差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>乘除法中完全合法的数学依据：乘积累积法则 $\lim(A \cdot B) = \lim A \cdot \lim B$ 中 $\lim A = 1$。</li><li>严禁加减法直接代换：加减法中的求极限本质是比拼高阶差分，必须使用 Taylor 展开式控制余项阶数。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.1 闭区间连续函数的有界性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-12" class="thm-tag routine-ref" target="_blank">🏷️ 套路 12: 反证法与极端假设破绽攻击</a>
+        <span class="thm-tag">闭区间连续</span><span class="thm-tag">有界性定理</span><span class="thm-tag">紧致集连续像</span><span class="thm-tag">二分区间套反证</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-1" class="anchor-btn" title="复制锚点链接"># 定理 3.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.1</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则它在 $[a, b]$ 上有界.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 用反证法.</p>
+<p>假设 $f(x)$ 在 $[a, b]$ 上无界. 将闭区间 $[a, b]$ 等分为两个小区间 $[a, \frac{a+b}{2}]$ 与 $[\frac{a+b}{2}, b]$，$f(x)$ 至少在其中之一上无界，把它记为 $[a_1, b_1]$；再将闭区间 $[a_1, b_1]$ 等分为两个小区间 $[a_1, \frac{a_1+b_1}{2}]$ 与 $[\frac{a_1+b_1}{2}, b_1]$，同样 $f(x)$ 至少在其中之一上无界，把它记为 $[a_2, b_2] \dots$ 这样的步骤一直做下去，便得到一个闭区间套 $\{[a_n, b_n]\}$，$f(x)$ 在其中任何一个闭区间 $[a_n, b_n]$ 上都是无界的.</p>
+<p>根据闭区间套定理，存在唯一的实数 $\xi$ 属于所有的闭区间 $[a_n, b_n]$，并且</p>
+$$\xi = \lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n.$$
+<p>因为 $\xi \in [a, b]$，而 $f(x)$ 在点 $\xi$ 连续，由定理 3.1.2 的推论 3，存在 $\delta &gt; 0, M &gt; 0$，对于一切 $x \in O(\xi, \delta) \cap [a, b]$，成立</p>
+$$|f(x)| \le M.$$
+<p>由于 $\lim_{n \to \infty} a_n = \lim_{n \to \infty} b_n = \xi$，我们又可知道对于充分大的 $n$，</p>
+$$[a_n, b_n] \subset O(\xi, \delta) \cap [a, b],$$
+<p class="no-indent">于是得到 $f(x)$ 在这些闭区间 $[a_n, b_n]$（$n$ 充分大）上有界的结论，从而产生矛盾.</p>
+<p>这说明所作的假设不能成立，即函数 $f(x)$ 在 $[a, b]$ 上必定有界.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-12" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 12: 反证法与极端假设破绽攻击</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 紧致集合在连续映射下的紧致性有界性；自封闭的定义域阻断了向边界逼近时的发散逃逸，迫使函数曲线全域收纳于有限高度内。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      函数在闭区间 $[a,b]$ 上连续，它在整个区间上就绝对是有界的，绝不可能发生冲向无穷大的纵向撕裂。
+【为什么必须是闭区间？】开区间 $(0,1)$ 上的函数 $f(x) = 1/x$ 处处连续，但在靠近 0 处直接发散至无穷大。正是因为 0 处是开边界，函数可以在边界产生无穷延伸。
+而在闭区间上，反证法利用二分法把假设无界的区域压缩为一个闭区间套，区间套缩至奇点 $\xi$。因为是闭区间，$\xi$ 属于定义域内部，函数在 $\xi$ 处必然连续且拥有局部有界邻域。当区间套缩得充分小时，整个无界小区间落入了局部有界邻域内，产生不可调和的逻辑冲突。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双侧刚性阻断与曲线包裹图景：
+闭区间相当于给横向自变量两端浇铸了实心的边界墙 $[a,b]$。连续函数是一根两端固定在边界墙上的弹性软绳。因为软绳处处无断点，两端又被刚性锚固在端点有限高度上，整根软绳在有限跨度内绝无可能产生延伸至天际的奇异性尖峰，必被上下一对有限水平天花板牢牢框定。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>开区间反例对照：$f(x) = 1/x$ 在 $(0,1)$ 无界，彰显闭区间端点包含性的必要性。</li><li>二分区间套法锁定坏点：将无界性归结于单一内点 $\xi$。</li><li>局部有界性（推论 3）作为绝杀手段：点 $\xi$ 的连续性迫使小区间陷入有界与无界的逻辑死锁。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.2 闭区间连续函数的最值定理 (Weierstrass 最值定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-01" class="thm-tag routine-ref" target="_blank">🏷️ 套路 01: 确界存在与实数完备性体系</a>
+        <span class="thm-tag">最值定理</span><span class="thm-tag">Weierstrass</span><span class="thm-tag">确界可达性</span><span class="thm-tag">极值点存在</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-2" class="anchor-btn" title="复制锚点链接"># 定理 3.4.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.2</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则它在 $[a, b]$ 上必能取到最大值与最小值，即存在 $\xi$ 和 $\eta \in [a, b]$，对于一切 $x \in [a, b]$ 成立</p>
+$$f(\xi) \le f(x) \le f(\eta).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由上述定理 3.4.1，集合</p>
+$$R_f = \{f(x) \mid x \in [a, b]\}$$
+<p class="no-indent">是一个有界数集，所以必有上确界与下确界，记</p>
+$$\alpha = \inf R_f, \quad \beta = \sup R_f.$$
+<p>现在证明存在 $\xi \in [a, b]$，使得 $f(\xi) = \alpha$.</p>
+<p>按照下确界的定义，一方面对一切 $x \in [a, b]$，成立 $f(x) \ge \alpha$；另一方面对任意给定的 $\varepsilon &gt; 0$，存在 $x \in [a, b]$，使得 $f(x) &lt; \alpha + \varepsilon$. 于是取 $\varepsilon_n = \frac{1}{n}$ ($n = 1, 2, 3, \dots$)，相应地得到一个数列 $\{x_n\}$，$x_n \in [a, b]$，并且满足</p>
+
+$$\alpha \le f(x_n) &lt; \alpha + \frac{1}{n} \quad (n = 1, 2, 3, \dots).$$
+<p>因为 $\{x_n\}$ 是有界数列，应用 Bolzano-Weierstrass 定理，存在收敛子列 $\{x_{n_k}\}$：</p>
+$$\lim_{k \to \infty} x_{n_k} = \xi \in [a, b].$$
+<p>考虑不等式</p>
+$$\alpha \le f(x_{n_k}) &lt; \alpha + \frac{1}{n_k}, \quad k = 1, 2, 3, \dots,$$
+<p class="no-indent">令 $k \to \infty$，由极限的夹逼性与 $f(x)$ 在点 $\xi$ 的连续性，得到</p>
+$$f(\xi) = \alpha.$$
+<p>这说明 $f(x)$ 在 $[a, b]$ 上取到最小值 $\alpha$，即 $\alpha = \min R_f$.</p>
+<p>同样可以证明存在 $\eta \in [a, b]$，使得 $f(\eta) = \beta = \max R_f$.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-01" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 01: 确界存在与实数完备性体系</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 紧致集上有界实值连续泛函的上确界可达性；连续曲线不仅受制于理论天花板，且必然切切实实触及天花板产生物理接触点。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      定理 3.4.1 只证明了函数有界（存在上确界 $M = \sup f(x)$），但这不保证函数能真正“等于”这个最大值（例如 $f(x) = x$ 在开区间 $(0,1)$ 上有上确界 1，但它永远取不到 1）。
+魏尔斯特拉斯最值定理证明：在闭区间 $[a,b]$ 上，必然存在某个确定的点 $x_0$，使得 $f(x_0) = M$ 严格成立！
+证明手法极其巧妙：反证法假设永远摸不到最大值，即 $M - f(x) > 0$ 恒成立。那么它的倒数函数 $g(x) = \frac{1}{M - f(x)}$ 在闭区间上也是连续函数！由定理 3.4.1，该倒数函数必然有界 $g(x) \le K$，变形后推得 $f(x) \le M - 1/K$。这说明 $M - 1/K$ 居然成了数集的一个更小的上界，彻底摧毁了 $M$ 是“最小上界”的定义！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      最高切触水平线与闭合接触点图景：
+将上确界 $M$ 视为横跨在函数曲线上方的一根刚性水平切线。最值定理表明，这条切线绝不会与曲线保持若即若离的悬空缝隙，它与曲线之间至少存在一个接触切点 $(x_0, M)$。曲线在闭区间的致密支撑下，在这一点将自身的几何高度推向理论极致。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>倒数构造反证法：构造 $g(x) = \frac{1}{M - f(x)}$，若上确界不可达，该倒数函数处处有定义且连续。</li><li>矛盾生成：倒数有界性导致 $f(x) \le M - 1/K < M$，与 $M = \sup$ 是最小上界发生逻辑坍塌。</li><li>中值定理家族的源头驱动：Rolle 定理与 Lagrange 中值定理寻找内部极值点全部依赖此定理。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.3 零点存在定理 (Bolzano 根的存在定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-13" class="thm-tag routine-ref" target="_blank">🏷️ 套路 13: 零点存在与介值连通穿透</a>
+        <span class="thm-tag">零点存在定理</span><span class="thm-tag">Bolzano</span><span class="thm-tag">拓扑连通性</span><span class="thm-tag">介值穿越</span><span class="thm-tag">确界法定位</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-3" class="anchor-btn" title="复制锚点链接"># 定理 3.4.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.3</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 连续，且 $f(a) \cdot f(b) &lt; 0$，则一定存在 $\xi \in (a, b)$，使 $f(\xi) = 0$.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 不失一般性，设 $f(a) &lt; 0, f(b) &gt; 0$. 定义集合 $V$：</p>
+$$V = \{x \mid f(x) &lt; 0, x \in [a, b]\}.$$
+<p>显然，集合 $V$ 有界、非空，所以必有上确界. 令</p>
+$$\xi = \sup V,$$
+<p class="no-indent">现证 $\xi \in (a, b)$，且 $f(\xi) = 0$.</p>
+<p>由函数在点 $a$ 与 $b$ 的连续性，存在 $\delta_1 &gt; 0, \forall x \in [a, a + \delta_1) : f(x) &lt; 0$；存在 $\delta_2 &gt; 0, \forall x \in (b - \delta_2, b] : f(x) &gt; 0$. 于是可知</p>
+$$a + \delta_1 \le \xi \le b - \delta_2,$$
+<p class="no-indent">即 $\xi \in (a, b)$.</p>
+<p>取 $x_n \in V$ ($n = 1, 2, \dots$)，$x_n \le \xi$ ($n \to \infty$)，因 $f(x_n) &lt; 0$，可以得到</p>
+$$f(\xi) = \lim_{n \to \infty} f(x_n) \le 0.$$
+<p>若 $f(\xi) &lt; 0$，则由局部保号性，存在 $\delta_3 &gt; 0$，当 $x \in (\xi - \delta_3, \xi + \delta_3)$ 时，$f(x) &lt; 0$，这就与 $\xi = \sup V$ 产生矛盾. 于是必然有</p>
+$$f(\xi) = 0.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-13" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 13: 零点存在与介值连通穿透</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一维实数空间的拓扑连通性穿越；不发生跳跃撕裂的连续曲线在跨越正负两半平面时，必相交于零测度的横轴分界线。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果连续曲线的两端一端落在 $x$ 轴下方 $f(a) < 0$，另一端落在 $x$ 轴上方 $f(b) > 0$。笔尖在纸面上连续行进不离开纸面，必然在某处切穿横轴 $f(\xi) = 0$。
+原书给出了极具数学美感的分析学证明：定义负值集合 $V = \{x \in [a,b] \mid f(x) < 0\}$，取它的上确界 $\xi = \sup V$（即负值区域向右扩散的最远前沿点）。
+利用局部保号性推证：若 $f(\xi) > 0$，其左邻域全是正的，$\xi$ 不可能是上确界；若 $f(\xi) < 0$，其右邻域全是负的，$\xi$ 不可能是上界。排除所有大于和小于的可能，唯一合法的拓扑位置只能是 $f(\xi) = 0$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      连续曲线切穿横轴的边界浸润图景：
+数轴横轴将平面划分为上下两个半平面。从下半平面走向正半平面的连续轨迹，在平面拓扑上无法绕过一维分割线。集合 $V$ 就像向右流淌的地下浸润水系，水系的最右端边界点 $\xi$ 处于干湿交界的临界面上；因为地形处处平滑连续，浸润前沿处的垂直高度只能恰好与海平面 $y=0$ 保持绝对齐平。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>确界定位根的精确位置：$\xi = \sup\{x \mid f(x) < 0\}$。</li><li>保号性双向围剿：$f(\xi) > 0$ 破坏确界逼近性，$f(\xi) < 0$ 破坏上界阻挡性。</li><li>排除法唯一定论：$f(\xi) = 0$ 严格确立，是非线性方程求根算法（如二分法）的理论母体。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.4 介值定理 (中间值定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-13" class="thm-tag routine-ref" target="_blank">🏷️ 套路 13: 零点存在与介值连通穿透</a>
+        <span class="thm-tag">介值定理</span><span class="thm-tag">平移构造</span><span class="thm-tag">连通区段全覆盖</span><span class="thm-tag">零点定理推广</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-4" class="anchor-btn" title="复制锚点链接"># 定理 3.4.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.4</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则它一定能取到最大值 $M = \max \{f(x) \mid x \in [a, b]\}$ 和最小值 $m = \min \{f(x) \mid x \in [a, b]\}$ 之间的任何一个值.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由最值定理，存在 $\xi, \eta \in [a, b]$，使得</p>
+$$f(\xi) = m, \quad f(\eta) = M.$$
+<p>不妨设 $\xi &lt; \eta$. 对任何一个中间值 $C$，$m &lt; C &lt; M$，考察辅助函数</p>
+$$\phi(x) = f(x) - C.$$
+<p class="no-indent">显然 $\phi(\xi) = m - C &lt; 0, \phi(\eta) = M - C &gt; 0$. 由零点存在定理，必有 $\zeta \in (\xi, \eta)$，使得</p>
+$$\phi(\zeta) = 0, \quad \text{即 } f(\zeta) = C.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-13" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 13: 零点存在与介值连通穿透</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 零点存在定理在任意水平切线下的刚性平移不变性；连续映射的像集完整覆盖极值区间内的所有连续中间态。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      介值定理表明：连续函数在闭区间上的值域是完全连通的，最小值 $m$ 和最大值 $M$ 之间的任何一个中间数值 $C \in (m, M)$，曲线在途经时都必须严密覆盖，绝无跳跃悬空。
+证明是化归思想的教科书典范：直接构造辅助函数 $\phi(x) = f(x) - C$。将原本求 $f(x) = C$ 的交点问题，一瞬间平移转化为求 $\phi(x) = 0$ 的零点问题！因为在最小值处 $\phi \le 0$，最大值处 $\phi \ge 0$，直接套用定理 3.4.3（零点存在定理）一击必杀！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      水平扫描基准线的平移相交图景：
+在直角坐标系中画一条从最低点通向最高点的连续曲线。拿一条水平直线 $y=C$ 从底部向顶部连续平移滑动。由于曲线没有垂直断裂口，水平线在滑过任意高度时，都必然与曲线至少相交于一个几何交点 $(\xi, C)$，交点的横坐标即为定理所保证的解。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>平移化归辅助函数：令 $\phi(x) = f(x) - C$，将任意常数交点化归为标准的零点存在定理。</li><li>与最值定理联合驱动：先由定理 3.4.2 拿到最小值点与最大值点，再在这两点之间施展介值穿透。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-cor">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 闭区间连续函数的值域必为闭区间</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-13" class="thm-tag routine-ref" target="_blank">🏷️ 套路 13: 零点存在与介值连通穿透</a>
+        <span class="thm-tag">值域连通性</span><span class="thm-tag">紧致像集</span><span class="thm-tag">闭区间保持</span><span class="thm-tag">拓扑不变量</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-cor" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>推论</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 连续，$m$ 是最小值，$M$ 是最大值，则 $f(x)$ 的值域是闭区间</p>
+$$R_f = [m, M].$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 由最值定理（定理 3.4.2），函数 $f(x)$ 在 $[a, b]$ 上必定能取得最小值 $m$ 和最大值 $M$，即存在 $x_1, x_2 \in [a, b]$ 满足 $f(x_1) = m, f(x_2) = M$。因此 $m \in f([a, b])$ 且 $M \in f([a, b])$，对任意 $x \in [a, b]$ 恒有 $m \le f(x) \le M$，故值域</p>
+$$f([a, b]) \subseteq [m, M].$$
+<p>另一方面，由介值定理（定理 3.4.4），对任意介于 $m$ 与 $M$ 之间的数 $C \in (m, M)$，都存在 $\xi \in [a, b]$ 使得 $f(\xi) = C$。于是 $(m, M) \subseteq f([a, b])$。综合端点 $m, M$ 亦在值域中，即得：</p>
+$$[m, M] \subseteq f([a, b]).$$
+<p>由此确证 $f([a, b]) = [m, M]$，闭区间在连续映射下的像依然是闭区间. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-13" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 13: 零点存在与介值连通穿透</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一维紧致连通拓扑在连续映射下的保形性；最值定理封闭端点边界，介值定理密实内部空间，合力锻造出封闭的实心像集。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      闭区间 $[a,b]$ 具备两大优异的拓扑性质：它既是“紧致的（有界闭集）”，又是“连通的（没有裂隙）”。
+连续函数把这个区间映射到纵轴上，其值域绝不会碎裂成孤立的散点，也绝不会变成半开半闭的残缺形态，它必然是一段标准的封闭闭区间 $[m, M]$。
+证明的双向包含极其对称严密：
+第一步：由最值定理，曲线高度绝不会突破最小值 $m$ 和最大值 $M$，值域被装进 $[m, M]$ 盒子里；
+第二步：由介值定理，$m$ 与 $M$ 之间的所有数字全被曲线覆盖，盒子被完全装满。两者双向夹紧，确证像集为闭区间 $[m, M]$。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      连续投影的实心压铸图景：
+将闭区间 $[a,b]$ 上的连续函数图像垂直投影到纵坐标轴上。由于函数处处连通，投影出来的光影带没有任何透光的缝隙（连通性）；又因为函数能切实取到最小值和最大值，光影带的两端被固定在实体端点刻度上（紧致性）。整段投影在几何轴上构成了完整的封闭线段。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>双向包含证明范式：由上界定义得 $f([a,b]) \subseteq [m, M]$，由介值定理得 $[m, M] \subseteq f([a,b])$。</li><li>拓扑学普适定理的具象化：紧致连通空间的连续像是紧致连通空间。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.5 一致连续性的充要条件 (点列判据准则)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-02" class="thm-tag routine-ref" target="_blank">🏷️ 套路 02: ε-N 与 ε-δ 动态博弈拆解</a>
+        <span class="thm-tag">一致连续性</span><span class="thm-tag">点列刻画</span><span class="thm-tag">量词调换</span><span class="thm-tag">局域陡峭性反例</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-5" class="anchor-btn" title="复制锚点链接"># 定理 3.4.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.5</strong> 设函数 $f(x)$ 在区间 $X$ 上定义，则 $f(x)$ 在 $X$ 上一致连续的充分必要条件是：对于任意两个满足条件 $\lim_{n \to \infty} (x_n' - x_n'') = 0$ 的点列 $\{x_n'\}, \{x_n''\} \subset X$，成立</p>
+$$\lim_{n \to \infty} (f(x_n') - f(x_n'')) = 0.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>必要性</strong>：函数 $f(x)$ 在 $X$ 上的一致连续性可表述为</p>
+$$\forall \varepsilon &gt; 0, \exists \delta &gt; 0, \forall x', x'' \in X (|x' - x''| &lt; \delta) : |f(x') - f(x'')| &lt; \varepsilon.$$
+<p>对上述 $\delta &gt; 0$，因 $\lim_{n \to \infty} (x_n' - x_n'') = 0$，故 $\exists N, \forall n &gt; N : |x_n' - x_n''| &lt; \delta$. 于是当 $n &gt; N$ 时成立</p>
+$$|f(x_n') - f(x_n'')| &lt; \varepsilon.$$
+<p class="no-indent">这就证明了 $\lim_{n \to \infty} (f(x_n') - f(x_n'')) = 0$.</p>
+<p><strong>充分性</strong>：采用反证法. 函数 $f(x)$ 在 $X$ 上的非一致连续性可表述为</p>
+$$\exists \varepsilon_0 &gt; 0, \forall \delta &gt; 0, \exists x', x'' \in X (|x' - x''| &lt; \delta) : |f(x') - f(x'')| \ge \varepsilon_0.$$
+<p>取 $\delta_n = \frac{1}{n}$ ($n = 1, 2, 3, \dots$)，于是存在 $x_n', x_n'' \in X$，满足</p>
+$$|x_n' - x_n''| &lt; \frac{1}{n} \quad \text{但} \quad |f(x_n') - f(x_n'')| \ge \varepsilon_0.$$
+<p>这就产生与定理条件相矛盾的结论.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-02" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 02: ε-N 与 ε-δ 动态博弈拆解</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 全局微观公差的一致有效性；非一致连续性在度量上等价于存在一对间距收缩至零但函数值落差无法消除的几何坏点列。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      【普通连续 vs 一致连续】：
+普通连续中，输入公差 $\delta(x_0, \varepsilon)$ 允许因地制宜，在曲线越陡峭的地方，$\delta$ 必须缩得极小极窄（如 $1/x$ 在靠近 0 处，斜率无限大，$\delta$ 塌缩为 0）；
+而一致连续要求“一把尺子量遍全场”——给出一个统一的 $\delta(\varepsilon)$，全域任意两点只要间距小于 $\delta$，函数落差就必须小于 $\varepsilon$。
+定理给出的点列准则是否定一致连续的终极法宝：只要能构造出两列点 $x_n', x_n''$，虽然它们的间距走向零 $|x_n' - x_n''| \to 0$，但函数落差始终被顶在 $|f(x_n') - f(x_n'')| \ge \varepsilon_0$ 之上，便直接判定非一致连续（如 $f(x)=1/x$ 取 $1/n$ 与 $1/(2n)$，间距趋于 0，落差恒为 $n$ 暴增）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      动态网格与斜率奇异性探测图景：
+一致连续性意味着曲线全场的局部平均坡度拥有全局统一的控制界限。非一致连续性意味着在定义域的某处边界或无穷远处，曲线发生了“无限陡峭的剪切畸变”。两列点就像一组不断向畸变中心靠近的高速游标卡尺，虽然卡尺读数不断归零，但卡尺两爪探测到的垂直断崖落差却永久保持，直接暴露出全场公差尺度的失效。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>逻辑量词顺序的重大质变：普通连续是 $\forall x_0, \forall \varepsilon, \exists \delta$；一致连续是 $\forall \varepsilon, \exists \delta, \forall x', x''$（$\delta$ 彻底摆脱对具体点位的依赖）。</li><li>否定命题的构造性反例：寻找满足 $|x_n' - x_n''| \to 0$ 但 $|f(x_n') - f(x_n'')| \ge \varepsilon_0$ 的坏点列。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.6 Cantor 定理 (闭区间上连续必一致连续)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: 局部性质到整体性质的过渡</a>
+        <span class="thm-tag">Cantor 定理</span><span class="thm-tag">一致连续</span><span class="thm-tag">有限覆盖法</span><span class="thm-tag">紧致性消除发散</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-6" class="anchor-btn" title="复制锚点链接"># 定理 3.4.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.6（Cantor 定理）</strong> 若函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则它在 $[a, b]$ 上一致连续.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 采用反证法.</p>
+<p>假设 $f(x)$ 在 $[a, b]$ 上非一致连续，由定理 3.4.5 的证明过程，可知存在 $\varepsilon_0 &gt; 0$ 及两列点列 $\{x_n'\}$ 和 $\{x_n''\}$，$x_n', x_n'' \in [a, b]$，满足</p>
+$$|x_n' - x_n''| &lt; \frac{1}{n}, \quad \text{但} \quad |f(x_n') - f(x_n'')| \ge \varepsilon_0 \quad (n = 1, 2, 3, \dots).$$
+<p>因为 $\{x_n'\}$ 有界，由 Bolzano-Weierstrass 定理，存在收敛子列 $\{x_{n_k}'\}$：</p>
+$$\lim_{k \to \infty} x_{n_k}' = \xi \in [a, b].$$
+<p>又由 $|x_{n_k}'' - \xi| \le |x_{n_k}'' - x_{n_k}'| + |x_{n_k}' - \xi| &lt; \frac{1}{n_k} + |x_{n_k}' - \xi|$，令 $k \to \infty$ 得到</p>
+$$\lim_{k \to \infty} x_{n_k}'' = \xi.$$
+<p>由于函数 $f(x)$ 在点 $\xi$ 连续，因而有</p>
+$$\lim_{k \to \infty} f(x_{n_k}') = f(\xi), \quad \lim_{k \to \infty} f(x_{n_k}'') = f(\xi).$$
+<p class="no-indent">于是得到：</p>
+$$\lim_{k \to \infty} (f(x_{n_k}') - f(x_{n_k}'')) = 0.$$
+<p class="no-indent">但这与 $|f(x_{n_k}') - f(x_{n_k}'')| \ge \varepsilon_0$ 产生矛盾，从而推翻假设，得到 $f(x)$ 在 $[a, b]$ 上的一致连续性结论.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: 局部性质到整体性质的过渡</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 闭区间的紧致闭合性消除了斜率发散的逃逸奇点；有限覆盖迫使每个局部的弹性公差凝结为全域统一的最小公差。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      为什么 $f(x) = 1/x$ 在开区间 $(0, 1]$ 上不一致连续，但在闭区间 $[0.01, 1]$ 上就绝对是一致连续的？
+因为开区间有一个无法触及的边界 0，函数越靠近 0 斜率越趋于无穷，公差 $\delta$ 趋于 0；
+而康托尔定理指出：只要定义域是闭区间 $[a,b]$，函数在这两个端点处必须是有定义的连续点，绝无可能存在未被定义的无穷陡峭奇点。
+证明用反证法：假设非一致连续，根据定理 3.4.5 抓出一对坏点列 $|x_n - y_n| \to 0$ 且落差大于 $\varepsilon_0$。由致密性定理（Bolzano-Weierstrass），在闭区间内必有子列收敛于某个内点 $\xi$。由连续性，两点列在 $\xi$ 处双双收敛于 $f(\xi)$，两者落差必然趋于零，当场粉碎矛盾！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      全场坡度受控与最小刻度尺图景：
+在有界闭区间上，连续曲线被完全封闭，没有任何开放的悬崖边界让斜率发生不可控的无限飙升。每个点 $x$ 处都由连续性提供了一把微观的控制尺 $\delta(x)$。由于闭区间的紧致性（有限覆盖），我们只需要在全场挑出有限把尺子；在有限把正数尺子中取最小值 $\delta = \min(\delta_1, \dots, \delta_k) > 0$，这把最小的尺子便足以通行全场。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>反证法 + 点列判据：由假设导出 $|x_n - y_n| \to 0$ 且 $|f(x_n) - f(y_n)| \ge \varepsilon_0$。</li><li>Bolzano-Weierstrass 抽取收敛子列：由于处于闭区间，子列必收敛至区间内确切点 $\xi \in [a,b]$。</li><li>连续性一击必杀：$|f(x_{n_k}) - f(y_{n_k})| \le |f(x_{n_k}) - f(\xi)| + |f(\xi) - f(y_{n_k})| \to 0$，击碎反证假设。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-3-4-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 3.4.7 开区间上连续函数的一致连续性延拓定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: 局部性质到整体性质的过渡</a>
+        <span class="thm-tag">一致连续延拓</span><span class="thm-tag">开区间</span><span class="thm-tag">单侧极限存在</span><span class="thm-tag">连续闭包修补</span>
+      </div>
+    </div>
+    <a href="#thm-3-4-7" class="anchor-btn" title="复制锚点链接"># 定理 3.4.7</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 3.4.7</strong> 函数 $f(x)$ 在有限开区间 $(a, b)$ 连续，则 $f(x)$ 在 $(a, b)$ 上一致连续的充分必要条件是：$f(a^+)$ 与 $f(b^-)$ 存在（且为有限数）.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>充分性</strong>：定义辅助函数 $\tilde{f}(x)$：</p>
+$$\tilde{f}(x) = \begin{cases} f(a^+), &amp; x = a, \\ f(x), &amp; x \in (a, b), \\ f(b^-), &amp; x = b, \end{cases}$$
+<p class="no-indent">则 $\tilde{f}(x)$ 是闭区间 $[a, b]$ 上的连续函数.</p>
+<p>由 Cantor 定理，$\tilde{f}(x)$ 在 $[a, b]$ 上一致连续. 显然，对于一致连续的函数，当定义域缩小为 $(a, b)$ 时，其一致连续性仍然保持. 于是函数 $\tilde{f}(x)$ 在开区间 $(a, b)$ 上也是一致连续的，这就说明函数 $f(x)$ 在 $(a, b)$ 上一致连续.</p>
+<p><strong>必要性</strong>：设函数 $f(x)$ 在开区间 $(a, b)$ 上一致连续，则 $\forall \varepsilon &gt; 0, \exists \delta &gt; 0, \forall x', x'' \in (a, b) (|x' - x''| &lt; \delta)$：</p>
+$$|f(x') - f(x'')| &lt; \varepsilon.$$
+<p>在区间 $(a, b)$ 上任意选取数列 $\{x_n\}$，$x_n \in (a, b)$ 且 $\lim_{n \to \infty} x_n = a$. 因数列 $\{x_n\}$ 是基本数列，对于上述 $\delta &gt; 0, \exists N, \forall n, m &gt; N : |x_n - x_m| &lt; \delta$，从而</p>
+$$|f(x_n) - f(x_m)| &lt; \varepsilon.$$
+<p>这说明了函数值数列 $\{f(x_n)\}$ 也是基本数列，因而必定收敛.</p>
+<p>由定理 3.1.5'，可知 $f(a^+) = \lim_{x \to a^+} f(x)$ 存在.</p>
+<p>同理可以证明 $f(b^-) = \lim_{x \to b^-} f(x)$ 存在.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: 局部性质到整体性质的过渡</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一致连续性的边界柯西完备化；函数在开区间内部一致连续，充要等价于其在两个开端点处具有有限确定的单侧极限，可无缝延拓至闭区间。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      面对有限开区间 $(a,b)$ 上的连续函数，怎样快速判定它是否具有高贵的一致连续性？
+定理给出了极其优雅的几何充要准则：只需检查左右两个开端点的单侧极限 $\lim_{x \to a^+} f(x)$ 和 $\lim_{x \to b^-} f(x)$！
+如果这两个极限都是正常有限数，我们只要人为把这两个极限值赋给端点，就构造出一个在大闭区间 $[a,b]$ 上处处连续的辅助函数 $\tilde{f}(x)$！根据 Cantor 定理，大闭区间上必定一致连续，原开区间作为子集自然继承一致连续性！
+反之，如果像 $1/x$（极限为无穷大）或 $\sin(1/x)$（在 0 处震荡无极限），端点极限不存在，函数绝对无法一致连续！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      桥梁两端引桥标高的合龙修补图景：
+开区间就像一座两端悬空、尚未连接引桥的主体桥面 $(a,b)$。一致连续性要求桥面无论在中间还是靠近两端，起伏坡度都必须平稳可控。只要两端悬空位置的极限高度是有限固定的（单侧极限存在），工人们就能在两头浇筑两个实体桥墩补齐缺口（延拓为闭区间连续），整条跨江大桥便直接化身为平整的一体化结构。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>辅助延拓函数构造：令 $\tilde{f}(a) = \lim_{x \to a^+} f(x)$ 与 $\tilde{f}(b) = \lim_{x \to b^-} f(x)$。</li><li>Cantor 定理逆向继承：延拓函数在闭区间 $[a,b]$ 上连续 $\implies$ 延拓函数一致连续 $\implies$ 子集 $(a,b)$ 天然一致连续。</li><li>判别开区间一致连续性的口算准则：如判别 $\frac{\sin x}{x}$ 在 $(0, 1)$ 上的一致连续性，直接求 $x \to 0^+$ 极限为 1，有限存在，秒杀判定一致连续！</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_02_theorems.html" class="page-nav-btn">← 上一章：第二章 · 数列极限</a>
+  <a href="chapter_04_theorems.html" class="page-nav-btn">下一章：第四章 · 导数与微分 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

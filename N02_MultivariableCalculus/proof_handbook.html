@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>数学分析证明套路与实战使用手册 | 21大核心套路全景指南</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&amp;family=Outfit:wght@400;500;600;700;800&amp;family=Noto+Sans+SC:wght@300;400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<!-- KaTeX CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" rel="stylesheet"/>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer="" onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });" src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-secondary: #0d1222;
+      --bg-card: rgba(15, 22, 40, 0.75);
+      --bg-card-hover: rgba(22, 32, 58, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(56, 189, 248, 0.3);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+
+      --tier-t0-bg: rgba(244, 63, 94, 0.15);
+      --tier-t0-border: rgba(244, 63, 94, 0.4);
+      --tier-t0-text: #fb7185;
+
+      --tier-t1-bg: rgba(245, 158, 11, 0.15);
+      --tier-t1-border: rgba(245, 158, 11, 0.4);
+      --tier-t1-text: #fbbf24;
+
+      --tier-t2-bg: rgba(56, 189, 248, 0.15);
+      --tier-t2-border: rgba(56, 189, 248, 0.4);
+      --tier-t2-text: #38bdf8;
+
+      --tier-t3-bg: rgba(168, 85, 247, 0.15);
+      --tier-t3-border: rgba(168, 85, 247, 0.4);
+      --tier-t3-text: #c084fc;
+
+      --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Fira Code', Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.75;
+      padding-bottom: 6rem;
+      scroll-behavior: smooth;
+    }
+
+    .katex {
+      font-size: 1.05em;
+      color: #f1f5f9;
+    }
+    .katex-display {
+      margin: 0.75rem 0;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0.25rem 0;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(7, 10, 18, 0.9);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 2rem;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .back-btn {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.2s ease;
+    }
+    .back-btn:hover {
+      transform: translateX(-3px);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .hero-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.16) 0%, rgba(168, 85, 247, 0.12) 100%);
+      border: 1px solid var(--border-highlight);
+      border-radius: 20px;
+      padding: 2.25rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      margin-bottom: 0.75rem;
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.02em;
+    }
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 900px;
+    }
+
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-chip {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .stat-chip .val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      font-family: var(--font-mono);
+    }
+    .stat-chip .lbl {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .filter-bar {
+      position: sticky;
+      top: 60px;
+      z-index: 90;
+      background: rgba(7, 10, 18, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 0.85rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .filter-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .filter-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+    .filter-pill.active {
+      background: var(--accent-blue);
+      color: #070a12;
+      border-color: var(--accent-blue);
+    }
+    .search-box {
+      position: relative;
+      min-width: 260px;
+    }
+    .search-box input {
+      width: 100%;
+      background: rgba(15, 22, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 0.45rem 1rem 0.45rem 2.2rem;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--accent-blue);
+    }
+    .search-box .icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .section-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 2.5rem 0 1.25rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid;
+    }
+    .section-title-wrap.t0 { border-color: var(--tier-t0-text); color: var(--tier-t0-text); }
+    .section-title-wrap.t1 { border-color: var(--tier-t1-text); color: var(--tier-t1-text); }
+    .section-title-wrap.t2 { border-color: var(--tier-t2-text); color: var(--tier-t2-text); }
+    .section-title-wrap.t3 { border-color: var(--tier-t3-text); color: var(--tier-t3-text); }
+
+    .section-title-wrap h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .method-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.75rem;
+      margin-bottom: 1.75rem;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .method-card:hover {
+      border-color: var(--border-highlight);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .card-num {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+    .method-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .meta-badges {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .tier-badge {
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      letter-spacing: 0.03em;
+    }
+    .tier-badge.t0 { background: var(--tier-t0-bg); border: 1px solid var(--tier-t0-border); color: var(--tier-t0-text); }
+    .tier-badge.t1 { background: var(--tier-t1-bg); border: 1px solid var(--tier-t1-border); color: var(--tier-t1-text); }
+    .tier-badge.t2 { background: var(--tier-t2-bg); border: 1px solid var(--tier-t2-border); color: var(--tier-t2-text); }
+    .tier-badge.t3 { background: var(--tier-t3-bg); border: 1px solid var(--tier-t3-border); color: var(--tier-t3-text); }
+
+    .freq-tag {
+      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+    }
+
+    .block-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Redesigned Layman Block Style */
+    .layman-block {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
+      border-left: 4px solid var(--accent-blue);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.95rem;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      border-right: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .layman-motto {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent-blue);
+      border-bottom: 1px dashed rgba(56, 189, 248, 0.25);
+      padding-bottom: 0.4rem;
+    }
+    .layman-sub {
+      line-height: 1.7;
+    }
+    .layman-sub strong.sub-title {
+      color: #7dd3fc;
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.92rem;
+    }
+    .layman-sub blockquote {
+      border-left: 3px solid rgba(56, 189, 248, 0.45);
+      padding: 0.4rem 0.85rem;
+      margin: 0.3rem 0;
+      color: #f1f5f9;
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.94rem;
+    }
+    .layman-sub ul {
+      margin-left: 1.25rem;
+      margin-top: 0.3rem;
+    }
+    .layman-sub li {
+      margin-bottom: 0.35rem;
+      color: #cbd5e1;
+    }
+    .layman-sub li strong {
+      color: #38bdf8;
+    }
+
+    .math-block {
+      background: rgba(10, 15, 28, 0.9);
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--accent-purple);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.25rem;
+      font-size: 0.93rem;
+      color: #f1f5f9;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .example-block {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .example-title {
+      color: var(--accent-emerald);
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .example-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.92rem;
+    }
+    .example-steps li {
+      padding-left: 1.25rem;
+      position: relative;
+      color: var(--text-secondary);
+    }
+    .example-steps li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent-emerald);
+      font-size: 0.9rem;
+    }
+    .example-steps li strong {
+      color: #f8fafc;
+    }
+
+    .pitfall-block {
+      background: rgba(244, 63, 94, 0.08);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+      border-left: 4px solid var(--accent-rose);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.88rem;
+      color: #fecdd3;
+    }
+    .pitfall-block strong {
+      color: #fda4af;
+    }
+
+    .toc-modal-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent-blue);
+      color: #070a12;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 99;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .toc-modal-btn:hover {
+      transform: scale(1.05);
+      background: #7dd3fc;
+    }
+
+    .quick-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 0.9rem;
+    }
+    .quick-table th, .quick-table td {
+      border: 1px solid var(--border-color);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .quick-table th {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+    .quick-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 1.5rem 1rem; }
+      h1 { font-size: 1.7rem; }
+      .filter-bar { flex-direction: column; align-items: stretch; }
+      .search-box { width: 100%; }
+      .card-top { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+<header>
+<div style="display: flex; align-items: center; gap: 1.25rem;">
+<a class="back-btn" href="index.html">← 返回 N02 门户</a>
+<a class="back-btn" href="textbook_theorems_proofs.html" style="color: var(--accent-emerald);">📚 查看教材核心定理标引库 →</a>
+</div>
+<span style="font-size: 0.85rem; color: var(--text-secondary); font-family: var(--font-mono);">21 大证明套路全景实战手册</span>
+</header>
+<div class="container">
+<!-- Hero Box -->
+<div class="hero-box">
+<span class="tag">MATHEMATICAL ANALYSIS · FIELD MANUAL</span>
+<h1>数学分析常用证明套路与实战使用手册</h1>
+<p class="hero-desc">
+        从“代数直等”走向“分析放缩”。这二十一个证明套路，本质上都在做一件事：<strong>把无限的、复杂的、抓不住的数学对象，拆成有限可控的误差部件装进笼子里</strong>。下面用最接地气的大白话拆开讲透，再配上真题实战和避坑警示！
+      </p>
+</div>
+<!-- Stats Ribbon -->
+<div class="stats-ribbon">
+<div class="stat-chip">
+<span class="val" style="color: var(--tier-t0-text);">4 招</span>
+<span class="lbl">T0 顶级基石 (85%+) 贯穿始终</span>
+</div>
+<div class="stat-chip">
+<span class="val" style="color: var(--tier-t1-text);">5 招</span>
+<span class="lbl">T1 核心高频 (50%~85%) 大题骨干</span>
+</div>
+<div class="stat-chip">
+<span class="val" style="color: var(--tier-t2-text);">5 招</span>
+<span class="lbl">T2 进阶分水岭 (20%~50%) 拔尖武器</span>
+</div>
+<div class="stat-chip">
+<span class="val" style="color: var(--tier-t3-text);">7 招</span>
+<span class="lbl">T3 专题压轴 (5%~20%) 竞赛必备</span>
+</div>
+</div>
+<!-- Filter & Search Bar -->
+<div class="filter-bar">
+<div class="filter-pills">
+<div class="filter-pill active" onclick="filterTier('all', this)">全部 (21)</div>
+<div class="filter-pill" onclick="filterTier('t0', this)">T0 顶级基石 (4)</div>
+<div class="filter-pill" onclick="filterTier('t1', this)">T1 核心高频 (5)</div>
+<div class="filter-pill" onclick="filterTier('t2', this)">T2 进阶分水岭 (5)</div>
+<div class="filter-pill" onclick="filterTier('t3', this)">T3 专题压轴 (7)</div>
+</div>
+<div class="search-box">
+<span class="icon">🔍</span>
+<input id="searchInput" oninput="handleSearch()" placeholder="搜索套路名称 / 关键字..." type="text"/>
+</div>
+</div>
+<!-- TIER 0 -->
+<div class="tier-section" data-tier="t0">
+<div class="section-title-wrap t0">
+<h2>🔥 第一梯队：T0 顶级基石（考查频度 85% ~ 100%）</h2>
+</div>
+<!-- 1 -->
+<div class="method-card" data-keywords="ε-δ ε-N 极限 分拆 局部有界 放缩 min max 三角不等式" data-tier="t0">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">01</span>
+<h3>$\varepsilon$-$\delta$ / $\varepsilon$-$N$ 分拆与局部有界放缩法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t0">T0 基石</span>
+<span class="freq-tag">出题频度 90%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：度量空间三角不等式误差分解：双步长 $\min\{\delta_1, \delta_2\}$ 隔离局部有界因子，控制余项线性收缩。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明极限 $\lim_{x \to x_0} f(x) = A$ 的核心在于控制因变量偏差 $|f(x) - A| &lt; \varepsilon$。当偏差呈现为多个扰动因子的乘积或代数和时，关键技术在于『解耦』：先取一个初选粗网格 $\delta_1 = 1$ 将待测点的邻域限制在紧致闭球内，利用紧致性将其中一个扰动因子上界固化为一个绝对常数 $M$（局部有界性）；再针对纯粹的自变量位移 $|x - x_0|$ 提出精度要求 $\delta_2 = \frac{\varepsilon}{M}$。最终取两者的下确界 $\delta = \min\{\delta_1, \delta_2\}$，实现闭环。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            度量拓扑球的交集收缩：在以 $x_0$ 为中心的开球 $B(x_0, \delta_1)$ 内将目标流形投影到一个有界柱体中；接着调节柱体底面半径 $\delta_2$，使得象空间在靶心 $A$ 的 $\varepsilon$-邻域球内被完全捕获。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>$\varepsilon/2$ 机制</strong>：三角不等式 $|A - B| \le |A - C| + |C - B|$ 的直接代数翻译。</li><li><strong>双步长选取</strong>：先用粗网（$\delta_1 = 1$）固定干扰项上界，再用细网（$\delta_2$）对齐精度，最后取 $\delta = \min\{\delta_1, \delta_2\}$ 双保险闭环。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          欲证 $\lim_{x \to x_0} f(x) = A$。对任意给定的 $\varepsilon &gt; 0$：
+          <p>1. 作差分解：$|f(x) - A| \le |g(x)| \cdot |h(x)|$；</p>
+<p>2. 先固定初选步长 $\delta_1 = 1$，当 $0 &lt; |x - x_0| &lt; \delta_1$ 时，控制未知因子有界：$|g(x)| \le M$；</p>
+<p>3. 对剩下的因子求解精度要求：寻找 $\delta_2 &gt; 0$，使得当 $0 &lt; |x - x_0| &lt; \delta_2$ 时，$|h(x)| &lt; \frac{\varepsilon}{M}$；</p>
+<p>4. 综合选取 $\delta = \min\{\delta_1, \delta_2\}$，保证：</p>
+          $$|f(x) - A| &lt; M \cdot \frac{\varepsilon}{M} = \varepsilon$$
+        </div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：证明 $\lim_{x \to 2} (x^2 + 3x) = 10$</div>
+<ul class="example-steps">
+<li><strong>步骤 1（作差分解）</strong>：$|(x^2 + 3x) - 10| = |(x - 2)(x + 5)| = |x - 2| \cdot |x + 5|$。</li>
+<li><strong>步骤 2（画圈隔离）</strong>：初选 $\delta_1 = 1$，当 $0 &lt; |x - 2| &lt; 1$ 时，$1 &lt; x &lt; 3 \implies 6 &lt; x + 5 &lt; 8 \implies |x + 5| &lt; 8$。</li>
+<li><strong>步骤 3（配平精度）</strong>：令 $|x - 2| \cdot 8 &lt; \varepsilon \implies |x - 2| &lt; \frac{\varepsilon}{8}$，取 $\delta_2 = \frac{\varepsilon}{8}$。</li>
+<li><strong>步骤 4（收网成文）</strong>：任取 $\varepsilon &gt; 0$，取 $\delta = \min\{1, \frac{\varepsilon}{8}\}$，当 $0 &lt; |x - 2| &lt; \delta$ 时，恒有 $|(x^2 + 3x) - 10| &lt; 8 \cdot \frac{\varepsilon}{8} = \varepsilon$。证毕。</li>
+</ul>
+</div>
+<div class="pitfall-block">
+          ⚠️ <strong>避坑警示：</strong> 严禁在 $\delta$ 的表达式中包含未知自变量 $x$（如写“令 $\delta = \frac{\varepsilon}{|x + 5|}$”是原则性错误！）。$\delta$ 只能包含 $\varepsilon$ 与确定常数。
+        </div>
+</div>
+<!-- 2 -->
+<div class="method-card" data-keywords="微分中值定理 辅助函数 积分因子 Rolle 罗尔 Lagrange 拉格朗日 Cauchy" data-tier="t0">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">02</span>
+<h3>微分中值定理与辅助函数构造（积分因子逆推）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t0">T0 基石</span>
+<span class="freq-tag">出题频度 98%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：伴随一阶常微分方程的李群不变量反演：将待证导数等式视为微分方程，逆推全微分原函数以满足 Rolle 定理边界条件。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明涉及导数与原函数耦合的等式（如 $\xi f'(\xi) + k f(\xi) = 0$）在开区间内有根，其本质是在寻找一个全微分原函数 $F(x)$ 使得 $F'(\xi) = 0$。通过将待证式视为一阶线性微分方程 $y' + \frac{k}{x}y = 0$，求出其积分因子 $\mu(x) = e^{\int \frac{k}{x}\mathrm{d}x} = x^k$。辅助函数即为 $F(x) = x^k f(x)$。由于 $F'(x) = x^{k-1}[x f'(x) + k f(x)]$，且 $x &gt; 0$ 时外层因子恒非零，由 Rolle 定理捕获的驻点 $F'(\xi) = 0$ 必定精准命中目标微分关系！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            一阶相空间中沿积分曲线的势能等高线构造：待证导数关系是某动力系统的速度矢量，辅助函数是该系统的保守势能函数；两端等势 $F(a)=F(b)$ 迫使质点在中途必须穿过极值势阱或驻点。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>积分因子法则</strong>：乘积求导公式的反向逆运算，见 $f' + gf = 0$ 必乘积分因子 $e^{\int g}$。</li><li><strong>辅助函数验证</strong>：原函数确定后，只需验证 Rolle 定理三条件（闭区间连续、开区间可导、两端值相等）。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          常用辅助函数积分因子逆推映射表：
+          <ul>
+<li>若待证式为 $f'(\xi) + g(\xi)f(\xi) = 0 \implies$ 令 $F(x) = e^{\int g(x)dx} f(x)$</li>
+<li>若待证式为 $f'(\xi) + k f(\xi) = 0 \implies$ 令 $F(x) = e^{kx} f(x)$</li>
+<li>若待证式为 $x f'(\xi) + n f(\xi) = 0 \implies$ 令 $F(x) = x^n f(x)$</li>
+<li>若待证式为 $f'(\xi) - f(\xi)\tan(\xi) = 0 \implies$ 令 $F(x) = f(x)\cos(x)$</li>
+</ul>
+</div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：设 $f(0) = f(1) = 0$，证明存在 $\xi \in (0, 1)$ 使 $f'(\xi) + k f(\xi) = 0$</div>
+<ul class="example-steps">
+<li><strong>步骤 1（逆推原函数）</strong>：求解微分方程 $y' + ky = 0 \implies$ 积分因子为 $e^{kx}$，设 $F(x) = e^{kx} f(x)$。</li>
+<li><strong>步骤 2（检验 Rolle 条件）</strong>：$F(x)$ 在 $[0, 1]$ 连续，$(0, 1)$ 可导；且 $F(0) = e^0 f(0) = 0$，$F(1) = e^k f(1) = 0$，两端相等。</li>
+<li><strong>步骤 3（求导落地）</strong>：由 Rolle 定理，存在 $\xi \in (0, 1)$ 使 $F'(\xi) = 0$。而 $F'(x) = e^{kx}[f'(x) + k f(x)]$。因 $e^{k\xi} &gt; 0$ 恒不为零，必有 $f'(\xi) + k f(\xi) = 0$。证毕。</li>
+</ul>
+</div>
+<div class="pitfall-block">
+          ⚠️ <strong>避坑警示：</strong> 若题目出现两个不同中值点（如 $\xi$ 与 $\eta$），切不可对同一个函数用一次 Rolle。需在两个子区间分别用 Lagrange，或使用 Cauchy 中值定理。
+        </div>
+</div>
+<!-- 3 -->
+<div class="method-card" data-keywords="单调有界 数列极限 递推数列 归纳法 压缩" data-tier="t0">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">03</span>
+<h3>单调有界收敛定理（递推数列三步法）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t0">T0 基石</span>
+<span class="freq-tag">出题频度 92%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：实数偏序完备性的单向收缩：单调性消灭相空间振荡，有界性消灭轨道向无穷发散，闭环收敛至不动点吸引子。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              递推动力系统 $x_{n+1} = f(x_n)$ 的极限分析范式。单调性与有界性是实数连续统（Dedekind 完备性）的一对黄金约束：单调递增排除了动力系统在相空间中发生极限环或混沌振荡的可能；上有界排除了轨道沿单向坐标轴逃逸至无穷远的可能。两者联手迫使轨道必须收敛于有限实数 $L$。分析步骤严格遵循：1. 联立代数不动点方程 $L = f(L)$ 预判不动点吸引子；2. 数学归纳法证明轨道处于吸引子单侧的单调区间内；3. 单调有界定理宣称极限存在后，两端取极限锁定精确根。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            阶梯蛛网图（Cobweb Diagram）在对角线 $y = x$ 附近的单调单侧单向迭代收敛：轨道被约束在曲线与对角线夹成的收缩扇区内，逐步向对角线交点聚拢。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>单调性消灭振荡，有界性消灭无穷</strong>：实数系完备性的最典型动力学体现。</li><li><strong>标准四步曲</strong>：1. 草稿纸令 $L = f(L)$ 预判界；2. 归纳法证有界；3. 作差法证单调；4. 两端取极限解方程。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          递推数列 $x_{n+1} = f(x_n)$ 规范四步流程：
+          <p>1. 预估极限：令 $L = f(L)$ 解出不动点预判界 $M$；</p>
+<p>2. 数学归纳法证明有界：$x_n \le M$（或 $x_n \ge m$）；</p>
+<p>3. 作差法或归纳法证明单调：考察 $x_{n+1} - x_n$ 符号；</p>
+<p>4. 依据单调有界定理宣布极限存在，在原递推式两边令 $n \to \infty$ 定出 $L$。</p>
+</div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：$x_1 = \sqrt{2}, x_{n+1} = \sqrt{2 + x_n}$，求 $\lim_{n \to \infty} x_n$</div>
+<ul class="example-steps">
+<li><strong>步骤 1（归纳证有界）</strong>：$x_1 = \sqrt{2} &lt; 2$。若 $x_k &lt; 2$，则 $x_{k+1} = \sqrt{2 + x_k} &lt; \sqrt{2 + 2} = 2$。故对所有 $n$ 恒有 $x_n &lt; 2$。</li>
+<li><strong>步骤 2（作差证单调）</strong>：$x_{n+1}^2 - x_n^2 = (2 + x_n) - x_n^2 = -(x_n - 2)(x_n + 1) &gt; 0$（因 $0 &lt; x_n &lt; 2$）。故 $x_{n+1} &gt; x_n$，严格单调递增。</li>
+<li><strong>步骤 3（定理落地与定值）</strong>：由单调有界定理极限存在，设 $\lim_{n \to \infty} x_n = L$。两端取极限：$L = \sqrt{2 + L} \implies L = 2$。</li>
+</ul>
+</div>
+<div class="pitfall-block">
+          ⚠️ <strong>避坑警示：</strong> 绝对不能在“未证明极限存在之前”直接写“设极限为 $L$，在两边取极限”。若数列本身发散，强解代数方程得出的往往是伪解。
+        </div>
+</div>
+<!-- 4 -->
+<div class="method-card" data-keywords="反证法 非一致连续 无界 1/n 子列 抓现行 矛盾" data-tier="t0">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">04</span>
+<h3>反证法 + 反设 $\exists \varepsilon_0$ 并令 $\delta = 1/n$ 提取矛盾点列</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t0">T0 基石</span>
+<span class="freq-tag">出题频度 86%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：连续统致密性向可数离散逆反点列的转化：通过度量步长 $1/n$ 采样构造违规轨迹，逼近紧集边缘触发拓扑自洽崩溃。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明某些全域性质（如闭区间上连续函数必一致连续、有界等）的标准反证架构。若结论不成立，存在一个非零的绝对误差 $\varepsilon_0 &gt; 0$ 使得对任意小的尺度 $\delta$ 都有违规点存在。依次令 $\delta_n = 1/n$，在紧致域中提取出违规点列 $\{x_n\}$ 与 $\{y_n\}$ 满足 $|x_n - y_n| &lt; 1/n$ 却保持距离差 $|f(x_n) - f(y_n)| \ge \varepsilon_0$。由 Bolzano-Weierstrass 致密性定理，紧集上的有界点列必存在收敛子列 $x_{n_k} \to x_0$。由夹逼准则必有 $y_{n_k} \to x_0$。此时由函数在 $x_0$ 处的连续性，两点函数值之差必须收敛到零，直接与 $\ge \varepsilon_0$ 发生根本冲突！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            拓扑分离悖论：在原点收缩的同心球套内，两串点列的空间欧几里得距离收敛为零，但它们在象空间的映射点却被排斥在直径为 $\varepsilon_0$ 的禁带球外，直接撕裂了连续映射的保邻域拓扑性质。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>命题否定的标准量词转换</strong>：全称命题 $\forall \varepsilon, \exists \delta$ 否定后生成特称存在命题 $\exists \varepsilon_0, \forall \delta$。</li><li><strong>离散化取点技术</strong>：令 $\delta_n = 1/n$ 将连续统的任意性离散化为具象的点列 $\{x_n\}$。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          一致连续性否定命题：
+          $$\exists \varepsilon_0 &gt; 0, \forall \delta &gt; 0, \exists x, y \text{ 使得 } |x - y| &lt; \delta \text{ 但 } |f(x) - f(y)| \ge \varepsilon_0$$
+          取 $\delta = 1/n$，产生点列 $\{x_n\}, \{y_n\}$ 满足：$|x_n - y_n| &lt; 1/n$，但 $|f(x_n) - f(y_n)| \ge \varepsilon_0$。
+          当 $n \to \infty$ 时两点靠得无限近，函数差却被正数 $\varepsilon_0$ 死死顶住，导出逻辑矛盾。
+        </div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：证明 $f(x) = 1/x$ 在 $(0, 1)$ 上非一致连续</div>
+<ul class="example-steps">
+<li><strong>步骤 1（反设与固定误差）</strong>：反设一致连续，取定常数 $\varepsilon_0 = 1$。</li>
+<li><strong>步骤 2（取点列）</strong>：令 $x_n = \frac{1}{n}$，$y_n = \frac{1}{2n}$。两点均落在 $(0, 1)$ 内部。</li>
+<li><strong>步骤 3（检验距离与函数差）</strong>：自变量距离 $|x_n - y_n| = \frac{1}{2n} \to 0$；但函数差值 $|f(x_n) - f(y_n)| = |n - 2n| = n \ge 1 = \varepsilon_0$。</li>
+<li><strong>步骤 4（达成矛盾）</strong>：无论 $\delta$ 多小，总能取充分大 $n$ 使得距离小于 $\delta$ 但函数差大于 $1$，与一致连续矛盾！</li>
+</ul>
+</div>
+<div class="pitfall-block">
+          ⚠️ <strong>避坑警示：</strong> 构造点列 $x_n, y_n$ 时，必须确保点列的每一项都严格落在定义域内部，不能越界（如本例不能取 $x_n = 0$）。
+        </div>
+</div>
+</div>
+<!-- TIER 1 -->
+<div class="tier-section" data-tier="t1">
+<div class="section-title-wrap t1">
+<h2>⚡ 第二梯队：T1 核心高频（考查频度 50% ~ 85%）</h2>
+</div>
+<!-- 5 -->
+<div class="method-card" data-keywords="Taylor 泰勒展开 导数估计 Lagrange余项 最佳步长 高阶导数" data-tier="t1">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">05</span>
+<h3>Taylor 展开与局部阶数估计法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t1">T1 核心</span>
+<span class="freq-tag">出题频度 82%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：切空间高阶密切化与最佳步长平衡：多项式展开吸收前 n 阶弯曲信息，Lagrange 余项量化全域截断误差上界。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              面对高阶导数与导数不等式的估计，Taylor 公式是最强解析工具。带 Lagrange 余项的 Taylor 公式 $f(x_0 + h) = f(x_0) + f'(x_0)h + \frac{f''(\xi)}{2}h^2$ 将宏观位移 $h$ 与导数严格绑定。证明中常通过解一元二次方程或均值不等式求导数上界：将式子改写为关于步长 $h$ 的函数 $f'(x_0) = \frac{f(x_0+h)-f(x_0)}{h} - \frac{f''(\xi)}{2}h$。右端两项关于 $h$ 一增一减，通过微积分极值求导寻找『最佳平衡步长 $h^* = 2\sqrt{M_0/M_2}$』，两项达到几何均值平衡，导出常数系数最优的 Landau-Kolmogorov 导数不等式。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            密切抛物包络与微分散斑极值平衡：用二次多项式拟合非线性局部曲面，一阶线性倾角误差与二阶弯曲残差随步长 $h$ 此消彼长，在鞍点极值处达到整体估计的最优紧致边界。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>展开点与步长设计</strong>：取定 $x$ 为中心，向正负两侧各展开一步 $f(x+h)$ 与 $f(x-h)$。</li><li><strong>最佳步长平衡术</strong>：对于 $A h + B/h$ 型不等式，取 $h = \sqrt{B/A}$ 达到均值不等式取等条件。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          $$f(x + h) = f(x) + f'(x)h + \frac{1}{2}f''(\xi)h^2 \implies f'(x) = \frac{f(x + h) - f(x)}{h} - \frac{1}{2}f''(\xi)h$$
+          利用三角不等式放大，最后选取使上界最小的最佳步长 $h$。
+        </div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：已知 $|f(x)| \le M_0$ 且 $|f''(x)| \le M_2$，证明 $|f'(x)| \le 2\sqrt{M_0 M_2}$</div>
+<ul class="example-steps">
+<li><strong>步骤 1（展开到 2 阶）</strong>：$f(x + h) = f(x) + f'(x)h + \frac{1}{2}f''(\xi)h^2$。</li>
+<li><strong>步骤 2（解出 $f'(x)$）</strong>：$f'(x) = \frac{f(x + h) - f(x)}{h} - \frac{1}{2}f''(\xi)h$。</li>
+<li><strong>步骤 3（不等式放大）</strong>：$|f'(x)| \le \frac{2M_0}{h} + \frac{M_2}{2}h$（注意：$h &gt; 0$ 可任意选取！）。</li>
+<li><strong>步骤 4（选最佳步长）</strong>：由均值不等式，取 $h = 2\sqrt{\frac{M_0}{M_2}}$ 时右端达最小值 $2\sqrt{M_0 M_2}$。证毕。</li>
+</ul>
+</div>
+</div>
+<!-- 6 -->
+<div class="method-card" data-keywords="Weierstrass M判别法 优级数 一致收敛 函数项级数 常数级数" data-tier="t1">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">06</span>
+<h3>Weierstrass M 判别法（优级数法）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t1">T1 核心</span>
+<span class="freq-tag">出题频度 78%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：赋范函数空间上的 $L^\infty$ 范数一致收敛完备性：常数级数的主导收敛强力压制全域函数项级数的范数柯西核。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              函数项级数 $\sum u_n(x)$ 一致收敛的本质是其在连续函数空间 $C(I)$ 中按上确界范数（Chebyshev 范数 $\|u_n\|_\infty = \sup_{x \in I} |u_n(x)|$）收敛。Weierstrass M-判别法要求存在常数序列 $M_n$ 使得对一切 $x$ 满足 $|u_n(x)| \le M_n$，且正项常数级数 $\sum M_n &lt; \infty$。其证明直接依据绝对值的三角不等式：$|\sum_{k=n+1}^{n+p} u_k(x)| \le \sum_{k=n+1}^{n+p} |u_k(x)| \le \sum_{k=n+1}^{n+p} M_k$。由于常数级数收敛满足实数柯西准则，右端尾数与 $x$ 无关地小于 $\varepsilon$，从而在全定义域上一致满足柯西准则！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            赋范代数空间中的绝对几何球收敛：将每一项函数约束在半径为 $M_n$ 的全域平行圆柱管内，圆柱管的总厚度累积有限，迫使函数列的包络带整体塌缩收敛至连续曲面。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>脱去变量束缚</strong>：通过求导或不等式放缩求出最大值 $M_n = \max_{x \in I} |u_n(x)|$。</li><li><strong>一致收敛的传递性</strong>：保证和函数继承各项的连续性、可微性与可积性。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          若对所有 $x \in I$ 恒有 $|u_n(x)| \le M_n$，且正项常数级数 $\sum_{n=1}^\infty M_n &lt; \infty$，则 $\sum_{n=1}^\infty u_n(x)$ 在 $I$ 上绝对且一致收敛。
+        </div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：证明 $\sum_{n=1}^\infty \frac{\sin(nx)}{n^2 + x^4}$ 在 $\mathbb{R}$ 上一致收敛</div>
+<ul class="example-steps">
+<li><strong>步骤 1（找常数上界）</strong>：$|\sin(nx)| \le 1$，且 $n^2 + x^4 \ge n^2$。故 $|u_n(x)| \le \frac{1}{n^2} = M_n$。</li>
+<li><strong>步骤 2（判常数敛散）</strong>：常数级数 $\sum_{n=1}^\infty \frac{1}{n^2}$ 为 $p = 2$ 的绝对收敛级数。</li>
+<li><strong>步骤 3（下结论）</strong>：由 Weierstrass M 判别法，原级数在全实数轴 $\mathbb{R}$ 上一致收敛。</li>
+</ul>
+</div>
+</div>
+<!-- 7 -->
+<div class="method-card" data-keywords="Stolz 离散洛必达 差分 数列极限 Cesaro" data-tier="t1">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">07</span>
+<h3>Stolz-Cesàro 定理（离散版洛必达法则）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t1">T1 核心</span>
+<span class="freq-tag">出题频度 70%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：差分算子对无穷累积比值的渐近控制：利用离散导数（后向差分）的极限决定累积总量的宏观增长率。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              Stolz 定理是微积分中洛必达法则在离散数列领域的纯代数对应。面对 $\frac{x_n}{y_n}$（其中 $y_n$ 严格单调趋于 $+\infty$），将总累积量分解为逐项差分 $\frac{x_n - x_{n-1}}{y_n - y_{n-1}}$。证明的精髓在于借助差分比值极限 $L$ 的 $\varepsilon$-逼近，对从某个分界点 $N$ 开始的各项建立局部不等式 $(L-\varepsilon)(y_k - y_{k-1}) &lt; x_k - x_{k-1} &lt; (L+\varepsilon)(y_k - y_{k-1})$。对这些差分项求和，内部节点伸缩抵消，转化为宏观比值，并在 $y_n \to \infty$ 时将早期有限初值项彻底稀释消解。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            离散折线轨迹在相平面上的斜率渐近线：两数列构成的参数多边形，其相邻折线段的割线斜率收敛于 $L$，宏观平均斜率最终渐近重合于折线增量斜率。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>分母单调递增至无穷</strong>：$y_n \uparrow +\infty$ 是保证分母差分非零且初项被稀释的前提。</li><li><strong>Cesàro 平均作为特例</strong>：令 $y_n = n$ 即导出著名的算术平均极限等于原序列极限。</li>
+</ul>
+</div>
+</div>
+<div class="math-block">
+          若 $b_n$ 严格单调递增且 $\lim_{n \to \infty} b_n = +\infty$，若：
+          $$\lim_{n \to \infty} \frac{a_n - a_{n-1}}{b_n - b_{n-1}} = L \implies \lim_{n \to \infty} \frac{a_n}{b_n} = L$$
+        </div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：求 $\lim_{n \to \infty} \frac{1^3 + 2^3 + \dots + n^3}{n^4}$</div>
+<ul class="example-steps">
+<li><strong>差分计算</strong>：$\frac{a_n - a_{n-1}}{b_n - b_{n-1}} = \frac{n^3}{n^4 - (n - 1)^4} = \frac{n^3}{4n^3 - 6n^2 + 4n - 1}$。</li>
+<li><strong>取极限</strong>：分子分母同除以 $n^3$，极限为 $\frac{1}{4}$。由 Stolz 定理原极限为 $\frac{1}{4}$。</li>
+</ul>
+</div>
+</div>
+<!-- 8 -->
+<div class="method-card" data-keywords="凸性 切线放缩 不等式 Jensen 均值不等式 支撑线" data-tier="t1">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">08</span>
+<h3>凸性切线放缩与基本不等式法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t1">T1 核心</span>
+<span class="freq-tag">出题频度 65%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：凸集分离超平面定理的一维投影：凸曲线图象处处位于切线支撑仿射流形上方，凸组合重心永远悬浮在弧线上方。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              下凸函数（二阶导 $f'' \ge 0$）的根本几何特征是其上方区域（超图 Epigraph）构成凸集。由泛函分析的 Hahn-Banach 分离定理，在凸图象上每一点必存在支撑超平面，反映到一元分析中即为经典的切线支撑线不等式 $f(x) \ge f(x_0) + f'(x_0)(x - x_0)$。将此不等式应用于凸组合，或者由数学归纳法证明 Jensen 不等式 $f(\sum \lambda_i x_i) \le \sum \lambda_i f(x_i)$，其代数本质就是质心在支撑超平面上的法向正投影偏序。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            凸壳重心的几何悬空性：曲线上有限个质点构成的多面体凸包完全包含在凸函数的超图内，其加权质量重心必定位于曲线上方对应坐标点的正上方。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>支撑线不等式构建</strong>：在切点 $x_0$ 处建立一阶仿射下界 $f(x) \ge f(x_0) + f'(x_0)(x - x_0)$。</li><li><strong>分析不等式统一母体</strong>：Jensen 不等式直接导出 AM-GM 均值不等式与 Hölder 不等式。</li>
+</ul>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-purple);">🧮 严密数学描述</div>
+<div class="math-block">
+          若 $f''(x) \ge 0$，则 $f(x) \ge f(x_0) + f'(x_0)(x - x_0)$。
+          <p>核心放缩不等式：$\ln(t) \le t - 1$（$t &gt; 0$）与 $e^t \ge 1 + t$。</p>
+</div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：用切线不等式证明算术-几何均值不等式 $\frac{a + b}{2} \ge \sqrt{ab}$</div>
+<ul class="example-steps">
+<li><strong>代换</strong>：令 $A = \frac{a + b}{2}$。由 $\ln(t) \le t - 1 \implies t \ge 1 + \ln(t)$。</li>
+<li><strong>代入求和</strong>：$\frac{a}{A} \ge 1 + \ln\frac{a}{A}$，$\frac{b}{A} \ge 1 + \ln\frac{b}{A}$。两式相加：$2 \ge 2 + \ln\frac{ab}{A^2} \implies \ln\frac{ab}{A^2} \le 0$。</li>
+<li><strong>得证</strong>：$A^2 \ge ab \implies \frac{a + b}{2} \ge \sqrt{ab}$。证毕。</li>
+</ul>
+</div>
+</div>
+<!-- 9 -->
+<div class="method-card" data-keywords="零点定理 介值定理 连续函数 二分法 根的存在性 不动点" data-tier="t1">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">09</span>
+<h3>零点存在定理与区间二分法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t1">T1 核心</span>
+<span class="freq-tag">出题频度 55%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：拓扑连通空间在连续映射下的连通象保真度：实数闭区间的连通性排除了跨越零点而不穿透核平面的可能。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明方程 $f(x) = 0$ 根的存在性的基础是 Bolzano 零点定理。其现代拓扑本质是：实数闭区间 $[a,b]$ 是连通空间。由连续映射的拓扑性质，连通集的连续象 $f([a,b])$ 必定也是连通空间。在实数轴上，唯一的连通子集是区间。既然象集包含负数 $f(a) &lt; 0$ 与正数 $f(b) &gt; 0$，该相空间区间必须包含连通闭包内的所有中间点，特别是零点 $0$！分析证明采用区间套二分法，将变号区间逐级折半，由 Cantor 闭区间套定理唯一锁定极限交点 $\xi$，由连续性迫使 $f(\xi) = 0$。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            连续轨迹对零界超平面的不可避免穿越：在连通实轴上运动的连续参数曲线，若起点与终点位于超平面的两侧，轨迹无法通过任何空间跳跃绕开超平面，必与超平面存在交点。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>连续象的连通性</strong>：实数连续统无孔洞性质在函数映射下的保真映射。</li><li><strong>二分法区间套锁定</strong>：$|b_n - a_n| = (b-a)/2^n \to 0$，单调有界与夹逼锁定唯一零点。</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- TIER 2 -->
+<div class="tier-section" data-tier="t2">
+<div class="section-title-wrap t2">
+<h2>🚀 第三梯队：T2 进阶分水岭（考查频度 20% ~ 50%）</h2>
+</div>
+<!-- 10 -->
+<div class="method-card" data-keywords="Abel变换 分部求和 Dirichlet 判别 条件收敛 三角级数" data-tier="t2">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">10</span>
+<h3>Abel 分部求和变换（Dirichlet / Abel 判别）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t2">T2 分水岭</span>
+<span class="freq-tag">出题频度 45%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：离散微积分中差分算子的对偶伴随转移：将交错项的求和分解为有界部分和与单调衰减因子的差分积。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              Abel 变换是定积分分部积分公式在离散序列上的严格代数镜像：$\sum_{k=1}^n a_k b_k = A_n b_n - \sum_{k=1}^{n-1} A_k (b_{k+1} - b_k)$（其中 $A_k = \sum_{j=1}^k a_j$）。面对剧烈振荡的正负交错项 $a_k$（如 $\sin kx$ 或 $(-1)^k$），直接求和由于缺乏绝对收敛性而发散；Abel 变换将求和焦点从 $a_k$ 转移到其部分和 $A_k$ 上。若 $A_k$ 有界（$|A_k| \le M$），而 $b_k$ 单调递减趋向零，差分项 $b_{k+1} - b_k$ 恒同号，使得右侧残余和绝对收敛，直接确立 Dirichlet/Abel 级数判别法的收敛基石。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            双线性型在离散对偶基底上的正交分解：将非绝对收敛的交错向量投影到单调递减坐标轴上，振荡分量被正交对消吸收。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>裂项求和核心恒等式</strong>：$a_k = A_k - A_{k-1}$ 代入展开重组指标。</li><li><strong>Dirichlet 判别法核心</strong>：部分和 $A_n$ 有界结合 $b_n$ 单调趋于 0。</li>
+</ul>
+</div>
+</div>
+<div class="math-block">
+          $$\sum_{k=1}^n a_k b_k = A_n b_n - \sum_{k=1}^{n-1} A_k (b_{k+1} - b_k)$$
+          <ul>
+<li><strong>Dirichlet 判别法</strong>：部分和 $A_n$ 有界，$b_n$ 单调趋于 $0 \implies \sum a_n b_n$ 收敛。</li>
+<li><strong>Abel 判别法</strong>：$\sum a_n$ 收敛，$b_n$ 单调有界 $\implies \sum a_n b_n$ 收敛。</li>
+</ul>
+</div>
+</div>
+<!-- 11 -->
+<div class="method-card" data-keywords="Heine 归结原则 双点列 极限不存在 振荡间断点" data-tier="t2">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">11</span>
+<h3>Heine 归结原则（双点列否证极限）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t2">T2 分水岭</span>
+<span class="freq-tag">出题频度 42%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：连续拓扑极限与离散可数收敛子列的等价性映射：选取两条相空间不同方向的离散探针提取矛盾极限值。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              Heine 归结原理断言：$\lim_{x \to x_0} f(x) = L$ 充要于对任意满足 $x_n \to x_0$（$x_n \ne x_0$）的数列，都有 $f(x_n) \to L$。该原理在否定极限存在时展现出无与伦比的实战杀伤力：要证明某个极限不存在，只需构造两条不同的趋向 $x_0$ 的离散点列 $\{x_n\}$ 与 $\{y_n\}$，证明它们映射出的函数值极限不相等 $\lim f(x_n) \ne \lim f(y_n)$，即可由反证法彻底击溃极限存在的假定。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            各向异性相轨道的终点分离：两条从不同相空间角度滑向奇点的测试轨迹，输出因变量在几何终点处分道扬镳，揭示了奇点处的拓扑非退化断裂。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>双探针取点模板</strong>：对于 $\sin(1/x)$，取 $x_n = \frac{1}{2n\pi}$（值为 0）与 $y_n = \frac{1}{2n\pi + \pi/2}$（值为 1）。</li><li><strong>反证法逻辑自洽</strong>：由离散子列极限相异，瞬间击溃全域连续极限假定。</li>
+</ul>
+</div>
+</div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：证明 $\lim_{x \to 0} \sin(1/x)$ 不存在</div>
+<ul class="example-steps">
+<li><strong>点列 1</strong>：取 $x_n = \frac{1}{n\pi} \to 0$，则 $\sin(1/x_n) = \sin(n\pi) = 0 \to 0$。</li>
+<li><strong>点列 2</strong>：取 $y_n = \frac{1}{2n\pi + \pi/2} \to 0$，则 $\sin(1/y_n) = 1 \to 1$。</li>
+<li><strong>结论</strong>：两子列极限值不等（$0 \ne 1$），由 Heine 归结原则极限不存在。</li>
+</ul>
+</div>
+</div>
+<!-- 12 -->
+<div class="method-card" data-keywords="Bolzano Weierstrass 致密性定理 收敛子列 有界数列 紧性" data-tier="t2">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">12</span>
+<h3>Bolzano-Weierstrass 致密性定理（子列紧性法）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t2">T2 分水岭</span>
+<span class="freq-tag">出题频度 38%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：欧氏紧致立方体网格拓扑密度累积：无穷集合在有界闭区域内的测度约束迫使极限点必在其内部凝聚。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              实数系完备性的几何体现：任何有界数列必定包含收敛子列。其证明本质是高维二分网格追踪法：设数列落在闭区间 $[a, b]$ 内。将区间平分为两个子区间，因为项数有可数无穷多个，由抽屉原理，至少有一个子区间包含无穷多项。保留该区间并继续二分，构造出满足包含关系的 Cantor 闭区间套 $\{I_k\}$，其长度 $(b-a)/2^k \to 0$。由区间套定理，这串闭区间的唯一公共交点就是凝聚点 $\xi$。在每个区间 $I_k$ 内各取一项，即构造出收敛到 $\xi$ 的子列。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            无穷质点在有界空间内的引力凝聚：在紧致有限体积内塞入无穷多个互不重合的粒子，由于体积排斥限制，粒子必然在某些局域几何微元周围呈现无限密度累积，形成拓扑聚点。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>二分法与抽屉原理联动</strong>：保证每一步子区间内驻留无穷多项。</li><li><strong>Cantor 闭区间套定理闭环</strong>：$\bigcap_{k=1}^\infty I_k = \{\xi\}$ 锁定唯一收敛极限点。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 13 -->
+<div class="method-card" data-keywords="第二积分中值定理 Bonnet 单调因子 强振荡 反常积分 Dirichlet积分" data-tier="t2">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">13</span>
+<h3>第二积分中值定理（提取单调因子）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t2">T2 分水岭</span>
+<span class="freq-tag">出题频度 32%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：有界变差测度在凸核上的平均值投影：分部积分伴随转移结合连续函数介值定理，将单调阻尼项提出积分号。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              处理反常积分（如 Fresnel 积分、Dirichlet 积分）条件收敛的最关键工具。定理指出：若 $f$ 可积且 $g$ 在区间上单调递减且非负，则存在 $\xi$ 使得 $\int_a^b f(x)g(x)\,\mathrm{d}x = g(a)\int_a^\xi f(x)\,\mathrm{d}x$。证明先将 $g$ 视作变差微分测度 $\mathrm{d}g$，由分部积分法将积分转化为对变上限原函数 $F(x) = \int_a^x f$ 关于单调测度 $\mathrm{d}g$ 的平均值；由 $g'$ 保号性触发积分第一中值定理，直接将 $F$ 在中值点 $\xi$ 处捕获。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            振荡相位积分在单调阻尼核下的凸包投影：单调衰减因子 $g$ 构成了紧致的单调测度权重，振荡函数的变上限积分在此权重下被完全约束在中值截断点 $\xi$ 处。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>分部积分伴随转移</strong>：$\int fg = Fg - \int F g'$ 建立原函数与导数积的联系。</li><li><strong>$g'$ 恒保号性</strong>：允许对非负测度应用连续函数的介值定理锁定中值点 $\xi$。</li>
+</ul>
+</div>
+</div>
+<div class="math-block">
+          $$\int_a^b f(x)g(x)dx = g(a^+) \int_a^\xi f(x)dx \quad (g \ge 0 \text{ 且单调减})$$
+        </div>
+</div>
+<!-- 14 -->
+<div class="method-card" data-keywords="含参变量积分 Feynman 积分技巧 积分号下求导 狄利克雷积分" data-tier="t2">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">14</span>
+<h3>含参变量积分求导法（Feynman 积分技巧）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t2">T2 分水岭</span>
+<span class="freq-tag">出题频度 28%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：无穷维光滑流形上的偏导算子与积分算子可交换性：引入可变外加参数，利用微分方程求解定积分。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              许多定积分（如 $\int_0^\infty \frac{\sin x}{x}\mathrm{d}x$ 或 Poisson 积分）无法直接找到初等原函数。分析学的破局高招是构造含参变量积分 $I(\alpha) = \int_0^\infty e^{-\alpha x}\frac{\sin x}{x}\mathrm{d}x$。利用 Leibniz 积分符号下求导法则，在一致收敛条件下将导数穿透积分号：$I'(\alpha) = -\int_0^\infty e^{-\alpha x}\sin x\mathrm{d}x = -\frac{1}{1+\alpha^2}$！此时复杂积分瞬间化为简单的初等微积分方程，积分回代得到 $I(\alpha) = C - \arctan \alpha$；代入 $\alpha \to +\infty$ 确定常数 $C = \pi/2$，令 $\alpha \to 0^+$ 瞬间攻克原积分！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            积分流形在参数空间中的微分切映射：将静止的几何面积嵌入一个一维连续演化的参数曲线族中，通过测量该流形沿参数方向的瞬时变化率，还原原流形的总体积。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>参数积分核构造</strong>：引入衰减因子 $e^{-\alpha x}$ 改善无穷远处的收敛性。</li><li><strong>微分算子与积分算子交换条件</strong>：依赖于导函数积分的一致收敛性。</li>
+</ul>
+</div>
+</div>
+<div class="example-block">
+<div class="example-title">📝 经典实战拆解：计算 $\int_0^\infty \frac{\sin x}{x} dx$</div>
+<ul class="example-steps">
+<li><strong>设含参积分</strong>：$I(t) = \int_0^\infty e^{-tx} \frac{\sin x}{x} dx$。当 $t=0$ 时为所求。</li>
+<li><strong>求导削分母</strong>：$I'(t) = -\int_0^\infty e^{-tx} \sin x dx = -\frac{1}{1 + t^2}$。</li>
+<li><strong>积分回弹</strong>：$I(t) = -\arctan(t) + C$。令 $t \to +\infty \implies 0 = -\frac{\pi}{2} + C \implies C = \frac{\pi}{2}$。</li>
+<li><strong>得值</strong>：$I(0) = \frac{\pi}{2}$。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- TIER 3 -->
+<div class="tier-section" data-tier="t3">
+<div class="section-title-wrap t3">
+<h2>👑 第四梯队：T3 专题与压轴（考查频度 5% ~ 20%）</h2>
+</div>
+<!-- 15 -->
+<div class="method-card" data-keywords="Heine Borel 有限覆盖 开覆盖 紧集 Cantor定理 一致连续" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">15</span>
+<h3>Heine-Borel 有限覆盖定理（局部拓广法）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 18%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：拓扑紧致性的公理化表达：全域无限开覆盖必能提纯为有限子覆盖，紧集内一致存在局部度量安全半径 Lebesgue 数。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              为什么闭区间 $[a,b]$ 上的连续函数一定一致连续？因为闭区间是紧集。设对每个点 $x$，根据连续性存在局域微小开邻域 $U_x$ 使得振幅小于 $\varepsilon$。全体 $\{U_x\}$ 构成了闭区间的一个无穷开覆盖。由 Heine-Borel 定理，必定能从中挑出有限个开区间 $U_1, \dots, U_m$ 依然完全覆盖 $[a,b]$！在有限个开区间覆盖的度量空间中，必定存在一个统一的正实数 $\lambda &gt; 0$（Lebesgue 数），使得任何直径小于 $\lambda$ 的小集合必完全落在某一个单一的 $U_k$ 内部，从而将局部性质直接跃升为全局一致性质。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            紧致曲面的有限多边形剖分：紧致流形排除了无限碎裂与边界逃逸，任何连续的局部拓扑信息都可以通过有限张局域坐标卡（有限子覆盖）完整重组。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>无限向有限的跃迁</strong>：开覆盖公理消除了无穷分析中的点态不均匀性。</li><li><strong>Lebesgue 覆盖引理</strong>：存在统一安全尺度 $\delta$，保证任意小区间不发生跨区域震荡。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 16 -->
+<div class="method-card" data-keywords="上下极限 lim sup lim inf 夹逼 振荡数列 收敛半径" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">16</span>
+<h3>上下极限（lim sup / lim inf）夹逼法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 16%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：振荡有界轨道的终极包络夹逼：上极限是最大聚点，下极限是最小聚点，上下极限重合是极限存在的充要测度条件。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              对于剧烈上下跳跃没有单调性的数列，直接求极限往往失效。但由实数完备性，数列的尾部上确界序列 $S_n = \sup_{k \ge n} x_k$ 随 $n$ 增大必定单调不增，其极限必存在，称为上极限 $\limsup x_n$；尾部下确界序列 $I_n = \inf_{k \ge n} x_k$ 单调不减，其极限为下极限 $\liminf x_n$。上下极限构成了数列振荡波形雷打不动的顶板与底板。定理确证：$\lim x_n = L \iff \limsup x_n = \liminf x_n = L$。通过从外部施加不等式放缩分别证明 $\limsup x_n \le L$ 与 $\liminf x_n \ge L$，即可将振荡数列夹逼锁定。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            相轨迹在无穷远处的吸引子截面测度坍缩：数列在无穷远处的全部聚点集合被封闭在区间 $[\liminf x_n, \limsup x_n]$ 内。当上下极限重合时，紧致吸引子区间测度收缩为单点。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>尾部确界的单调性</strong>：尾部排除有限项后，上确界单调递减，下确界单调递增。</li><li><strong>极限存在的充要准则</strong>：$\limsup x_n = \liminf x_n = L$ 彻底替代了传统的 $\varepsilon-N$ 证明。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 17 -->
+<div class="method-card" data-keywords="压缩映射 不动点 Banach 迭代法 唯一性" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">17</span>
+<h3>压缩映射原理与不动点迭代法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 14%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：完备度量空间上的自同态几何收缩：压缩算子生成以几何级数收敛的柯西轨道，唯一收敛到全局不动点。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明方程 $x = T(x)$ 解的存在唯一性。若算子 $T$ 满足压缩条件 $d(T(x), T(y)) \le k d(x, y)$（$0 &lt; k &lt; 1$）。任取初值 $x_0$，迭代点列满足 $d(x_{n+1}, x_n) \le k^n d(x_1, x_0)$。由于公比 $k &lt; 1$ 的等比级数收敛，三角不等式直接确立点列 $\{x_n\}$ 是度量空间中的柯西序列！由空间的完备性，点列必收敛于某点 $x^*$。对递推式取极限得 $x^* = T(x^*)$，不动点存在；唯一性由反证法与 $d(x^*, y^*) \le k d(x^*, y^*)$ 导出距离为零而证毕。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            仿射几何空间的均匀各向同性收缩：每一次变换将整个度量空间的几何直径按比例 $k$ 进行各向同性缩小，闭球套定理保证收缩中心唯一。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>等比数列公比受控</strong>：利用公比 $k &lt; 1$ 导出柯西序列性 $d(x_{n+p}, x_n) \le \frac{k^n}{1-k}d(x_1, x_0) \to 0$。</li><li><strong>度量空间完备性闭环</strong>：柯西列必收敛保证不动点存在性，压缩性保证唯一性。</li>
+</ul>
+</div>
+</div>
+<div class="math-block">
+          $$|T(x) - T(y)| \le k |x - y| \quad (0 &lt; k &lt; 1) \implies \exists! x^* \text{ 使得 } T(x^*) = x^*$$
+        </div>
+</div>
+<!-- 18 -->
+<div class="method-card" data-keywords="Riemann Lebesgue 振荡相消 Fourier 傅里叶 高频极限" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">18</span>
+<h3>Riemann-Lebesgue 振荡相消引理</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 12%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：傅里叶变换的相空间高频衰减：可积函数与无穷高频谐波因子的卷积在半周期对称相消下趋于零。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              求解极限 $\lim_{\lambda \to \infty} \int_a^b f(x)\sin(\lambda x)\,\mathrm{d}x = 0$。其几何物理本质是破坏性相干干涉：作半周期平移换元 $x = t + \frac{\pi}{\lambda}$，因为 $\sin(\lambda t + \pi) = -\sin(\lambda t)$，积分变为原式的相反数。将原积分写为平移前后的平均值：$\frac{1}{2}\int [f(x) - f(x+\frac{\pi}{\lambda})]\sin(\lambda x)\,\mathrm{d}x$。当 $\lambda \to \infty$ 时，平移步长 $\pi/\lambda \to 0$，利用函数在紧区间上的连续性（或用阶梯函数逼近 $L^1$ 空间），被积函数的差分在全域积分范数下收敛到零！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            高频载波相位的正负极性完全对称相消：波形频率趋于无穷大时，微元区间内密集填充了无限多个正半周与负半周，在连续权重的平滑调制下，相邻微正面积与微负面积自发完全对消。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>半周期平移反相技巧</strong>：令 $x = t + \pi/\lambda$ 构造符号相反的等价积分。</li><li><strong>$L^1$ 空间的连续模衰减</strong>：利用 $\lim_{h \to 0} \int |f(x+h) - f(x)|\mathrm{d}x = 0$ 确立极限为零。</li>
+</ul>
+</div>
+</div>
+<div class="math-block">
+          $$\lim_{\lambda \to \infty} \int_a^b f(x) \sin(\lambda x) dx = 0$$
+        </div>
+</div>
+<!-- 19 -->
+<div class="method-card" data-keywords="逼近论 3-ε 阶梯函数 多项式逼近 Weierstrass逼近" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">19</span>
+<h3>逼近论思想（3-$\varepsilon$ 阶梯/多项式逼近）</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 10%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：泛函分析中的稠密集逼近技术：在光滑稠密子空间（如多项式或阶梯函数）上完成运算，借助稠密性将结论延拓至全空间。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              证明一般可积函数或连续函数的复杂性质时，直接在全空间证明往往遇到非平滑障碍。标准技巧是利用稠密性：在函数空间中，阶梯函数或光滑多项式在 $L^1$ 或 $C(I)$ 范数下是稠密的。对任意 $\varepsilon &gt; 0$，选取一个结构极简的阶梯函数 $g$ 满足 $\|f - g\| &lt; \varepsilon/3$；利用其简单台阶性质完成核心代数推演（误差 $&lt; \varepsilon/3$）；最后再由范数连续性倒回目标状态（误差 $&lt; \varepsilon/3$）。三角不等式合并三个 $\varepsilon/3$，结论以绝对严谨性拓展到全体函数！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            度量空间的拓扑闭包延拓：在易于解析计算的稠密子流形上建立规律，借助连续算子保范数极限的性质，将几何真理无缝推广到整个完备闭包空间。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>Weierstrass 逼近定理</strong>：多项式在闭区间连续函数空间中按一致范数稠密。</li><li><strong>3-$\varepsilon$ 误差分拆三角不等式</strong>：$\|T(f) - L\| \le \|T(f) - T(g)\| + \|T(g) - L'\| + \|L' - L\|$。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 20 -->
+<div class="method-card" data-keywords="Cantor对角线 紧性 Arzela-Ascoli 子列抽取 稠密集" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">20</span>
+<h3>Cantor 对角线抽取法</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 8%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：双重可数序列的对角紧致性提纯：通过对可数稠密集逐点提取子列，构造全域逐点收敛的对角线子序列。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              在函数族中抽取收敛子列（如证明 Ascoli-Arzelà 定理或实数不可数性）的最高技巧。设有可数稠密集 $\{q_1, q_2, \dots\}$。在第一个点 $q_1$ 处提取收敛子列 $f_{1,n}$；在该子列内部继续在 $q_2$ 处提取子列 $f_{2,n}$；以此类推得到无穷嵌套矩阵。取其主对角线序列 $g_n = f_{n,n}$。由于对任意固定指标 $k$，当 $n \ge k$ 时 $g_n$ 都是第 $k$ 行子列的后续成员，因此对角线序列在每一个点 $q_k$ 处都能同时保证收敛！
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            无穷维相空间矩阵中对角矢量的遍历提取：利用可数步逐层过滤，主对角线路径在无穷状态空间中同时穿透所有可数基准点的投影收敛域。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>逐点紧致性到全局对角线抽取</strong>：在稠密集 $\mathbb{Q} \cap [a,b]$ 上逐点应用 Bolzano-Weierstrass 定理。</li><li><strong>对角线项继承前序收敛性</strong>：$g_n = f_{n,n}$ 对任意固定 $k$ 属于第 $k$ 阶子列的尾部。</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- 21 -->
+<div class="method-card" data-keywords="Darboux 导数介值定理 间断点 第一类间断点 Fermat引理" data-tier="t3">
+<div class="card-top">
+<div class="card-title-group">
+<span class="card-num">21</span>
+<h3>Darboux 导数介值定理</h3>
+</div>
+<div class="meta-badges">
+<span class="tier-badge t3">T3 压轴</span>
+<span class="freq-tag">出题频度 6%</span>
+</div>
+</div>
+<div class="block-label" style="color: var(--accent-blue);">💡 大白话通俗理解</div>
+<div class="layman-block">
+<div class="layman-motto">一句话精髓：导函数连通象性质与 Fermat 极值引理结合：即便导函数处处不连续，导数向量场也绝无跳跃间断点。</div>
+<div class="layman-sub">
+<strong class="sub-title">大白话版：</strong>
+<blockquote>
+              许多人误以为只有连续函数才拥有介值性质。Darboux 定理石破天惊地证明：任何可导函数的导函数 $f'(x)$，即便自身是不连续函数，也必定满足介值定理（即若 $f'(a) &lt; k &lt; f'(b)$，必存在 $\xi$ 使 $f'(\xi) = k$）！其证明极其优雅地规避了导数的连续性：构造辅助函数 $g(x) = f(x) - kx$。因为 $f$ 在闭区间上可导必连续，辅助函数 $g(x)$ 必连续，由最值定理必在 $[a,b]$ 上取得最小值。由 $g'(a) &lt; 0$ 知 $a$ 不是最小值点，由 $g'(b) &gt; 0$ 知 $b$ 不是最小值点。最小值必定在开区间内部取得！内部极值点直接套用 Fermat 引理（定理 5.1.1），$g'(\xi) = f'(\xi) - k = 0 \implies f'(\xi) = k$！由此还导出了著名推论：导函数绝不可能出现第一类间断点（跳跃或可去间断点）。
+            </blockquote>
+</div>
+<div class="layman-sub">
+<strong class="sub-title">形象理解：</strong>
+            势函数倾斜投影的内部极值驻留：将导函数与水平基线的偏差转化为辅助势能曲线的倾斜，端点的倾斜符号保证了能量最低点无法停留在边界，内部极值驻点的水平切线直接产生介值导数。
+          </div>
+<div class="layman-sub">
+<strong class="sub-title">核心关键点：</strong>
+<ul>
+<li><strong>辅助函数倾斜构造</strong>：$g(x) = f(x) - kx$，将导数值等于 $k$ 转化为驻点导数等于 0。</li><li><strong>最值必在开区间内部取得</strong>：单侧导数异号排除端点极值，触发 Fermat 引理 $g'(\xi) = 0$。</li><li><strong>重大推论</strong>：导函数绝无第一类间断点，若有间断点必为本质振荡间断点。</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Reference Matrix -->
+<div style="margin-top: 3.5rem;">
+<h2 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent-blue);">🧭 考场秒杀反射表</h2>
+<table class="quick-table">
+<thead>
+<tr>
+<th>题目字眼 / 待证特征</th>
+<th>第一反射套路</th>
+<th>备用第二反射套路</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>证递推数列极限存在</strong></td>
+<td><strong>单调有界收敛定理</strong>（归纳法）</td>
+<td>压缩映射原理（不动点）</td>
+</tr>
+<tr>
+<td><strong>证极限不存在 / 非一致连续</strong></td>
+<td><strong>反设 $\exists \varepsilon_0$，令 $\delta = 1/n$ 取点列</strong></td>
+<td>Heine 归结原则（取双子列）</td>
+</tr>
+<tr>
+<td><strong>式中含 $f'(\xi)$ 与 $f(\xi)$ 线性组合</strong></td>
+<td><strong>常微分方程积分因子法</strong>逆推原函数</td>
+<td>Cauchy 中值定理</td>
+</tr>
+<tr>
+<td><strong>式中出现高阶导数 $f''(\xi)$</strong></td>
+<td><strong>关键点处带余项的 Taylor 展开</strong></td>
+<td>两次使用 Rolle 定理</td>
+</tr>
+<tr>
+<td><strong>和式比值极限 $(\sum a_k) / b_n$</strong></td>
+<td><strong>Stolz-Cesàro 定理</strong>（离散洛必达）</td>
+<td>定积分 Riemann 和</td>
+</tr>
+<tr>
+<td><strong>函数项级数一致收敛</strong></td>
+<td><strong>Weierstrass M 判别法</strong>（找常数上界）</td>
+<td>Dirichlet / Abel 判别法</td>
+</tr>
+<tr>
+<td><strong>反常积分快速正负振荡</strong></td>
+<td><strong>第二积分中值定理</strong>提单调因子</td>
+<td>Dirichlet 判别法</td>
+</tr>
+<tr>
+<td><strong>闭区间连续函数证有界/最值</strong></td>
+<td><strong>反证法 + Bolzano-Weierstrass 致密性</strong></td>
+<td>Heine-Borel 有限覆盖定理</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<button class="toc-modal-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ↑ 返回顶部
+  </button>
+<script>
+    function filterTier(tier, btn) {
+      document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+
+      const sections = document.querySelectorAll('.tier-section');
+      const cards = document.querySelectorAll('.method-card');
+
+      if (tier === 'all') {
+        sections.forEach(s => s.style.display = 'block');
+        cards.forEach(c => c.style.display = 'block');
+      } else {
+        sections.forEach(s => {
+          if (s.getAttribute('data-tier') === tier) {
+            s.style.display = 'block';
+          } else {
+            s.style.display = 'none';
+          }
+        });
+        cards.forEach(c => {
+          if (c.getAttribute('data-tier') === tier) {
+            c.style.display = 'block';
+          } else {
+            c.style.display = 'none';
+          }
+        });
+      }
+    }
+
+    function handleSearch() {
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.method-card');
+      const sections = document.querySelectorAll('.tier-section');
+
+      if (!q) {
+        document.querySelectorAll('.filter-pill')[0].click();
+        return;
+      }
+
+      sections.forEach(s => s.style.display = 'block');
+      cards.forEach(card => {
+        const text = (card.textContent + ' ' + (card.getAttribute('data-keywords') || '')).toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

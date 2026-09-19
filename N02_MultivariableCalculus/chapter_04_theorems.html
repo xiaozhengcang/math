@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第四章 · 导数与微分 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill current-ch">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (9)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-4-1-1" class="toc-link" title="定理 4.1.1 一元函数可微与可导等价定理">定理 4.1.1 一元函数可微与可导等价定理</a></li>
+<li><a href="#thm-4-3-1" class="toc-link" title="定理 4.3.1 导数的线性运算法则">定理 4.3.1 导数的线性运算法则</a></li>
+<li><a href="#thm-4-3-2" class="toc-link" title="定理 4.3.2 导数的乘积求导法则 (Leibniz 乘积法则)">定理 4.3.2 导数的乘积求导法则 (Leibniz 乘积法则)</a></li>
+<li><a href="#thm-4-3-3" class="toc-link" title="定理 4.3.3 导数的倒数求导法则">定理 4.3.3 导数的倒数求导法则</a></li>
+<li><a href="#thm-4-3-cor" class="toc-link" title="推论 导数的商求导法则">推论 导数的商求导法则</a></li>
+<li><a href="#thm-4-3-4" class="toc-link" title="定理 4.3.4 反函数求导定理">定理 4.3.4 反函数求导定理</a></li>
+<li><a href="#thm-4-4-1" class="toc-link" title="定理 4.4.1 复合函数求导法则 (链式法则 Chain Rule)">定理 4.4.1 复合函数求导法则 (链式法则 Chain Rule)</a></li>
+<li><a href="#thm-4-5-1" class="toc-link" title="定理 4.5.1 高阶导数的线性运算法则">定理 4.5.1 高阶导数的线性运算法则</a></li>
+<li><a href="#thm-4-5-2" class="toc-link" title="定理 4.5.2 乘积的高阶导数公式 (Leibniz 公式)">定理 4.5.2 乘积的高阶导数公式 (Leibniz 公式)</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 04</span>
+        <span class="ch-count-badge">共收录 9 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第四章 · 导数与微分</h1>
+      <p class="ch-desc-text">导数与微分等价性、求导四则运算法则、反函数/复合函数求导与 Leibniz 公式</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-4-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.1.1 一元函数可微与可导等价定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">可微性</span><span class="thm-tag">可导性</span><span class="thm-tag">一维切空间</span><span class="thm-tag">局部线性化</span>
+      </div>
+    </div>
+    <a href="#thm-4-1-1" class="anchor-btn" title="复制锚点链接"># 定理 4.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.1.1</span>
+函数 $y = f(x)$ 在 $x$ 处可微的充分必要条件是它在 $x$ 处可导.
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 充分必要性分别证明如下：</p>
+<p><strong>必要性（可微 $\implies$ 可导）：</strong> 若 $f(x)$ 在 $x$ 处可微，则由定义 4.1.1，其自变量增量与因变量增量满足关系式：</p>
+$$\Delta y = A\Delta x + o(\Delta x),$$
+<p>其中 $A = g(x)$ 与 $\Delta x$ 无关。两边同时除以 $\Delta x \ (\Delta x \ne 0)$，得到差商表达式：</p>
+$$\frac{\Delta y}{\Delta x} = A + \frac{o(\Delta x)}{\Delta x}.$$
+<p>因为当 $\Delta x \to 0$ 时，$\dfrac{o(\Delta x)}{\Delta x} \to 0$，所以令 $\Delta x \to 0$ 取极限，得到：</p>
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = A.$$
+<p>由导数的定义 4.1.2，极限存在即表明 $f(x)$ 在 $x$ 处可导，并且导数值恰好为 $f'(x) = A$。</p>
+<p><strong>充分性（可导 $\implies$ 可微）：</strong> 反过来，若 $f(x)$ 在 $x$ 处可导，由定义 4.1.2，差商极限存在：</p>
+$$\lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = f'(x), \quad \text{即} \quad \lim_{\Delta x \to 0}\left[\frac{\Delta y}{\Delta x} - f'(x)\right] = 0.$$
+<p>由无穷小量与极限的关系，有 $\dfrac{\Delta y}{\Delta x} - f'(x) = o(1)$，两边同乘以 $\Delta x$，即得到：</p>
+$$\Delta y - f'(x)\Delta x = o(1)\cdot\Delta x = o(\Delta x), \quad \text{即} \quad \Delta y = f'(x)\Delta x + o(\Delta x).$$
+<p>由定义 4.1.1，函数 $f(x)$ 在 $x$ 处可微，并且其微分就是 $\mathrm{d}y = f'(x)\mathrm{d}x$. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一维切空间的一阶结构由单一标量唯一确定：导数是局部切线的几何斜率，微分是其对应的线性切映射，二者是一阶线性逼近的一体两面。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在一元函数中，『可导』考察的是割线斜率的极限（差商极限 $\Delta y / \Delta x \to f'$）；『可微』考察的是增量的局部仿射逼近（$\Delta y = A \Delta x + o(\Delta x)$）。两者等价的本质原因在于一维实数轴上自由度只有 1，切空间是一维直线，任何过原点的线性映射 $T(h) = Ah$ 必定完全由单个常数 $A$ 唯一决定。将增量方程除以 $\Delta x$ 即为差商极限，将差商方程乘以 $\Delta x$ 即为微分展开式。注意：这一等价性仅在一元微积分中成立；多元微积分中各偏导数存在并不足以保证切平面的全方位良好逼近，偏导存在不蕴含可微！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      仿射切空间的显微逼近：把平滑曲线在点 $(x_0, f(x_0))$ 处在显微镜下无限放大，曲率导致的二阶弯曲被高阶无穷小 $o(\Delta x)$ 迅速吸收压制，曲线在极微邻域内等同于一条倾斜直线 $y - y_0 = f'(x_0)(x - x_0)$。微分 $\mathrm{d}y = f'(x_0)\Delta x$ 是切线上的高度净位移，真实曲线高度 $\Delta y$ 与切线高度的差值以高于一阶的速度趋于零。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>无穷小形式转化：由极限与无穷小关系 $\frac{\Delta y}{\Delta x} - f'(x) = \alpha(\Delta x) \to 0$，两边同乘以 $\Delta x$ 得到残差项 $\alpha \Delta x = o(\Delta x)$。</li><li>线性主部的唯一性：微分中的线性项 $f'(x_0)\Delta x$ 称为增量的线性主部，导数 $f'(x_0)$ 充当了线性算子的系数标量。</li><li>一元与多元的分水岭：一元切空间为一维，单向导数即可锁死线性映射；多元切空间多维，必须要求所有方向上的割线一致贴合切平面。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.3.1 导数的线性运算法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">线性运算法则</span><span class="thm-tag">线性微分算子</span><span class="thm-tag">差商线性分解</span>
+      </div>
+    </div>
+    <a href="#thm-4-3-1" class="anchor-btn" title="复制锚点链接"># 定理 4.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.3.1</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，则对任意常数 $c_1$ 和 $c_2$，它们的线性组合 $c_1f(x) + c_2g(x)$ 也在该区间上可导，且满足如下的线性运算关系
+$$[c_1f(x) + c_2g(x)]' = c_1f'(x) + c_2g'(x).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+由 $f(x)$ 和 $g(x)$ 的可导性，根据导数的定义，可得
+$$\begin{aligned}
+[c_1f(x) + c_2g(x)]' &amp;= \lim_{\Delta x \to 0}\frac{[c_1f(x + \Delta x) + c_2g(x + \Delta x)] - [c_1f(x) + c_2g(x)]}{\Delta x}\\
+&amp;= c_1 \cdot \lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x} + c_2 \cdot \lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x}\\
+&amp;= c_1f'(x) + c_2g'(x).
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 求导算子是函数向量空间上的线性自同态，完全保持向量加法与标量数乘结构。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      导数运算 $D = \frac{\mathrm{d}}{\mathrm{d}x}$ 作用于函数时具有完美的线性保真性：常数系数可以任意穿透算子提出，加减运算可逐项分离。其证明本质就是极限算子的线性性在差商上的投射：$[c_1 f + c_2 g]$ 的差商天然分解为 $c_1$ 倍 $f$ 的差商加上 $c_2$ 倍 $g$ 的差商。极限运算对有限项线性组合保运算，极限拆解后直接化为各自的导数线性组合。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      切向量场的线性加权叠加：在几何上，将曲线 $y = f(x)$ 与 $y = g(x)$ 沿垂直方向按权重系数 $c_1, c_2$ 叠加。在任意给定横坐标处，合成曲线的切向量 $(1, [c_1 f + c_2 g]')$ 就是各自切向量 $(1, f')$ 与 $(1, g')$ 在切相空间中的仿射加权合成 $(1, c_1 f' + c_2 g')$。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>微分算子的代数结构：$D(c_1 f + c_2 g) = c_1 Df + c_2 Dg$，确立了可导函数集构成实数域上的向量空间，求导是其上的线性算子。</li><li>差商无损线性分解：$\frac{(c_1 f + c_2 g)(x+\Delta x) - (c_1 f + c_2 g)(x)}{\Delta x} = c_1\frac{f(x+\Delta x)-f(x)}{\Delta x} + c_2\frac{g(x+\Delta x)-g(x)}{\Delta x}$。</li><li>极限分配律的严格使用：依赖于分项极限各自独立存在。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.3.2 导数的乘积求导法则 (Leibniz 乘积法则)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">Leibniz 乘积法则</span><span class="thm-tag">双线性变化率</span><span class="thm-tag">交错项拆分</span><span class="thm-tag">连续性过渡</span>
+      </div>
+    </div>
+    <a href="#thm-4-3-2" class="anchor-btn" title="复制锚点链接"># 定理 4.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.3.2</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，则它们的积函数也在该区间上可导，且满足
+$$[f(x) \cdot g(x)]' = f'(x)g(x) + f(x)g'(x);$$
+相应的微分表达式为
+$$\mathrm{d}[f(x) \cdot g(x)] = g(x)\mathrm{d}[f(x)] + f(x)\mathrm{d}[g(x)].$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+因为
+$$\frac{f(x + \Delta x) \cdot g(x + \Delta x) - f(x) \cdot g(x)}{\Delta x}$$
+$$= \frac{[f(x + \Delta x) \cdot g(x + \Delta x) - f(x + \Delta x) \cdot g(x)] + [f(x + \Delta x) \cdot g(x) - f(x) \cdot g(x)]}{\Delta x}$$
+$$= f(x + \Delta x)\frac{g(x + \Delta x) - g(x)}{\Delta x} + g(x)\frac{f(x + \Delta x) - f(x)}{\Delta x},$$
+由 $f(x)$ 和 $g(x)$ 的可导性（显然 $f(x)$ 也具有连续性），即可得到
+$$\begin{aligned}
+[f(x) \cdot g(x)]' &amp;= \lim_{\Delta x \to 0}\frac{f(x + \Delta x) \cdot g(x + \Delta x) - f(x) \cdot g(x)}{\Delta x}\\
+&amp;= \lim_{\Delta x \to 0}f(x + \Delta x)\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x} + g(x)\lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}\\
+&amp;= f'(x)g(x) + f(x)g'(x).
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 双线性映射的一阶变分合成：矩形面积沿长、宽两个正交维度的局部膨胀边缘带之和，角隅二阶无穷小在极限下消解。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      两个函数相乘的导数 $[f(x)g(x)]'$ 为何不能简单写成导数相乘 $f'(x)g'(x)$？因为自变量变动时，两个乘子同时处于漂移状态。增量 $\Delta(fg) = f(x+\Delta x)g(x+\Delta x) - f(x)g(x)$ 包含了三个来源：$f$ 变动带来的增益、$g$ 变动带来的增益、以及两者同时变动的交叉耦合。分析学的经典技巧是通过引入交错项 $f(x+\Delta x)g(x)$（加一项减一项），将总增量分解为两部分：一部分固定 $g$ 考察 $f$ 的差商，另一部分固定 $f$ 考察 $g$ 的差商。可导性保证了 $g$ 具有连续性，使得 $g(x+\Delta x) \to g(x)$，交叉扰动项自然退化为零。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      动态矩形面积微元扩张：考虑边长分别为 $u(x)$ 与 $v(x)$ 的矩形，当自变量发生微小变化 $\mathrm{d}x$ 时，边长分别延伸 $\Delta u$ 与 $\Delta v$。新面积相较于原面积的净增长由三部分组成：水平延展条带 $u\Delta v$、垂直延展条带 $v\Delta u$、以及右上角极小矩形 $\Delta u\Delta v$。对 $\Delta x$ 作比并取极限时，前两项生成一阶主部 $u v' + v u'$，而右上角为二阶小量 $\frac{\Delta u}{\Delta x}\Delta v \to u' \cdot 0 = 0$ 被彻底抹平。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>加减中间交叉项构造：恒等变形为 $[f(x+\Delta x)-f(x)]g(x+\Delta x) + f(x)[g(x+\Delta x)-g(x)]$。</li><li>可导必连续的枢纽作用：$g(x+\Delta x) \to g(x)$ 确保了极限相乘拆解的合法性；若 $g$ 在该点不连续，则乘积法则当场失效。</li><li>高阶导数推广的前奏：两项对消结构正是后续 Leibniz 高阶展开二项式系数组合的微观源头。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.3.3 导数的倒数求导法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">倒数求导</span><span class="thm-tag">双曲反比映射</span><span class="thm-tag">负二次方衰减</span><span class="thm-tag">分母非零连续保号</span>
+      </div>
+    </div>
+    <a href="#thm-4-3-3" class="anchor-btn" title="复制锚点链接"># 定理 4.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.3.3</span>
+设 $g(x)$ 在某一区间上可导，且 $g(x) \ne 0$，则它的倒数也在该区间上可导，且满足
+$$\left[\frac{1}{g(x)}\right]' = -\frac{g'(x)}{[g(x)]^2};$$
+相应的微分表达式为
+$$\mathrm{d}\left[\frac{1}{g(x)}\right] = -\frac{1}{[g(x)]^2}\mathrm{d}[g(x)].$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+记 $y = \dfrac{1}{g(x)}$，则有
+$$\begin{aligned}
+\left[\frac{1}{g(x)}\right]' &amp;= \lim_{\Delta x \to 0}\frac{\Delta y}{\Delta x} = \lim_{\Delta x \to 0}\frac{\dfrac{1}{g(x + \Delta x)} - \dfrac{1}{g(x)}}{\Delta x} = \lim_{\Delta x \to 0}\frac{g(x) - g(x + \Delta x)}{g(x + \Delta x) \cdot g(x) \cdot \Delta x}\\
+&amp;= \frac{-1}{g(x)}\left(\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x}\right)\left(\lim_{\Delta x \to 0}\frac{1}{g(x + \Delta x)}\right).
+\end{aligned}$$
+根据定理的条件，有
+$$\lim_{\Delta x \to 0}\frac{g(x + \Delta x) - g(x)}{\Delta x} = g'(x),\quad \lim_{\Delta x \to 0}g(x + \Delta x) = g(x) \ne 0,$$
+代入后即知定理结论成立.
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 反比单调映射对局部变动的负向响应与二次方缩放：反向变动生成负号，通分乘积生成分母平方。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      计算 $1/g(x)$ 的导数，差商通分后分子为 $g(x) - g(x+\Delta x) = -\Delta g$。这里的负号并非偶然，而是倒数映射严格单调递减性质的必然体现（自变量增大因变量必反向收缩）。分母部分则为 $\Delta x \cdot g(x+\Delta x)g(x)$。由 $g(x) \ne 0$ 且 $g$ 连续，局部极限分母收敛为稳定非零值 $g^2(x)$。于是分子差商极限给出 $-g'(x)$，整体得出 $-g'(x)/g^2(x)$。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双曲线 $y = 1/u$ 的切线倾角与相空间映射：反比例函数 $y = 1/u$ 自身的切线斜率为 $-\frac{1}{u^2}$。内层函数 $u = g(x)$ 的微小漂移 $\mathrm{d}u = g'(x)\mathrm{d}x$ 作用于该非线性坐标变换，输出位移按双曲线切线斜率缩放，即 $\mathrm{d}y = (-\frac{1}{u^2})\mathrm{d}u = -\frac{g'(x)}{g^2(x)}\mathrm{d}x$。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>分式通分提取相反增量：$\frac{1}{g(x+\Delta x)} - \frac{1}{g(x)} = -\frac{g(x+\Delta x)-g(x)}{g(x+\Delta x)g(x)}$。</li><li>局部保号与非零极限：由连续性保号性（定理 3.2.3），若 $g(x) \ne 0$，在某邻域内 $g(x+\Delta x) \ne 0$，保证分母处处合法且极限为 $g^2(x) > 0$。</li><li>幂函数负指数的微观验证：该法则将正整数幂求导 $(x^n)'=nx^{n-1}$ 直接延拓至负整数幂。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-3-cor">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 导数的商求导法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">商求导法则</span><span class="thm-tag">积与倒数化归</span><span class="thm-tag">分式微分算子</span>
+      </div>
+    </div>
+    <a href="#thm-4-3-cor" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">推 论</span>
+设 $f(x)$ 和 $g(x)$ 在某一区间上都是可导的，且 $g(x) \ne 0$，则它们的商函数也在该区间上可导，且满足
+$$\left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x)g(x) - f(x)g'(x)}{[g(x)]^2};$$
+这一结论的微分形式为
+$$\mathrm{d}\left[\frac{f(x)}{g(x)}\right] = \frac{g(x)\mathrm{d}[f(x)] - f(x)\mathrm{d}[g(x)]}{[g(x)]^2}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 将商函数看成被除数与除数的倒数的乘积，即：</p>
+$$\frac{f(x)}{g(x)} = f(x) \cdot \frac{1}{g(x)}.$$
+<p>由已知 $f(x)$ 和 $g(x)$ 在区间上可导，且 $g(x) \ne 0$。直接套用定理 4.3.2（积的求导法则）与定理 4.3.3（倒数的求导法则），得到：</p>
+$$\begin{aligned}
+\left[\frac{f(x)}{g(x)}\right]' &= \left[ f(x) \cdot \frac{1}{g(x)} \right]' \\
+&= f'(x) \cdot \frac{1}{g(x)} + f(x) \cdot \left[\frac{1}{g(x)}\right]' \\
+&= \frac{f'(x)}{g(x)} + f(x) \cdot \left( -\frac{g'(x)}{g^2(x)} \right) \\
+&= \frac{f'(x)g(x) - f(x)g'(x)}{g^2(x)}.
+\end{aligned}$$
+<p>推论结论获证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 代数结构的模块化化归：将商运算解构为乘法与求倒数的复合，两套成熟法则代数合成直接导出分式求导公式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无需重新从差商极限定义费力推导商的导数。把分式 $\frac{f(x)}{g(x)}$ 视作乘积 $f(x) \cdot [g(x)]^{-1}$，直接调用积法则 $[uv]' = u'v + uv'$ 与倒数法则 $[1/v]' = -v'/v^2$。通分后，分母统一为 $g^2(x)$，分子自然聚合为对偶差式 $f'(x)g(x) - f(x)g'(x)$。这种模块化化归思想在现代分析中极为常见。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      正负相消的加权合力：分子的增长率 $f'$ 赋予分式正向增长推力，经分母 $g$ 加权贡献 $f'g$；分母自身的增长率 $g'$ 产生负向压制阻力，经分子 $f$ 加权贡献 $-fg'$。两股相互竞争的变化率在归一化基底 $g^2$ 上叠加为净变化率。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>完全避免重复极限运算：利用代数结构化归 $[f \cdot (1/g)]' = f' \cdot (1/g) + f \cdot (-g'/g^2)$。</li><li>分子对偶反对称结构：分子 $f'g - fg'$ 具有明显的行列式对偶特征 $\det \begin{pmatrix} f' & g' \\ f & g \end{pmatrix}$，刻画了两个函数在相空间中的微元面积膨胀速率。</li><li>分母严格非零要求：若 $g(x_0)=0$，商函数在 $x_0$ 处甚至无定义，公式不成立。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.3.4 反函数求导定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">反函数求导</span><span class="thm-tag">切线对称斜率</span><span class="thm-tag">微分同胚</span><span class="thm-tag">单调连续性</span>
+      </div>
+    </div>
+    <a href="#thm-4-3-4" class="anchor-btn" title="复制锚点链接"># 定理 4.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.3.4（反函数求导定理）</span>
+若函数 $y = f(x)$ 在 $(a, b)$ 上连续、严格单调、可导并且 $f'(x) \ne 0$，记 $\alpha = \min(f(a+), f(b-))$，$\beta = \max(f(a+), f(b-))$，则它的反函数 $x = f^{-1}(y)$ 在 $(\alpha, \beta)$ 上可导，且有
+$$[f^{-1}(y)]' = \frac{1}{f'(x)}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+因为函数 $y = f(x)$ 在 $(a, b)$ 上连续且严格单调，由反函数连续定理，它的反函数 $x = f^{-1}(y)$ 在 $(\alpha, \beta)$ 上存在、连续，且严格单调，这时 $\Delta y = f(x + \Delta x) - f(x) \ne 0$ 等价于 $\Delta x = f^{-1}(y + \Delta y) - f^{-1}(y) \ne 0$，并且当 $\Delta y \to 0$ 时有 $\Delta x \to 0$. 因此
+$$\begin{aligned}
+[f^{-1}(y)]' &amp;= \lim_{\Delta y \to 0}\frac{f^{-1}(y + \Delta y) - f^{-1}(y)}{\Delta y} = \lim_{\Delta x \to 0}\frac{\Delta x}{f(x + \Delta x) - f(x)}\\
+&amp;= \frac{1}{\displaystyle\lim_{\Delta x \to 0}\frac{f(x + \Delta x) - f(x)}{\Delta x}} = \frac{1}{f'(x)}.
+\end{aligned}$$
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 坐标轴对称对换诱导的切空间逆映射：差商互为倒数，导数值在非零条件下互为倒数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      原函数是以 $x$ 为输入、$y$ 为输出，割线差商为 $\Delta y / \Delta x$；反函数则是以 $y$ 为输入、$x$ 为输出，其割线差商为 $\Delta x / \Delta y$。这两个代数商在数值上严格互为倒数！由定理 3.2.2，严格单调连续函数的反函数必定严格单调且连续，因此当 $\Delta y \to 0$ 时必定驱动 $\Delta x \to 0$。只要原函数导数不为零 $f'(x) \ne 0$，对倒数恒等式两边取极限，极限分配律成立，反函数导数即为 $1/f'(x)$。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      平面对角线 $y=x$ 的镜像反射变换：反函数的几何图象是原曲线绕直线 $y = x$ 进行翻转后的镜像。在反射变换下，若原曲线在点 $(x, y)$ 处的切线与横轴夹角为 $\alpha$（斜率 $k = \tan \alpha$），翻转后切线与新横轴（原纵轴）的夹角变为 $\frac{\pi}{2} - \alpha$。新切线斜率即为 $\tan(\frac{\pi}{2} - \alpha) = \cot \alpha = \frac{1}{\tan \alpha} = \frac{1}{k}$。若原切线为水平切线（$f'=0$），翻转后切线变为垂直直线，斜率趋于无穷大，反函数导数不复存在。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>差商绝对倒数恒等式：$\frac{\Delta x}{\Delta y} = \frac{1}{\frac{\Delta y}{\Delta x}}$（其中 $\Delta x \ne 0, \Delta y \ne 0$ 由严格单调性保证）。</li><li>反函数连续性保证变量联动收敛：由反函数连续性，$\Delta y \to 0 \implies \Delta x = f^{-1}(y+\Delta y) - f^{-1}(y) \to 0$。</li><li>非零条件 $f'(x) \ne 0$ 极其苛刻：若 $f'(x)=0$（如 $y = x^3$ 在 $x=0$ 处），反函数 $x = y^{1/3}$ 在 $y=0$ 处切线铅直，导数不存在。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.4.1 复合函数求导法则 (链式法则 Chain Rule)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">链式法则</span><span class="thm-tag">复合切映射</span><span class="thm-tag">可微展开式</span><span class="thm-tag">消除除零奇异性</span>
+      </div>
+    </div>
+    <a href="#thm-4-4-1" class="anchor-btn" title="复制锚点链接"># 定理 4.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.4.1（复合函数求导法则）</span>
+设函数 $u = g(x)$ 在 $x = x_0$ 可导，而函数 $y = f(u)$ 在 $u = u_0 = g(x_0)$ 处可导，则复合函数 $y = f(g(x))$ 在 $x = x_0$ 可导，且有
+$$[f(g(x))]'_{x=x_0} = f'(u_0)g'(x_0) = f'(g(x_0))g'(x_0).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+因为 $y = f(u)$ 在 $u_0$ 处可导，所以可微. 由可微的定义，对任意一个充分小的 $\Delta u \ne 0$，都有
+$$f(u_0 + \Delta u) - f(u_0) = f'(u_0)\Delta u + \alpha\Delta u,$$
+其中 $\displaystyle\lim_{\Delta u \to 0}\alpha = 0$. 因为当 $\Delta u = 0$ 时 $\Delta y = 0$，不妨规定当 $\Delta u = 0$ 时 $\alpha = 0$，因而上式对 $\Delta u = 0$ 也成立.
+
+设 $\Delta u = g(x_0 + \Delta x) - g(x_0)\,(\Delta x \ne 0)$，在上式两边同时除以 $\Delta x$，则有
+$$\frac{f(g(x_0 + \Delta x)) - f(g(x_0))}{\Delta x} = f'(u_0)\frac{\Delta u}{\Delta x} + \alpha\frac{\Delta u}{\Delta x},$$
+由函数 $u = g(x)$ 在 $x = x_0$ 可导，即有 $\displaystyle\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} = g'(x_0)$，且此式也蕴含了 $\displaystyle\lim_{\Delta x \to 0}\Delta u = 0$. 注意到在 $\Delta x \to 0$ 的过程中，或者有 $\Delta u = 0$，这时有 $\alpha = 0$；或者有 $\Delta u \ne 0$，但 $\Delta u$ 趋于 $0$，因此由 $\displaystyle\lim_{\Delta u \to 0}\alpha = 0$，可知 $\displaystyle\lim_{\Delta x \to 0}\alpha = 0$. 于是令 $\Delta x \to 0$，得到
+$$\frac{\mathrm{d}y}{\mathrm{d}x} = \lim_{\Delta x \to 0}\frac{f(g(x_0 + \Delta x)) - f(g(x_0))}{\Delta x} = f'(u_0)\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} + \lim_{\Delta x \to 0}\alpha\lim_{\Delta x \to 0}\frac{\Delta u}{\Delta x} = f'(u_0)g'(x_0).$$
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 局部切映射的相继复合与雅可比乘积：以微分形式的一阶展开式为刚性载体，彻底破除中间增量为零的除零奇点。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      直观上人们容易把链式法则写成差商约分 $\frac{\Delta y}{\Delta x} = \frac{\Delta y}{\Delta u} \cdot \frac{\Delta u}{\Delta x}$。但在严格分析中，这是一个严重的逻辑漏洞：当 $\Delta x \to 0$ 时，中间变量增量 $\Delta u$ 可能在任意小邻域内密集为零（例如常数函数或振荡函数 $u(x) = x^2\sin(1/x)$），此时 $\frac{\Delta y}{\Delta u}$ 出现分母为零的致命无定义！现代分析的严密处理手段是利用可微性展开：将外层增量表示为 $\Delta y = f'(u_0)\Delta u + \alpha(\Delta u)\Delta u$（约定 $\alpha(0) = 0$）。此时 $\Delta u$ 处于分子因子的位置，就算 $\Delta u = 0$ 等式也恒成立。两边除以 $\Delta x$ 后安全取极限，第二项因 $\alpha \to 0$ 消亡，丝滑证明 $[f(g(x))]' = f'(g(x))g'(x)$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      切向量传递的多级倍增效应：内层映射 $u = g(x)$ 将基底扰动 $\mathrm{d}x$ 线性变换为中间相空间的扰动切向量 $\mathrm{d}u = g'(x)\mathrm{d}x$；外层映射 $y = f(u)$ 接收该扰动切向量，并再次以自身的切线斜率 $f'(u)$ 进行线性缩放，输出 $\mathrm{d}y = f'(u)\mathrm{d}u$。复合系统的总灵敏度就是各个级联子系统切映射放大系数的代数乘积。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>补齐奇点的连续延拓技术：构造辅助函数 $\alpha(\Delta u) = \begin{cases} \frac{\Delta y}{\Delta u} - f'(u_0), & \Delta u \ne 0 \\ 0, & \Delta u = 0 \end{cases}$，使展开式 $\Delta y = [f'(u_0) + \alpha(\Delta u)]\Delta u$ 全局成立。</li><li>除以 $\Delta x$ 避开中间除零：$\frac{\Delta y}{\Delta x} = f'(u_0)\frac{\Delta u}{\Delta x} + \alpha(\Delta u)\frac{\Delta u}{\Delta x}$。</li><li>连续性驱动误差项灭亡：当 $\Delta x \to 0$ 时，由内层函数连续性知 $\Delta u \to 0$，从而 $\alpha(\Delta u) \to 0$，第二项乘积极限为 $0 \cdot g'(x_0) = 0$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-5-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.5.1 高阶导数的线性运算法则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-11" class="thm-tag routine-ref" target="_blank">🏷️ 套路 11: 数学归纳法与离散递推演化</a>
+        <span class="thm-tag">高阶导数</span><span class="thm-tag">微分算子代数</span><span class="thm-tag">数学归纳法</span><span class="thm-tag">线性变换幂</span>
+      </div>
+    </div>
+    <a href="#thm-4-5-1" class="anchor-btn" title="复制锚点链接"># 定理 4.5.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.5.1</span>
+设 $f(x)$ 和 $g(x)$ 都是 $n$ 阶可导的，则对任意常数 $c_1$ 和 $c_2$，它们的线性组合 $c_1f(x) + c_2g(x)$ 也是 $n$ 阶可导的，且满足如下的线性运算关系
+$$[c_1f(x) + c_2g(x)]^{(n)} = c_1f^{(n)}(x) + c_2g^{(n)}(x).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 采用数学归纳法：</p>
+<p><strong>奠基步：</strong> 当 $n = 1$ 时，由定理 4.3.1（一阶导数的线性运算法则），结论 $[c_1f(x) + c_2g(x)]' = c_1f'(x) + c_2g'(x)$ 显然成立。</p>
+<p><strong>归纳步：</strong> 假设结论对于 $n = k$ 阶导数成立，即：</p>
+$$[c_1f(x) + c_2g(x)]^{(k)} = c_1f^{(k)}(x) + c_2g^{(k)}(x).$$
+<p>当 $n = k + 1$ 时，根据高阶导数的逐阶定义，利用归纳假设以及一阶导数的线性性，有：</p>
+$$\begin{aligned}
+[c_1f(x) + c_2g(x)]^{(k+1)} &= \left( [c_1f(x) + c_2g(x)]^{(k)} \right)' \\
+&= \left[ c_1f^{(k)}(x) + c_2g^{(k)}(x) \right]' \\
+&= c_1 [f^{(k)}(x)]' + c_2 [g^{(k)}(x)]' \\
+&= c_1 f^{(k+1)}(x) + c_2 g^{(k+1)}(x).
+\end{aligned}$$
+<p>因此结论对 $n = k+1$ 也成立。由数学归纳法原理，对任意正整数 $n$，定理结论皆成立. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-11" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 11: 数学归纳法与离散递推演化</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 线性微分算子的半群幂结构：线性变换的有限次相继复合依然是线性变换，保持函数空间的线性结构不变。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      一阶导数算子 $D$ 是线性的，高阶导数 $D^n$ 本质是算子自相乘 $n$ 次的幂复合。由于线性算子与线性算子的复合依然是线性算子，因此无论求导多少次，常数系数 $c_1, c_2$ 永远像透明人一样可以提在最外层，各分项加法各自独立求导。数学归纳法以一阶线性性为基石，通过定义 $D^{k+1} = D \circ D^k$ 形成完美的离散封闭环。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维函数空间的保结构线性投影：在无穷维光滑函数空间 $C^\infty$ 中，求导是一次线性映射。对函数线性组合施加多次求导，相当于在状态空间中连续施加 $n$ 次相同的线性剪切变换，网格线保持平行与等距，矢量的线性组合比例在整个变换链条中始终不变。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>算子代数观点：微分算子满足加法分配律与数乘交换律，$D^n(c_1 f + c_2 g) = c_1 D^n f + c_2 D^n g$。</li><li>归纳法的标准架构：奠基步直接依赖定理 4.3.1，归纳步通过 $[F]^{(k+1)} = ([F]^{(k)})'$ 将高阶降为一阶。</li><li>向常系数微分方程延拓：高阶导数的线性性是常系数线性微分方程解的叠加原理的根本代数前提。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-4-5-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 4.5.2 乘积的高阶导数公式 (Leibniz 公式)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-11" class="thm-tag routine-ref" target="_blank">🏷️ 套路 11: 数学归纳法与离散递推演化</a>
+        <span class="thm-tag">Leibniz 公式</span><span class="thm-tag">高阶导数</span><span class="thm-tag">二项式定理同构</span><span class="thm-tag">组合数杨辉三角递推</span>
+      </div>
+    </div>
+    <a href="#thm-4-5-2" class="anchor-btn" title="复制锚点链接"># 定理 4.5.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 4.5.2（Leibniz 公式）</span>
+设 $f(x)$ 和 $g(x)$ 都是 $n$ 阶可导函数，则它们的积函数也 $n$ 阶可导，且成立公式
+$$[f(x) \cdot g(x)]^{(n)} = \sum_{k=0}^{n}C_n^k f^{(n-k)}(x)g^{(k)}(x),$$
+这里 $C_n^k = \dfrac{n!}{k!(n-k)!}$ 是组合系数.
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+用数学归纳法.
+<p>当 $n = 1$ 时，上式为
+$$[f(x) \cdot g(x)]' = C_1^0f'(x)g(x) + C_1^1f(x)g'(x) = f'(x)g(x) + f(x)g'(x).$$
+这正是 §3 中的结论.</p>
+<p>设当 $n = m$ 时 Leibniz 公式成立，即有
+$$[f(x) \cdot g(x)]^{(m)} = \sum_{k=0}^{m}C_m^k f^{(m-k)}(x)g^{(k)}(x),$$
+则当 $n = m + 1$ 时，利用归纳法假设
+$$\begin{aligned}
+[f(x) \cdot g(x)]^{(m+1)} &= \{[f(x) \cdot g(x)]^{(m)}\}'\\
+&= \sum_{k=0}^{m}C_m^k[f^{(m-k)}(x) \cdot g^{(k)}(x)]'\\
+&= \sum_{k=0}^{m}C_m^k\{[f^{(m-k)}(x)]'g^{(k)}(x) + f^{(m-k)}(x)[g^{(k)}(x)]'\}\\
+&= \sum_{k=0}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x) + \sum_{k=0}^{m}C_m^k f^{(m-k)}(x)g^{(k+1)}(x).
+\end{aligned}$$
+将右边的第一项改写成
+$$\sum_{k=0}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x) = f^{(m+1)}(x)g^{(0)}(x) + \sum_{k=1}^{m}C_m^k f^{(m+1-k)}(x)g^{(k)}(x),$$
+而将右边的第二项改写成
+$$\begin{aligned}
+\sum_{j=0}^{m}C_m^j f^{(m-j)}(x)g^{(j+1)}(x) &= \sum_{k=1}^{m+1}C_m^{k-1}f^{(m+1-k)}(x)g^{(k)}(x)\qquad (\text{令 }k = j + 1)\\
+&= \sum_{k=1}^{m}C_m^{k-1}f^{(m+1-k)}(x)g^{(k)}(x) + f^{(0)}(x)g^{(m+1)}(x).
+\end{aligned}$$
+两式合并后利用组合恒等式
+$$C_m^{k-1} + C_m^k = C_{m+1}^k\quad \text{和}\quad C_m^0 = C_{m+1}^0 = C_m^m = C_{m+1}^{m+1} = 1,$$
+便有
+$$[f(x) \cdot g(x)]^{(m+1)} = \sum_{k=0}^{m+1}C_{m+1}^k f^{(m+1-k)}(x)g^{(k)}(x),$$
+即公式对 $n = m + 1$ 也成立.</p>
+<p>所以，定理结论对任意正整数成立.</p>
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-11" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 11: 数学归纳法与离散递推演化</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 交换算子代数与代数二项式定理的精确同构：微积分的高阶积法则在代数结构上等同于双变量多项式的二项式展开。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      两个函数乘积的 $n$ 阶导数 $(uv)^{(n)}$ 展现出与初等代数二项式展开 $(a+b)^n$ 惊人的一致性：展开项由所有分配形式 $u^{(k)}v^{(n-k)}$ 构成，系数恰好是二项式系数 $\binom{n}{k}$。其深层本质在于：求导算子作用于积时呈现为两个可交换偏算子的和 $D(uv) = (D_u + D_v)(uv)$（其中 $D_u$ 只对 $u$ 作用，$D_v$ 只对 $v$ 作用）。由于两算子可交换 $D_u D_v = D_v D_u$，二项式定理在算子代数上完全成立。数学归纳法的归纳步中，对 $\binom{n}{k}u^{(k)}v^{(n-k)}$ 再求导产生两项，错位相加后组合数自然触发杨辉三角恒等式 $\binom{n}{k} + \binom{n}{k-1} = \binom{n+1}{k}$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      微商在二元晶格上的离散分布路径：将对 $u$ 求导视为向右移动一步，对 $v$ 求导视为向上移动一步。对乘积 $uv$ 进行 $n$ 次相继求导，相当于在平面网格上从原点 $(0,0)$ 走到直线 $x + y = n$ 上的各个整点 $(k, n-k)$。到达每个格点的不同走法数目恰好由组合数 $\binom{n}{k}$ 给出，记录了总阶数 $n$ 在两个函数之间的所有可能求导分配历史。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>组合数递推恒等式支柱：$\binom{n}{k-1} + \binom{n}{k} = \binom{n+1}{k}$（杨辉三角加法法则）。</li><li>错位求和与平移指标技巧：对第 $k$ 项求导产生 $u^{(k+1)}v^{(n-k)}$ 与 $u^{(k)}v^{(n-k+1)}$，通过平移求和哑指标，同阶导数项完美配对合并。</li><li>计算实战价值：对于多项式与超越函数之积（如 $x^2 e^{2x}$），多项式求导若干次后归零，原本可能产生 $2^n$ 项的庞大导数式在 Leibniz 展开下瞬间截断为极少数几项。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_03_theorems.html" class="page-nav-btn">← 上一章：第三章 · 函数极限与连续性</a>
+  <a href="chapter_05_theorems.html" class="page-nav-btn">下一章：第五章 · 微分中值定理及其应用 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

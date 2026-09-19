@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>陈纪修《数学分析》全书核心定理、证明精粹与21大套路标引库</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    :root {
+      --bg-primary: #070a12;
+      --bg-secondary: #0d1222;
+      --bg-card: rgba(15, 22, 40, 0.78);
+      --bg-card-hover: rgba(22, 32, 58, 0.9);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-highlight: rgba(56, 189, 248, 0.35);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --accent-blue: #38bdf8;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+
+      --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Fira Code', Menlo, Monaco, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      line-height: 1.75;
+      padding-bottom: 6rem;
+      scroll-behavior: smooth;
+    }
+
+    .katex { font-size: 1.04em; color: #f1f5f9; }
+    .katex-display { margin: 0.6rem 0; overflow-x: auto; overflow-y: hidden; }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(7, 10, 18, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.85rem 2rem;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .back-link {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: transform 0.2s;
+    }
+    .back-link:hover { transform: translateX(-3px); }
+
+    .container {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem;
+    }
+
+    /* Hero */
+    .hero-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(16, 185, 129, 0.1) 50%, rgba(168, 85, 247, 0.12) 100%);
+      border: 1px solid var(--border-highlight);
+      border-radius: 20px;
+      padding: 2.25rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .tag-row {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.75rem;
+    }
+    .tag {
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--accent-blue);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+    }
+    .tag.purple {
+      background: rgba(168, 85, 247, 0.2);
+      color: #c084fc;
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1.02rem;
+      max-width: 950px;
+    }
+
+    /* Chapter Filter Tabs */
+    .filter-sticky {
+      position: sticky;
+      top: 56px;
+      z-index: 90;
+      background: rgba(7, 10, 18, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 0.85rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .ch-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .ch-pill {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.3rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .ch-pill:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-primary);
+    }
+    .ch-pill.active {
+      background: var(--accent-blue);
+      color: #070a12;
+      border-color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .search-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+    }
+    .search-input-wrap input {
+      width: 100%;
+      background: rgba(15, 22, 40, 0.85);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      padding: 0.45rem 1rem 0.45rem 2.2rem;
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-input-wrap input:focus {
+      border-color: var(--accent-blue);
+    }
+    .search-input-wrap .icon {
+      position: absolute;
+      left: 0.8rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .total-counter {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* Chapter Header */
+    .ch-group-header {
+      margin: 3rem 0 1.25rem 0;
+      padding-bottom: 0.6rem;
+      border-bottom: 2px solid var(--accent-blue);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .ch-group-header h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .ch-group-header .ch-sub {
+      font-size: 0.88rem;
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+    }
+
+    /* Theorem Card */
+    .th-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem 1.6rem;
+      margin-bottom: 1.75rem;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .th-card:hover {
+      border-color: var(--border-highlight);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .th-card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .th-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .th-num-badge {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--accent-blue);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+    }
+    .th-card h3 {
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .technique-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .tech-tag {
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #34d399;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .tech-tag.t0 { background: rgba(244, 63, 94, 0.15); border-color: rgba(244, 63, 94, 0.35); color: #fb7185; }
+    .tech-tag.t1 { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.35); color: #fbbf24; }
+    .tech-tag.t2 { background: rgba(56, 189, 248, 0.15); border-color: rgba(56, 189, 248, 0.35); color: #38bdf8; }
+    .tech-tag.t3 { background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.35); color: #c084fc; }
+
+    /* Statement Block */
+    .th-statement {
+      background: rgba(10, 15, 28, 0.8);
+      border-left: 4px solid var(--accent-cyan);
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1rem;
+      color: #f1f5f9;
+      font-size: 0.93rem;
+      line-height: 1.7;
+    }
+    .th-statement strong {
+      color: var(--accent-cyan);
+    }
+
+    /* Proof Essence */
+    .th-proof-box {
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .th-proof-title {
+      color: var(--accent-emerald);
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .proof-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      font-size: 0.91rem;
+      color: var(--text-secondary);
+    }
+    .proof-steps li {
+      padding-left: 1.2rem;
+      position: relative;
+    }
+    .proof-steps li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--accent-emerald);
+      font-weight: bold;
+    }
+    .proof-steps li strong { color: #f8fafc; }
+
+    /* Technique Breakdown Callout */
+    .th-technique-insight {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.08) 0%, rgba(56, 189, 248, 0.05) 100%);
+      border-left: 4px solid var(--accent-purple);
+      border-radius: 8px;
+      padding: 0.85rem 1.1rem;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-start;
+    }
+    .th-technique-insight strong {
+      color: #c084fc;
+      white-space: nowrap;
+    }
+
+    .toc-modal-btn {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--accent-blue);
+      color: #070a12;
+      border: none;
+      border-radius: 9999px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 99;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .toc-modal-btn:hover {
+      transform: scale(1.05);
+      background: #7dd3fc;
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 1.5rem 1rem; }
+      h1 { font-size: 1.65rem; }
+      .th-card-top { flex-direction: column; gap: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-left">
+      <a href="index.html" class="back-link">← N02 多元微积分</a>
+      <span style="color: var(--border-color);">|</span>
+      <a href="proof_handbook.html" class="back-link" style="color: var(--accent-emerald);">📖 21大证明套路手册</a>
+    </div>
+    <span style="font-size: 0.82rem; color: var(--text-secondary); font-family: var(--font-mono);">教材核心定理与套路图谱</span>
+  </header>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <div class="hero-box">
+      <div class="tag-row">
+        <span class="tag">陈纪修《数学分析》第三版</span>
+        <span class="tag purple">全书核心定理 × 21大证明套路对照表</span>
+      </div>
+      <h1>教材全部核心定理证明精粹与套路标引</h1>
+      <p class="hero-desc">
+        从原书第一章到第八章（实数系连续性、极限论、单变量微分学、定积分与反常积分），全盘提炼每一定理的核心数学陈述与证明脉络，并深度打上对应的<strong>数析证明套路标签</strong>，带你一览分析学大厦的底层骨架！
+      </p>
+    </div>
+
+    <!-- Dedicated Chapter Files Navigation Notice -->
+    <div style="background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(168, 85, 247, 0.1)); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 2rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 0.8rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.1rem;">📑</span>
+          <strong style="color: #fff; font-size: 1.05rem;">分章完整证明独立文件已就绪 (106个定理全部收录)</strong>
+        </div>
+        <span style="font-size: 0.78rem; color: var(--accent-blue); background: rgba(56, 189, 248, 0.15); padding: 0.2rem 0.6rem; border-radius: 9999px;">原始完整推导 + 4层大白话点评</span>
+      </div>
+      <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.8rem; line-height: 1.6;">
+        若需研读教材中 100% 一字不漏的<strong>完整原始数学证明</strong>与配套的四层大白话点评（一句话精髓、大白话版、形象比喻、核心关键点），请直接点击下方进入分章独立阅读页面：
+      </p>
+      <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+        <a href="chapter_01_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第1章 (4) →</a>
+        <a href="chapter_02_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第2章 (19) →</a>
+        <a href="chapter_03_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第3章 (23) →</a>
+        <a href="chapter_04_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第4章 (9) →</a>
+        <a href="chapter_05_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第5章 (17) →</a>
+        <a href="chapter_06_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第6章 (3) →</a>
+        <a href="chapter_07_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第7章 (19) →</a>
+        <a href="chapter_08_theorems.html" style="font-size: 0.8rem; font-weight: 600; color: #fff; background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); padding: 0.3rem 0.7rem; border-radius: 6px; text-decoration: none;">第8章 (12) →</a>
+      </div>
+    </div>
+
+    <!-- Chapter Navigation & Filter Sticky -->
+    <div class="filter-sticky">
+      <div class="ch-pills">
+        <div class="ch-pill active" onclick="filterChapter('all', this)">全部章节 (52+)</div>
+        <div class="ch-pill" onclick="filterChapter('ch1', this)">第1章 集合与实数</div>
+        <div class="ch-pill" onclick="filterChapter('ch2', this)">第2章 数列极限</div>
+        <div class="ch-pill" onclick="filterChapter('ch3', this)">第3章 函数极限连续</div>
+        <div class="ch-pill" onclick="filterChapter('ch4', this)">第4章 微分求导</div>
+        <div class="ch-pill" onclick="filterChapter('ch5', this)">第5章 中值定理应用</div>
+        <div class="ch-pill" onclick="filterChapter('ch6', this)">第6章 不定积分</div>
+        <div class="ch-pill" onclick="filterChapter('ch7', this)">第7章 定积分与微积分基本</div>
+        <div class="ch-pill" onclick="filterChapter('ch8', this)">第8章 反常积分判别</div>
+      </div>
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <span class="icon">🔍</span>
+          <input type="text" id="thSearchInput" placeholder="输入定理号、定理名称或套路关键词（如：致密性、Stolz、Cantor、分拆、Rolle）..." oninput="handleTheoremSearch()" />
+        </div>
+        <div class="total-counter" id="counterText">显示 52 个定理与证明</div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 1 ================= -->
+    <div class="chapter-block" data-chapter="ch1">
+      <div class="ch-group-header">
+        <h2>第一章 集合与映射</h2>
+        <span class="ch-sub">P.1 ~ P.20 · 可数性基石与代数不等式</span>
+      </div>
+
+      <!-- 定理 1.1.1 -->
+      <div class="th-card" data-chapter="ch1" data-keywords="定理 1.1.1 可列集 并集 对角线 20 Cantor">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 1.1.1</span>
+            <h3>可列个可列集的并集仍为可列集</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t3">🏷️ 套路 20：Cantor 对角线抽取法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $A_1, A_2, \dots, A_n, \dots$ 是可数个可列集，则其可列并集 $\bigcup_{n=1}^\infty A_n$ 仍然是一个可列集。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>网格排布</strong>：将每个可列集 $A_n$ 的元素排成无穷二维矩阵：第 $n$ 行为 $a_{n1}, a_{n2}, a_{n3}, \dots$。</li>
+            <li><strong>蛇形遍历</strong>：按照对角线指标和 $n + k = 2, 3, 4, \dots$ 的顺序依次走蛇形路线编排序号（遇重复元素则跳过）。</li>
+            <li><strong>建立双射</strong>：该遍历法则建立起二维矩阵元素与自然数集 $\mathbb{N}^*$ 之间的一一对应，从而证得其为可列集。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>典型的“二维网格转一维对角线折叠法”。将无限维度的并集通过斜向对角线计数，化无序为有序。
+        </div>
+      </div>
+
+      <!-- 定理 1.1.2 -->
+      <div class="th-card" data-chapter="ch1" data-keywords="定理 1.1.2 实数不可列 区间不可列 对角线法则 反证法 20 Cantor">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 1.1.2</span>
+            <h3>实数区间 $(-\infty, +\infty)$ 是不可列集</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t3">🏷️ 套路 20：Cantor 对角线抽取法</span>
+            <span class="tech-tag t0">🏷️ 反证法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          任何非空开区间 $(a, b)$ 以及全实数集 $\mathbb{R} = (-\infty, +\infty)$ 均为不可列集（基数为连续统势 $c$）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>反证假设</strong>：假设 $(0, 1)$ 是可列集，则其所有实数可按序号排成序列：$x_1, x_2, \dots, x_n, \dots$。</li>
+            <li><strong>无限十进制展开</strong>：设第 $n$ 个数为 $x_n = 0.a_{n1}a_{n2}\dots a_{nn}\dots$（规定不采用无限循环 9 的形式）。</li>
+            <li><strong>对角线构造逃逸数</strong>：构造实数 $b = 0.b_1b_2\dots b_n\dots$，规定若对角线第 $n$ 位 $a_{nn} = 1$ 则取 $b_n = 2$；若 $a_{nn} \ne 1$ 则取 $b_n = 1$。</li>
+            <li><strong>导出矛盾</strong>：新数 $b \in (0, 1)$，但由于 $b$ 的第 $n$ 位小数与 $x_n$ 的第 $n$ 位必不相等，故 $b \ne x_n$（对一切 $n \in \mathbb{N}^*$），这与 $x_n$ 包含 $(0, 1)$ 中所有数矛盾！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>分析学最著名的“Cantor 对角线逐位否定论据”。利用对角线位数的变异，构造出一个永远无法被列举网罗的“逃逸点”。
+        </div>
+      </div>
+
+      <!-- 定理 1.2.1 -->
+      <div class="th-card" data-chapter="ch1" data-keywords="定理 1.2.1 三角不等式 01 绝对值 放缩">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 1.2.1</span>
+            <h3>绝对值三角不等式</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：ε-δ 放缩之母机</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          对任意实数 $a, b \in \mathbb{R}$，恒有：
+          $$\big| |a| - |b| \big| \le |a \pm b| \le |a| + |b|$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>右边放大</strong>：由 $-|a| \le a \le |a|$ 与 $-|b| \le b \le |b|$ 两式相加，得 $-(|a| + |b|) \le a + b \le |a| + |b| \implies |a + b| \le |a| + |b|$。</li>
+            <li><strong>左边缩小</strong>：恒等代换 $a = (a - b) + b \implies |a| \le |a - b| + |b| \implies |a| - |b| \le |a - b|$。交换 $a, b$ 位置同理得证反向，综上加绝对值。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>数学分析一切“作差放缩”、“$\varepsilon/2$ 拆分”的绝对力量源泉，整部分析学的三角不等式母机。
+        </div>
+      </div>
+
+      <!-- 定理 1.2.2 -->
+      <div class="th-card" data-chapter="ch1" data-keywords="定理 1.2.2 平均值不等式 算术几何 08 凸性 切线 归纳法">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 1.2.2</span>
+            <h3>算术-几何平均值不等式（均值不等式）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 套路 08：凸性切线放缩法</span>
+            <span class="tech-tag t1">🏷️ 柯西反向归纳法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          对任意正实数 $a_1, a_2, \dots, a_n > 0$，恒有：
+          $$\frac{a_1 + a_2 + \dots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n}$$
+          等号当且仅当 $a_1 = a_2 = \dots = a_n$ 时成立。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>现代切线放缩证法</strong>：考察严格凹函数 $f(t) = \ln t$ 在 $t=1$ 处的切线不等式 $\ln t \le t - 1$（当且仅当 $t=1$ 取等）。</li>
+            <li><strong>均值代换</strong>：记算术平均 $A = \frac{1}{n}\sum_{i=1}^n a_i$。代入 $t_i = \frac{a_i}{A}$，则 $\ln\frac{a_i}{A} \le \frac{a_i}{A} - 1$。</li>
+            <li><strong>累加求和</strong>：$n$ 个不等式相加：$\sum_{i=1}^n \ln\frac{a_i}{A} \le \sum_{i=1}^n \frac{a_i}{A} - n = \frac{nA}{A} - n = 0$。</li>
+            <li><strong>指数还原</strong>：$\ln\left( \prod_{i=1}^n \frac{a_i}{A} \right) \le 0 \implies \prod_{i=1}^n a_i \le A^n \implies \sqrt[n]{\prod a_i} \le A$。证毕。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>用套路 08 的切线放缩 $\ln t \le t - 1$（悬空铁锅法则）秒杀初等归纳法长篇累牍的证明，极为干净利落。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 2 ================= -->
+    <div class="chapter-block" data-chapter="ch2">
+      <div class="ch-group-header">
+        <h2>第二章 数列极限</h2>
+        <span class="ch-sub">P.21 ~ P.59 · 实数完备性六大定理与收敛准则</span>
+      </div>
+
+      <!-- 定理 2.1.1 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.1.1 确界存在定理 实数完备性 连续性 03 上确界">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.1.1</span>
+            <h3>确界存在定理（实数系连续性公理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 实数系完备性第一基石</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          非空有上界的数集必有上确界（最小上界）；非空有下界的数集必有下确界（最大下界）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>逐位截断构造</strong>：设非空集合 $S$ 有上界 $M$。利用无限小数展开法：整数部分取 $S$ 元素的最大可能整数 $a_0$；</li>
+            <li><strong>逐级细化小数位</strong>：十分位取使存在 $S$ 元素不小于该前缀的最大数字 $a_1\dots$，逐位构造实数 $\beta = a_0.a_1a_2\dots$；</li>
+            <li><strong>验证两项确界性质</strong>：(1) 对一切 $x \in S$，恒有 $x \le \beta$（$\beta$ 为上界）；(2) 对任意 $\varepsilon > 0$，取充分大位数位使得 $10^{-k} < \varepsilon$，构造保证存在某 $x \in S$ 满足 $x > \beta - 10^{-k} > \beta - \varepsilon$（$\beta$ 为最小上界）。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>实数“没有缝隙”的基石陈述。将集合的界通过无限小数的逐位截断逼近固定为一个唯一的实数确界。
+        </div>
+      </div>
+
+      <!-- 定理 2.2.1 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.2.1 极限唯一性 01 ε/2 反证法">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.2.1</span>
+            <h3>极限的唯一性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：ε/2 分拆法</span>
+            <span class="tech-tag t0">🏷️ 反证法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若数列 $\{x_n\}$ 存在极限，则其极限值必定是唯一的。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>反设两极限相异</strong>：假设 $\lim x_n = a$ 且 $\lim x_n = b$，且 $a \ne b$。</li>
+            <li><strong>选取对半固定误差</strong>：取固定正数 $\varepsilon_0 = \frac{|a - b|}{2} > 0$。</li>
+            <li><strong>邻域重叠矛盾</strong>：由定义存在 $N$，当 $n > N$ 时同时有 $|x_n - a| < \varepsilon_0$ 且 $|x_n - b| < \varepsilon_0$。</li>
+            <li><strong>三角不等式撞车</strong>：$|a - b| \le |a - x_n| + |x_n - b| < \varepsilon_0 + \varepsilon_0 = |a - b|$，导出矛盾 $|a - b| < |a - b|$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>标准的“$\varepsilon/2$ 距离隔离法”。取两个假想极限点间距的一半作为标尺，利用三角不等式逼出不可调和的距离矛盾。
+        </div>
+      </div>
+
+      <!-- 定理 2.2.2 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.2.2 收敛必有界 01 局部有界 min max">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.2.2</span>
+            <h3>收敛数列的有界性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：局部有界（取 max 控制有限项）</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          任何收敛的数列必定是有界数列。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>固定粗步长</strong>：设 $\lim x_n = a$。在定义中初选 $\varepsilon = 1$。</li>
+            <li><strong>后段截获局部界</strong>：存在 $N$，当 $n > N$ 时，恒有 $|x_n - a| < 1 \implies |x_n| < |a| + 1$。</li>
+            <li><strong>有限项取最大值</strong>：令 $M = \max\{ |x_1|, |x_2|, \dots, |x_N|, |a| + 1 \}$，则对一切自然数 $n$，均有 $|x_n| \le M$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>“有限项取 max，无限项借极限邻域有界”。这是分析学控制未知干扰因子的标准化操作。
+        </div>
+      </div>
+
+      <!-- 定理 2.2.3 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.2.3 保序性 保号性 01 缓冲中介">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.2.3</span>
+            <h3>极限的保号性与保序性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：ε 分半中介阻隔法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $\lim x_n = a, \lim y_n = b$ 且 $a > b$，则必存在正整数 $N$，当 $n > N$ 时恒有 $x_n > y_n$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>构造缓冲间隙</strong>：令 $\varepsilon = \frac{a - b}{2} > 0$。</li>
+            <li><strong>邻域分离</strong>：当 $n > N$ 时，$x_n > a - \varepsilon = \frac{a + b}{2}$；同时 $y_n < b + \varepsilon = \frac{a + b}{2}$。</li>
+            <li><strong>传递得证</strong>：$x_n > \frac{a + b}{2} > y_n \implies x_n > y_n$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>在两个极限点中间强行插进一条中介隔离带 $\frac{a+b}{2}$，让两个数列分别在隔离带两侧活动。
+        </div>
+      </div>
+
+      <!-- 定理 2.2.5 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.2.5 四则运算 01 分拆 局部有界 乘法 除法">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.2.5</span>
+            <h3>数列极限的四则运算法则</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：ε/2 分拆与局部有界放缩</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $\lim x_n = a, \lim y_n = b$，则 $\lim(x_n \pm y_n) = a \pm b$，$\lim(x_n y_n) = ab$，且当 $b \ne 0$ 时 $\lim \frac{x_n}{y_n} = \frac{a}{b}$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>乘法拆分</strong>：$|x_n y_n - ab| = |x_n(y_n - b) + b(x_n - a)| \le |x_n||y_n - b| + |b||x_n - a|$。</li>
+            <li><strong>局部有界锁定系数</strong>：由收敛有界性知 $|x_n| \le M$。将总误差分配给两项：$M \cdot \frac{\varepsilon}{2M} + |b| \cdot \frac{\varepsilon}{2(|b|+1)} < \varepsilon$。</li>
+            <li><strong>除法保护分母</strong>：先取 $\varepsilon_0 = \frac{|b|}{2}$，使当 $n$ 充分大时分母满足 $|y_n| > \frac{|b|}{2}$，避免除以零且放缩倒数。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>乘积拆分与分母下界保护是数析最经典的“预处理两阶段放缩”。
+        </div>
+      </div>
+
+      <!-- 定理 2.3.3 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.3.3 Stolz 离散洛必达 07 分段放缩 差分">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.3.3</span>
+            <h3>Stolz-Cesàro 定理（离散版洛必达法则）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 套路 07：Stolz-Cesàro 定理</span>
+            <span class="tech-tag t0">🏷️ 套路 01：分段放缩法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设数列 $\{y_n\}$ 严格单调增加且 $\lim_{n \to \infty} y_n = +\infty$。若 $\lim_{n \to \infty} \frac{x_n - x_{n-1}}{y_n - y_{n-1}} = a$，则成立：
+          $$\lim_{n \to \infty} \frac{x_n}{y_n} = a$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>化归差分</strong>：不妨设 $a = 0$。对任意 $\varepsilon > 0$，存在 $N$，当 $k > N$ 时 $|x_k - x_{k-1}| < \frac{\varepsilon}{2}(y_k - y_{k-1})$。</li>
+            <li><strong>裂项求和与分段拆开</strong>：将分子写为 $x_n = x_N + \sum_{k=N+1}^n (x_k - x_{k-1})$。两端同除以 $y_n$：
+              $$\left| \frac{x_n}{y_n} \right| \le \frac{|x_N|}{y_n} + \frac{\varepsilon}{2}\frac{y_n - y_N}{y_n} \le \frac{|x_N|}{y_n} + \frac{\varepsilon}{2}$$</li>
+            <li><strong>大头稀释</strong>：因为 $y_n \to +\infty$，固定分子 $x_N$ 在 $n$ 充分大时 $\frac{|x_N|}{y_n} < \frac{\varepsilon}{2}$。两段相加小于 $\varepsilon$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>“前段固定项被分母稀释为零，后段无穷项受 $\varepsilon$ 均匀控制”，分段放缩法的传世经典。
+        </div>
+      </div>
+
+      <!-- 定理 2.4.1 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.4.1 单调有界收敛 03 确界逼近">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.4.1</span>
+            <h3>单调有界数列收敛定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 03：单调有界收敛定理</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          任何单调有界的实数列必有有限极限（递增有上界必收敛于上确界，递减有下界必收敛于下确界）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>确界定候选值</strong>：设 $x_n$ 单调增且有上界。由确界存在定理，设 $a = \sup\{x_n\}$。</li>
+            <li><strong>利用确界逼近性</strong>：对任意 $\varepsilon > 0$，$a - \varepsilon$ 不是上界，故必存在某一项 $x_N$ 满足 $x_N > a - \varepsilon$。</li>
+            <li><strong>单调性锁定全尾部</strong>：由单调增加性，当 $n > N$ 时，$a - \varepsilon < x_N \le x_n \le a < a + \varepsilon \implies |x_n - a| < \varepsilon$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>利用单调性消灭一切可能的振荡，利用确界保证不会越界，实数完备性最实用的一张王牌。
+        </div>
+      </div>
+
+      <!-- 定理 2.4.2 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.4.2 闭区间套定理 俄罗斯套娃 03 09">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.4.2</span>
+            <h3>闭区间套定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 03：单调有界收敛</span>
+            <span class="tech-tag t1">🏷️ 套路 09：区间套锁定单一实数</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设闭区间列 $\{[a_n, b_n]\}$ 满足 $[a_1, b_1] \supseteq [a_2, b_2] \supseteq \dots$ 且 $\lim_{n \to \infty}(b_n - a_n) = 0$，则所有闭区间的交集恰好包含唯一实数 $\xi$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>端点单调有界</strong>：左端点 $a_n$ 递增有上界 $b_1 \implies \lim a_n = \xi$；右端点 $b_n$ 递减有下界 $a_1 \implies \lim b_n = \eta$。</li>
+            <li><strong>长度趋零合二为一</strong>：$\eta - \xi = \lim (b_n - a_n) = 0 \implies \xi = \eta$。</li>
+            <li><strong>唯一性保证</strong>：显然 $a_n \le \xi \le b_n$ 对一切 $n$ 成立。若有两个点，两点间距将小于任意区间长度，产生矛盾。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>“俄罗斯套娃无穷缩限”。在二分搜索、零点定理和致密性证明中作为最底层的定点工具。
+        </div>
+      </div>
+
+      <!-- 定理 2.4.5 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.4.5 Bolzano-Weierstrass 致密性定理 收敛子列 12 二分法">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.4.5</span>
+            <h3>Bolzano-Weierstrass 致密性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t2">🏷️ 套路 12：Bolzano-Weierstrass 致密性定理</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          任何有界实数列必定包含至少一个收敛的子序列。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>初选有界大区间</strong>：设 $\{x_n\} \subset [a_1, b_1]$。</li>
+            <li><strong>无限次二分折半</strong>：取中点将区间对半平分。由抽屉原理，左右两半中至少有一半包含数列的无穷多项，记为 $[a_2, b_2]$；</li>
+            <li><strong>构筑区间套定极限</strong>：无限迭代得到闭区间套 $[a_k, b_k]$，由区间套定理交出唯一实数 $\xi$；</li>
+            <li><strong>抽取子序列</strong>：在每个小区间按自然下标递增依次抽取元素 $x_{n_k} \in [a_k, b_k]$，由夹逼准则必有 $x_{n_k} \to \xi$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>通过“抽屉原理 + 闭区间套”在杂乱无章的有界序列中强行抽取出整齐收敛的子列队伍，现代拓扑紧性的源头。
+        </div>
+      </div>
+
+      <!-- 定理 2.4.7 -->
+      <div class="th-card" data-chapter="ch2" data-keywords="定理 2.4.7 Cauchy 收敛原理 完备性 01 12">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 2.4.7</span>
+            <h3>Cauchy 收敛原理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：ε/2 分拆传递</span>
+            <span class="tech-tag t2">🏷️ 套路 12：致密性提取子列</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          数列 $\{x_n\}$ 收敛的充分必要条件是：对任意给定的 $\varepsilon > 0$，存在正整数 $N$，当 $n, m > N$ 时恒有 $|x_n - x_m| < \varepsilon$（即 $\{x_n\}$ 为柯西列）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>必要性</strong>：若 $x_n \to a$，由三角不等式 $|x_n - x_m| \le |x_n - a| + |x_m - a| < \varepsilon/2 + \varepsilon/2 = \varepsilon$。</li>
+            <li><strong>充分性第一步（有界）</strong>：取 $\varepsilon = 1$ 可推得柯西列必有界。</li>
+            <li><strong>充分性第二步（提取子列）</strong>：由 Bolzano-Weierstrass 定理，必有收敛子序列 $x_{n_k} \to a$。</li>
+            <li><strong>充分性第三步（子列拉动全列）</strong>：对柯西准则令 $m = n_k$ 充分大，利用三角不等式 $|x_n - a| \le |x_n - x_{n_k}| + |x_{n_k} - a| < \varepsilon/2 + \varepsilon/2 = \varepsilon$，推导全列 $x_n \to a$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>无需预先知道极限值 $a$ 是多少即可判定收敛的终极准则。用子序列收敛结合柯西内聚性“以点带面”拉动整体收敛。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 3 ================= -->
+    <div class="chapter-block" data-chapter="ch3">
+      <div class="ch-group-header">
+        <h2>第三章 函数极限与连续函数</h2>
+        <span class="ch-sub">P.60 ~ P.102 · 归结原则、闭区间四大定理与一致连续</span>
+      </div>
+
+      <!-- 定理 3.1.5 -->
+      <div class="th-card" data-chapter="ch3" data-keywords="定理 3.1.5 Heine 归结原则 双点列 11 04 1/n">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 3.1.5</span>
+            <h3>Heine 定理（归结原则）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t2">🏷️ 套路 11：Heine 归结原则</span>
+            <span class="tech-tag t0">🏷️ 套路 04：反设 ∃ ε₀ 令 δ=1/n 提取子列</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          $\lim_{x \to x_0} f(x) = A$ 的充分必要条件是：对于任何满足 $x_n \ne x_0$ 且 $\lim_{n \to \infty} x_n = x_0$ 的数列 $\{x_n\}$，相应的函数值数列均有 $\lim_{n \to \infty} f(x_n) = A$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>必要性</strong>：直接将函数极限定义中的 $\delta$ 作为数列的收敛指标即可。</li>
+            <li><strong>充分性（经典反证法）</strong>：假设结论不成立，即 $f(x) \not\to A$。</li>
+            <li><strong>反设 1/n 取点列</strong>：存在 $\varepsilon_0 > 0$，对每个 $\delta_n = 1/n$，必存在点 $x_n$ 满足 $0 < |x_n - x_0| < 1/n$，但是 $|f(x_n) - A| \ge \varepsilon_0$。</li>
+            <li><strong>逻辑崩溃</strong>：构造出的点列 $x_n \to x_0$，但其函数值数列永远与 $A$ 保持 $\varepsilon_0$ 以上的距离，与充分性假设矛盾！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>连接连续函数与离散数列的巍峨立交桥。充分性的证明把套路 04（令 $\delta = 1/n$ 抓现行）发挥得淋漓尽致。
+        </div>
+      </div>
+
+      <!-- 定理 3.4.1 -->
+      <div class="th-card" data-chapter="ch3" data-keywords="定理 3.4.1 闭区间连续有界性 12 04 BW 反证法">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 3.4.1</span>
+            <h3>闭区间连续函数之有界性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t2">🏷️ 套路 12：Bolzano-Weierstrass 致密性</span>
+            <span class="tech-tag t0">🏷️ 套路 04：无界发散子列反证法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          在闭区间 $[a, b]$ 上的连续函数 $f(x)$ 必在该区间上有界。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>反设函数无界</strong>：对每个正整数 $n$，均存在 $x_n \in [a, b]$ 满足 $|f(x_n)| > n$。</li>
+            <li><strong>致密性提取子列</strong>：点列 $\{x_n\}$ 落在紧集 $[a, b]$ 内，由 Bolzano-Weierstrass 定理必有收敛子列 $x_{n_k} \to x_0 \in [a, b]$。</li>
+            <li><strong>连续性撞车</strong>：由连续性 $\lim f(x_{n_k}) = f(x_0)$（有限固定实数）；然而根据假设 $|f(x_{n_k})| > n_k \to +\infty$，有限值与无穷大产生不可调和的矛盾！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>“无界就找点列趋向无穷，紧集就抽子列收敛定点”，两路夹攻引爆有限与无限的悖论。
+        </div>
+      </div>
+
+      <!-- 定理 3.4.2 -->
+      <div class="th-card" data-chapter="ch3" data-keywords="定理 3.4.2 最值定理 Weierstrass 02 倒数构造">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 3.4.2</span>
+            <h3>最大值与最小值定理（Weierstrass 最值定理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 确界存在定理</span>
+            <span class="tech-tag t0">🏷️ 套路 02：辅助函数倒数反证法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          在闭区间 $[a, b]$ 上的连续函数 $f(x)$ 必在该区间上达到其最大值与最小值。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>锁定上确界</strong>：由定理 3.4.1，$f$ 有界，故值域集存在上确界 $M = \sup_{x \in [a, b]} f(x)$。</li>
+            <li><strong>反设永远达不到最大值</strong>：假设对所有 $x \in [a, b]$ 均有 $f(x) < M$。</li>
+            <li><strong>构造倒数辅助函数</strong>：令 $g(x) = \frac{1}{M - f(x)}$。因为分母非零且连续，故 $g(x)$ 在 $[a, b]$ 上连续，必有界：$g(x) \le K$。</li>
+            <li><strong>逼退上确界矛盾</strong>：$M - f(x) \ge 1/K \implies f(x) \le M - 1/K$，这与 $M$ 是最小上界绝对矛盾！故必存在 $\xi$ 使 $f(\xi) = M$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>构造倒数函数 $g(x) = \frac{1}{M - f(x)}$ 是分析学证明“确界可达”的绝妙巧思。
+        </div>
+      </div>
+
+      <!-- 定理 3.4.3 -->
+      <div class="th-card" data-chapter="ch3" data-keywords="定理 3.4.3 零点存在定理 根的存在性 09 二分法 区间套">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 3.4.3</span>
+            <h3>零点存在定理（Bolzano 零点定理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 套路 09：零点存在定理与区间二分法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x)$ 在闭区间 $[a, b]$ 上连续，且两端点函数值异号（即 $f(a)f(b) < 0$），则开区间 $(a, b)$ 内必存在至少一点 $\xi$ 使得 $f(\xi) = 0$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>二分排查法</strong>：设 $f(a) < 0, f(b) > 0$。取中点 $c_1 = \frac{a+b}{2}$。若 $f(c_1) = 0$ 证毕；若非零，取端点异号的半边作为 $[a_1, b_1]$；</li>
+            <li><strong>无限套娃</strong>：重复折半构造出闭区间套 $[a_n, b_n]$，满足 $f(a_n) < 0, f(b_n) > 0$ 且长度趋于 0；</li>
+            <li><strong>区间套定零点</strong>：区间套交出唯一公共点 $\xi$。由保序性 $f(\xi) = \lim f(a_n) \le 0$，且 $f(\xi) = \lim f(b_n) \ge 0$，唯一可能只有 $f(\xi) = 0$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>现代数值计算中“二分搜索算法”的数学原点。
+        </div>
+      </div>
+
+      <!-- 定理 3.4.6 -->
+      <div class="th-card" data-chapter="ch3" data-keywords="定理 3.4.6 Cantor定理 闭区间连续一致连续 15 04 12">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 3.4.6</span>
+            <h3>Cantor 一致连续性定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t3">🏷️ 套路 15：Heine-Borel 有限覆盖法</span>
+            <span class="tech-tag t0">🏷️ 套路 04：反设 δ=1/n 提取子列反证法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，则 $f(x)$ 在 $[a, b]$ 上必定是一致连续的。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>反证法套用套路 04</strong>：若非一致连续，存在 $\varepsilon_0 > 0$，对每个 $\delta_n = 1/n$，存在点对 $x_n, y_n \in [a, b]$ 满足 $|x_n - y_n| < 1/n$ 但 $|f(x_n) - f(y_n)| \ge \varepsilon_0$。</li>
+            <li><strong>致密性提取公共极限</strong>：由 Bolzano-Weierstrass 定理，存在收敛子列 $x_{n_k} \to x_0 \in [a, b]$。因 $|y_{n_k} - x_{n_k}| < 1/n_k \to 0$，亦有 $y_{n_k} \to x_0$。</li>
+            <li><strong>连续性击溃误差下界</strong>：由函数连续性，$\lim [f(x_{n_k}) - f(y_{n_k})] = f(x_0) - f(x_0) = 0$，与恒有差值 $\ge \varepsilon_0$ 发生剧烈矛盾！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>闭区间紧致性赋予连续函数的最高特权。此定理直接保证了后续第七章“闭区间连续函数必定黎曼可积”的宏伟结论。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 4 ================= -->
+    <div class="chapter-block" data-chapter="ch4">
+      <div class="ch-group-header">
+        <h2>第四章 微分</h2>
+        <span class="ch-sub">P.103 ~ P.146 · 微分可导等价、链式法则与 Leibniz 乘积求导</span>
+      </div>
+
+      <!-- 定理 4.1.1 -->
+      <div class="th-card" data-chapter="ch4" data-keywords="定理 4.1.1 可微 可导 等价 微分定义">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 4.1.1</span>
+            <h3>一元函数可微与可导等价定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 阶数局部展开与等价转化</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          函数 $y = f(x)$ 在点 $x$ 处可微的充分必要条件是它在点 $x$ 处可导，且微分即为 $\mathrm{d}y = f'(x)\Delta x$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>必要性</strong>：由可微定义 $\Delta y = A\Delta x + o(\Delta x)$，两边同除以 $\Delta x$ 取极限：$\lim \frac{\Delta y}{\Delta x} = A + \lim \frac{o(\Delta x)}{\Delta x} = A$，故导数存在且 $f'(x) = A$。</li>
+            <li><strong>充分性</strong>：若 $\lim \frac{\Delta y}{\Delta x} = f'(x)$，记误差无穷小 $\alpha = \frac{\Delta y}{\Delta x} - f'(x) \to 0$。去分母整理得 $\Delta y = f'(x)\Delta x + \alpha\Delta x = f'(x)\Delta x + o(\Delta x)$，满足可微定义。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>微分学最基本的定义化归。一元微积分中“可导”与“可微”是一体两面。
+        </div>
+      </div>
+
+      <!-- 定理 4.3.2 -->
+      <div class="th-card" data-chapter="ch4" data-keywords="定理 4.3.2 积函数求导 乘积法则 01 作差添项">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 4.3.2</span>
+            <h3>乘积求导法则（Leibniz 乘积律）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：作差添项拆分法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 与 $g(x)$ 均可导，则积函数 $f(x)g(x)$ 亦可导，且 $[f(x)g(x)]' = f'(x)g(x) + f(x)g'(x)$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>插入交叉过渡项</strong>：$\Delta(fg) = f(x+\Delta x)g(x+\Delta x) - f(x)g(x) = [f(x+\Delta x) - f(x)]g(x+\Delta x) + f(x)[g(x+\Delta x) - g(x)]$。</li>
+            <li><strong>可导保证连续</strong>：因 $g$ 可导，故 $g$ 必连续，有 $\lim_{\Delta x \to 0} g(x+\Delta x) = g(x)$。</li>
+            <li><strong>除以步长取极限</strong>：除以 $\Delta x$ 逐项取极限直接得出 $f'(x)g(x) + f(x)g'(x)$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>添加中介项 $f(x+\Delta x)g(x)$ 作差，是代数与分析中解构乘积变化率的标配手法。
+        </div>
+      </div>
+
+      <!-- 定理 4.4.1 -->
+      <div class="th-card" data-chapter="ch4" data-keywords="定理 4.4.1 复合函数求导 链式法则 局部线性化">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 4.4.1</span>
+            <h3>复合函数求导法则（链式法则 Chain Rule）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 局部线性微分展开（避零处理法）</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $u = g(x)$ 在 $x_0$ 可导，而 $y = f(u)$ 在 $u_0 = g(x_0)$ 可导，则复合函数 $y = f(g(x))$ 在 $x_0$ 可导且 $(f \circ g)'(x_0) = f'(u_0)g'(x_0)$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>微分展开规避分母为零</strong>：直接写 $\frac{\Delta y}{\Delta x} = \frac{\Delta y}{\Delta u} \frac{\Delta u}{\Delta x}$ 当 $\Delta u = 0$ 时会除以零失效。</li>
+            <li><strong>构造连续辅助项</strong>：改用 $f$ 在 $u_0$ 的可微式：$\Delta y = [f'(u_0) + \alpha(\Delta u)]\Delta u$，其中规定当 $\Delta u = 0$ 时 $\alpha(0) = 0$。</li>
+            <li><strong>两边同除取极限</strong>：$\frac{\Delta y}{\Delta x} = [f'(u_0) + \alpha(\Delta u)]\frac{\Delta u}{\Delta x} \to f'(u_0) g'(x_0)$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>现代微分算子、神经网络反向传播（Backprop / Autodiff）的理论心脏。构造连续误差项 $\alpha$ 规避了除以零的严密性漏洞。
+        </div>
+      </div>
+
+      <!-- 定理 4.5.2 -->
+      <div class="th-card" data-chapter="ch4" data-keywords="定理 4.5.2 Leibniz公式 高阶导数 数学归纳法 二项式">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 4.5.2</span>
+            <h3>Leibniz 高阶乘积求导公式</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 数学归纳法 + 组合系数恒等式</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 与 $g(x)$ 均 $n$ 阶可导，则积函数亦 $n$ 阶可导，且成立：
+          $$[f(x)g(x)]^{(n)} = \sum_{k=0}^n \binom{n}{k} f^{(k)}(x) g^{(n-k)}(x)$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>数学归纳法验证基底</strong>：$n=1$ 时即为普通乘积法则，二项式系数 $\binom{1}{0}=\binom{1}{1}=1$ 成立。</li>
+            <li><strong>归纳假设求导</strong>：对 $n$ 阶假设式逐项求导，产生相邻二项式系数求和：$\binom{n}{k-1} + \binom{n}{k} = \binom{n+1}{k}$。</li>
+            <li><strong>归纳闭环</strong>：合并同阶导数项，即得 $n+1$ 阶二项式展开形态。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>分析学与组合数学二项式定理同构的优美范例。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 5 ================= -->
+    <div class="chapter-block" data-chapter="ch5">
+      <div class="ch-group-header">
+        <h2>第五章 微分中值定理及其应用</h2>
+        <span class="ch-sub">P.147 ~ P.202 · Fermat、Rolle、Lagrange、Cauchy、Taylor 与凸性</span>
+      </div>
+
+      <!-- 定理 5.1.1 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.1.1 Fermat引理 极值 导数为零 保号性">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.1.1</span>
+            <h3>Fermat 引理（极值点处驻点定理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 极限单侧保号性对夹法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x)$ 在点 $x_0$ 的某邻域内有定义，在 $x_0$ 处可导，且在 $x_0$ 处取得极值，则必有 $f'(x_0) = 0$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>极大值单侧差商分析</strong>：设 $x_0$ 为极大值点。当 $\Delta x > 0$ 时，$\frac{f(x_0+\Delta x) - f(x_0)}{\Delta x} \le 0 \implies f'_+(x_0) \le 0$。</li>
+            <li><strong>左侧差商反向保号</strong>：当 $\Delta x < 0$ 时，分子 $\le 0$ 分母 $< 0$，差商 $\ge 0 \implies f'_-(x_0) \ge 0$。</li>
+            <li><strong>可导迫使两端归零</strong>：由于可导保证 $f'(x_0) = f'_+(x_0) = f'_-(x_0)$，夹在 $\le 0$ 与 $\ge 0$ 之间唯一可能就是 $f'(x_0) = 0$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>一切微分中值定理和最优化梯度下降算法（必要条件 $\nabla f = 0$）的发祥地。
+        </div>
+      </div>
+
+      <!-- 定理 5.1.2 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.1.2 Rolle定理 罗尔 最值定理 Fermat 02">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.1.2</span>
+            <h3>Rolle 定理（罗尔中值定理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 最值定理 + Fermat 引理</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 内可导，且端点值相等 $f(a) = f(b)$，则必存在 $\xi \in (a, b)$ 使得 $f'(\xi) = 0$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>最值定理定界</strong>：由定理 3.4.2，$f$ 在 $[a, b]$ 上必有最大值 $M$ 和最小值 $m$。</li>
+            <li><strong>常数平凡情形</strong>：若 $M = m$，则 $f(x) \equiv C$ 恒为常数，导数处处为 0，任取一点即可。</li>
+            <li><strong>非平凡内部取值</strong>：若 $M > m$，因两端点相等 $f(a) = f(b)$，故最大值或最小值至少有一个在开区间内部某点 $\xi \in (a, b)$ 达到。</li>
+            <li><strong>引理降维收网</strong>：该内部点是极值点且可导，由 Fermat 引理必有 $f'(\xi) = 0$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>微分学所有中值定理的母定理。通过端点相等阻断边界最值，迫使极值点掉落开区间内部。
+        </div>
+      </div>
+
+      <!-- 定理 5.1.3 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.1.3 Lagrange中值定理 拉格朗日 割线 02 辅助函数">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.1.3</span>
+            <h3>Lagrange 中值定理（有限增量定理）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 02：辅助函数构造（旋转倾斜割线法）</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 内可导，则至少存在一点 $\xi \in (a, b)$ 使得：
+          $$f(b) - f(a) = f'(\xi)(b - a)$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>求割线斜率</strong>：连接端点 $(a, f(a))$ 与 $(b, f(b))$ 的割线方程为 $y = f(a) + \frac{f(b)-f(a)}{b-a}(x - a)$。</li>
+            <li><strong>构造垂直偏差函数</strong>：构造曲线与割线垂直偏差辅助函数：
+              $$\varphi(x) = f(x) - f(a) - \frac{f(b) - f(a)}{b - a}(x - a)$$</li>
+            <li><strong>应用 Rolle 定理</strong>：显然 $\varphi(a) = \varphi(b) = 0$。由 Rolle 定理必存在 $\xi \in (a, b)$ 使 $\varphi'(\xi) = 0$。</li>
+            <li><strong>展开得证</strong>：$\varphi'(\xi) = f'(\xi) - \frac{f(b)-f(a)}{b-a} = 0 \implies f(b) - f(a) = f'(\xi)(b - a)$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>微积分大厦的承重墙。把割线作差平移构造辅助函数，把一般的倾斜运动转化为 Rolle 定理的水平运动。
+        </div>
+      </div>
+
+      <!-- 定理 5.1.8 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.1.8 Jensen不等式 凸函数 08 切线放缩 均值">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.1.8</span>
+            <h3>Jensen 凸函数不等式</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 套路 08：凸性切线放缩法</span>
+            <span class="tech-tag t1">🏷️ 数学归纳法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 在区间 $I$ 上为下凸函数，则对任意点 $x_1, \dots, x_n \in I$ 及任意权重 $\lambda_1, \dots, \lambda_n > 0$（满足 $\sum \lambda_i = 1$），恒有：
+          $$f\left( \sum_{i=1}^n \lambda_i x_i \right) \le \sum_{i=1}^n \lambda_i f(x_i)$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>定位加权平均中心</strong>：设重心 $\bar{x} = \sum_{i=1}^n \lambda_i x_i \in I$。</li>
+            <li><strong>在重心处作切线（支撑超平面）</strong>：由凸函数性质，曲线处处高于重心切线：$f(x_i) \ge f(\bar{x}) + f'(\bar{x})(x_i - \bar{x})$。</li>
+            <li><strong>乘权重加权求和</strong>：两端同乘正权重 $\lambda_i$ 并求和：
+              $$\sum \lambda_i f(x_i) \ge \sum \lambda_i f(\bar{x}) + f'(\bar{x}) \sum \lambda_i (x_i - \bar{x}) = f(\bar{x}) + f'(\bar{x})(\bar{x} - \bar{x}) = f(\bar{x})$$</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>运用套路 08 切线支撑不等式，一次求和直接消去一阶导数干扰项，优美至极。
+        </div>
+      </div>
+
+      <!-- 定理 5.1.9 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.1.9 Cauchy中值定理 柯西中值 02 辅助函数 行列式">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.1.9</span>
+            <h3>Cauchy 柯西中值定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 02：行列式自归零辅助函数法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x), g(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 内可导且 $g'(x) \ne 0$，则必存在 $\xi \in (a, b)$ 使得：
+          $$\frac{f(b) - f(a)}{g(b) - g(a)} = \frac{f'(\xi)}{g'(\xi)}$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>构造对角交叉辅助函数</strong>：令 $F(x) = [f(b) - f(a)]g(x) - [g(b) - g(a)]f(x)$。</li>
+            <li><strong>检验两端点自归零</strong>：$F(a) = f(b)g(a) - f(a)g(b)$，且 $F(b) = f(b)g(a) - f(a)g(b)$，端点天然相等！</li>
+            <li><strong>应用 Rolle 定理</strong>：存在 $\xi \in (a, b)$ 使 $F'(\xi) = [f(b) - f(a)]g'(\xi) - [g(b) - g(a)]f'(\xi) = 0$。除以非零项即得。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>通过二阶行列式交叉构造辅助函数，几何上相当于将参数平面曲线 $(g(t), f(t))$ 的割线转化为切线斜率。
+        </div>
+      </div>
+
+      <!-- 定理 5.4.1 -->
+      <div class="th-card" data-chapter="ch5" data-keywords="定理 5.4.1 Taylor定理 泰勒公式 05 Lagrange余项 02">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 5.4.1</span>
+            <h3>Taylor 定理（带有 Lagrange 余项的泰勒公式）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t1">🏷️ 套路 05：Taylor 展开与局部阶数估计</span>
+            <span class="tech-tag t0">🏷️ 套路 02：高阶 Rolle 辅助函数构造</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若 $f(x)$ 在含 $x_0, x$ 的闭区间上 $n+1$ 阶可导，则存在 $\xi$ 介于 $x_0$ 与 $x$ 之间，成立：
+          $$f(x) = \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k + \frac{f^{(n+1)}(\xi)}{(n+1)!}(x - x_0)^{n+1}$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>设待定余项常数 $K$</strong>：令余项为 $R_n(x) = K(x - x_0)^{n+1}$。</li>
+            <li><strong>构造关于动点 $t$ 的辅助函数</strong>：
+              $$\Phi(t) = f(x) - \sum_{k=0}^n \frac{f^{(k)}(t)}{k!}(x - t)^k - K(x - t)^{n+1}$$</li>
+            <li><strong>检验两端点</strong>：$\Phi(x) = 0$，且按 $K$ 的定义 $\Phi(x_0) = 0$。</li>
+            <li><strong>神奇求导错位相消</strong>：对 $t$ 求导时，前一项导数与后一项展开式导数宛如多米诺骨牌全部抵消，只留下一头一尾：
+              $$\Phi'(t) = -\frac{f^{(n+1)}(t)}{n!}(x - t)^n + (n+1)K(x - t)^n = 0 \implies K = \frac{f^{(n+1)}(\xi)}{(n+1)!}$$</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>把动点 $t$ 移入展开式基准点，利用求导裂项相消的“神之一手”，逼出拉格朗日余项。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 7 ================= -->
+    <div class="chapter-block" data-chapter="ch7">
+      <div class="ch-group-header">
+        <h2>第七章 定积分与微积分基本定理</h2>
+        <span class="ch-sub">P.234 ~ P.298 · 黎曼积分理论、可积准则与 Newton-Leibniz</span>
+      </div>
+
+      <!-- 定理 7.1.1 & 7.1.2 -->
+      <div class="th-card" data-chapter="ch7" data-keywords="定理 7.1.1 7.1.2 Darboux可积准则 振幅可积准则 01 确界">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 7.1.1 / 7.1.2</span>
+            <h3>Darboux 与振幅可积充分必要条件</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 确界夹逼准则</span>
+            <span class="tech-tag t0">🏷️ 套路 01：总振幅误差度量</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          有界函数 $f(x)$ 在 $[a, b]$ 上可积 $\iff \underline{I} = \overline{I}$（上积分等于下积分）$\iff \lim_{\lambda \to 0} \sum_{i=1}^n \omega_i \Delta x_i = 0$（振幅和趋向于零）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>公共加细网格</strong>：对任意两个划分 $P_1, P_2$，通过公共加细 $P^* = P_1 \cup P_2$ 证明下和恒不超过上和：$\underline{S}(P_1) \le \overline{S}(P_2)$。</li>
+            <li><strong>上积分与下积分夹逼</strong>：从而下积分 $\underline{I} \le \overline{I}$ 上积分恒成立。</li>
+            <li><strong>振幅转化为上下和差</strong>：$\sum \omega_i \Delta x_i = \sum (M_i - m_i)\Delta x_i = \overline{S}(P) - \underline{S}(P)$，两边夹逼趋向于 0 等价于上下积分离合为一。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>将极其抽象的黎曼和任意介点 $\xi_i$，通过上确界和下确界夹在两道铁轨中间，转化为纯粹的几何总振幅面积控制。
+        </div>
+      </div>
+
+      <!-- 定理 7.1.2 推论 1 -->
+      <div class="th-card" data-chapter="ch7" data-keywords="推论 1 连续函数必可积 Cantor定理 15 一致连续">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">推论 7.1.1</span>
+            <h3>闭区间连续函数必可积定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t3">🏷️ 套路 15：Cantor 一致连续性定理</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          定义在闭区间 $[a, b]$ 上的任何连续函数必定是 Riemann 可积的。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>请出 Cantor 一致连续性</strong>：由定理 3.4.6，闭区间连续必一致连续。</li>
+            <li><strong>均匀控制微小振幅</strong>：对任意 $\varepsilon > 0$，存在 $\delta > 0$，使得当 $|x' - x''| < \delta$ 时，恒有 $|f(x') - f(x'')| < \frac{\varepsilon}{b - a}$。</li>
+            <li><strong>全局振幅受控可积</strong>：取细度 $\lambda < \delta$ 的划分，每个小区间内振幅 $\omega_i \le \frac{\varepsilon}{b-a}$。总振幅和：
+              $$\sum_{i=1}^n \omega_i \Delta x_i \le \frac{\varepsilon}{b - a}\sum \Delta x_i = \frac{\varepsilon}{b - a}(b - a) = \varepsilon$$
+              由振幅可积准则，函数必可积！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>Cantor 定理在积分学中的最璀璨落地。把原本不确定的局部振幅，用一致连续强行压平到 $\frac{\varepsilon}{b-a}$。
+        </div>
+      </div>
+
+      <!-- 定理 7.1.2 推论 2 -->
+      <div class="th-card" data-chapter="ch7" data-keywords="推论 2 单调函数必可积 裂项相消">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">推论 7.1.2</span>
+            <h3>闭区间单调函数必可积定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 裂项求和对消法</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          定义在闭区间 $[a, b]$ 上的任何单调函数必定是 Riemann 可积的（哪怕有可数无穷多个间断点！）。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>等距划分化归</strong>：不妨设 $f$ 单调增。采用等距划分 $\Delta x_i = \frac{b - a}{n}$。</li>
+            <li><strong>振幅裂项多米诺骨牌相消</strong>：由于单调递增，每一段上的最大值和最小值就在端点达到：$\omega_i = f(x_i) - f(x_{i-1})$。</li>
+            <li><strong>中间项全灭</strong>：总振幅和写为：
+              $$\sum \omega_i \Delta x_i = \frac{b - a}{n}\sum_{i=1}^n [f(x_i) - f(x_{i-1})] = \frac{b - a}{n}[f(b) - f(a)]$$</li>
+            <li><strong>极速归零</strong>：只要令 $n \to \infty$，该总振幅和直接趋于 0，证明可积。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>单调性让每一段的振幅化为一前一后的函数差，求和时首尾相消，展现惊人的代数对称美。
+        </div>
+      </div>
+
+      <!-- 定理 7.3.1 -->
+      <div class="th-card" data-chapter="ch7" data-keywords="定理 7.3.1 变上限积分导数 01 局部展开">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 7.3.1</span>
+            <h3>变上限积分的导数定理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 连续性局部展开 + 积分中值</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x)$ 在 $[a, b]$ 上可积，作函数 $F(x) = \int_a^x f(t)\mathrm{d}t$。则 $F(x)$ 在 $[a, b]$ 上连续；若 $f(x)$ 在点 $x_0$ 处连续，则 $F(x)$ 在 $x_0$ 处可导，且 $F'(x_0) = f(x_0)$。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>差商展开为积分</strong>：$\frac{F(x_0 + \Delta x) - F(x_0)}{\Delta x} = \frac{1}{\Delta x}\int_{x_0}^{x_0 + \Delta x} f(t)\mathrm{d}t$。</li>
+            <li><strong>连续性局部常数化</strong>：由 $f$ 在 $x_0$ 连续，对任意 $\varepsilon > 0$，存在 $\delta > 0$，当 $|t - x_0| < \delta$ 时 $|f(t) - f(x_0)| < \varepsilon$。</li>
+            <li><strong>积分放缩</strong>：把 $f(x_0)$ 写成 $\frac{1}{\Delta x}\int_{x_0}^{x_0+\Delta x} f(x_0)\mathrm{d}t$。则：
+              $$\left| \frac{F(x_0 + \Delta x) - F(x_0)}{\Delta x} - f(x_0) \right| \le \frac{1}{|\Delta x|}\int_{x_0}^{x_0+\Delta x} |f(t) - f(x_0)|\mathrm{d}t < \frac{\varepsilon |\Delta x|}{|\Delta x|} = \varepsilon$$</li>
+            <li><strong>得导数</strong>：即 $\lim_{\Delta x \to 0} \frac{\Delta F}{\Delta x} = f(x_0) \implies F'(x_0) = f(x_0)$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>微分与积分互为逆运算的关键锁钥！证明了任何连续函数必定拥有原函数。
+        </div>
+      </div>
+
+      <!-- 定理 7.3.2 -->
+      <div class="th-card" data-chapter="ch7" data-keywords="定理 7.3.2 微积分基本定理 Newton Leibniz 02 常数导数">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 7.3.2</span>
+            <h3>微积分基本定理（Newton-Leibniz 公式）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 变上限原函数 + Lagrange 中值定理推论</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x)$ 在 $[a, b]$ 上连续，$F(x)$ 是 $f(x)$ 在 $[a, b]$ 上的任意一个原函数，则成立：
+          $$\int_a^b f(x)\mathrm{d}x = F(b) - F(a)$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>确立变上限标准原函数</strong>：令 $\Phi(x) = \int_a^x f(t)\mathrm{d}t$。由定理 7.3.1 知 $\Phi'(x) = f(x)$。</li>
+            <li><strong>两原函数相差常数</strong>：设 $F(x)$ 为任意原函数，则 $[\Phi(x) - F(x)]' = f(x) - f(x) \equiv 0$。由 Lagrange 中值定理推论，必存在常数 $C$ 满足 $\Phi(x) = F(x) + C$。</li>
+            <li><strong>定常数求终值</strong>：代入 $x = a \implies \Phi(a) = \int_a^a = 0 = F(a) + C \implies C = -F(a)$。</li>
+            <li><strong>代入上限收网</strong>：代入 $x = b \implies \int_a^b f(x)\mathrm{d}x = \Phi(b) = F(b) - F(a)$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>整个高等数学中最重要的一行公式。将难以求解的分割求和极限，一举化归为寻找原函数的简单代数差。
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= CHAPTER 8 ================= -->
+    <div class="chapter-block" data-chapter="ch8">
+      <div class="ch-group-header">
+        <h2>第八章 反常积分</h2>
+        <span class="ch-sub">P.299 ~ P.326 · 广义积分收敛判别法与第二积分中值定理</span>
+      </div>
+
+      <!-- 定理 8.2.1 -->
+      <div class="th-card" data-chapter="ch8" data-keywords="定理 8.2.1 反常积分 Cauchy收敛原理 01 尾部截断">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 8.2.1</span>
+            <h3>无穷限反常积分之 Cauchy 收敛原理</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 01：Cauchy 准则尾部切片控制</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛的充要条件是：对任意 $\varepsilon > 0$，存在 $A_0 \ge a$，当 $A_2 > A_1 > A_0$ 时恒有：
+          $$\left| \int_{A_1}^{A_2} f(x)\mathrm{d}x \right| < \varepsilon$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>化归函数极限</strong>：定义变上限连续函数 $I(A) = \int_a^A f(x)\mathrm{d}x$。</li>
+            <li><strong>反常积分即极限</strong>：$\int_a^{+\infty} f = \lim_{A \to +\infty} I(A)$。</li>
+            <li><strong>应用函数极限 Cauchy 准则</strong>：函数极限存在的充要条件即为柯西准则：对任意两动点 $|I(A_2) - I(A_1)| = |\int_{A_1}^{A_2} f(x)\mathrm{d}x| < \varepsilon$。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>反常积分条件收敛与绝对收敛理论的总纲领。
+        </div>
+      </div>
+
+      <!-- 定理 8.2.2 & 8.2.3 -->
+      <div class="th-card" data-chapter="ch8" data-keywords="定理 8.2.2 8.2.3 比较判别法 Cauchy判别法 单调有界 03 p积分">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 8.2.2 / 8.2.3</span>
+            <h3>非负函数反常积分比较与 Cauchy 判别法</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t0">🏷️ 套路 03：单调有界收敛定理</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x) \ge 0$。若 $f(x) \le K \varphi(x)$ 且 $\int_a^{+\infty} \varphi$ 收敛，则 $\int_a^{+\infty} f$ 必收敛；特别地，以 $\int_1^{+\infty} \frac{1}{x^p}\mathrm{d}x$（$p > 1$ 收敛）为标尺。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>非负性诱导单调增</strong>：因被积函数 $f(x) \ge 0$，故 $I(A) = \int_a^A f(x)\mathrm{d}x$ 关于 $A$ 严格单调增加。</li>
+            <li><strong>收敛积分给出上界天花板</strong>：$\int_a^A f(x)\mathrm{d}x \le K \int_a^A \varphi(x)\mathrm{d}x \le K \int_a^{+\infty} \varphi(x)\mathrm{d}x = M < \infty$。</li>
+            <li><strong>单调有界定理生效</strong>：单调递增且有上界的函数在 $A \to +\infty$ 时极限必然存在！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>将积分收敛性化归为单调函数的天花板封顶法（套路 03）。
+        </div>
+      </div>
+
+      <!-- 定理 8.2.4 -->
+      <div class="th-card" data-chapter="ch8" data-keywords="定理 8.2.4 积分第二中值定理 Bonnet 13 单调因子 强振荡">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 8.2.4</span>
+            <h3>积分第二中值定理（Bonnet 与 Du Bois-Reymond 公式）</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t2">🏷️ 套路 13：第二积分中值定理（提取单调因子）</span>
+            <span class="tech-tag t2">🏷️ 套路 10：Abel 分部求和展开</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          设 $f(x)$ 在 $[a, b]$ 上可积，$g(x)$ 在 $[a, b]$ 上单调。若 $g(x) \ge 0$ 且单调递减，则存在 $\xi \in [a, b]$ 使得：
+          $$\int_a^b f(x)g(x)\mathrm{d}x = g(a^+) \int_a^\xi f(x)\mathrm{d}x$$
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>阶梯函数与 Abel 变换</strong>：先将可积函数 $f$ 用阶梯函数逼近，积分化为离散和 $\sum f_k g_k \Delta x_k$。</li>
+            <li><strong>应用 Abel 变换提取首项</strong>：由套路 10，离散分部求和后，单调递减非负权重使得余项差分同号并被确界夹死在 $g(a^+) \cdot [m, M]$ 之间。</li>
+            <li><strong>连续介值落地</strong>：积分原函数连续满足介值性，必定能找到某个瞬时中值点 $\xi$ 使等式成立。</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>把难啃的平缓衰减项 $g(x)$ 像吸铁石一样直接吸出积分号外，是啃下 Dirichlet 积分 $\int_0^\infty \frac{\sin x}{x}\mathrm{d}x$ 的终极神器。
+        </div>
+      </div>
+
+      <!-- 定理 8.2.5 -->
+      <div class="th-card" data-chapter="ch8" data-keywords="定理 8.2.5 Dirichlet判别法 Abel判别法 反常积分 13 01 10">
+        <div class="th-card-top">
+          <div class="th-title-group">
+            <span class="th-num-badge">定理 8.2.5</span>
+            <h3>反常积分之 Dirichlet 与 Abel 判别法</h3>
+          </div>
+          <div class="technique-tags">
+            <span class="tech-tag t2">🏷️ 套路 13：第二积分中值定理</span>
+            <span class="tech-tag t0">🏷️ 套路 01：Cauchy 准则</span>
+          </div>
+        </div>
+        <div class="th-statement">
+          若下列条件之一成立，则 $\int_a^{+\infty} f(x)g(x)\mathrm{d}x$ 收敛：
+          <br><strong>(1) Dirichlet 判别法</strong>：原函数 $\int_a^A f(x)\mathrm{d}x$ 在 $[a, +\infty)$ 上有界，且 $g(x)$ 在 $[a, +\infty)$ 上单调递减趋于 0；
+          <br><strong>(2) Abel 判别法</strong>：反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛，且 $g(x)$ 在 $[a, +\infty)$ 上单调有界。
+        </div>
+        <div class="th-proof-box">
+          <div class="th-proof-title">⚡ 证明精粹与关键步骤</div>
+          <ul class="proof-steps">
+            <li><strong>考察尾部切片</strong>：检验 Cauchy 准则项：$\left| \int_{A_1}^{A_2} f(x)g(x)\mathrm{d}x \right|$。</li>
+            <li><strong>施展第二积分中值定理</strong>：由定理 8.2.4，存在 $\xi \in [A_1, A_2]$，使得：
+              $$\int_{A_1}^{A_2} f(x)g(x)\mathrm{d}x = g(A_1)\int_{A_1}^\xi f(x)\mathrm{d}x$$</li>
+            <li><strong>有界配对压制为零</strong>：在 Dirichlet 条件下，原函数有界 $|\int_{A_1}^\xi f| \le 2M$，而 $g(A_1) \to 0$。只要 $A_1$ 足够大，直接放大控制：
+              $$\left| \int_{A_1}^{A_2} f(x)g(x)\mathrm{d}x \right| \le g(A_1) \cdot 2M < \varepsilon$$
+              由 Cauchy 收敛原理，反常积分必收敛！</li>
+          </ul>
+        </div>
+        <div class="th-technique-insight">
+          <strong>💡 套路点评：</strong>第二积分中值定理与柯西收敛准则天衣无缝的组合拳。一击驯服强振荡反常积分。
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <button class="toc-modal-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+    ↑ 返回顶部
+  </button>
+
+  <script>
+    function filterChapter(ch, btn) {
+      document.querySelectorAll('.ch-pill').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+
+      const blocks = document.querySelectorAll('.chapter-block');
+      let visibleCards = 0;
+
+      if (ch === 'all') {
+        blocks.forEach(b => {
+          b.style.display = 'block';
+          visibleCards += b.querySelectorAll('.th-card').length;
+        });
+      } else {
+        blocks.forEach(b => {
+          if (b.getAttribute('data-chapter') === ch) {
+            b.style.display = 'block';
+            visibleCards += b.querySelectorAll('.th-card').length;
+          } else {
+            b.style.display = 'none';
+          }
+        });
+      }
+      document.getElementById('counterText').textContent = `显示 ${visibleCards} 个定理与证明`;
+    }
+
+    function handleTheoremSearch() {
+      const q = document.getElementById('thSearchInput').value.trim().toLowerCase();
+      const cards = document.querySelectorAll('.th-card');
+      const blocks = document.querySelectorAll('.chapter-block');
+
+      if (!q) {
+        document.querySelectorAll('.ch-pill')[0].click();
+        return;
+      }
+
+      blocks.forEach(b => b.style.display = 'block');
+      let count = 0;
+
+      cards.forEach(card => {
+        const text = (card.textContent + ' ' + (card.getAttribute('data-keywords') || '')).toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'block';
+          count++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Hide empty chapter blocks
+      blocks.forEach(b => {
+        const hasVisible = Array.from(b.querySelectorAll('.th-card')).some(c => c.style.display !== 'none');
+        b.style.display = hasVisible ? 'block' : 'none';
+      });
+
+      document.getElementById('counterText').textContent = `搜索到 ${count} 个匹配定理`;
+    }
+  </script>
+</body>
+</html>

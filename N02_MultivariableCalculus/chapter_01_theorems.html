@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第一章 · 实数集与函数 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill current-ch">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (4)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-1-1-1" class="toc-link" title="定理 1.1.1 可列个可列集之并也是可列集">定理 1.1.1 可列个可列集之并也是可列集</a></li>
+<li><a href="#thm-1-1-2" class="toc-link" title="定理 1.1.2 有理数集 Q 是可列集">定理 1.1.2 有理数集 Q 是可列集</a></li>
+<li><a href="#thm-1-2-1" class="toc-link" title="定理 1.2.1 三角不等式">定理 1.2.1 三角不等式</a></li>
+<li><a href="#thm-1-2-2" class="toc-link" title="定理 1.2.2 平均值不等式 (算术-几何平均值不等式)">定理 1.2.2 平均值不等式 (算术-几何平均值不等式)</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 01</span>
+        <span class="ch-count-badge">共收录 4 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第一章 · 实数集与函数</h1>
+      <p class="ch-desc-text">实数系基本性质、集合基数、三角不等式与均值不等式</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-1-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 1.1.1 可列个可列集之并也是可列集</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-17" class="thm-tag routine-ref" target="_blank">🏷️ 套路 17: 抽屉原理与对角线论证</a>
+        <span class="thm-tag">集合基数</span><span class="thm-tag">可数性</span><span class="thm-tag">对角线排列法</span><span class="thm-tag">直积映射</span>
+      </div>
+    </div>
+    <a href="#thm-1-1-1" class="anchor-btn" title="复制锚点链接"># 定理 1.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 1.1.1</span>
+          可列个可列集之并也是可列集.
+          
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+            对任意 $n \in \mathbb{N}^*$，设 $A_n$ 可表示为
+            $$ A_n = \{ x_{n1}, x_{n2}, x_{n3}, \dots, x_{nk}, \dots \}, $$
+            则 $\bigcup_{n=1}^\infty A_n$ 的元素全体可排成如下的无穷方块阵：
+            $$\begin{matrix}
+              x_{11} &amp; &amp; x_{12} &amp; &amp; x_{13} &amp; &amp; x_{14} &amp; \cdots \\
+              &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \\
+              x_{21} &amp; &amp; x_{22} &amp; &amp; x_{23} &amp; &amp; x_{24} &amp; \cdots \\
+              &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \\
+              x_{31} &amp; &amp; x_{32} &amp; &amp; x_{33} &amp; &amp; x_{34} &amp; \cdots \\
+              &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \swarrow &amp; &amp; \\
+              x_{41} &amp; &amp; x_{42} &amp; &amp; x_{43} &amp; &amp; x_{44} &amp; \cdots \\
+              \vdots &amp; &amp; \vdots &amp; &amp; \vdots &amp; &amp; \vdots &amp; \ddots
+            \end{matrix}$$
+            <p>把所有这些元素排成一列的规则可以有许多，常用的一种称为<strong>对角线法则</strong>：从最左面开始，顺着逐条“对角线”（图中箭头所示）将元素按从右上至左下的次序排列，也就是把所有的元素排列成</p>
+            $$ x_{11}, x_{12}, x_{21}, x_{13}, x_{22}, x_{31}, x_{14}, x_{23}, x_{32}, x_{41}, \dots, $$
+            <p class="no-indent">这样的规则保证了不会遗漏一个元素.</p>
+<p>由于不同集合 $A_i$ 与 $A_j \; (i \ne j)$ 的交可能不是空集，因此有些元素可能会在排列中多次出现，我们对此只保留一个而去掉多余的，这样得到的排列仍然表示集合 $\bigcup_{n=1}^\infty A_n$，从而定理得到证明.</p>
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-17" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 17: 抽屉原理与对角线论证</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 二维无限网格与一维无限序列具有相同的基数；通过斜向对角线分组枚举，将可列个离散自由度压缩为单一自然数标号序列。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      所谓“可列”，本质就是能与全体正整数 $\mathbb{N}^*$ 建立一一对应，即元素可以排成一列、依次点名。直观上，一个无限列表已经无穷无尽，将无穷多个无限列表并在一起，直觉容易误以为其元素密度升级到了“连续介质”的级别。
+但定理指明：只要每个子集内部是离散可排的、子集族本身也是离散可数的，总元素集合就依然是离散的 $\aleph_0$（阿列夫零）。证明的关键难点在于排队规则：如果企图先数完第一个集合的所有元素再数第二个集合，就会陷入第一个集合的“无限深渊”而永远无法触及后续集合。因此必须建立“有限步覆盖”的对角线巡回顺序，确保任何一个确定的元素 $(n, k)$ 都在有限步内被排上号码。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      几何图景：将所有元素排布在第一象限的二维正整数格点平面上，横坐标 $k$ 代表第 $k$ 个元素，纵坐标 $n$ 代表第 $n$ 个集合。
+如果沿着某一条横线（某一个集合）一直往右走，就会在水平方向走向无限远而丢失整个平面。康托尔对角线法则沿着斜对角线 $n+k = m$ 进行折返遍历：先扫 $n+k=2$（单点），再扫 $n+k=3$（线段上有限个格点），依此类推。由于每一条斜线段上的整点数都是有限的，整张展开在二维平面上的离散点阵，被一条连续折返的蛇形折线毫无遗漏地串成了一维长链。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>集合势的离散守恒性：可列并操作不改变集合的势，满足 $\aleph_0 \times \aleph_0 = \aleph_0$。</li><li>指标和控制步长：按照双指标之和 $n+k$ 的大小分层排序，保证任意给定下标 $(n,k)$ 的元素在第 $n+k-1$ 轮之内必被遍历到，杜绝了无限停滞。</li><li>重复元素与子集性质：若各集合有公共交集，对应的是自然数集的一个子集，由可列集的任何无限子集仍可列，结论依然严格成立。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-1-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 1.1.2 有理数集 Q 是可列集</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-17" class="thm-tag routine-ref" target="_blank">🏷️ 套路 17: 抽屉原理与对角线论证</a>
+        <span class="thm-tag">有理数集</span><span class="thm-tag">稠密性与可数性</span><span class="thm-tag">势的测度</span><span class="thm-tag">离散骨架</span>
+      </div>
+    </div>
+    <a href="#thm-1-1-2" class="anchor-btn" title="复制锚点链接"># 定理 1.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 1.1.2</span>
+          有理数集 $\mathbb{Q}$ 是可列集.
+          
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+由于区间 $(-\infty, +\infty)$ 可以表示为可列个区间 $(n, n+1] \; (n \in \mathbb{Z})$ 的并，我们只须证明区间 $(0, 1]$ 中的有理数是可列集即可.
+<p>由于区间 $(0, 1]$ 中的有理数可惟一地表示为既约分数 $\frac{q}{p}$，其中 $p \in \mathbb{N}^*, q \in \mathbb{N}^*, q \le p$，并且 $p, q$ 互素. 我们按下列方式排列这些有理数：</p>
+<p>分母 $p=1$ 的既约分数只有一个：$r_{11} = \frac{1}{1} = 1$；</p>
+<p>分母 $p=2$ 的既约分数也只有一个：$r_{21} = \frac{1}{2}$；</p>
+<p>分母 $p=3$ 的既约分数有两个：$r_{31} = \frac{1}{3}, r_{32} = \frac{2}{3}$；</p>
+<p>分母 $p=4$ 的既约分数也只有两个：$r_{41} = \frac{1}{4}, r_{42} = \frac{3}{4}$；</p>
+<p>$\dots\dots$</p>
+<p>一般地，分母 $p=n$ 的既约分数至多不超过 $n-1$ 个，可将它们记为 $r_{n1}, r_{n2}, \dots, r_{nk(n)}$，其中 $k(n) \le n$.</p>
+<p>于是区间 $(0, 1]$ 中的有理数全体可以排成</p>
+$$ r_{11}, r_{21}, r_{31}, r_{32}, r_{41}, r_{42}, \dots, r_{n1}, r_{n2}, \dots, r_{nk(n)}, \dots, $$
+<p class="no-indent">这就证明了有理数集 $\mathbb{Q}$ 是可列集.</p>
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-17" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 17: 抽屉原理与对角线论证</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 数轴上的『稠密性』不等于测度意义上的『连续性』；有理数虽然在实数轴上无处不在，但在基数意义上仅是一具疏松的离散骨架。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在数轴上，任意两个不同有理数之间都存在着无穷多个有理数，这种性质叫作“稠密性”。直觉上，有理数似乎已经像细沙一样填满了整条直线。
+然而该定理给出了极其深刻的现代数学洞察：稠密仅仅是一种拓扑序结构，它的基数其实极其渺小，跟最朴素的自然数集 $1, 2, 3 \dots$ 毫无区别！因为任何有理数都由一对互质整数 $(p, q)$ 唯一编码，有理数集本质上是有序整数对集合 $\mathbb{Z} \times \mathbb{N}^*$ 的一个投影。既然二维格点是可列的，稠密分布在数轴上的全部有理数就也能排成一个单列。这直接预示着：真正填满数轴连续体的绝大多数质料，是不可数、无法写成分数的无理数。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      实数轴的骨架与血肉图景：
+如果把数轴看成一条钢铁轨道，全体有理数就像焊在轨道上的无数个微观刻度晶格。哪怕你在任意两个晶格之间放大亿万倍，依然能看到更微小的有理数刻度。但是，如果我们把所有有理数排成一队，在第 $n$ 个有理数周围套上一个长度为 $\varepsilon / 2^n$ 的微小开区间，所有这些区间的总长度居然可以小于任意给定的 $\varepsilon$（总测度为零）！这意味着有理数在数轴上是“处处稠密却毫无实心体积”的离散点阵，实数轴真正的连续介质完全由无理数支撑。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>拓扑稠密与代数可数的并存：稠密是指在每个邻域都有交集，可数是指元素总容量是离散可编号的，两者并不矛盾。</li><li>原书证明的构造手法：先将数轴拆为可列个单位区间 $(n, n+1]$，在每个区间内按分母大小对分数进行分层，直接将问题化归为定理 1.1.1 的可列并结构。</li><li>分析学推论：实数集 $\mathbb{R}$ 是不可数的（连续统势 $\mathfrak{c}$），由此立即可推得无理数集不仅不可数，而且在测度意义上几乎占据了整条数轴。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-1-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 1.2.1 三角不等式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">三角不等式</span><span class="thm-tag">距离公理</span><span class="thm-tag">模长控制</span><span class="thm-tag">分析学基本不等式</span>
+      </div>
+    </div>
+    <a href="#thm-1-2-1" class="anchor-btn" title="复制锚点链接"># 定理 1.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 1.2.1（三角不等式）</span>
+          对于任意实数 $a$ 和 $b$，都有
+          $$ \big| |a| - |b| \big| \le |a + b| \le |a| + |b|. $$
+          
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+            因为对于任意实数 $a$ 和 $b$，都有
+            $$ -|a||b| \le ab \le |a||b|, $$
+            所以
+            $$ |a|^2 - 2|a||b| + |b|^2 \le a^2 + 2ab + b^2 \le |a|^2 + 2|a||b| + |b|^2, $$
+            即
+            $$ (|a| - |b|)^2 \le (a + b)^2 \le (|a| + |b|)^2, $$
+            开方后就得到上述不等式.
+            <span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 度量空间距离公理的一维本原形式；通过两端极值放缩控制合成量模长，是分析学中误差分离与项拆解的根本基石。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在实数分析中，绝对值 $|x - y|$ 代表数轴上两点间的距离。三角不等式 $|a \pm b| \le |a| + |b|$ 表明：合成位移的绝对大小，绝不会超过分段位移绝对大小的算术和。
+如果 $a$ 与 $b$ 方向相同（同号），合成模长达到最大值 $|a| + |b|$；如果方向相反（异号），两者产生内部抵消，合成模长收缩。
+在极限与连续性的证明中，我们几乎无法直接硬算目标量 $|f(x) - A|$，必须借由中间媒介（比如极限目标、辅助函数）将其撕开为两段误差：$|f(x) - A| = |(f(x) - g(x)) + (g(x) - A)| \le |f(x) - g(x)| + |g(x) - A|$。三角不等式就是保证这种“中介拆分、分别控制”在数学上永远成立的通行证。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      向量几何与数轴折返图景：
+在平面几何中，三角形任意两边之和大于第三边，当三点共线且两向量反向时，第三边等于两边之差；当同向时等于两边之和。
+数轴上的一维绝对值就是共线向量的模长：从原点出发沿 $a$ 向量位移，再接着做 $b$ 向量位移。无论两次位移是否发生掉头折返，最终距离原点的欧氏距离 $|a+b|$，永远被“不计方向的全程累计路程 $|a| + |b|$”作为上界绝对压制；同时被“两次位移的净净抵消差值 $||a| - |b||$”作为下界牢牢托住。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>绝对值的代数本质：$|x| \le M \iff -M \le x \le M$。由 $-|a| \le a \le |a|$ 与 $-|b| \le b \le |b|$ 逐边相加，立得对称边界。</li><li>差式不等式的代数恒等变形：将 $a$ 写为 $(a - b) + b$，套用和式不等式得 $|a| \le |a - b| + |b|$，移项即得 $|a| - |b| \le |a - b|$。</li><li>分析学标准放缩模板：$\varepsilon/2$ 证明法全部基于 $|A - B| \le |A - X| + |X - B| < arepsilon/2 + arepsilon/2 = arepsilon$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-1-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 1.2.2 平均值不等式 (算术-几何平均值不等式)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-11" class="thm-tag routine-ref" target="_blank">🏷️ 套路 11: 数学归纳法与离散递推演化</a>
+        <span class="thm-tag">均值不等式</span><span class="thm-tag">AM-GM</span><span class="thm-tag">凸性萌芽</span><span class="thm-tag">柯西正反向归纳法</span>
+      </div>
+    </div>
+    <a href="#thm-1-2-2" class="anchor-btn" title="复制锚点链接"># 定理 1.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<span class="box-title">定理 1.2.2（平均值不等式）</span>
+          对任意 $n$ 个正数 $a_1, a_2, \dots, a_n$，有
+          $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n} \ge n \Big/ \left( \frac{1}{a_1} + \frac{1}{a_2} + \cdots + \frac{1}{a_n} \right), $$
+          等号当且仅当 $a_1, a_2, \dots, a_n$ 全部相等时成立.
+          <p>这就是说，算术平均值不小于几何平均值，几何平均值不小于调和平均值.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<span class="proof-title">证</span>
+            先证明左边的不等式
+            $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n}. $$
+            当 $n = 1, 2$ 时，不等式显然成立.<br/>
+            当 $n = 2^k \; (k \in \mathbb{N}^*)$ 时，不等式是 $\frac{a+b}{2} \ge \sqrt{ab}$ 的直接推论.<br/>
+            当 $n \ne 2^k$ 时，取 $l \in \mathbb{N}^*$，使 $2^{l-1} &lt; n &lt; 2^l$. 记
+            $$ \sqrt[n]{a_1 a_2 \cdots a_n} = \bar{a}, $$
+            在 $a_1, a_2, \dots, a_n$ 后面加上 $(2^l - n)$ 个 $\bar{a}$，将其扩充成 $2^l$ 个正数. 对这 $2^l$ 个正数应用不等式，得到
+            $$ \frac{1}{2^l}[a_1 + a_2 + \cdots + a_n + (2^l - n)\bar{a}] \ge (a_1 a_2 \cdots a_n \bar{a}^{2^l - n})^{\frac{1}{2^l}} = \bar{a}, $$
+            整理后即有
+            $$ \frac{a_1 + a_2 + \cdots + a_n}{n} \ge \sqrt[n]{a_1 a_2 \cdots a_n}. $$
+            对 $\frac{1}{a_1}, \frac{1}{a_2}, \dots, \frac{1}{a_n}$ 使用上面的结论，便得到右边的不等式.
+            <span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-11" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 11: 数学归纳法与离散递推演化</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 几何平均的对数凹性反映了极值均分律；证明中采用的柯西正反向归纳法，是离散递推突破常规线性步长的高维范式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在代数与分析学中，均值不等式揭示了乘积与求和之间的根本约束：在总和固定时，各分量完全相等时乘积最大；在乘积固定时，各分量完全相等时总和最小。
+该定理的证明方法在数学史上具有里程碑意义——柯西反向归纳法（Forward-Backward Induction）：
+常规数学归纳法是一步一步向上爬（$n \to n+1$），但均值不等式在从 $n$ 项跳到 $n+1$ 项时，多出的项会改变整个平均值的权重，代数结构难以递推。柯西打破常规：先从 $n$ 翻倍跳到 $2n$（通过成对组合秒证 $2^k$ 阶梯），再巧妙利用算术平均值本身作为虚设填充项，从高处的 $2^k$ 倒着回踩到任意自然数 $n$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      超多面体体积与对数凸性图景：
+固定周长的矩形中，正方形面积最大；固定表面积的超长方体中，正超立方体的体积最大。任何不均衡的分配，都会导致超长方体在某些维度过分压扁，从而遭受高维体积的剧烈惩罚。
+从对数几何视角看：函数 $f(x) = \ln x$ 是严格上凸曲线，弦线永远位于弧线下方。算术平均值是横坐标的质心，几何平均值的对数是函数值的质心；因为曲线向上凸起，弧线上的质心高度必然高于或等于弦线上的平均高度，直接在几何上钉死了几何均值小于等于算术均值。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>归纳奠基步：利用实数平方非负 $(\sqrt{a_1} - \sqrt{a_2})^2 \ge 0$ 确立两变量均值不等式 $a_1 a_2 \le (rac{a_1+a_2}{2})^2$。</li><li>两倍步长正向飞跃：设命题对 $n$ 成立，将 $2n$ 项拆为两组 $n$ 项，内层分别应用归纳假设，外层应用二元均值不等式，完成 $2^k$ 幂次阶梯递推。</li><li>虚设平均项反向回溯：对于任意 $n < 2^k$，补齐 $2^k - n$ 个数值恰好等于 $A = rac{a_1+\dots+a_n}{n}$ 的常数项，代入已知成立的 $2^k$ 项不等式，两边相消后自然倒退推得 $n$ 项不等式。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <span></span>
+  <a href="chapter_02_theorems.html" class="page-nav-btn">下一章：第二章 · 数列极限 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

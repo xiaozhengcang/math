@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第七章 · 定积分 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill current-ch">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (19)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#lem-7-1-1" class="toc-link" title="引理 7.1.1 划分加细大和小和单调性定理">引理 7.1.1 划分加细大和小和单调性定理</a></li>
+<li><a href="#lem-7-1-2" class="toc-link" title="引理 7.1.2 任意两划分小和不大于大和引理">引理 7.1.2 任意两划分小和不大于大和引理</a></li>
+<li><a href="#lem-7-1-3" class="toc-link" title="引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)">引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)</a></li>
+<li><a href="#thm-7-1-1" class="toc-link" title="定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)">定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)</a></li>
+<li><a href="#thm-7-1-2" class="toc-link" title="定理 7.1.2 振幅可积准则">定理 7.1.2 振幅可积准则</a></li>
+<li><a href="#thm-7-1-cor1" class="toc-link" title="推论 1 闭区间上的连续函数必定可积">推论 1 闭区间上的连续函数必定可积</a></li>
+<li><a href="#thm-7-1-cor2" class="toc-link" title="推论 2 闭区间上的单调函数必定可积">推论 2 闭区间上的单调函数必定可积</a></li>
+<li><a href="#thm-7-1-3" class="toc-link" title="定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)">定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)</a></li>
+<li><a href="#thm-7-1-cor3" class="toc-link" title="推论 3 闭区间上只有有限个间断点的有界函数必可积">推论 3 闭区间上只有有限个间断点的有界函数必可积</a></li>
+<li><a href="#thm-7-3-1" class="toc-link" title="定理 7.3.1 变上限积分函数的连续性与可微性定理">定理 7.3.1 变上限积分函数的连续性与可微性定理</a></li>
+<li><a href="#thm-7-3-2" class="toc-link" title="定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)">定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)</a></li>
+<li><a href="#thm-7-3-3" class="toc-link" title="定理 7.3.3 定积分的分部积分法">定理 7.3.3 定积分的分部积分法</a></li>
+<li><a href="#thm-7-3-4" class="toc-link" title="定理 7.3.4 定积分的换元积分法">定理 7.3.4 定积分的换元积分法</a></li>
+<li><a href="#thm-7-3-5" class="toc-link" title="定理 7.3.5 奇偶函数在对称区间上的积分性质定理">定理 7.3.5 奇偶函数在对称区间上的积分性质定理</a></li>
+<li><a href="#thm-7-3-6" class="toc-link" title="定理 7.3.6 周期函数定积分的区间平移不变性定理">定理 7.3.6 周期函数定积分的区间平移不变性定理</a></li>
+<li><a href="#thm-7-4-1" class="toc-link" title="定理 7.4.1 平面曲线的弧长积分公式">定理 7.4.1 平面曲线的弧长积分公式</a></li>
+<li><a href="#thm-7-6-1" class="toc-link" title="定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理">定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理</a></li>
+<li><a href="#cor-7-6-1" class="toc-link" title="推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n">推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n</a></li>
+<li><a href="#cor-7-6-2" class="toc-link" title="推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1">推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 07</span>
+        <span class="ch-count-badge">共收录 19 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第七章 · 定积分</h1>
+      <p class="ch-desc-text">Darboux 准则、黎曼可积充分必要条件、微积分基本定理 (N-L 公式) 与数值求积</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="lem-7-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 7.1.1 划分加细大和小和单调性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分上下和挤压与达布振幅控制</a>
+        <span class="thm-tag">达布大和</span><span class="thm-tag">达布小和</span><span class="thm-tag">划分加细</span><span class="thm-tag">确界单调性</span><span class="thm-tag">阶梯包络</span>
+      </div>
+    </div>
+    <a href="#lem-7-1-1" class="anchor-btn" title="复制锚点链接"># 引理 7.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>引理 7.1.1</strong> 设 $P'$ 是由划分 $P$ 添加了 $p$ 个分点后得到的加细划分，设 $|f(x)| \le M \ (x \in [a, b])$，$\lambda = \max\limits_{1\le i\le n}\Delta x_i$，则成立
+<ol>
+<li>$\underline{S}(P) \le \underline{S}(P') \le \overline{S}(P') \le \overline{S}(P)$（即划分越细，小和不减，大和不增）；</li>
+<li>$\overline{S}(P) - \overline{S}(P') \le 2pM\lambda$，$ \underline{S}(P') - \underline{S}(P) \le 2pM\lambda$．</li>
+</ol></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 先设 $P'$ 只比 $P$ 多增加了一个分点 $x^* \in (x_{k-1}, x_k)$．记</p>
+$$
+M_k' = \sup_{x\in [x_{k-1}, x^*]} f(x), \quad M_k'' = \sup_{x\in [x^*, x_k]} f(x).
+$$
+<p>显然 $M_k' \le M_k, M_k'' \le M_k$．于是</p>
+$$
+\begin{aligned}
+\overline{S}(P) - \overline{S}(P') &amp;= M_k(x_k - x_{k-1}) - [M_k'(x^* - x_{k-1}) + M_k''(x_k - x^*)] \\
+&amp;= (M_k - M_k')(x^* - x_{k-1}) + (M_k - M_k'')(x_k - x^*) \ge 0.
+\end{aligned}
+$$
+<p>由于 $M_k - M_k' \le 2M, M_k - M_k'' \le 2M$，故</p>
+$$
+\overline{S}(P) - \overline{S}(P') \le 2M(x_k - x_{k-1}) \le 2M\lambda.
+$$
+<p>同理可证 $\underline{S}(P') - \underline{S}(P) \ge 0$ 且 $\underline{S}(P') - \underline{S}(P) \le 2M\lambda$．若增加了 $p$ 个分点，只需重复上述步骤 $p$ 次即得证．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分上下和挤压与达布振幅控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 阶梯函数逼近的包含单调性：划分加细缩小局部取值范围，迫使小和（底盘支撑）单调抬升，大和（顶棚覆盖）单调下沉。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在 Riemann 积分理论中，达布大和 $\overline{S}(P) = \sum M_i \Delta x_i$ 代表上覆盖阶梯矩形总面积，达布小和 $\underline{S}(P) = \sum m_i \Delta x_i$ 代表下支撑阶梯矩形总面积。当我们在原有划分中增加新的分点（即划分加细 $P \subset P^*$）时，某些小区间被进一步细分。在细分的小区间上，子区间的下确界因范围缩小而只增不减（$m_k', m_k'' \ge m_k$），上确界只减不增（$M_k', M_k'' \le M_k$）。因此加细后的小和必定单调增大 $\underline{S}(P) \le \underline{S}(P^*)$，大和必定单调减小 $\overline{S}(P^*) \le \overline{S}(P)$。增加 $p$ 个分点时，总形变量被严格控制在 $2pM\lambda$ 之内。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      阶梯包络盒的内外单调夹紧：从下方支撑函数图象的阶梯多边形（小和），随着网格加密，其内部空隙被逐步填补抬升；从上方罩住函数图象的阶梯多边形（大和），其凸出多余的边角被逐级削切压低，内外两层阶梯曲面单调向真实曲边梯形贴近。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>先证增加单个分点 $x^*$：区间一分为二，子区间确界单调性直接导出差值 $\le 2M\lambda$。</li><li>数学归纳法推广到增加 $p$ 个分点：总误差严格受控于 $2pM\lambda$。</li><li>构建整个 Darboux 理论体系与黎曼可积准则的最底层单调性支撑。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="lem-7-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 7.1.2 任意两划分小和不大于大和引理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分上下和挤压与达布振幅控制</a>
+        <span class="thm-tag">公共加细划分</span><span class="thm-tag">大小和交集桥梁</span><span class="thm-tag">上下积分良定性</span><span class="thm-tag">确界偏序</span>
+      </div>
+    </div>
+    <a href="#lem-7-1-2" class="anchor-btn" title="复制锚点链接"># 引理 7.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>引理 7.1.2</strong> 对区间 $[a, b]$ 的任意两个划分 $P_1$ 与 $P_2$，必有
+$$
+\underline{S}(P_1) \le \overline{S}(P_2).
+$$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 考虑 $P_1$ 与 $P_2$ 的公共加细划分 $P = P_1 \cup P_2$．由引理 7.1.1，</p>
+$$
+\underline{S}(P_1) \le \underline{S}(P) \le \overline{S}(P) \le \overline{S}(P_2).
+$$
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分上下和挤压与达布振幅控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 公共加细划分作为拓扑并网枢纽：任意选取的两个孤立划分，其小和与大和之间通过公共加细链条保持全局偏序 $\underline{S}(P_1) \le \overline{S}(P_2)$。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      设 $P_1$ 与 $P_2$ 是区间 $[a,b]$ 上任意两个完全无关的划分方案。证明张三的小和 $\underline{S}(P_1)$ 必定小于等于李四的大和 $\overline{S}(P_2)$ 的关键，在于构造两者的『公共加细划分 $P = P_1 \cup P_2$』。在公共加细划分下，利用引理 7.1.1 串联起单调链条：$\underline{S}(P_1) \le \underline{S}(P) \le \overline{S}(P) \le \overline{S}(P_2)$。这一不等式具有非凡的拓扑意义：它表明任何一个大和都是全体小和集合的上界，任何一个小和都是全体大和集合的下界！由实数系的确界存在定理，下积分 $\underline{I} = \sup \underline{S}$ 与上积分 $\overline{I} = \inf \overline{S}$ 稳固存在，且必然满足 $\underline{I} \le \overline{I}$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      阶梯函数的逐点不等式积分：对任意两套划分，下阶梯函数 $s_{P_1}(x)$ 与上阶梯函数 $S_{P_2}(x)$ 处处满足点态偏序 $s_{P_1}(x) \le f(x) \le S_{P_2}(x)$。在区间上对点态不等式求积分，直接导出整体积分和的大小偏序，中间毫无逆转的可能。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>公共加细技巧：取分点并集 $P = P_1 \cup P_2$ 作为中介跳板。</li><li>四元不等式链条：$\underline{S}(P_1) \le \underline{S}(P) \le \overline{S}(P) \le \overline{S}(P_2)$。</li><li>确界存在性推论：确立上积分 $\overline{I}$ 与下积分 $\underline{I}$ 作为固有界限的良定义性，且 $\underline{I} \le \overline{I}$ 恒成立。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="lem-7-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>引理 7.1.3 Darboux 定理 (达布上下和极限逼近定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分上下和挤压与达布振幅控制</a>
+        <span class="thm-tag">Darboux 定理</span><span class="thm-tag">达布上下积分</span><span class="thm-tag">网格细度趋于零</span><span class="thm-tag">ε 截断分割</span><span class="thm-tag">基准划分叠加</span>
+      </div>
+    </div>
+    <a href="#lem-7-1-3" class="anchor-btn" title="复制锚点链接"># 引理 7.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>引理 7.1.3 (Darboux 定理)</strong> 设 $f(x)$ 是 $[a, b]$ 上的有界函数，则当划分的细度 $\lambda \to 0$ 时，有
+$$
+\lim_{\lambda\to 0}\underline{S}(P) = \underline{I}, \quad \lim_{\lambda\to 0}\overline{S}(P) = \overline{I}.
+$$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 只证上积分的情形．任给 $\varepsilon &gt; 0$，由下确界的定义，存在一个固定的划分 $P_0$，使得</p>
+$$
+\overline{S}(P_0) &lt; \overline{I} + \frac{\varepsilon}{2}.
+$$
+<p>设 $P_0$ 的分点个数为 $p+1$（即除了端点 $a, b$ 外有 $p$ 个内分点）．令 $\delta = \dfrac{\varepsilon}{4pM}$（设 $M = \sup |f(x)| &gt; 0$）．对细度 $\lambda &lt; \delta$ 的任何划分 $P$，考虑公共加细划分 $P' = P \cup P_0$．由于 $P'$ 最多只比 $P$ 多 $p$ 个分点，应用引理 7.1.1，</p>
+$$
+\overline{S}(P) - \overline{S}(P') \le 2pM\lambda &lt; 2pM\delta = \frac{\varepsilon}{2}.
+$$
+<p>又因为 $P_0 \subset P'$，故 $\overline{S}(P') \le \overline{S}(P_0)$．从而</p>
+$$
+\overline{I} \le \overline{S}(P) &lt; \overline{S}(P') + \frac{\varepsilon}{2} \le \overline{S}(P_0) + \frac{\varepsilon}{2} &lt; \overline{I} + \varepsilon.
+$$
+<p>这正是 $\lim\limits_{\lambda\to 0}\overline{S}(P) = \overline{I}$ 的定义．同理可证下积分的极限结论．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分上下和挤压与达布振幅控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 细度趋于零强力驱动大小和逼向理论确界：通过下确界选取优质基准划分，利用并网误差控制将大和小和强行收敛于上下积分。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      上积分 $\overline{I}$ 是所有可能大和的下确界。由下确界定义，对任意 $\varepsilon > 0$，必定存在某个特定的基准划分 $P_0$ 使得 $\overline{S}(P_0) < \overline{I} + \varepsilon/2$。设 $P_0$ 含有 $p$ 个内分点。对任意一个网格细度充分小（$\lambda < \delta = \frac{\varepsilon}{4pM}$）的任意划分 $P$，将 $P$ 与 $P_0$ 合并，相当于在 $P$ 中增加了至多 $p$ 个分点。由引理 7.1.1，增加 $p$ 个分点导致的大和改变量不超过 $2pM\lambda < \varepsilon/2$。结合加细不等式，直接夹逼得出 $\overline{I} \le \overline{S}(P) < \overline{I} + \varepsilon$。这证明了：只要网格最大细度 $\lambda \to 0$，无论划分方案如何杂乱无章，大和必收敛到上积分 $\overline{I}$，小和必收敛到下积分 $\underline{I}$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      网格细密化消解局部非对称性：当最大小区间尺度 $\lambda$ 被全局压制时，阶梯函数对曲边几何边界的局部逼近误差被一致压缩，大和函数在网格流形上强收敛至能量泛函的极小点（上积分）。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>利用确界定义提取基准划分：构造特定划分 $P_0$ 使得 $\overline{S}(P_0) < \overline{I} + \varepsilon/2$。</li><li>并网分点增量误差控制：任意细划分 $P$ 叠加 $P_0$ 引入至多 $p$ 个新点，形变量受控于 $2pM\lambda$。</li><li>两阶段 $\varepsilon$ 截断法：通过选取 $\delta = \frac{\varepsilon}{4pM}$，将任意网格细度的误差锁死在 $\varepsilon$ 以内。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.1.1 Darboux 可积准则 (上积分等于下积分准则)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分上下和挤压与达布振幅控制</a>
+        <span class="thm-tag">可积准则</span><span class="thm-tag">达布可积</span><span class="thm-tag">上积分等于下积分</span><span class="thm-tag">夹逼挤压</span><span class="thm-tag">黎曼和确界</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-1" class="anchor-btn" title="复制锚点链接"># 定理 7.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>定理 7.1.1 (Darboux 可积准则)</strong> 有界函数 $f(x)$ 在 $[a, b]$ 上可积的充分必要条件是
+$$
+\underline{I} = \overline{I},
+$$
+此时，它们的公共值就是定积分 $\int_a^b f(x)\,\mathrm{d}x$．</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> <strong>必要性</strong>：若 $f(x)$ 可积，积分值为 $I$．由夹逼不等式，对任意 $\xi_i \in [x_{i-1}, x_i]$，$\underline{S}(P) \le \sum f(\xi_i)\Delta x_i \le \overline{S}(P)$，由上确界和下确界性质，容易得出 $\underline{S}(P) \le I \le \overline{S}(P)$，令 $\lambda \to 0$ 取极限即得 $\underline{I} = I = \overline{I}$．</p>
+<p><strong>充分性</strong>：若 $\underline{I} = \overline{I} = I$，则由引理 7.1.3，$\lim\limits_{\lambda\to 0}\underline{S}(P) = \lim\limits_{\lambda\to 0}\overline{S}(P) = I$．由夹逼定理，对任意选取的样本点 $\xi_i$，必有 $\lim\limits_{\lambda\to 0}\sum\limits_{i=1}^n f(\xi_i)\Delta x_i = I$，故 $f(x)$ 可积．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分上下和挤压与达布振幅控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 外测度与内测度的完全闭合：黎曼可积的充要条件是上积分等于下积分，阶梯上下界将介点黎曼和夹逼锁定在唯一积分值上。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      函数在 $[a,b]$ 上黎曼可积的严格定义是：当细度 $\lambda \to 0$ 时，无论介点 $\xi_i$ 如何选取，黎曼和 $\sum f(\xi_i)\Delta x_i$ 都有确定极限 $I$。达布可积准则断言：可积的充要条件是上积分等于下积分 $\overline{I} = \underline{I}$！其内在机制极为明澈：对任意给定的划分 $P$，无论介点怎么挑，黎曼和永远被夹在小和与大和之间：$\underline{S}(P) \le \sum f(\xi_i)\Delta x_i \le \overline{S}(P)$。若 $\overline{I} = \underline{I} = I$，由 Darboux 定理，当 $\lambda \to 0$ 时大和与小和从两侧同时奔向 $I$，两面夹定理直接将黎曼和压死在 $I$ 上；反过来，若可积，由介点选取的任意性取确界，两端确界极限迫使上下积分完全重合。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      阶梯包络曲面的单层坍缩：上阶梯面与下阶梯面在极限状态下贴合成唯一的单层流形曲面，厚度坍缩为零，中间介点抽样的所有黎曼和在零厚度的夹缝中被唯一锁定。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>必要性：可积说明黎曼和收敛于 $I$，由介点任意性取确界导出 $\underline{S}(P) \le I \le \overline{S}(P)$，取极限得 $\underline{I} = \overline{I} = I$。</li><li>充分性：由 Darboux 定理 $\lim \underline{S}(P) = \underline{I}$ 且 $\lim \overline{S}(P) = \overline{I}$；当 $\underline{I} = \overline{I}$ 时触发夹逼准则。</li><li>将抽象的介点任意性极限问题，彻底转化为确界微元差别的解析判定。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.1.2 振幅可积准则</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-14" class="thm-tag routine-ref" target="_blank">🏷️ 套路 14: 积分上下和挤压与达布振幅控制</a>
+        <span class="thm-tag">振幅可积</span><span class="thm-tag">振幅加权和</span><span class="thm-tag">几何阴影面积趋于零</span><span class="thm-tag">误差带测度消亡</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-2" class="anchor-btn" title="复制锚点链接"># 定理 7.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>定理 7.1.2 (振幅可积准则)</strong> 有界函数 $f(x)$ 在 $[a, b]$ 可积的充分必要条件是：
+$$
+\lim_{\lambda\to 0}\sum_{i=1}^n \omega_i \Delta x_i = 0.
+$$
+等价地，对任意给定的 $\varepsilon &gt; 0$，都存在一种划分 $P$，使得
+$$
+\sum_{i=1}^n \omega_i \Delta x_i &lt; \varepsilon.
+$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 证明分为两步，直接由 Darboux 可积准则与 Darboux 定理转化完成：</p>
+<p>注意到对任意划分 $P$，大和与小和之差恰好等于振幅关于区间长度的加权和：</p>
+$$\overline{S}(P) - \underline{S}(P) = \sum_{i=1}^n M_i \Delta x_i - \sum_{i=1}^n m_i \Delta x_i = \sum_{i=1}^n (M_i - m_i)\Delta x_i = \sum_{i=1}^n \omega_i \Delta x_i.$$
+<p><strong>必要性：</strong> 若 $f(x)$ 在 $[a, b]$ 上可积，由定理 7.1.1（Darboux 可积准则），上积分与下积分相等 $\overline{I} = \underline{I}$。再由引理 7.1.3（Darboux 定理），当 $\lambda \to 0$ 时，$\overline{S}(P) \to \overline{I}$ 且 $\underline{S}(P) \to \underline{I}$。两式相减即得：</p>
+$$\lim_{\lambda \to 0} \sum_{i=1}^n \omega_i \Delta x_i = \lim_{\lambda \to 0}[\overline{S}(P) - \underline{S}(P)] = \overline{I} - \underline{I} = 0.$$
+<p><strong>充分性：</strong> 若 $\lim_{\lambda \to 0} \sum_{i=1}^n \omega_i \Delta x_i = 0$。任给 $\varepsilon > 0$，存在划分 $P$，使得 $\overline{S}(P) - \underline{S}(P) < \varepsilon$。因为恒有 $\underline{S}(P) \le \underline{I} \le \overline{I} \le \overline{S}(P)$，所以必有：</p>
+$$0 \le \overline{I} - \underline{I} \le \overline{S}(P) - \underline{S}(P) < \varepsilon.$$
+<p>由 $\varepsilon$ 的任意性，只能有 $\overline{I} - \underline{I} = 0$，即 $\overline{I} = \underline{I}$。由定理 7.1.1，函数 $f(x)$ 在 $[a, b]$ 上可积. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-14" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 14: 积分上下和挤压与达布振幅控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 大和与小和之差严格等同于极差振幅的微元加权和：函数可积性完全等价于局部起伏振幅带的总面积消亡。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      计算大和与小和的差值，展开后为 $\overline{S}(P) - \underline{S}(P) = \sum (M_i - m_i)\Delta x_i = \sum \omega_i \Delta x_i$（其中 $\omega_i = M_i - m_i$ 称为小区间上的振幅）。在几何上，这项差值正是上下阶梯矩形在每个子区间上形成的『误差悬空矩形带』的总面积！定理指出：可积的充要条件就是只要网格细度 $\lambda \to 0$，这些误差带的总面积必收敛于零！若总振幅面积不能趋于零，说明函数在微观尺度上起伏过于剧烈（例如 Dirichlet 函数在任何小区间上振幅恒为 1，总振幅面积恒为 $b-a \ne 0$），导致阶梯包络无法收缩贴合，因而不可积。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      不确定度误差流形的测度湮灭：将上下阶梯面之间的空隙视为二维相空间中的误差流形。可积性意味着当对底空间进行无限细分投影时，该误差流形的平面测度（面积）以零为极限收缩消失。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>恒等变形桥梁：$\overline{S}(P) - \underline{S}(P) = \sum \omega_i \Delta x_i$ 直接打通大和小和与局部振幅的关系。</li><li>充要性两步推导：结合 Darboux 可积准则与 Darboux 定理，极限差直接映射为 $\overline{I} - \underline{I}$。</li><li>不可积函数的终极判据：若存在非空子集上振幅无法被细分压缩，则总振幅加权和下界非零，当场判定不可积。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-cor1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 1 闭区间上的连续函数必定可积</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: 局部性质到整体性质的过渡</a>
+        <span class="thm-tag">连续必可积</span><span class="thm-tag">Cantor 一致连续</span><span class="thm-tag">振幅一致微小</span><span class="thm-tag">紧致性覆盖</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-cor1" class="anchor-btn" title="复制锚点链接"># 推论 1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>推论 1</strong> 闭区间上的连续函数必定可积．</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 设 $f(x)$ 在 $[a, b]$ 上连续，则它在 $[a, b]$ 上一致连续．也就是说，对任意 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，对任意 $x', x'' \in [a, b]$，只要 $|x' - x''| &lt; \delta$，就有</p>
+$$
+|f(x') - f(x'')| &lt; \frac{\varepsilon}{b - a}.
+$$
+<p>在 $[a, b]$ 的任何细度 $\lambda &lt; \delta$ 的划分 $P$ 中，每个小区间 $[x_{i-1}, x_i]$ 上的振幅满足</p>
+$$
+\omega_i = M_i - m_i = f(x_i') - f(x_i'') &lt; \frac{\varepsilon}{b - a},
+$$
+<p>于是</p>
+$$
+\sum_{i=1}^n \omega_i \Delta x_i &lt; \frac{\varepsilon}{b - a}\sum_{i=1}^n \Delta x_i = \varepsilon.
+$$
+<p>由定理 7.1.2，$f(x)$ 在 $[a, b]$ 上可积．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: 局部性质到整体性质的过渡</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 紧致区间上一致连续性对局部振幅的一致压制：Cantor 定理将所有小区间的振幅全局压至 $\varepsilon/(b-a)$，区间求和完美消去常数分母。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      闭区间 $[a,b]$ 是实数轴上的紧致集合。由 Cantor 一致连续性定理（定理 3.4.6），连续函数在闭区间上必然一致连续。这意味着对任意给定的容许误差 $\varepsilon > 0$，存在统一的尺度 $\delta > 0$，使得只要子区间长度 $\Delta x_i < \delta$，全场每一个子区间上的振幅落差都满足 $\omega_i < \frac{\varepsilon}{b-a}$！将此不等式代入振幅可积准则，提取上界得 $\sum \omega_i \Delta x_i < \frac{\varepsilon}{b-a} \sum \Delta x_i = \frac{\varepsilon}{b-a}(b-a) = \varepsilon$！误差总面积被任意压缩，直接宣告连续函数必定黎曼可积！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      紧致流形上一阶起伏的一致平顺性：在无边界奇点的紧致定义域上，连续映射排除了一切无限陡峭或无限密集的震荡畸变，使得网格细度能够对函数的局域曲面落差实现全域无死角的刚性约束。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Cantor 定理的战略运用：由闭区间紧致性将逐点连续性升级为全局一致连续性。</li><li>振幅界定：直接给出与区间位置无关的一致界 $\omega_i < \frac{\varepsilon}{b-a}$。</li><li>伸缩相消求和：$\sum \Delta x_i = b-a$，分母精确对消，瞬间确立可积性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-cor2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 2 闭区间上的单调函数必定可积</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">单调必可积</span><span class="thm-tag">伸缩对消求和</span><span class="thm-tag">纵轴非重叠投影</span><span class="thm-tag">可列间断点容许性</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-cor2" class="anchor-btn" title="复制锚点链接"># 推论 2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>推论 2</strong> 闭区间上的单调函数必定可积．</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 设 $f(x)$ 在 $[a, b]$ 上单调，不妨设其为单调增加，则在任意小区间 $[x_{i-1}, x_i]$ 上，$f(x)$ 的振幅为 $\omega_i = f(x_i) - f(x_{i-1})$．</p>
+<p>于是，对任意给定的 $\varepsilon &gt; 0$，取 $\delta = \dfrac{\varepsilon}{f(b) - f(a)} &gt; 0$（若 $f(b) = f(a)$ 则为常数函数，结论平凡）．当 $\lambda = \max(\Delta x_i) &lt; \delta$ 时，</p>
+$$
+\sum_{i=1}^n \omega_i \Delta x_i \le \lambda \sum_{i=1}^n [f(x_i) - f(x_{i-1})] = \lambda [f(b) - f(a)] &lt; \delta [f(b) - f(a)] = \varepsilon.
+$$
+<p>由定理 7.1.2，$f(x)$ 在 $[a, b]$ 上可积．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 单调函数极差在纵轴上的不重叠投影与等距伸缩相消：内部分点完全级联对消，总振幅和被端点落差与步长乘积锁死。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      单调函数哪怕拥有可列无穷多个跳跃间断点，也必定黎曼可积！其证明结构展现了分析学的极致对消之美：设 $f$ 在 $[a,b]$ 上单调递增，则在每个子区间 $[x_{i-1}, x_i]$ 上，最小值在左端点取得 $m_i = f(x_{i-1})$，最大值在右端点取得 $M_i = f(x_i)$，振幅恰好就是端点差 $\omega_i = f(x_i) - f(x_{i-1})$！采用等距划分 $\Delta x_i = \lambda = \frac{b-a}{n}$，将步长提出求和号外，内部振幅累加呈现多米诺骨牌式的级联伸缩相消：$(f(x_1)-f(x_0)) + (f(x_2)-f(x_1)) + \dots + (f(x_n)-f(x_{n-1})) = f(b) - f(a)$！中间所有内部分点全部相互抵消，总振幅和为 $\lambda [f(b) - f(a)]$。随着 $\lambda \to 0$，乘积必然收敛于 0，立即可积！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      极差在纵轴上的非重叠投影拼接：单调函数的各子区间函数值范围 $[f(x_{i-1}), f(x_i)]$ 在纵坐标轴上互不重叠。所有小振幅段拼接起来的总长度，严格等于两端点间的总高度差 $f(b)-f(a)$，使得总振幅面积被几何长方形 $\lambda \times [f(b)-f(a)]$ 刚性封顶。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调性确定极值位置：$M_i = f(x_i), m_i = f(x_{i-1})$，极差转化为函数值代数差。</li><li>裂项伸缩对消求和：$\sum [f(x_i) - f(x_{i-1})] = f(b) - f(a)$，彻底抹平内部分割细节。</li><li>容许可列间断点：即便函数含有密集跳跃间断点，单调性依然足以捍卫定积分的可积性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.1.3 可积的 Cauchy 准则 (充分必要条件)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">柯西准则</span><span class="thm-tag">可积充要条件</span><span class="thm-tag">存在特定划分</span><span class="thm-tag">内在自洽性</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-3" class="anchor-btn" title="复制锚点链接"># 定理 7.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>定理 7.1.3 (可积充分必要条件——Cauchy 准则)</strong> 有界函数 $f(x)$ 在 $[a, b]$ 可积的充分必要条件是，对任意给定的 $\varepsilon &gt; 0$，存在着一种划分 $P$，使得相应的振幅满足
+$$
+\sum_{i=1}^n \omega_i \Delta x_i &lt; \varepsilon.
+$$
+<p>证明留给读者．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><em>（原书注：证明留给读者。标准严谨证明如下：）</em></p>
+<p><strong>证</strong> <strong>必要性：</strong> 若 $f(x)$ 在 $[a, b]$ 上可积。由定理 7.1.2（振幅可积准则），$\displaystyle\lim_{\lambda \to 0} \sum_{i=1}^n \omega_i \Delta x_i = 0$。取 $\varepsilon > 0$，只要划分 $P$ 的细度 $\lambda$ 充分小，就必然成立：</p>
+$$\sum_{i=1}^n \omega_i \Delta x_i < \varepsilon.$$
+<p>因此必存在这样的划分 $P$。</p>
+<p><strong>充分性：</strong> 假设对任意给定的 $\varepsilon > 0$，都存在一种划分 $P$，使得 $\overline{S}(P) - \underline{S}(P) = \sum_{i=1}^n \omega_i \Delta x_i < \varepsilon$。</p>
+<p>由上积分与下积分的定义，恒有：</p>
+$$\underline{S}(P) \le \underline{I} \le \overline{I} \le \overline{S}(P).$$
+<p>因此两式相减，必定有：</p>
+$$0 \le \overline{I} - \underline{I} \le \overline{S}(P) - \underline{S}(P) < \varepsilon.$$
+<p>因为 $\varepsilon$ 可以任意小，这迫使 $0 \le \overline{I} - \underline{I} = 0$，即 $\underline{I} = \overline{I}$。由定理 7.1.1（Darboux 可积准则），函数 $f(x)$ 在 $[a, b]$ 上可积. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 全局极限条件向特定划分存在性的等价转化：无须验证所有细微划分，只需针对每个精度 ε 存在某一种特定划分使得振幅和小量可控。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      定理 7.1.2 要求『对一切细度 $\lambda \to 0$ 的划分都趋于零』，全称量词往往在构造性证明中极为苛刻。Cauchy 准则为分析学家提供了极为强大的判别武器：只需证明对每个 $\varepsilon > 0$，存在某一种定制划分 $P$ 满足 $\overline{S}(P) - \underline{S}(P) < \varepsilon$ 即可！为什么只要一种划分就够了？因为下积分与上积分恒被任何划分夹在中间：$\underline{S}(P) \le \underline{I} \le \overline{I} \le \overline{S}(P)$。既然存在一种划分让大和与小和的间距缩小到 $\varepsilon$ 以内，夹在中间的下积分与上积分的落差自然必须小于 $\varepsilon$。由 $\varepsilon$ 的任意性，这直接迫使 $\overline{I} = \underline{I}$，确立可积性！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      特定夹具的存在性判定：要证明两个理论界面完全重合，不需要遍历全天下所有的测量网格，只要对任意微小的公差 $\varepsilon$，你能构造出一组特定的阶梯夹板将其缝隙压缩在 $\varepsilon$ 之内，两界面的无缝闭合即可获证。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>存在量词放宽机制：从 $\forall \lambda < \delta$ 简化为 $\exists P$。</li><li>夹逼确界差：$0 \le \overline{I} - \underline{I} \le \overline{S}(P) - \underline{S}(P) < \varepsilon \implies \overline{I} = \underline{I}$。</li><li>证明含有复杂奇异集（如有限或可列间断点）函数可积性的标准工作平台。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-1-cor3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 3 闭区间上只有有限个间断点的有界函数必可积</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-08" class="thm-tag routine-ref" target="_blank">🏷️ 套路 08: 局部性质到整体性质的过渡</a>
+        <span class="thm-tag">间断点隔离</span><span class="thm-tag">有限覆盖</span><span class="thm-tag">分段击破</span><span class="thm-tag">零测度集雏形</span>
+      </div>
+    </div>
+    <a href="#thm-7-1-cor3" class="anchor-btn" title="复制锚点链接"># 推论 3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>推论 3</strong> 闭区间上只有有限个不连续点的有界函数必定可积．</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 设 $f(x)$ 在 $[a, b]$ 上的不连续点共有 $k$ 个，记为 $a \le p_1 &lt; p_2 &lt; \cdots &lt; p_k \le b$，设相邻两个点之间的最小距离为 $d$．不妨假设 $p_1$ 和 $p_k$ 在 $[a, b]$ 的内部．</p>
+
+<p>对任意给定的 $\varepsilon &gt; 0$，取 $\delta = \min\left\{ \dfrac{p_1 - a}{2}, \dfrac{b - p_k}{2}, \dfrac{d}{3}, \dfrac{\varepsilon}{4k(M - m)} \right\}$，其中 $M = \sup f(x), m = \inf f(x)$．以这 $k$ 个点为中心，每个点两边对称地取两个端点 $p_j - \delta, p_j + \delta$ 为分点，将 $[a, b]$ 分成 $2k + 1$ 个子区间，于是 $f(x)$ 在子区间 $[a, p_1 - \delta], [p_1 + \delta, p_2 - \delta], \dots, [p_k + \delta, b]$ 上是连续的．由于连续函数在这些子区间上都可积，所以在每个连续子区间上分别存在分点，使得该子区间上的振幅乘区间长之和小于 $\dfrac{\varepsilon}{2(k + 1)}$．</p>
+<p>将所有分点合为一组，看成是 $[a, b]$ 的一个划分，记 $\omega_j'$ 为 $f(x)$ 在 $[p_j - \delta, p_j + \delta]$ 上的振幅，即有</p>
+$$
+\sum_{i=1}^n \omega_i \Delta x_i &lt; (k + 1)\frac{\varepsilon}{2(k + 1)} + 2\delta \cdot k(M - m) \le \frac{\varepsilon}{2} + \frac{\varepsilon}{4k(M - m)} \cdot 2k(M - m) = \varepsilon.
+$$
+<p>由定理 7.1.3，$f(x)$ 在 $[a, b]$ 上可积．当 $p_1$ 和 $p_k$ 为 $[a, b]$ 的端点时可类似证得．</p>
+<p style="text-align: right;">证毕</p>
+</div></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-08" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 08: 局部性质到整体性质的过渡</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 零测度奇异集的邻域隔离与紧致余集的一致连续覆盖：用总长极小的开区间包裹间断点，在剩余闭区间上用 Cantor 定理平抑误差。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      有界函数在闭区间上有有限个断点能否积分？完全可以！其证明手法是高维测度论在初等分析中的绝妙雏形——『隔离法』：设函数有 $m$ 个间断点。我们用 $m$ 个极窄的小开区间将每个间断点各自包裹在内，控制这些小开区间的总长度小于 $\frac{\varepsilon}{4M}$。在这些牢笼内部，函数即便振荡，其振幅至多为 $2M$，加权振幅和不超过 $2M \times \frac{\varepsilon}{4M} = \frac{\varepsilon}{2}$！掏出这几个开区间后，剩下的定义域是一组有限个封闭区间的并集（紧集），函数在其中处处连续。由 Cantor 定理，在良性闭集上划分，振幅和同样被压缩在 $\frac{\varepsilon}{2}$ 以内。两部分加和小于 $\varepsilon$，直接触发 Cauchy 准则（定理 7.1.3），判定函数必可积！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      奇异点的零测度管道隔离：有限个孤立间断点在实数轴上的测度为零。用任意细微的测度管道将这些奇异点包裹隔离后，函数的大局平滑性在管道外部的广大紧致区域依然占绝对统治地位，奇异点无法破坏全局面积的收敛。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>奇异区域长度控制：设间断点 $m$ 个，小区间总长控制在 $\frac{\varepsilon}{4M}$，使得坏区振幅和 $< \varepsilon/2$。</li><li>良性余区紧致性：掏出间断点邻域后剩下有限个闭区间，应用 Cantor 一致连续性控制好区振幅和 $< \varepsilon/2$。</li><li>合体小于 $\varepsilon$ 触发定理 7.1.3 Cauchy 准则完成证明。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.1 变上限积分函数的连续性与可微性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-15" class="thm-tag routine-ref" target="_blank">🏷️ 套路 15: 变上限积分导数与微积分基石</a>
+        <span class="thm-tag">变上限积分</span><span class="thm-tag">原函数存在性</span><span class="thm-tag">平滑化算子</span><span class="thm-tag">积分第一中值定理</span><span class="thm-tag">微积分基石</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-1" class="anchor-btn" title="复制锚点链接"># 定理 7.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-1">
+<div class="theorem-header">定理 7.3.1</div>
+<p>设 $f(x)$ 在 $[a, b]$ 上可积，作函数</p>
+  $$
+  F(x) = \int_a^x f(t)\,\mathrm{d}t, \quad x \in [a, b],
+  $$
+  <p>则</p>
+<p>(1) $F(x)$ 是 $[a, b]$ 上的连续函数；</p>
+<p>(2) 若 $f(x)$ 在 $[a, b]$ 上连续，则 $F(x)$ 在 $[a, b]$ 上可微，且有</p>
+  $$
+  F'(x) = f(x).
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 由定理条件，知 $F(x)$ 在整个 $[a, b]$ 上有定义．由定积分的区间可加性，</p>
+$$
+F(x + \Delta x) - F(x) = \int_a^{x+\Delta x} f(t)\,\mathrm{d}t - \int_a^x f(t)\,\mathrm{d}t = \int_x^{x+\Delta x} f(t)\,\mathrm{d}t.
+$$
+<p>记 $m, M$ 分别为 $f(x)$ 在 $[a, b]$ 上的下确界和上确界，由定积分第一中值定理，即得到</p>
+$$
+F(x + \Delta x) - F(x) = \begin{cases}
+\eta\cdot\Delta x \ (\eta \in [m, M]), &amp; \text{若 } f(x) \text{ 在 } [a, b] \text{ 上可积}, \\
+f(\xi)\cdot\Delta x \ (\xi \text{ 在 } x \text{ 与 } x + \Delta x \text{ 之间}), &amp; \text{若 } f(x) \text{ 在 } [a, b] \text{ 上连续}.
+\end{cases}
+$$
+<p>显然，不管在哪一种情况下，当 $\Delta x \to 0$ 时都有 $F(x + \Delta x) - F(x) \to 0$，即 $F(x)$ 在 $[a, b]$ 上连续．</p>
+<p>若 $f(x)$ 在 $[a, b]$ 连续，当 $\Delta x \to 0$ 时有 $\xi \to x$，因而 $f(\xi) \to f(x)$，于是</p>
+$$
+F'(x) = \lim_{\Delta x \to 0} \frac{F(x + \Delta x) - F(x)}{\Delta x} = \lim_{\Delta x \to 0} f(\xi) = f(x).
+$$
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-15" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 15: 变上限积分导数与微积分基石</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 积分算子作为提升函数光滑度的平滑化算子：被积函数可积使得变上限函数连续，被积函数连续使得变上限函数可导且导数严格复原被积函数。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      定义变上限积分函数 $\Phi(x) = \int_a^x f(t)\,\mathrm{d}t$。其增量具有完美的区间可加性：$\Phi(x+\Delta x) - \Phi(x) = \int_x^{x+\Delta x} f(t)\,\mathrm{d}t$。由有界性性质，$|\Delta \Phi| \le M|\Delta x|$，当 $\Delta x \to 0$ 时必有 $\Delta \Phi \to 0$，证明 $\Phi(x)$ 必定是连续函数（积分将有界可积函数的光滑度提升为连续）。若进一步假设 $f$ 在点 $x$ 处连续，则差商 $\frac{\Delta \Phi}{\Delta x} = \frac{1}{\Delta x} \int_x^{x+\Delta x} f(t)\,\mathrm{d}t$。由连续性，小区间内的函数值逼近 $f(x)$，对积分平均值取极限，立即可导且 $\Phi'(x) = f(x)$！这不仅是微积分学的最高基石，更是人类历史上第一次以构造性方式确立了：任何连续函数都百分之百存在原函数！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      边际累积速率等于前沿切面高度：当积分上限沿横轴向右推进 $\Delta x$ 时，新累积的狭窄曲边梯形面积，其一阶线性主部恰好由底边 $\Delta x$ 乘以当前前沿瞬时高度 $f(x)$ 构成。单位推进步长上的边际面积增加率，极限下精确等于横截面高度。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>积分区间可加性分解增量：$\Phi(x+\Delta x) - \Phi(x) = \int_x^{x+\Delta x} f(t)\,\mathrm{d}t$。</li><li>差商化为平均值积分：$\frac{\Delta \Phi}{\Delta x} = \frac{1}{\Delta x}\int_x^{x+\Delta x} [f(x) + \alpha(t)]\,\mathrm{d}t = f(x) + \frac{1}{\Delta x}\int_x^{x+\Delta x} \alpha(t)\,\mathrm{d}t$。</li><li>连续性驱动余项积分消亡：由 $t \to x$ 时 $\alpha(t) \to 0$，平均值余项绝对值小于 $\varepsilon$，导出 $\Phi'(x) = f(x)$。</li><li>彻底解决了连续函数原函数存在性的根本理论瓶颈。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.2 微积分基本定理 (Newton-Leibniz 公式)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-15" class="thm-tag routine-ref" target="_blank">🏷️ 套路 15: 变上限积分导数与微积分基石</a>
+        <span class="thm-tag">微积分基本定理</span><span class="thm-tag">牛顿莱布尼茨公式</span><span class="thm-tag">微积分统一</span><span class="thm-tag">边界势差与全域累积</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-2" class="anchor-btn" title="复制锚点链接"># 定理 7.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-2">
+<div class="theorem-header">定理 7.3.2（微积分基本定理）</div>
+<p>设 $f(x)$ 在 $[a, b]$ 上连续，$F(x)$ 是 $f(x)$ 在 $[a, b]$ 上的一个原函数，则成立</p>
+  $$
+  \int_a^b f(x)\,\mathrm{d}x = F(b) - F(a).
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $F(x)$ 是 $f(x)$ 在 $[a, b]$ 上的任一个原函数，而由定理 7.3.1，$\displaystyle\int_a^x f(t)\,\mathrm{d}t$ 也是 $f(x)$ 在 $[a, b]$ 上的一个原函数，因而两者至多相差一个常数．记</p>
+$$
+\int_a^x f(t)\,\mathrm{d}t = F(x) + C,
+$$
+<p>令 $x = a$，即得到 $C = -F(a)$，所以</p>
+$$
+\int_a^x f(t)\,\mathrm{d}t = F(x) - F(a).
+$$
+<p>再令 $x = b$，由于定积分中的自变量用什么记号与积分值无关，便可得到</p>
+$$
+\int_a^b f(x)\,\mathrm{d}x = \int_a^b f(t)\,\mathrm{d}t = F(b) - F(a).
+$$
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-15" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 15: 变上限积分导数与微积分基石</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 微观局部导数与宏观全域积分的终极统一：全域无限细分累积和严格等于原函数在边界端点处的宏观势差净位移。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在 Newton 和 Leibniz 之前，求定积分必须通过无限分割求和求极限（黎曼和），过程繁琐晦涩。微积分基本定理以无与伦比的优雅统一了微积分：求定积分 $\int_a^b f(x)\,\mathrm{d}x$ 只需要找到 $f(x)$ 的任意一个原函数 $F(x)$，结果就是端点值相减 $F(b) - F(a)$！证明大道至简：由定理 7.3.1，变上限积分函数 $\Phi(x) = \int_a^x f(t)\,\mathrm{d}t$ 本身就是 $f(x)$ 的一个原函数。由定理 5.1.4，任何两个原函数在连通区间上必相差一个常数 $C$，故 $\Phi(x) = F(x) + C$。令 $x=a$，利用 $\Phi(a) = \int_a^a f = 0$，解出常数 $C = -F(a)$！再代入上限 $x=b$，瞬间锁定 $\int_a^b f(t)\,\mathrm{d}t = \Phi(b) = F(b) - F(a)$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      梯度场沿一维流形的路径积分等于边界势能差：若将 $f(x) = F'(x)$ 视为一维保守势能场的梯度力，沿区间 $[a,b]$ 的定积分即为力场沿路径所做的总功。保守力做功与中途具体路径起伏完全无关，只唯一由端点两处的势能差 $F(b) - F(a)$ 决定（高维 Stokes 公式的一维退化原型）。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>变上限积分作为桥梁特解：$\Phi(x) = \int_a^x f(t)\,\mathrm{d}t$ 满足 $\Phi'(x) = f(x)$。</li><li>原函数族常数差定理：$\Phi(x) - F(x) \equiv C$（定理 5.1.4 导数恒零则为常数）。</li><li>端点定常数：令 $x=a$ 确定 $C = -F(a)$，令 $x=b$ 导出 $\int_a^b f = F(b) - F(a)$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.3 定积分的分部积分法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 分部积分与导数配对转移</a>
+        <span class="thm-tag">分部积分</span><span class="thm-tag">微积分基本定理应用</span><span class="thm-tag">伴随微分算子转移</span><span class="thm-tag">边界项代入</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-3" class="anchor-btn" title="复制锚点链接"># 定理 7.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-3">
+<div class="theorem-header">定理 7.3.3</div>
+<p>设 $u(x), v(x)$ 在区间 $[a, b]$ 上有连续导数，则</p>
+  $$
+  \int_a^b u(x)v'(x)\,\mathrm{d}x = \left.[u(x)v(x)]\right|_a^b - \int_a^b v(x)u'(x)\,\mathrm{d}x.
+  $$
+  <p>上式也能写成下列形式</p>
+  $$
+  \int_a^b u(x)\,\mathrm{d}v(x) = \left.[u(x)v(x)]\right|_a^b - \int_a^b v(x)\,\mathrm{d}u(x).
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 因为 $u(x)$ 与 $v(x)$ 在区间 $[a, b]$ 上具有连续导数，由导数的乘积法则（定理 4.3.2），函数乘积 $u(x)v(x)$ 在 $[a, b]$ 上可导，且其导数为连续函数：</p>
+$$[u(x)v(x)]' = u'(x)v(x) + u(x)v'(x).$$
+<p>对上述等式两边在区间 $[a, b]$ 上计算定积分，利用定积分的线性性（定理 7.1.1），有：</p>
+$$\int_a^b [u(x)v(x)]'\,\mathrm{d}x = \int_a^b u'(x)v(x)\,\mathrm{d}x + \int_a^b u(x)v'(x)\,\mathrm{d}x.$$
+<p>因为 $[u(x)v(x)]'$ 连续，以 $u(x)v(x)$ 为其原函数。根据定理 7.3.2（微积分基本定理 / Newton-Leibniz 公式），左边定积分直接等于端点值之差：</p>
+$$\int_a^b [u(x)v(x)]'\,\mathrm{d}x = \left.[u(x)v(x)]\right|_a^b = u(b)v(b) - u(a)v(a).$$
+<p>将此代入上式并移项，把 $\int_a^b u(x)v'(x)\,\mathrm{d}x$ 留在等式左端，即得到：</p>
+$$\int_a^b u(x)v'(x)\,\mathrm{d}x = \left.[u(x)v(x)]\right|_a^b - \int_a^b v(x)u'(x)\,\mathrm{d}x.$$
+<p>再由微分形式 $\mathrm{d}v(x) = v'(x)\mathrm{d}x$ 与 $\mathrm{d}u(x) = u'(x)\mathrm{d}x$，上式即为定理所给出的标准分部积分公式. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 分部积分与导数配对转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 双线性乘积微分法则在紧致域上的积分反映：通过边界项补偿，将微分算子从一个因子转移至其对偶配对因子。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      分部积分法本质是将两函数相乘的求导法则 $[uv]' = u'v + uv'$ 搬到定积分领域。对等式两边在 $[a,b]$ 上同时求定积分，利用 Newton-Leibniz 公式，左端直接脱去积分号化为端点边界差 $[u(x)v(x)]|_a^b$。移项后，原式 $\int_a^b u\,\mathrm{d}v$ 中的微商算子成功被转移到 $u$ 身上，变为 $\int_a^b v\,\mathrm{d}u$。在计算定积分时，必须注意：边界项 $[uv]|_a^b$ 必须立即代入上下限，这构成了微分算子转移在边界处付出的全通量代价值。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      相平面全微分沿对角轨道的流形积分：面积全微分 $\mathrm{d}(uv) = u\,\mathrm{d}v + v\,\mathrm{d}u$ 积分得到总对角面积增量。分部积分本质是在二维参数相平面中互换积分次序，两块正交积分区域的面积差严格等于外围大矩形与初始小矩形的边界差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>乘积求导恒等式：$[uv]' = u'v + uv'$ 作为出发点。</li><li>Newton-Leibniz 公式脱帽：$\int_a^b [uv]'\,\mathrm{d}x = [uv]|_a^b$ 直接计算全微分原函数。</li><li>定积分上下限的即时代入：消除不定积分中遗漏常数或换回变量的繁琐错误。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.4 定积分的换元积分法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-21" class="thm-tag routine-ref" target="_blank">🏷️ 套路 21: 换元积分与变量代换扭曲</a>
+        <span class="thm-tag">换元积分</span><span class="thm-tag">微分同胚</span><span class="thm-tag">Jacobi 测度形变因子</span><span class="thm-tag">上下限同步映射</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-4" class="anchor-btn" title="复制锚点链接"># 定理 7.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-4">
+<div class="theorem-header">定理 7.3.4</div>
+<p>设 $f(x)$ 在区间 $[a, b]$ 上连续，$x = \varphi(t)$ 在区间 $[\alpha, \beta]$（或区间 $[\beta, \alpha]$）上有连续导数，其值域包含于 $[a, b]$，且满足 $\varphi(\alpha) = a$ 和 $\varphi(\beta) = b$，则</p>
+  $$
+  \int_a^b f(x)\,\mathrm{d}x = \int_\alpha^\beta f(\varphi(t))\varphi'(t)\,\mathrm{d}t.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 因为 $f(x)$ 连续，所以必有原函数．设 $F(x)$ 为 $f(x)$ 的某个原函数，由复合函数求导法则，可知 $F(\varphi(t))$ 是 $f(\varphi(t))\varphi'(t)$ 的一个原函数．按 Newton-Leibniz 公式，则有</p>
+$$
+\int_\alpha^\beta f(\varphi(t))\varphi'(t)\,\mathrm{d}t = F(\varphi(\beta)) - F(\varphi(\alpha)) = F(b) - F(a) = \int_a^b f(x)\,\mathrm{d}x.
+$$
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-21" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 21: 换元积分与变量代换扭曲</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一维微分同胚坐标变换下的测度形变补偿：链式法则引入导数因子 $\varphi'(t)$ 补偿坐标轴非均匀拉伸，上下限同步变换免除反解回代。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      设坐标变换为 $x = \varphi(t)$。若 $F$ 是 $f$ 的原函数，由复合函数求导链式法则，$[F(\varphi(t))]' = f(\varphi(t))\varphi'(t)$。对复合求导式在 $[\alpha, \beta]$ 上套用 Newton-Leibniz 公式，右端积分直接等于 $F(\varphi(\beta)) - F(\varphi(\alpha)) = F(b) - F(a) = \int_a^b f(x)\,\mathrm{d}x$！定积分换元法展现了比不定积分换元更为纯粹的数学自洽：不仅将微分形式 $\mathrm{d}x$ 变为 $\varphi'(t)\mathrm{d}t$，而且上下限同步变换为新变量的端点 $[\alpha, \beta]$。计算完新变量的原函数后，直接代入新上下限即得最终数值，彻底免除了反解反函数的步骤！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      一维黎曼流形的非均匀拉伸与局域体积形式保真：将底空间坐标轴进行非均匀伸缩 $x = \varphi(t)$，微元长度以局域伸缩率 $\varphi'(t)$ 缩放。高度函数在新坐标系中评估为 $f(\varphi(t))$，底乘高后的微元面积在非线性微分变换下处处保真，整体测度保持严格不变。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>复合函数原函数构造：由链式法则 $[F(\varphi(t))]' = f(\varphi(t))\varphi'(t)$ 建立原函数对应。</li><li>Newton-Leibniz 双向闭合：两端积分分别化为 $F(b)-F(a)$，逻辑严丝合缝。</li><li>单调性与连续可导性先决条件：$\varphi'(t)$ 连续保证了被积函数连续，端点一一对应保证了区间定向无折叠回退。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.5 奇偶函数在对称区间上的积分性质定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-19" class="thm-tag routine-ref" target="_blank">🏷️ 套路 19: 奇偶对称与周期伸缩抵消</a>
+        <span class="thm-tag">对称区间</span><span class="thm-tag">空间反射对称性</span><span class="thm-tag">奇零偶倍</span><span class="thm-tag">定向反转与积分抵消</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-5" class="anchor-btn" title="复制锚点链接"># 定理 7.3.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-5">
+<div class="theorem-header">定理 7.3.5</div>
+<p>设 $f(x)$ 在对称区间 $[-a, a]$ 上可积，</p>
+<p>(1) 若 $f(x)$ 是偶函数，则成立</p>
+  $$
+  \int_{-a}^a f(x)\,\mathrm{d}x = 2\int_0^a f(x)\,\mathrm{d}x;
+  $$
+  <p>(2) 若 $f(x)$ 是奇函数，则成立</p>
+  $$
+  \int_{-a}^a f(x)\,\mathrm{d}x = 0.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 由</p>
+$$
+\int_{-a}^a f(x)\,\mathrm{d}x = \int_{-a}^0 f(x)\,\mathrm{d}x + \int_0^a f(x)\,\mathrm{d}x,
+$$
+<p>对积分 $\displaystyle\int_{-a}^0 f(x)\,\mathrm{d}x$ 作变量代换 $x = -t$，得</p>
+$$
+\int_{-a}^0 f(x)\,\mathrm{d}x = -\int_a^0 f(-t)\,\mathrm{d}t = \begin{cases}
+\displaystyle\int_0^a f(x)\,\mathrm{d}x, &amp; f(x) \text{ 为偶函数}, \\
+\displaystyle -\int_0^a f(x)\,\mathrm{d}x, &amp; f(x) \text{ 为奇函数},
+\end{cases}
+$$
+<p>从而得到所需结论．</p>
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-19" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 19: 奇偶对称与周期伸缩抵消</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 空间反射不变性与定向反转抵消：在反对称反射映射下，奇函数定向相消使其积分归零，偶函数对称重叠使其积分翻倍。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      对称区间 $[-a, a]$ 的积分性质源于反射变换 $x = -t$ 的代数对称性。将区间拆解为负半轴与正半轴 $\int_{-a}^a = \int_{-a}^0 + \int_0^a$。对前半段积分施行镜面换元 $x = -t$，由于 $\mathrm{d}x = -\mathrm{d}t$ 且积分上下限从 $-a \to 0$ 反转为 $a \to 0$，负号与反向限相互对消，恒等变形为 $\int_0^a f(-t)\,\mathrm{d}t$。若 $f$ 为奇函数，由 $f(-t) = -f(t)$，前半段变为 $-\int_0^a f(t)\,\mathrm{d}t$，与后半段正负完全抵消，总积分必然恒等于零；若 $f$ 为偶函数，由 $f(-t) = f(t)$，两段完全同号同值，相加得出 $2\int_0^a f(t)\,\mathrm{d}t$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      对称群作用下的宇称积分分解：反射算子将坐标轴定向翻转。奇函数的图象关于原点中心反对称，左半平面的有向面积与右半平面的有向面积等大异号，全空间测度加权和在群不变性下精准归零；偶函数的图象关于纵轴轴对称，两半平面有向面积同向相加。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>拆分积分区间：$\int_{-a}^a = \int_{-a}^0 + \int_0^a$。</li><li>镜面代换消除负限：在 $[-a,0]$ 上令 $x = -t$，得到 $\int_{-a}^0 f(x)\,\mathrm{d}x = \int_0^a f(-t)\,\mathrm{d}t$。</li><li>利用宇称性质分流：奇函数出负号相消为 0，偶函数同号相加为 2 倍。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-3-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.3.6 周期函数定积分的区间平移不变性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-19" class="thm-tag routine-ref" target="_blank">🏷️ 套路 19: 奇偶对称与周期伸缩抵消</a>
+        <span class="thm-tag">周期函数</span><span class="thm-tag">圆周流形积分</span><span class="thm-tag">平移不变测度</span><span class="thm-tag">首尾截断拼接</span>
+      </div>
+    </div>
+    <a href="#thm-7-3-6" class="anchor-btn" title="复制锚点链接"># 定理 7.3.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-3-6">
+<div class="theorem-header">定理 7.3.6</div>
+<p>设 $f(x)$ 是以 $T$ 为周期的可积函数，则对任意 $a$，</p>
+  $$
+  \int_a^{a+T} f(x)\,\mathrm{d}x = \int_0^T f(x)\,\mathrm{d}x.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><em>（原书注：作为一个练习，请读者用换元积分法自行证明。标准严谨证明如下：）</em></p>
+<p><strong>证</strong> 利用定积分对区间的可加性，将积分区间 $[a, a+T]$ 拆解为三段相加：</p>
+$$\int_a^{a+T} f(x)\,\mathrm{d}x = \int_a^0 f(x)\,\mathrm{d}x + \int_0^T f(x)\,\mathrm{d}x + \int_T^{a+T} f(x)\,\mathrm{d}x.$$
+<p>对上式右端的第三个积分 $\displaystyle\int_T^{a+T} f(x)\,\mathrm{d}x$ 进行换元，令 $x = t + T$，则 $\mathrm{d}x = \mathrm{d}t$。当 $x = T$ 时 $t = 0$；当 $x = a + T$ 时 $t = a$。又因为函数 $f(x)$ 是以 $T$ 为周期的函数，恒有 $f(t+T) = f(t)$，因此第三个积分变为：</p>
+$$\int_T^{a+T} f(x)\,\mathrm{d}x = \int_0^a f(t+T)\,\mathrm{d}t = \int_0^a f(t)\,\mathrm{d}t.$$
+<p>将此结果代回原拆解式中，注意到根据定积分定向性质，第一项 $\displaystyle\int_a^0 f(x)\,\mathrm{d}x = -\int_0^a f(x)\,\mathrm{d}x$，于是有：</p>
+$$\begin{aligned}
+\int_a^{a+T} f(x)\,\mathrm{d}x &= \int_a^0 f(x)\,\mathrm{d}x + \int_0^T f(x)\,\mathrm{d}x + \int_0^a f(t)\,\mathrm{d}t \\
+&= -\int_0^a f(x)\,\mathrm{d}x + \int_0^T f(x)\,\mathrm{d}x + \int_0^a f(x)\,\mathrm{d}x \\
+&= \int_0^T f(x)\,\mathrm{d}x.
+\end{aligned}$$
+<p>由此确证：周期函数在任意一个周期长度的区间上的定积分值皆相等，且与积分区间的起始位置 $a$ 完全无关. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-19" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 19: 奇偶对称与周期伸缩抵消</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 圆周拓扑流形上的平移不变 Haar 测度：任意长度为一个周期的滑动窗口截取的定积分值恒等于基准周期积分，与起点位置无关。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      设 $f(x)$ 具有周期 $T$。无论以任意点 $a$ 为起点，长度为 $T$ 的区间 $[a, a+T]$ 上的定积分值恒等于基准区间 $[0,T]$ 上的积分。证明通过精巧的区间三段式拆分完成：$[a, a+T] = [a, 0] \cup [0, T] \cup [T, a+T]$。对尾部截段 $\int_T^{a+T}$ 作平移换元 $x = t+T$，由周期性 $f(t+T) = f(t)$，尾部积分原样复制转化为 $[0, a]$ 上的积分。而首部截段 $\int_a^0$ 恰好等于 $-\int_0^a$。首部与尾部正负符号相反、绝对值完全相等，在相加时代数抵消彻底消亡，全场仅留下中间的基准积分 $\int_0^T f$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      紧致圆周 $S^1$ 上的闭合环路积分：周期为 $T$ 的实轴函数等价于定义在拓扑圆周 $S^1 = \mathbb{R}/T\mathbb{Z}$ 上的函数。在圆周上积分整整一圈的累积量，不论你从圆周上的哪一点作为切割缝出发，环绕闭合一周的总面积必然恒定守恒。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>三段式拆解技巧：将滑动区间分解为基准区间与两端头尾残余段。</li><li>平移换元抵消首尾：令 $x = t+T$，使尾段 $[T, a+T]$ 恒等映射为 $[0, a]$，与首段 $[a, 0] = -[0, a]$ 完美抵消。</li><li>傅里叶级数系数计算的奠基性质：允许自由将积分区间平移至对称区间 $[-\frac{T}{2}, \frac{T}{2}]$ 简化运算。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-4-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.4.1 平面曲线的弧长积分公式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">弧长公式</span><span class="thm-tag">微分中值同步化</span><span class="thm-tag">切向量欧氏范数</span><span class="thm-tag">折线逼近</span>
+      </div>
+    </div>
+    <a href="#thm-7-4-1" class="anchor-btn" title="复制锚点链接"># 定理 7.4.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-4-1">
+<div class="theorem-header">定理 7.4.1（弧长公式）</div>
+<p>若由参数方程</p>
+  $$
+  \begin{cases}
+  x = x(t), \\
+  y = y(t),
+  \end{cases} \quad t \in [T_1, T_2]
+  $$
+
+
+<p>确定的曲线是光滑曲线，则它是可求长的，其弧长为</p>
+  $$
+  l = \int_{T_1}^{T_2} \sqrt{[x'(t)]^2 + [y'(t)]^2}\,\mathrm{d}t.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 利用上面的记号，则对区间 $[T_1, T_2]$ 的任意划分，有</p>
+$$
+\begin{aligned}
+&amp;\left|\sum_{i=1}^n P_{i-1}P_i - \sum_{i=1}^n \sqrt{[x'(\xi_i)]^2 + [y'(\xi_i)]^2}\Delta t_i\right| \\
+= &amp;\left|\sum_{i=1}^n \sqrt{[x'(\eta_i)]^2 + [y'(\sigma_i)]^2}\Delta t_i - \sum_{i=1}^n \sqrt{[x'(\xi_i)]^2 + [y'(\xi_i)]^2}\Delta t_i\right| \\
+\le &amp;\sum_{i=1}^n \left|\sqrt{[x'(\eta_i)]^2 + [y'(\sigma_i)]^2} - \sqrt{[x'(\xi_i)]^2 + [y'(\xi_i)]^2}\right|\Delta t_i.
+\end{aligned}
+$$
+<p>由三角不等式</p>
+$$
+|\sqrt{x_1^2 + x_2^2} - \sqrt{y_1^2 + y_2^2}| \le \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2} \le |x_1 - y_1| + |x_2 - y_2|,
+$$
+<p>得到</p>
+$$
+\begin{aligned}
+&amp;\left|\sum_{i=1}^n P_{i-1}P_i - \sum_{i=1}^n \sqrt{[x'(\xi_i)]^2 + [y'(\xi_i)]^2}\Delta t_i\right| \\
+\le &amp;\sum_{i=1}^n |x'(\eta_i) - x'(\xi_i)|\Delta t_i + \sum_{i=1}^n |y'(\sigma_i) - y'(\xi_i)|\Delta t_i \\
+\le &amp;\sum_{i=1}^n \bar{\omega}_i \Delta t_i + \sum_{i=1}^n \tilde{\omega}_i \Delta t_i,
+\end{aligned}
+$$
+<p>其中 $\bar{\omega}_i$ 和 $\tilde{\omega}_i$ 分别是 $x'(t)$ 和 $y'(t)$ 在 $[t_{i-1}, t_i]$ 中的振幅．</p>
+<p>因为 $x'(t)$ 和 $y'(t)$ 在 $[T_1, T_2]$ 上可积，由定积分存在的充分必要条件，当 $\lambda = \max\limits_{1 \le i \le n}(\Delta t_i) \to 0$ 有</p>
+$$
+\sum_{i=1}^n \bar{\omega}_i \Delta t_i \to 0, \quad \text{及} \quad \sum_{i=1}^n \tilde{\omega}_i \Delta t_i \to 0,
+$$
+<p>于是</p>
+$$
+\begin{aligned}
+l &amp;= \lim_{\lambda \to 0}\sum_{i=1}^n P_{i-1}P_i = \lim_{\lambda \to 0}\sum_{i=1}^n \sqrt{[x'(\xi_i)]^2 + [y'(\xi_i)]^2}\Delta t_i \\
+&amp;= \int_{T_1}^{T_2}\sqrt{[x'(t)]^2 + [y'(t)]^2}\,\mathrm{d}t.
+\end{aligned}
+$$
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 切向量欧氏度规范数的时间全域积分：折线弦长逼近曲线弧长，借助微分中值定理与一致连续性消除中值点异步误差。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      设参数曲线为 $(x(t), y(t))$。计算曲线弧长的根本几何定义是内接折线多边形弦长和的极限。小折线段弦长由勾股定理给出 $\Delta s_i = \sqrt{\Delta x_i^2 + \Delta y_i^2}$。由 Lagrange 中值定理，$\Delta x_i = x'(\xi_i)\Delta t_i$，$\Delta y_i = y'(\eta_i)\Delta t_i$。这里的理论难点在于中值点 $\xi_i$ 与 $\eta_i$ 通常不重合，直接求和并非严格的 Riemann 和！分析学家通过代数不等式 $|\sqrt{a^2+b^2} - \sqrt{a^2+c^2}| \le |b-c|$ 将异步误差转化为 $|y'(\xi_i) - y'(\eta_i)|$；再利用导函数在紧区间上的一致连续性，将中值错位误差在 $\lambda \to 0$ 时彻底压缩为零，最终严格确立弧长为切速度模长的定积分 $\int_a^b \sqrt{x'(t)^2 + y'(t)^2}\,\mathrm{d}t$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      切向速度矢量的模长对时间的线积分：在平面内运动的质点，其瞬时切向速度矢量为 $\vec{v}(t) = (x'(t), y'(t))$，标量速率为速率范数 $\|\vec{v}(t)\| = \sqrt{x'(t)^2 + y'(t)^2}$。质点在时间区间 $[a,b]$ 内沿弯曲轨迹扫过的总物理路程，严格等于标量速率随时间累积的定积分。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>折线弦长微元表示：$\Delta s_i = \sqrt{[x(t_i)-x(t_{i-1})]^2 + [y(t_i)-y(t_{i-1})]^2}$。</li><li>双中值点异步误差消解：利用根号不等式与导数一致连续性消去 $|\xi_i - \eta_i|$ 的扰动。</li><li>黎曼可积收敛：将折线和逼近严格闭环收敛为连续函数度规范数的 Riemann 积分。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-7-6-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 7.6.1 Newton-Cotes 数值求积公式误差估计定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">数值求积</span><span class="thm-tag">牛顿科特斯公式</span><span class="thm-tag">误差估计</span><span class="thm-tag">插值余项积分</span><span class="thm-tag">积分第一中值定理</span>
+      </div>
+    </div>
+    <a href="#thm-7-6-1" class="anchor-btn" title="复制锚点链接"># 定理 7.6.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="thm-7-6-1">
+<div class="theorem-header">定理 7.6.1（Newton-Cotes 公式误差估计定理）</div>
+<p>设 $f^{(n+1)}(x)$ 在 $[a, b]$ 连续，则用 Newton-Cotes 公式计算 $\displaystyle\int_a^b f(x)\,\mathrm{d}x$ 的误差 $R_n(f)$ 满足估计式</p>
+    $$
+    |R_n(f)| \le \frac{M_f h^{n+2}}{(n+1)!}\int_0^n \left|\prod_{j=0}^n (t-j)\right|\mathrm{d}t,
+    $$
+    <p>这里</p>
+    $$
+    M_f = \max_{x \in [a, b]} |f^{(n+1)}(x)|.
+    $$
+  </div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong></p>
+    $$
+    R_n(f) = \int_a^b f(x)\,\mathrm{d}x - (b-a)\sum_{i=0}^n C_i^{(n)} f(x_i) = \int_a^b f(x)\,\mathrm{d}x - \int_a^b p_n(x)\,\mathrm{d}x = \int_a^b [f(x) - p_n(x)]\,\mathrm{d}x.
+    $$
+    <p>由 Lagrange 插值多项式余项定理，</p>
+    $$
+    R_n(f) = \int_a^b \frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n (x - x_i)\,\mathrm{d}x, \quad \xi \in (x_{\min}, x_{\max})
+    $$
+    <p>于是</p>
+    $$
+    \begin{aligned}
+    |R_n(f)| &amp;\le \int_a^b \left|\frac{f^{(n+1)}(\xi)}{(n+1)!}\prod_{i=0}^n (x - x_i)\right|\mathrm{d}x \\
+    &amp;\le \frac{M_f}{(n+1)!}\int_a^b \left|\prod_{i=0}^n (x - x_i)\right|\mathrm{d}x \quad (\text{令 } x = a + th) \\
+    &amp;\le \frac{M_f h^{n+2}}{(n+1)!}\int_0^n \left|\prod_{j=0}^n (t-j)\right|\mathrm{d}t.
+    \end{aligned}
+    $$
+    <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 插值多项式截断误差核函数的全域积分：利用积分第一中值定理将高阶导数提出，确立数值积分的步长幂次收敛阶。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      数值微积分中，用等距节点的 $n$ 次插值多项式 $P_n(x)$ 近似代替真实函数计算积分，所产生的截断误差为 $R_n(f) = \int_a^b [f(x) - P_n(x)]\,\mathrm{d}x$。根据定理 5.3.3，被积的差值正是插值余项 $\frac{f^{(n+1)}(\xi(x))}{(n+1)!}\prod (x-x_i)$。当节点核函数在区间内保持单号时，利用积分第一中值定理，可将高阶导数因子 $f^{(n+1)}(\eta)$ 整体提取到积分号外，剩下的节点多项式积分纯粹由网格几何结构唯一确定，给出正比于步长高次幂 $h^{n+2}$ 的刚性误差估计界限！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      截断误差多项式包络的面积积分：插值多项式在节点之间形成的波动残差被积分算子进行全域平滑累积。高阶导数控制了局域波动的振幅上限，等距网格步长 $h$ 的高阶幂次确保了网格加密时总截断面积以超线性速度崩塌消亡。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>余项原像表达：$R_n(f) = \int_a^b [f(x) - P_n(x)]\,\mathrm{d}x$ 代入插值余项公式。</li><li>积分第一中值定理提取导数：将变导数 $f^{(n+1)}(\xi(x))$ 提为单点中值常数 $f^{(n+1)}(\eta)$。</li><li>确立数值算法收敛阶数：步长 $h$ 减半时，截断误差按 $O(h^{n+2})$ 阶迅速衰减。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="cor-7-6-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 1 n 步 Newton-Cotes 求积公式代数精度至少为 n</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">代数精度</span><span class="thm-tag">多项式零误差</span><span class="thm-tag">高阶导数湮灭</span><span class="thm-tag">线性映射重合</span>
+      </div>
+    </div>
+    <a href="#cor-7-6-1" class="anchor-btn" title="复制锚点链接"># 推论 1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="cor-7-6-1">
+<div class="theorem-header">推论 1</div>
+<p>$n$ 步 Newton-Cotes 求积公式的代数精度至少为 $n$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设 $f(x)$ 是一个次数不超过 $n$ 的代数多项式，即：</p>
+$$f(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0.$$
+<p>因为 $f(x)$ 的次数最高为 $n$，所以对它求 $n+1$ 阶导数时，根据多项式求导法则，必恒有：</p>
+$$f^{(n+1)}(x) \equiv 0 \quad (\forall x \in [a, b]).$$
+<p>将此代入定理 7.6.1（Newton-Cotes 公式误差估计定理）给出的误差表达式 $R_n(f)$ 中，因为误差公式中含有因子 $f^{(n+1)}(\xi)$，从而立即可知：</p>
+$$R_n(f) \equiv 0.$$
+<p>误差恒等于零，表明该 $n$ 步 Newton-Cotes 求积公式对于任意次数不超过 $n$ 的代数多项式都能精确成立。按照代数精度的定义，该公式的代数精度至少为 $n$. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 多项式微分算子的有限幂次湮灭：对不高于 n 次的多项式求导 n+1 次恒为零多项式，导致误差核公式绝对归零。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      所谓数值求积公式的『代数精度』，是指该数值公式能够做到毫无误差、绝对精确计算的最大多项式次数。推论证明仅需一步代数推导：定理 7.6.1 已经严格给出了误差公式 $R_n(f)$ 正比于高阶导数 $f^{(n+1)}(\eta)$。若 $f(x)$ 是任意次数不超过 $n$ 的多项式，对其连续求导 $n+1$ 次，所有单项式全部被导数消灭归零，即 $f^{(n+1)}(x) \equiv 0$！将零代入误差公式，直接得出 $R_n(f) \equiv 0$。误差恒等于零表明该数值积分在此多项式子空间上化为绝对精确值，代数精度至少为 $n$。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      在有限维多项式子空间上的投影算子重合：求积数值泛函与真实的积分线性泛函在子空间 $\mathcal{P}_n$ 上取值完全恒等，近似算法在该维度内与解析理论没有任何几何偏差。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>代数精度的严格定义：能对一切 $P \in \mathcal{P}_d$ 保证 $R_n(P) = 0$ 的最大整数 $d$。</li><li>多项式导数湮灭性质：$\operatorname{deg} P \le n \implies P^{(n+1)}(x) \equiv 0$。</li><li>误差公式中核心乘子归零，直接完成精度奠基。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="cor-7-6-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 2 偶数步 Newton-Cotes 求积公式代数精度至少为 2k+1</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-19" class="thm-tag routine-ref" target="_blank">🏷️ 套路 19: 奇偶对称与周期伸缩抵消</a>
+        <span class="thm-tag">辛普森公式</span><span class="thm-tag">对称性红利</span><span class="thm-tag">奇次矩自动平衡</span><span class="thm-tag">超阶代数精度</span>
+      </div>
+    </div>
+    <a href="#cor-7-6-2" class="anchor-btn" title="复制锚点链接"># 推论 2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box" id="cor-7-6-2">
+<div class="theorem-header">推论 2</div>
+<p>$n = 2k$ 步的 Newton-Cotes 求积公式的代数精度至少为 $2k+1$．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 我们只要证明 $n = 2k$ 步的 Newton-Cotes 求积公式对 $f(x) = x^{2k+1}$ 精确成立就可以了．</p>
+<p>此时 $f^{(2k+1)}(x) \equiv (2k+1)!$，由定理 7.6.1 证明的中间过程得到</p>
+    $$
+    \begin{aligned}
+    \frac{R_{2k}(f)}{h^{2k+2}} &amp;= \int_0^{2k} \prod_{j=0}^{2k} (t - j)\,\mathrm{d}t \quad (\text{令 } u = t - k) \\
+    &amp;= \int_{-k}^k \prod_{j=-k}^k (u + j)\,\mathrm{d}u \quad (\text{令 } v = -u) \\
+    &amp;= (-1)^{2k+1}\int_{-k}^k \prod_{j=-k}^k (v - j)\,\mathrm{d}v \\
+    &amp;= -\int_{-k}^k \prod_{j=-k}^k (v + j)\,\mathrm{d}v = -\frac{R_{2k}(f)}{h^{2k+2}},
+    \end{aligned}
+    $$
+    <p>所以</p>
+    $$
+    R_{2k}(f) = 0.
+    $$
+    <p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-19" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 19: 奇偶对称与周期伸缩抵消</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 节点几何网格中心对称诱导的高阶奇次项误差自动平衡：奇函数在对称区间上的积分为零，赋予偶数步公式额外的一阶代数精度。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      这是数值微积分中对称性结构所赋予的最惊艳的精度跃迁：当求积步数 $n = 2k$ 为偶数时（例如著名的 2 步 Simpson 辛普森公式），按常理其代数精度应为 2（仅能精确计算二次多项式）；但实际它居然能 100% 精确计算一切三次多项式！其根本机制在于中心对称性：当步数为偶数时，节点分布完全关于区间中点对称。在检验 $f(x) = x^{2k+1}$ 时，平移坐标系至对称区间 $[-A, A]$。由于节点分布关于原点对称，其误差核函数在对称变换下呈现严格的奇函数反对称性！由定理 7.3.5，奇函数在对称区间上的积分为零，误差积分自动对消归零！这意味着偶数步公式无需付出任何额外计算代价，代数精度自动白白多赚了一阶，跃迁至 $2k+1$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      对称排布对奇数阶多极矩的自发正负抵消：在偶数步对称网格中，关于几何中心对称的一对节点赋予了等权重的正向和反向力矩，导致三次方的奇次非线性扭曲在积分求和中被左右两翼对称抵消，系统的数值保真度超越了阶数限制。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>测试函数选取：仅需验证最高奇次项 $f(x) = x^{2k+1}$ 的误差是否为零。</li><li>换元到对称区间 $[-A, A]$：揭示节点布局的反对称代数核结构。</li><li>定理 7.3.5 奇函数积分为零的终极运用：积分自动归零，使代数精度从 $2k$ 强行升级为 $2k+1$（如 Simpson 公式精度达到 3 次）。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_06_theorems.html" class="page-nav-btn">← 上一章：第六章 · 不定积分</a>
+  <a href="chapter_08_theorems.html" class="page-nav-btn">下一章：第八章 · 反常积分 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

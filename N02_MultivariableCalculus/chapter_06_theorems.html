@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第六章 · 不定积分 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill current-ch">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (3)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-6-1-1" class="toc-link" title="定理 6.1.1 不定积分的线性性定理">定理 6.1.1 不定积分的线性性定理</a></li>
+<li><a href="#thm-6-3-1" class="toc-link" title="定理 6.3.1 有理真分式实根部分分式分解定理">定理 6.3.1 有理真分式实根部分分式分解定理</a></li>
+<li><a href="#thm-6-3-2" class="toc-link" title="定理 6.3.2 有理真分式共轭复根部分分式分解定理">定理 6.3.2 有理真分式共轭复根部分分式分解定理</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 06</span>
+        <span class="ch-count-badge">共收录 3 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第六章 · 不定积分</h1>
+      <p class="ch-desc-text">不定积分线性性质与有理真分式部分分式分解定理</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-6-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 6.1.1 不定积分的线性性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">不定积分</span><span class="thm-tag">线性微分算子逆</span><span class="thm-tag">原函数同余类</span><span class="thm-tag">常数吸收性</span>
+      </div>
+    </div>
+    <a href="#thm-6-1-1" class="anchor-btn" title="复制锚点链接"># 定理 6.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<strong>定理 6.1.1（线性性）</strong> 若函数 $f(x)$ 和 $g(x)$ 的原函数都存在，则对任意常数 $k_1$ 和 $k_2$，函数 $k_1 f(x) + k_2 g(x)$ 的原函数也存在，且有
+$$
+\int [k_1 f(x) + k_2 g(x)]\,\mathrm{d}x = k_1 \int f(x)\,\mathrm{d}x + k_2 \int g(x)\,\mathrm{d}x.
+$$
+此式应理解为等式两端所表示的函数族相同．另外，当 $k_1 = k_2 = 0$ 时，等式右端应理解为常数 $C$．
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $F(x)$ 和 $G(x)$ 分别为 $f(x)$ 和 $g(x)$ 的一个原函数，那么对任意常数 $k_1$ 和 $k_2$，$k_1 F(x) + k_2 G(x)$ 是 $k_1 f(x) + k_2 g(x)$ 的一个原函数，因此有</p>
+$$
+\int [k_1 f(x) + k_2 g(x)]\,\mathrm{d}x = k_1 F(x) + k_2 G(x) + C,
+$$
+<p>与</p>
+$$
+\begin{aligned}
+k_1 \int f(x)\,\mathrm{d}x + k_2 \int g(x)\,\mathrm{d}x &amp;= k_1 (F(x) + C_1) + k_2 (G(x) + C_2) \\
+&amp;= k_1 F(x) + k_2 G(x) + (k_1 C_1 + k_2 C_2).
+\end{aligned}
+$$
+<p>由于上面两式中的 $C, C_1, C_2$ 都代表任意常数，所以上面两等式的右端所表示的函数族相同，于是有</p>
+$$
+\int [k_1 f(x) + k_2 g(x)]\,\mathrm{d}x = k_1 \int f(x)\,\mathrm{d}x + k_2 \int g(x)\,\mathrm{d}x.
+$$
+<p style="text-align: right;">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 线性算子伪逆在同余类意义下的保结构映射：微分算子的线性性反向投射至原函数族，形成函数等价类的线性闭包。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      不定积分本质是求导运算 $D = \frac{\mathrm{d}}{\mathrm{d}x}$ 的逆映射。证明不定积分的线性性，最根本的手法是求导验证：设 $F, G$ 分别为 $f, g$ 的原函数，对线性组合 $k_1 F(x) + k_2 G(x)$ 求导，由一阶导数的线性性（定理 4.3.1），导数严格等于 $k_1 f(x) + k_2 g(x)$。这表明 $k_1 F + k_2 G$ 确实是新函数的原函数。需要特别强调的是：不定积分并非单一数值，而是以任意常数 $C$ 为模的函数等价类（即集合同余类 $\{F(x) + C \mid C \in \mathbb{R}\}$）。公式中的等号表示两个函数集合相等，任意常数 $C$ 在加减与数乘下具有完全的代数吸收性。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      函数向量空间中平行纤维丛的仿射投影：原函数族是一簇在纵向相差常数高度的等距平行曲线族（几何纤维丛）。微分算子将整簇平行曲线投射到唯一的导函数向量上；反向的不定积分则将函数空间的线性运算完全保真地还原为平行纤维丛之间的线性平移叠加。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>求导验证法：证明两个不定积分表达式相等，充要条件是验证两端任意代表元的导数在区间上处处恒等。</li><li>同余类等式本质：等号两端并非单纯的数值相等，而是集合相等的同余记号，常数 $C$ 吸收了数乘倍数与加法常数。</li><li>积分技术的大前提：是一切换元积分法与分部积分法得以展开的底层线性空间代数根基。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-6-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 6.3.1 有理真分式实根部分分式分解定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">有理函数积分</span><span class="thm-tag">部分分式分解</span><span class="thm-tag">因式定理降次</span><span class="thm-tag">待定系数消除极点</span>
+      </div>
+    </div>
+    <a href="#thm-6-3-1" class="anchor-btn" title="复制锚点链接"># 定理 6.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+ 设有理函数 $\dfrac{p(x)}{q(x)}$ 是真分式，多项式 $q(x)$ 有 $k$ 重实根 $\alpha$，即 $q(x) = (x - \alpha)^k q_1(x), q_1(\alpha) \neq 0$．则存在实数 $\lambda$ 与多项式 $p_1(x)$，$p_1(x)$ 的次数低于 $(x - \alpha)^{k-1}q_1(x)$ 的次数，成立
+$$
+\frac{p(x)}{q(x)} = \frac{\lambda}{(x - \alpha)^k} + \frac{p_1(x)}{(x - \alpha)^{k-1}q_1(x)}.
+$$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 令 $\dfrac{p(\alpha)}{q_1(\alpha)} = \lambda$，则 $x = \alpha$ 是多项式 $p(x) - \lambda q_1(x)$ 的根，设</p>
+$$
+p(x) - \lambda q_1(x) = (x - \alpha)p_1(x),
+$$
+<p>就得到</p>
+$$
+\frac{p(x)}{q(x)} = \frac{\lambda}{(x - \alpha)^k} + \frac{p_1(x)}{(x - \alpha)^{k-1}q_1(x)}.
+$$
+<p style="text-align: right;">证毕</p>
+</div></p></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 多项式代数环的因式整除与奇点阶数逐级剥离：通过在极点处赋值使得残余分子产生公因式 $(x-\alpha)$，完成有理分式降次。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      有理函数积分的核心是将复杂的有理真分式 $\frac{p(x)}{(x-\alpha)^k q_1(x)}$ 拆解为最简单的单项式之和。定理证明展现了多项式代数的极致精巧：设定待定常数 $\lambda = \frac{p(\alpha)}{q_1(\alpha)}$（因 $q_1(\alpha) \ne 0$，此商良定唯一）。作差得到的分子多项式 $p(x) - \lambda q_1(x)$ 在 $x = \alpha$ 时代入刚好为零！根据多项式因式定理，该多项式必定含有公因式 $(x-\alpha)$，即能分解为 $(x-\alpha)p_1(x)$。分子分母的公因式 $(x-\alpha)$ 当场约去，使得分母中的重根幂次从 $k$ 降为 $k-1$！重复此过程 $k$ 次，所有重实根被彻底剥离为单个负整数幂项，从而将高阶积分完全转化为初等幂函数积分。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      极点奇异性强度的局域展开与剥离：在实轴上的极点 $\alpha$ 附近，高阶极点 $(x-\alpha)^{-k}$ 占据主导。常数 $\lambda$ 恰好度量了该奇点在此最高阶处的局域奇性强度；减去该主部项后，局部奇点阶数降为 $k-1$，在几何相空间中奇性被逐级弱化直至消失。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>待定系数唯一性的代数构造：令 $\lambda = \frac{p(\alpha)}{q_1(\alpha)}$，迫使 $x=\alpha$ 成为分子多项式的根。</li><li>因式定理核心应用：$p(x) - \lambda q_1(x) = (x-\alpha)p_1(x)$，直接完成多项式整除降次。</li><li>离散阶数递推完全性：经有限次 $k$ 步循环，有理分母完全分解为不可再降的单项幂，为初等积分铺平道路。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-6-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 6.3.2 有理真分式共轭复根部分分式分解定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-03" class="thm-tag routine-ref" target="_blank">🏷️ 套路 03: 构造辅助量与目标恒等变形</a>
+        <span class="thm-tag">有理函数积分</span><span class="thm-tag">共轭复根</span><span class="thm-tag">二次不可约因式</span><span class="thm-tag">复数赋值与实数域整除</span>
+      </div>
+    </div>
+    <a href="#thm-6-3-2" class="anchor-btn" title="复制锚点链接"># 定理 6.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+ 设有理函数 $\dfrac{p(x)}{q(x)}$ 是真分式，多项式 $q(x)$ 有 $l$ 重共轭复根 $\beta \pm \mathrm{i}\gamma$，即 $q(x) = (x^2 + 2\xi x + \eta^2)^l q^*(x), q^*(\beta \pm \mathrm{i}\gamma) \neq 0$．则存在实数 $\mu, \nu$ 和多项式 $p^*(x)$，$p^*(x)$ 的次数低于 $(x^2 + 2\xi x + \eta^2)^{l-1}q^*(x)$ 的次数，成立
+$$
+\frac{p(x)}{q(x)} = \frac{\mu x + \nu}{(x^2 + 2\xi x + \eta^2)^l} + \frac{p^*(x)}{(x^2 + 2\xi x + \eta^2)^{l-1}q^*(x)}.
+$$</div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof"><p><strong>证</strong> 令</p>
+$$
+\frac{p(\beta + \mathrm{i}\gamma)}{q^*(\beta + \mathrm{i}\gamma)} = \mu(\beta + \mathrm{i}\gamma) + \nu,
+$$
+<p>其中 $\mu, \nu$ 为实数，则</p>
+$$
+\frac{p(\beta - \mathrm{i}\gamma)}{q^*(\beta - \mathrm{i}\gamma)} = \mu(\beta - \mathrm{i}\gamma) + \nu.
+$$
+<p>于是 $x = \beta \pm \mathrm{i}\gamma$ 是多项式 $p(x) - (\mu x + \nu)q^*(x)$ 的根，设</p>
+$$
+p(x) - (\mu x + \nu)q^*(x) = (x^2 + 2\xi x + \eta^2)p^*(x),
+$$
+<p>就得到</p>
+$$
+\frac{p(x)}{q(x)} = \frac{\mu x + \nu}{(x^2 + 2\xi x + \eta^2)^l} + \frac{p^*(x)}{(x^2 + 2\xi x + \eta^2)^{l-1}q^*(x)}.
+$$
+<p style="text-align: right;">证毕</p>
+</div></p></div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-03" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 03: 构造辅助量与目标恒等变形</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 共轭复数对称性在实代数环中的不可约整除：通过复数赋值联立实部虚部解出线性分子，将二次不可约重因子逐阶消去。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      当分母含有实数域上不可约的二次重因子 $(x^2 + 2\xi x + \eta^2)^l$ 时（对应一对共轭复根 $\beta \pm \mathrm{i}\gamma$），如何不引入虚数单位 $\mathrm{i}$ 而在纯实数域内完成分解？定理给出了剥离一次式分子 $\frac{\mu x + \nu}{(x^2 + 2\xi x + \eta^2)^l}$ 的普适方案。证明极其精妙地借道复数域：将复根 $z_0 = \beta + \mathrm{i}\gamma$ 代入等式 $\frac{p(z_0)}{q^*(z_0)} = \mu z_0 + \nu$。该复数等式拆分为实部与虚部两个实线性方程，由于虚部 $\gamma \ne 0$，系数行列式非零，恰好唯一解出两个实数常数 $\mu$ 与 $\nu$！此时新分子多项式在 $\beta + \mathrm{i}\gamma$ 处为零；由实多项式的共轭对称性，它在其共轭点 $\beta - \mathrm{i}\gamma$ 处也必须为零。于是该实多项式必定能被二次实不可约多项式 $(x^2 + 2\xi x + \eta^2)$ 完全整除！分子分母约分后，二次因子的幂次成功从 $l$ 降为 $l-1$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      复平面共轭镜像对的实轴二元降次：互为共轭的一对复极点在复平面上关于实轴镜像对称。单独的一次复数因子无法在实数轴维持实系数，将其合并为二次因式后，一次式分子 $\mu x + \nu$ 恰好提供了匹配该对称极点对的二维自由度，在实相空间中对应阻尼对数项与 $\arctan$ 反三角项。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>复数赋值确立二元待定系数：利用实部虚部线性方程的非奇异性，唯一解出实系数对 $(\mu, \nu)$。</li><li>共轭成对零点与多项式整除定理：实系数多项式若以复数为根，必以其共轭复数为根，从而整除二次多项式 $(x-z_0)(x-\bar{z}_0) = x^2+2\xi x+\eta^2$。</li><li>有理函数不定积分终极结论：任何实系数有理函数的不定积分，皆可严格表示为有理分式、自然对数 $\ln$ 与反三角函数 $\arctan$ 的有限次代数叠加！</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_05_theorems.html" class="page-nav-btn">← 上一章：第五章 · 微分中值定理及其应用</a>
+  <a href="chapter_07_theorems.html" class="page-nav-btn">下一章：第七章 · 定积分 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第八章 · 反常积分 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill current-ch">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (12)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-8-2-1" class="toc-link" title="定理 8.2.1 反常积分的 Cauchy 收敛原理 (无穷限)">定理 8.2.1 反常积分的 Cauchy 收敛原理 (无穷限)</a></li>
+<li><a href="#thm-8-2-cor1" class="toc-link" title="推论 绝对收敛的反常积分必定收敛">推论 绝对收敛的反常积分必定收敛</a></li>
+<li><a href="#thm-8-2-2" class="toc-link" title="定理 8.2.2 非负函数反常积分的比较判别法">定理 8.2.2 非负函数反常积分的比较判别法</a></li>
+<li><a href="#thm-8-2-cor2" class="toc-link" title="推论 比较判别法的极限形式">推论 比较判别法的极限形式</a></li>
+<li><a href="#thm-8-2-3" class="toc-link" title="定理 8.2.3 Cauchy 判别法 (p 判别法 / 标杆尺度对照法)">定理 8.2.3 Cauchy 判别法 (p 判别法 / 标杆尺度对照法)</a></li>
+<li><a href="#thm-8-2-cor3" class="toc-link" title="推论 Cauchy 判别法的极限形式">推论 Cauchy 判别法的极限形式</a></li>
+<li><a href="#thm-8-2-4" class="toc-link" title="定理 8.2.4 积分第二中值定理">定理 8.2.4 积分第二中值定理</a></li>
+<li><a href="#thm-8-2-5" class="toc-link" title="定理 8.2.5 反常积分的 Abel 判别法与 Dirichlet 判别法">定理 8.2.5 反常积分的 Abel 判别法与 Dirichlet 判别法</a></li>
+<li><a href="#thm-8-2-1p" class="toc-link" title="定理 8.2.1' 反常积分的 Cauchy 收敛原理 (无界函数瑕积分)">定理 8.2.1' 反常积分的 Cauchy 收敛原理 (无界函数瑕积分)</a></li>
+<li><a href="#thm-8-2-3p" class="toc-link" title="定理 8.2.3' 瑕积分的 Cauchy 判别法 (p 判别法)">定理 8.2.3' 瑕积分的 Cauchy 判别法 (p 判别法)</a></li>
+<li><a href="#thm-8-2-cor4" class="toc-link" title="推论 瑕积分 Cauchy 判别法的极限形式">推论 瑕积分 Cauchy 判别法的极限形式</a></li>
+<li><a href="#thm-8-2-5p" class="toc-link" title="定理 8.2.5' 瑕积分的 Abel 判别法与 Dirichlet 判别法">定理 8.2.5' 瑕积分的 Abel 判别法与 Dirichlet 判别法</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 08</span>
+        <span class="ch-count-badge">共收录 12 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第八章 · 反常积分</h1>
+      <p class="ch-desc-text">无穷限与无界函数反常积分 Cauchy 收敛原理、比较判别法、积分第二中值定理与 Abel/Dirichlet 判别法</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-8-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.1 反常积分的 Cauchy 收敛原理 (无穷限)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">反常积分</span><span class="thm-tag">Cauchy 收敛原理</span><span class="thm-tag">尾部积分测度控制</span><span class="thm-tag">变上限函数极限</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-1" class="anchor-btn" title="复制锚点链接"># 定理 8.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.1（Cauchy 收敛原理）</h4>
+<p>反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛的充分必要条件是：对任意给定的 $\varepsilon &gt; 0$，存在 $A_0 \geqslant a$，使得对任意 $A, A' \geqslant A_0$，有</p>
+  $$
+  \left|\int_A^{A'} f(x)\mathrm{d}x\right| &lt; \varepsilon.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设反常积分的变上限函数为：</p>
+$$F(A) = \int_a^A f(x)\,\mathrm{d}x \quad (A \ge a).$$
+<p>根据反常积分收敛的定义，反常积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 收敛等价于极限 $\lim_{A \to +\infty} F(A)$ 存在且为一个有限数。</p>
+<p>根据函数极限的 Cauchy 收敛原理（定理 3.1.6 推广至自变量趋向正无穷大），极限 $\lim_{A \to +\infty} F(A)$ 存在的充分必要条件是：对任意给定的 $\varepsilon > 0$，存在常数 $A_0 \ge a$，使得对于任意 $A, A' \ge A_0$，都有：</p>
+$$|F(A') - F(A)| < \varepsilon.$$
+<p>再由定积分对区间的可加性，有：</p>
+$$F(A') - F(A) = \int_a^{A'} f(x)\,\mathrm{d}x - \int_a^A f(x)\,\mathrm{d}x = \int_A^{A'} f(x)\,\mathrm{d}x.$$
+<p>将此式代入上述绝对值不等式中，即得到：</p>
+$$\left| \int_A^{A'} f(x)\,\mathrm{d}x \right| < \varepsilon.$$
+<p>定理结论获证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 反常积分敛散性还原为变上限函数的无穷远柯西极限：尾部残差能量在远方任意两截断点之间的定积分绝对值小于任意给定误差。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      反常积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 的本质，就是变上限积分函数 $F(A) = \int_a^A f(x)\,\mathrm{d}x$ 当上限 $A \to +\infty$ 时的普通函数极限。直接套用函数极限的 Cauchy 收敛原理（定理 3.1.6）：极限存在的充分必要条件是，对任意 $\varepsilon > 0$，当 $A, A'$ 足够大时两处函数值之差满足 $|F(A') - F(A)| < \varepsilon$。利用定积分对区间的可加性，$F(A') - F(A)$ 恰好等于区间 $[A, A']$ 上的孤岛积分 $\int_A^{A'} f(x)\,\mathrm{d}x$！因此反常积分收敛的内在充要条件就是：只要截断点走得足够远，任意两远方节点之间的尾部面积绝对值都微不足道。该定理无需预知极限数值，是推导绝对收敛性、比较判别法以及 Abel/Dirichlet 判别法的总母体。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      无穷长渐近带尾部测度的自洽收缩：当观察视窗沿横轴推向无穷深处时，任意两个远方截面之间的有向曲边梯形面积必须一致衰减至零。残差流形在度量空间中自我闭合，截断能量无法在远端形成宏观堆积。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>本质还原为函数极限：$F(A) = \int_a^A f(x)\,\mathrm{d}x$ 在 $A \to +\infty$ 时的 Cauchy 准则。</li><li>区间可加性消除初值依赖：$F(A') - F(A) = \int_A^{A'} f(x)\,\mathrm{d}x$。</li><li>无需极限值的自洽性裁判：构成了处理条件收敛反常积分的理论支柱。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-cor1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 绝对收敛的反常积分必定收敛</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">绝对收敛</span><span class="thm-tag">三角不等式放缩</span><span class="thm-tag">全变差测度控制</span><span class="thm-tag">柯西准则应用</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-cor1" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>推论</h4>
+<p>若反常积分 $\int_a^{+\infty} f(x)\mathrm{d}x$ 绝对收敛，则它一定收敛．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 对任意给定的 $\varepsilon > 0$，由于 $\int_a^{+\infty} |f(x)|\mathrm{d}x$ 收敛，所以存在 $A_0 \geqslant a$，使得对任意 $A, A' \geqslant A_0$，成立</p>
+$$
+\int_A^{A'} |f(x)|\mathrm{d}x < \varepsilon.
+$$
+<p>利用定积分的性质，得到</p>
+$$
+\left|\int_A^{A'} f(x)\mathrm{d}x\right| \leqslant \int_A^{A'} |f(x)|\mathrm{d}x < \varepsilon,
+$$
+<p>由 Cauchy 收敛原理，知 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛．</p>
+<span class="proof-qed">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 积分模长的不等式单向约束：全正波形全变差面积的有限性刚性压制带正负抵消波形的真实振荡面积。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      如果一个函数取了绝对值之后的反常积分 $\int_a^{+\infty} |f(x)|\,\mathrm{d}x$ 收敛（称为绝对收敛），那么原函数积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 必定收敛！其证明仅需一步代数放缩：由定积分的绝对值不等式，恒有 $|\int_A^{A'} f(x)\,\mathrm{d}x| \le \int_A^{A'} |f(x)|\,\mathrm{d}x$。若 $|f|$ 收敛，根据定理 8.2.1（Cauchy 收敛原理），其尾部积分 $\int_A^{A'} |f| < \varepsilon$。由不等式，原函数的尾部积分绝对值自然也严格小于 $\varepsilon$！再次触发 Cauchy 准则，原函数收敛铁板钉钉！注意：逆命题不成立，原函数收敛但绝对值发散的情形称为条件收敛。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      全变差折叠下的位移界定：将正负交错波形全部翻折到第一象限，计算其全变差总路程。若总路程有限（绝对收敛），在允许正负相互对消后，质点的净位移（原积分）必然更加收敛稳定，绝不可能失控发散。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>绝对值不等式放缩：$|\int_A^{A'} f(x)\,\mathrm{d}x| \le \int_A^{A'} |f(x)|\,\mathrm{d}x$。</li><li>Cauchy 准则双向打通：$|f|$ 收敛 $\implies$ 尾部积分 $< \varepsilon \implies f$ 尾部积分 $< \varepsilon \implies f$ 收敛。</li><li>条件收敛与绝对收敛的分界：如 Dirichlet 积分 $\int_0^{+\infty} \frac{\sin x}{x}\,\mathrm{d}x$ 条件收敛，但其绝对值积分对数发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.2 非负函数反常积分的比较判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">比较判别法</span><span class="thm-tag">单调有界定理</span><span class="thm-tag">正锥保序性</span><span class="thm-tag">大收小收小发大发</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-2" class="anchor-btn" title="复制锚点链接"># 定理 8.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.2（比较判别法）</h4>
+<p>设在 $[a, +\infty)$ 上恒有 $0 \leqslant f(x) \leqslant K\varphi(x)$，其中 $K$ 是正常数，则</p>
+<ol>
+<li>当 $\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 收敛时，$\int_a^{+\infty} f(x)\mathrm{d}x$ 也收敛；</li>
+<li>当 $\int_a^{+\infty} f(x)\mathrm{d}x$ 发散时，$\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 也发散．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设 $F(A) = \int_a^A f(x)\,\mathrm{d}x$，$\Phi(A) = \int_a^A \varphi(x)\,\mathrm{d}x$ ($A \ge a$)。</p>
+<p>因为在 $[a, +\infty)$ 上 $f(x) \ge 0$ 且 $\varphi(x) \ge 0$，根据定积分的保序性，$F(A)$ 和 $\Phi(A)$ 都是关于 $A$ 的单调递增函数。</p>
+<p>由已知条件 $0 \le f(x) \le K\varphi(x)$，对任意 $A \ge a$，恒有：</p>
+$$0 \le F(A) \le K\Phi(A).$$
+<p>(1) 若 $\int_a^{+\infty} \varphi(x)\,\mathrm{d}x$ 收敛，记其极限为 $J$。因为 $\Phi(A)$ 单调增加，必有 $\Phi(A) \le J$。从而：</p>
+$$F(A) \le K\Phi(A) \le KJ.$$
+<p>这说明单调递增函数 $F(A)$ 上有界！由单调有界收敛定理（定理 2.4.1 的连续函数版本），极限 $\lim_{A \to +\infty} F(A)$ 必定存在，即反常积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 收敛。</p>
+<p>(2) 若 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 发散，因为 $F(A)$ 单调增，它只能是无界奔向 $+\infty$。由不等式 $\Phi(A) \ge \frac{1}{K}F(A)$，$\Phi(A)$ 也必然奔向 $+\infty$，从而 $\int_a^{+\infty} \varphi(x)\,\mathrm{d}x$ 发散. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 非负测度下的单调有界紧致性：被积函数非负保证变上限函数单调递增，上有界等价于收敛，确立大收小必收、小发大必发。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      对于非负函数 $f(x) \ge 0$，变上限积分 $F(A) = \int_a^A f(t)\,\mathrm{d}t$ 随 $A$ 增大而单调不减。单调函数的极限只有两种可能：要么上有界收敛，要么无界奔向 $+\infty$！若 $0 \le f(x) \le K\varphi(x)$，且 $\varphi$ 的反常积分收敛于有限值 $J$。则 $F(A) \le K\Phi(A) \le KJ < +\infty$。单调递增函数拥有了坚固的有限天花板，由单调有界收敛定理，极限必存在且收敛！逆命题同样成立：若底下较小的函数积分发散，其变上限积分必奔向 $+\infty$，把压在其上方更大的函数直接顶飞至 $+\infty$ 发散。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      非负曲边区域的几何包含测度原理：由于 $f(x) \le K\varphi(x)$，曲线 $y = f(x)$ 下方与坐标轴围成的无界面积区域，在几何上完全被包含在放大 $K$ 倍的区域 $K E_\varphi$ 之内。外部包络多边形面积有限，内部子区域测度必然有限。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>单调有界收敛的直接转化：非负函数反常积分收敛 $\iff$ 变上限函数上有界。</li><li>大收推小收：$F(A) \le K\Phi(A) \le KJ < +\infty$ 建立刚性上界。</li><li>小发推大发：逆否命题，底座无界必然驱动顶层积分无界发散。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-cor2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 比较判别法的极限形式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">极限形式</span><span class="thm-tag">渐近等价</span><span class="thm-tag">保号性双向夹逼</span><span class="thm-tag">同敛散性</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-cor2" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>推论（比较判别法的极限形式）</h4>
+<p>设在 $[a, +\infty)$ 上恒有 $f(x) \geqslant 0$ 和 $\varphi(x) \geqslant 0$，且</p>
+  $$
+  \lim_{x \to +\infty} \frac{f(x)}{\varphi(x)} = l,
+  $$
+  <p>则</p>
+<ol>
+<li>若 $0 \leqslant l &lt; +\infty$，则 $\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 收敛时 $\int_a^{+\infty} f(x)\mathrm{d}x$ 也收敛；</li>
+<li>若 $0 &lt; l \leqslant +\infty$，则 $\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 发散时 $\int_a^{+\infty} f(x)\mathrm{d}x$ 也发散．</li>
+</ol>
+<p>所以，当 $0 &lt; l &lt; +\infty$ 时，$\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 和 $\int_a^{+\infty} f(x)\mathrm{d}x$ 同时收敛或同时发散．</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> (1) 若 $\lim_{x \to +\infty}\frac{f(x)}{\varphi(x)} = l &lt; +\infty$，由极限的性质，存在常数 $A$ ($A \geqslant a$)，使得当 $x \geqslant A$ 时成立</p>
+  $$
+  \frac{f(x)}{\varphi(x)} &lt; l + 1,
+  $$
+  <p>即</p>
+  $$
+  f(x) &lt; (l + 1)\varphi(x).
+  $$
+  <p>于是，由比较判别法，当 $\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 收敛时 $\int_a^{+\infty} f(x)\mathrm{d}x$ 也收敛．</p>
+<p>(2) 若 $\lim_{x \to +\infty}\frac{f(x)}{\varphi(x)} = l &gt; 0$，由极限的性质，存在常数 $A$ ($A \geqslant a$)，使得当 $x \geqslant A$ 时成立</p>
+  $$
+  \frac{f(x)}{\varphi(x)} &gt; l',
+  $$
+  <p>其中 $0 &lt; l' &lt; l$（当 $l = +\infty$ 时，$l'$ 可取任意正数），即</p>
+  $$
+  f(x) &gt; l'\varphi(x).
+  $$
+  <p>于是，由比较判别法，当 $\int_a^{+\infty} \varphi(x)\mathrm{d}x$ 发散时 $\int_a^{+\infty} f(x)\mathrm{d}x$ 也发散．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无穷远渐近同阶性的双向保序传递：比值极限为有限非零正数，通过极限保号性建立双向受控不等式，两者同敛散。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在实际解题中寻找常数 $K$ 建立逐点不等式十分繁琐。极限形式通过计算比值极限 $\lim_{x \to +\infty} \frac{f(x)}{\varphi(x)} = l \in (0, +\infty)$ 彻底破局。根据极限保号性，取 $\varepsilon = l/2$，存在充分大的 $A_0$，当 $x > A_0$ 时必有 $\frac{l}{2}\varphi(x) < f(x) < \frac{3l}{2}\varphi(x)$。右侧不等式通过比较判别法导出『$\varphi$ 收敛则 $f$ 收敛』；左侧不等式导出『$\varphi$ 发散则 $f$ 发散』。因此两者的反常积分具有完全相同的敛散性！若 $l = 0$，说明 $f$ 衰减更快，只能由大收推小收；若 $l = +\infty$，说明 $f$ 增长更快，只能由小发推大发。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      无穷相空间中渐近轨道的比率吻合：两曲线在纵向的截距比值在无穷深处收敛为固定常数 $l$。两者的几何面积流形具有完全同构的无穷积分收敛动力学，命运完全绑定。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>极限保号性双向夹逼：构造 $\frac{l}{2}\varphi(x) < f(x) < \frac{3l}{2}\varphi(x)$。</li><li>同敛散性确立：双向不等式打通充分必要条件。</li><li>端点奇异值分类讨论：$l=0$ 仅单向保留收敛性判定，$l=+\infty$ 仅单向保留发散性判定。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.3 Cauchy 判别法 (p 判别法 / 标杆尺度对照法)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">Cauchy 判别法</span><span class="thm-tag">p 判别法</span><span class="thm-tag">标杆尺度</span><span class="thm-tag">对数发散分水岭</span><span class="thm-tag">幂函数衰减速度</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-3" class="anchor-btn" title="复制锚点链接"># 定理 8.2.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.3（Cauchy 判别法）</h4>
+<p>设在 $[a, +\infty) \subset (0, +\infty)$ 上恒有 $f(x) \geqslant 0$，$K$ 是正常数，</p>
+<ol>
+<li>若 $f(x) \leqslant \dfrac{K}{x^p}$，且 $p &gt; 1$，则 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛；</li>
+<li>若 $f(x) \geqslant \dfrac{K}{x^p}$，且 $p \leqslant 1$，则 $\int_a^{+\infty} f(x)\mathrm{d}x$ 发散．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 选取标杆函数为标准 $p$-幂函数反常积分：</p>
+$$\int_a^{+\infty} \frac{\mathrm{d}x}{x^p} \quad (a > 0).$$
+<p>根据例 8.1.1 的直接计算结果：当 $p > 1$ 时，$\int_a^{+\infty} \frac{\mathrm{d}x}{x^p} = \frac{a^{1-p}}{p-1}$ 收敛；当 $p \le 1$ 时，反常积分发散。</p>
+<p>(1) 当 $x^p f(x) \le C$ 时，有 $0 \le f(x) \le \frac{C}{x^p}$。因为 $p > 1$，标杆积分 $\int_a^{+\infty} \frac{\mathrm{d}x}{x^p}$ 收敛，由比较判别法（定理 8.2.2），反常积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 必收敛。</p>
+<p>(2) 当 $x f(x) \ge C > 0$ 时，有 $f(x) \ge \frac{C}{x}$。因为标杆积分 $\int_a^{+\infty} \frac{\mathrm{d}x}{x}$ 发散，由比较判别法，反常积分 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 必发散. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 对数积分发散的临界分水岭：$1/x$ 是调和级数的发散红线，衰减阶数只要严格超越该临界线（p>1），无穷远尾部面积必为有限值。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      所有非负反常积分的通用黄金度量衡是标准幂函数 $\int_a^{+\infty} \frac{\mathrm{d}x}{x^p}$。直接积分可知：当 $p > 1$ 时原函数为负幂次，积分为有限常数 $\frac{a^{1-p}}{p-1}$（收敛）；当 $p \le 1$ 时（特别是 $p=1$ 对应自然对数 $\ln A$），积分发散至无穷大。因此 $p=1$ 构成了无穷深处收敛与发散的绝对分水岭！若 $x^p f(x) \le C$（$p>1$），说明函数在远方的衰减速度被压制在更陡峭的 $C/x^p$ 之下，由比较判别法定理必收敛；若 $x f(x) \ge C > 0$，说明衰减速度慢于调和线 $C/x$，必定发散。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双曲区域在对数伸缩下的测度临界：指数 $p=1$ 对应的等轴双曲线区域，其在对数变换下呈现恒定面积通量（导致无穷发散）；一旦 $p > 1$，面积微元引入了指数级收缩因子，使得全域面积积分在有界数值上闭合。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>标杆积分的精确解析解：$\int_a^{+\infty} x^{-p}\,\mathrm{d}x$ 在 $p>1$ 时收敛，在 $p \le 1$ 时发散。</li><li>代数不等式对接：$f(x) \le C x^{-p}$ 直接调用定理 8.2.2 比较判别法。</li><li>抓大头求极限法：对于分式多项式，分母次数与分子次数之差大于 1 即等价于 $p>1$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-cor3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 Cauchy 判别法的极限形式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">Cauchy 极限形式</span><span class="thm-tag">渐近阶数抓取</span><span class="thm-tag">幂因子乘积极限</span><span class="thm-tag">定性判定</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-cor3" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>推论（Cauchy 判别法的极限形式）</h4>
+<p>设在 $[a, +\infty) \subset (0, +\infty)$ 上恒有 $f(x) \geqslant 0$，且</p>
+  $$
+  \lim_{x \to +\infty} x^p f(x) = l,
+  $$
+  <p>则</p>
+<ol>
+<li>若 $0 \leqslant l &lt; +\infty$，且 $p &gt; 1$，则 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛；</li>
+<li>若 $0 &lt; l \leqslant +\infty$，且 $p \leqslant 1$，则 $\int_a^{+\infty} f(x)\mathrm{d}x$ 发散．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设 $\lim_{x \to +\infty} x^p f(x) = l$。取标杆函数 $\varphi(x) = \frac{1}{x^p}$，则有：</p>
+$$\lim_{x \to +\infty} \frac{f(x)}{\varphi(x)} = \lim_{x \to +\infty} x^p f(x) = l.$$
+<p>(1) 若 $0 \le l < +\infty$ 且 $p > 1$。由标杆反常积分 $\int_a^{+\infty} \frac{\mathrm{d}x}{x^p}$ 收敛，直接套用比较判别法的极限形式（定理 8.2.2 之推论），即得 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 收敛。</p>
+<p>(2) 若 $0 < l \le +\infty$（或 $l = +\infty$）且 $p \le 1$。由标杆反常积分 $\int_a^{+\infty} \frac{\mathrm{d}x}{x^p}$ 发散，套用比较判别法极限形式，即得 $\int_a^{+\infty} f(x)\,\mathrm{d}x$ 发散. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 通过与标杆幂因子乘积求极限提取渐近阶数：只要存在 p>1 使得乘积极限有限，即可确立收敛性。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      判定反常积分敛散性最简捷的实战工具：无需显式构造标杆，直接给被积函数乘上 $x^p$ 考察极限 $\lim_{x \to +\infty} x^p f(x) = l$。只要你能构造出一个比 1 大的指数 $p > 1$ 使得该极限为有限数，立刻宣告反常积分收敛；如果乘上 $x$（即 $p=1$）后极限依然大于零甚至为无穷大，则立刻宣告发散。这一技巧将复杂的反常积分敛散性问题，彻底简化为求初等函数的无穷远极限问题。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      无穷远处的渐近量级滤镜：乘上 $x^p$ 相当于用 $p$ 次幂的放大滤镜去抵消原函数的衰减速度。若能在 $p>1$ 的放大滤镜下被成功中和成有限常数，表明原函数的衰减动力超越了发散红线，总积分收敛。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>标杆函数转化：令 $\varphi(x) = 1/x^p$，完全嵌入定理 8.2.2 极限形式框架。</li><li>对数项压制：遇到 $\ln x$ 等慢增长因子，因 $\lim_{x \to +\infty} \frac{\ln x}{x^\varepsilon} = 0$，可借出任意微小的指数 $\varepsilon > 0$ 吸收对数，完成 $p$ 阶配平。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.4 积分第二中值定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-16" class="thm-tag routine-ref" target="_blank">🏷️ 套路 16: 分部积分与导数配对转移</a>
+        <span class="thm-tag">积分第二中值定理</span><span class="thm-tag">单调函数提取</span><span class="thm-tag">分部积分转移</span><span class="thm-tag">连续介值捕获</span><span class="thm-tag">条件收敛武器</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-4" class="anchor-btn" title="复制锚点链接"># 定理 8.2.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.4（积分第二中值定理）</h4>
+<p>设 $f(x)$ 在 $[a, b]$ 上可积，$g(x)$ 在 $[a, b]$ 上单调，则存在 $\xi \in [a, b]$，使得</p>
+  $$
+  \int_a^b f(x)g(x)\mathrm{d}x = g(a)\int_a^\xi f(x)\mathrm{d}x + g(b)\int_\xi^b f(x)\mathrm{d}x.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 我们这里只对 $f(x)$ 在 $[a, b]$ 上连续，$g(x)$ 在 $[a, b]$ 上单调且 $g'(x)$ 在 $[a, b]$ 上可积的情况加以证明．</p>
+<p>记 $F(x) = \int_a^x f(t)\mathrm{d}t$，则 $F(x)$ 在 $[a, b]$ 连续，且 $F(a) = 0$．由于 $f(x)$ 在 $[a, b]$ 上连续，于是 $F(x)$ 是 $f(x)$ 在 $[a, b]$ 上的一个原函数，利用分部积分法，</p>
+  $$
+  \int_a^b f(x)g(x)\mathrm{d}x = F(x)g(x)\Bigg|_a^b - \int_a^b F(x)g'(x)\mathrm{d}x.
+  $$
+  <p>上式右端的第一项</p>
+  $$
+  F(x)g(x)\Bigg|_a^b = F(b)g(b) = g(b)\int_a^b f(x)\mathrm{d}x,
+  $$
+  <p>而在第二项中，由于 $g(x)$ 单调，因此 $g'(x)$ 保持定号，由积分第一中值定理，存在 $\xi \in [a, b]$，使得</p>
+  $$
+  \int_a^b F(x)g'(x)\mathrm{d}x = F(\xi)\int_a^b g'(x)\mathrm{d}x = [g(b) - g(a)]\int_a^\xi f(x)\mathrm{d}x,
+  $$
+  <p>于是</p>
+  $$
+  \begin{aligned}
+  \int_a^b f(x)g(x)\mathrm{d}x &amp;= g(b)\int_a^b f(x)\mathrm{d}x - [g(b) - g(a)]\int_a^\xi f(x)\mathrm{d}x \\
+  &amp;= g(a)\int_a^\xi f(x)\mathrm{d}x + g(b)\int_\xi^b f(x)\mathrm{d}x.
+  \end{aligned}
+  $$
+  <p>对于一般的可积函数 $f(x)$ 和单调函数 $g(x)$ 的情况，由于证明过程比较复杂，在此从略．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-16" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 16: 分部积分与导数配对转移</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 单调函数在分部积分下的导数保号性与介值定理联动：将单调函数的端点值提至积分外，积分号内转化为变上限积分差值。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      第一中值定理是把连续函数提到积分号外；第二中值定理则是把『单调函数』提到积分号外！公式给出 $\int_a^b f(x)g(x)\,\mathrm{d}x = g(a)\int_a^\xi f(x)\,\mathrm{d}x + g(b)\int_\xi^b f(x)\,\mathrm{d}x$。证明极其精湛地调动了微积分的全部主力：先利用分部积分法将积分转化为 $F(b)g(b) - \int_a^b F(x)g'(x)\,\mathrm{d}x$（其中 $F(x) = \int_a^x f$ 为连续变上限函数）。因为 $g(x)$ 单调，其导数 $g'(x)$ 在区间内处处保持同号！导数保号使得积分第一中值定理合法成立，把连续函数 $F(x)$ 提到积分号外，化为 $F(\xi)\int_a^b g' = F(\xi)[g(b)-g(a)]$！代回原式移项，两端点系数 $g(a)$ 与 $g(b)$ 跃然纸上！这是分析学中处理剧烈振荡函数积分的最强重型武器。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      单调阻尼测度下的有界平均值投影：单调函数 $g$ 在区间上诱导了单符号的 Radon 测度 $\mathrm{d}g$。振荡积分的原函数 $F$ 在该单号测度下的加权平均值，由介值定理必定能在某一个单一代表点 $\xi$ 处被精确捕获。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>分部积分法转换：$\int_a^b f g\,\mathrm{d}x = F(b)g(b) - \int_a^b F(x)g'(x)\,\mathrm{d}x$。</li><li>单调性带来的导数保号：$g'(x)$ 恒不改变符号，触发积分第一中值定理，提取 $F(\xi)$。</li><li>代数项重组：拆分出 $g(a)F(\xi) + g(b)[F(b)-F(\xi)]$，精确对应定理结论形式。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.5 反常积分的 Abel 判别法与 Dirichlet 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">Abel 判别法</span><span class="thm-tag">Dirichlet 判别法</span><span class="thm-tag">条件收敛判定</span><span class="thm-tag">积分第二中值定理应用</span><span class="thm-tag">Dirichlet 积分</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-5" class="anchor-btn" title="复制锚点链接"># 定理 8.2.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.5</h4>
+<p>若下列两个条件之一满足，则 $\int_a^{+\infty} f(x)g(x)\mathrm{d}x$ 收敛：</p>
+<ol>
+<li><strong>（Abel 判别法）</strong> $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛，$g(x)$ 在 $[a, +\infty)$ 上单调有界；</li>
+<li><strong>（Dirichlet 判别法）</strong> $F(A) = \int_a^A f(x)\mathrm{d}x$ 在 $[a, +\infty)$ 上有界，$g(x)$ 在 $[a, +\infty)$ 上单调且 $\lim_{x \to +\infty} g(x) = 0$．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-box">
+<p><strong>证</strong> 设 $\varepsilon$ 是任意给定的正数．</p>
+<p>(1) 若 Abel 判别法条件满足，记 $G$ 是 $|g(x)|$ 在 $[a, +\infty)$ 的一个上界．因为 $\int_a^{+\infty} f(x)\mathrm{d}x$ 收敛，由 Cauchy 收敛原理，存在 $A_0 \geqslant a$，使得对任意 $A, A' \geqslant A_0$，有</p>
+  $$
+  \left|\int_A^{A'} f(x)\mathrm{d}x\right| &lt; \frac{\varepsilon}{2G}.
+  $$
+  <p>由积分第二中值定理，</p>
+  $$
+  \begin{aligned}
+  \left|\int_A^{A'} f(x)g(x)\mathrm{d}x\right| &amp;\leqslant |g(A)|\cdot\left|\int_A^\xi f(x)\mathrm{d}x\right| + |g(A')|\cdot\left|\int_\xi^{A'} f(x)\mathrm{d}x\right| \\
+  &amp;\leqslant G\left|\int_A^\xi f(x)\mathrm{d}x\right| + G\left|\int_\xi^{A'} f(x)\mathrm{d}x\right| &lt; \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+  \end{aligned}
+  $$
+
+
+<p>(2) 若 Dirichlet 判别法条件满足，记 $M$ 是 $F(A)$ 在 $[a, +\infty)$ 的一个上界．此时对任意 $A, A' \geqslant a$ 显然有</p>
+  $$
+  \left|\int_A^{A'} f(x)\mathrm{d}x\right| &lt; 2M.
+  $$
+  <p>因为 $\lim_{x \to +\infty} g(x) = 0$，所以存在 $A_0 \geqslant a$，当 $x &gt; A_0$ 时，有</p>
+  $$
+  |g(x)| &lt; \frac{\varepsilon}{4M}.
+  $$
+  <p>于是，对任意 $A, A' \geqslant A_0$，</p>
+  $$
+  \begin{aligned}
+  \left|\int_A^{A'} f(x)g(x)\mathrm{d}x\right| &amp;\leqslant |g(A)|\cdot\left|\int_A^\xi f(x)\mathrm{d}x\right| + |g(A')|\cdot\left|\int_\xi^{A'} f(x)\mathrm{d}x\right| \\
+  &amp;\leqslant 2M|g(A)| + 2M|g(A')| &lt; \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon.
+  \end{aligned}
+  $$
+  <p>所以无论哪个判别法条件满足，由 Cauchy 收敛原理，都有 $\int_a^{+\infty} f(x)g(x)\mathrm{d}x$ 收敛的结论．</p>
+<p class="proof-end">证毕</p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 振荡有界性与单调阻尼因子的相消配对：利用积分第二中值定理将乘积积分的尾部严格受控于两个独立因子的乘积，判定非绝对收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      对于正负交替振荡抵消的反常积分（如著名的 Dirichlet 积分 $\int_0^{+\infty} \frac{\sin x}{x}\,\mathrm{d}x$），被积函数取绝对值后发散，比较判别法全部失效。Abel 与 Dirichlet 判别法凭借第二中值定理打破僵局：利用第二中值定理，远方区间的积分被拆解为 $|\int_A^{A'} fg| = |g(A)\int_A^\xi f + g(A')\int_\xi^{A'} f|$。Dirichlet 条件要求 $f$ 的变上限积分有界（$|\int f| \le M$），$g$ 单调趋于 0。此时展开式两项均受 $2M|g|$ 控制，当 $A \to +\infty$ 时由于 $g(A) \to 0$，尾部被强行压缩到任意小 $\varepsilon$！Abel 条件则要求原积分 $\int f$ 本身收敛（尾部极小），$g$ 单调有界（$|g| \le G$），乘积同样小于 $\varepsilon$。两者完美证明了反常积分的收敛性！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      相空间振荡能量的单调耗散：振荡函数 $f$ 的周期积分构成有界势阱，单调衰减因子 $g$ 充当相空间中的强阻尼耗散器。二者在第二中值定理的几何配对下，在无穷远相空间中将振幅包络线彻底压制消灭。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>第二中值定理分解尾部：$|\int_A^{A'} f(x)g(x)\,\mathrm{d}x| = |g(A)\int_A^\xi f + g(A')\int_\xi^{A'} f|$。</li><li>Dirichlet 机制：积分有界项被常数 $M$ 控制，$g(A) \to 0$ 提供无限衰减小量，两项相乘压制在 $\varepsilon$ 以内。</li><li>Abel 机制：原反常积分收敛保证尾部积分小于 $\frac{\varepsilon}{2G}$，$g(x)$ 有界性提供常数 $G$，两者相乘受控于 $\varepsilon$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-1p">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.1' 反常积分的 Cauchy 收敛原理 (无界函数瑕积分)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">瑕积分</span><span class="thm-tag">无界函数</span><span class="thm-tag">奇点邻域截断</span><span class="thm-tag">Cauchy 收敛原理</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-1p" class="anchor-btn" title="复制锚点链接"># 定理 8.2.1'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.1'（Cauchy 收敛原理）</h4>
+<p>反常积分 $\int_a^b f(x)\mathrm{d}x$ 收敛的充分必要条件是：对任意给定的 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，使得对任意 $\eta, \eta' \in (0, \delta)$，有</p>
+  $$
+  \left|\int_{b-\eta}^{b-\eta'} f(x)\mathrm{d}x\right| &lt; \varepsilon.
+  $$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设 $b$ 为反常积分（瑕积分）的唯一奇点（瑕点）。作变下限积分函数：</p>
+$$F(\eta) = \int_a^{b-\eta} f(x)\,\mathrm{d}x \quad (0 < \eta \le b - a).$$
+<p>根据瑕积分收敛的定义，反常积分 $\int_a^b f(x)\,\mathrm{d}x$ 收敛等价于右极限 $\lim_{\eta \to 0^+} F(\eta)$ 存在且有限。</p>
+<p>应用函数在原点右侧极限的 Cauchy 收敛原理，极限存在的充要条件是：对任意给定的 $\varepsilon > 0$，存在 $\delta > 0$，使得对任意 $0 < \eta, \eta' < \delta$，都有：</p>
+$$|F(\eta') - F(\eta)| < \varepsilon.$$
+<p>不妨设 $\eta > \eta'$，由定积分的区间可加性：</p>
+$$F(\eta') - F(\eta) = \int_a^{b-\eta'} f(x)\,\mathrm{d}x - \int_a^{b-\eta} f(x)\,\mathrm{d}x = \int_{b-\eta}^{b-\eta'} f(x)\,\mathrm{d}x.$$
+<p>代入绝对值不等式，即得到：</p>
+$$\left| \int_{b-\eta}^{b-\eta'} f(x)\,\mathrm{d}x \right| < \varepsilon.$$
+<p>定理结论获证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 奇点邻域截断区间的局域微元测度控制：无界函数在瑕点边缘的瑕积分收敛，等价于靠近瑕点的任意微小缝隙积分绝对值小于任意给定误差。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      瑕积分是被积函数在有限区间端点 $b$ 处无界（瑕点/奇点）。考察变上限函数 $F(\eta) = \int_a^{b-\eta} f(x)\,\mathrm{d}x$ 当截断距离 $\eta \to 0^+$ 时的单侧极限。利用函数极限的 Cauchy 收敛准则，极限存在的充要条件是对任意 $\varepsilon > 0$，当 $\eta, \eta'$ 充分接近 0 时，两端函数值差满足 $|F(\eta') - F(\eta)| < \varepsilon$。由定积分对区间的可加性，这正好等于在瑕点附近的极狭窄小缝隙 $[b-\eta, b-\eta']$ 上的积分：$|\int_{b-\eta}^{b-\eta'} f(x)\,\mathrm{d}x| < \varepsilon$。这表明无界函数收敛的本质是：越逼近奇点，狭缝内所包容的微元面积必须以超越高度暴涨的速度快速衰减，确保缝隙积分趋于零。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      垂直渐近线附近的微元面积塌缩：虽然曲线在逼近瑕点时高度飙升至无穷大，但只要在任意贴近渐近线的垂直极窄缝隙中，曲边梯形的截面面积都能被压缩在容许公差 $\varepsilon$ 之内，整体几何面积即可收敛良定。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>奇点截断距离 $\eta \to 0^+$ 与无穷大限 $A \to +\infty$ 的拓扑对应关系。</li><li>缝隙微元积分受控：$|\int_{b-\eta}^{b-\eta'} f(x)\,\mathrm{d}x| < \varepsilon$ 确立自洽性判据。</li><li>所有瑕积分后续判别法的理论出发点。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-3p">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.3' 瑕积分的 Cauchy 判别法 (p 判别法)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">瑕积分 p 判别法</span><span class="thm-tag">奇点发散阶数</span><span class="thm-tag">p<1 临界线</span><span class="thm-tag">变量代换对偶性</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-3p" class="anchor-btn" title="复制锚点链接"># 定理 8.2.3'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.3'（Cauchy 判别法）</h4>
+<p>设在 $[a, b)$ 上恒有 $f(x) \geqslant 0$，若当 $x$ 属于 $b$ 的某个左邻域 $[b-\eta_0, b)$ 时，存在正常数 $K$，使得</p>
+<ol>
+<li>$f(x) \leqslant \dfrac{K}{(b-x)^p}$，且 $p &lt; 1$，则 $\int_a^b f(x)\mathrm{d}x$ 收敛；</li>
+<li>$f(x) \geqslant \dfrac{K}{(b-x)^p}$，且 $p \geqslant 1$，则 $\int_a^b f(x)\mathrm{d}x$ 发散．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 选取标杆函数为无界函数标准 $p$-幂函数瑕积分：</p>
+$$\int_a^b \frac{\mathrm{d}x}{(b - x)^p} \quad (b > a).$$
+<p>由例 8.1.3 的直接积分结果：当 $p < 1$ 时，$\int_a^b \frac{\mathrm{d}x}{(b-x)^p} = \frac{(b-a)^{1-p}}{1-p}$ 收敛；当 $p \ge 1$ 时，瑕积分发散。</p>
+<p>(1) 当 $(b-x)^p f(x) \le C$ 时，有 $0 \le f(x) \le \frac{C}{(b-x)^p}$。若 $p < 1$，标杆瑕积分收敛，由比较判别法，$\int_a^b f(x)\,\mathrm{d}x$ 必收敛。</p>
+<p>(2) 当 $(b-x) f(x) \ge C > 0$ 时，有 $f(x) \ge \frac{C}{b-x}$。若 $p = 1$，标杆瑕积分发散，由比较判别法，$\int_a^b f(x)\,\mathrm{d}x$ 必发散. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 无界奇点与无穷远点的拓扑对偶反转：无穷限反常积分是 p>1 收敛，瑕积分由于变量代换的负二次幂微分雅可比行列式，完全颠倒为 p<1 收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      许多初学者常对『为什么无穷限是 $p>1$ 收敛，而瑕积分是 $p<1$ 收敛』感到困惑。通过变量代换 $t = \frac{1}{b-x}$ 可以彻底洞穿其几何与代数机制：代换后，导数产生微元 $\mathrm{d}x = t^{-2}\mathrm{d}t$。被积函数变为 $\frac{1}{(b-x)^p}\mathrm{d}x = t^p \cdot t^{-2}\mathrm{d}t = t^{-(2-p)}\mathrm{d}t$。无穷限积分要求新指数 $2-p > 1$，解出的恰好正是 $p < 1$！在有限奇点处，分母的幂次越小（$p<1$），函数在接近奇点时暴涨的速度就越迟钝，底边的线性收缩速度就能轻松战胜高度的爆炸速度，从而将垂直狭长面积压制成有限常数！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      垂直奇点狭长矩形的几何纵横比权衡：奇点附近的曲边梯形是『底边趋于 0、高度趋于无穷』。底边收缩速度为 $\Delta x$，高度爆炸速度为 $(\Delta x)^{-p}$。乘积微元面积为 $(\Delta x)^{1-p}$，只有当 $1-p > 0$ 即 $p < 1$ 时，底边收缩的几何速度才能压制高度爆炸，积分才可能收敛闭合。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>标杆积分的对偶反转：$\int_a^b (b-x)^{-p}\,\mathrm{d}x$ 在 $p < 1$ 时收敛，在 $p \ge 1$ 时发散。</li><li>换元法揭示对偶本质：$t = 1/(b-x)$ 将瑕点映射至无穷远，导数微元引入 $t^{-2}$ 促成指数从 $p$ 变为 $2-p$。</li><li>判定口诀：『无穷看大（$p>1$），瑕点看小（$p<1$）』。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-cor4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>推论 瑕积分 Cauchy 判别法的极限形式</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-20" class="thm-tag routine-ref" target="_blank">🏷️ 套路 20: 比较判别法与标杆基准尺度对照</a>
+        <span class="thm-tag">瑕积分极限形式</span><span class="thm-tag">乘奇点因子消奇性</span><span class="thm-tag">泰勒展开剥离阶数</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-cor4" class="anchor-btn" title="复制锚点链接"># 推论</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>推论（Cauchy 判别法的极限形式）</h4>
+<p>设在 $[a, b)$ 上恒有 $f(x) \geqslant 0$，且</p>
+  $$
+  \lim_{x \to b^-} (b-x)^p f(x) = l,
+  $$
+  <p>则</p>
+<ol>
+<li>若 $0 \leqslant l &lt; +\infty$，且 $p &lt; 1$，则 $\int_a^b f(x)\mathrm{d}x$ 收敛；</li>
+<li>若 $0 &lt; l \leqslant +\infty$，且 $p \geqslant 1$，则 $\int_a^b f(x)\mathrm{d}x$ 发散．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 取标杆函数为 $\varphi(x) = \frac{1}{(b - x)^p}$，则由题设条件有：</p>
+$$\lim_{x \to b^-} \frac{f(x)}{\varphi(x)} = \lim_{x \to b^-} (b - x)^p f(x) = l.$$
+<p>(1) 若 $0 \le l < +\infty$ 且 $p < 1$。因为标杆瑕积分 $\int_a^b \frac{\mathrm{d}x}{(b-x)^p}$ 收敛，由比较判别法极限形式，原瑕积分 $\int_a^b f(x)\,\mathrm{d}x$ 必收敛。</p>
+<p>(2) 若 $0 < l \le +\infty$ 且 $p \ge 1$。因为标杆瑕积分发散，原瑕积分 $\int_a^b f(x)\,\mathrm{d}x$ 必发散. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-20" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 20: 比较判别法与标杆基准尺度对照</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 乘上瑕点因子消除分母奇异点：若能选取指数 p<1 使得被积函数与 (b-x)^p 之积的极限为有限值，则瑕积分必然收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      遇到分母在端点 $b$ 处为零的无界函数反常积分，直接给被积函数乘上因子 $(b-x)^p$ 求极限 $\lim_{x \to b^-} (b-x)^p f(x) = l$。若存在某个小于 1 的指数 $p < 1$（例如 $1/2, 2/3$）使得极限为有限数，表明函数的奇异性阶数低于发散阈值 1，原瑕积分立刻判定为收敛！在实际计算中，若分母含有超越函数如 $\sin(b-x)$ 或 $\ln(1+\sqrt{b-x})$，直接利用一阶 Taylor 展开等价无穷小提取主部阶数，便可口算完成判定。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      瑕点奇性的代数中和滤镜：$(b-x)^p$ 作为局域修正滤镜，消除了分母中走向无穷的奇异零因子。只要中和指数 $p < 1$，局域曲面便被拉平为良态连续函数，积分面积保持有限。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>标杆代换：令 $\varphi(x) = 1/(b-x)^p$，直接落入比较判别法极限形式的轨道。</li><li>等价无穷小剥离奇异性：将局域三角、对数因式展开为 $(b-x)$ 的幂次，快速确定最佳指数 $p$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-8-2-5p">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 8.2.5' 瑕积分的 Abel 判别法与 Dirichlet 判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-07" class="thm-tag routine-ref" target="_blank">🏷️ 套路 07: 柯西准则与自洽性收敛</a>
+        <span class="thm-tag">瑕积分判别法</span><span class="thm-tag">Abel</span><span class="thm-tag">Dirichlet</span><span class="thm-tag">积分第二中值定理应用</span><span class="thm-tag">奇点震荡收敛</span>
+      </div>
+    </div>
+    <a href="#thm-8-2-5p" class="anchor-btn" title="复制锚点链接"># 定理 8.2.5'</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-box">
+<h4>定理 8.2.5'</h4>
+<p>若下列两个条件之一满足，则 $\int_a^b f(x)g(x)\mathrm{d}x$ 收敛：</p>
+<ol>
+<li><strong>（Abel 判别法）</strong> $\int_a^b f(x)\mathrm{d}x$ 收敛，$g(x)$ 在 $[a, b)$ 上单调有界；</li>
+<li><strong>（Dirichlet 判别法）</strong> $F(\eta) = \int_a^{b-\eta} f(x)\mathrm{d}x$ 在 $(0, b-a]$ 上有界，$g(x)$ 在 $[a, b)$ 上单调且 $\lim_{x \to b^-} g(x) = 0$．</li>
+</ol>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 证明与无穷限反常积分的定理 8.2.5 完全平行对应，借由积分第二中值定理完成：</p>
+<p>对任意 $0 < \eta' < \eta < b - a$，利用积分第二中值定理（定理 8.2.4），因为 $g(x)$ 在 $[a, b)$ 上单调，必存在 $\xi \in [b - \eta, b - \eta']$，使得：</p>
+$$\int_{b-\eta}^{b-\eta'} f(x)g(x)\,\mathrm{d}x = g(b - \eta)\int_{b-\eta}^\xi f(x)\,\mathrm{d}x + g(b - \eta')\int_\xi^{b-\eta'} f(x)\,\mathrm{d}x.$$
+<p>(1) 在 Dirichlet 条件下：$F(\eta) = \int_a^{b-\eta} f(x)\,\mathrm{d}x$ 有界，设其界为 $M$。则任何内区间积分绝对值都不超过 $2M$。而 $\lim_{x \to b^-} g(x) = 0$，只要 $\eta, \eta'$ 充分小，就有 $|g(b-\eta)| < \frac{\varepsilon}{4M}$ 且 $|g(b-\eta')| < \frac{\varepsilon}{4M}$。两项相加即得：</p>
+$$\left| \int_{b-\eta}^{b-\eta'} f(x)g(x)\,\mathrm{d}x \right| < \frac{\varepsilon}{4M} \cdot 2M + \frac{\varepsilon}{4M} \cdot 2M = \varepsilon.$$
+<p>由定理 8.2.1' 瑕积分 Cauchy 收敛原理，$\int_a^b f(x)g(x)\,\mathrm{d}x$ 必收敛。</p>
+<p>(2) 在 Abel 条件下：$g(x)$ 单调有界，设 $|g(x)| \le G$；原反常积分 $\int_a^b f(x)\,\mathrm{d}x$ 收敛保证其尾部积分绝对值小于 $\frac{\varepsilon}{2G}$。代入第二中值定理式，同样可得尾部小于 $\varepsilon$。瑕积分必收敛. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-07" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 07: 柯西准则与自洽性收敛</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 瑕点边缘的振荡有界性与单调趋零因子的相消配对：利用第二中值定理跨越奇点裂缝，将剧烈振荡瑕积分化解收敛。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      对于在奇点端点附近剧烈振荡交错变号的瑕积分（例如 $\int_0^1 \frac{1}{x^\alpha}\sin(1/x)\,\mathrm{d}x$），绝对值积分往往由于无界性而发散。瑕积分版的 Dirichlet 定理指明了收敛道路：若振荡部分 $f(x)$ 在趋向瑕点时的截断积分保持有界（振荡能量不发散），配合上一个在瑕点处单调趋于零的阻尼函数 $g(x) \to 0$。在瑕点附近的极微缝隙 $[b-\eta, b-\eta']$ 上应用积分第二中值定理，两端提出的 $g$ 因子极限为 0，将总积分牢牢压死在 $\varepsilon$ 以内，成功判定瑕积分收敛！这充分展示了无穷限反常积分与瑕积分在拓扑流形变换下的高度内在一致性。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      奇点悬崖边缘的振荡阻尼耗散：被积函数的振荡波形在逼近奇点悬崖时虽然频率趋向无限，但其累积积分波形被约束在有界带状流形内；单调趋于零的衰减因子充当阻尼吸收器，在无限贴近悬崖的瞬间将总波幅彻底抹平为零。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>第二中值定理在瑕点邻域应用：在 $[b-\eta, b-\eta']$ 裂缝上分解出端点系数 $g(b-\eta)$ 与 $g(b-\eta')$。</li><li>Dirichlet 条件消解奇点振荡：$g(x) \to 0$ 乘以有界积分核，总误差受控于 $\varepsilon$。</li><li>揭示数学分析中无穷远大尺度与微观奇点极小尺度的完全对称对偶性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_07_theorems.html" class="page-nav-btn">← 上一章：第七章 · 定积分</a>
+  <a href="proof_handbook.html" class="page-nav-btn">📖 查看 21 大套路实战手册 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

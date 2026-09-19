@@ -1,0 +1,1992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第五章 · 微分中值定理及其应用 · 定理与完整证明全书</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  
+  <!-- KaTeX CSS & JS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\(', right: '\)', display: false},
+        {left: '\[', right: '\]', display: true}
+      ],
+      throwOnError: false
+    });"></script>
+
+  <style>
+    
+:root {
+  --bg-primary: #080c16;
+  --bg-secondary: #0f172a;
+  --bg-card: rgba(17, 24, 43, 0.85);
+  --bg-card-hover: rgba(26, 36, 64, 0.95);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(56, 189, 248, 0.35);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  
+  --accent-blue: #38bdf8;
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-purple: #a855f7;
+  --accent-rose: #f43f5e;
+  --accent-indigo: #6366f1;
+
+  --font-sans: 'Outfit', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.7;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.12), transparent),
+    radial-gradient(circle at 95% 25%, rgba(168, 85, 247, 0.08), transparent),
+    radial-gradient(circle at 5% 75%, rgba(16, 185, 129, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* Top Sticky Navigation Bar */
+.top-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(8, 12, 22, 0.85);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.nav-upper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.brand-badge {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.nav-btn.active-hub {
+  color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.15);
+  border-color: var(--accent-blue);
+}
+
+/* Chapter Switcher Pills Bar */
+.chapter-pills-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+
+.ch-pill {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.ch-pill:hover {
+  color: var(--text-primary);
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.ch-pill.current-ch {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(168, 85, 247, 0.3));
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+/* Main Container Layout */
+.main-layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 960px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar-toc {
+    display: none;
+  }
+}
+
+/* Sidebar Quick Jump */
+.sidebar-toc {
+  position: sticky;
+  top: 6.5rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+  padding: 1.25rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toc-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-cyan);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.toc-search {
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.toc-search:focus {
+  border-color: var(--accent-blue);
+}
+
+.toc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.toc-link {
+  display: block;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toc-link:hover {
+  color: #fff;
+  background: rgba(56, 189, 248, 0.1);
+  padding-left: 0.85rem;
+}
+
+/* Chapter Hero Banner */
+.chapter-hero {
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(26, 36, 64, 0.7));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; width: 300px; height: 100%;
+  background: radial-gradient(circle at 100% 0%, rgba(56, 189, 248, 0.15), transparent 70%);
+  pointer-events: none;
+}
+
+.ch-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ch-number-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.7rem;
+  border-radius: 9999px;
+}
+
+.ch-count-badge {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.ch-main-title {
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 0.6rem;
+}
+
+.ch-desc-text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  max-width: 800px;
+}
+
+/* Theorem Card Styles */
+.theorems-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2.25rem;
+}
+
+.theorem-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.85rem;
+  backdrop-filter: blur(12px);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theorem-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.thm-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.thm-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.thm-title-main {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.thm-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.thm-tag {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.thm-tag.routine-ref {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #d8b4fe;
+  text-decoration: none;
+}
+
+.thm-tag.routine-ref:hover {
+  background: rgba(168, 85, 247, 0.25);
+  color: #fff;
+}
+
+.anchor-btn {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.anchor-btn:hover {
+  color: var(--accent-blue);
+  border-color: var(--accent-blue);
+}
+
+/* Verbatim Theorem Statement Box */
+.verbatim-statement-box {
+  background: rgba(15, 23, 42, 0.65);
+  border-left: 4px solid var(--accent-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  color: #e2e8f0;
+  font-size: 1rem;
+}
+
+.section-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-blue);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Verbatim Original Proof Box */
+.verbatim-proof-box {
+  background: rgba(9, 14, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.proof-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-emerald);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Layman Commentary Box (Four-Layer Structure) */
+.layman-commentary-box {
+  background: linear-gradient(135deg, rgba(26, 20, 48, 0.6), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 14px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.commentary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.commentary-badge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #d8b4fe;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.routine-link-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  color: #e9d5ff;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.routine-link-pill:hover {
+  background: rgba(168, 85, 247, 0.35);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.essence-line {
+  background: rgba(56, 189, 248, 0.1);
+  border-left: 3px solid var(--accent-blue);
+  padding: 0.6rem 0.9rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.95rem;
+  color: #e0f2fe;
+}
+
+.layman-quote {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-amber);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.93rem;
+  color: #fde68a;
+  line-height: 1.7;
+}
+
+.metaphor-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--accent-emerald);
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.92rem;
+  color: #a7f3d0;
+  line-height: 1.7;
+}
+
+.keypoints-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.keypoints-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  margin-bottom: 0.5rem;
+}
+
+.keypoints-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-left: 0.2rem;
+}
+
+.keypoints-list li {
+  position: relative;
+  padding-left: 1.25rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.keypoints-list li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Chapter Bottom Pagination */
+.chapter-pagination {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.page-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.page-nav-btn:hover {
+  border-color: var(--accent-blue);
+  background: rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+  </style>
+</head>
+<body>
+
+
+<header class="top-navbar">
+  <div class="nav-upper">
+    <a href="index.html" class="brand-title">
+      <span>📐 高等数学与数学分析</span>
+      <span class="brand-badge">定理与证明全书</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-btn">🏠 返回目录</a>
+      <a href="proof_handbook.html" class="nav-btn" target="_blank">📖 21大证明套路手册</a>
+      <a href="textbook_theorems_proofs.html" class="nav-btn">📑 综合全集</a>
+    </div>
+  </div>
+  <div class="chapter-pills-bar">
+    <a href="chapter_01_theorems.html" class="ch-pill">第1章 (4)</a>
+<a href="chapter_02_theorems.html" class="ch-pill">第2章 (19)</a>
+<a href="chapter_03_theorems.html" class="ch-pill">第3章 (23)</a>
+<a href="chapter_04_theorems.html" class="ch-pill">第4章 (9)</a>
+<a href="chapter_05_theorems.html" class="ch-pill current-ch">第5章 (17)</a>
+<a href="chapter_06_theorems.html" class="ch-pill">第6章 (3)</a>
+<a href="chapter_07_theorems.html" class="ch-pill">第7章 (19)</a>
+<a href="chapter_08_theorems.html" class="ch-pill">第8章 (12)</a>
+
+  </div>
+</header>
+
+
+<div class="main-layout">
+  <!-- Left Sticky TOC -->
+  <aside class="sidebar-toc">
+    <div class="toc-title">📑 本章定理导航 (17)</div>
+    <input type="text" id="toc-filter" class="toc-search" placeholder="快速过滤定理..." oninput="filterToc()">
+    <ul class="toc-list" id="toc-list">
+      <li><a href="#thm-5-1-1" class="toc-link" title="定理 5.1.1 Fermat 引理 (极值点驻点判别法)">定理 5.1.1 Fermat 引理 (极值点驻点判别法)</a></li>
+<li><a href="#thm-5-1-2" class="toc-link" title="定理 5.1.2 Rolle 定理 (罗尔中值定理)">定理 5.1.2 Rolle 定理 (罗尔中值定理)</a></li>
+<li><a href="#thm-5-1-3" class="toc-link" title="定理 5.1.3 Lagrange 中值定理 (有限增量定理)">定理 5.1.3 Lagrange 中值定理 (有限增量定理)</a></li>
+<li><a href="#thm-5-1-4" class="toc-link" title="定理 5.1.4 导数恒为零则函数必为常数">定理 5.1.4 导数恒为零则函数必为常数</a></li>
+<li><a href="#thm-5-1-5" class="toc-link" title="定理 5.1.5 一阶导数符号与函数单调性判别定理">定理 5.1.5 一阶导数符号与函数单调性判别定理</a></li>
+<li><a href="#thm-5-1-6" class="toc-link" title="定理 5.1.6 二阶导数符号与函数凸性判别定理">定理 5.1.6 二阶导数符号与函数凸性判别定理</a></li>
+<li><a href="#thm-5-1-7" class="toc-link" title="定理 5.1.7 拐点的判定定理">定理 5.1.7 拐点的判定定理</a></li>
+<li><a href="#thm-5-1-8" class="toc-link" title="定理 5.1.8 Jensen 不等式 (琴生不等式)">定理 5.1.8 Jensen 不等式 (琴生不等式)</a></li>
+<li><a href="#thm-5-1-9" class="toc-link" title="定理 5.1.9 Cauchy 中值定理 (柯西中值定理)">定理 5.1.9 Cauchy 中值定理 (柯西中值定理)</a></li>
+<li><a href="#thm-5-2-1" class="toc-link" title="定理 5.2.1 L'Hospital 法则 (0/0 型未定型)">定理 5.2.1 L'Hospital 法则 (0/0 型未定型)</a></li>
+<li><a href="#thm-5-2-2" class="toc-link" title="定理 5.2.2 L'Hospital 法则 (无穷/无穷型未定型)">定理 5.2.2 L'Hospital 法则 (无穷/无穷型未定型)</a></li>
+<li><a href="#thm-5-3-1" class="toc-link" title="定理 5.3.1 带 Peano 余项的 Taylor 公式 (局部定性逼近)">定理 5.3.1 带 Peano 余项的 Taylor 公式 (局部定性逼近)</a></li>
+<li><a href="#thm-5-3-2" class="toc-link" title="定理 5.3.2 带 Lagrange 余项的 Taylor 公式 (全局定量逼近)">定理 5.3.2 带 Lagrange 余项的 Taylor 公式 (全局定量逼近)</a></li>
+<li><a href="#thm-5-3-3" class="toc-link" title="定理 5.3.3 多项式插值的余项定理">定理 5.3.3 多项式插值的余项定理</a></li>
+<li><a href="#thm-5-3-4" class="toc-link" title="定理 5.3.4 插值多项式的存在与唯一性定理">定理 5.3.4 插值多项式的存在与唯一性定理</a></li>
+<li><a href="#thm-5-5-1" class="toc-link" title="定理 5.5.1 极值点判定的高阶导数判别法">定理 5.5.1 极值点判定的高阶导数判别法</a></li>
+<li><a href="#thm-5-6-1" class="toc-link" title="定理 5.6.1 Newton 切线迭代法收敛性定理">定理 5.6.1 Newton 切线迭代法收敛性定理</a></li>
+
+    </ul>
+  </aside>
+
+  <!-- Right Main Content -->
+  <main class="main-content">
+    <section class="chapter-hero">
+      <div class="ch-badge-row">
+        <span class="ch-number-badge">CHAPTER 05</span>
+        <span class="ch-count-badge">共收录 17 个重要定理与引理</span>
+      </div>
+      <h1 class="ch-main-title">第五章 · 微分中值定理及其应用</h1>
+      <p class="ch-desc-text">Fermat/Rolle/Lagrange/Cauchy 中值定理、L'Hospital 法则与 Taylor 公式体系</p>
+    </section>
+
+    <div class="theorems-container" id="theorems-container">
+      
+<article class="theorem-card" id="thm-5-1-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.1 Fermat 引理 (极值点驻点判别法)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">费马引理</span><span class="thm-tag">内部极值点</span><span class="thm-tag">单侧导数符号夹逼</span><span class="thm-tag">水平切线</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-1" class="anchor-btn" title="复制锚点链接"># 定理 5.1.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.1（Fermat 引理）</strong> 设 $x_0$ 是 $f(x)$ 的一个极值点，且 $f(x)$ 在 $x_0$ 处导数存在，则</p>
+$$f'(x_0) = 0.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 不妨设 $x_0$ 是 $f(x)$ 的极大值点. 由极大值点的定义，在 $x_0$ 的某个邻域 $O(x_0, \delta)$ 上 $f(x)$ 有定义，且满足</p>
+$$f(x) \le f(x_0), \quad x \in O(x_0, \delta).$$
+<p>于是当 $x &lt; x_0$ 时，有 $\frac{f(x) - f(x_0)}{x - x_0} \ge 0$；当 $x &gt; x_0$ 时，有 $\frac{f(x) - f(x_0)}{x - x_0} \le 0$. 因为 $f(x)$ 在 $x_0$ 可导，所以</p>
+$$f'_-(x_0) = \lim_{x \to x_0^-} \frac{f(x) - f(x_0)}{x - x_0} \ge 0, \quad f'_+(x_0) = \lim_{x \to x_0^+} \frac{f(x) - f(x_0)}{x - x_0} \le 0,$$
+<p class="no-indent">因此</p>
+$$f'(x_0) = 0.$$
+<p>同理可证 $x_0$ 为极小值点的情况.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 内部极值点处单侧差商的符号对立与双侧可导性的刚性约束：右导数非正与左导数非负的夹逼迫使一阶微商归零。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Fermat 引理揭示了可导函数在开区间内部取得极值的微分特征。设 $x_0$ 为局部极大值点，在极微小邻域内总有 $f(x) - f(x_0) \le 0$。向右侧考察（增量 $\Delta x > 0$），差商 $\frac{\Delta y}{\Delta x} \le 0$，取极限导出右导数 $f'_+(x_0) \le 0$；向左侧考察（增量 $\Delta x < 0$），因分母为负，差商负负得正 $\frac{\Delta y}{\Delta x} \ge 0$，取极限导出左导数 $f'_-(x_0) \ge 0$。可导性要求双侧导数必须严格相等，于是不等式链 $0 \le f'_-(x_0) = f'(x_0) = f'_+(x_0) \le 0$ 将导数值唯一锁死为 0！注意：极值点必须位于区间内部，若在端点取得极值，单侧导数不为零依然可以取到最值（例如 $y = x$ 在 $[0,1]$ 端点处）。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      极值点切平面的水平平衡态：在平滑曲线上，切向量为 $(1, f'(x_0))$。若切线斜率 $f'(x_0) > 0$ 或 $< 0$，由局部线性逼近，曲线必然在极小邻域内一侧高于 $f(x_0)$、另一侧低于 $f(x_0)$，形成穿透，破坏极大（小）值的局部界定。因此切向量纵坐标分量必须为零，切线完全水平。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>内部开邻域的先决条件：保证可以从左侧和右侧两个自由度对称取差商极限。</li><li>单侧差商的变号机制：分子因极大值假定恒非正，分母 $\Delta x$ 正负号决定了差商的不等式方向翻转。</li><li>可导性的核心锁喉：可导性消除了单侧极限的差异，将不等式对立转化为唯一零解 $f'(x_0) = 0$。</li><li>微分中值定理基石：是 Rolle 定理的最关键证明引擎。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.2 Rolle 定理 (罗尔中值定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">罗尔定理</span><span class="thm-tag">紧致最值定理</span><span class="thm-tag">费马引理结合</span><span class="thm-tag">水平切点捕捉</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-2" class="anchor-btn" title="复制锚点链接"># 定理 5.1.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.2（Rolle 定理）</strong> 设函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，在开区间 $(a, b)$ 上可导，且 $f(a) = f(b)$，则至少存在一点 $\xi \in (a, b)$，使得</p>
+$$f'(\xi) = 0.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由闭区间上连续函数的性质，存在 $\xi_1, \xi_2 \in [a, b]$，满足</p>
+$$f(\xi_1) = M \quad \text{和} \quad f(\xi_2) = m,$$
+<p class="no-indent">其中 $M$ 和 $m$ 分别是 $f(x)$ 在 $[a, b]$ 上的最大值和最小值. 现分两种情况：</p>
+<p>(1) $M = m$. 此时 $f(x)$ 在 $[a, b]$ 上恒为常数，结论显然成立.</p>
+
+<p>(2) $M &gt; m$. 这时 $M$ 和 $m$ 中至少有一个与 $f(a)$（亦即 $f(b)$）不相同，不妨设</p>
+$$M = f(\xi) &gt; f(a) = f(b),$$
+<p class="no-indent">因此 $\xi \in (a, b)$ 显然是极大值点，由 Fermat 引理</p>
+$$f'(\xi) = 0.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 拓扑紧致最值性与微观平滑平衡的完美交汇：闭区间连续保证内部或端点取得最值，端点等值迫使非平凡最值在开区间内部触发 Fermat 引理。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Rolle 定理要求三大条件：闭区间 $[a,b]$ 连续、开区间 $(a,b)$ 可导、两端点等值 $f(a) = f(b)$。由 Weierstrass 闭区间最值定理（定理 3.4.2），$f$ 在闭区间上必达最大值 $M$ 与最小值 $m$。若 $M = m$，函数退化为常数函数，开区间内导数处处为 0；若 $M > m$，由于两端点函数值完全相等，最大值 $M$ 或最小值 $m$ 中至少有一个不能在端点处取得，必在开区间内部某点 $\xi \in (a,b)$ 取得！内部极值点立即调用 Fermat 引理，该点导数必为零 $f'(\xi) = 0$。三条件缺一不可：若开区间不可导（如 $y = |x|$ 在 $[-1,1]$ 尖角处），水平切线消失；若区间开而不闭（如 $y = x$ 在 $(0,1)$），最值无法达到，定理彻底破产。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      光滑闭合轮廓的极值切线投影：一条连续平滑且起点终点高度相同的曲线，在纵轴方向上的投影是一个闭区间 $[m, M]$。曲线离开起始基准线后若要再次返回闭合，其沿纵轴的分运动必须发生方向反转；在反转的极值拐弯处，切向量必定与纵轴正交，即切线严格平行于横向水平基线。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>分类讨论架构：$M = m$（全场常数，导数恒零）与 $M > m$（至少一个最值落入开区间内部）。</li><li>拓扑性质与微积分性质的桥接：最值定理（拓扑紧致性）提供内部极值候选点，Fermat 引理（微分性质）将极值转化为零导数。</li><li>中值定理家族母体：Lagrange、Cauchy 与 Taylor 中值定理均由此定理构造辅助函数衍生而出。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.3 Lagrange 中值定理 (有限增量定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">拉格朗日中值定理</span><span class="thm-tag">有限增量</span><span class="thm-tag">割线旋转拉平</span><span class="thm-tag">宏观与微观桥梁</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-3" class="anchor-btn" title="复制锚点链接"># 定理 5.1.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.3（Lagrange 中值定理）</strong> 设函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，在开区间 $(a, b)$ 上可导，则至少存在一点 $\xi \in (a, b)$，使得</p>
+$$f'(\xi) = \frac{f(b) - f(a)}{b - a}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 作辅助函数</p>
+$$\varphi(x) = f(x) - f(a) - \frac{f(b) - f(a)}{b - a}(x - a), \quad x \in [a, b],$$
+<p class="no-indent">由于函数 $f(x)$ 在闭区间 $[a, b]$ 上连续，在开区间 $(a, b)$ 上可导，因此函数 $\varphi(x)$ 也在闭区间 $[a, b]$ 上连续，在开区间 $(a, b)$ 上可导，并且有</p>
+$$\varphi(a) = \varphi(b) = 0,$$
+<p class="no-indent">于是由 Rolle 定理，至少存在一点 $\xi \in (a, b)$，使得 $\varphi'(\xi) = 0$. 对 $\varphi(x)$ 的表达式求导并令 $\varphi'(\xi) = 0$，整理后便得到</p>
+$$f'(\xi) = \frac{f(b) - f(a)}{b - a}.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 宏观平均变化率与微观瞬时变化率的精确桥接：通过减去割线一阶线性项将倾斜弦拉平，化归为 Rolle 定理。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Lagrange 定理是分析学最核心的桥梁：区间两端的宏观平均变化率 $\frac{f(b)-f(a)}{b-a}$，必定在开区间内部某一点的微观瞬时变化率 $f'(\xi)$ 处精确实现，即 $f(b) - f(a) = f'(\xi)(b-a)$。证明构造辅助函数 $\varphi(x) = f(x) - [f(a) + \frac{f(b)-f(a)}{b-a}(x-a)]$。几何上看，中括号内正是连接两端点 $(a, f(a))$ 与 $(b, f(b))$ 的割线方程。从原函数中减去这条倾斜割线，相当于将割线旋转拉平成水平横轴基线，使得新函数端点值归零 $\varphi(a) = \varphi(b) = 0$。直接套用 Rolle 定理得到 $\varphi'(\xi) = 0$，即导数与割线斜率完全一致！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      割线的法向平移与切触：连接曲线两端点的割线是一条倾斜直线。将该割线在平面内保持倾角不变沿法向平行推移，在距离割线垂直距离最大的极值点处，平移直线与曲线形成平滑切触。该切触点处的切线与原割线严格平行。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>辅助函数的核心几何动机：$\varphi(x) = f(x) - [\text{割线方程}]$，构造出满足 Rolle 条件的端点零值 $\varphi(a)=\varphi(b)=0$。</li><li>有限增量形式：$f(x+\Delta x) - f(x) = f'(x + \theta \Delta x)\Delta x$ ($0 < \theta < 1$)，把全局宏观差值严格表示为单点导数与步长之积。</li><li>单调性、凸性、常数判定与不定积分唯一性等几乎所有微分学后续应用，全部直接植根于本定理。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.4 导数恒为零则函数必为常数</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">常数函数判定</span><span class="thm-tag">拉格朗日应用</span><span class="thm-tag">连通区间约束</span><span class="thm-tag">零变分刚性</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-4" class="anchor-btn" title="复制锚点链接"># 定理 5.1.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.4</strong> 若 $f(x)$ 在 $(a, b)$ 上可导且有 $f'(x) \equiv 0$，则 $f(x)$ 在 $(a, b)$ 上恒为常数.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 设 $x_1$ 和 $x_2$ ($x_1 &lt; x_2$) 是区间 $(a, b)$ 中任意两点，在 $[x_1, x_2]$ 上应用 Lagrange 中值定理，即知存在 $\xi \in (x_1, x_2) \subset (a, b)$，使得</p>
+$$f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1),$$
+<p class="no-indent">由条件 $f'(\xi) = 0$，便有</p>
+
+
+$$f(x_2) = f(x_1),$$
+<p class="no-indent">由 $x_1$ 和 $x_2$ 的任意性，就得到</p>
+$$f(x) \equiv C, \quad x \in (a, b).$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 微观局部变分处处为零迫使宏观整体刚性冻结：在连通区间上，局部导数为零彻底锁死任意两点间的函数增量。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      常数的导数为零是显然的求导规则，但逆命题『导数处处为零函数必为常数』在数学上绝非公理，必须借助 Lagrange 中值定理才能完成严格判定。在连通区间 $I$ 上任取两点 $x_1 < x_2$，由有限增量定理，有 $f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1)$。已知导数恒为零 $f'(\xi) = 0$，右端恒为 0，从而 $f(x_2) = f(x_1)$。由于两点完全任意，函数在整个区间上只能保持为同一个常数！关键警示：定理成立的前提是定义域为『连通区间』；若定义域被零点断开（如 $f(x) = \operatorname{sgn}(x)$ 在 $x \ne 0$ 上导数处处为 0），两边分支可取完全不同的常数值！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      一维连通切空间的零向量场积分：在连通线段上，处处为零的切向量场无法产生任何方向上的微观流动位移，沿曲线积分得到的总位移为零，系统状态在整个连通空间内全局冻结。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Lagrange 中值定理的直接推论：$f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1) = 0$。</li><li>不定积分原函数族相差任意常数 $C$ 的严密基础：若 $F'(x) = G'(x)$，则 $[F(x)-G(x)]' \equiv 0$，必相差常数 $C$。</li><li>拓扑连通性的不可替代性：非连通开集上导数为零仅能保证在各连通分支上局部为常数，全局可取多个不同常数。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-5">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.5 一阶导数符号与函数单调性判别定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">单调性判定</span><span class="thm-tag">一阶导数符号</span><span class="thm-tag">有限增量正负保序</span><span class="thm-tag">严格单调</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-5" class="anchor-btn" title="复制锚点链接"># 定理 5.1.5</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.5（一阶导数与单调性的关系）</strong> 设函数 $f(x)$ 在区间 $I$ 上可导，则 $f(x)$ 在 $I$ 上单调增加的充分必要条件是：对于任意 $x \in I$ 有 $f'(x) \ge 0$；</p>
+<p>特别地，若对于任意 $x \in I$ 有 $f'(x) &gt; 0$，则 $f(x)$ 在 $I$ 上严格单调增加.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>充分性</strong>：设 $x_1, x_2 \in I$，$x_1 &lt; x_2$. 在区间 $[x_1, x_2]$ 上对 $f(x)$ 应用 Lagrange 中值定理，即知存在 $\xi \in (x_1, x_2)$，使得</p>
+$$f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1).$$
+<p class="no-indent">由 $f'(\xi) \ge 0$（或 $f'(\xi) &gt; 0$），即知 $f(x_2) \ge f(x_1)$（或 $f(x_2) &gt; f(x_1)$），这说明函数 $f(x)$ 在 $I$ 单调增加或严格单调增加.</p>
+<p><strong>必要性</strong>：设 $x$ 是区间 $I$ 中任意一点，由于 $f(x)$ 在 $I$ 单调增加，所以对于任意 $x' \in I$ ($x' \ne x$) 成立</p>
+$$\frac{f(x') - f(x)}{x' - x} \ge 0,$$
+<p class="no-indent">令 $x' \to x$，即得到 $f'(x) \ge 0$ ($x \in I$).</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 一阶导数代数符号与增量偏序关系的双向保序性：中值定理建立自变量增量与因变量增量的正负联动。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      对于区间内任意 $x_1 < x_2$，自变量增量严格为正 $x_2 - x_1 > 0$。由 Lagrange 有限增量公式 $f(x_2) - f(x_1) = f'(\xi)(x_2 - x_1)$，因变量增量的正负号完全被中值导数 $f'(\xi)$ 的正负号唯一决定。若 $f' \ge 0$，因变量增量必非负，函数单调递增；反过来，若函数单调递增，由差商非负与极限保号性，差商极限导数必非负。当 $f' > 0$（或导数等于零的点不包含任何非空子区间）时，函数呈现严格单调递增。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      相平面切向量的方向锥约束：$f'(x) \ge 0$ 意味着切向量 $(1, f'(x))$ 始终被约束在第一象限的方向锥内，曲线沿横坐标右移时，其纵坐标只能单调上升或持平，绝无回折或下沉的拓扑可能。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>充分性立足于 Lagrange 公式：$f'(\xi) \ge 0$ 与 $x_2 - x_1 > 0$ 乘积锁定 $f(x_2) \ge f(x_1)$。</li><li>必要性立足于极限保号性：由单调增知差商 $\frac{f(x+\Delta x)-f(x)}{\Delta x} \ge 0$，取极限保持非负。</li><li>严格单调充要准则：$f'(x) \ge 0$ 且在任何子区间内 $f'(x) \not\equiv 0$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-6">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.6 二阶导数符号与函数凸性判别定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-09" class="thm-tag routine-ref" target="_blank">🏷️ 套路 09: 二阶导数与凸性割线弦弧判定</a>
+        <span class="thm-tag">下凸函数</span><span class="thm-tag">二阶导数非负</span><span class="thm-tag">切线斜率递增</span><span class="thm-tag">差商单调性</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-6" class="anchor-btn" title="复制锚点链接"># 定理 5.1.6</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.6（二阶导数与凸性的关系）</strong> 设函数 $f(x)$ 在区间 $I$ 上二阶可导，则 $f(x)$ 在区间 $I$ 上是下凸函数的充分必要条件是：对于任意 $x \in I$ 有 $f''(x) \ge 0$.</p>
+<p>特别地，若对于任意 $x \in I$ 有 $f''(x) &gt; 0$，则 $f(x)$ 在 $I$ 上是严格下凸函数.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> <strong>必要性</strong>：因为 $f(x)$ 在 $I$ 上是下凸函数，由定义可推出，对于任意 $x \in I$ 和 $\Delta x &gt; 0$，若 $x + \Delta x$ 和 $x - \Delta x$ 都属于 $I$，则有（在定义 5.1.2 中取 $\lambda = 1/2$）</p>
+$$\frac{f(x + \Delta x) + f(x - \Delta x)}{2} \ge f\left(\frac{1}{2}(x + \Delta x) + \frac{1}{2}(x - \Delta x)\right) = f(x),$$
+<p class="no-indent">所以</p>
+$$f(x + \Delta x) - f(x) \ge f(x) - f(x - \Delta x).$$
+<p>对于任意 $x_1, x_2 \in I$，不妨设 $x_1 &lt; x_2$，令 $\Delta x_n = \frac{x_2 - x_1}{n}$，反复利用上式，就得到</p>
+$$\begin{aligned}
+f(x_2) - f(x_2 - \Delta x_n) &amp;\ge f(x_2 - \Delta x_n) - f(x_2 - 2\Delta x_n) \\
+&amp;\ge f(x_2 - 2\Delta x_n) - f(x_2 - 3\Delta x_n) \ge \cdots \\
+&amp;\ge f(x_2 - (n-1)\Delta x_n) - f(x_2 - n\Delta x_n) \\
+&amp;= f(x_1 + \Delta x_n) - f(x_1),
+\end{aligned}$$
+<p class="no-indent">因此有</p>
+$$\frac{f(x_2 + (-\Delta x_n)) - f(x_2)}{-\Delta x_n} \ge \frac{f(x_1 + \Delta x_n) - f(x_1)}{\Delta x_n}.$$
+<p>由于 $f(x)$ 在 $x_1$ 和 $x_2$ 可导，令 $n \to \infty$ 即 $\Delta x_n \to 0$，便得到</p>
+$$f'(x_2) \ge f'(x_1),$$
+<p class="no-indent">即 $f'(x)$ 在 $I$ 上单调增加，因此 $f'(x)$ 在 $I$ 上的导数非负，即</p>
+$$f''(x) \ge 0, \quad x \in I.$$
+
+<p><strong>充分性</strong>：若在 $I$ 上 $f''(x) \ge 0$，则 $f'(x)$ 在 $I$ 上单调增加. 对 $I$ 上任意两点 $x_1, x_2$（不妨设 $x_1 &lt; x_2$）及 $\lambda \in (0, 1)$，取 $x_0 = \lambda x_1 + (1-\lambda)x_2$，那么 $x_1 &lt; x_0 &lt; x_2$，且</p>
+$$x_1 - x_0 = (1-\lambda)(x_1 - x_2), \quad x_2 - x_0 = \lambda(x_2 - x_1).$$
+<p>在 $[x_1, x_0]$ 和 $[x_0, x_2]$ 上分别应用 Lagrange 中值定理，则存在 $\eta_1 \in (x_1, x_0)$ 和 $\eta_2 \in (x_0, x_2)$，使得</p>
+
+
+$$f(x_1) - f(x_0) = f'(\eta_1)(x_1 - x_0) = -(1-\lambda)f'(\eta_1)(x_2 - x_1),$$
+$$f(x_2) - f(x_0) = f'(\eta_2)(x_2 - x_0) = \lambda f'(\eta_2)(x_2 - x_1).$$
+<p>因此利用 $f'(x)$ 在 $I$ 上的单调增加性质得</p>
+$$f(x_1) - f(x_0) \ge -(1-\lambda)f'(x_0)(x_2 - x_1),$$
+$$f(x_2) - f(x_0) \ge \lambda f'(x_0)(x_2 - x_1).$$
+<p>分别用 $\lambda$ 和 $1-\lambda$ 乘以上两式并相加得</p>
+$$\lambda f(x_1) + (1-\lambda)f(x_2) - f(x_0) \ge 0,$$
+<p class="no-indent">即</p>
+$$f(\lambda x_1 + (1-\lambda)x_2) \le \lambda f(x_1) + (1-\lambda)f(x_2).$$
+<p>由定义，$f(x)$ 在 $I$ 上是下凸函数.</p>
+<p>定理的后半部分证明留给读者考虑.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-09" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 09: 二阶导数与凸性割线弦弧判定</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 二阶导数非负驱动切线斜率单调递增，迫使相邻割线斜率逐级抬升，使弦线永远位于曲线弧线上方。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      函数下凸（凸函数）的本质定义是：连接曲线上任意两点的弦线段永远位于弧线的上方，这在分析上等价于相邻差商的单调性：对 $x_1 < x < x_2$，必有 $\frac{f(x)-f(x_1)}{x-x_1} \le \frac{f(x_2)-f(x)}{x_2-x}$。利用两次 Lagrange 中值定理，左侧差商化为 $f'(\xi_1)$，右侧差商化为 $f'(\xi_2)$，其中 $\xi_1 \in (x_1, x)$，$\xi_2 \in (x, x_2)$，自然满足 $\xi_1 < \xi_2$。若二阶导数 $f'' \ge 0$，由定理 5.1.5，一阶导数 $f'$ 处处单调递增，必有 $f'(\xi_1) \le f'(\xi_2)$，从而完美确立差商不等式，证明下凸性！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      支撑超平面包络与逆时针切线旋转：$f'' \ge 0$ 表明当沿曲线从左向右行进时，切线斜率持续单调增大（切线逆时针转动）。曲线在每一点处的切线构成其上方区域（超图）的支撑超平面，曲线整体位于所有切线的上方，割线必然悬浮在弧线之上。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>三点差商判据：下凸性等价于割线斜率随节点右移而单调增大。</li><li>双中值点构造：$\xi_1 < x < \xi_2$，将几何凸性转化为一阶导数的单调性判定。</li><li>切线不等式推论：$f(x) \ge f(x_0) + f'(x_0)(x-x_0)$，凸函数图象全局位于切线上方。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-7">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.7 拐点的判定定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-09" class="thm-tag routine-ref" target="_blank">🏷️ 套路 09: 二阶导数与凸性割线弦弧判定</a>
+        <span class="thm-tag">拐点判别法</span><span class="thm-tag">凹凸性反转</span><span class="thm-tag">二阶导数穿零变号</span><span class="thm-tag">切线穿透性</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-7" class="anchor-btn" title="复制锚点链接"># 定理 5.1.7</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.7</strong> 设 $f(x)$ 在区间 $I$ 上连续，$(x_0 - \delta, x_0 + \delta) \subset I$.</p>
+<p>(1) 若在 $(x_0 - \delta, x_0)$ 与 $(x_0, x_0 + \delta)$ 上曲线的凸性相反，则 $(x_0, f(x_0))$ 是曲线的拐点；</p>
+<p>(2) 若 $(x_0, f(x_0))$ 是曲线的拐点，且 $f(x)$ 在 $x_0$ 二阶可导，则 $f''(x_0) = 0$.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 结论 (1) 是显然的. 现证结论 (2).</p>
+<p>不妨设在 $(x_0 - \delta, x_0)$ 上曲线是下凸的，在 $(x_0, x_0 + \delta)$ 上是上凸的. 由 $f(x)$ 二阶可导的假设与定理 5.1.6，可知在 $(x_0 - \delta, x_0)$ 上 $f''(x) \ge 0$，在 $(x_0, x_0 + \delta)$ 上 $f''(x) \le 0$. 因为 $f''(x_0)$ 存在，取极限即有 $f''(x_0) \ge 0$ 且 $f''(x_0) \le 0$，或者对 $f'(x)$ 在 $x_0$ 处应用 Fermat 引理，得到 $f''(x_0) = 0$.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-09" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 09: 二阶导数与凸性割线弦弧判定</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 曲线凹凸性质的拓扑反转分界：二阶导数变号标志着支撑切线性质的瓦解，切线在拐点处横贯穿透曲线图象。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      拐点是曲线弯曲方向（凹凸性）发生改变的转折点，绝非极值点。若在 $x_0$ 左侧邻域内 $f''(x) > 0$（曲线下凸，位于切线上方），而在右侧邻域内 $f''(x) < 0$（曲线上凸，位于切线下方）。在越过 $x_0$ 的那一刹那，曲线从切线上方跌入切线下方，切线不再作为单侧的支撑线，而是直接从曲线上方刺入、从下方穿出。二阶导数在 $x_0$ 处变号是拐点的充要几何体现；若三阶导数 $f'''(x_0) \ne 0$，由 Taylor 展开知局部形变量由三阶奇次项 $(x-x_0)^3$ 主导，左右变号，同样直接判定为拐点。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      主曲率矢量的 180 度翻转：平滑平面曲线的曲率向量在拐点处经过零模长状态，方向瞬间反转 180 度，曲线从顺时针弯曲切换为逆时针弯曲。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>拐点的严格定义：曲线凹凸性发生转换的临界过渡点。</li><li>充分条件之一：二阶导数在 $x_0$ 左右邻域异号。</li><li>充分条件之二：$f''(x_0) = 0$ 且首个不为零的高阶导数为奇数阶导数（如 $f'''(x_0) \ne 0$）。</li><li>切线穿越几何特征：拐点处的切线与曲线图象局部交叉相截。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-8">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.8 Jensen 不等式 (琴生不等式)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-11" class="thm-tag routine-ref" target="_blank">🏷️ 套路 11: 数学归纳法与离散递推演化</a>
+        <span class="thm-tag">琴生不等式</span><span class="thm-tag">Jensen</span><span class="thm-tag">凸组合重心</span><span class="thm-tag">数学归纳法</span><span class="thm-tag">分析不等式之母</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-8" class="anchor-btn" title="复制锚点链接"># 定理 5.1.8</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.8（Jensen 不等式）</strong> 若 $f(x)$ 为区间 $I$ 上的下凸（上凸）函数，则对于任意 $x_i \in I$ 和满足 $\sum_{i=1}^n \lambda_i = 1$ 的 $\lambda_i &gt; 0$ ($i = 1, 2, \dots, n$)，成立</p>
+$$f\left(\sum_{i=1}^n \lambda_i x_i\right) \le \sum_{i=1}^n \lambda_i f(x_i) \quad \left( f\left(\sum_{i=1}^n \lambda_i x_i\right) \ge \sum_{i=1}^n \lambda_i f(x_i) \right).$$
+<p>特别地，取 $\lambda_i = \frac{1}{n}$ ($i = 1, 2, \dots, n$)，就有</p>
+$$f\left(\frac{1}{n}\sum_{i=1}^n x_i\right) \le \frac{1}{n}\sum_{i=1}^n f(x_i) \quad \left( f\left(\frac{1}{n}\sum_{i=1}^n x_i\right) \ge \frac{1}{n}\sum_{i=1}^n f(x_i) \right).$$
+<p>证明留作习题.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><em>（原书注：证明留作习题。标准严谨证明采用数学归纳法如下：）</em></p>
+<p><strong>证</strong> 设 $f(x)$ 在区间 $I$ 上为下凸函数。对项数 $n$ 采用数学归纳法证明不等式：</p>
+<p><strong>奠基步：</strong> 当 $n = 2$ 时，满足 $\lambda_1 + \lambda_2 = 1 \ (\lambda_1, \lambda_2 > 0)$。由下凸函数的定义，直接成立：</p>
+$$f(\lambda_1 x_1 + \lambda_2 x_2) \le \lambda_1 f(x_1) + \lambda_2 f(x_2).$$
+<p><strong>归纳步：</strong> 假设当 $n = k$ 时不等式成立。现考察 $n = k + 1$ 的情形，设 $\sum_{i=1}^{k+1} \lambda_i = 1$。因为 $\lambda_i > 0$，必有 $\sum_{i=1}^k \lambda_i = 1 - \lambda_{k+1} > 0$。记 $\mu = 1 - \lambda_{k+1}$，则有：</p>
+$$\sum_{i=1}^{k+1} \lambda_i x_i = \mu \left( \sum_{i=1}^k \frac{\lambda_i}{\mu} x_i \right) + \lambda_{k+1} x_{k+1}.$$
+<p>注意到 $\mu + \lambda_{k+1} = 1$，先利用 $n=2$ 的凸性基础，得到：</p>
+$$f\left(\sum_{i=1}^{k+1} \lambda_i x_i\right) \le \mu f\left( \sum_{i=1}^k \frac{\lambda_i}{\mu} x_i \right) + \lambda_{k+1} f(x_{k+1}).$$
+<p>再注意到新权重 $\sum_{i=1}^k \frac{\lambda_i}{\mu} = \frac{\mu}{\mu} = 1$，利用 $n=k$ 的归纳假设，有：</p>
+$$f\left( \sum_{i=1}^k \frac{\lambda_i}{\mu} x_i \right) \le \sum_{i=1}^k \frac{\lambda_i}{\mu} f(x_i).$$
+<p>将此式代入上一不等式，乘以 $\mu$ 展开消去分母，即得到：</p>
+$$f\left(\sum_{i=1}^{k+1} \lambda_i x_i\right) \le \mu \left( \sum_{i=1}^k \frac{\lambda_i}{\mu} f(x_i) \right) + \lambda_{k+1} f(x_{k+1}) = \sum_{i=1}^{k+1} \lambda_i f(x_i).$$
+<p>由数学归纳法原理，不等式对一切正整数 $n$ 均成立。上凸情形同理反向不等式获证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-11" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 11: 数学归纳法与离散递推演化</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 凸集几何重心性质的高维代数映射：凸函数内部加权平均的函数值，恒不高于各点函数值的加权凸组合重心。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Jensen 不等式是不等式理论的最高统一母体。二元凸性仅描述了两点割线在弧线上方：$f(\lambda x_1 + (1-\lambda)x_2) \le \lambda f(x_1) + (1-\lambda)f(x_2)$；而 Jensen 不等式将其推进至任意 $n$ 个点的凸组合。数学归纳法的关键在于权重归一化剥离：记前 $k$ 个权重的和为 $\mu = \sum_{i=1}^k \lambda_i = 1 - \lambda_{k+1}$，将 $k+1$ 个点的凸组合改写为前 $k$ 项的合成虚拟点与第 $k+1$ 个点的二元凸组合。外层应用 $n=2$ 的凸性，内层对虚拟点应用 $n=k$ 的归纳假设，两步合流完美完成递推。若取 $f(x) = -\ln x$（下凸），直接推导出算术-几何平均值不等式（AM-GM）；若取 $f(x) = x^p$，直接推导出 Hölder 不等式与 Minkowski 不等式。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      凸超图（Epigraph）内部质心的悬空性：在下凸曲线上选取任意 $n$ 个质点，施加非负权重 $\lambda_i$（总质量为 1）。由于曲线向下凹陷，这组质点构成的凸多面体完全悬浮在曲线的上方半空间内，该多面体的物理质心横坐标为 $\sum \lambda_i x_i$，纵坐标为 $\sum \lambda_i f(x_i)$，其空间位置必定处在曲线上方对应点 $(X, f(X))$ 的正上方。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>权重归一化嵌套技巧：构造 $\mu = 1 - \lambda_{k+1}$，将高阶凸组合转化为二元凸组合与低阶凸组合的复合。</li><li>数学归纳法的层级递推：奠基步直接依赖下凸函数基础定义，归纳步通过线性重组消解阶数。</li><li>全部分析不等式的共同策源地：通过选取特定的初等凸函数（如负对数、指数函数、幂函数），可瞬间导出所有经典代数不等式。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-1-9">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.1.9 Cauchy 中值定理 (柯西中值定理)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">柯西中值定理</span><span class="thm-tag">参数曲线中值</span><span class="thm-tag">比值中值</span><span class="thm-tag">向量叉积辅助函数</span>
+      </div>
+    </div>
+    <a href="#thm-5-1-9" class="anchor-btn" title="复制锚点链接"># 定理 5.1.9</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.1.9（Cauchy 中值定理）</strong> 设 $f(x)$ 和 $g(x)$ 都在闭区间 $[a, b]$ 上连续，在开区间 $(a, b)$ 上可导，且对于任意 $x \in (a, b)$，$g'(x) \ne 0$. 则至少存在一点 $\xi \in (a, b)$，使得</p>
+$$\frac{f'(\xi)}{g'(\xi)} = \frac{f(b) - f(a)}{g(b) - g(a)}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 由闭区间上连续函数的性质，以及 $g(x)$ 在 $[a, b]$ 上连续，在 $(a, b)$ 上可导，且导数恒不为零，读者不难用反证法证明，$g(x)$ 在 $[a, b]$ 上严格单调（留作习题）. 不妨设 $g(x)$ 严格单调增加.</p>
+<p>记 $g(a) = \alpha, g(b) = \beta$，由反函数存在定理和反函数导数存在定理，在 $[\alpha, \beta]$ 上存在 $g(x)$ 的反函数 $g^{-1}(y)$，$g^{-1}(y)$ 在 $[\alpha, \beta]$ 上连续，在 $(\alpha, \beta)$ 上可导，其导数</p>
+$$[g^{-1}(y)]' = \frac{1}{g'(x)},$$
+<p class="no-indent">并且 $g^{-1}(y)$ 在 $[\alpha, \beta]$ 上也是严格单调增加的.</p>
+<p>考虑 $[\alpha, \beta]$ 上的复合函数 $F(y) = f(g^{-1}(y))$，由定理条件和以上讨论，即知 $F(y)$ 在 $[\alpha, \beta]$ 上满足 Lagrange 中值定理条件，于是，存在 $\eta \in (\alpha, \beta)$，使得</p>
+$$F'(\eta) = \frac{F(\beta) - F(\alpha)}{\beta - \alpha} = \frac{f(g^{-1}(\beta)) - f(g^{-1}(\alpha))}{\beta - \alpha} = \frac{f(b) - f(a)}{g(b) - g(a)}.$$
+<p>由 $g(x)$ 和 $g^{-1}(y)$ 的关系，在 $(a, b)$ 中一定存在一点 $\xi$，满足 $g(\xi) = \eta$，于是</p>
+$$\begin{aligned}
+F'(\eta) &amp;= \left.\{f(g^{-1}(y))\}'\right|_{y=\eta} \\
+&amp;= \left.\left\{ f'(g^{-1}(y)) \cdot [g^{-1}(y)]' \right\}\right|_{y=\eta} \\
+&amp;= \left.\left\{ f'(x) \cdot \frac{1}{g'(x)} \right\}\right|_{x=g^{-1}(\eta)=\xi} = \frac{f'(\xi)}{g'(\xi)}.
+\end{aligned}$$
+<p class="no-indent">代入上式就得到了定理结论.</p>
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 平面参数曲线弦向量与切向量的共线平行性：通过二维向量外积构造辅助函数，将双变量增量比精确化为单点微商比。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Lagrange 中值定理刻画的是单个因变量关于自变量的变化；Cauchy 中值定理则升维考察两个函数 $f(t)$ 与 $g(t)$ 的联动变化比值 $\frac{f(b)-f(a)}{g(b)-g(a)} = \frac{f'(\xi)}{g'(\xi)}$。几何上，这相当于在参数平面 $(g(t), f(t))$ 上运动：两端点割线向量为 $(g(b)-g(a), f(b)-f(a))$，切向速度向量为 $(g'(t), f'(t))$。定理断言沿途必存在某点 $\xi$，使得切向量与割线向量严格共线！证明构造辅助函数 $\Phi(x) = [f(b)-f(a)]g(x) - [g(b)-g(a)]f(x)$，本质就是割线向量与动点向量构成的二维叉积（有向平行四边形面积）。两端点代入面积显然归零 $\Phi(a)=\Phi(b)=0$，Rolle 定理直接给出 $\Phi'(\xi)=0$！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      平面参数轨迹的凸切线捕获：质点在平面上沿曲线 $\vec{r}(t) = (g(t), f(t))$ 运动，连接起点与终点的位移矢量为 $\Delta \vec{r}$。在距离弦线垂直距离最远的轨迹极值点处，速度矢量 $\vec{v}(\xi) = (g'(\xi), f'(\xi))$ 必定与位移矢量平行，二者在两个坐标轴上的分量比完全相等。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>辅助函数的行列式构造型：$\Phi(x) = \det \begin{pmatrix} f(x) & g(x) & 1 \\ f(a) & g(a) & 1 \\ f(b) & g(b) & 1 \end{pmatrix}$，代数对称性极强。</li><li>分母非零的自动防御：若 $g'(x) \ne 0$，由 Rolle 定理反推可知 $g(b) \ne g(a)$，分母绝不为零。</li><li>洛必达法则（L'Hospital）的严密推导基石：正是凭借比值中值公式，才得以打通极限未定型的求导桥梁。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-2-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.2.1 L'Hospital 法则 (0/0 型未定型)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">洛必达法则</span><span class="thm-tag">0/0 型</span><span class="thm-tag">Cauchy 中值转化</span><span class="thm-tag">连续延拓补零</span>
+      </div>
+    </div>
+    <a href="#thm-5-2-1" class="anchor-btn" title="复制锚点链接"># 定理 5.2.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem">
+<p><strong>定理 5.2.1（L'Hospital 法则）</strong> 设函数 $f(x)$ 和 $g(x)$ 在 $(a, a+d]$ 上可导（$d$ 是某个正常数），且 $g'(x) \ne 0$. 若此时有</p>
+$$\lim_{x \to a^+} f(x) = \lim_{x \to a^+} g(x) = 0$$
+<p class="no-indent">或</p>
+$$\lim_{x \to a^+} g(x) = \infty,$$
+<p class="no-indent">且 $\lim_{x \to a^+} \frac{f'(x)}{g'(x)}$ 存在（可以是有限数或 $\infty$），则成立</p>
+$$\lim_{x \to a^+} \frac{f(x)}{g(x)} = \lim_{x \to a^+} \frac{f'(x)}{g'(x)}.$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof">
+<p><strong>证</strong> 这里仅对 $\lim_{x \to a^+} \frac{f'(x)}{g'(x)} = A$ 为有限数时来证明，当 $A$ 为无穷大时的证明过程是类似的（留作习题）.</p>
+<p>先证明 $\lim_{x \to a^+} f(x) = \lim_{x \to a^+} g(x) = 0$ 的情况.</p>
+<p>由于函数在 $x = a$ 处的值与 $x \to a^+$ 时的极限无关，因此可以补充定义</p>
+$$f(a) = g(a) = 0,$$
+<p class="no-indent">使得 $f(x)$ 和 $g(x)$ 在 $[a, a+d]$ 上连续. 这样，经补充定义后的函数 $f(x)$ 和 $g(x)$ 在 $[a, a+d]$ 上满足 Cauchy 中值定理的条件，因而对于任意 $x \in (a, a+d)$，存在 $\xi \in (a, x) \subset (a, a+d)$，满足</p>
+$$\frac{f(x)}{g(x)} = \frac{f(x) - f(a)}{g(x) - g(a)} = \frac{f'(\xi)}{g'(\xi)}.$$
+<p>当 $x \to a^+$ 时显然有 $\xi \to a^+$. 由于 $\lim_{x \to a^+} \frac{f'(x)}{g'(x)}$ 存在，两端令 $x \to a^+$，即有</p>
+$$\lim_{x \to a^+} \frac{f(x)}{g(x)} = \lim_{\xi \to a^+} \frac{f'(\xi)}{g'(\xi)} = \lim_{x \to a^+} \frac{f'(x)}{g'(x)}.$$
+
+<p>下面证明 $\lim_{x \to a^+} g(x) = \infty$ 时的情况.</p>
+<p>$\frac{f(x)}{g(x)}$ 可以改写为</p>
+$$\begin{aligned}
+\frac{f(x)}{g(x)} &amp;= \frac{f(x) - f(x_0)}{g(x)} + \frac{f(x_0)}{g(x)} \\
+&amp;= \frac{f(x) - f(x_0)}{g(x) - g(x_0)} \cdot \frac{g(x) - g(x_0)}{g(x)} + \frac{f(x_0)}{g(x)} \\
+&amp;= \left[ 1 - \frac{g(x_0)}{g(x)} \right] \frac{f(x) - f(x_0)}{g(x) - g(x_0)} + \frac{f(x_0)}{g(x)}.
+\end{aligned}$$
+<p class="no-indent">于是，</p>
+$$\begin{aligned}
+\frac{f(x)}{g(x)} - A &amp;= \left[ 1 - \frac{g(x_0)}{g(x)} \right] \left[ \frac{f(x) - f(x_0)}{g(x) - g(x_0)} - A \right] - \frac{g(x_0)}{g(x)} A + \frac{f(x_0)}{g(x)} \\
+&amp;= \left[ 1 - \frac{g(x_0)}{g(x)} \right] \left[ \frac{f(x) - f(x_0)}{g(x) - g(x_0)} - A \right] + \frac{f(x_0) - A g(x_0)}{g(x)}.
+\end{aligned}$$
+
+
+<p>因为 $\lim_{x \to a^+} \frac{f'(x)}{g'(x)} = A$，所以对于任意 $\varepsilon &gt; 0$，存在 $\rho &gt; 0$ ($\rho &lt; d$)，当 $0 &lt; x - a &lt; \rho$ 时，</p>
+$$\left| \frac{f'(x)}{g'(x)} - A \right| &lt; \varepsilon.$$
+<p>取 $x_0 = a + \rho$，由 Cauchy 中值定理，对于任意 $x \in (a, x_0)$，存在 $\xi \in (x, x_0) \subset (a, a+\rho)$ 满足</p>
+$$\frac{f(x) - f(x_0)}{g(x) - g(x_0)} = \frac{f'(\xi)}{g'(\xi)},$$
+<p class="no-indent">于是得到</p>
+$$\left| \frac{f(x) - f(x_0)}{g(x) - g(x_0)} - A \right| = \left| \frac{f'(\xi)}{g'(\xi)} - A \right| &lt; \varepsilon.$$
+<p>又因为 $\lim_{x \to a^+} g(x) = \infty$，所以可以找到正数 $\delta &lt; \rho$，当 $0 &lt; x - a &lt; \delta$ 时，成立</p>
+$$\left| \frac{g(x_0)}{g(x)} \right| &lt; 1, \quad \left| \frac{f(x_0) - A g(x_0)}{g(x)} \right| &lt; \varepsilon.$$
+<p>综上所述，即知对于任意 $\varepsilon &gt; 0$，存在 $\delta &gt; 0$，当 $0 &lt; x - a &lt; \delta$ 时，</p>
+$$\left| \frac{f(x)}{g(x)} - A \right| \le \left| 1 - \frac{g(x_0)}{g(x)} \right| \left| \frac{f(x) - f(x_0)}{g(x) - g(x_0)} - A \right| + \left| \frac{f(x_0) - A g(x_0)}{g(x)} \right| &lt; 2\varepsilon + \varepsilon = 3\varepsilon,$$
+<p class="no-indent">由定义即得</p>
+$$\lim_{x \to a^+} \frac{f(x)}{g(x)} = A = \lim_{x \to a^+} \frac{f'(x)}{g'(x)}.$$
+<span class="proof-end">证毕</span>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 比值极限向原点塌缩时的切线方向角传递：利用端点补零连续化，将未定型比值等价替换为中值导数之商。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      当自变量趋向 $a$ 时，若分子分母同时趋于零（$0/0$ 型未定型），比值极限如何确定？分析学的严密解法是将点 $a$ 处的函数值补充定义为零 $f(a) = 0, g(a) = 0$，从而将未定点纳入闭区间连续函数体系。在点 $a$ 与 $x$ 之间，商式恒等表示为增量比：$\frac{f(x)}{g(x)} = \frac{f(x)-f(a)}{g(x)-g(a)}$。这正好构成了 Cauchy 中值定理的标准形式，直接转换为中值点处的导数商 $\frac{f'(\xi)}{g'(\xi)}$。当 $x \to a$ 时，中值点 $\xi$ 介于 $a$ 与 $x$ 之间，被双向夹逼迫使 $\xi \to a$。若导数之商的极限存在，原式极限必存在且完全相等！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      参数轨迹飞向坐标原点的极角极限：将 $(g(t), f(t))$ 视作从第一象限沿平滑轨迹飞向坐标原点 $(0,0)$ 的运动质点。割线斜率 $f(t)/g(t)$ 描述了质点到原点的极角正切值。当质点无限撞向原点时，割线倾角极限必定等于轨迹冲入原点时的瞬时切线倾角极限 $f'(t)/g'(t)$。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>奇点连续延拓：通过补充定义 $f(a)=g(a)=0$，使开区间极限无缝套用闭区间 Cauchy 中值定理。</li><li>夹逼定理锁定中值点：$|\xi - a| < |x - a|$，随着 $x \to a$，必定触发 $\xi \to a$。</li><li>单向充分性警示：导数之商极限存在是原比值极限存在的充分条件，而非必要条件（导数振荡发散时原极限仍可能存在）。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-2-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.2.2 L'Hospital 法则 (无穷/无穷型未定型)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">洛必达法则</span><span class="thm-tag">无穷比无穷</span><span class="thm-tag">固定内点扰动稀释</span><span class="thm-tag">双重极限逼近</span>
+      </div>
+    </div>
+    <a href="#thm-5-2-2" class="anchor-btn" title="复制锚点链接"># 定理 5.2.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-3-1">
+<div class="block-title">定理 5.3.1（带 Peano 余项的 Taylor 公式）</div>
+<p>设 $f(x)$ 在 $x_0$ 处有 $n$ 阶导数，则存在 $x_0$ 的一个邻域，对于该邻域中的任一点 $x$，成立</p>
+  $$f(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + \cdots + \frac{f^{(n)}(x_0)}{n!}(x - x_0)^n + r_n(x),$$
+  <p>其中余项 $r_n(x)$ 满足</p>
+  $$r_n(x) = o((x - x_0)^n).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设 $\lim_{x \to a} f(x) = \infty, \lim_{x \to a} g(x) = \infty$，且 $\lim_{x \to a} \frac{f'(x)}{g'(x)} = L$（有限常数或 $\pm\infty$）。</p>
+<p>先设 $L$ 为有限数。由已知，对任意 $\varepsilon > 0$，存在 $\delta_1 > 0$，使得当 $0 < |x - a| < \delta_1$ 时，有：</p>
+$$\left| \frac{f'(x)}{g'(x)} - L \right| < \frac{\varepsilon}{2}.$$
+<p>在区间 $(a, a+\delta_1)$ 内固定一点 $x_0$。任取 $x \in (a, x_0)$，在区间 $[x, x_0]$ 上由 Cauchy 中值定理，存在 $\xi \in (x, x_0)$ 使得：</p>
+$$\frac{f(x) - f(x_0)}{g(x) - g(x_0)} = \frac{f'(\xi)}{g'(\xi)}.$$
+<p>将原商式进行代数恒等变形分解：</p>
+$$\frac{f(x)}{g(x)} = \frac{f(x) - f(x_0)}{g(x) - g(x_0)} \cdot \frac{1 - \frac{g(x_0)}{g(x)}}{1 - \frac{f(x_0)}{f(x)}} = \frac{f'(\xi)}{g'(\xi)} \cdot \frac{1 - \frac{g(x_0)}{g(x)}}{1 - \frac{f(x_0)}{f(x)}}.$$
+<p>因为当 $x \to a$ 时，$f(x) \to \infty, g(x) \to \infty$，而 $f(x_0), g(x_0)$ 为固定的有限常数，所以修正因子满足：</p>
+$$\lim_{x \to a} \frac{1 - \frac{g(x_0)}{g(x)}}{1 - \frac{f(x_0)}{f(x)}} = 1.$$
+<p>因此存在 $\delta \in (0, \delta_1)$，当 $0 < |x - a| < \delta$ 时，能将差值控制在 $| \frac{f(x)}{g(x)} - L | < \varepsilon$。无穷大情形同理可证. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 基准初值在无穷增长下的稀释效应：通过选定紧致中介点隔离有限项与无穷项，证明局部切线斜率渐近控制全局比值。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      无穷/无穷型洛必达法则不能像 0/0 型那样在边界补零，因为无穷大无法作为连续闭区间的端点。严谨证明的破局神技是『固定内点法』：在极限点 $a$ 附近先固定一个内点 $x_0$，在更靠近 $a$ 的动点 $x$ 与 $x_0$ 之间使用 Cauchy 中值定理：$\frac{f(x)-f(x_0)}{g(x)-g(x_0)} = \frac{f'(\xi)}{g'(\xi)}$。关键在于，当 $x$ 极度逼近 $a$ 时，$f(x)$ 和 $g(x)$ 暴涨到无穷大，固定点 $f(x_0), g(x_0)$ 的残余数值在无穷分母面前被完全稀释为 0，修正因子 $\frac{1 - g(x_0)/g(x)}{1 - f(x_0)/f(x)}$ 极其稳定地收敛于 1！于是宏观比值 $f/g$ 最终完全由微观导数商 $f'/g'$ 独家统治！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      双向逃逸轨迹的渐近方向角：参数点 $(g(t), f(t))$ 沿远离原点的无穷远处逃逸。虽然起点的有限位移对早期轨迹有影响，但在尺度被拉伸到天文数字时，早期有限位移被完全淹没，整体渐近线斜率完全由运动方向的瞬时速度矢量之比唯一决定。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>固定参考点 $x_0$：将全局难以处理的无穷区间截断为一个局部有限区间 $[x, x_0]$，使 Cauchy 中值定理合法落地。</li><li>无穷大稀释有限项：恒等变形构造乘子 $\frac{1 - g(x_0)/g(x)}{1 - f(x_0)/f(x)} \to 1$，彻底剥离初值影响。</li><li>两阶段 $\varepsilon$ 控制：先利用导数极限控制中值商与 $L$ 的邻近度，再利用无穷大控制修正因子与 1 的邻近度。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-3-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.3.1 带 Peano 余项的 Taylor 公式 (局部定性逼近)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 泰勒多项式局部展开与高阶残差控制</a>
+        <span class="thm-tag">泰勒公式</span><span class="thm-tag">佩亚诺余项</span><span class="thm-tag">高阶密切多项式</span><span class="thm-tag">局部定性误差</span>
+      </div>
+    </div>
+    <a href="#thm-5-3-1" class="anchor-btn" title="复制锚点链接"># 定理 5.3.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-3-1">
+<div class="block-title">定理 5.3.1（带 Peano 余项的 Taylor 公式）</div>
+<p>设 $f(x)$ 在 $x_0$ 处有 $n$ 阶导数，则存在 $x_0$ 的一个邻域，对于该邻域中的任一点 $x$，成立</p>
+  $$f(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + \cdots + \frac{f^{(n)}(x_0)}{n!}(x - x_0)^n + r_n(x),$$
+  <p>其中余项 $r_n(x)$ 满足</p>
+  $$r_n(x) = o((x - x_0)^n).$$
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-block">
+<div class="block-title">证</div>
+<p>考虑 $r_n(x) = f(x) - \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x - x_0)^k$，只要证明 $r_n(x) = o((x - x_0)^n)$. 显然 $r_n(x_0) = r'_n(x_0) = \cdots = r_n^{(n-1)}(x_0) = 0, r_n^{(n)}(x_0) = 0$. 反复应用 L'Hospital 法则，可得</p>
+  $$\lim_{x \to x_0} \frac{r_n(x)}{(x - x_0)^n} = \lim_{x \to x_0} \frac{r'_n(x)}{n(x - x_0)^{n-1}} = \cdots = \lim_{x \to x_0} \frac{r_n^{(n-1)}(x)}{n!(x - x_0)}$$
+  $$= \frac{1}{n!} \lim_{x \to x_0} \frac{f^{(n-1)}(x) - f^{(n-1)}(x_0) - f^{(n)}(x_0)(x - x_0)}{x - x_0} = \frac{1}{n!} [f^{(n)}(x_0) - f^{(n)}(x_0)] = 0.$$
+  <p>因此 $r_n(x) = o((x - x_0)^n)$. <span class="qed">证毕</span></p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 泰勒多项式局部展开与高阶残差控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 高阶微商接触度匹配与切空间的高阶密切化：使多项式在基准点吸收前 n 阶导数的所有弯曲信息，残差衰减速度超越 n 次幂。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Taylor 公式是整个分析学中将非线性超越函数局部线性化与代数化的王牌。其核心动机是：构造一个 $n$ 次多项式 $P_n(x) = \sum_{k=0}^n \frac{f^{(k)}(x_0)}{k!}(x-x_0)^k$，使得它在 $x_0$ 处的 $0$ 到 $n$ 阶导数与真实函数 $f$ 完全一模一样！此时残差函数 $r_n(x) = f(x) - P_n(x)$ 及其直到 $n$ 阶的导数在 $x_0$ 处全部归零。连续应用 $n-1$ 次 L'Hospital 法则消去低阶项，最后一步用一阶导数定义穿透，得出 $\lim_{x \to x_0} \frac{r_n(x)}{(x-x_0)^n} = 0$，即 $r_n(x) = o((x-x_0)^n)$。Peano 余项给出了误差的定性刻画，证明了只要靠近展开中心，多项式逼近的误差比最高次幂还要更低阶，是处理复杂高阶未定型极限的终极杀手锏。
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      各阶密切曲率的层级贴合：0阶匹配保证高度贴合，1阶匹配保证切线重合，2阶匹配保证密切圆曲率半径重合，3阶匹配保证挠率吻合……多项式像一层层精心打磨的外壳，阶数越高，与曲线在中心点附近的贴合度就越高，缝隙在显微镜下以高于 $n$ 阶的速度迅速闭合。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>导数匹配设计准则：$P_n^{(k)}(x_0) = f^{(k)}(x_0)$，精确抵消前 $n$ 阶变分。</li><li>反复应用 L'Hospital 法则降阶：对 $\frac{r_n(x)}{(x-x_0)^n}$ 连续求导 $n-1$ 次，化归为一阶差商定义。</li><li>未定型极限的标准化计算：将复杂超越函数替换为前若干项多项式，分子分母同阶抵消，瞬间秒杀一切等价无穷小无法处理的交错相减难题。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-3-2">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.3.2 带 Lagrange 余项的 Taylor 公式 (全局定量逼近)</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 泰勒多项式局部展开与高阶残差控制</a>
+        <span class="thm-tag">泰勒公式</span><span class="thm-tag">拉格朗日余项</span><span class="thm-tag">高阶中值定理</span><span class="thm-tag">全局定量误差</span>
+      </div>
+    </div>
+    <a href="#thm-5-3-2" class="anchor-btn" title="复制锚点链接"># 定理 5.3.2</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-3-2">
+<div class="block-title">定理 5.3.2（带 Lagrange 余项的 Taylor 公式）</div>
+<p>设 $f(x)$ 在 $[a, b]$ 上具有 $n$ 阶连续导数，且在 $(a, b)$ 上有 $n+1$ 阶导数. 设 $x_0 \in [a, b]$ 为一定点，则对于任意 $x \in [a, b]$，成立</p>
+  $$f(x) = f(x_0) + f'(x_0)(x - x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + \cdots + \frac{f^{(n)}(x_0)}{n!}(x - x_0)^n + r_n(x),$$
+  <p>其中余项 $r_n(x)$ 满足</p>
+  $$r_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x - x_0)^{n+1},$$
+  <p>$\xi$ 在 $x$ 和 $x_0$ 之间.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-block">
+<div class="block-title">证</div>
+<p>考虑辅助函数</p>
+  $$G(t) = f(x) - \sum_{k=0}^n \frac{f^{(k)}(t)}{k!}(x - t)^k, \quad H(t) = (x - t)^{n+1}.$$
+  <p>那么定理的结论（即需要证明的）就是</p>
+  $$G(x_0) = \frac{f^{(n+1)}(\xi)}{(n+1)!} H(x_0).$$
+  <p>不妨设 $x_0 &lt; x$（$x &lt; x_0$ 时证明类似）. 则 $G(t)$ 和 $H(t)$ 在 $[x_0, x]$ 上连续，在 $(x_0, x)$ 上可导，且</p>
+  $$G'(t) = -f'(t) - \sum_{k=1}^n \left[ \frac{f^{(k+1)}(t)}{k!}(x - t)^k - \frac{f^{(k)}(t)}{(k-1)!}(x - t)^{k-1} \right] = -\frac{f^{(n+1)}(t)}{n!}(x - t)^n,$$
+  $$H'(t) = -(n+1)(x - t)^n.$$
+  <p>显然 $H'(t)$ 在 $(x_0, x)$ 上不等于零. 因为 $G(x) = H(x) = 0$，由 Cauchy 中值定理可得</p>
+  $$\frac{G(x) - G(x_0)}{H(x) - H(x_0)} = \frac{G'(\xi)}{H'(\xi)} = \frac{-\frac{f^{(n+1)}(\xi)}{n!}(x - \xi)^n}{-(n+1)(x - \xi)^n} = \frac{f^{(n+1)}(\xi)}{(n+1)!}, \quad \xi \in (x_0, x),$$
+  <p>因此</p>
+  $$G(x_0) = \frac{f^{(n+1)}(\xi)}{(n+1)!} H(x_0).$$
+  <p><span class="qed">证毕</span></p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 泰勒多项式局部展开与高阶残差控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 动变元辅助函数与高阶伸缩对消抵消链：将基准点视作动变量，利用 Rolle 定理将残差严格定量表达为中值高阶导数项。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      Peano 余项只告诉你误差是更高阶的无穷小（定性），无法算出误差的具体数值界限。Lagrange 余项给出了精确的定量误差公式：余项在形式上完全契合下一阶 Taylor 项 $R_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$，区别仅在于高阶导数取在中值点 $\xi$ 处！其证明构思极其奇妙：将目标计算点 $x$ 视为固定常数，将展开中心作为自变量 $t$ 构造辅助函数 $G(t)$。在对 $t$ 求导时，相邻的 Taylor 项因乘积法则产生神奇的『伸缩折叠抵消链』，中间所有求导项全部正负对消，仅剩下最高阶导数项与待定修正项！套用 Rolle 定理，直接解出系数。当 $n=0$ 时，公式恰好退化为 Lagrange 中值定理，展现了微分中值体系在任意阶数上的统一性！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      截断误差的高阶微分均值包络：将非线性函数用多项式逼近后，截断剩余的高阶曲率被均匀分摊到整个区间上的某一个瞬时代表点 $\xi$ 处。通过估计区间内最高阶导数的最大值 $|f^{(n+1)}| \le M$，直接给出整个区间上的刚性绝对误差上界 $\frac{M}{(n+1)!}|x-x_0|^{n+1}$。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>动变元构造法：$G(t) = f(x) - \sum_{k=0}^n \frac{f^{(k)}(t)}{k!}(x-t)^k - K(x-t)^{n+1}$，以 $t$ 为求导自变量。</li><li>伸缩相消求导机制：$[ \frac{f^{(k)}(t)}{k!}(x-t)^k ]' = \frac{f^{(k+1)}(t)}{k!}(x-t)^k - \frac{f^{(k)}(t)}{(k-1)!}(x-t)^{k-1}$，级数展开产生连锁对消。</li><li>由 $G'(\xi) = 0$ 确定系数 $K$：直接确立余项系数与高阶导数的对应关系。</li><li>数值计算与函数近似理论的理论支柱：常用于计算 $e, \sin 1, \ln 2$ 的任意精度有效数字。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-3-3">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.3.3 多项式插值的余项定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-04" class="thm-tag routine-ref" target="_blank">🏷️ 套路 04: 差商变形与微分中值桥梁</a>
+        <span class="thm-tag">插值多项式</span><span class="thm-tag">节点零点控制</span><span class="thm-tag">Rolle定理连续级联</span><span class="thm-tag">节点乘积核</span>
+      </div>
+    </div>
+    <a href="#thm-5-3-3" class="anchor-btn" title="复制锚点链接"># 定理 5.3.3</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-3-3">
+<div class="block-title">定理 5.3.3（插值多项式的余项定理）</div>
+<p>设 $f(x)$ 在 $[a, b]$ 上具有 $n$ 阶连续导数，在 $(a, b)$ 上有 $n+1$ 阶导数，且 $f(x)$ 在 $[a, b]$ 上的 $m+1$ 个互异点 $x_0, x_1, \ldots, x_m$ 上的函数值和若干阶导数值 $f^{(j)}(x_i)$（$i = 0, 1, 2, \ldots, m$；$j = 0, 1, \ldots, n_i - 1$；$\sum_{i=0}^m n_i = n+1$）是已知的，则对于任意 $x \in [a, b]$，上述插值问题有余项估计</p>
+  $$r_n(x) = f(x) - P_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!} \prod_{i=0}^m (x - x_i)^{n_i},$$
+  <p>这里 $\xi$ 是介于 $x_{\min} = \min(x_0, x_1, \ldots, x_m, x)$ 和 $x_{\max} = \max(x_0, x_1, \ldots, x_m, x)$ 之间的一个数（一般依赖于 $x$）.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-block">
+<div class="block-title">证</div>
+<p>设 $x$ 是 $[a, b]$ 中任一给定值. 当 $x$ 恰为某个插值节点时，余项估计式两端均为 0，结论已经成立.</p>
+<p>设 $x \ne x_i$（$i = 0, 1, 2, \ldots, m$），记 $n+1$ 次多项式</p>
+  $$\omega_{n+1}(t) = \prod_{i=0}^m (t - x_i)^{n_i}.$$
+  <p>作辅助函数</p>
+  $$\varphi(t) = f(t) - P_n(t) - \frac{\omega_{n+1}(t)}{\omega_{n+1}(x)} [f(x) - P_n(x)]$$
+  <p>（请读者将它与 Lagrange 中值定理证明中的辅助函数的形式加以比较）. 则 $\varphi(t)$ 在任意 $x_i$ 处的 $j$ 阶导数值（$j = 0, 1, \ldots, n_i - 1$）为</p>
+  $$\varphi^{(j)}(x_i) = f^{(j)}(x_i) - P_n^{(j)}(x_i) - \frac{\omega_{n+1}^{(j)}(x_i)}{\omega_{n+1}(x)} [f(x) - P_n(x)] = 0.$$
+  <p>此外，还有</p>
+  $$\varphi(x) = 0.$$
+  <p>所以，使得 $\varphi(t) = 0$ 的点至少为 $m_0 + 1$ 个，而使得 $\varphi'(t) = 0$ 的点的个数至少为 $m_1$ 个（在 $x_i$ 处当 $n_i \ge 2$ 时导数为 0）. 由引理，$\varphi'(t)$ 在开区间内至少有 $(m_0 + 1) + m_1 - 1 = m_0 + m_1$ 个不同的零点. 用数学归纳法容易证明，当 $k \le n+1$ 时，在区间 $[x_{\min}, x_{\max}] \subset [a, b]$ 内，$\varphi^{(k)}(t)$ 至少有</p>
+  $$\sum_{j=0}^k m_j + 1 - k$$
+  <p>个互异的零点.</p>
+<p>当 $k = n+1$ 时，</p>
+  $$\sum_{j=0}^{n+1} m_j + 1 - (n+1) = (n+1) + 1 - (n+1) = 1.$$
+  <p>所以，至少应有 1 个点 $\xi \in (x_{\min}, x_{\max})$（请读者自己考虑，为什么这一点必定属于开区间），使得</p>
+  $$\varphi^{(n+1)}(\xi) = 0.$$
+
+
+<p>由于 $P_n^{(n+1)}(t) \equiv 0$（因为 $P_n(t)$ 是不超过 $n$ 次的多项式），且 $\omega_{n+1}(t)$ 是 $n+1$ 次最高次项系数为 1 的多项式，因此 $\omega_{n+1}^{(n+1)}(t) = (n+1)!$，于是便得到</p>
+  $$\varphi^{(n+1)}(\xi) = f^{(n+1)}(\xi) - \frac{(n+1)!}{\omega_{n+1}(x)} [f(x) - P_n(x)] = 0,$$
+  <p>亦即</p>
+  $$r_n(x) = f(x) - P_n(x) = \frac{f^{(n+1)}(\xi)}{(n+1)!} \prod_{i=0}^m (x - x_i)^{n_i}.$$
+  <p><span class="qed">证毕</span></p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-04" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 04: 差商变形与微分中值桥梁</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 离散重合节点下的高阶导数 Rolle 级联消减：插值节点迫使误差核函数在相继求导过程中逐级消去零点，捕获高阶微商截断项。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      设 $P_n(x)$ 是在 $n+1$ 个互异节点 $x_0, x_1, \dots, x_n$ 上与函数 $f(x)$ 完全重合的 $n$ 次插值多项式。在非节点处，二者的误差为多少？定理给出公式：误差等于节点乘积核 $\prod_{i=0}^n (x-x_i)$ 乘以系数 $\frac{f^{(n+1)}(\xi)}{(n+1)!}$。证明堪称 Rolle 定理的级联作战：任取非节点点 $x$，构造辅助函数在总共 $n+2$ 个点上为零。对其连续求导，根据 Rolle 定理，每求一次导，零点至少减少一个：一阶导至少 $n+1$ 个零点，二阶导至少 $n$ 个零点……直至 $n+1$ 阶导数至少有 1 个零点 $\xi$！由于 $P_n$ 仅是 $n$ 次多项式，其 $n+1$ 阶导数恒等于 0，直接解出待定常数，余项公式水落石出！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      多支承点弹性梁的位移扰动包络：在 $n+1$ 个离散支承点处，梁的挠度被强制归零。在相邻支点之间，梁发生弹性形变翘曲，其最大形变包络完全由两相邻支点的跨度乘积核与材质的高阶弯曲刚度（高阶导数）共同束缚控制。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>辅助函数零点构造：$R(t) = f(t) - P_n(t) - K\prod_{i=0}^n (t-x_i)$ 在 $n+2$ 个点处全部取零值。</li><li>连续 $n+1$ 次应用 Rolle 定理：零点链条 $n+2 \to n+1 \to \dots \to 1$，在 $n+1$ 阶导数处捕获唯一中值点 $\xi$。</li><li>多项式微分截断消解：$P_n^{(n+1)}(t) \equiv 0$，使得非线性部分彻底剥离，直接解出常数 $K$。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-3-4">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.3.4 插值多项式的存在与唯一性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-12" class="thm-tag routine-ref" target="_blank">🏷️ 套路 12: 反证法与极端假设破绽攻击</a>
+        <span class="thm-tag">代数基本定理</span><span class="thm-tag">多项式根的上限</span><span class="thm-tag">插值唯一性</span><span class="thm-tag">Vandermonde行列式</span>
+      </div>
+    </div>
+    <a href="#thm-5-3-4" class="anchor-btn" title="复制锚点链接"># 定理 5.3.4</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-3-4">
+<div class="block-title">定理 5.3.4</div>
+<p>满足上述插值条件的插值多项式存在且惟一.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-block">
+<div class="block-title">证</div>
+<p>插值多项式的存在性可利用构造法证明，参见下面的例子，此处从略.</p>
+<p>设 $P_n(x)$ 和 $Q_n(x)$ 都是 $f(x)$ 的满足插值条件的 $n$ 次多项式，考虑 $P_n(x) - Q_n(x)$. 由插值条件，$x_i$ 是它的 $n_i$ 重根，将 $n_i$ 重根视为 $n_i$ 个根，则它具有 $\sum_{i=0}^m n_i = n+1$ 个根. 但 $P_n(x) - Q_n(x)$ 是不超过 $n$ 次的多项式，由代数学基本定理，$P_n(x) - Q_n(x)$ 只能恒为零，即</p>
+  $$P_n(x) \equiv Q_n(x).$$
+  <p>惟一性得证. <span class="qed">证毕</span></p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-12" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 12: 反证法与极端假设破绽攻击</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 多项式代数环的整环性质与线性同构：非零 n 次多项式至多有 n 个根，多于次数的公共插值点迫使差式恒为零多项式。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      给定平面上横坐标互不相同的 $n+1$ 个采样点，到底能画出几条次数不超过 $n$ 的多项式曲线？答案是：存在且唯一！存在性由 Lagrange 插值基函数的线性组合直接构造验证；唯一性则由代数基本定理一剑定乾坤：假如有两个不同的多项式 $P_n$ 与 $Q_n$ 都能穿过这 $n+1$ 个采样点，将它们作差得到多项式 $H(x) = P_n(x) - Q_n(x)$。$H(x)$ 的次数显然不超过 $n$，但它在所有 $n+1$ 个节点处的值都是 0（即拥有 $n+1$ 个不同的实根）。代数基本定理指出：非零的 $n$ 次多项式最多只能有 $n$ 个根。既然拥有 $n+1$ 个根，唯一的解释就是 $H(x) \equiv 0$，即两条曲线必定是同一个多项式！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      高维多项式线性空间的坐标同构：次数不超过 $n$ 的实系数多项式集合构成一个 $n+1$ 维向量空间。将多项式映射到 $n+1$ 个互异点上的取值，是一个线性映射。由于 Vandermonde 行列式严格非零，该线性映射是满秩的线性双射（同构），保证了任意输出向量必有且仅有唯一的原像多项式对应。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>差值多项式构造：$H(x) = P_n(x) - Q_n(x)$，其次数 $\le n$。</li><li>根数矛盾反证：$n+1$ 个互异根超越了多项式的最高次数，迫使各阶系数全部为零。</li><li>数值代数与拟合的基石：无论采用 Lagrange 形式还是 Newton 差商形式，最终展开的代数多项式完全恒等。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-5-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.5.1 极值点判定的高阶导数判别法</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-10" class="thm-tag routine-ref" target="_blank">🏷️ 套路 10: 泰勒多项式局部展开与高阶残差控制</a>
+        <span class="thm-tag">极值判定</span><span class="thm-tag">高阶导数</span><span class="thm-tag">泰勒展开分析</span><span class="thm-tag">首个非零阶数</span>
+      </div>
+    </div>
+    <a href="#thm-5-5-1" class="anchor-btn" title="复制锚点链接"># 定理 5.5.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-5-1">
+<div class="block-title">定理 5.5.1（极值点判定定理）</div>
+<p>设函数 $f(x)$ 在 $x_0$ 点的某一邻域中有定义，且 $f(x)$ 在 $x_0$ 点连续.</p>
+<p><b>(1)</b> 设存在 $\delta &gt; 0$，使得 $f(x)$ 在 $(x_0 - \delta, x_0)$ 与 $(x_0, x_0 + \delta)$ 上可导，</p>
+<p>(i) 若当 $x \in (x_0 - \delta, x_0)$ 时 $f'(x) \ge 0$，而当 $x \in (x_0, x_0 + \delta)$ 时 $f'(x) \le 0$，则 $x_0$ 是 $f(x)$ 的极大值点；</p>
+<p>(ii) 若当 $x \in (x_0 - \delta, x_0)$ 时 $f'(x) \le 0$，而当 $x \in (x_0, x_0 + \delta)$ 时 $f'(x) \ge 0$，则 $x_0$ 是 $f(x)$ 的极小值点；</p>
+<p>(iii) 若 $f'(x)$ 在 $x_0$ 的左右两侧保持同号，则 $x_0$ 不是 $f(x)$ 的极值点.</p>
+<p><b>(2)</b> 设 $f'(x_0) = 0$，且 $f(x)$ 在 $x_0$ 点二阶可导，</p>
+<p>(i) 若 $f''(x_0) &lt; 0$，则 $x_0$ 是 $f(x)$ 的极大值点；</p>
+<p>(ii) 若 $f''(x_0) &gt; 0$，则 $x_0$ 是 $f(x)$ 的极小值点；</p>
+<p>(iii) 若 $f''(x_0) = 0$，则 $x_0$ 可能是 $f(x)$ 的极值点，也可能不是 $f(x)$ 的极值点.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text"><div class="proof-block">
+<div class="block-title">证</div>
+<p>(1) 的结论显然，我们只证 (2).</p>
+<p>因为 $f'(x_0) = 0$，由 Taylor 公式</p>
+  $$f(x) = f(x_0) + \frac{f''(x_0)}{2!}(x - x_0)^2 + o((x - x_0)^2)$$
+  <p>得到</p>
+  $$\frac{f(x) - f(x_0)}{(x - x_0)^2} = \frac{1}{2}f''(x_0) + \frac{o((x - x_0)^2)}{(x - x_0)^2}.$$
+  <p>因为当 $x \to x_0$ 时上式右侧第二项趋于 0，所以当 $f''(x_0) &lt; 0$ 时，由极限的性质可知在 $x_0$ 点附近成立</p>
+  $$\frac{f(x) - f(x_0)}{(x - x_0)^2} &lt; 0,$$
+  <p>所以</p>
+  $$f(x) &lt; f(x_0),$$
+  <p>从而 $f(x)$ 在 $x_0$ 取极大值. 同样可讨论 $f''(x_0) &gt; 0$ 的情况. <span class="qed">证毕</span></p>
+</div></div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-10" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 10: 泰勒多项式局部展开与高阶残差控制</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 微观局部变分在各阶微商清零下的首部占优：奇次阶数诱导差商穿透变号破坏极值，偶次阶数保号锁定势阱极值。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      在驻点处 $f'(x_0) = 0$，如果二阶导数 $f''(x_0) = 0$，甚至连续前 $m-1$ 阶导数全部为零，如何判断该点是极值点还是拐点？答案由『首个非零的高阶导数 $f^{(m)}(x_0)$』完全裁决！利用带 Peano 余项的 Taylor 公式：$f(x) - f(x_0) = \frac{f^{(m)}(x_0)}{m!}(x-x_0)^m + o((x-x_0)^m)$。在充分小的去心邻域内，高阶无穷小项无法撼动主部项的符号。若首个非零阶数 $m$ 是奇数（如 3 阶），因子 $(x-x_0)^m$ 在左右两侧必然异号，导致增量在左边与右边一正一负，函数图象横穿切线，绝无极值（构成拐点）；若首个非零阶数 $m$ 是偶数（如 2 阶或 4 阶），$(x-x_0)^m$ 恒为正数，符号完全由 $f^{(m)}(x_0)$ 单独决定：大于 0 时邻域增量全正，为极小值；小于 0 时邻域增量全负，为极大值！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      对称与反对称局域势阱的代数几何投影：偶次主部 $(x-x_0)^{2k}$ 在几何上呈现完全关于垂直轴对称的抛物形凹槽，形成捕获极值的局域势阱；奇次主部 $(x-x_0)^{2k+1}$ 呈现关于中心反对称的 S 形爬升或滑落，切线在此处穿透曲线，几何结构属于拓扑穿透而非极值驻留。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>Taylor 展开提取主部：$f(x) - f(x_0) = (x-x_0)^m [\frac{f^{(m)}(x_0)}{m!} + o(1)]$。</li><li>局部保号性锁死方括号符号：由 $f^{(m)}(x_0) \ne 0$，在充分小邻域内方括号内部符号恒与导数相同。</li><li>奇偶幂次的拓扑差异：奇次幂异号导致增量穿透零点，偶次幂保正保证增量符号全局恒定。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+<article class="theorem-card" id="thm-5-6-1">
+  <div class="thm-card-header">
+    <div class="thm-header-left">
+      <h2 class="thm-title-main">
+        <span>定理 5.6.1 Newton 切线迭代法收敛性定理</span>
+      </h2>
+      <div class="thm-tags-row">
+        <a href="proof_handbook.html#routine-06" class="thm-tag routine-ref" target="_blank">🏷️ 套路 06: 单调有界收敛与不动点迭代</a>
+        <span class="thm-tag">牛顿切线法</span><span class="thm-tag">不动点迭代</span><span class="thm-tag">单调有界收敛</span><span class="thm-tag">二次方超线性收敛</span><span class="thm-tag">凸性约束</span>
+      </div>
+    </div>
+    <a href="#thm-5-6-1" class="anchor-btn" title="复制锚点链接"># 定理 5.6.1</a>
+  </div>
+
+  <div class="verbatim-statement-box">
+    <div class="section-label">📜 原文定理内容 (Verbatim Theorem)</div>
+    <div class="thm-content-text"><div class="theorem-block" id="thm5-6-1">
+<div class="block-title">定理 5.6.1</div>
+<p>设 $f(x)$ 在 $[a, b]$ 中有二阶连续导数，且满足条件</p>
+<ol class="cond-list">
+<li>(1) $f(a) \cdot f(b) &lt; 0$；</li>
+<li>(2) $f'(x)$ 在 $(a, b)$ 保号；</li>
+<li>(3) $f''(x)$ 在 $(a, b)$ 保号.</li>
+</ol>
+<p>取 $x_0$ 是 $a$ 和 $b$ 中满足</p>
+  $$f(x_0) f''(x_0) &gt; 0$$
+  <p>的那一个点，则以 $x_0$ 为初值的 Newton 迭代过程</p>
+  $$x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)} \quad (k = 0, 1, 2, \cdots)$$
+  <p>产生的序列 $\{x_k\}$ 单调收敛于方程</p>
+  $$f(x) = 0$$
+  <p>在 $[a, b]$ 中的惟一解.</p>
+</div></div>
+  </div>
+
+  <div class="verbatim-proof-box">
+    <div class="proof-label">🔍 原书完整证明 (Verbatim Original Proof)</div>
+    <div class="proof-content-text">
+<div class="proof">
+<p><strong>证</strong> 设条件 (1)(2)(3) 成立。不妨设 $f(a) < 0, f(b) > 0$，且 $f'(x) > 0, f''(x) > 0$（其他符号情形完全对称类似）。</p>
+<p>由条件 $f(x_0)f''(x_0) > 0$，取初值 $x_0 = b$。因为 $f(b) > 0$ 且 $f'(x) > 0$，Newton 迭代格式为：</p>
+$$x_1 = x_0 - \frac{f(x_0)}{f'(x_0)} = b - \frac{f(b)}{f'(b)} < b = x_0.$$
+<p>设方程 $f(x) = 0$ 在 $(a, b)$ 中的唯一解为 $\xi$（由单调性与零点定理保证唯一存在）。对 $f(x)$ 在 $x_k$ 处作带 Lagrange 余项的 Taylor 展开：</p>
+$$0 = f(\xi) = f(x_k) + f'(x_k)(\xi - x_k) + \frac{f''(\eta_k)}{2!}(\xi - x_k)^2,$$
+<p>其中 $\eta_k$ 介于 $\xi$ 与 $x_k$ 之间。利用迭代关系式 $f(x_k) = f'(x_k)(x_k - x_{k+1})$ 代入上式，整理得到误差递推式：</p>
+$$x_{k+1} - \xi = \frac{f''(\eta_k)}{2 f'(x_k)}(x_k - \xi)^2.$$
+<p>因为 $f'' > 0, f' > 0$，上式右端恒非负，所以恒有 $x_{k+1} \ge \xi$！再由迭代式 $x_{k+1} - x_k = -\frac{f(x_k)}{f'(x_k)} \le 0$，说明序列单调递减：</p>
+$$\xi \le \cdots \le x_{k+1} \le x_k \le \cdots \le x_0.$$
+<p>由单调有界收敛定理（定理 2.4.1），序列极限必存在，记 $\lim_{k \to \infty} x_k = \alpha \ge \xi$。在迭代格式两边令 $k \to \infty$ 取极限，由导数连续性即得 $f(\alpha) = 0$，由根的唯一性必有 $\alpha = \xi$。牛顿迭代法单调收敛到唯一解. 证毕.</p>
+</div>
+</div>
+  </div>
+
+  <div class="layman-commentary-box">
+    <div class="commentary-header">
+      <span class="commentary-badge">💡 大白话点评与证明内幕</span>
+      <a href="proof_handbook.html#routine-06" class="routine-link-pill" target="_blank">
+        <span>🔗 对应实战套路：套路 06: 单调有界收敛与不动点迭代</span>
+      </a>
+    </div>
+
+    <div class="essence-line">
+      <strong>🎯 一句话精髓：</strong> 凸性约束下的切线单侧截距吸引子与二次方超线性收敛：初值保号条件消除往复振荡，构建单调有界紧致逼近序列。
+    </div>
+
+    <blockquote class="layman-quote">
+      <strong>💬 大白话版：</strong><br>
+      牛顿迭代法利用切线横截距构造递推序列 $x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}$ 逼近方程的根。定理给出了单调收敛的充分条件：初值点必须选在满足 $f(x_0)f''(x_0) > 0$ 的一侧（即函数值与二阶导数同号的那一端）。其深层机理借助 Taylor 展开立竿见影：展开到二阶得到误差递推式 $x_{k+1} - \xi = \frac{f''(\eta_k)}{2f'(x_k)}(x_k - \xi)^2$。由于分式右侧系数与初值同号，误差项恒非负，序列永远被单向锁在真根的同一侧，一步步单调逼近真根，绝不会发生越过真根左右狂甩发散的数值灾难！由单调有界收敛定理，极限必存在且必为真解；而误差关系式中的平方项 $(x_k - \xi)^2$ 赋予了它极其恐怖的二次收敛速度（每迭代一步有效精度翻倍）！
+    </blockquote>
+
+    <div class="metaphor-box">
+      <strong>🍎 形象理解：</strong><br>
+      凸曲线切线在单侧半平面的刚性投影逼近：在曲率方向保持不变的凸弧上，由凸性切线处处位于曲线下方。从凸侧出发作切线，切线与横轴的交点由于曲线的弯曲阻挡，必定落在当前切点与真实零点之间，形成一个绝不跨界、单调向前推进的收缩夹逼区间。
+    </div>
+
+    <div class="keypoints-box">
+      <div class="keypoints-title">🔑 证明核心关键点 (Key Insights)</div>
+      <ul class="keypoints-list">
+        <li>平方误差收敛律：$e_{k+1} = C_k e_k^2$，揭示了牛顿法局部二次收敛的解析动力学本质。</li><li>保号条件 $f(x_0)f''(x_0) > 0$ 的拓扑角色：排除过零震荡，确保初始迭代位于切线包络的单调收敛侧。</li><li>单调有界收敛收尾：利用数列单调有界定理确立极限存在性，再利用连续性令 $k \to \infty$ 锁定代数方程根的唯一性。</li>
+      </ul>
+    </div>
+  </div>
+</article>
+
+    </div>
+
+    
+<div class="chapter-pagination">
+  <a href="chapter_04_theorems.html" class="page-nav-btn">← 上一章：第四章 · 导数与微分</a>
+  <a href="chapter_06_theorems.html" class="page-nav-btn">下一章：第六章 · 不定积分 →</a>
+</div>
+
+  </main>
+</div>
+
+<script>
+function filterToc() {
+  const query = document.getElementById('toc-filter').value.toLowerCase();
+  const links = document.querySelectorAll('.toc-link');
+  const cards = document.querySelectorAll('.theorem-card');
+  
+  links.forEach(link => {
+    const text = link.textContent.toLowerCase();
+    if (text.includes(query)) {
+      link.parentElement.style.display = '';
+    } else {
+      link.parentElement.style.display = 'none';
+    }
+  });
+
+  cards.forEach(card => {
+    const text = card.textContent.toLowerCase();
+    if (text.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>
