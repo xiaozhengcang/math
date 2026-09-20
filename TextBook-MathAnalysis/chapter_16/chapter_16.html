@@ -444,10 +444,10 @@
     <span class="proof-title">证</span>
     <p>不妨设 $\varphi(x)$ 单调增加．于是对任意给定的 $\varepsilon > 0$，存在 $\eta \in (0, \delta)$，当 $u \in (0, \eta)$ 时，$0 \le \varphi(u) - \varphi(0^+) &lt; \varepsilon$．将积分分为两部分</p>
     $$\int_0^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u = \int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u + \int_\eta^\delta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u.$$
-    <p>对等式右边的第一项，由积分第二中值定理，存在 $\xi \in [0, \eta]$，</p>
-    $$\left|\int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| \le \frac{\varepsilon}{\eta}\left|\int_0^\xi \sin pu\,\mathrm{d}u\right| \le \frac{\varepsilon}{\eta}\cdot\frac{2}{p}.$$
-    <p>利用含参变量积分中已经得到的结论，可知存在与 $p$ 无关的常数 $K$，使得 $\left|p\int_0^\xi\sin pu\,\mathrm{d}u\right| \le K$，即</p>
-    $$\left|\int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| &lt; K\varepsilon.$$
+    <p>对等式右边的第一项，由积分第二中值定理，存在 $\xi \in [0, \eta]$，使得</p>
+    $$\int_0^\eta (\varphi(u) - \varphi(0^+))\frac{\sin pu}{u}\,\mathrm{d}u = (\varphi(\eta) - \varphi(0^+))\int_\xi^\eta \frac{\sin pu}{u}\,\mathrm{d}u.$$
+    <p>由于 $\left|\int_\xi^\eta \frac{\sin pu}{u}\,\mathrm{d}u\right| = \left|\int_{p\xi}^{p\eta}\frac{\sin t}{t}\,\mathrm{d}t\right| \le K$（其中 $K$ 是与 $p$ 无关的常数），所以</p>
+    $$\left|\int_0^\eta \frac{\varphi(u) - \varphi(0^+)}{u}\sin pu\,\mathrm{d}u\right| \le K\varepsilon.$$
 
   <div class="page-divider" data-page="原书第 354 页 [PDF P.374]" id="p354"></div>
 
@@ -481,7 +481,7 @@
 
   <div class="page-divider" data-page="原书第 355 页 [PDF P.375]" id="p355"></div>
 
-    <p>都存在，则 $f(x)$ 的 Fourier 级数在点 $x$ 处收敛于 $\dfrac{f(x^+) + f(x^-)}{2}$．</p>
+    <p class="no-indent">都存在，则 $f(x)$ 的 Fourier 级数在点 $x$ 处收敛于 $\dfrac{f(x^+) + f(x^-)}{2}$．</p>
   </div>
 
   <p>Dirichlet-Jordan 判别法和 Dini-Lipschitz 判别法都是 Fourier 级数收敛的充分条件，尽管在物理、化学、工程等领域的实际问题中，出现的函数一般都同时满足这两个判别法的条件（容易验证，上节例子和习题中的 $f(x)$ 均是如此），但可以构造例子说明它们确实是互不包含的（参见本节习题 10）．附带指出，直至今天，还没有找到一个判别 Fourier 级数敛散性的既充分又必要的条件．</p>
@@ -769,8 +769,8 @@
   <div class="page-divider" data-page="原书第 365 页 [PDF P.385]" id="p365"></div>
 
     <p>设曲线 $C$ 以弧长参数的方程为 $x = x(s)$，$y = y(s)$，$s \in [0, L]$，且参数 $s$ 从 $0$ 变到 $L$ 时，点 $(x(s), y(s))$ 沿逆时针方向画出曲线 $C$．因为 $C$ 是闭曲线，可将该曲线的方程改写为 $x = \varphi(t)$，$y = \psi(t)$，$t \in [-\pi, \pi]$，不妨假设 $\int_{-\pi}^\pi \varphi(t)\,\mathrm{d}t = 0$．</p>
-    <p>由于 $s = \dfrac{L}{2\pi}t$，所以 $\dot{x}^2 + \dot{y}^2 = \left(\dfrac{L}{2\pi}\right)^2$，再由弧长的微分公式得</p>
-    $$L^2 = \left(\frac{L}{2\pi}\right)^2 \cdot 2\pi\int_{-\pi}^\pi [\dot{\varphi}^2(t) + \dot{\psi}^2(t)]\,\mathrm{d}t \cdot \frac{1}{1} = \frac{L^2}{4\pi^2}\int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t.$$
+    <p>由于 $s$ 与 $t$ 满足 $\dfrac{\mathrm{d}s}{\mathrm{d}t} = \dfrac{L}{2\pi}$，所以由弧长的微分公式得</p>
+    $$\varphi'^2(t) + \psi'^2(t) = \left(\frac{\mathrm{d}s}{\mathrm{d}t}\right)^2 = \left(\frac{L}{2\pi}\right)^2.$$
     <p>对上式在 $[-\pi, \pi]$ 上取定积分得</p>
     $$\frac{L^2}{2\pi} = \int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t.$$
 
@@ -779,14 +779,14 @@
     <p>其次，$C$ 所围图形的面积 $A$ 可用曲线积分表示</p>
     $$A = \oint_C x\,\mathrm{d}y = \int_{-\pi}^\pi \varphi(t)\psi'(t)\,\mathrm{d}t,$$
     <p>因此</p>
-    $$\frac{L^2}{4\pi} - A = \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t - \int_{-\pi}^\pi \varphi(t)\psi'(t)\,\mathrm{d}t = \frac{1}{2}\int_{-\pi}^\pi [\varphi'(t) - \psi'(t)]^2\,\mathrm{d}t + \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t.$$
+    $$\frac{L^2}{4\pi} - A = \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) + \psi'^2(t)]\,\mathrm{d}t - \int_{-\pi}^\pi \varphi(t)\psi'(t)\,\mathrm{d}t = \frac{1}{2}\int_{-\pi}^\pi [\varphi(t) - \psi'(t)]^2\,\mathrm{d}t + \frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t.$$
     <p>由于 $C$ 是分段光滑曲线，所以 $\varphi(t)$ 满足引理 16.3.2 的条件，因此</p>
     $$\frac{1}{2}\int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t \ge 0,$$
     $$\frac{L^2}{4\pi} - A \ge 0.$$
     <p>等号成立当且仅当</p>
-    $$\int_{-\pi}^\pi [\varphi'(t) - \psi'(t)]^2\,\mathrm{d}t = 0, \quad \int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t = 0,$$
+    $$\int_{-\pi}^\pi [\varphi(t) - \psi'(t)]^2\,\mathrm{d}t = 0, \quad \int_{-\pi}^\pi [\varphi'^2(t) - \varphi^2(t)]\,\mathrm{d}t = 0,$$
     <p>等价地，就是</p>
-    $$\varphi(t) = a\cos t + b\sin t, \quad \psi'(t) = \varphi'(t), \quad t \in [-\pi, \pi],$$
+    $$\varphi(t) = a\cos t + b\sin t, \quad \psi'(t) = \varphi(t), \quad t \in [-\pi, \pi],$$
     <p>这时 $C$ 的参数方程为 $x = \varphi(t) = a\cos t + b\sin t$，$y = \psi(t) = a\sin t - b\cos t$，$t \in [-\pi, \pi]$，即 $C$ 是一个圆周．证毕</p>
   </div>
 
@@ -854,7 +854,7 @@
 
   <div class="page-divider" data-page="原书第 369 页 [PDF P.389]" id="p369"></div>
 
-  <p>而称函数</p>
+  <p class="no-indent">而称函数</p>
   $$f(x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(\omega)e^{i\omega x}\,\mathrm{d}\omega \quad (x \in (-\infty, +\infty))$$
   <p>为 $F$ 的 <strong>Fourier 逆变换</strong>（或像原函数），记为 $\mathcal{F}^{-1}[F]$，即</p>
   $$\mathcal{F}^{-1}[F](x) = \frac{1}{2\pi}\int_{-\infty}^{+\infty} F(\omega)e^{i\omega x}\,\mathrm{d}\omega.$$
@@ -1038,7 +1038,7 @@
   <div class="page-divider" data-page="原书第 376 页 [PDF P.396]" id="p376"></div>
 
   $$X(j) = \sum_{n=0}^{N-1} x(n)e^{-2\pi i jn/N}, \quad j = 0, 1, 2, \ldots, N-1,$$
-  <p>就可以有效地解决上面的问题．（之所以称它为"离散 Fourier 变换"，在于它可以看成是 Fourier 变换 $\hat{f}(\omega) = \int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x$ 的一种离散的近似形式的推广．）</p>
+  <p class="no-indent">就可以有效地解决上面的问题．（之所以称它为"离散 Fourier 变换"，在于它可以看成是 Fourier 变换 $\hat{f}(\omega) = \int_{-\infty}^{+\infty} f(x)e^{-i\omega x}\,\mathrm{d}x$ 的一种离散的近似形式的推广．）</p>
   <p>利用正交关系式</p>
   $$\frac{1}{N}\sum_{k=0}^{N-1} e^{2\pi i(j-n)k/N} = \delta_{jn},$$
   <p>可以导出<strong>离散 Fourier 逆变换</strong></p>
@@ -1059,14 +1059,14 @@
   <p>一直到 20 世纪 60 年代中期，Cooley 和 Tukey 发现了计算离散 Fourier 变换的高效方法——<strong>快速 Fourier 变换</strong>（简称 FFT——Fast Fourier Transform）之后，它才真正获得了生命力．可以毫不夸张地说，基于 FFT 的离散 Fourier 变换技术，是当今信息传输、频谱分析、图像处理、数据压缩等领域中最重要的数学工具之一，目前，国际上任何一个综合的数学软件中，必定含有 FFT 的计算程序．</p>
   <p>下面对 FFT 的思想作一简单介绍（由于逆 FFT 的形式与 FFT 完全相同，因此所有的方法和结论都可以平行地用到逆 FFT 上去）：</p>
   <p>设 $N = 2m$，将 $j$ 和 $n$ 分别改写成</p>
-  $$j = m_1 j_1 + j_0, \quad j_1 = 0, 1, \ldots, m-1, \quad j_0 = 0, 1,$$
-  $$n = 2n_1 + n_0, \quad n_1 = 0, 1, \ldots, m-1, \quad n_0 = 0, 1,$$
-  <p>记 $W_N = e^{-2\pi i/N}$，则 $W_N^{jn} = W_N^{(m_1 j_1 + j_0)(2n_1 + n_0)} = W_m^{j_1 n_1}(W_N^{j_0})^{n_0}W_N^{j_1 n_0}$．</p>
+  $$j = m j_0 + j_1, \quad j_0 = 0, 1, \quad j_1 = 0, 1, \ldots, m-1,$$
+  $$n = 2n_1 + n_0, \quad n_0 = 0, 1, \quad n_1 = 0, 1, \ldots, m-1,$$
+  <p>记 $W_N = e^{-2\pi i/N}$，则 $W_N^{jn} = W_N^{(m j_0 + j_1)(2n_1 + n_0)} = W_m^{j_1 n_1}(W_N^m)^{j_0 n_0}W_N^{j_1 n_0} = W_m^{j_1 n_1}(-1)^{j_0 n_0}W_N^{j_1 n_0}$．</p>
   <p>将上式代入离散 Fourier 变换公式，并记 $X(j)$ 为 $X(j_1, j_0)$：</p>
-  $$X(j_1, j_0) = \sum_{n_0=0}^1 \left[(W_N^{j_0})^{n_0}W_N^{j_1 n_0}\sum_{n_1=0}^{m-1} x(2n_1 + n_0)(W_m)^{j_1 n_1}\right].$$
+  $$X(j_1, j_0) = \sum_{n_0=0}^1 \left[(-1)^{j_0 n_0}W_N^{j_1 n_0}\sum_{n_1=0}^{m-1} x(2n_1 + n_0)W_m^{j_1 n_1}\right].$$
   <p>将方括号中的部分记为 $\tilde{X}(n_0, j_1)$，则计算 $X(j)$（$j = 0, 1, 2, \ldots, N-1$）可分解为两个步骤进行：</p>
-  $$\tilde{X}(n_0, j_1) = \sum_{n_1=0}^{m-1} x(2n_1 + n_0)(W_m)^{j_1 n_1}, \quad n_0 = 0, 1, \quad j_1 = 0, 1, \ldots, m-1.$$
-  $$X(j_1, j_0) = \sum_{n_0=0}^1 (W_N^{j_0})^{n_0}W_N^{j_1 n_0}\tilde{X}(n_0, j_1).$$
+  $$\tilde{X}(n_0, j_1) = \sum_{n_1=0}^{m-1} x(2n_1 + n_0)W_m^{j_1 n_1}, \quad n_0 = 0, 1, \quad j_1 = 0, 1, \ldots, m-1.$$
+  $$X(j_1, j_0) = \sum_{n_0=0}^1 (-1)^{j_0 n_0}W_N^{j_1 n_0}\tilde{X}(n_0, j_1).$$
 
   <div class="page-divider" data-page="原书第 378 页 [PDF P.398]" id="p378"></div>
 
