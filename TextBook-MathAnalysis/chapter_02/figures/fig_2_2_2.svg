@@ -1,91 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 250" width="100%" height="auto" style="max-width:540px; font-family:'Times New Roman', serif; font-size:14px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 265" width="100%" height="auto" style="max-width:560px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(10, 10)">
-    <!-- Axes: Origin O at (80, 200) -->
-    <line x1="50" y1="200" x2="500" y2="200" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)" />
-    <line x1="80" y1="215" x2="80" y2="15" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)" />
-    <text x="495" y="214" font-style="italic">t</text>
-    <text x="66" y="214" font-style="italic">O</text>
-
-    <!-- Levels: b=60 (b+eps=40), (a+b)/2=90, a=120 (a-eps=140) -->
-    <!-- y_n strip around b=60 -->
-    <rect x="80" y="40" width="410" height="40" fill="#eff6ff" fill-opacity="0.6" />
-    <line x1="80" y1="40" x2="490" y2="40" stroke="#3b82f6" stroke-dasharray="4,4" stroke-width="1.2" />
-    <line x1="80" y1="60" x2="490" y2="60" stroke="#93c5fd" stroke-dasharray="2,2" stroke-width="1" />
+  <!--
+    Sequence ordering theorem (定理2.2.3): x_n → a < b ← y_n
     
-    <!-- dividing line (a+b)/2 = 90 -->
-    <line x1="80" y1="90" x2="490" y2="90" stroke="#dc2626" stroke-dasharray="5,4" stroke-width="1.5" />
-
-    <!-- x_n strip around a=120 -->
-    <rect x="80" y="100" width="410" height="40" fill="#f1f5f9" fill-opacity="0.6" />
-    <line x1="80" y1="120" x2="490" y2="120" stroke="#94a3b8" stroke-dasharray="2,2" stroke-width="1" />
-    <line x1="80" y1="140" x2="490" y2="140" stroke="#64748b" stroke-dasharray="4,4" stroke-width="1.2" />
-
-    <text x="44" y="44" font-style="italic">b+ε</text>
-    <text x="66" y="64" font-style="italic">b</text>
-    <text x="24" y="94" font-style="italic">(a+b)/2</text>
-    <text x="66" y="124" font-style="italic">a</text>
-    <text x="44" y="144" font-style="italic">a-ε</text>
-
-    <!-- Horizontal ticks -->
-    <line x1="120" y1="197" x2="120" y2="203" stroke="#222" /><text x="117" y="214">1</text>
-    <line x1="155" y1="197" x2="155" y2="203" stroke="#222" /><text x="152" y="214">2</text>
-    <line x1="190" y1="197" x2="190" y2="203" stroke="#222" /><text x="187" y="214">3</text>
-    <text x="220" y="214">⋯</text>
-    <line x1="265" y1="197" x2="265" y2="203" stroke="#222" /><text x="260" y="214" font-style="italic">N</text>
-    <line x1="305" y1="197" x2="305" y2="203" stroke="#222" /><text x="294" y="214">N+1</text>
-    <line x1="345" y1="197" x2="345" y2="203" stroke="#222" /><text x="334" y="214">N+2</text>
-    <text x="385" y="214">⋯</text>
-
-    <!-- Points for x_n (solid circle) and y_n (open square) -->
-    <!-- t=1 -->
-    <circle cx="120" cy="165" r="3" fill="#334155" />
-    <rect x="117" y="145" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
-
-    <!-- t=2 -->
-    <circle cx="155" cy="65" r="3" fill="#334155" />
-    <rect x="152" y="95" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
-
-    <!-- t=3 -->
-    <circle cx="190" cy="80" r="3" fill="#334155" />
-    <rect x="187" y="105" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
-
-    <!-- intermediate -->
-    <circle cx="215" cy="35" r="3" fill="#334155" />
-    <rect x="232" y="80" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+    Two horizontal strips:
+      - x_n strip around a (lower): a ± ε, separated from b
+      - y_n strip around b (upper): b ± ε, separated from a
+      - dividing line at (a+b)/2
     
-    <!-- t=N -->
-    <circle cx="265" cy="150" r="3" fill="#334155" />
-    <rect x="262" y="35" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+    Layout:
+      x-axis (n) at y=230, origin at x=90
+      Vertical:
+        b+ε  at y=55
+        b    at y=75
+        b-ε  at y=95
+        (a+b)/2 at y=130 (midpoint)
+        a+ε  at y=165
+        a    at y=185
+        a-ε  at y=205
+  -->
 
-    <!-- For t > N: all circles in [100, 140], all squares in [40, 80] -->
-    <!-- t=N+1 -->
-    <circle cx="305" cy="125" r="3" fill="#334155" />
-    <rect x="302" y="68" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- Shaded strips -->
+  <!-- y_n strip around b -->
+  <rect x="90" y="55" width="440" height="40" fill="#dbeafe" fill-opacity="0.7"/>
+  <!-- x_n strip around a -->
+  <rect x="90" y="165" width="440" height="40" fill="#f1f5f9" fill-opacity="0.7"/>
 
-    <!-- t=N+2 -->
-    <circle cx="345" cy="115" r="3" fill="#334155" />
-    <rect x="342" y="52" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- Axes -->
+  <line x1="55"  y1="230" x2="525" y2="230" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)"/>
+  <line x1="90"  y1="248" x2="90"  y2="18"  stroke="#222" stroke-width="1.4" marker-end="url(#arr3)"/>
+  <text x="513" y="244" font-style="italic">n</text>
+  <text x="74"  y="24"  font-style="italic">x</text>
+  <text x="73"  y="244" font-style="italic">O</text>
 
-    <!-- further -->
-    <circle cx="375" cy="128" r="3" fill="#334155" />
-    <rect x="372" y="70" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- Dashed horizontal lines -->
+  <line x1="90" y1="55"  x2="525" y2="55"  stroke="#3b82f6" stroke-dasharray="5,4" stroke-width="1.2"/>
+  <line x1="90" y1="75"  x2="525" y2="75"  stroke="#93c5fd" stroke-dasharray="2,2" stroke-width="1"/>
+  <line x1="90" y1="95"  x2="525" y2="95"  stroke="#3b82f6" stroke-dasharray="5,4" stroke-width="1.2"/>
+  <line x1="90" y1="130" x2="525" y2="130" stroke="#dc2626" stroke-dasharray="6,4" stroke-width="1.5"/>
+  <line x1="90" y1="165" x2="525" y2="165" stroke="#64748b" stroke-dasharray="5,4" stroke-width="1.2"/>
+  <line x1="90" y1="185" x2="525" y2="185" stroke="#94a3b8" stroke-dasharray="2,2" stroke-width="1"/>
+  <line x1="90" y1="205" x2="525" y2="205" stroke="#64748b" stroke-dasharray="5,4" stroke-width="1.2"/>
 
-    <circle cx="400" cy="118" r="3" fill="#334155" />
-    <rect x="397" y="74" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- Labels on left -->
+  <text x="40"  y="59"   font-style="italic">b+ε</text>
+  <text x="70"  y="79"   font-style="italic">b</text>
+  <text x="40"  y="99"   font-style="italic">b−ε</text>
+  <text x="2"   y="134"  font-style="italic">(a+b)/2</text>
+  <text x="40"  y="169"  font-style="italic">a+ε</text>
+  <text x="70"  y="189"  font-style="italic">a</text>
+  <text x="40"  y="209"  font-style="italic">a−ε</text>
 
-    <circle cx="425" cy="122" r="3" fill="#334155" />
-    <rect x="422" y="62" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- n-axis ticks -->
+  <line x1="135" y1="227" x2="135" y2="233" stroke="#222"/><text x="132" y="244">1</text>
+  <line x1="172" y1="227" x2="172" y2="233" stroke="#222"/><text x="169" y="244">2</text>
+  <line x1="209" y1="227" x2="209" y2="233" stroke="#222"/><text x="206" y="244">3</text>
+  <text x="236"  y="244">⋯</text>
+  <line x1="275" y1="227" x2="275" y2="233" stroke="#222"/><text x="270" y="244" font-style="italic">N</text>
+  <line x1="312" y1="227" x2="312" y2="233" stroke="#222"/><text x="299" y="244">N+1</text>
+  <line x1="349" y1="227" x2="349" y2="233" stroke="#222"/><text x="336" y="244">N+2</text>
+  <text x="388"  y="244">⋯</text>
 
-    <circle cx="450" cy="116" r="3" fill="#334155" />
-    <rect x="447" y="55" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
+  <!-- x_n points (circles): for n≤N scattered, for n>N inside a-strip -->
+  <circle cx="135" cy="215" r="3" fill="#334155"/>
+  <circle cx="172" cy="170" r="3" fill="#334155"/>
+  <circle cx="209" cy="200" r="3" fill="#334155"/>
+  <circle cx="238" cy="212" r="3" fill="#334155"/>
+  <circle cx="275" cy="195" r="3" fill="#334155"/>
+  <!-- n>N: inside a-strip -->
+  <circle cx="312" cy="180" r="3" fill="#1e40af"/>
+  <circle cx="349" cy="172" r="3" fill="#1e40af"/>
+  <circle cx="380" cy="182" r="3" fill="#1e40af"/>
+  <circle cx="410" cy="176" r="3" fill="#1e40af"/>
+  <circle cx="440" cy="183" r="3" fill="#1e40af"/>
+  <circle cx="470" cy="178" r="3" fill="#1e40af"/>
+  <circle cx="500" cy="180" r="3" fill="#1e40af"/>
 
-    <circle cx="475" cy="123" r="3" fill="#334155" />
-    <rect x="472" y="65" width="6" height="6" fill="#fff" stroke="#222" stroke-width="1.2" />
-  </g>
+  <!-- y_n points (open squares): for n≤N scattered, for n>N inside b-strip -->
+  <rect x="132" y="35"  width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <rect x="169" y="105" width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <rect x="206" y="90"  width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <rect x="235" y="115" width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <rect x="272" y="35"  width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <!-- n>N: inside b-strip -->
+  <rect x="309" y="70"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="346" y="60"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="377" y="75"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="407" y="65"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="437" y="72"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="467" y="68"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="497" y="73"  width="6" height="6" fill="#fff" stroke="#1e40af" stroke-width="1.5"/>
+
+  <!-- Vertical dashed line at N -->
+  <line x1="275" y1="25" x2="275" y2="220" stroke="#dc2626" stroke-dasharray="4,3" stroke-width="1.3"/>
+
+  <!-- Legend -->
+  <circle cx="110" cy="15" r="3" fill="#374155"/>
+  <text x="118" y="19" font-size="12" font-style="italic">x_n</text>
+  <rect x="148" y="11" width="6" height="6" fill="#fff" stroke="#374151" stroke-width="1.2"/>
+  <text x="159" y="19" font-size="12" font-style="italic">y_n</text>
 </svg>

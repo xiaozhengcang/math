@@ -1,29 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:16px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 310" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:16px;">
   <defs>
-    <marker id="arr5" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
+    </marker>
+    <marker id="arrSmall" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(10, 10)">
-    <!-- Center O at (140, 140), radius R = 100 -->
-    <line x1="20" y1="140" x2="280" y2="140" stroke="#222" stroke-width="1.4" marker-end="url(#arr5)" />
-    <line x1="140" y1="260" x2="140" y2="20" stroke="#222" stroke-width="1.4" marker-end="url(#arr5)" />
-    <text x="275" y="156" font-style="italic">x</text>
-    <text x="126" y="28" font-style="italic">y</text>
-    <text x="124" y="156" font-style="italic">O</text>
+  <!--
+    Unit circle: center O = (155, 165), radius R = 110px.
+    
+    Point P at angle t = 50° (counterclockwise from x-axis):
+      cos(50°) ≈ 0.6428, sin(50°) ≈ 0.7660
+      Px = 155 + 110×0.6428 = 155 + 70.7 ≈ 226
+      Py = 165 - 110×0.7660 = 165 - 84.3 ≈ 81
 
-    <!-- Circle -->
-    <circle cx="140" cy="140" r="100" fill="none" stroke="#222" stroke-width="1.8" />
+    For angle arc t:
+      Start: (155+35, 165) = (190, 165) — on x-axis at radius 35
+      End:   (155 + 35×cos50°, 165 - 35×sin50°)
+           = (155 + 35×0.6428, 165 - 35×0.7660)
+           = (155+22.5, 165-26.8)
+           = (177.5, 138.2) ≈ (178, 138)
+      Arc: counterclockwise (large-arc=0, sweep=0 for CCW in SVG coords where y flips)
+      In SVG: counterclockwise mathematically = clockwise in screen (y inverted)
+      → sweep-flag=0 gives counterclockwise on screen (which is mathematically correct CCW)
+      
+      Actually in SVG: sweep=1 is clockwise on screen (= counterclockwise mathematically since y flips)
+      Let's check: from (190,165) going to (178,138):
+        - The arc should go counterclockwise (mathematically), i.e., upward
+        - In SVG y-down coords: going from right to upper-right is CCW mathematically = CW on screen
+        - Therefore sweep=1 for CW on screen.
+  -->
 
-    <!-- Point P at t = 58 deg (approx 1 rad) -->
-    <!-- cos(58) = 0.53, sin(58) = 0.85 -> px: 140 + 53 = 193, py: 140 - 85 = 55 -->
-    <line x1="140" y1="140" x2="193" y2="55" stroke="#1e40af" stroke-width="1.8" />
-    <circle cx="193" cy="55" r="3.5" fill="#1e40af" />
-    <text x="198" y="52" font-style="italic">P(x, y)</text>
+  <!-- Axes -->
+  <line x1="25"  y1="165" x2="290" y2="165" stroke="#222" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <line x1="155" y1="290" x2="155" y2="25"  stroke="#222" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <text x="278" y="183" font-style="italic">x</text>
+  <text x="141" y="30"  font-style="italic">y</text>
+  <text x="139" y="183" font-style="italic">O</text>
 
-    <!-- Angle arc t -->
-    <path d="M 175 140 A 35 35 0 0 0 159 110" fill="none" stroke="#222" stroke-width="1.2" marker-end="url(#arr5)" />
-    <text x="168" y="128" font-style="italic">t</text>
-  </g>
+  <!-- Unit circle -->
+  <circle cx="155" cy="165" r="110" fill="none" stroke="#222" stroke-width="1.8"/>
+
+  <!-- Radius to P -->
+  <line x1="155" y1="165" x2="226" y2="81" stroke="#1e40af" stroke-width="1.8"/>
+
+  <!-- Point P -->
+  <circle cx="226" cy="81" r="4" fill="#1e40af"/>
+  <text x="232" y="78" font-style="italic">P(x, y)</text>
+
+  <!-- Projection lines from P to axes (dashed) -->
+  <line x1="226" y1="81" x2="226" y2="165" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+  <line x1="226" y1="165" x2="155" y2="165" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+  <!-- small dots at projection feet -->
+  <circle cx="226" cy="165" r="2" fill="#888"/>
+
+  <!-- Angle arc t: from x-axis (190,165) counterclockwise to near P at radius 35 -->
+  <!-- sweep=1 (CW on screen = CCW mathematically) -->
+  <path d="M 190 165 A 35 35 0 0 0 177 138" fill="none" stroke="#222" stroke-width="1.3" marker-end="url(#arrSmall)"/>
+  <text x="180" y="160" font-style="italic">t</text>
+
+  <!-- Labels on axes for the projection -->
+  <text x="218" y="180" font-style="italic">x</text>
+  <text x="138" y="87"  font-style="italic">y</text>
 </svg>

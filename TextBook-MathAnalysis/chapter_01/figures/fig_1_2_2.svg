@@ -1,30 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 180" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:16px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 200" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:16px;">
   <defs>
-    <marker id="arr2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(20, 10)">
-    <!-- Axes -->
-    <line x1="20" y1="90" x2="280" y2="90" stroke="#222" stroke-width="1.4" marker-end="url(#arr2)" />
-    <line x1="150" y1="165" x2="150" y2="15" stroke="#222" stroke-width="1.4" marker-end="url(#arr2)" />
-    <text x="275" y="108" font-style="italic">x</text>
-    <text x="136" y="22" font-style="italic">y</text>
-    <text x="136" y="106" font-style="italic">O</text>
+  <!--
+    Origin O at (150, 100).
+    x-axis: y=100, from x=20 to x=310
+    y-axis: x=150, from y=175 to y=25
+    scale: 50px per unit
+    y=1  → py = 100 - 50 = 50
+    y=0  → py = 100
+    y=-1 → py = 100 + 50 = 150
+  -->
 
-    <!-- Function rays -->
-    <!-- y = 1 for x > 0 -->
-    <line x1="154" y1="50" x2="270" y2="50" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="150" cy="50" r="3.5" fill="#fff" stroke="#1e40af" stroke-width="2" />
-    <text x="134" y="55">1</text>
+  <!-- Axes -->
+  <line x1="20"  y1="100" x2="308" y2="100" stroke="#222" stroke-width="1.4" marker-end="url(#arr2)"/>
+  <line x1="150" y1="175" x2="150" y2="22"  stroke="#222" stroke-width="1.4" marker-end="url(#arr2)"/>
+  <text x="296" y="118" font-style="italic">x</text>
+  <text x="136" y="28"  font-style="italic">y</text>
+  <text x="135" y="117" font-style="italic">O</text>
 
-    <!-- y = 0 for x = 0 -->
-    <circle cx="150" cy="90" r="3.5" fill="#1e40af" stroke="#1e40af" stroke-width="1" />
+  <!-- Tick on y-axis at y=1 and y=-1 -->
+  <line x1="146" y1="50"  x2="154" y2="50"  stroke="#222" stroke-width="1"/>
+  <text x="130" y="55"  text-anchor="end">1</text>
+  <line x1="146" y1="150" x2="154" y2="150" stroke="#222" stroke-width="1"/>
+  <text x="130" y="155" text-anchor="end">−1</text>
 
-    <!-- y = -1 for x < 0 -->
-    <line x1="30" y1="130" x2="146" y2="130" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="150" cy="130" r="3.5" fill="#fff" stroke="#1e40af" stroke-width="2" />
-    <text x="158" y="135">-1</text>
-  </g>
+  <!-- sgn(x) = 1 for x > 0: ray from x=0 (exclusive) to right -->
+  <!-- open circle at x=0, y=1: (150, 50) -->
+  <line x1="153" y1="50" x2="295" y2="50" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="150" cy="50" r="4" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- sgn(0) = 0: filled dot at origin (150, 100) -->
+  <circle cx="150" cy="100" r="4" fill="#1e40af" stroke="#1e40af" stroke-width="1"/>
+
+  <!-- sgn(x) = -1 for x < 0: ray from left to x=0 (exclusive) -->
+  <!-- open circle at x=0, y=-1: (150, 150) -->
+  <line x1="25" y1="150" x2="147" y2="150" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="150" cy="150" r="4" fill="white" stroke="#1e40af" stroke-width="2"/>
 </svg>

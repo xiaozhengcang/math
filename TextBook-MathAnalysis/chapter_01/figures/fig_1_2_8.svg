@@ -1,31 +1,59 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 230" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:15px;">
   <defs>
-    <marker id="arr8" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr8" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(15, 10)">
-    <!-- Origin O at (50, 160) -->
-    <!-- Peak (1, 1) at (150, 60), End (2, 0) at (250, 160) -->
-    <!-- Cut x at 190 (between 1 and 2, y = 160 - 60 = 100 at cut) -->
-    <line x1="20" y1="160" x2="300" y2="160" stroke="#222" stroke-width="1.4" marker-end="url(#arr8)" />
-    <line x1="50" y1="180" x2="50" y2="20" stroke="#222" stroke-width="1.4" marker-end="url(#arr8)" />
-    <text x="295" y="176" font-style="italic">x</text>
-    <text x="36" y="28" font-style="italic">y</text>
-    <text x="36" y="176" font-style="italic">O</text>
+  <!--
+    Triangle with vertices:
+      (0,0) → SVG (50, 160)
+      (1,1) → SVG (150, 60)
+      (2,0) → SVG (250, 160)
+    Scale: 100px per unit.
 
-    <!-- Shaded area from 0 to x: polygon (50, 160) -> (150, 60) -> (190, 100) -> (190, 160) -->
-    <polygon points="50,160 150,60 190,100 190,160" fill="#cbd5e1" />
+    The shaded region f(x) = area under triangle from 0 to x, x in [0,2].
 
-    <!-- Triangle outline -->
-    <line x1="50" y1="160" x2="150" y2="60" stroke="#222" stroke-width="1.8" />
-    <line x1="150" y1="60" x2="250" y2="160" stroke="#222" stroke-width="1.8" />
-    <line x1="190" y1="100" x2="190" y2="160" stroke="#222" stroke-width="1.8" />
+    For the figure, we show a generic x in (1,2) to illustrate the function.
+    Let x = 1.5 as the example: SVG x-coord = 50 + 1.5*100 = 200.
+    At x=1.5, the right edge is on the right side of the triangle:
+      Right side: from (1,1) to (2,0), parameterized as y = 2-x (for x in [1,2]).
+      At x=1.5: y = 2-1.5 = 0.5 → SVG (200, 160-50) = (200, 110).
 
-    <!-- Labels -->
-    <text x="135" y="50">(1, 1)</text>
-    <text x="186" y="176" font-style="italic">x</text>
-    <text x="246" y="176">2</text>
-  </g>
+    Shaded region for x=1.5:
+      polygon: (50,160) → (150,60) → (200,110) → (200,160)
+  -->
+
+  <!-- Axes -->
+  <line x1="20"  y1="160" x2="295" y2="160" stroke="#222" stroke-width="1.4" marker-end="url(#arr8)"/>
+  <line x1="50"  y1="185" x2="50"  y2="20"  stroke="#222" stroke-width="1.4" marker-end="url(#arr8)"/>
+  <text x="285" y="177" font-style="italic">x</text>
+  <text x="36"  y="26"  font-style="italic">y</text>
+  <text x="34"  y="177" font-style="italic">O</text>
+
+  <!-- Shaded area: region under triangle from 0 to x=1.5 -->
+  <!-- Polygon: O(50,160), peak(150,60), right-edge-at-x(200,110), foot(200,160) -->
+  <polygon points="50,160 150,60 200,110 200,160" fill="#cbd5e1" stroke="none"/>
+
+  <!-- Triangle outline -->
+  <line x1="50"  y1="160" x2="150" y2="60"  stroke="#374151" stroke-width="1.8"/>
+  <line x1="150" y1="60"  x2="250" y2="160" stroke="#374151" stroke-width="1.8"/>
+  <line x1="50"  y1="160" x2="250" y2="160" stroke="#374151" stroke-width="1.8"/>
+
+  <!-- Vertical line at x=1.5 (SVG x=200) showing the cut -->
+  <line x1="200" y1="110" x2="200" y2="160" stroke="#374151" stroke-width="1.8"/>
+
+  <!-- Labels -->
+  <text x="141" y="52" font-size="14">(1, 1)</text>
+  <!-- x-axis labels -->
+  <line x1="150" y1="157" x2="150" y2="163" stroke="#222"/>
+  <text x="146" y="177">1</text>
+  <line x1="250" y1="157" x2="250" y2="163" stroke="#222"/>
+  <text x="246" y="177">2</text>
+  <!-- generic x label -->
+  <text x="196" y="177" font-style="italic">x</text>
+
+  <!-- y-axis label at y=1 -->
+  <line x1="47"  y1="60"  x2="53"  y2="60"  stroke="#222"/>
+  <text x="36"   y="65">1</text>
 </svg>

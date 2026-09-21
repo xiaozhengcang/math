@@ -1,44 +1,83 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 270" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr312" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <marker id="arr312" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
-  <g transform="translate(40, 20)">
-    <!-- Axes -->
-    <line x1="20" y1="220" x2="340" y2="220" stroke="#222" stroke-width="1.4" marker-end="url(#arr312)"/>
-    <line x1="40" y1="240" x2="40" y2="20" stroke="#222" stroke-width="1.4" marker-end="url(#arr312)"/>
-    <text x="330" y="236" font-style="italic">x</text>
-    <text x="26" y="28" font-style="italic">y</text>
-    <text x="26" y="235" font-style="italic">O</text>
 
-    <!-- Unit arc from angle 0 to x -->
-    <path d="M 40 220 A 120 120 0 0 0 164 76" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <!--
+    Geometric proof of lim sin(x)/x = 1 as x→0.
+    
+    Setup: Unit circle with center O, radius R=100px.
+    O at SVG (60, 220).
+    A = O + (R, 0) = (160, 220).  (right end of x-axis on circle)
+    
+    For angle x = 50° (representative):
+      cos(50°) ≈ 0.6428, sin(50°) ≈ 0.7660
+      B = O + (R*cos(x), -R*sin(x)) = (60+64.28, 220-76.60) = (124.3, 143.4) ≈ (124, 143)
+      
+    C = tangent point on line OB extended to vertical through A:
+      C is at x=160 (same as A), y = 220 - R*tan(x) = 220 - 100*1.1918 = 220-119.2 = 100.8 ≈ 101
+      
+    Geometry:
+      Triangle OAB: area = (1/2)*R*R*sin(x) = (1/2)*sin(x)  [in unit radius terms]
+      Sector OAB:   area = (1/2)*R²*x = (1/2)*x
+      Triangle OAC: area = (1/2)*R*R*tan(x) = (1/2)*tan(x)
+      
+      So sin(x) < x < tan(x)
+      
+    Key points:
+      O = (60, 220)
+      A = (160, 220)  (right end, x=1 in circle)
+      B = (124, 143)  (point on circle at angle x)
+      C = (160, 101)  (point on tangent at A)
+      
+    Foot of B on x-axis: D = (124, 220)  [for sin(x) = BD/OA]
+  -->
 
-    <!-- Point B on unit circle -->
-    <circle cx="164" cy="76" r="3.2" fill="#1e40af"/>
-    <text x="170" y="72" font-style="italic">B</text>
+  <!-- Axes -->
+  <line x1="30"  y1="220" x2="285" y2="220" stroke="#222" stroke-width="1.4" marker-end="url(#arr312)"/>
+  <line x1="60"  y1="248" x2="60"  y2="20"  stroke="#222" stroke-width="1.4" marker-end="url(#arr312)"/>
+  <text x="274" y="234" font-style="italic">x</text>
+  <text x="46"  y="26"  font-style="italic">y</text>
+  <text x="44"  y="235" font-style="italic">O</text>
 
-    <!-- Point C = (1, tan x) -->
-    <circle cx="280" cy="76" r="3.2" fill="#1e40af"/>
-    <text x="286" y="72" font-style="italic">C</text>
+  <!-- Quarter unit circle arc from A to top (only the relevant portion shown) -->
+  <!-- Arc from A=(160,220) to B area — just the first quadrant arc from x=0 to x≈50° -->
+  <path d="M 160 220 A 100 100 0 0 0 124 143" fill="none" stroke="#374151" stroke-width="1.5"/>
 
-    <!-- Radius OA to B -->
-    <line x1="40" y1="220" x2="164" y2="76" stroke="#222" stroke-width="1.4"/>
-    <!-- Line OB along x-axis -->
-    <line x1="40" y1="220" x2="280" y2="220" stroke="#222" stroke-width="1.4"/>
-    <!-- Tangent line at B? actually line from O to C -->
-    <line x1="40" y1="220" x2="280" y2="76" stroke="#222" stroke-width="1.4"/>
-    <!-- Vertical line from B to x-axis -->
-    <line x1="164" y1="76" x2="164" y2="220" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
-    <!-- Vertical line from C to x-axis -->
-    <line x1="280" y1="76" x2="280" y2="220" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Radii: OA and OB -->
+  <line x1="60"  y1="220" x2="160" y2="220" stroke="#374151" stroke-width="1.4"/>
+  <line x1="60"  y1="220" x2="124" y2="143" stroke="#374151" stroke-width="1.4"/>
 
-    <!-- Angle x arc -->
-    <path d="M 70 220 A 30 30 0 0 0 62 196" fill="none" stroke="#222" stroke-width="1.2"/>
-    <text x="75" y="200" font-style="italic">x</text>
+  <!-- Line from O through B extended to C: OC -->
+  <!-- Direction: (124-60, 143-220)=(64,-77), length=100 → normalized: (0.6428, -0.7660) -->
+  <!-- C is where x=160: t=(160-60)/64=1.5625, y=220-77*1.5625=220-120.3=99.7≈100 -->
+  <line x1="60" y1="220" x2="160" y2="100" stroke="#374151" stroke-width="1.4"/>
 
-    <!-- Point A label at O? -->
-    <text x="22" y="75" font-style="italic">A</text>
-  </g>
+  <!-- Vertical line at A from A=(160,220) to C=(160,100) — tangent line segment -->
+  <line x1="160" y1="220" x2="160" y2="100" stroke="#374151" stroke-width="1.4"/>
+
+  <!-- Vertical dashed line from B down to x-axis (showing sin x = BD) -->
+  <line x1="124" y1="143" x2="124" y2="220" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+
+  <!-- Points -->
+  <circle cx="160" cy="220" r="3" fill="#374151"/>
+  <text x="163" y="238" font-style="italic">A</text>
+
+  <circle cx="124" cy="143" r="3" fill="#1e40af"/>
+  <text x="128" y="140" font-style="italic">B</text>
+
+  <circle cx="160" cy="100" r="3" fill="#1e40af"/>
+  <text x="164" y="98"  font-style="italic">C</text>
+
+  <!-- Angle arc x at O -->
+  <!-- from A direction (right) to OB direction, CCW mathematically (CW on screen) -->
+  <!-- Start at (60+30, 220)=(90, 220), sweep to angle 50° CCW at radius 30 -->
+  <!-- End: (60+30*cos50°, 220-30*sin50°) = (60+19.28, 220-22.98) = (79.3, 197) ≈ (79, 197) -->
+  <path d="M 90 220 A 30 30 0 0 0 79 197" fill="none" stroke="#222" stroke-width="1.2" marker-end="url(#arr312)"/>
+  <text x="88" y="208" font-style="italic">x</text>
+
+  <!-- Right angle mark at foot of B on axis -->
+  <rect x="124" y="215" width="5" height="5" fill="none" stroke="#888" stroke-width="1"/>
 </svg>

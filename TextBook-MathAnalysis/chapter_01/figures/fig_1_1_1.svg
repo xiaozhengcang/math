@@ -1,61 +1,69 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 220" width="100%" height="auto" style="max-width:760px; font-family:'Times New Roman', serif; font-size:16px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 220" width="100%" height="auto" style="max-width:780px; font-family:'Times New Roman', serif; font-size:16px;">
   <defs>
-    <clipPath id="circleS1"><circle cx="85" cy="115" r="50" /></clipPath>
-    <clipPath id="circleT1"><circle cx="125" cy="75" r="50" /></clipPath>
-    <clipPath id="circleS2"><circle cx="265" cy="115" r="50" /></clipPath>
-    <clipPath id="circleT2"><circle cx="305" cy="75" r="50" /></clipPath>
-    <clipPath id="circleS3"><circle cx="445" cy="115" r="50" /></clipPath>
-    <clipPath id="circleT3"><circle cx="485" cy="75" r="50" /></clipPath>
-    <mask id="diffMask">
-      <rect x="380" y="10" width="200" height="200" fill="white" />
-      <circle cx="485" cy="75" r="50" fill="black" />
+    <!-- 交集用 clipPath：S∩T = S 的区域 clip 到 T -->
+    <clipPath id="clipT2">
+      <circle cx="310" cy="75" r="52"/>
+    </clipPath>
+    <!-- 差集 S\T：先渲染 S，再用 T 的形状挖掉 -->
+    <mask id="maskSdiffT">
+      <!-- 整个 S 区域白色（可见） -->
+      <circle cx="450" cy="115" r="52" fill="white"/>
+      <!-- T 区域黑色（遮掉） -->
+      <circle cx="492" cy="75" r="52" fill="black"/>
     </mask>
-    <mask id="compMask">
-      <rect x="580" y="25" width="140" height="140" fill="white" />
-      <circle cx="650" cy="95" r="46" fill="black" />
+    <!-- 补集 S^c：矩形减去 S -->
+    <mask id="maskScomp">
+      <rect x="585" y="20" width="155" height="155" fill="white"/>
+      <circle cx="657" cy="97" r="48" fill="black"/>
     </mask>
   </defs>
 
-  <!-- Panel 1: S \cup T -->
+  <!-- ====== Panel 1: S ∪ T ====== -->
   <g>
-    <circle cx="85" cy="115" r="50" fill="#d0d5dd" />
-    <circle cx="125" cy="75" r="50" fill="#d0d5dd" />
-    <circle cx="85" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <circle cx="125" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <text x="80" y="135" font-style="italic">S</text>
-    <text x="125" y="65" font-style="italic">T</text>
-    <text x="105" y="200" text-anchor="middle" font-style="italic">S ∪ T</text>
+    <!-- 两个圆都填色 = 并集 -->
+    <circle cx="90" cy="115" r="52" fill="#b0c4de" stroke="#222" stroke-width="1.8"/>
+    <circle cx="132" cy="75" r="52" fill="#b0c4de" stroke="#222" stroke-width="1.8"/>
+    <text x="72" y="138" font-style="italic" fill="#222">S</text>
+    <text x="152" y="62" font-style="italic" fill="#222">T</text>
+    <text x="111" y="206" text-anchor="middle" font-style="italic" fill="#222">S ∪ T</text>
   </g>
 
-  <!-- Panel 2: S \cap T -->
+  <!-- ====== Panel 2: S ∩ T ====== -->
   <g>
-    <circle cx="265" cy="115" r="50" fill="#fff" stroke="#222" stroke-width="1.8" />
-    <circle cx="305" cy="75" r="50" fill="#fff" stroke="#222" stroke-width="1.8" />
-    <circle cx="265" cy="115" r="50" fill="#d0d5dd" clip-path="url(#circleT2)" />
-    <circle cx="265" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <circle cx="305" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <text x="260" y="135" font-style="italic">S</text>
-    <text x="305" y="65" font-style="italic">T</text>
-    <text x="285" y="200" text-anchor="middle" font-style="italic">S ∩ T</text>
+    <!-- 两圆轮廓（无填色） -->
+    <circle cx="270" cy="115" r="52" fill="#f5f5f5" stroke="#222" stroke-width="1.8"/>
+    <circle cx="312" cy="75" r="52" fill="#f5f5f5" stroke="#222" stroke-width="1.8"/>
+    <!-- 交集部分：S 的区域裁剪到 T 中 -->
+    <circle cx="270" cy="115" r="52" fill="#b0c4de" clip-path="url(#clipT2)" stroke="none"/>
+    <!-- 重绘轮廓 -->
+    <circle cx="270" cy="115" r="52" fill="none" stroke="#222" stroke-width="1.8"/>
+    <circle cx="312" cy="75" r="52" fill="none" stroke="#222" stroke-width="1.8"/>
+    <text x="252" y="138" font-style="italic" fill="#222">S</text>
+    <text x="332" y="62" font-style="italic" fill="#222">T</text>
+    <text x="291" y="206" text-anchor="middle" font-style="italic" fill="#222">S ∩ T</text>
   </g>
 
-  <!-- Panel 3: S \setminus T -->
+  <!-- ====== Panel 3: S \ T ====== -->
   <g>
-    <circle cx="445" cy="115" r="50" fill="#d0d5dd" mask="url(#diffMask)" />
-    <circle cx="445" cy="115" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <circle cx="485" cy="75" r="50" fill="none" stroke="#222" stroke-width="1.8" />
-    <text x="440" y="135" font-style="italic">S</text>
-    <text x="485" y="65" font-style="italic">T</text>
-    <text x="465" y="200" text-anchor="middle" font-style="italic">S \ T</text>
+    <!-- S 减去 T 的部分 -->
+    <circle cx="450" cy="115" r="52" fill="#b0c4de" mask="url(#maskSdiffT)" stroke="none"/>
+    <!-- 轮廓 -->
+    <circle cx="450" cy="115" r="52" fill="none" stroke="#222" stroke-width="1.8"/>
+    <circle cx="492" cy="75" r="52" fill="none" stroke="#222" stroke-width="1.8"/>
+    <text x="432" y="138" font-style="italic" fill="#222">S</text>
+    <text x="512" y="62" font-style="italic" fill="#222">T</text>
+    <text x="471" y="206" text-anchor="middle" font-style="italic" fill="#222">S \ T</text>
   </g>
 
-  <!-- Panel 4: S^c -->
+  <!-- ====== Panel 4: S^c ====== -->
   <g>
-    <rect x="580" y="25" width="140" height="140" fill="#d0d5dd" mask="url(#compMask)" />
-    <rect x="580" y="25" width="140" height="140" fill="none" stroke="#222" stroke-width="1.8" />
-    <circle cx="650" cy="95" r="46" fill="#fff" stroke="#222" stroke-width="1.8" />
-    <text x="645" y="100" font-style="italic">S</text>
-    <text x="705" y="45" font-style="italic">X</text>
-    <text x="650" y="200" text-anchor="middle" font-style="italic">S<tspan baseline-shift="super" font-size="12px">c</tspan></text>
+    <!-- 矩形范围减去圆 S 的部分 -->
+    <rect x="585" y="20" width="155" height="155" fill="#b0c4de" mask="url(#maskScomp)" stroke="none"/>
+    <!-- 轮廓 -->
+    <rect x="585" y="20" width="155" height="155" fill="none" stroke="#222" stroke-width="1.8"/>
+    <circle cx="657" cy="97" r="48" fill="#f5f5f5" stroke="#222" stroke-width="1.8"/>
+    <text x="651" y="102" font-style="italic" fill="#222">S</text>
+    <text x="725" y="42" font-style="italic" fill="#222">X</text>
+    <text x="657" y="206" text-anchor="middle" font-style="italic" fill="#222">S<tspan baseline-shift="super" font-size="12px">c</tspan></text>
   </g>
 </svg>

@@ -1,51 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 310" width="100%" height="auto" style="max-width:300px; font-family:'Times New Roman', serif; font-size:15px;">
   <defs>
-    <marker id="arr9" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
+    <marker id="arr9" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#333"/>
     </marker>
   </defs>
 
-  <g transform="translate(10, 10)">
-    <!-- Frustum container:
-         Top ellipse: center (180, 50), rx=85, ry=22
-         Interface 1 (kerosene/water, depth 5cm): center (180, 120), rx=72, ry=18
-         Interface 2 (water/mercury, depth +4cm=9cm): center (180, 190), rx=60, ry=15
-         Bottom ellipse (bottom, depth +2cm=11cm): center (180, 240), rx=48, ry=12
-    -->
-    <!-- Outlines -->
-    <line x1="95" y1="50" x2="132" y2="240" stroke="#222" stroke-width="1.8" />
-    <line x1="265" y1="50" x2="228" y2="240" stroke="#222" stroke-width="1.8" />
+  <!--
+    Frustum (truncated cone) glass:
+    Total liquid height = 5+4+2 = 11 cm.
+    
+    Top rim (open top):   center (155, 40), rx=90, ry=20
+    Bottom:               center (155, 250), rx=50, ry=12
+    
+    Sides: left from (155-90, 40)=(65,40) to (155-50,250)=(105,250)
+           right from (155+90, 40)=(245,40) to (155+50,250)=(205,250)
+    
+    Liquid interfaces (total height 11cm, SVG height 210px = 210/11 per cm):
+    scale: 210px / 11cm = 19.09 px/cm
+    
+    Interface at depth 5cm (kerosene/water, from top):
+      y_svg = 40 + 5*19.09 = 40 + 95.45 ≈ 135
+      Radius at y=135: lerp between top (r=90) and bottom (r=50) over 210px range
+        frac = (135-40)/210 = 95/210 = 0.452
+        r_x = 90 - (90-50)*0.452 = 90-18.1 = 71.9 ≈ 72
+        r_y = 20 - (20-12)*0.452 = 20-3.6 = 16.4 ≈ 16
+      Left end: (155-72, 135) = (83, 135), Right: (155+72, 135) = (227, 135)
+    
+    Interface at depth 9cm (water/mercury):
+      y_svg = 40 + 9*19.09 = 40 + 171.8 ≈ 212
+      frac = (212-40)/210 = 172/210 = 0.819
+      r_x = 90 - 40*0.819 = 90-32.8 = 57.2 ≈ 57
+      r_y = 20 - 8*0.819 = 20-6.55 = 13.5 ≈ 13 (use 13)
+      Left: (155-57, 212) = (98, 212), Right: (155+57, 212) = (212, 212)
+    
+    Bottom at y=250 (depth 11cm):
+      r_x=50, r_y=12. Already defined.
+      Left: (105, 250), Right: (205, 250)
+  -->
 
-    <!-- Top rim -->
-    <ellipse cx="180" cy="50" rx="85" ry="22" fill="#f8fafc" stroke="#222" stroke-width="1.8" />
+  <!-- Frustum sides -->
+  <line x1="65"  y1="40"  x2="105" y2="250" stroke="#374151" stroke-width="1.8"/>
+  <line x1="245" y1="40"  x2="205" y2="250" stroke="#374151" stroke-width="1.8"/>
 
-    <!-- Interface 1: 5cm -->
-    <path d="M 108 120 A 72 18 0 0 1 252 120" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2" fill="none" />
-    <path d="M 108 120 A 72 18 0 0 0 252 120" stroke="#222" stroke-width="1.8" fill="none" />
+  <!-- Layer shading -->
+  <!-- Kerosene (top layer, y=40 to y=135): light color -->
+  <path d="M 83,135 A 72,16 0 0 0 227,135 L 245,40 A 90,20 0 0 1 65,40 Z"
+        fill="#fef3c7" stroke="none"/>
+  <!-- Water (middle layer, y=135 to y=212): medium color -->
+  <path d="M 98,212 A 57,13 0 0 0 212,212 L 227,135 A 72,16 0 0 1 83,135 Z"
+        fill="#bfdbfe" stroke="none"/>
+  <!-- Mercury (bottom layer, y=212 to y=250): dark color -->
+  <path d="M 105,250 A 50,12 0 0 0 205,250 L 212,212 A 57,13 0 0 1 98,212 Z"
+        fill="#9ca3af" stroke="none"/>
 
-    <!-- Interface 2: 4cm -->
-    <path d="M 120 190 A 60 15 0 0 1 240 190" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2" fill="none" />
-    <path d="M 120 190 A 60 15 0 0 0 240 190" stroke="#222" stroke-width="1.8" fill="none" />
+  <!-- Top rim ellipse -->
+  <ellipse cx="155" cy="40" rx="90" ry="20" fill="#f9fafb" stroke="#374151" stroke-width="1.8"/>
 
-    <!-- Bottom: 2cm -->
-    <path d="M 132 240 A 48 12 0 0 1 228 240" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2" fill="none" />
-    <path d="M 132 240 A 48 12 0 0 0 228 240" stroke="#222" stroke-width="1.8" fill="none" />
+  <!-- Interface 1: kerosene/water at y=135 -->
+  <!-- back arc (dashed) -->
+  <path d="M 83,135 A 72,16 0 0 1 227,135" stroke="#94a3b8" stroke-dasharray="4,3" stroke-width="1.2" fill="none"/>
+  <!-- front arc (solid) -->
+  <path d="M 83,135 A 72,16 0 0 0 227,135" stroke="#374151" stroke-width="1.8" fill="none"/>
 
-    <!-- Dimension arrows on left -->
-    <!-- 5 cm: y from 50 to 120 -->
-    <line x1="70" y1="50" x2="95" y2="50" stroke="#555" stroke-width="1" />
-    <line x1="70" y1="120" x2="108" y2="120" stroke="#555" stroke-width="1" />
-    <line x1="78" y1="53" x2="78" y2="117" stroke="#222" stroke-width="1.2" marker-start="url(#arr9)" marker-end="url(#arr9)" />
-    <text x="32" y="90">5 cm</text>
+  <!-- Interface 2: water/mercury at y=212 -->
+  <path d="M 98,212 A 57,13 0 0 1 212,212" stroke="#94a3b8" stroke-dasharray="4,3" stroke-width="1.2" fill="none"/>
+  <path d="M 98,212 A 57,13 0 0 0 212,212" stroke="#374151" stroke-width="1.8" fill="none"/>
 
-    <!-- 4 cm: y from 120 to 190 -->
-    <line x1="70" y1="190" x2="120" y2="190" stroke="#555" stroke-width="1" />
-    <line x1="78" y1="123" x2="78" y2="187" stroke="#222" stroke-width="1.2" marker-start="url(#arr9)" marker-end="url(#arr9)" />
-    <text x="32" y="160">4 cm</text>
+  <!-- Bottom ellipse -->
+  <path d="M 105,250 A 50,12 0 0 1 205,250" stroke="#94a3b8" stroke-dasharray="4,3" stroke-width="1.2" fill="none"/>
+  <path d="M 105,250 A 50,12 0 0 0 205,250" stroke="#374151" stroke-width="1.8" fill="none"/>
 
-    <!-- 2 cm: y from 190 to 240 -->
-    <line x1="70" y1="240" x2="132" y2="240" stroke="#555" stroke-width="1" />
-    <line x1="78" y1="193" x2="78" y2="237" stroke="#222" stroke-width="1.2" marker-start="url(#arr9)" marker-end="url(#arr9)" />
-    <text x="32" y="220">2 cm</text>
-  </g>
+  <!-- Redraw frustum outline on top -->
+  <line x1="65"  y1="40"  x2="105" y2="250" stroke="#374151" stroke-width="1.8"/>
+  <line x1="245" y1="40"  x2="205" y2="250" stroke="#374151" stroke-width="1.8"/>
+
+  <!-- Dimension arrows on left (outside the frustum) -->
+  <!-- 5cm: y from 40 to 135 -->
+  <line x1="47" y1="40"  x2="63"  y2="40"  stroke="#555" stroke-width="1"/>
+  <line x1="47" y1="135" x2="81"  y2="135" stroke="#555" stroke-width="1"/>
+  <line x1="55" y1="43"  x2="55"  y2="132" stroke="#333" stroke-width="1.2"
+        marker-start="url(#arr9)" marker-end="url(#arr9)"/>
+  <text x="5"  y="93"  font-size="14">5 cm</text>
+  <!-- 4cm: y from 135 to 212 -->
+  <line x1="47" y1="212" x2="96"  y2="212" stroke="#555" stroke-width="1"/>
+  <line x1="55" y1="138" x2="55"  y2="209" stroke="#333" stroke-width="1.2"
+        marker-start="url(#arr9)" marker-end="url(#arr9)"/>
+  <text x="5"  y="178" font-size="14">4 cm</text>
+  <!-- 2cm: y from 212 to 250 -->
+  <line x1="47" y1="250" x2="103" y2="250" stroke="#555" stroke-width="1"/>
+  <line x1="55" y1="215" x2="55"  y2="247" stroke="#333" stroke-width="1.2"
+        marker-start="url(#arr9)" marker-end="url(#arr9)"/>
+  <text x="5"  y="236" font-size="14">2 cm</text>
+
+  <!-- Layer labels -->
+  <text x="155" y="92"  text-anchor="middle" fill="#92400e" font-size="13">煤油</text>
+  <text x="155" y="177" text-anchor="middle" fill="#1e40af" font-size="13">水</text>
+  <text x="155" y="234" text-anchor="middle" fill="#374151" font-size="13">汞</text>
 </svg>

@@ -1,48 +1,139 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 230" width="100%" height="auto" style="max-width:620px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 240" width="100%" height="auto" style="max-width:660px; font-family:'Times New Roman', serif; font-size:15px;">
   <defs>
-    <marker id="arr6" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
+    </marker>
+    <marker id="arrSm6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(20, 10)">
-    <!-- Ground / x axis: y = 170, origin O at (80, 170) -->
-    <line x1="40" y1="170" x2="570" y2="170" stroke="#222" stroke-width="1.4" marker-end="url(#arr6)" />
-    <line x1="80" y1="200" x2="80" y2="20" stroke="#222" stroke-width="1.4" marker-end="url(#arr6)" />
-    <text x="560" y="188" font-style="italic">x</text>
-    <text x="66" y="28" font-style="italic">y</text>
-    <text x="68" y="186" font-style="italic">O</text>
+  <!--
+    Cycloid with radius R=1.
+    Parametric: x(t) = t - sin(t),  y(t) = 1 - cos(t),  t in [0, 2π]
+    
+    Scale: 1 unit = 55px (so circle radius = 55px, 2π ≈ 6.2832 → width ≈ 345px)
+    Origin (t=0 contact point) at SVG (60, 185).
+    
+    SVG coords: px = origin_x + x(t)*55, py = origin_y - y(t)*55
+    
+    Notable points:
+      t=0:   x=0,    y=0  → (60, 185)
+      t=π/2: x≈0.571,y=1  → (60+31.4, 185-55) = (91.4, 130)
+      t=π:   x≈3.142,y=2  → (60+172.7, 185-110) = (232.7, 75)  ← top
+      t=3π/2:x≈5.712,y=1  → (60+314.2, 185-55) = (374.2, 130)
+      t=2π:  x≈6.283,y=0  → (60+345.6, 185) = (405.6, 185)
+    
+    For the rolling circle illustration, show circle at t ≈ 1.2 rad:
+      cos(1.2)≈0.362, sin(1.2)≈0.932
+      Circle center: x_c = t - 0 = 1.2 units = 66px from origin → px = 60+66=126... 
+      Wait: x_c(t) = R*t = 1.2 (in units), y_c = R = 1 (in units)
+      → px_c = 60 + 1.2*55 = 60+66 = 126, py_c = 185 - 1*55 = 130
+      Contact point P on ground: (px_c, 185) = (126, 185)
+      
+      Point A' (the tracing point):
+        x_A = x(t) = t - sin(t) = 1.2 - 0.932 = 0.268 units → px = 60 + 0.268*55 = 60+14.7 = 74.7 ≈ 75
+        y_A = y(t) = 1 - cos(t) = 1 - 0.362 = 0.638 units → py = 185 - 0.638*55 = 185-35.1 = 149.9 ≈ 150
+      
+      Angle arc: from vertical down from center to line CA':
+        Center is at (126, 130). Vertical down = (126, 185).
+        A' is at (75, 150).
+        Vector CA' = (75-126, 150-130) = (-51, 20)
+        This is to the upper-left, so angle is measured from straight down (0,-1) rotating CCW
+        Arc from (126, 185-30=155) to toward A' at radius 30.
+        
+    Initial position: circle at t=0, center=(60, 130), contact=(60, 185)
+    Mark as starting circle (dashed).
+  -->
 
-    <!-- Radius R = 55 -->
-    <!-- Circle 1 at start: center (80, 115) -->
-    <circle cx="80" cy="115" r="55" fill="none" stroke="#64748b" stroke-width="1.4" />
-    <text x="68" y="166" font-style="italic">A</text>
+  <!-- Axes -->
+  <line x1="30"  y1="185" x2="620" y2="185" stroke="#222" stroke-width="1.4" marker-end="url(#arr6)"/>
+  <line x1="60"  y1="210" x2="60"  y2="25"  stroke="#222" stroke-width="1.4" marker-end="url(#arr6)"/>
+  <text x="608" y="202" font-style="italic">x</text>
+  <text x="46"  y="30"  font-style="italic">y</text>
+  <text x="44"  y="200" font-style="italic">O</text>
 
-    <!-- Circle 2 rolled by angle t:
-         t ~ 1.2 rad (approx 70 deg)
-         Center moved right by R*t = 55 * 1.2 = 66 -> center (146, 115)
-         Contact point P on x axis = (146, 170)
-    -->
-    <circle cx="146" cy="115" r="55" fill="none" stroke="#222" stroke-width="1.6" />
-    <line x1="146" y1="115" x2="146" y2="170" stroke="#555" stroke-dasharray="3,3" stroke-width="1.2" />
-    <circle cx="146" cy="170" r="2.5" fill="#222" />
-    <text x="142" y="188" font-style="italic">P</text>
+  <!-- Ground line tick: 2π -->
+  <line x1="406" y1="182" x2="406" y2="188" stroke="#222"/>
+  <text x="396"  y="202">2π</text>
 
-    <!-- Point A' on circle 2:
-         x = R(t - sin t) = 55*(1.2 - 0.932) = 55 * 0.268 = 14.7 -> 80 + 14.7 = 94.7
-         y = R(1 - cos t) = 55*(1 - 0.362) = 55 * 0.638 = 35.1 -> 170 - 35.1 = 134.9
-    -->
-    <line x1="146" y1="115" x2="95" y2="135" stroke="#1e40af" stroke-width="1.6" />
-    <circle cx="95" cy="135" r="3.5" fill="#1e40af" />
-    <text x="82" y="130" font-style="italic">A′</text>
+  <!-- Rolling circle at t=0 (initial position, dashed) -->
+  <circle cx="60" cy="130" r="55" fill="none" stroke="#94a3b8" stroke-dasharray="5,4" stroke-width="1.4"/>
+  <circle cx="60" cy="185" r="2.5" fill="#94a3b8"/>
+  <text x="46" y="178" font-style="italic" fill="#94a3b8" font-size="14">A</text>
 
-    <!-- Angle t between vertical down line and radius CA' -->
-    <path d="M 146 145 A 30 30 0 0 1 122 125" fill="none" stroke="#222" stroke-width="1.2" marker-end="url(#arr6)" />
-    <text x="132" y="145" font-style="italic">t</text>
+  <!-- Rolling circle at t=1.2 rad (current position) -->
+  <!-- center at (126, 130) -->
+  <circle cx="126" cy="130" r="55" fill="none" stroke="#374151" stroke-width="1.6"/>
+  <!-- Radius from center to contact point P -->
+  <line x1="126" y1="130" x2="126" y2="185" stroke="#555" stroke-dasharray="3,3" stroke-width="1.2"/>
+  <!-- Contact point P -->
+  <circle cx="126" cy="185" r="2.5" fill="#222"/>
+  <text x="122" y="200" font-style="italic">P</text>
 
-    <!-- Cycloid Arch: from x=80 (t=0) to x = 80 + 2*pi*55 = 80 + 345.6 = 425.6 (t=2*pi) -->
-    <!-- Path computed using exact cycloid coordinates -->
-    <path d="M 80,170 C 105,160 120,135 150,110 C 185,80 220,60 253,60 C 286,60 321,80 356,110 C 386,135 401,160 426,170" fill="none" stroke="#dc2626" stroke-width="2.2" />
-    <text x="415" y="188">2π</text>
-  </g>
+  <!-- Radius from center to tracing point A' -->
+  <line x1="126" y1="130" x2="75"  y2="150" stroke="#1e40af" stroke-width="1.6"/>
+  <!-- Tracing point A' -->
+  <circle cx="75" cy="150" r="3.5" fill="#1e40af"/>
+  <text x="56"  y="148" font-style="italic">A′</text>
+
+  <!-- Angle arc t from vertical-down to radius CA' (CW on screen = CCW math) -->
+  <!-- Arc center=(126,130), start at bottom (126,160) radius=30 -->
+  <!-- End angle toward A': direction (-51,20), normalized, at radius 30 from center -->
+  <!-- endpoint: 126 + 30*(-51/sqrt(51²+20²), 30*(20/sqrt(51²+20²)) -->
+  <!-- sqrt(51²+20²)=sqrt(2601+400)=sqrt(3001)≈54.8 -->
+  <!-- endpoint: (126 - 30*51/54.8, 130 + 30*20/54.8) = (126-27.9, 130+10.9) = (98.1, 140.9) ≈ (98, 141) -->
+  <path d="M 126 160 A 30 30 0 0 0 98 141" fill="none" stroke="#374151" stroke-width="1.3" marker-end="url(#arrSm6)"/>
+  <text x="104" y="162" font-style="italic">t</text>
+
+  <!--
+    Cycloid path: t from 0 to 2π, computed with ~40 points
+    x(t)=(t-sin(t))*55+60, y(t)=185-(1-cos(t))*55
+    t=0:    (60,    185)
+    t=0.16: (60+(0.16-0.1595)*55, 185-(1-0.9872)*55) ≈ (60.03, 183.3)
+    Computing key points:
+    t:   x_unit=t-sin(t),  y_unit=1-cos(t),  px=60+x*55, py=185-y*55
+    0.0: 0,       0      → 60,     185
+    0.3: 0.0451,  0.0551 → 62.5,  181.97
+    0.6: 0.1647,  0.1753 → 69.1,  175.4
+    0.9: 0.3838,  0.3784 → 81.1,  164.2
+    1.2: 0.2679,→ already calc above: 0.268, 0.638 → 74.7, 149.9
+    Wait, 1.2: sin(1.2)=0.9320, so x=1.2-0.9320=0.268, y=1-cos(1.2)=1-0.3624=0.638 ✓
+    1.5: sin(1.5)=0.9975, x=1.5-0.9975=0.5025, y=1-cos(1.5)=1-0.0707=0.9293 → (87.6, 133.9)
+    π/2=1.5708: x=1.5708-1=0.5708, y=1-0=1 → (91.4, 130)
+    2.0: sin(2.0)=0.9093, x=2.0-0.9093=1.0907, y=1-cos(2)=1-(-0.4161)=1.4161 → (120.0, 107.1)
+    2.5: sin(2.5)=0.5985, x=1.9015, y=1-(-0.8011)=1.8011 → (164.6, 86.1)
+    3.0: sin(3.0)=0.1411, x=2.8589, y=1-(-0.9900)=1.990 → (217.2, 75.6)
+    π=3.1416: x=π-0=π, y=2 → (60+172.8, 185-110) = (232.8, 75)
+    3.5: sin(3.5)=-0.3508, x=3.5+0.3508=3.8508, y=1-(-0.9365)=1.9365 → (271.8, 78.5)
+    4.0: sin(4.0)=-0.7568, x=4.7568, y=1-(-0.6536)=1.6536 → (321.6, 94.5)
+    4.5: sin(4.5)=-0.9775, x=5.4775, y=1-(-0.2108)=1.2108 → (361.3, 118.4)
+    3π/2=4.7124: x=4.7124+1=5.7124, y=1-0=1 → (374.2, 130)
+    5.0: sin(5.0)=-0.9589, x=5.9589, y=1-0.2837=0.7163 → (387.7, 146.6)
+    5.5: sin(5.5)=-0.7055, x=6.2055, y=1-0.7087=0.2913 → (401.3, 169.0)
+    2π=6.2832: x=2π-0=6.2832, y=0 → (405.6, 185)
+    
+    Using these ~14 points as a polyline (close enough for illustration):
+  -->
+  <polyline
+    points="
+      60,185
+      62.5,182.0
+      69.1,175.4
+      81.1,164.2
+      74.7,149.9
+      87.6,133.9
+      91.4,130.0
+      120.0,107.1
+      164.6,86.1
+      217.2,75.6
+      232.8,75.0
+      271.8,78.5
+      321.6,94.5
+      361.3,118.4
+      374.2,130.0
+      387.7,146.6
+      401.3,169.0
+      405.6,185.0"
+    fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round"/>
 </svg>

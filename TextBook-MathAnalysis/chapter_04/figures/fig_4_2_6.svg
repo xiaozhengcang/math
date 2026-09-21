@@ -1,41 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 265" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr426" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
   <!-- Axes -->
-  <line x1="55" y1="200" x2="320" y2="200" stroke="#222" stroke-width="1.4" marker-end="url(#arr4)"/>
-  <line x1="75" y1="215" x2="75" y2="30" stroke="#222" stroke-width="1.4" marker-end="url(#arr4)"/>
-  <text x="325" y="208" font-style="italic">x</text>
-  <text x="63" y="32" font-style="italic">y</text>
-  <text x="63" y="213" font-style="italic">O</text>
+  <line x1="40" y1="215" x2="355" y2="215" stroke="#222" stroke-width="1.4" marker-end="url(#arr426)"/>
+  <line x1="60" y1="235" x2="60" y2="25" stroke="#222" stroke-width="1.4" marker-end="url(#arr426)"/>
+  <text x="360" y="220" font-style="italic">x</text>
+  <text x="45" y="25" font-style="italic">y</text>
+  <text x="45" y="231" font-style="italic">O</text>
 
-  <!-- Curve y=f(x) -->
-  <path d="M 90 170 Q 150 140 190 100 T 300 45" fill="none" stroke="#1e40af" stroke-width="2"/>
-  <text x="305" y="50" font-style="italic">y=f(x)</text>
+  <!-- Curve y = f(x) -->
+  <path d="M 80 185 C 110 165 125 150 140 140 C 180 115 210 85 250 55 C 275 38 290 32 310 28" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <text x="315" y="32" fill="#1e40af" font-style="italic" font-weight="bold">y = f(x)</text>
 
-  <!-- Point at x -->
-  <line x1="165" y1="200" x2="165" y2="112" stroke="#222" stroke-width="1" stroke-dasharray="4,3"/>
-  <line x1="205" y1="200" x2="205" y2="80" stroke="#222" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Differential triangle PMT (shaded) -->
+  <polygon points="140,140 250,140 250,63" fill="#dbeafe" fill-opacity="0.6"/>
 
-  <!-- Tangent segment -->
-  <line x1="165" y1="112" x2="205" y2="80" stroke="#16a34a" stroke-width="2"/>
+  <!-- Tangent line segment PT extended -->
+  <line x1="90" y1="175.0" x2="275" y2="45.5" stroke="#16a34a" stroke-width="1.8"/>
+  <text x="280" y="45" fill="#16a34a" font-weight="bold">切线</text>
 
-  <!-- Horizontal/vertical small triangle for dx, dy -->
-  <line x1="165" y1="112" x2="205" y2="112" stroke="#222" stroke-width="1" stroke-dasharray="3,2"/>
-  <line x1="205" y1="112" x2="205" y2="80" stroke="#222" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Horizontal line PM (dx) -->
+  <line x1="140" y1="140" x2="250" y2="140" stroke="#2563eb" stroke-width="1.6"/>
+  <!-- Vertical line MT (dy) -->
+  <line x1="250" y1="140" x2="250" y2="63" stroke="#2563eb" stroke-width="2"/>
 
-  <!-- Delta y segment from curve to tangent top -->
-  <line x1="205" y1="80" x2="205" y2="72" stroke="#c2410c" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <!-- Error segment TQ (o(dx)) -->
+  <line x1="250" y1="63" x2="250" y2="55" stroke="#dc2626" stroke-width="2.2"/>
+  <text x="256" y="63.0" fill="#dc2626" font-size="12px">o(dx)</text>
 
-  <!-- Labels -->
-  <text x="155" y="215" font-style="italic">x</text>
-  <text x="190" y="215">x+Δx</text>
-  <text x="180" y="105">dy</text>
-  <text x="210" y="95">Δy</text>
-  <text x="178" y="188">dx</text>
-  <text x="45" y="117">f(x)</text>
-  <text x="30" y="78">f(x+Δx)</text>
+  <!-- Total increment Delta y (vertical dimension line) -->
+  <line x1="285" y1="140" x2="285" y2="55" stroke="#ea580c" stroke-width="1.4"/>
+  <line x1="280" y1="140" x2="290" y2="140" stroke="#ea580c" stroke-width="1.4"/>
+  <line x1="280" y1="55" x2="290" y2="55" stroke="#ea580c" stroke-width="1.4"/>
+  <text x="292" y="102.5" fill="#ea580c" font-weight="bold">Δy</text>
+
+  <!-- Right angle at M -->
+  <path d="M 238 140 L 238 128 L 250 128" fill="none" stroke="#64748b" stroke-width="1.2"/>
+
+  <!-- Angle alpha arc at P -->
+  <path d="M 165 140 A 25 25 0 0 0 160 126" fill="none" stroke="#222" stroke-width="1.2"/>
+  <text x="168" y="135" font-style="italic">α</text>
+
+  <!-- Projections to x-axis -->
+  <line x1="140" y1="215" x2="140" y2="140" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4"/>
+  <line x1="250" y1="215" x2="250" y2="140" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4"/>
+
+  <!-- Points P, Q, T -->
+  <circle cx="140" cy="140" r="3.5" fill="#1e40af"/>
+  <circle cx="250" cy="55" r="3.5" fill="#1e40af"/>
+  <circle cx="250" cy="63" r="3" fill="#16a34a"/>
+  <text x="122" y="134" fill="#1e40af" font-weight="bold">P</text>
+  <text x="236" y="49" fill="#1e40af" font-weight="bold">Q</text>
+  <text x="236" y="59" fill="#16a34a" font-size="12px">T</text>
+
+  <!-- Labels dx and dy -->
+  <text x="187.0" y="158" fill="#2563eb" font-weight="bold">dx = Δx</text>
+  <text x="224" y="106.5" fill="#2563eb" font-weight="bold">dy</text>
+
+  <!-- x axis labels -->
+  <text x="136" y="231" font-style="italic">x</text>
+  <text x="232" y="231">x + Δx</text>
 </svg>

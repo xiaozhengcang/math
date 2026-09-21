@@ -1,54 +1,80 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 180" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 210" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:15px;">
   <defs>
-    <marker id="arr4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(10, 10)">
-    <!-- Origin at (110, 120), step = 45, y=1 height = 55 -->
-    <line x1="20" y1="120" x2="345" y2="120" stroke="#222" stroke-width="1.4" marker-end="url(#arr4)" />
-    <line x1="110" y1="155" x2="110" y2="25" stroke="#222" stroke-width="1.4" marker-end="url(#arr4)" />
-    <text x="340" y="136" font-style="italic">x</text>
-    <text x="96" y="32" font-style="italic">y</text>
-    <text x="94" y="136" font-style="italic">O</text>
+  <!--
+    {x} = x - [x] ∈ [0,1) for all x.
+    Origin O at (130, 155). Step = 50px per unit.
+    y=0 → py=155, y=1 → py=155-50=105.
 
-    <!-- Ticks -->
-    <text x="60" y="136">-1</text>
-    <text x="152" y="136">1</text>
-    <text x="197" y="136">2</text>
-    <text x="242" y="136">3</text>
-    <text x="287" y="136">4</text>
+    x positions (n=-2..4 at intervals of 50):
+      n=-2 → 30, -1 → 80, 0 → 130, 1 → 180, 2 → 230, 3 → 280, 4 → 330
 
-    <!-- Sawtooth waves -->
-    <!-- [-2, -1) -->
-    <line x1="20" y1="120" x2="65" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="20" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="65" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+    Each segment: x in [n, n+1), y goes from 0 to 1 (but 1 exclusive)
+    SVG line from (n_px, 155) to (n+1_px, 105) with:
+      - filled circle at left end (y=0)
+      - open circle at right end (y=1 exclusive)
+  -->
 
-    <!-- [-1, 0) -->
-    <line x1="65" y1="120" x2="110" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="65" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="110" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- Axes -->
+  <line x1="20"  y1="155" x2="400" y2="155" stroke="#222" stroke-width="1.4" marker-end="url(#arr4)"/>
+  <line x1="130" y1="190" x2="130" y2="20"  stroke="#222" stroke-width="1.4" marker-end="url(#arr4)"/>
+  <text x="388" y="173" font-style="italic">x</text>
+  <text x="115" y="26"  font-style="italic">y</text>
+  <text x="114" y="172" font-style="italic">O</text>
 
-    <!-- [0, 1) -->
-    <line x1="110" y1="120" x2="155" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="110" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="155" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- y=1 tick -->
+  <line x1="126" y1="105" x2="134" y2="105" stroke="#222"/>
+  <text x="118"  y="110" text-anchor="end">1</text>
 
-    <!-- [1, 2) -->
-    <line x1="155" y1="120" x2="200" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="155" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="200" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- x-axis ticks -->
+  <line x1="80"  y1="152" x2="80"  y2="158" stroke="#222"/>
+  <text x="72"   y="172">−1</text>
+  <line x1="180" y1="152" x2="180" y2="158" stroke="#222"/>
+  <text x="177"  y="172">1</text>
+  <line x1="230" y1="152" x2="230" y2="158" stroke="#222"/>
+  <text x="227"  y="172">2</text>
+  <line x1="280" y1="152" x2="280" y2="158" stroke="#222"/>
+  <text x="277"  y="172">3</text>
+  <line x1="330" y1="152" x2="330" y2="158" stroke="#222"/>
+  <text x="327"  y="172">4</text>
 
-    <!-- [2, 3) -->
-    <line x1="200" y1="120" x2="245" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="200" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="245" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- Sawtooth segments of {x} = x - [x] -->
+  <!-- n=-2: x in [-2,-1) -->
+  <line x1="30"  y1="155" x2="80"  y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="30"  cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="80"  cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
 
-    <!-- [3, 4) -->
-    <line x1="245" y1="120" x2="290" y2="65" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="245" cy="120" r="3.2" fill="#1e40af" />
-    <circle cx="290" cy="65" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
-  </g>
+  <!-- n=-1: x in [-1,0) -->
+  <line x1="80"  y1="155" x2="130" y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="80"  cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="130" cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=0: x in [0,1) -->
+  <line x1="130" y1="155" x2="180" y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="130" cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="180" cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=1: x in [1,2) -->
+  <line x1="180" y1="155" x2="230" y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="180" cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="230" cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=2: x in [2,3) -->
+  <line x1="230" y1="155" x2="280" y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="230" cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="280" cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=3: x in [3,4) -->
+  <line x1="280" y1="155" x2="330" y2="105" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="280" cy="155" r="3.5" fill="#1e40af"/>
+  <circle cx="330" cy="105" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- Continuation arrows -->
+  <line x1="28" y1="155" x2="22" y2="158" stroke="#1e40af" stroke-width="1.5" marker-end="url(#arr4)"/>
+  <line x1="330" y1="155" x2="375" y2="115" stroke="#1e40af" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr4)"/>
+  <circle cx="330" cy="155" r="3.5" fill="#1e40af"/>
 </svg>

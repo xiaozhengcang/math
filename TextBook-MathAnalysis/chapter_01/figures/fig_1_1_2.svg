@@ -1,102 +1,158 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 320" width="100%" height="auto" style="max-width:680px; font-family:'Times New Roman', serif; font-size:16px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 300" width="100%" height="auto" style="max-width:680px; font-family:'Times New Roman', serif; font-size:16px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <!-- Left: 2D A x B -->
-  <g transform="translate(10, 20)">
+  <!-- ===== Left panel: 2D A×B rectangle ===== -->
+  <!-- Origin O at (70, 230), x-axis goes right, y-axis goes up -->
+  <g transform="translate(0, 0)">
     <!-- Axes -->
-    <line x1="50" y1="230" x2="270" y2="230" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)" />
-    <line x1="70" y1="250" x2="70" y2="30" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)" />
-    <text x="265" y="248" font-style="italic">x</text>
-    <text x="52" y="38" font-style="italic">y</text>
-    <text x="55" y="245" font-style="italic">O</text>
+    <line x1="50" y1="230" x2="280" y2="230" stroke="#222" stroke-width="1.5" marker-end="url(#arr)"/>
+    <line x1="70" y1="250" x2="70" y2="30"  stroke="#222" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="270" y="248" font-style="italic">x</text>
+    <text x="54"  y="38"  font-style="italic">y</text>
+    <text x="54"  y="248" font-style="italic">O</text>
 
-    <!-- Rectangle [a, b] x [c, d] -->
-    <rect x="110" y="80" width="120" height="110" fill="#f4f6f8" stroke="#222" stroke-width="1.8" />
-    <line x1="110" y1="190" x2="110" y2="230" stroke="#666" stroke-dasharray="4,4" stroke-width="1.2" />
-    <line x1="230" y1="190" x2="230" y2="230" stroke="#666" stroke-dasharray="4,4" stroke-width="1.2" />
-    <line x1="70" y1="190" x2="110" y2="190" stroke="#666" stroke-dasharray="4,4" stroke-width="1.2" />
-    <line x1="70" y1="80" x2="110" y2="80" stroke="#666" stroke-dasharray="4,4" stroke-width="1.2" />
+    <!-- Rectangle [a,b]×[c,d]: a=110, b=230 (x coords), c=y=190→px, d=y=80→px -->
+    <!-- x=a at px 120, x=b at px 220 -->
+    <!-- y=c at px 190, y=d at px 90 -->
+    <rect x="120" y="90" width="100" height="100" fill="#e8f0fe" stroke="#222" stroke-width="1.8"/>
 
-    <text x="106" y="248" font-style="italic">a</text>
-    <text x="226" y="248" font-style="italic">b</text>
-    <text x="56" y="195" font-style="italic">c</text>
-    <text x="54" y="85" font-style="italic">d</text>
+    <!-- Dashed projection lines -->
+    <line x1="120" y1="190" x2="120" y2="230" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2"/>
+    <line x1="220" y1="190" x2="220" y2="230" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2"/>
+    <line x1="70"  y1="190" x2="120" y2="190" stroke="#888" stroke-dasharray="4,4" stroke-width="1.2"/>
+    <line x1="70"  y1="90"  x2="120" y2="90"  stroke="#888" stroke-dasharray="4,4" stroke-width="1.2"/>
+
+    <!-- Axis labels -->
+    <text x="115" y="248" font-style="italic">a</text>
+    <text x="215" y="248" font-style="italic">b</text>
+    <text x="52"  y="195" font-style="italic">c</text>
+    <text x="52"  y="95"  font-style="italic">d</text>
+
+    <!-- Title -->
+    <text x="150" y="280" text-anchor="middle" font-style="italic">A × B</text>
   </g>
 
-  <!-- Right: 3D A x B x C -->
-  <g transform="translate(340, 20)">
-    <!-- Axes: x (pointing down-left), y (pointing right), z (pointing up) -->
-    <line x1="100" y1="180" x2="310" y2="180" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)" />
-    <line x1="100" y1="180" x2="100" y2="20" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)" />
-    <line x1="100" y1="180" x2="30" y2="250" stroke="#222" stroke-width="1.5" marker-end="url(#arrow)" />
+  <!-- ===== Right panel: 3D A×B×C cuboid ===== -->
+  <!--
+    Coordinate system:
+      Origin O at (420, 220) in SVG coords
+      y-axis: points right → (+1, 0) in SVG
+      z-axis: points up   → (0, -1) in SVG
+      x-axis: isometric, points lower-left → (-0.6, +0.5) in SVG (normalized to unit=50px)
 
-    <text x="305" y="198" font-style="italic">y</text>
-    <text x="82" y="28" font-style="italic">z</text>
-    <text x="22" y="260" font-style="italic">x</text>
-    <text x="106" y="195" font-style="italic">O</text>
+    Unit sizes:
+      A=[a,b]: x-depth units = 2 → 2*50px = 100px along x-dir
+      B=[c,d]: y-width units = 2 → 2*50px = 100px along y-dir  
+      C=[e,f]: z-height units = 2 → 2*50px = 100px along z-dir
 
-    <!-- Cuboid vertices:
-         x in [a, b], y in [c, d], z in [e, f]
-         Projected: origin at (100, 180).
-         dx for x: -0.707 * s, dy for x: 0.707 * s
-         y goes right (+y), z goes up (-z)
+    x-axis unit vector: (-0.6, 0.5)*50 = (-30, 25) per unit
+    y-axis unit vector: (1, 0)*50 = (50, 0) per unit
+    z-axis unit vector: (0, -1)*50 = (0, -50) per unit
+
+    Cuboid:
+      Origin corner (near): O = (420, 220)
+      Along x: 2 units → Δ=(-60, 50)
+      Along y: 2 units → Δ=(100, 0)
+      Along z: 2 units → Δ=(0, -100)
+
+    8 vertices (x=0..2, y=0..2, z=0..2):
+      (0,0,0) = O = (420, 220)      ← front-bottom-near
+      (2,0,0) = O+(-60,50) = (360, 270) ← back-bottom-near  (hidden)
+      (0,2,0) = O+(100,0) = (520, 220)  ← front-bottom-far
+      (2,2,0) = (460, 270)              ← back-bottom-far   (hidden)
+      (0,0,2) = O+(0,-100) = (420, 120) ← front-top-near
+      (2,0,2) = (360, 170)              ← back-top-near     (hidden)
+      (0,2,2) = (520, 120)              ← front-top-far
+      (2,2,2) = (460, 170)              ← back-top-far
+  -->
+  <g transform="translate(0, 0)">
+    <!-- Axes from O=(420,220) -->
+    <!-- y-axis (right) -->
+    <line x1="420" y1="220" x2="560" y2="220" stroke="#222" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- z-axis (up) -->
+    <line x1="420" y1="220" x2="420" y2="50"  stroke="#222" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- x-axis (lower-left), direction (-0.6, 0.5), length ~150 → endpoint ≈(420-90, 220+75)=(330,295) -->
+    <line x1="420" y1="220" x2="330" y2="295" stroke="#222" stroke-width="1.5" marker-end="url(#arr)"/>
+
+    <text x="565" y="236" font-style="italic">y</text>
+    <text x="406" y="56"  font-style="italic">z</text>
+    <text x="318" y="308" font-style="italic">x</text>
+    <text x="424" y="238" font-style="italic">O</text>
+
+    <!-- Dashed hidden edges -->
+    <!-- bottom face hidden edges: (0,0,0)-(2,0,0), (0,0,0)-(2,0,0)→... -->
+    <!-- vertex (2,0,0)=(360,270) hidden -->
+    <line x1="420" y1="220" x2="360" y2="270" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+    <line x1="360" y1="270" x2="460" y2="270" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+    <line x1="360" y1="270" x2="360" y2="170" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+
+    <!-- Visible solid edges of cuboid -->
+    <!-- Bottom face visible edges -->
+    <line x1="420" y1="220" x2="520" y2="220" stroke="#222" stroke-width="1.8"/>
+    <line x1="520" y1="220" x2="460" y2="270" stroke="#222" stroke-width="1.8"/>
+
+    <!-- Vertical edges (z-direction) -->
+    <line x1="420" y1="220" x2="420" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="520" y1="220" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="460" y1="270" x2="460" y2="170" stroke="#222" stroke-width="1.8"/>
+
+    <!-- Top face edges -->
+    <line x1="420" y1="120" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="420" y1="120" x2="360" y2="170" stroke="#222" stroke-width="1.8"/>
+    <line x1="360" y1="170" x2="460" y2="170" stroke="#222" stroke-width="1.8"/>
+    <line x1="460" y1="170" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+
+    <!-- Face fills (back faces first, then front faces) -->
+    <!-- Top face: (420,120),(520,120),(460,170),(360,170) -->
+    <polygon points="420,120 520,120 460,170 360,170" fill="#dce8f7" fill-opacity="0.7" stroke="none"/>
+    <!-- Right face: (520,220),(460,270),(460,170),(520,120) -->
+    <polygon points="520,220 460,270 460,170 520,120" fill="#c8d8f0" fill-opacity="0.7" stroke="none"/>
+    <!-- Front face: (420,220),(520,220),(520,120),(420,120) -->
+    <polygon points="420,220 520,220 520,120 420,120" fill="#e8f0fe" fill-opacity="0.7" stroke="none"/>
+
+    <!-- Re-draw edges on top of fills -->
+    <line x1="420" y1="220" x2="520" y2="220" stroke="#222" stroke-width="1.8"/>
+    <line x1="520" y1="220" x2="460" y2="270" stroke="#222" stroke-width="1.8"/>
+    <line x1="420" y1="220" x2="420" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="520" y1="220" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="460" y1="270" x2="460" y2="170" stroke="#222" stroke-width="1.8"/>
+    <line x1="420" y1="120" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+    <line x1="420" y1="120" x2="360" y2="170" stroke="#222" stroke-width="1.8"/>
+    <line x1="360" y1="170" x2="460" y2="170" stroke="#222" stroke-width="1.8"/>
+    <line x1="460" y1="170" x2="520" y2="120" stroke="#222" stroke-width="1.8"/>
+
+    <!--
+      Labels for axes:
+        a is on x-axis at x=1 unit: O+(-30,25)=(390,245)
+        b is on x-axis at x=2 unit: (360,270) - labeled near tick
+        c is on y-axis at y=1 unit: O+(50,0)=(470,220) - label below
+        d is on y-axis at y=2 unit: (520,220) - label below
+        e is on z-axis at z=1 unit: O+(0,-50)=(420,170) - label left
+        f is on z-axis at z=2 unit: (420,120) - label left
     -->
-    <!-- Dashed projection box -->
-    <!-- z levels: e=120 (y=100), f=60 (y=50) -->
-    <!-- y levels: c=180, d=270 -->
-    <!-- x levels: a=30 (proj: -25, +25), b=60 (proj: -50, +50) -->
-    
-    <!-- Front Face (at x=b): (100-50, y+50, z) -> x=50, y=180+50=230 to 270+50=320 is outside, let's calibrate: -->
-    <!-- Let O=(100,180). x-axis: vector (-0.8, 0.6) -->
-    <!-- let a: 40px -> (-32, 24); b: 80px -> (-64, 48) -->
-    <!-- let c: 80px (x=180); d: 170px (x=270) -->
-    <!-- let e: 70px (z=110); f: 130px (z=50) -->
-    
-    <!-- Dashed lines for axes markings -->
-    <line x1="68" y1="204" x2="148" y2="204" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="36" y1="228" x2="206" y2="228" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="180" y1="180" x2="116" y2="228" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="270" y1="180" x2="206" y2="228" stroke="#888" stroke-dasharray="3,3" />
-    
-    <line x1="100" y1="110" x2="148" y2="110" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="100" y1="50" x2="148" y2="50" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="148" y1="110" x2="148" y2="204" stroke="#888" stroke-dasharray="3,3" />
+    <!-- Tick marks and labels on x-axis -->
+    <line x1="393" y1="244" x2="387" y2="248" stroke="#222" stroke-width="1"/>
+    <text x="374" y="256" font-style="italic">a</text>
+    <line x1="363" y1="269" x2="357" y2="273" stroke="#222" stroke-width="1"/>
+    <text x="344" y="281" font-style="italic">b</text>
 
-    <!-- Cuboid: back face at x=a (origin + (-32, 24)):
-         left-bottom: (148, 134), right-bottom: (238, 134), left-top: (148, 74), right-top: (238, 74)
-         Front face at x=b (origin + (-64, 48)):
-         left-bottom: (116, 158), right-bottom: (206, 158), left-top: (116, 98), right-top: (206, 98)
-    -->
-    <!-- Dashed back edges -->
-    <line x1="148" y1="134" x2="238" y2="134" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="148" y1="134" x2="148" y2="74" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="148" y1="134" x2="116" y2="158" stroke="#888" stroke-dasharray="3,3" />
+    <!-- Tick marks and labels on y-axis -->
+    <line x1="470" y1="217" x2="470" y2="223" stroke="#222" stroke-width="1"/>
+    <text x="466" y="238" font-style="italic">c</text>
+    <line x1="520" y1="217" x2="520" y2="223" stroke="#222" stroke-width="1"/>
+    <text x="516" y="238" font-style="italic">d</text>
 
-    <!-- Solid front/top/side edges -->
-    <rect x="116" y="98" width="90" height="60" fill="#f8fafc" fill-opacity="0.7" stroke="#222" stroke-width="1.8" />
-    <!-- Top Face -->
-    <polygon points="116,98 148,74 238,74 206,98" fill="#eef2f6" fill-opacity="0.7" stroke="#222" stroke-width="1.8" />
-    <!-- Right Face -->
-    <polygon points="206,98 238,74 238,134 206,158" fill="#e2e8f0" fill-opacity="0.7" stroke="#222" stroke-width="1.8" />
+    <!-- Tick marks and labels on z-axis -->
+    <line x1="417" y1="170" x2="423" y2="170" stroke="#222" stroke-width="1"/>
+    <text x="400" y="175" font-style="italic">e</text>
+    <line x1="417" y1="120" x2="423" y2="120" stroke="#222" stroke-width="1"/>
+    <text x="400" y="125" font-style="italic">f</text>
 
-    <!-- Outer projection dashed lines -->
-    <line x1="100" y1="50" x2="238" y2="50" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="238" y1="50" x2="238" y2="74" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="100" y1="110" x2="270" y2="110" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="270" y1="110" x2="270" y2="180" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="36" y1="228" x2="36" y2="98" stroke="#888" stroke-dasharray="3,3" />
-    <line x1="36" y1="98" x2="116" y2="98" stroke="#888" stroke-dasharray="3,3" />
-
-    <!-- Labels -->
-    <text x="72" y="200" font-style="italic">a</text>
-    <text x="40" y="224" font-style="italic">b</text>
-    <text x="182" y="196" font-style="italic">c</text>
-    <text x="272" y="196" font-style="italic">d</text>
-    <text x="104" y="114" font-style="italic">e</text>
-    <text x="104" y="54" font-style="italic">f</text>
+    <!-- Title -->
+    <text x="460" y="280" text-anchor="middle" font-style="italic">A × B × C</text>
   </g>
 </svg>

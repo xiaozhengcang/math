@@ -1,55 +1,76 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr321" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <marker id="arr321" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
-    <marker id="arrDelta" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto">
-      <path d="M 2 2 L 5 8 L 8 2 z" fill="#222"/>
+    <marker id="arr321r" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 10 1.5 L 2 5 L 10 8.5 z" fill="#222"/>
     </marker>
   </defs>
-  <g>
-    <!-- Axes -->
-    <line x1="40" y1="270" x2="390" y2="270" stroke="#222" stroke-width="1.4" marker-end="url(#arr321)"/>
-    <line x1="70" y1="290" x2="70" y2="30" stroke="#222" stroke-width="1.4" marker-end="url(#arr321)"/>
-    <text x="380" y="286" font-style="italic">x</text>
-    <text x="56" y="38" font-style="italic">y</text>
-    <text x="56" y="285" font-style="italic">O</text>
 
-    <!-- Curve y = f(x): strictly increasing with inflection -->
-    <!-- Passes from (110, 250) up to (330, 60) -->
-    <!-- Point 1: x0 - eps = 170, y1 = 230 -->
-    <!-- Point 0: x0 = 220, y0 = 175 -->
-    <!-- Point 2: x0 + eps = 260, y2 = 90 -->
-    <path d="M 110 250 C 160 245, 200 220, 220 175 C 235 135, 250 90, 340 70" fill="none" stroke="#1e40af" stroke-width="2"/>
-    <text x="290" y="60" font-style="italic" font-size="15">y = f(x)</text>
+  <!--
+    Inverse function continuity diagram.
+    
+    Shows: f strictly increasing on [a,b], with:
+      x0-ε, x0, x0+ε on x-axis
+      y1=f(x0-ε), y0=f(x0), y2=f(x0+ε) on y-axis
+      
+    Origin O at (70, 270). Scale 50px/unit.
+    
+    Points:
+      x0-ε at px=170, x0 at px=220, x0+ε at px=270
+      y1=f(x0-ε) at py=200, y0=f(x0) at py=150, y2=f(x0+ε) at py=100
+      
+    Curve: smooth increasing from (120,220) through (170,200),(220,150),(270,100) to (330,70)
+  -->
 
-    <!-- Dashed projection lines -->
-    <!-- x0 - eps -->
-    <line x1="170" y1="270" x2="170" y2="230" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
-    <line x1="70" y1="230" x2="170" y2="230" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Axes -->
+  <line x1="40"  y1="270" x2="390" y2="270" stroke="#222" stroke-width="1.4" marker-end="url(#arr321)"/>
+  <line x1="70"  y1="290" x2="70"  y2="28"  stroke="#222" stroke-width="1.4" marker-end="url(#arr321)"/>
+  <text x="378" y="285" font-style="italic">x</text>
+  <text x="56"  y="34"  font-style="italic">y</text>
+  <text x="55"  y="285" font-style="italic">O</text>
 
-    <!-- x0 -->
-    <line x1="220" y1="270" x2="220" y2="175" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
-    <line x1="70" y1="175" x2="220" y2="175" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Smooth increasing curve y=f(x) -->
+  <path d="M 110,235 C 140,225 155,212 170,200 C 190,185 205,168 220,150 C 240,128 255,112 270,100 C 295,80 315,72 345,64"
+        fill="none" stroke="#1e40af" stroke-width="2"/>
+  <text x="310" y="55" font-style="italic" font-size="13">y = f(x)</text>
 
-    <!-- x0 + eps -->
-    <line x1="260" y1="270" x2="260" y2="90" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
-    <line x1="70" y1="90" x2="260" y2="90" stroke="#555" stroke-width="1" stroke-dasharray="4,3"/>
+  <!-- Dashed projection lines -->
+  <!-- From x0-ε (px=170) to curve (py=200), then to y-axis -->
+  <line x1="170" y1="270" x2="170" y2="200" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+  <line x1="70"  y1="200" x2="170" y2="200" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
 
-    <!-- Labels on x-axis -->
-    <text x="148" y="286" font-style="italic">x<tspan dy="3" font-size="11">0</tspan>-ε</text>
-    <text x="214" y="286" font-style="italic">x<tspan dy="3" font-size="11">0</tspan></text>
-    <text x="246" y="286" font-style="italic">x<tspan dy="3" font-size="11">0</tspan>+ε</text>
+  <!-- From x0 (px=220) to curve (py=150), then to y-axis -->
+  <line x1="220" y1="270" x2="220" y2="150" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+  <line x1="70"  y1="150" x2="220" y2="150" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
 
-    <!-- Labels on y-axis -->
-    <text x="50" y="235" font-style="italic">y<tspan dy="3" font-size="11">1</tspan></text>
-    <text x="50" y="180" font-style="italic">y<tspan dy="3" font-size="11">0</tspan></text>
-    <text x="50" y="95" font-style="italic">y<tspan dy="3" font-size="11">2</tspan></text>
+  <!-- From x0+ε (px=270) to curve (py=100), then to y-axis -->
+  <line x1="270" y1="270" x2="270" y2="100" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
+  <line x1="70"  y1="100" x2="270" y2="100" stroke="#888" stroke-dasharray="4,3" stroke-width="1.2"/>
 
-    <!-- Vertical double arrow for delta between y1 and y0 -->
-    <line x1="88" y1="185" x2="88" y2="220" stroke="#222" stroke-width="1.2"/>
-    <line x1="88" y1="178" x2="88" y2="185" stroke="#222" stroke-width="1.2" marker-end="url(#arr321)"/>
-    <line x1="88" y1="227" x2="88" y2="220" stroke="#222" stroke-width="1.2" marker-end="url(#arr321)"/>
-    <text x="76" y="206" font-style="italic">δ</text>
-  </g>
+  <!-- Points on curve -->
+  <circle cx="170" cy="200" r="3.5" fill="#1e40af"/>
+  <circle cx="220" cy="150" r="3.5" fill="#1e40af"/>
+  <circle cx="270" cy="100" r="3.5" fill="#1e40af"/>
+
+  <!-- x-axis labels -->
+  <text x="155" y="287" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan>−ε</text>
+  <text x="213" y="287" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan></text>
+  <text x="259" y="287" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan>+ε</text>
+
+  <!-- y-axis labels -->
+  <text x="42" y="204" font-style="italic" font-size="13">y<tspan dy="2" font-size="11">1</tspan></text>
+  <text x="48" y="154" font-style="italic" font-size="13">y<tspan dy="2" font-size="11">0</tspan></text>
+  <text x="42" y="104" font-style="italic" font-size="13">y<tspan dy="2" font-size="11">2</tspan></text>
+
+  <!-- Double-headed arrow on x-axis for ε (left side: x0-ε to x0) -->
+  <line x1="173" y1="258" x2="217" y2="258" stroke="#374151" stroke-width="1.2"
+        marker-start="url(#arr321r)" marker-end="url(#arr321)"/>
+  <text x="190" y="254" font-style="italic" font-size="12">ε</text>
+
+  <!-- Double-headed arrow on y-axis for δ=y0-y1 -->
+  <line x1="82" y1="203" x2="82" y2="147" stroke="#374151" stroke-width="1.2"
+        marker-start="url(#arr321)" marker-end="url(#arr321r)"/>
+  <text x="86" y="180" font-style="italic" font-size="12">δ</text>
 </svg>

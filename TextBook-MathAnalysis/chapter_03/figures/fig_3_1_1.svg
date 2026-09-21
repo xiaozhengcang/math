@@ -1,43 +1,71 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 300" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr311" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <marker id="arr311" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
-  <g transform="translate(50, 30)">
-    <!-- Axes -->
-    <line x1="0" y1="220" x2="360" y2="220" stroke="#222" stroke-width="1.4" marker-end="url(#arr311)"/>
-    <line x1="50" y1="250" x2="50" y2="10" stroke="#222" stroke-width="1.4" marker-end="url(#arr311)"/>
-    <text x="350" y="236" font-style="italic">x</text>
-    <text x="36" y="20" font-style="italic">y</text>
-    <text x="36" y="235" font-style="italic">O</text>
 
-    <!-- Curve y=f(x) -->
-    <path d="M 60 160 Q 110 130, 150 120 T 220 90 T 300 60" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <!--
+    ε-δ definition of function limit: lim f(x) = A as x→x0.
+    
+    Layout:
+      Origin O at (60, 260). Scale: 60px per unit on x, 50px per unit on y.
+      x0 at x_px=240, A at y_px=140.
+      ε = 35px, so A+ε at y=105, A-ε at y=175.
+      δ = 50px, so x0-δ at x=190, x0+δ at x=290.
+      
+    Curve: y = f(x), smooth curve through the strip region.
+    The curve at x=x0 has a "hole" (removed point), limit A is shown separately.
+    
+    For visual clarity: f(x) is a smooth decreasing curve passing near (x0, A).
+    At x0, we place an open circle (showing f(x0) possibly undefined or ≠ A).
+  -->
 
-    <!-- Horizontal lines A-epsilon, A, A+epsilon -->
-    <line x1="45" y1="95" x2="320" y2="95" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
-    <line x1="45" y1="120" x2="320" y2="120" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
-    <line x1="45" y1="145" x2="320" y2="145" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
+  <!-- Shaded horizontal ε-strip -->
+  <rect x="60" y="105" width="340" height="70" fill="#e8f4fd" fill-opacity="0.7"/>
+  <!-- Shaded vertical δ-strip -->
+  <rect x="190" y="20" width="100" height="240" fill="#fef3c7" fill-opacity="0.5"/>
 
-    <!-- Vertical lines x0-delta, x0, x0+delta -->
-    <line x1="180" y1="225" x2="180" y2="80" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
-    <line x1="230" y1="225" x2="230" y2="80" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
-    <line x1="280" y1="225" x2="280" y2="80" stroke="#555" stroke-width="1" stroke-dasharray="5,4"/>
+  <!-- Axes -->
+  <line x1="30"  y1="260" x2="395" y2="260" stroke="#222" stroke-width="1.4" marker-end="url(#arr311)"/>
+  <line x1="60"  y1="280" x2="60"  y2="18"  stroke="#222" stroke-width="1.4" marker-end="url(#arr311)"/>
+  <text x="385" y="275" font-style="italic">x</text>
+  <text x="45"  y="24"  font-style="italic">y</text>
+  <text x="44"  y="275" font-style="italic">O</text>
 
-    <!-- Open circle at (x0, A) -->
-    <circle cx="230" cy="120" r="4" fill="#fff" stroke="#1e40af" stroke-width="1.8"/>
-    <circle cx="230" cy="145" r="4" fill="#1e40af"/>
+  <!-- Curve y = f(x): smooth, passes near x0=240, with limit A at y=140 -->
+  <!-- Curve passes through region but has a hole at x0 -->
+  <!-- Left part: from x=70 to x=235 -->
+  <path d="M 70,230 C 100,220 140,200 175,180 C 200,165 220,150 235,143"
+        fill="none" stroke="#1e40af" stroke-width="2"/>
+  <!-- Right part: from x=245 to x=360 (continuing past x0) -->
+  <path d="M 245,137 C 260,132 280,120 310,105 C 340,90 360,75 370,65"
+        fill="none" stroke="#1e40af" stroke-width="2"/>
+  <text x="345" y="62" font-style="italic" font-size="13">y=f(x)</text>
 
-    <!-- Labels -->
-    <text x="26" y="100" font-style="italic">A+ε</text>
-    <text x="38" y="125" font-style="italic">A</text>
-    <text x="26" y="150" font-style="italic">A-ε</text>
+  <!-- Open circle at (x0, limit_value) = (240, 140) — limit point -->
+  <circle cx="240" cy="140" r="4" fill="white" stroke="#1e40af" stroke-width="1.8"/>
+  <!-- Filled dot showing actual value f(x0) (possibly different from A) -->
+  <!-- Here shown below the limit for illustration -->
+  <circle cx="240" cy="200" r="4" fill="#1e40af"/>
 
-    <text x="168" y="240" font-style="italic">x<tspan dy="3" font-size="12">0</tspan>-δ</text>
-    <text x="223" y="240" font-style="italic">x<tspan dy="3" font-size="12">0</tspan></text>
-    <text x="268" y="240" font-style="italic">x<tspan dy="3" font-size="12">0</tspan>+δ</text>
+  <!-- Dashed horizontal lines: A+ε, A, A-ε -->
+  <line x1="60" y1="105" x2="390" y2="105" stroke="#374151" stroke-dasharray="5,4" stroke-width="1.2"/>
+  <line x1="60" y1="140" x2="390" y2="140" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1"/>
+  <line x1="60" y1="175" x2="390" y2="175" stroke="#374151" stroke-dasharray="5,4" stroke-width="1.2"/>
 
-    <text x="300" y="55" font-style="italic">y=f(x)</text>
-  </g>
+  <!-- Dashed vertical lines: x0-δ, x0, x0+δ -->
+  <line x1="190" y1="15" x2="190" y2="260" stroke="#374151" stroke-dasharray="5,4" stroke-width="1.2"/>
+  <line x1="240" y1="15" x2="240" y2="260" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1"/>
+  <line x1="290" y1="15" x2="290" y2="260" stroke="#374151" stroke-dasharray="5,4" stroke-width="1.2"/>
+
+  <!-- y-axis labels -->
+  <text x="22" y="109" font-style="italic">A+ε</text>
+  <text x="44" y="144" font-style="italic">A</text>
+  <text x="22" y="179" font-style="italic">A−ε</text>
+
+  <!-- x-axis labels -->
+  <text x="170" y="278" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan>−δ</text>
+  <text x="232" y="278" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan></text>
+  <text x="274" y="278" font-style="italic" font-size="13">x<tspan dy="2" font-size="11">0</tspan>+δ</text>
 </svg>

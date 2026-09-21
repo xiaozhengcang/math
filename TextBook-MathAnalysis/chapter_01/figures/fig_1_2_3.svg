@@ -1,60 +1,88 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:15px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 270" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:15px;">
   <defs>
-    <marker id="arr3" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
     </marker>
   </defs>
 
-  <g transform="translate(10, 10)">
-    <!-- Axes: origin at (120, 140), step = 35 -->
-    <line x1="20" y1="140" x2="340" y2="140" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)" />
-    <line x1="120" y1="220" x2="120" y2="20" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)" />
-    <text x="335" y="156" font-style="italic">x</text>
-    <text x="105" y="26" font-style="italic">y</text>
-    <text x="104" y="156" font-style="italic">O</text>
+  <!--
+    [x] = n for x in [n, n+1)
+    Origin O at (130, 170). Step = 50px per unit.
+    x positions: n=-2 → px=30, n=-1→80, n=0→130, n=1→180, n=2→230, n=3→280, n=4→330
+    y positions (y=[x]):
+      n=-2 → y_px = 170 + 2*50 = 270 (too low, use step=40)
+    
+    Use step = 40px:
+    x positions: ..., -2→50, -1→90, 0→130, 1→170, 2→210, 3→250, 4→290, 5→330
+    y positions (for value n, y_px = 170 - n*40):
+      n=-2 → 250, n=-1 → 210, n=0 → 170, n=1 → 130, n=2 → 90, n=3 → 50
+  -->
 
-    <!-- Ticks -->
-    <!-- x = -2 (50), -1 (85), 0 (120), 1 (155), 2 (190), 3 (225), 4 (260) -->
-    <line x1="85" y1="137" x2="85" y2="143" stroke="#222" />
-    <text x="78" y="158">-1</text>
-    <line x1="155" y1="137" x2="155" y2="143" stroke="#222" />
-    <text x="152" y="158">1</text>
-    <line x1="190" y1="137" x2="190" y2="143" stroke="#222" />
-    <text x="187" y="158">2</text>
-    <line x1="225" y1="137" x2="225" y2="143" stroke="#222" />
-    <text x="222" y="158">3</text>
-    <line x1="260" y1="137" x2="260" y2="143" stroke="#222" />
-    <text x="257" y="158">4</text>
+  <!-- Axes -->
+  <line x1="25"  y1="170" x2="400" y2="170" stroke="#222" stroke-width="1.4" marker-end="url(#arr3)"/>
+  <line x1="130" y1="255" x2="130" y2="20"  stroke="#222" stroke-width="1.4" marker-end="url(#arr3)"/>
+  <text x="388" y="188" font-style="italic">x</text>
+  <text x="115" y="26"  font-style="italic">y</text>
+  <text x="113" y="188" font-style="italic">O</text>
 
-    <!-- Steps -->
-    <!-- n = -2: x in [-2, -1), y = -2 (y_px = 140 + 70 = 210) -->
-    <line x1="50" y1="210" x2="85" y2="210" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="50" cy="210" r="3.2" fill="#1e40af" />
-    <circle cx="85" cy="210" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- x-axis ticks and labels -->
+  <line x1="90"  y1="167" x2="90"  y2="173" stroke="#222"/>
+  <text x="82"   y="187">−1</text>
+  <line x1="170" y1="167" x2="170" y2="173" stroke="#222"/>
+  <text x="167"  y="187">1</text>
+  <line x1="210" y1="167" x2="210" y2="173" stroke="#222"/>
+  <text x="207"  y="187">2</text>
+  <line x1="250" y1="167" x2="250" y2="173" stroke="#222"/>
+  <text x="247"  y="187">3</text>
+  <line x1="290" y1="167" x2="290" y2="173" stroke="#222"/>
+  <text x="287"  y="187">4</text>
 
-    <!-- n = -1: x in [-1, 0), y = -1 (y_px = 140 + 35 = 175) -->
-    <line x1="85" y1="175" x2="120" y2="175" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="85" cy="175" r="3.2" fill="#1e40af" />
-    <circle cx="120" cy="175" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- y-axis ticks and labels (values of [x]) -->
+  <line x1="127" y1="210" x2="133" y2="210" stroke="#222"/>
+  <text x="110"  y="215" text-anchor="end">−1</text>
+  <line x1="127" y1="130" x2="133" y2="130" stroke="#222"/>
+  <text x="122"  y="135" text-anchor="end">1</text>
+  <line x1="127" y1="90"  x2="133" y2="90"  stroke="#222"/>
+  <text x="122"  y="95"  text-anchor="end">2</text>
+  <line x1="127" y1="50"  x2="133" y2="50"  stroke="#222"/>
+  <text x="122"  y="55"  text-anchor="end">3</text>
+  <line x1="127" y1="250" x2="133" y2="250" stroke="#222"/>
+  <text x="110"  y="255" text-anchor="end">−2</text>
 
-    <!-- n = 0: x in [0, 1), y = 0 (y_px = 140) -->
-    <line x1="120" y1="140" x2="155" y2="140" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="120" cy="140" r="3.2" fill="#1e40af" />
-    <circle cx="155" cy="140" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- Step segments of [x] -->
+  <!-- n=-2: x in [-2,-1), y=-2, px: x=50..90, y=250 -->
+  <line x1="35"  y1="250" x2="90"  y2="250" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="35"  cy="250" r="3.5" fill="#1e40af"/>
+  <circle cx="90"  cy="250" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+  <!-- arrow left to indicate continuation -->
+  <line x1="35" y1="250" x2="28" y2="250" stroke="#1e40af" stroke-width="2" marker-end="url(#arr3)"/>
 
-    <!-- n = 1: x in [1, 2), y = 1 (y_px = 105) -->
-    <line x1="155" y1="105" x2="190" y2="105" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="155" cy="105" r="3.2" fill="#1e40af" />
-    <circle cx="190" cy="105" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- n=-1: x in [-1,0), y=-1, px: x=90..130, y=210 -->
+  <line x1="90"  y1="210" x2="130" y2="210" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="90"  cy="210" r="3.5" fill="#1e40af"/>
+  <circle cx="130" cy="210" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
 
-    <!-- n = 2: x in [2, 3), y = 2 (y_px = 70) -->
-    <line x1="190" y1="70" x2="225" y2="70" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="190" cy="70" r="3.2" fill="#1e40af" />
-    <circle cx="225" cy="70" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
+  <!-- n=0: x in [0,1), y=0, px: x=130..170, y=170 — but y=170 IS the x-axis, offset slightly -->
+  <!-- Draw slightly above (y=169) to be visible, but keep at y=170 mathematically -->
+  <line x1="130" y1="170" x2="170" y2="170" stroke="#1e40af" stroke-width="2.5"/>
+  <circle cx="130" cy="170" r="3.5" fill="#1e40af"/>
+  <circle cx="170" cy="170" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
 
-    <!-- n = 3: x in [3, 4), y = 3 (y_px = 35) -->
-    <line x1="225" y1="35" x2="260" y2="35" stroke="#1e40af" stroke-width="2.2" />
-    <circle cx="225" cy="35" r="3.2" fill="#1e40af" />
-    <circle cx="260" cy="35" r="3.2" fill="#fff" stroke="#1e40af" stroke-width="1.8" />
-  </g>
+  <!-- n=1: x in [1,2), y=1, px: x=170..210, y=130 -->
+  <line x1="170" y1="130" x2="210" y2="130" stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="170" cy="130" r="3.5" fill="#1e40af"/>
+  <circle cx="210" cy="130" r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=2: x in [2,3), y=2, px: x=210..250, y=90 -->
+  <line x1="210" y1="90"  x2="250" y2="90"  stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="210" cy="90"  r="3.5" fill="#1e40af"/>
+  <circle cx="250" cy="90"  r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- n=3: x in [3,4), y=3, px: x=250..290, y=50 -->
+  <line x1="250" y1="50"  x2="290" y2="50"  stroke="#1e40af" stroke-width="2.2"/>
+  <circle cx="250" cy="50"  r="3.5" fill="#1e40af"/>
+  <circle cx="290" cy="50"  r="3.5" fill="white" stroke="#1e40af" stroke-width="2"/>
+  <!-- arrow right to indicate continuation -->
+  <line x1="290" y1="50" x2="380" y2="50" stroke="#1e40af" stroke-width="2" stroke-dasharray="4,3" marker-end="url(#arr3)"/>
+  <circle cx="290" cy="50"  r="3.5" fill="#1e40af"/>
 </svg>
