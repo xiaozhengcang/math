@@ -1,12 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="100%" height="auto" style="max-width: 300px;">
-  <!-- Exhaustion of R^2 by concentric disks -->
-  <line x1="20" y1="100" x2="270" y2="100" stroke="#2d3748" stroke-width="1.2" />
-  <line x1="140" y1="185" x2="140" y2="15" stroke="#2d3748" stroke-width="1.2" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <!-- Axes: origin at (180, 130) -->
+  <line x1="30" y1="130" x2="330" y2="130" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="325" y="148" font-style="italic">x</text>
+  <line x1="180" y1="240" x2="180" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="168" y="25" font-style="italic">y</text>
+  <text x="168" y="145">O</text>
+
+  <!-- Inner disk D_R: radius R = 60 -->
+  <circle cx="180" cy="130" r="60" fill="#bae6fd" fill-opacity="0.4" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,2"/>
   
-  <circle cx="140" cy="100" r="35" fill="none" stroke="#3182ce" stroke-width="1.5" stroke-dasharray="3,3" />
-  <circle cx="140" cy="100" r="60" fill="none" stroke="#3182ce" stroke-width="1.5" stroke-dasharray="3,3" />
-  <circle cx="140" cy="100" r="85" fill="none" stroke="#3182ce" stroke-width="1.5" />
-  <text x="180" y="95" font-size="11" font-style="italic" font-family="serif">r_1</text>
-  <text x="205" y="95" font-size="11" font-style="italic" font-family="serif">r_2</text>
-  <text x="230" y="95" font-size="11" font-style="italic" font-family="serif">r_n</text>
+  <!-- Square K_R = [-R, R] x [-R, R]: side 120 -->
+  <rect x="120" y="70" width="120" height="120" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+
+  <!-- Outer disk D_√2 R: radius = 60 * 1.414 = 84.8 -->
+  <circle cx="180" cy="130" r="84.8" fill="none" stroke="#1e40af" stroke-width="1.8"/>
+
+  <!-- Radius marks -->
+  <line x1="180" y1="130" x2="240" y2="130" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="205" y="125" font-size="12" font-style="italic" fill="#0284c7">R</text>
+
+  <!-- Labels -->
+  <text x="145" y="115" font-size="14" font-style="italic" fill="#0284c7" font-weight="bold">D_R</text>
+  <text x="215" y="85" font-size="14" font-style="italic" fill="#dc2626" font-weight="bold">K_R</text>
+  <text x="245" y="60" font-size="14" font-style="italic" fill="#1e40af" font-weight="bold">D_√2 R</text>
+  <text x="50" y="240" font-size="12" fill="#64748b">D_R ⊂ K_R ⊂ D_√2 R</text>
 </svg>

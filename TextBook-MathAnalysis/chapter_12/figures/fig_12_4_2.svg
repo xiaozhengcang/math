@@ -1,64 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 300" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 310" width="100%" height="auto" style="max-width:460px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <style>
-      .axis { stroke: #2d3748; stroke-width: 1.5; fill: none; }
-      .curve { stroke: #2b6cb0; stroke-width: 2.2; fill: none; }
-      .dashed-line { stroke: #718096; stroke-width: 1.2; stroke-dasharray: 4,3; fill: none; }
-      .label { font-family: 'KaTeX_Main', 'Times New Roman', serif; font-size: 15px; fill: #2d3748; }
-      .label-math { font-family: 'KaTeX_Math', 'Times New Roman', serif; font-style: italic; font-size: 15px; fill: #2d3748; }
-      .point { fill: #c53030; }
-    </style>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
   </defs>
-
   <!-- Axes -->
-  <line x1="30" y1="240" x2="430" y2="240" class="axis" marker-end="url(#arrow)" />
-  <text x="430" y="255" class="label-math">x</text>
-  <line x1="60" y1="270" x2="60" y2="30" class="axis" marker-end="url(#arrow)" />
-  <text x="50" y="35" class="label-math">y</text>
-  <text x="48" y="255" class="label">O</text>
-
-  <!-- Dashed box [x0 - rho, x0 + rho] x [y0 - beta, y0 + beta] -->
-  <!-- Let x0 = 230, rho = 70 => x in [160, 300] -->
-  <!-- Let y0 = 140, beta = 60 => y in [80, 200] -->
-  <rect x="160" y="80" width="140" height="120" class="dashed-line" />
-
-  <!-- Horizontal dashed lines extending to y axis -->
-  <line x1="60" y1="80" x2="160" y2="80" class="dashed-line" />
-  <text x="18" y="85" class="label-math">y₀+β</text>
-  <text x="255" y="74" class="label">F &gt; 0</text>
-
-  <line x1="60" y1="140" x2="230" y2="140" class="dashed-line" />
-  <text x="36" y="145" class="label-math">y₀</text>
-
-  <line x1="60" y1="200" x2="160" y2="200" class="dashed-line" />
-  <text x="18" y="205" class="label-math">y₀-β</text>
-  <text x="255" y="195" class="label">F &lt; 0</text>
-
-  <!-- Intermediate y_bar = 165 -->
-  <line x1="60" y1="165" x2="200" y2="165" class="dashed-line" />
-  <text x="42" y="170" class="label-math">ȳ</text>
-
-  <!-- Vertical dashed lines down to x axis -->
-  <line x1="160" y1="80" x2="160" y2="240" class="dashed-line" />
-  <text x="140" y="258" class="label-math">x₀-ρ</text>
-
-  <line x1="200" y1="165" x2="200" y2="240" class="dashed-line" />
-  <text x="195" y="258" class="label-math">x̄</text>
-
-  <line x1="230" y1="140" x2="230" y2="240" class="dashed-line" />
-  <text x="225" y="258" class="label-math">x₀</text>
-
-  <line x1="300" y1="80" x2="300" y2="240" class="dashed-line" />
-  <text x="285" y="258" class="label-math">x₀+ρ</text>
-
-  <!-- Curve y = f(x) passing through (x0, y0) -->
-  <path d="M 120 190 Q 180 180 230 140 T 350 90" class="curve" />
-
-  <!-- Points -->
-  <circle cx="230" cy="140" r="3.5" class="point" />
-  <text x="235" y="135" class="label-math">(x₀, y₀)</text>
-  <circle cx="200" cy="165" r="3" class="point" />
+  <line x1="40" y1="240" x2="430" y2="240" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="70" y1="270" x2="70" y2="30" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="435" y="244" font-style="italic">x</text>
+  <text x="58" y="30" font-style="italic">y</text>
+  <text x="56" y="256" font-style="italic">O</text>
+  <!-- Neighborhood Box -->
+  <rect x="150" y="70" width="160" height="120" fill="#f8fafc" stroke="#64748b" stroke-width="1.3" stroke-dasharray="4,4"/>
+  <text x="230" y="62" text-anchor="middle" font-size="13px" fill="#0284c7" font-weight="bold">F(x, y₀+ε) &gt; 0</text>
+  <text x="230" y="208" text-anchor="middle" font-size="13px" fill="#0284c7" font-weight="bold">F(x, y₀−ε) &lt; 0</text>
+  <!-- Implicit Curve y = f(x) -->
+  <path d="M 150 160 C 200 145, 260 115, 310 100" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="318" y="105" font-style="italic" font-weight="bold" fill="#1e40af">y = f(x)</text>
+  <circle cx="230" cy="130" r="4" fill="#dc2626"/>
+  <text x="238" y="124" font-style="italic" font-weight="bold" fill="#dc2626">(x₀, y₀)</text>
+  <line x1="230" y1="240" x2="230" y2="130" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="70" y1="130" x2="230" y2="130" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="230" y="256" text-anchor="middle" font-style="italic">x₀</text>
+  <text x="62" y="134" text-anchor="end" font-style="italic">y₀</text>
+  <text x="240" y="295" text-anchor="middle" font-size="13px" fill="#1e293b">零点存在定理：对于每个 x ∈ (x₀−δ, x₀+δ)，存在唯一的 y = f(x) 使得 F(x, y) = 0</text>
 </svg>

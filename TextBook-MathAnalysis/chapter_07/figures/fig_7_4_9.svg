@@ -1,19 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 240" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Polar axis -->
+  <line x1="40" y1="180" x2="300" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="295" y="198">极轴</text>
+  <text x="32" y="195">O</text>
 
-  <!-- Cardioid r = a(1 + cos theta) -->
-  <line x1="20" y1="110" x2="340" y2="110" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="120" y1="200" x2="120" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Cardioid parametric curve path -->
-  <path d="M 280 110 C 280 50, 180 30, 120 110 C 180 190, 280 170, 280 110 Z" fill="rgba(26, 115, 232, 0.2)" stroke="var(--primary-accent, #1a73e8)" stroke-width="2.2"/>
-  <text x="285" y="125" font-size="12" fill="var(--text-primary, #333)">2a</text>
-  <text x="180" y="210" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.9 心形线 r = a(1 + cos θ)</text>
+  <!-- Hyperbolic spiral curve r = a/theta from theta=pi/6 to 2pi -->
+  <path d="M 260 180 C 230 110, 150 90, 110 125 C 80 155, 95 180, 120 180" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="195" y="90" font-style="italic" fill="#1e40af">rθ = a</text>
+
+  <!-- Swept sector area -->
+  <path d="M 40 180 L 260 180 C 230 110, 150 90, 110 125 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="none"/>
+  <text x="145" y="150" font-size="14" font-style="italic" fill="#0369a1" font-weight="bold">A</text>
 </svg>

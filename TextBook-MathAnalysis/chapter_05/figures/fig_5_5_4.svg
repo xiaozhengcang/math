@@ -1,57 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="100%" height="300" style="max-width: 460px; display: block; margin: 1.5rem auto;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 340" width="100%" height="auto" style="max-width:480px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <style>
-      .axis { stroke: var(--text-color, #2c3e50); stroke-width: 1.5; marker-end: url(#arrow-4); }
-      .curve { fill: none; stroke: var(--primary-color, #2980b9); stroke-width: 2.2; }
-      .asymptote { stroke: var(--secondary-color, #e74c3c); stroke-width: 1.2; stroke-dasharray: 6 4; }
-      .label { font-family: 'Times New Roman', serif; font-size: 15px; fill: var(--text-color, #2c3e50); }
-      .math-italic { font-style: italic; }
-    </style>
-    <marker id="arrow-4" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor" />
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr5_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr5_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
-
   <!-- Axes -->
-  <!-- x-axis -->
-  <line x1="40" y1="180" x2="440" y2="180" class="axis" />
-  <text x="445" y="184" class="label math-italic">x</text>
-
-  <!-- y-axis -->
-  <line x1="280" y1="310" x2="280" y2="35" class="axis" />
-  <text x="272" y="28" class="label math-italic">y</text>
-
-  <!-- Vertical Asymptote x = -1 at x=240 -->
-  <line x1="240" y1="35" x2="240" y2="310" class="asymptote" />
-  <text x="240" y="300" class="label" text-anchor="start" dx="5">x = −1</text>
-  <text x="238" y="195" class="label" text-anchor="end">−1</text>
-
+  <line x1="30" y1="180" x2="450" y2="180" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <line x1="240" y1="320" x2="240" y2="25" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <text x="455" y="184" font-style="italic">x</text>
+  <text x="228" y="25" font-style="italic">y</text>
+  <text x="226" y="196" font-style="italic">O</text>
+  <!-- Vertical Asymptote x = -1 -->
+  <line x1="198" y1="30" x2="198" y2="320" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="6,4"/>
+  <text x="190" y="45" font-size="13px" fill="#dc2626" text-anchor="end">x = −1</text>
+  <text x="194" y="196" font-size="13px" text-anchor="end">−1</text>
   <!-- Oblique Asymptote y = x/3 - 1 -->
-  <!-- slope = -0.3 in screen coords (as x increases, y decreases in SVG) -->
-  <!-- at x=280, y_screen = 215. At x=40: y_screen = 215 + 240*0.35 = 299. At x=440: y_screen = 215 - 160*0.35 = 159 -->
-  <line x1="40" y1="290" x2="440" y2="155" class="asymptote" />
-  <text x="365" y="225" class="label math-italic">y = </text>
-  <text x="390" y="215" class="label">x</text>
-  <line x1="385" y1="220" x2="400" y2="220" stroke="currentColor" stroke-width="1" />
-  <text x="390" y="235" class="label">3</text>
-  <text x="405" y="225" class="label">− 1</text>
-
-  <!-- Curve branches -->
-  <!-- Left branch (x < -1): approaches x=-1 from left (x=240) down to infinity, approaches oblique asymptote at left -->
-  <path d="M 45 292 C 120 280 180 270 200 275 C 220 280 232 295 235 310" class="curve" />
-
-  <!-- Right branch (x > -1): from (245, 40) down, y-intercept (280, 168), touches (315, 180), then rises asymptotically -->
-  <path d="M 245 40 C 248 100 258 150 280 168 C 295 180 305 180 315 180 C 345 180 390 160 440 142" class="curve" />
-
-  <!-- Touch point (1, 0) tick and label -->
-  <text x="315" y="195" class="label">1</text>
-
-  <!-- Origin -->
-  <text x="268" y="195" class="label math-italic">O</text>
-
-  <!-- Curve formula label -->
-  <text x="380" y="55" class="label math-italic">y = </text>
-  <text x="405" y="45" class="label">(x − 1)²</text>
-  <line x1="395" y1="52" x2="450" y2="52" stroke="currentColor" stroke-width="1" />
-  <text x="405" y="68" class="label">3(x + 1)</text>
+  <line x1="45" y1="287" x2="435" y2="157" stroke="#ea580c" stroke-width="1.3" stroke-dasharray="6,4"/>
+  <text x="360" y="150" font-size="13px" fill="#ea580c">y = x/3 − 1</text>
+  <!-- Left Branch (x < -1) -->
+  <polyline points="51.0,301.0 55.2,300.1 59.4,299.2 63.6,298.3 67.8,297.5 72.0,296.7 76.2,295.9 80.4,295.2 84.6,294.5 88.8,293.9 93.0,293.4 97.2,292.9 101.4,292.5 105.6,292.3 109.8,292.1 114.0,292.0 118.2,292.1 122.4,292.3 126.6,292.7 130.8,293.4 135.0,294.3 139.2,295.6 143.4,297.3 147.6,299.5 151.8,302.3 156.0,306.0 160.2,310.8 164.4,317.2 168.6,325.8" fill="none" stroke="#1e40af" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- Right Branch (x > -1) -->
+  <polyline points="229.5,150.8 231.6,154.8 233.7,158.2 235.8,161.2 237.9,163.8 240.0,166.0 242.1,168.0 244.2,169.7 246.3,171.2 248.4,172.5 250.5,173.7 252.6,174.7 254.7,175.6 256.8,176.4 258.9,177.1 261.0,177.7 263.1,178.2 265.2,178.6 267.3,179.0 269.4,179.3 271.5,179.5 273.6,179.7 275.7,179.8 277.8,179.9 279.9,180.0 282.0,180.0 284.1,180.0 286.2,179.9 288.3,179.9 290.4,179.7 292.5,179.6 294.6,179.5 296.7,179.3 298.8,179.1 300.9,178.8 303.0,178.6 305.1,178.3 307.2,178.1 309.3,177.8 311.4,177.5 313.5,177.1 315.6,176.8 317.7,176.5 319.8,176.1 321.9,175.7 324.0,175.3 326.1,174.9 328.2,174.5 330.3,174.1 332.4,173.7 334.5,173.3 336.6,172.8 338.7,172.4 340.8,171.9 342.9,171.5 345.0,171.0 347.1,170.5 349.2,170.0 351.3,169.6 353.4,169.1 355.5,168.6 357.6,168.1 359.7,167.6 361.8,167.0 363.9,166.5 366.0,166.0 368.1,165.5 370.2,164.9 372.3,164.4 374.4,163.9 376.5,163.3 378.6,162.8 380.7,162.2 382.8,161.7 384.9,161.1 387.0,160.6 389.1,160.0" fill="none" stroke="#1e40af" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- Local Max (-3, -8/3) -->
+  <line x1="114" y1="180" x2="114" y2="292.0" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="240" y1="292.0" x2="114" y2="292.0" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <circle cx="114" cy="292.0" r="3.5" fill="#dc2626"/>
+  <text x="114" y="174" text-anchor="middle">−3</text>
+  <text x="248" y="296.0">−8/3</text>
+  <text x="104" y="310.0" font-size="12px" fill="#dc2626">极大值 (−3, −8/3)</text>
+  <!-- Local Min (1, 0) -->
+  <circle cx="282" cy="180" r="3.5" fill="#dc2626"/>
+  <text x="282" y="196" text-anchor="middle">1</text>
+  <text x="292" y="172" font-size="12px" fill="#dc2626">极小值 (1, 0)</text>
+  <circle cx="240" cy="166.0" r="2.5" fill="#1e40af"/>
+  <text x="232" y="170.0" text-anchor="end" font-size="12px">1/3</text>
+  <text x="320" y="70" font-style="italic" font-weight="bold" fill="#1e40af">y = (x−1)² / [3(x+1)]</text>
 </svg>

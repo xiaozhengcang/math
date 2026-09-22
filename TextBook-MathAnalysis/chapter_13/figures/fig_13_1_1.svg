@@ -1,34 +1,60 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="auto" style="max-width: 400px;">
-  <!-- Grid background -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 320" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#cbd5e0" stroke-width="1.2" />
-    </pattern>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
   </defs>
-  <!-- Outer bounding rectangle U -->
-  <rect x="50" y="30" width="300" height="240" fill="none" stroke="#4a5568" stroke-width="1.8" />
-  <!-- Grid lines inside U -->
-  <rect x="50" y="30" width="300" height="240" fill="url(#grid)" />
-  
-  <!-- Boundary curve of D -->
-  <!-- Oval shape representing region D -->
-  <path d="M 80 160 C 70 80, 160 50, 260 60 C 340 70, 340 180, 280 230 C 200 280, 90 230, 80 160 Z" 
-        fill="#ebf8ff" fill-opacity="0.4" stroke="#2b6cb0" stroke-width="2.5" />
-  
-  <!-- Highlight some inner squares (completely inside D) -->
-  <rect x="140" y="90" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="170" y="90" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="200" y="90" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="140" y="120" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="170" y="120" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="200" y="120" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="230" y="120" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="140" y="150" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="170" y="150" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="200" y="150" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
-  <rect x="230" y="150" width="30" height="30" fill="#bee3f8" fill-opacity="0.7" stroke="#3182ce" stroke-width="1.5" />
+  <!-- Bounding rectangle U = [a, b] x [c, d] -->
+  <line x1="40" y1="280" x2="410" y2="280" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="405" y="295" font-style="italic">x</text>
+  <line x1="50" y1="290" x2="50" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="35" y="25" font-style="italic">y</text>
+  <text x="38" y="295">O</text>
 
-  <!-- Labels -->
-  <text x="185" y="140" font-size="16" font-style="italic" font-family="serif" fill="#2c5282" font-weight="bold">D</text>
-  <text x="355" y="275" font-size="14" font-style="italic" font-family="serif" fill="#4a5568">U</text>
+  <!-- Outer rectangle U -->
+  <rect x="80" y="50" width="280" height="210" fill="none" stroke="#64748b" stroke-width="1.5"/>
+  <text x="80" y="295" text-anchor="middle" font-style="italic">a</text>
+  <text x="360" y="295" text-anchor="middle" font-style="italic">b</text>
+  <text x="40" y="265" font-style="italic">c</text>
+  <text x="40" y="55" font-style="italic">d</text>
+  <text x="365" y="65" font-style="italic" fill="#64748b" font-weight="bold">U</text>
+
+  <!-- Grid lines inside U -->
+  <!-- Vertical: 8 divisions of width 35 -->
+  <!-- Horizontal: 6 divisions of height 35 -->
+  <path d="M 115 50 L 115 260 M 150 50 L 150 260 M 185 50 L 185 260 M 220 50 L 220 260 M 255 50 L 255 260 M 290 50 L 290 260 M 325 50 L 325 260" stroke="#cbd5e1" stroke-width="1"/>
+  <path d="M 80 85 L 360 85 M 80 120 L 360 120 M 80 155 L 360 155 M 80 190 L 360 190 M 80 225 L 360 225" stroke="#cbd5e1" stroke-width="1"/>
+
+  <!-- Inner cells (mA) completely inside D: shaded soft blue -->
+  <rect x="150" y="120" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="185" y="120" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="220" y="120" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="255" y="120" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="150" y="155" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="185" y="155" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="220" y="155" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="255" y="155" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="185" y="85" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="220" y="85" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="185" y="190" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+  <rect x="220" y="190" width="35" height="35" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+
+  <!-- Boundary curve of D -->
+  <path d="M 115 155 C 105 100, 160 70, 240 75 C 320 80, 335 140, 310 195 C 285 245, 180 245, 130 220 C 110 205, 118 180, 115 155 Z" fill="#e0f2fe" fill-opacity="0.35" stroke="#1e40af" stroke-width="2.2"/>
+
+  <!-- Legend / labels -->
+  <text x="210" y="145" font-size="18" font-style="italic" fill="#1e40af" font-weight="bold">D</text>
+  
+  <g transform="translate(80, 15)">
+    <rect x="0" y="0" width="16" height="12" fill="#bae6fd" stroke="#0284c7" stroke-width="1"/>
+    <text x="22" y="11" font-size="12" fill="#334155">内小矩形 (构成 mA)</text>
+    <rect x="150" y="0" width="16" height="12" fill="#e0f2fe" fill-opacity="0.35" stroke="#1e40af" stroke-width="1.2"/>
+    <text x="172" y="11" font-size="12" fill="#334155">区域 D 边界 (构成 mB)</text>
+  </g>
 </svg>

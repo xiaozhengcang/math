@@ -1,28 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="40" y1="140" x2="360" y2="140" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="365" y="145" font-family="serif" font-size="14" font-style="italic">y</text>
-  <line x1="80" y1="220" x2="80" y2="40" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="70" y="35" font-family="serif" font-size="14" font-style="italic">z</text>
+  <!-- 3D Axes: y-axis horizontal right, z-axis vertical, x-axis down-left -->
+  <line x1="120" y1="150" x2="120" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="130" y="28" font-style="italic">z</text>
+  <line x1="120" y1="150" x2="350" y2="150" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="345" y="168" font-style="italic">y</text>
+  <line x1="120" y1="150" x2="45" y2="225" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="35" y="235" font-style="italic">x</text>
+  <text x="105" y="162">O</text>
 
-  <path d="M 280 70 C 130 70, 80 140, 80 140 C 80 140, 130 210, 280 210" fill="#ebf8ff" fill-opacity="0.6" stroke="#2b6cb0" stroke-width="2"/>
-  
-  <ellipse cx="280" cy="140" rx="20" ry="70" fill="#fed7d7" fill-opacity="0.5" stroke="#e53e3e" stroke-width="2"/>
-  <text x="270" y="130" font-family="serif" font-size="13" fill="#e53e3e">Σ₁ (y=h)</text>
-  <text x="140" y="110" font-family="serif" font-size="14" fill="#2b6cb0">Σ</text>
+  <!-- Paraboloid opening horizontally along positive y-axis:
+       Apex at origin (120, 150)
+       At y = h (280, 150), circle radius in xz: r = 70 px
+  -->
+  <path d="M 120 150 Q 200 80 280 80 L 280 220 Q 200 220 120 150 Z" fill="#e0f2fe" fill-opacity="0.6" stroke="#1e40af" stroke-width="2"/>
 
-  <text x="200" y="248" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.3.17 旋转抛物面 Σ 及其添加闭合圆盘 Σ₁</text>
+  <!-- Cap disk at y = h -->
+  <ellipse cx="280" cy="150" rx="22" ry="70" fill="#bae6fd" fill-opacity="0.65" stroke="#0284c7" stroke-width="1.8"/>
+
+  <!-- Normal vector: oriented left side (outer side) on paraboloid -->
+  <line x1="180" y1="105" x2="160" y2="70" stroke="#dc2626" stroke-width="2.2" marker-end="url(#arr_red)"/>
+  <text x="145" y="65" font-weight="bold" fill="#dc2626">n (左侧)</text>
+
+  <!-- Tick at y = h -->
+  <line x1="280" y1="145" x2="280" y2="155" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="275" y="170" font-style="italic">h</text>
+
+  <text x="210" y="145" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">Σ</text>
+  <text x="210" y="195" font-size="13" font-style="italic" fill="#1e40af">y = x² + z²</text>
 </svg>

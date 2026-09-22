@@ -1,48 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="260" style="max-width: 380px; display: block; margin: 1.5rem auto;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 290" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <style>
-      .axis { stroke: var(--text-color, #2c3e50); stroke-width: 1.5; marker-end: url(#arrow-63); }
-      .curve { fill: none; stroke: var(--primary-color, #2980b9); stroke-width: 2.2; }
-      .secant { stroke: var(--secondary-color, #e74c3c); stroke-width: 1.4; }
-      .dashed { stroke: var(--text-color, #2c3e50); stroke-width: 1.2; stroke-dasharray: 5 4; }
-      .label { font-family: 'Times New Roman', serif; font-size: 15px; fill: var(--text-color, #2c3e50); }
-      .math-italic { font-style: italic; }
-    </style>
-    <marker id="arrow-63" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor" />
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr5_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr5_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
-
   <!-- Axes -->
-  <line x1="40" y1="200" x2="360" y2="200" class="axis" />
-  <text x="355" y="218" class="label math-italic">x</text>
-
-  <line x1="75" y1="235" x2="75" y2="35" class="axis" />
-  <text x="65" y="38" class="label math-italic">y</text>
-  <text x="60" y="215" class="label math-italic">O</text>
-
-  <!-- Curve: y = f(x) -->
-  <path d="M 60 230 C 95 215 125 200 155 175 C 190 145 235 95 280 40" class="curve" />
-  <text x="275" y="35" class="label math-italic">y = f(x)</text>
-
-  <!-- Points x_{k-1} = 265, curve y ~ 65 -->
-  <line x1="265" y1="200" x2="265" y2="65" class="dashed" />
-
-  <!-- Point x_k = 215, curve y ~ 138 -->
-  <line x1="215" y1="200" x2="215" y2="138" class="dashed" />
-
-  <!-- Secant line passing through (265, 65) and (215, 138) -->
-  <!-- slope = (138 - 65)/(215 - 265) = 73/(-50) = -1.46 -->
-  <!-- at y = 200, x = 215 - (200 - 138)/(-1.46) = 215 + 42.5 = 172.5 -->
-  <line x1="280" y1="43" x2="60" y2="364" class="secant" />
-
-  <!-- Ticks and labels on x-axis -->
-  <!-- root x* at 130 -->
-  <text x="132" y="218" class="label math-italic" text-anchor="middle">x*</text>
-  <!-- x_{k+1} at 173 -->
-  <text x="173" y="218" class="label math-italic" text-anchor="middle">x<tspan font-size="11px" dy="3">k+1</tspan></text>
-  <!-- x_k at 215 -->
-  <text x="215" y="218" class="label math-italic" text-anchor="middle" dx="5">x<tspan font-size="11px" dy="3">k</tspan></text>
-  <!-- x_{k-1} at 265 -->
-  <text x="265" y="218" class="label math-italic" text-anchor="middle" dx="8">x<tspan font-size="11px" dy="3">k−1</tspan></text>
+  <line x1="40" y1="220" x2="410" y2="220" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <line x1="70" y1="260" x2="70" y2="35" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <text x="415" y="225" font-style="italic">x</text>
+  <text x="58" y="35" font-style="italic">y</text>
+  <text x="56" y="235" font-style="italic">O</text>
+  <path d="M 120 235 C 135 228 145 222 150 220 C 180 205 260 140 350 50" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="355" y="55" font-style="italic" font-weight="bold" fill="#1e40af">y = f(x)</text>
+  <circle cx="150" cy="220" r="3.5" fill="#1e293b"/>
+  <text x="145" y="238" font-style="italic" font-weight="bold">x*</text>
+  <!-- Secant 1 through (x0, f(x0)) and (x1, f(x1)) -->
+  <line x1="355" y1="46" x2="160" y2="229" stroke="#dc2626" stroke-width="1.8"/>
+  <circle cx="340" cy="60" r="3.5" fill="#1e40af"/>
+  <circle cx="260" cy="135" r="3.5" fill="#1e40af"/>
+  <circle cx="170" cy="220" r="3.5" fill="#dc2626"/>
+  <line x1="340" y1="220" x2="340" y2="60" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="260" y1="220" x2="260" y2="135" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="340" y="238" text-anchor="middle" font-style="italic">x₀</text>
+  <text x="260" y="238" text-anchor="middle" font-style="italic">x₁</text>
+  <text x="170" y="238" text-anchor="middle" font-style="italic" font-weight="bold" fill="#dc2626">x₂</text>
+  <text x="260" y="275" text-anchor="middle" font-size="13px" fill="#1e293b">割线法迭代式：xₖ₊₁ = xₖ − f(xₖ)(xₖ − xₖ₋₁)/[f(xₖ) − f(xₖ₋₁)]</text>
 </svg>

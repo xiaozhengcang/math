@@ -1,25 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 250" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <path d="M 80 130 C 80 60, 200 50, 340 70 C 370 150, 340 210, 240 220 C 130 230, 80 190, 80 130 Z" fill="#ebf8ff" fill-opacity="0.5" stroke="#2b6cb0" stroke-width="2"/>
-  
-  <path d="M 190 55 C 220 120, 180 170, 220 220" fill="none" stroke="#e53e3e" stroke-width="2"/>
-  <text x="210" y="125" font-family="serif" font-size="13" fill="#e53e3e">Σ*</text>
+  <!-- 3D body Omega with cavity, cut by dividing surface -->
+  <ellipse cx="190" cy="125" rx="130" ry="85" fill="#f8fafc" stroke="#1e293b" stroke-width="2"/>
+  <!-- Internal cavity -->
+  <ellipse cx="190" cy="125" rx="45" ry="30" fill="#ffffff" stroke="#1e293b" stroke-width="1.8"/>
 
-  <text x="130" y="140" font-family="serif" font-size="16" font-style="italic" fill="#2b6cb0">Ω₁</text>
-  <text x="280" y="140" font-family="serif" font-size="16" font-style="italic" fill="#2b6cb0">Ω₂</text>
+  <!-- Dividing cross-cut surface across the layer -->
+  <line x1="60" y1="125" x2="145" y2="125" stroke="#dc2626" stroke-width="2"/>
+  <line x1="80" y1="122" x2="120" y2="122" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
+  <line x1="120" y1="128" x2="80" y2="128" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
 
-  <text x="210" y="248" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.3.15 添加辅助曲面将空间区域分割为标准块</text>
+  <line x1="235" y1="125" x2="320" y2="125" stroke="#dc2626" stroke-width="2"/>
+  <line x1="255" y1="122" x2="295" y2="122" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
+  <line x1="295" y1="128" x2="255" y2="128" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
+
+  <text x="190" y="80" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold" text-anchor="middle">Ω₁</text>
+  <text x="190" y="180" font-size="16" font-style="italic" fill="#b45309" font-weight="bold" text-anchor="middle">Ω₂</text>
+  <text x="190" y="130" font-size="12" fill="#64748b" text-anchor="middle">空腔</text>
+
+  <text x="190" y="235" text-anchor="middle" font-size="12" fill="#64748b">用辅助曲面分割为单连通区域后相加</text>
 </svg>

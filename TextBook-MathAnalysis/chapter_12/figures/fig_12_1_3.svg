@@ -1,39 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 280" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 300" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arr-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#c53030" />
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
-  <style>
-    .axis { stroke: #4a5568; stroke-width: 1.4; fill: none; }
-    .contour { stroke: #2b6cb0; stroke-width: 1.6; fill: none; }
-    .vector { stroke: #c53030; stroke-width: 2.2; fill: none; }
-    .label { font-family: "Times New Roman", STSong, serif; font-style: italic; font-size: 15px; fill: #1a202c; }
-  </style>
-
   <!-- Axes -->
-  <line x1="40" y1="140" x2="420" y2="140" class="axis" marker-end="url(#arr)" />
-  <text x="415" y="155" class="label">x</text>
-  <line x1="230" y1="260" x2="230" y2="20" class="axis" marker-end="url(#arr)" />
-  <text x="218" y="25" class="label">y</text>
-  <text x="218" y="155" class="label">O</text>
-
-  <!-- Concentric Ellipses (Level Curves) -->
-  <ellipse cx="230" cy="140" rx="35" ry="18" class="contour" />
-  <ellipse cx="230" cy="140" rx="65" ry="32" class="contour" />
-  <ellipse cx="230" cy="140" rx="100" ry="50" class="contour" />
-  <ellipse cx="230" cy="140" rx="140" ry="70" class="contour" />
-  <ellipse cx="230" cy="140" rx="175" ry="88" class="contour" />
-
-  <!-- Gradient Vectors orthogonal to contours -->
-  <line x1="230" y1="140" x2="230" y2="40" class="vector" marker-end="url(#arr-red)" />
-  <line x1="230" y1="140" x2="230" y2="240" class="vector" marker-end="url(#arr-red)" />
-  
-  <line x1="230" y1="140" x2="330" y2="70" class="vector" marker-end="url(#arr-red)" />
-  <text x="338" y="72" class="label" fill="#c53030" font-weight="bold">grad f</text>
-
-  <line x1="230" y1="140" x2="130" y2="70" class="vector" marker-end="url(#arr-red)" />
+  <line x1="40" y1="240" x2="410" y2="240" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="60" y1="270" x2="60" y2="35" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="415" y="244" font-style="italic">x</text>
+  <text x="48" y="35" font-style="italic">y</text>
+  <text x="46" y="256" font-style="italic">O</text>
+  <!-- Contours f(x, y) = c -->
+  <path d="M 100 230 C 150 180, 240 190, 360 210" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="365" y="210" font-size="12px" fill="#64748b">f = c₁</text>
+  <path d="M 120 180 C 170 120, 260 130, 380 150" fill="none" stroke="#0284c7" stroke-width="1.8"/>
+  <text x="385" y="150" font-size="12px" fill="#0284c7">f = c₂</text>
+  <path d="M 140 130 C 190 60, 280 70, 400 90" fill="none" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="405" y="90" font-size="12px" fill="#64748b">f = c₃ (c₁ &lt; c₂ &lt; c₃)</text>
+  <circle cx="230" cy="126" r="4" fill="#1e293b"/>
+  <text x="222" y="144" font-style="italic" font-weight="bold">P₀</text>
+  <!-- Tangent line to contour -->
+  <line x1="160" y1="140" x2="300" y2="112" stroke="#64748b" stroke-width="1.3" stroke-dasharray="5,3"/>
+  <text x="305" y="112" font-size="12px" fill="#64748b">切线</text>
+  <!-- Gradient Vector ∇f -->
+  <line x1="230" y1="126" x2="210" y2="51" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr_red)"/>
+  <text x="200" y="45" font-style="italic" font-weight="bold" fill="#dc2626">grad f = ∇f</text>
+  <path d="M 226,108 L 217,110 L 221,128" fill="none" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="230" y="275" text-anchor="middle" font-size="13px" fill="#1e293b">梯度性质：∇f 垂直于等高线切线，指向函数增长最快的方向</text>
 </svg>

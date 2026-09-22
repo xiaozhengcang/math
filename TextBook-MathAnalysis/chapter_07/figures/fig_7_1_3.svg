@@ -1,53 +1,52 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 260" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 250" width="100%" height="auto" style="max-width:460px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-
   <!-- Axes -->
-  <line x1="40" y1="210" x2="490" y2="210" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="70" y1="230" x2="70" y2="30" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="485" y="230" font-size="13" font-style="italic" fill="var(--text-primary, #333)">x</text>
-  <text x="55" y="35" font-size="13" font-style="italic" fill="var(--text-primary, #333)">y</text>
-  <text x="55" y="225" font-size="13" fill="var(--text-primary, #333)">O</text>
-  
-  <!-- Curve y = f(x) -->
-  <path d="M 110 140 C 150 190, 220 180, 270 140 C 320 100, 390 60, 430 70" fill="none" stroke="var(--text-primary, #333)" stroke-width="2"/>
-  <text x="415" y="55" font-size="13" font-style="italic" fill="var(--text-primary, #333)">y = f(x)</text>
-  
-  <!-- Boundary lines x = a, x = b -->
-  <line x1="110" y1="210" x2="110" y2="140" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <text x="105" y="228" font-size="13" font-style="italic" fill="var(--text-primary, #333)">a</text>
-  <line x1="430" y1="210" x2="430" y2="70" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <text x="425" y="228" font-size="13" font-style="italic" fill="var(--text-primary, #333)">b</text>
-  
-  <!-- Partition ticks -->
-  <line x1="160" y1="210" x2="160" y2="178" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="153" y="228" font-size="12" font-style="italic" fill="var(--text-muted, #888)">x₁</text>
-  <line x1="210" y1="210" x2="210" y2="175" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="203" y="228" font-size="12" font-style="italic" fill="var(--text-muted, #888)">x₂</text>
-  <text x="235" y="225" font-size="12" fill="var(--text-muted, #888)">⋯</text>
-  
-  <!-- Highlighted interval [x_i-1, x_i] and sample point xi_i -->
-  <rect x="270" y="115" width="60" height="95" fill="rgba(26, 115, 232, 0.2)" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.8"/>
-  <line x1="270" y1="210" x2="270" y2="115" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.5"/>
-  <line x1="330" y1="210" x2="330" y2="115" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.5"/>
-  <text x="255" y="228" font-size="11" font-style="italic" fill="var(--text-primary, #333)">xᵢ₋₁</text>
-  <text x="323" y="228" font-size="11" font-style="italic" fill="var(--text-primary, #333)">xᵢ</text>
-  
-  <!-- Sample point xi_i -->
-  <circle cx="295" cy="115" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <line x1="295" y1="115" x2="295" y2="210" stroke="var(--primary-accent, #1a73e8)" stroke-dasharray="3 3"/>
-  <text x="290" y="228" font-size="11" font-style="italic" fill="var(--primary-accent, #1a73e8)">ξᵢ</text>
-  <text x="290" y="105" font-size="12" font-style="italic" fill="var(--primary-accent, #1a73e8)">f(ξᵢ)</text>
-  
-  <line x1="375" y1="210" x2="375" y2="72" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="348" y="225" font-size="12" fill="var(--text-muted, #888)">⋯</text>
-  
-  <text x="270" y="252" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.1.3 定积分（黎曼和）的几何定义</text>
+  <line x1="30" y1="210" x2="430" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="425" y="228" font-style="italic">x</text>
+  <line x1="55" y1="230" x2="55" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="42" y="30" font-style="italic">y</text>
+  <text x="42" y="225">O</text>
+
+  <!-- Function curve y = f(x) over [a, b] = [90, 370] -->
+  <path d="M 70 170 C 120 110, 180 70, 260 120 C 310 150, 360 80, 390 60" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="395" y="55" font-style="italic" fill="#1e40af">y = f(x)</text>
+
+  <!-- Partition points: x0=90, x1=145, x2=200, x3=260, x4=315, x5=370 -->
+  <!-- Sample rectangles:
+       [90, 145]: xi_1 = 120, f(120)=122 -> rect height 88
+       [145, 200]: xi_2 = 175, f(175)=82 -> rect height 128
+       [200, 260]: xi_3 = 230, f(230)=105 -> rect height 105 (highlighted!)
+       [260, 315]: xi_4 = 285, f(285)=135 -> rect height 75
+       [315, 370]: xi_5 = 345, f(345)=95 -> rect height 115
+  -->
+  <rect x="90" y="122" width="55" height="88" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+  <rect x="145" y="82" width="55" height="128" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+  <rect x="200" y="105" width="60" height="105" fill="#bae6fd" stroke="#0284c7" stroke-width="1.8"/>
+  <rect x="260" y="135" width="55" height="75" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+  <rect x="315" y="95" width="55" height="115" fill="#e0f2fe" stroke="#0284c7" stroke-width="1"/>
+
+  <!-- Highlight sample point xi_i in 3rd strip -->
+  <circle cx="230" cy="105" r="3.5" fill="#dc2626"/>
+  <line x1="230" y1="210" x2="230" y2="105" stroke="#dc2626" stroke-width="1.4" stroke-dasharray="3,3"/>
+  <circle cx="230" cy="210" r="2.5" fill="#dc2626"/>
+  <text x="225" y="228" font-style="italic" fill="#dc2626" font-weight="bold">ξᵢ</text>
+  <text x="235" y="100" font-size="12" font-style="italic" fill="#dc2626">f(ξᵢ)</text>
+
+  <!-- Ticks at a and b -->
+  <line x1="90" y1="207" x2="90" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="86" y="228" font-style="italic">a = x₀</text>
+  <line x1="370" y1="207" x2="370" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="360" y="228" font-style="italic">b = xₙ</text>
+
+  <text x="215" y="170" font-size="13" font-style="italic" fill="#0369a1">f(ξᵢ)Δxᵢ</text>
 </svg>

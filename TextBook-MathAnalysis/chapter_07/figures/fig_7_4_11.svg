@@ -1,24 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 210" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 240" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Curve y = f(x) from A to B -->
+  <path d="M 60 180 C 110 70, 220 50, 360 120" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="365" y="115" font-style="italic" fill="#1e40af">y = f(x)</text>
 
-  <!-- Arc length differential element ds -->
-  <line x1="30" y1="170" x2="340" y2="170" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="50" y1="190" x2="50" y2="30" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <path d="M 90 140 Q 180 120, 280 50" fill="none" stroke="var(--text-primary, #333)" stroke-width="2"/>
-  <!-- Differential triangle: dx, dy, ds -->
-  <line x1="160" y1="115" x2="210" y2="115" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.8"/>
-  <line x1="210" y1="115" x2="210" y2="85" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.8"/>
-  <line x1="160" y1="115" x2="210" y2="85" stroke="#e74c3c" stroke-width="2.2"/>
-  <text x="180" y="130" font-size="12" font-style="italic" fill="var(--primary-accent, #1a73e8)">dx</text>
-  <text x="215" y="105" font-size="12" font-style="italic" fill="var(--primary-accent, #1a73e8)">dy</text>
-  <text x="175" y="95" font-size="12" font-style="italic" fill="#e74c3c">ds</text>
-  <text x="190" y="200" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.11 曲线弧长微元 ds = √(1 + y'²) dx</text>
+  <!-- Inscribed polygon vertices: A=(60, 180), P1=(110, 120), P2=(180, 75), P3=(265, 78), B=(360, 120) -->
+  <polyline points="60,180 110,120 180,75 265,78 360,120" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+
+  <circle cx="60" cy="180" r="3.5" fill="#1e293b"/>
+  <text x="45" y="195">A</text>
+  <circle cx="110" cy="120" r="3" fill="#dc2626"/>
+  <circle cx="180" cy="75" r="3" fill="#dc2626"/>
+  <text x="175" y="65">P_{i-1}</text>
+  <circle cx="265" cy="78" r="3" fill="#dc2626"/>
+  <text x="265" y="68">P_i</text>
+  <circle cx="360" cy="120" r="3.5" fill="#1e293b"/>
+  <text x="365" y="135">B</text>
+
+  <!-- Chord Delta s_i -->
+  <text x="220" y="95" font-size="13" font-style="italic" fill="#dc2626">Δs_i</text>
+  <text x="210" y="220" text-anchor="middle" font-size="13" fill="#1e293b">s = lim ∑ √[Δx_i² + Δy_i²] = ∫ √[1 + f'(x)²] dx</text>
 </svg>

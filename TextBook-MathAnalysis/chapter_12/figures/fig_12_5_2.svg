@@ -1,45 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" width="100%" height="auto" style="max-width: 420px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 340" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr1252" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
-
-  <!-- Axes -->
-  <line x1="220" y1="210" x2="220" y2="40" stroke="#2d3748" stroke-width="1.5" marker-end="url(#arr1252)" />
-  <text x="205" y="45" font-family="'Times New Roman', serif" font-style="italic" font-size="16">z</text>
-  
-  <line x1="120" y1="210" x2="380" y2="210" stroke="#2d3748" stroke-width="1.5" marker-end="url(#arr1252)" />
-  <text x="385" y="215" font-family="'Times New Roman', serif" font-style="italic" font-size="16">y</text>
-  
-  <line x1="220" y1="210" x2="110" y2="275" stroke="#2d3748" stroke-width="1.5" marker-end="url(#arr1252)" />
-  <text x="95" y="280" font-family="'Times New Roman', serif" font-style="italic" font-size="16">x</text>
-  <text x="225" y="225" font-family="'Times New Roman', serif" font-size="15">O</text>
-
-  <!-- Base Circle projection in perspective -->
-  <ellipse cx="220" cy="180" rx="90" ry="40" fill="none" stroke="#718096" stroke-width="1" stroke-dasharray="3,3" />
-
-  <!-- Helix curve -->
-  <path d="M 130 255 C 190 280, 310 240, 310 170 C 310 100, 140 110, 140 160 C 140 190, 260 210, 305 130 C 315 100, 270 50, 260 30" 
-        fill="none" stroke="#2b6cb0" stroke-width="2" />
-
-  <!-- Point P0 on x-axis -->
-  <circle cx="140" cy="255" r="3.5" fill="#c53030" />
-  <text x="145" y="270" font-family="'Times New Roman', serif" font-style="italic" font-size="15">P₀</text>
-
-  <!-- Point P on helix -->
-  <circle cx="305" cy="130" r="3.5" fill="#c53030" />
-  <text x="315" y="130" font-family="'Times New Roman', serif" font-size="14">P(x,y,z)</text>
-
-  <!-- Point M on xy plane -->
-  <line x1="305" y1="130" x2="305" y2="185" stroke="#718096" stroke-width="1.2" stroke-dasharray="3,3" />
-  <circle cx="305" cy="185" r="3" fill="#2d3748" />
-  <text x="312" y="195" font-family="'Times New Roman', serif" font-style="italic" font-size="15">M</text>
-
-  <!-- Line OM and angle theta -->
-  <line x1="220" y1="210" x2="305" y2="185" stroke="#2d3748" stroke-width="1.2" />
-  <path d="M 180 232 A 40 25 0 0 0 255 200" fill="none" stroke="#e53e3e" stroke-width="1.2" />
-  <text x="220" y="235" font-family="'Times New Roman', serif" font-size="14" fill="#e53e3e">θ</text>
-
-  <text x="220" y="310" text-anchor="middle" font-family="'Songti SC', SimSun, serif" font-size="15" fill="#2d3748">图 12.5.2</text>
+  <!-- 3D Axes -->
+  <line x1="220" y1="240" x2="400" y2="240" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="220" y1="240" x2="80" y2="300" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="220" y1="240" x2="220" y2="30" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="405" y="244" font-style="italic">y</text>
+  <text x="75" y="310" font-style="italic">x</text>
+  <text x="208" y="30" font-style="italic">z</text>
+  <text x="206" y="256" font-style="italic">O</text>
+  <!-- Cylinder Frame -->
+  <ellipse cx="220" cy="240" rx="100" ry="32" fill="none" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <ellipse cx="220" cy="70" rx="100" ry="32" fill="none" stroke="#cbd5e1" stroke-width="1.2"/>
+  <line x1="120" y1="70" x2="120" y2="240" stroke="#cbd5e1" stroke-width="1.2"/>
+  <line x1="320" y1="70" x2="320" y2="240" stroke="#cbd5e1" stroke-width="1.2"/>
+  <!-- Circular Helix r(t) = (a cos t, a sin t, bt) -->
+  <path d="M 220 208 C 120 208, 120 182, 220 166" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <path d="M 220 166 C 320 150, 320 124, 220 124" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <path d="M 220 124 C 120 124, 120 98, 220 82" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4,3"/>
+  <path d="M 220 82 C 320 66, 320 40, 220 40" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <circle cx="305" cy="140" r="4" fill="#dc2626"/>
+  <text x="313" y="155" font-style="italic" font-weight="bold" fill="#dc2626">P</text>
+  <!-- Tangent vector T -->
+  <line x1="305" y1="140" x2="270" y2="95" stroke="#dc2626" stroke-width="2" marker-end="url(#arr_red)"/>
+  <text x="263" y="92" font-style="italic" font-weight="bold" fill="#dc2626">T</text>
+  <!-- Principal normal N -->
+  <line x1="305" y1="140" x2="250" y2="132" stroke="#0284c7" stroke-width="2" marker-end="url(#arr_blue)"/>
+  <text x="240" y="130" font-style="italic" font-weight="bold" fill="#0284c7">N</text>
+  <!-- Binormal vector B -->
+  <line x1="305" y1="140" x2="335" y2="105" stroke="#059669" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="340" y="105" font-style="italic" font-weight="bold" fill="#059669">B</text>
+  <text x="220" y="325" text-anchor="middle" font-size="13px" fill="#1e293b">圆螺旋线运动轨迹及 Frenet 标架 (T, N, B)</text>
 </svg>

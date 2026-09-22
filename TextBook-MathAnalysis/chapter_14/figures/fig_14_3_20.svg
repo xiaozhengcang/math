@@ -1,30 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 270" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280" width="100%" height="auto" style="max-width:400px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="190" y1="250" x2="190" y2="30" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="195" y="35" font-family="serif" font-size="14" font-style="italic">z</text>
-  <line x1="50" y1="180" x2="340" y2="180" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="345" y="185" font-family="serif" font-size="14" font-style="italic">y</text>
-  <line x1="190" y1="180" x2="100" y2="245" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="90" y="255" font-family="serif" font-size="14" font-style="italic">x</text>
+  <!-- 3D Axes -->
+  <line x1="160" y1="210" x2="160" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="170" y="28" font-style="italic">z</text>
+  <line x1="160" y1="180" x2="360" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="355" y="198" font-style="italic">y</text>
+  <line x1="160" y1="180" x2="70" y2="255" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="60" y="265" font-style="italic">x</text>
+  <text x="145" y="192">O</text>
 
-  <circle cx="190" cy="180" r="90" fill="none" stroke="#a0aec0" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <ellipse cx="235" cy="180" rx="45" ry="18" fill="none" stroke="#cbd5e0" stroke-width="1.2"/>
-  
-  <path d="M 190 180 C 210 130, 270 120, 275 180 C 270 240, 210 230, 190 180 Z" fill="#feebc8" fill-opacity="0.4" stroke="#e53e3e" stroke-width="2.2"/>
-  
-  <text x="250" y="110" font-family="serif" font-size="13" fill="#e53e3e">交线 L</text>
-  <text x="190" y="265" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.3.20 球面与圆柱面的交线（Viviani 曲线）</text>
+  <!-- Hemisphere background outline -->
+  <path d="M 90 230 C 90 100, 270 90, 320 180" fill="none" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+  <!-- Cylinder outline passing through origin -->
+  <path d="M 160 180 C 130 205, 110 235, 140 245 C 170 255, 210 225, 210 180" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3"/>
+
+  <!-- Viviani intersection figure-8-like loop L on hemisphere -->
+  <path d="M 160 180 C 135 140, 115 110, 135 85 C 155 60, 185 90, 195 130 C 205 160, 185 180, 160 180 Z" 
+        fill="#bae6fd" fill-opacity="0.65" stroke="#1e40af" stroke-width="2.5"/>
+
+  <!-- Direction arrow on curve L -->
+  <line x1="135" y1="85" x2="165" y2="78" stroke="#1e40af" stroke-width="2.5" marker-end="url(#arr_blue)"/>
+
+  <text x="145" y="130" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">L</text>
+  <text x="225" y="85" font-size="12" font-style="italic" fill="#1e40af">x² + y² + z² = 2Rx</text>
+  <text x="215" y="235" font-size="12" font-style="italic" fill="#64748b">x² + y² = 2rx</text>
 </svg>

@@ -1,25 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 250" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <g stroke="#3182ce" stroke-width="1.5" fill="#ebf8ff" fill-opacity="0.6">
-    <polygon points="110,40 190,70 150,110 80,80"/>
-    <polygon points="190,70 270,40 230,80 150,110"/>
-    <polygon points="150,110 230,80 270,130 190,160"/>
-    <polygon points="80,80 150,110 190,160 110,130"/>
-    <polygon points="110,130 190,160 150,200 80,170"/>
-    <polygon points="190,160 270,130 230,170 150,200"/>
-  </g>
-  <text x="190" y="245" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.1.8 Schwarz 褶皱多面体的折痕</text>
+  <!-- Right triangle: vertical leg (cylinder generator h/n), horizontal leg (sagitta r - r cos(pi/m)), hypotenuse in triangle plane -->
+  <!-- Top vertex V = (120, 50) -->
+  <!-- Bottom vertex of vertical leg = (120, 190), length = 140 px -->
+  <!-- Right vertex of sagitta = (250, 190), length = 130 px -->
+  <polygon points="120,50 120,190 250,190" fill="#e0f2fe" fill-opacity="0.6" stroke="#1e40af" stroke-width="2"/>
+
+  <!-- Right angle mark at (120, 190) -->
+  <path d="M 120 175 L 135 175 L 135 190" fill="none" stroke="#1e293b" stroke-width="1.2"/>
+
+  <!-- Angle theta at top vertex V(120, 50) -->
+  <path d="M 120 90 A 40 40 0 0 1 138 85" fill="none" stroke="#dc2626" stroke-width="1.6" marker-end="url(#arr_red)"/>
+  <text x="135" y="105" font-style="italic" fill="#dc2626" font-weight="bold">θ</text>
+
+  <!-- Labels -->
+  <text x="65" y="125" font-style="italic" fill="#1e293b">h/n (母线)</text>
+  <text x="140" y="210" font-size="13" fill="#1e40af">r - r cos(π/m) = 2r sin²(π/2m)</text>
+  <text x="200" y="115" font-style="italic" fill="#1e40af">h_k</text>
+
+  <text x="180" y="40" font-size="13" fill="#dc2626">tan θ = [r - r cos(π/m)] / (h/n)</text>
 </svg>

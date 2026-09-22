@@ -1,14 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 230" width="100%" height="auto" style="max-width: 260px;">
-  <!-- Equilateral triangle base -->
-  <polygon points="130,20 20,210 240,210" fill="none" stroke="#2d3748" stroke-width="1.5" />
-  <!-- 4 smaller triangles subdivided -->
-  <polygon points="130,20 75,115 185,115" fill="none" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <polygon points="75,115 20,210 130,210" fill="none" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <polygon points="185,115 130,210 240,210" fill="none" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  
-  <!-- Step 2 recursive path -->
-  <path d="M 20 210 L 47 162 L 75 210 L 102 162 L 130 210 L 157 162 L 185 210 L 212 162 L 240 210
-           L 212 162 L 185 115 L 157 67 L 130 20 L 102 67 L 75 115 L 47 162" 
-        fill="none" stroke="#2b6cb0" stroke-width="1.6" />
-  <text x="25" y="70" font-size="13" font-style="italic" font-family="serif" fill="#2b6cb0">$f_2([0, 1])$</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 310" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <!-- Main triangle -->
+  <polygon points="60,260 300,260 180,52.2" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="42" y="272">A</text>
+  <text x="306" y="272">B</text>
+  <text x="175" y="42">C</text>
+
+  <!-- Subdivisions: midpoints M_AB=(180, 260), M_BC=(240, 156.1), M_CA=(120, 156.1) -->
+  <polygon points="120,156.1 240,156.1 180,260" fill="#e2e8f0" fill-opacity="0.4" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <line x1="60" y1="260" x2="180" y2="260" stroke="#64748b" stroke-width="1"/>
+  <line x1="180" y1="260" x2="300" y2="260" stroke="#64748b" stroke-width="1"/>
+
+  <!-- Centroids of 4 sub-triangles -->
+  <!-- Delta_0 (bottom-left): A=(60,260), (180,260), (120,156.1) -> G0=(120, 225.4) -->
+  <!-- Delta_1 (top): (120,156.1), (240,156.1), C=(180,52.2) -> G1=(180, 121.5) -->
+  <!-- Delta_2 (central flipped): (120,156.1), (240,156.1), (180,260) -> G2=(180, 190.7) -->
+  <!-- Delta_3 (bottom-right): (180,260), B=(300,260), (240,156.1) -> G3=(240, 225.4) -->
+
+  <!-- Path f_2 traversing 4 sub-triangles -->
+  <path d="M 60 260 L 120 225.4 L 120 156.1 L 180 121.5 L 240 156.1 L 180 190.7 L 180 260 L 240 225.4 L 300 260" 
+        fill="none" stroke="#dc2626" stroke-width="2.2" stroke-linejoin="round"/>
+
+  <!-- Labels for sub-triangles -->
+  <text x="100" y="245" font-size="12" fill="#64748b">Δ₀</text>
+  <text x="180" y="85" text-anchor="middle" font-size="12" fill="#64748b">Δ₁</text>
+  <text x="180" y="168" text-anchor="middle" font-size="12" fill="#64748b">Δ₂</text>
+  <text x="255" y="245" font-size="12" fill="#64748b">Δ₃</text>
+
+  <text x="180" y="295" text-anchor="middle" fill="#dc2626" font-weight="bold">f₂([0, 1])</text>
 </svg>

@@ -1,34 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="100%" height="auto" style="max-width: 340px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 250" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
   <!-- Axes -->
-  <line x1="40" y1="190" x2="320" y2="190" stroke="#2d3748" stroke-width="1.5" />
-  <polygon points="320,187 328,190 320,193" fill="#2d3748" />
-  <text x="322" y="205" font-size="13" font-style="italic" font-family="serif">x</text>
+  <line x1="30" y1="210" x2="350" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="345" y="228" font-style="italic">x</text>
+  <line x1="55" y1="225" x2="55" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="42" y="30" font-style="italic">y</text>
+  <text x="42" y="225">O</text>
 
-  <line x1="60" y1="200" x2="60" y2="20" stroke="#2d3748" stroke-width="1.5" />
-  <polygon points="57,20 60,12 63,20" fill="#2d3748" />
-  <text x="48" y="22" font-size="13" font-style="italic" font-family="serif">y</text>
-  <text x="50" y="202" font-size="12" font-family="serif">O</text>
+  <!-- Bounding rectangle [a, b] x [c, d] -->
+  <rect x="90" y="45" width="220" height="145" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="90" y1="207" x2="90" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="86" y="228" font-style="italic">a</text>
+  <line x1="310" y1="207" x2="310" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="306" y="228" font-style="italic">b</text>
+  <text x="40" y="193" font-style="italic">c</text>
+  <text x="40" y="50" font-style="italic">d</text>
+  <text x="315" y="55" font-style="italic" fill="#64748b">D̃</text>
 
-  <!-- Bounding box [a, b] x [c, d] -->
-  <rect x="100" y="40" width="190" height="130" fill="none" stroke="#a0aec0" stroke-width="1.4" stroke-dasharray="4,3" />
+  <!-- Shaded normal domain D between y1(x) and y2(x) -->
+  <path d="M 90 145 C 130 170, 240 185, 310 135 L 310 75 C 240 50, 160 65, 90 110 Z" 
+        fill="#e0f2fe" stroke="none"/>
 
-  <!-- Region D bounded by y_1(x) below and y_2(x) above -->
-  <path d="M 100 120 C 140 170, 250 170, 290 120 C 250 45, 140 45, 100 120 Z" 
-        fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2" />
+  <!-- Lower curve y = y1(x) -->
+  <path d="M 90 145 C 130 170, 240 185, 310 135" fill="none" stroke="#1e40af" stroke-width="2"/>
+  <text x="210" y="188" font-size="13" font-style="italic" fill="#1e40af">y = y₁(x)</text>
 
-  <!-- Boundary curve labels -->
-  <text x="170" y="60" font-size="12" font-style="italic" font-family="serif" fill="#2b6cb0">y = y₂(x)</text>
-  <text x="170" y="160" font-size="12" font-style="italic" font-family="serif" fill="#2b6cb0">y = y₁(x)</text>
-  <text x="190" y="115" font-size="15" font-style="italic" font-family="serif" fill="#2b6cb0">D</text>
+  <!-- Upper curve y = y2(x) -->
+  <path d="M 90 110 C 160 65, 240 50, 310 75" fill="none" stroke="#0284c7" stroke-width="2"/>
+  <text x="210" y="65" font-size="13" font-style="italic" fill="#0284c7">y = y₂(x)</text>
 
-  <!-- Ticks on axes -->
-  <line x1="100" y1="190" x2="100" y2="170" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <line x1="290" y1="190" x2="290" y2="170" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <text x="96" y="204" font-size="12" font-style="italic" font-family="serif">a</text>
-  <text x="286" y="204" font-size="12" font-style="italic" font-family="serif">b</text>
+  <!-- Vertical boundary lines x=a and x=b for D -->
+  <line x1="90" y1="110" x2="90" y2="145" stroke="#1e40af" stroke-width="1.5"/>
+  <line x1="310" y1="75" x2="310" y2="135" stroke="#1e40af" stroke-width="1.5"/>
 
-  <line x1="60" y1="170" x2="100" y2="170" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <line x1="60" y1="40" x2="100" y2="40" stroke="#a0aec0" stroke-width="1" stroke-dasharray="2,2" />
-  <text x="46" y="174" font-size="12" font-style="italic" font-family="serif">c</text>
-  <text x="46" y="44" font-size="12" font-style="italic" font-family="serif">d</text>
+  <text x="180" y="125" font-size="18" font-style="italic" fill="#1e40af" font-weight="bold">D</text>
 </svg>

@@ -1,24 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Axes -->
+  <line x1="30" y1="200" x2="350" y2="200" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="345" y="218" font-style="italic">x</text>
+  <line x1="55" y1="220" x2="55" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="42" y="30" font-style="italic">y</text>
+  <text x="42" y="215">O</text>
 
-  <line x1="30" y1="170" x2="370" y2="170" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="50" y1="190" x2="50" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Two curves y = f1(x) and y = f2(x) -->
-  <path d="M 90 120 C 150 50, 250 60, 320 90" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-  <path d="M 90 150 C 160 130, 250 140, 320 120" fill="none" stroke="#27ae60" stroke-width="2"/>
-  <!-- Shaded area between them -->
-  <path d="M 120 98 C 170 65, 240 70, 280 82 L 280 125 C 240 135, 170 128, 120 142 Z" fill="rgba(26, 115, 232, 0.25)"/>
-  <line x1="120" y1="170" x2="120" y2="98" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <line x1="280" y1="170" x2="280" y2="82" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="115" y="185" font-size="12" fill="var(--text-primary, #333)">a</text>
-  <text x="275" y="185" font-size="12" fill="var(--text-primary, #333)">b</text>
-  <text x="200" y="195" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.2 两曲线 y = f₁(x) 与 y = f₂(x) 之间的面积</text>
+  <!-- Area between f(x) and g(x) on [a, b] = [100, 290] -->
+  <path d="M 100 135 C 140 70, 230 65, 290 100 L 290 155 C 230 145, 150 170, 100 135 Z" 
+        fill="#e0f2fe" fill-opacity="0.65" stroke="none"/>
+
+  <!-- Upper curve y = f(x) -->
+  <path d="M 80 155 C 130 80, 230 65, 310 105" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="315" y="105" font-style="italic" fill="#1e40af">y = f(x)</text>
+
+  <!-- Lower curve y = g(x) -->
+  <path d="M 80 120 C 130 150, 220 170, 310 145" fill="none" stroke="#dc2626" stroke-width="2"/>
+  <text x="315" y="150" font-style="italic" fill="#dc2626">y = g(x)</text>
+
+  <!-- Vertical lines at a and b -->
+  <line x1="100" y1="200" x2="100" y2="135" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <line x1="290" y1="200" x2="290" y2="100" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <line x1="100" y1="197" x2="100" y2="203" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="96" y="218" font-style="italic">a</text>
+  <line x1="290" y1="197" x2="290" y2="203" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="286" y="218" font-style="italic">b</text>
+
+  <text x="185" y="125" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">A</text>
 </svg>

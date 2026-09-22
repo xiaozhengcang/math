@@ -1,19 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 220" width="100%" height="auto" style="max-width: 340px;">
-  <!-- Unbounded region D and cut Gamma -->
-  <line x1="20" y1="110" x2="310" y2="110" stroke="#2d3748" stroke-width="1.2" />
-  <polygon points="310,108 316,110 310,112" fill="#2d3748" />
-  <text x="315" y="125" font-size="12" font-style="italic" font-family="serif">x</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 240" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <!-- Axes -->
+  <line x1="30" y1="180" x2="330" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="325" y="198" font-style="italic">x</text>
+  <line x1="60" y1="210" x2="60" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="48" y="30" font-style="italic">y</text>
+  <text x="48" y="195">O</text>
 
-  <line x1="110" y1="200" x2="110" y2="20" stroke="#2d3748" stroke-width="1.2" />
-  <polygon points="108,20 110,14 112,20" fill="#2d3748" />
-  <text x="100" y="24" font-size="12" font-style="italic" font-family="serif">y</text>
+  <!-- Bounded subregion D_r: cut by arc Gamma -->
+  <!-- Bounded region from origin out to radius ~ 140 -->
+  <path d="M 60 180 L 220 180 A 160 160 0 0 0 60 40 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="none"/>
+  <line x1="60" y1="180" x2="220" y2="180" stroke="#1e40af" stroke-width="1.5"/>
+  <line x1="60" y1="180" x2="60" y2="40" stroke="#1e40af" stroke-width="1.5"/>
 
-  <!-- Bounded subset D_r -->
-  <path d="M 110 110 L 220 110 A 110 110 0 0 0 110 20 Z" fill="#bee3f8" fill-opacity="0.6" stroke="#3182ce" stroke-width="1.6" />
-  <text x="150" y="80" font-size="13" font-style="italic" font-family="serif" fill="#2b6cb0">D_r</text>
+  <!-- Cut line Gamma (circular arc / smooth curve) -->
+  <path d="M 220 180 A 160 160 0 0 0 60 40" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="4,3"/>
+  <text x="185" y="80" font-style="italic" fill="#dc2626" font-weight="bold">Γ (割线)</text>
 
-  <!-- Cut line Gamma -->
-  <path d="M 220 110 A 110 110 0 0 0 110 20" fill="none" stroke="#e53e3e" stroke-width="2" stroke-dasharray="3,3" />
-  <text x="210" y="45" font-size="12" font-style="italic" font-family="serif" fill="#c53030">Γ (割线)</text>
-  <text x="250" y="70" font-size="14" font-style="italic" font-family="serif" fill="#4a5568">D</text>
+  <!-- Labels -->
+  <text x="110" y="130" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">D_r</text>
+  <text x="250" y="100" font-size="18" font-style="italic" fill="#1e293b" font-weight="bold">D</text>
+  <text x="220" y="195" font-size="12" fill="#64748b">r</text>
 </svg>

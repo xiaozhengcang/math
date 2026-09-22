@@ -1,46 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 210" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- x-axis from 0 to 1 -->
+  <line x1="30" y1="160" x2="410" y2="160" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="405" y="178" font-style="italic">x</text>
+  
+  <line x1="70" y1="155" x2="70" y2="165" stroke="#1e293b" stroke-width="1.4"/>
+  <text x="67" y="180">0</text>
+  <line x1="370" y1="155" x2="370" y2="165" stroke="#1e293b" stroke-width="1.4"/>
+  <text x="367" y="180">1</text>
 
-  <!-- Axes -->
-  <line x1="30" y1="160" x2="420" y2="160" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="60" y1="180" x2="60" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="415" y="180" font-size="13" font-style="italic" fill="var(--text-primary, #333)">x</text>
-  <text x="45" y="25" font-size="13" font-style="italic" fill="var(--text-primary, #333)">y</text>
-  <text x="45" y="175" font-size="13" fill="var(--text-primary, #333)">O</text>
-  
-  <!-- Threshold line y = epsilon / 2 -->
-  <line x1="60" y1="100" x2="380" y2="100" stroke="var(--text-muted, #888)" stroke-width="1.5" stroke-dasharray="5 4"/>
-  <text x="385" y="105" font-size="12" font-style="italic" fill="var(--text-muted, #888)">ε / 2</text>
-  
-  <!-- Finitely many points with R(x) >= epsilon / 2 -->
-  <circle cx="60" cy="30" r="3.5" fill="var(--text-primary, #333)"/>
-  <text x="45" y="35" font-size="12" fill="var(--text-primary, #333)">1</text>
-  
-  <circle cx="210" cy="30" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <circle cx="135" cy="80" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <circle cx="285" cy="80" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  
-  <!-- Points below threshold line -->
-  <circle cx="110" cy="125" r="2.5" fill="var(--text-muted, #888)"/>
-  <circle cx="310" cy="125" r="2.5" fill="var(--text-muted, #888)"/>
-  
-  <!-- Covering intervals on x-axis -->
-  <rect x="55" y="157" width="15" height="6" fill="var(--primary-accent, #1a73e8)"/>
-  <text x="50" y="180" font-size="10" fill="var(--text-primary, #333)">[x₀,x₁]</text>
-  
-  <rect x="195" y="157" width="30" height="6" fill="var(--primary-accent, #1a73e8)"/>
-  <text x="195" y="180" font-size="10" fill="var(--text-primary, #333)">[x₂,x₃]</text>
-  
-  <rect x="345" y="157" width="20" height="6" fill="var(--primary-accent, #1a73e8)"/>
-  <text x="340" y="180" font-size="10" fill="var(--text-primary, #333)">[x₄,x₅=1]</text>
-  
-  <text x="230" y="202" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.1.6 Riemann 函数可积性证明中覆盖间断点的有限小区间</text>
+  <!-- Finite number of rational points with q <= N: p/q -->
+  <!-- 1/2 at 220, 1/3 at 170, 2/3 at 270, 1/4 at 145, 3/4 at 295 -->
+  <!-- Each covered by a small interval of width 24 px -->
+  <rect x="133" y="152" width="24" height="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.2"/>
+  <circle cx="145" cy="160" r="2.5" fill="#dc2626"/>
+  <text x="145" y="145" font-size="11" fill="#dc2626" text-anchor="middle">1/4</text>
+
+  <rect x="158" y="152" width="24" height="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.2"/>
+  <circle cx="170" cy="160" r="2.5" fill="#dc2626"/>
+  <text x="170" y="145" font-size="11" fill="#dc2626" text-anchor="middle">1/3</text>
+
+  <rect x="208" y="152" width="24" height="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.2"/>
+  <circle cx="220" cy="160" r="2.5" fill="#dc2626"/>
+  <text x="220" y="145" font-size="11" fill="#dc2626" text-anchor="middle">1/2</text>
+
+  <rect x="258" y="152" width="24" height="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.2"/>
+  <circle cx="270" cy="160" r="2.5" fill="#dc2626"/>
+  <text x="270" y="145" font-size="11" fill="#dc2626" text-anchor="middle">2/3</text>
+
+  <rect x="283" y="152" width="24" height="16" fill="#fca5a5" stroke="#dc2626" stroke-width="1.2"/>
+  <circle cx="295" cy="160" r="2.5" fill="#dc2626"/>
+  <text x="295" y="145" font-size="11" fill="#dc2626" text-anchor="middle">3/4</text>
+
+  <!-- Remaining intervals J_k: omega <= epsilon/2 -->
+  <text x="220" y="55" text-anchor="middle" font-size="13" fill="#1e40af">分母 q ≤ N 的有限个间断点被总长 &lt; ε/2 的小区间覆盖</text>
+  <text x="220" y="80" text-anchor="middle" font-size="13" fill="#0284c7">其余小区间上振幅 ω_k ≤ 1/N &lt; ε/2</text>
+  <text x="220" y="210" text-anchor="middle" font-size="12" fill="#64748b">证明 Riemann 函数 R(x) 在 [0, 1] 上可积</text>
 </svg>

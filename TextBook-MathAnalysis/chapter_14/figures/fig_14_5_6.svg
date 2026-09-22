@@ -1,35 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 240" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <g transform="translate(30, 20)">
-    <circle cx="80" cy="90" r="65" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
-    <circle cx="80" cy="90" r="10" fill="#ffffff" stroke="#e53e3e" stroke-width="1.5"/>
-    <path d="M 50 70 C 60 40, 110 50, 110 80 C 110 110, 60 120, 50 70 Z" fill="none" stroke="#2f855a" stroke-width="1.5" stroke-dasharray="3,3"/>
-    <text x="80" y="180" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">挖去小球的立体 (单连通)</text>
-  </g>
+  <!-- Outer sphere R2 = 100, Inner sphere R1 = 45 centered at (200, 130) -->
+  <!-- Spherical shell shaded -->
+  <circle cx="200" cy="130" r="100" fill="#e0f2fe" fill-opacity="0.6" stroke="#1e40af" stroke-width="2"/>
+  <circle cx="200" cy="130" r="45" fill="#ffffff" stroke="#1e40af" stroke-width="1.8"/>
+  <text x="200" y="135" font-size="12" fill="#64748b" text-anchor="middle">空心内球腔</text>
 
-  <g transform="translate(230, 20)">
-    <ellipse cx="80" cy="35" rx="55" ry="18" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
-    <ellipse cx="80" cy="145" rx="55" ry="18" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
-    <line x1="25" y1="35" x2="25" y2="145" stroke="#2b6cb0" stroke-width="2"/>
-    <line x1="135" y1="35" x2="135" y2="145" stroke="#2b6cb0" stroke-width="2"/>
-    <ellipse cx="80" cy="35" rx="20" ry="7" fill="#ffffff" stroke="#e53e3e" stroke-width="1.5"/>
-    <ellipse cx="80" cy="145" rx="20" ry="7" fill="#ffffff" stroke="#e53e3e" stroke-width="1.5"/>
-    <ellipse cx="80" cy="90" rx="38" ry="14" fill="none" stroke="#2f855a" stroke-width="2"/>
-    <text x="80" y="180" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">打洞圆柱体 (非单连通)</text>
-  </g>
+  <!-- 1-connected demonstration: any 1D closed loop gamma can contract to a point (green) -->
+  <path d="M 220 55 C 245 50, 270 70, 255 90 C 240 105, 215 85, 220 55 Z" fill="none" stroke="#16a34a" stroke-width="2"/>
+  <circle cx="240" cy="72" r="2" fill="#16a34a"/>
+  <!-- Arrow showing contraction to point -->
+  <line x1="260" y1="75" x2="245" y2="73" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="270" y="70" font-size="12" font-weight="bold" fill="#16a34a">闭曲线 γ 可连续缩为一点</text>
+  <text x="270" y="86" font-size="12" fill="#16a34a">(单连通)</text>
 
-  <text x="210" y="230" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.5.6 空间单连通与非单连通区域的对比</text>
+  <!-- NOT 2-connected demonstration: a 2D closed surface S enclosing the inner sphere cannot contract! (red dashed) -->
+  <circle cx="200" cy="130" r="72" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="120" y="195" font-size="12" font-weight="bold" fill="#dc2626">包围空腔的闭曲面 S</text>
+  <text x="120" y="210" font-size="12" fill="#dc2626">不可缩为一点 (非二维单连通)</text>
+
+  <text x="200" y="245" text-anchor="middle" font-size="13" font-style="italic" fill="#1e40af" font-weight="bold">空心球壳：单连通，但不是二维单连通</text>
 </svg>

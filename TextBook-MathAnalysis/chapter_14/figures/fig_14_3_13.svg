@@ -1,31 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 250" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="40" y1="130" x2="360" y2="130" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="365" y="135" font-family="serif" font-size="14" font-style="italic">x</text>
-  <line x1="190" y1="230" x2="190" y2="20" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="180" y="15" font-family="serif" font-size="14" font-style="italic">y</text>
+  <!-- Axes: origin at (170, 130) -->
+  <line x1="30" y1="130" x2="330" y2="130" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="325" y="148" font-style="italic">x</text>
+  <line x1="170" y1="230" x2="170" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="158" y="25" font-style="italic">y</text>
+  <text x="155" y="145">O</text>
 
-  <path d="M 80 130 C 80 50, 200 40, 310 70 C 350 130, 330 200, 240 210 C 140 220, 80 190, 80 130 Z" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
-  <text x="315" y="85" font-family="serif" font-size="14" font-style="italic" fill="#2b6cb0">L</text>
+  <!-- Curve L enclosing origin: counterclockwise -->
+  <!-- Small circle l_epsilon of radius epsilon = 32 around origin: clockwise -->
+  <path d="M 60 130 C 50 60, 140 40, 260 50 C 320 60, 320 180, 260 205 C 180 230, 80 205, 60 130 Z
+           M 138 130 C 138 147.7, 152.3 162, 170 162 C 187.7 162, 202 147.7, 202 130 C 202 112.3, 187.7 98, 170 98 C 152.3 98, 138 112.3, 138 130 Z" 
+        fill="#e0f2fe" fill-opacity="0.65" fill-rule="evenodd" stroke="#1e40af" stroke-width="2"/>
 
-  <circle cx="190" cy="130" r="30" fill="#ffffff" stroke="#e53e3e" stroke-width="2"/>
-  <path d="M 190 100 A 30 30 0 0 1 220 130" fill="none" stroke="#e53e3e" stroke-width="2" marker-end="url(#arrow-red)"/>
-  <text x="195" y="120" font-family="serif" font-size="12" fill="#e53e3e">l_r</text>
+  <!-- Outer L orientation arrow -->
+  <line x1="160" y1="46" x2="200" y2="47" stroke="#1e40af" stroke-width="2.2" marker-end="url(#arr_blue)"/>
+  <text x="210" y="40" font-size="16" font-style="italic" fill="#1e40af" font-weight="bold">L</text>
 
-  <text x="240" y="165" font-family="serif" font-size="14" font-style="italic" fill="#2b6cb0">D_r</text>
+  <!-- Inner circle l_epsilon clockwise arrow -->
+  <line x1="160" y1="98" x2="185" y2="98" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
+  <text x="170" y="85" font-size="13" font-style="italic" fill="#dc2626" text-anchor="middle">l_ε (顺时针)</text>
 
-  <text x="200" y="242" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.3.13 挖去原点小圆邻域的区域 D_r</text>
+  <text x="235" y="165" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">D_ε</text>
+  <text x="170" y="240" text-anchor="middle" font-size="12" fill="#64748b">∮_L (xdy - ydx)/(x² + y²) = ∮_{l_ε} = 2π</text>
 </svg>

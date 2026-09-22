@@ -1,39 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 270" width="100%" height="auto" style="max-width: 360px;">
-  <!-- 3D axes -->
-  <line x1="160" y1="250" x2="160" y2="20" stroke="#2d3748" stroke-width="1.5" />
-  <polygon points="157,20 160,12 163,20" fill="#2d3748" />
-  <text x="168" y="22" font-size="13" font-style="italic" font-family="serif">z</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="auto" style="max-width:400px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <!-- 3D Axes -->
+  <line x1="160" y1="270" x2="160" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="170" y="28" font-style="italic">z</text>
+  <line x1="160" y1="190" x2="370" y2="190" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="365" y="208" font-style="italic">y</text>
+  <line x1="160" y1="190" x2="80" y2="265" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="70" y="280" font-style="italic">x</text>
+  <text x="145" y="202">O</text>
 
-  <line x1="160" y1="170" x2="340" y2="170" stroke="#2d3748" stroke-width="1.5" />
-  <polygon points="340,167 348,170 340,173" fill="#2d3748" />
-  <text x="345" y="184" font-size="13" font-style="italic" font-family="serif">y</text>
+  <!-- Solid Omega boundary (egg-shaped volume) between z=e (y=230) and z=f (y=60) -->
+  <path d="M 160 60 C 230 60, 270 120, 260 180 C 250 225, 200 240, 160 240 C 120 240, 70 220, 65 170 C 60 110, 100 60, 160 60 Z" 
+        fill="#f8fafc" fill-opacity="0.4" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
 
-  <line x1="160" y1="170" x2="70" y2="245" stroke="#2d3748" stroke-width="1.5" />
-  <polygon points="68,240 62,250 73,246" fill="#2d3748" />
-  <text x="65" y="262" font-size="13" font-style="italic" font-family="serif">x</text>
-  <text x="148" y="182" font-size="12" font-family="serif">O</text>
+  <!-- Bottom boundary z = e -->
+  <line x1="155" y1="240" x2="165" y2="240" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="140" y="245" font-style="italic">e</text>
+  <!-- Top boundary z = f -->
+  <line x1="155" y1="60" x2="165" y2="60" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="145" y="65" font-style="italic">f</text>
 
-  <!-- Region Omega in 3D -->
-  <!-- Top surface z = z_2(x, y) -->
-  <path d="M 150 85 C 190 60, 270 65, 300 100 C 270 125, 200 120, 150 85 Z" fill="#ebf8ff" fill-opacity="0.8" stroke="#2b6cb0" stroke-width="1.8" />
-  <!-- Bottom surface z = z_1(x, y) -->
-  <path d="M 150 145 C 190 120, 270 125, 300 160 C 270 185, 200 180, 150 145 Z" fill="#edf2f7" fill-opacity="0.6" stroke="#4a5568" stroke-width="1.5" stroke-dasharray="3,3" />
+  <!-- Horizontal cross-section plane at height z: z = 145 -->
+  <polygon points="75,130 295,130 265,165 45,165" fill="#f1f5f9" fill-opacity="0.5" stroke="#cbd5e1" stroke-width="1"/>
+  <line x1="155" y1="145" x2="165" y2="145" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="145" y="148" font-style="italic" fill="#0369a1">z</text>
 
-  <!-- Vertical boundary generators connecting top and bottom -->
-  <line x1="150" y1="85" x2="150" y2="145" stroke="#2b6cb0" stroke-width="1.5" />
-  <line x1="300" y1="100" x2="300" y2="160" stroke="#2b6cb0" stroke-width="1.5" />
-
-  <!-- Horizontal cross section at height z -->
-  <path d="M 150 115 C 190 90, 270 95, 300 130 C 270 155, 200 150, 150 115 Z" fill="#feb2b2" fill-opacity="0.3" stroke="#e53e3e" stroke-width="1.2" stroke-dasharray="3,2" />
-
-  <!-- Projected region Omega_xy on xy-plane -->
-  <path d="M 150 205 C 190 180, 270 185, 300 220 C 270 245, 200 240, 150 205 Z" fill="#e2e8f0" fill-opacity="0.5" stroke="#718096" stroke-width="1.4" stroke-dasharray="4,3" />
-  <!-- Projection rays -->
-  <line x1="150" y1="145" x2="150" y2="205" stroke="#cbd5e0" stroke-width="1" stroke-dasharray="2,2" />
-  <line x1="300" y1="160" x2="300" y2="220" stroke="#cbd5e0" stroke-width="1" stroke-dasharray="2,2" />
-
-  <text x="215" y="110" font-size="14" font-style="italic" font-family="serif" fill="#2b6cb0">Ω</text>
-  <text x="210" y="220" font-size="13" font-style="italic" font-family="serif" fill="#4a5568">Ω_{xy}</text>
-  <text x="250" y="55" font-size="11" font-style="italic" font-family="serif" fill="#2b6cb0">z = z₂(x, y)</text>
-  <text x="250" y="150" font-size="11" font-style="italic" font-family="serif" fill="#4a5568">z = z₁(x, y)</text>
+  <!-- Slice Omega_z -->
+  <ellipse cx="160" cy="145" rx="75" ry="22" fill="#bae6fd" fill-opacity="0.8" stroke="#0284c7" stroke-width="1.8"/>
+  <text x="195" y="150" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">Ω_z</text>
+  <text x="265" y="105" font-size="18" font-style="italic" fill="#1e40af" font-weight="bold">Ω</text>
 </svg>

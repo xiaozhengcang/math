@@ -1,57 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360" width="100%" height="320" style="max-width: 360px; display: block; margin: 1.5rem auto;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 390" width="100%" height="auto" style="max-width:400px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <style>
-      .fig-circle { fill: none; stroke: var(--text-color, #2c3e50); stroke-width: 2; }
-      .fig-hex { fill: none; stroke: var(--text-color, #2c3e50); stroke-width: 1.8; }
-      .fig-12gon { fill: none; stroke: var(--primary-color, #2980b9); stroke-width: 1.2; stroke-dasharray: none; }
-      .fig-spoke { stroke: var(--text-color, #2c3e50); stroke-width: 1.2; }
-      .fig-dashed { stroke: var(--secondary-color, #e74c3c); stroke-width: 1.5; stroke-dasharray: 5 4; }
-      .fig-mark { stroke: var(--text-color, #2c3e50); stroke-width: 1.5; }
-      .fig-text { font-family: 'Times New Roman', serif; font-size: 14px; fill: var(--text-color, #2c3e50); }
-    </style>
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr5_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr5_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
   </defs>
-
-  <!-- Outer Circle -->
-  <circle cx="180" cy="180" r="140" class="fig-circle" />
-
-  <!-- Radii spokes to 6 vertices -->
-  <!-- Center (180, 180) -->
-  <!-- 0 deg: (320, 180) -->
-  <!-- 60 deg: (250, 58.76) -->
-  <!-- 120 deg: (110, 58.76) -->
-  <!-- 180 deg: (40, 180) -->
-  <!-- 240 deg: (110, 301.24) -->
-  <!-- 300 deg: (250, 301.24) -->
-  <line x1="40" y1="180" x2="320" y2="180" class="fig-spoke" />
-  <line x1="180" y1="180" x2="250" y2="58.76" class="fig-spoke" />
-  <line x1="180" y1="180" x2="110" y2="58.76" class="fig-spoke" />
-  <line x1="180" y1="180" x2="110" y2="301.24" class="fig-spoke" />
-  <line x1="180" y1="180" x2="250" y2="301.24" class="fig-spoke" />
-
+  <!-- Center & Outer Circle -->
+  <circle cx="200" cy="200" r="155" fill="#f8fafc" stroke="#1e293b" stroke-width="2"/>
   <!-- Inscribed Hexagon (n=6) -->
-  <polygon points="320,180 250,58.76 110,58.76 40,180 110,301.24 250,301.24" class="fig-hex" />
-
-  <!-- Inscribed 12-gon (2n=12) chords around perimeter -->
-  <!-- Midpoints of 30, 90, 150, 210, 270, 330 deg on circle: -->
-  <!-- 30 deg: 180+140*cos(30) = 180+121.24 = 301.24, 180-70 = 110 -->
-  <!-- 90 deg: 180, 40 -->
-  <!-- 150 deg: 58.76, 110 -->
-  <!-- 210 deg: 58.76, 250 -->
-  <!-- 270 deg: 180, 320 -->
-  <!-- 330 deg: 301.24, 250 -->
-  <polyline points="250,58.76 180,40 110,58.76" class="fig-12gon" />
-  <polyline points="110,58.76 58.76,110 40,180" class="fig-12gon" />
-  <polyline points="40,180 58.76,250 110,301.24" class="fig-12gon" />
-  <polyline points="110,301.24 180,320 250,301.24" class="fig-12gon" />
-  <polyline points="250,301.24 301.24,250 320,180" class="fig-12gon" />
-  <polyline points="320,180 301.24,110 250,58.76" class="fig-12gon" />
-
-  <!-- Dashed vertical bisector radius to (180, 40) -->
-  <line x1="180" y1="180" x2="180" y2="40" class="fig-dashed" />
-
-  <!-- Little intersection mark at chord (180, 58.76) -->
-  <line x1="175" y1="58.76" x2="185" y2="58.76" class="fig-mark" />
-
-  <!-- Center point -->
-  <circle cx="180" cy="180" r="2.5" fill="currentColor" />
+  <polygon points="355.0,200.0 277.5,65.8 122.5,65.8 45.0,200.0 122.5,334.2 277.5,334.2" fill="none" stroke="#1e293b" stroke-width="1.8"/>
+  <!-- Inscribed 12-gon (2n=12) -->
+  <polygon points="355.0,200.0 334.2,122.5 277.5,65.8 200.0,45.0 122.5,65.8 65.8,122.5 45.0,200.0 65.8,277.5 122.5,334.2 200.0,355.0 277.5,334.2 334.2,277.5" fill="none" stroke="#0284c7" stroke-width="1.4" stroke-dasharray="4,3"/>
+  <line x1="200" y1="200" x2="355.0" y2="200.0" stroke="#94a3b8" stroke-width="1.1"/>
+  <line x1="200" y1="200" x2="277.5" y2="65.8" stroke="#94a3b8" stroke-width="1.1"/>
+  <line x1="200" y1="200" x2="122.5" y2="65.8" stroke="#94a3b8" stroke-width="1.1"/>
+  <line x1="200" y1="200" x2="45.0" y2="200.0" stroke="#94a3b8" stroke-width="1.1"/>
+  <line x1="200" y1="200" x2="122.5" y2="334.2" stroke="#94a3b8" stroke-width="1.1"/>
+  <line x1="200" y1="200" x2="277.5" y2="334.2" stroke="#94a3b8" stroke-width="1.1"/>
+  <!-- Triangle ABC on chord AB -->
+  <polygon points="277.5,65.8 122.5,65.8 200.0,45.0" fill="#e0f2fe" fill-opacity="0.6" stroke="#0284c7" stroke-width="1.5"/>
+  <line x1="200" y1="200" x2="200" y2="45" stroke="#dc2626" stroke-width="1.5"/>
+  <circle cx="200" cy="200" r="3.5" fill="#1e293b"/>
+  <circle cx="277.5" cy="65.8" r="3" fill="#1e293b"/>
+  <circle cx="122.5" cy="65.8" r="3" fill="#1e293b"/>
+  <circle cx="200" cy="45" r="3" fill="#dc2626"/>
+  <circle cx="200.0" cy="65.8" r="2.5" fill="#dc2626"/>
+  <text x="206" y="216" font-style="italic" font-weight="bold">O</text>
+  <text x="285.5" y="65.76606241341202" font-style="italic" font-weight="bold">A</text>
+  <text x="104.50000000000003" y="65.76606241341199" font-style="italic" font-weight="bold">B</text>
+  <text x="200" y="37" text-anchor="middle" font-style="italic" font-weight="bold" fill="#dc2626">C</text>
+  <text x="208.0" y="79.766062413412" font-style="italic" font-size="12px">M</text>
+  <text x="215" y="132.9" font-size="13px" fill="#475569">弦心距</text>
+  <text x="208" y="59.4" font-size="12px" fill="#dc2626" font-weight="bold">矢</text>
+  <text x="253.75" y="142.9" font-style="italic" fill="#64748b">r</text>
+  <text x="35" y="365" font-size="13px" fill="#1e293b">刘徽割圆术：割之弥细，所失弥少</text>
 </svg>

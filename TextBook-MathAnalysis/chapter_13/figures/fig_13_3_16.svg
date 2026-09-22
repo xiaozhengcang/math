@@ -1,20 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="100%" height="auto" style="max-width: 380px;">
-  <!-- Gravitational field of solid sphere on point P -->
-  <line x1="20" y1="120" x2="350" y2="120" stroke="#2d3748" stroke-width="1.2" stroke-dasharray="4,4" />
-  
-  <!-- Solid sphere -->
-  <circle cx="120" cy="120" r="70" fill="#e2e8f0" stroke="#4a5568" stroke-width="2" />
-  <circle cx="120" cy="120" r="3" fill="#2d3748" />
-  <text x="115" y="140" font-size="12" font-family="serif">O</text>
-  <text x="65" y="105" font-size="12" font-style="italic" font-family="serif">R</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="auto" style="max-width:400px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+  </defs>
+  <!-- z-axis passing horizontally/vertically: let's align along horizontal for clarity -->
+  <line x1="20" y1="130" x2="370" y2="130" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+  <text x="365" y="148" font-style="italic">z</text>
 
-  <!-- External Point P -->
-  <circle cx="310" cy="120" r="4" fill="#e53e3e" />
-  <text x="315" y="115" font-size="13" font-family="serif" fill="#c53030">P(0, 0, s)</text>
+  <!-- Solid sphere of radius R centered at O(120, 130) -->
+  <circle cx="120" cy="130" r="75" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.8"/>
+  <circle cx="120" cy="130" r="3" fill="#1e293b"/>
+  <text x="112" y="150">O</text>
 
-  <!-- Volume element dV inside sphere -->
-  <circle cx="150" cy="85" r="4" fill="#3182ce" />
-  <text x="156" y="80" font-size="11" font-family="serif" fill="#2b6cb0">dV(x,y,z)</text>
-  <line x1="150" y1="85" x2="310" y2="120" stroke="#3182ce" stroke-width="1.5" />
-  <text x="230" y="95" font-size="11" font-style="italic" font-family="serif" fill="#2b6cb0">r_P</text>
+  <!-- Radius R line -->
+  <line x1="120" y1="130" x2="67" y2="77" stroke="#64748b" stroke-width="1.2"/>
+  <text x="85" y="98" font-style="italic">R</text>
+
+  <!-- External point P_0(0, 0, s) at (320, 130) -->
+  <circle cx="320" cy="130" r="4" fill="#dc2626"/>
+  <text x="310" y="115" font-style="italic" fill="#dc2626" font-weight="bold">P₀(0, 0, s)</text>
+
+  <!-- Volume element dV inside sphere at P(x, y, z): (150, 95) -->
+  <circle cx="150" cy="95" r="3.5" fill="#0284c7"/>
+  <text x="130" y="85" font-size="12" fill="#0284c7">dV(x, y, z)</text>
+
+  <!-- Attraction vector from P_0 toward dV or dF -->
+  <line x1="150" y1="95" x2="320" y2="130" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="320" y1="130" x2="260" y2="118" stroke="#dc2626" stroke-width="2" marker-end="url(#arr_red)"/>
+  <text x="270" y="110" font-style="italic" fill="#dc2626" font-weight="bold">dF</text>
+  <text x="225" y="105" font-size="12" font-style="italic" fill="#0284c7">r_P</text>
 </svg>

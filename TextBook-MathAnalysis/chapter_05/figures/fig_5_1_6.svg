@@ -1,40 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 280" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 300" width="100%" height="auto" style="max-width:460px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow6" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr5_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr5_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
   <!-- Axes -->
-  <line x1="40" y1="220" x2="420" y2="220" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow6)"/>
-  <text x="415" y="238" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">x</text>
-  
-  <line x1="70" y1="250" x2="70" y2="30" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow6)"/>
-  <text x="55" y="35" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">y</text>
-  <text x="55" y="235" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">O</text>
-  
-  <!-- Convex curve (curving upward) -->
-  <!-- x1=120, x_lambda=210, x2=320 -->
-  <path d="M 90 175 C 130 170, 240 160, 340 50" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2.5"/>
-  
-  <!-- Secant chord connecting (120, 168) and (320, 75) -->
-  <line x1="120" y1="168" x2="320" y2="75" stroke="var(--text-primary, #333)" stroke-width="1.8"/>
-  
-  <!-- Dashed lines -->
-  <line x1="120" y1="168" x2="120" y2="220" stroke="var(--text-muted, #888)" stroke-width="1" stroke-dasharray="3 3"/>
-  <line x1="210" y1="126" x2="210" y2="220" stroke="var(--text-muted, #888)" stroke-width="1" stroke-dasharray="3 3"/>
-  <line x1="320" y1="75" x2="320" y2="220" stroke="var(--text-muted, #888)" stroke-width="1" stroke-dasharray="3 3"/>
-  
-  <!-- Points -->
-  <circle cx="120" cy="168" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <circle cx="320" cy="75" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <circle cx="210" cy="126" r="3.5" fill="#e53935"/>
-  <circle cx="210" cy="153" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  
+  <line x1="45" y1="240" x2="435" y2="240" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <line x1="75" y1="270" x2="75" y2="30" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr5)"/>
+  <text x="440" y="245" font-style="italic">x</text>
+  <text x="63" y="30" font-style="italic">y</text>
+  <text x="60" y="255" font-style="italic">O</text>
+  <!-- Convex curve y = f(x) -->
+  <path d="M 95 185 C 150 190 220 185 264 150 C 310 115 340 85 385 50" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="390" y="55" font-style="italic" font-weight="bold" fill="#1e40af">y = f(x)</text>
+  <!-- Secant Chord -->
+  <line x1="120" y1="170" x2="360" y2="70" stroke="#1e293b" stroke-width="1.8"/>
+  <!-- Vertical projection at x_lambda -->
+  <line x1="264" y1="240" x2="264" y2="70" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <line x1="120" y1="240" x2="120" y2="170" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="360" y1="240" x2="360" y2="70" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <circle cx="120" cy="170" r="3.5" fill="#1e40af"/>
+  <circle cx="360" cy="70" r="3.5" fill="#1e40af"/>
+  <circle cx="264" cy="110" r="4" fill="#dc2626"/>
+  <circle cx="264" cy="150" r="4" fill="#1e40af"/>
+  <line x1="264" y1="110" x2="264" y2="150" stroke="#dc2626" stroke-width="2.5"/>
   <!-- Labels -->
-  <text x="215" y="120" font-size="12" font-family="KaTeX_Math, serif" fill="var(--text-primary, #333)">λf(x<tspan font-size="9" dy="2">1</tspan>) + (1-λ)f(x<tspan font-size="9" dy="2">2</tspan>)</text>
-  <text x="218" y="160" font-size="12" font-family="KaTeX_Math, serif" fill="var(--primary-accent, #1a73e8)">f(λx<tspan font-size="9" dy="2">1</tspan> + (1-λ)x<tspan font-size="9" dy="2">2</tspan>)</text>
-  
-  <text x="113" y="238" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">x<tspan font-size="10" dy="3">1</tspan></text>
-  <text x="175" y="238" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">λx<tspan font-size="10" dy="2">1</tspan> + (1-λ)x<tspan font-size="10" dy="2">2</tspan></text>
-  <text x="313" y="238" font-size="14" font-family="KaTeX_Math, serif" font-style="italic" fill="var(--text-primary, #333)">x<tspan font-size="10" dy="3">2</tspan></text>
+  <text x="275" y="105" font-size="13px" fill="#dc2626">λf(x₁) + (1−λ)f(x₂)</text>
+  <text x="275" y="155" font-size="13px" fill="#1e40af">f(λx₁ + (1−λ)x₂)</text>
+  <text x="120" y="258" text-anchor="middle" font-style="italic">x₁</text>
+  <text x="264" y="258" text-anchor="middle" font-style="italic">λx₁ + (1−λ)x₂</text>
+  <text x="360" y="258" text-anchor="middle" font-style="italic">x₂</text>
 </svg>

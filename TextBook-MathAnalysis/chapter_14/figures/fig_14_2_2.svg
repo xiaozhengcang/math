@@ -1,32 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 250" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="50" y1="190" x2="330" y2="190" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="335" y="195" font-family="serif" font-size="14" font-style="italic">x</text>
-  <line x1="80" y1="210" x2="80" y2="40" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="70" y="35" font-family="serif" font-size="14" font-style="italic">y</text>
-  <text x="68" y="205" font-family="serif" font-size="13">O</text>
+  <!-- Axes: origin at (190, 180) -->
+  <line x1="30" y1="180" x2="350" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="345" y="198" font-style="italic">x</text>
+  <line x1="190" y1="210" x2="190" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="178" y="30" font-style="italic">y</text>
+  <text x="178" y="195">O</text>
 
-  <line x1="80" y1="190" x2="240" y2="70" stroke="#718096" stroke-width="1.8" stroke-dasharray="4,4"/>
-  <text x="140" y="120" font-family="serif" font-size="13" fill="#718096">y = x</text>
+  <!-- Radius R = 110 px -->
+  <!-- M(R, 0) = (300, 180), N(-R, 0) = (80, 180) -->
+  <circle cx="300" cy="180" r="3.5" fill="#1e293b"/>
+  <text x="295" y="200" font-weight="bold">M(R, 0)</text>
+  <circle cx="80" cy="180" r="3.5" fill="#1e293b"/>
+  <text x="60" y="200" font-weight="bold">N(-R, 0)</text>
 
-  <path d="M 80 190 Q 180 190 240 70" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
-  <text x="180" y="165" font-family="serif" font-size="13" fill="#2b6cb0">y = x²</text>
+  <!-- Path (1): Upper semicircle counterclockwise from M to N -->
+  <path d="M 300 180 A 110 110 0 0 0 80 180" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <!-- Arrow at top (190, 70) pointing left -->
+  <line x1="200" y1="70" x2="175" y2="70" stroke="#1e40af" stroke-width="2.5" marker-end="url(#arr_blue)"/>
+  <text x="190" y="55" font-size="13" font-style="italic" fill="#1e40af" text-anchor="middle">L₁: x² + y² = R² (y ≥ 0)</text>
 
-  <circle cx="240" cy="70" r="3.5" fill="#2d3748"/>
-  <text x="245" y="65" font-family="serif" font-size="13">(1, 1)</text>
-
-  <text x="190" y="235" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.2.2 抛物线路径 y = x²</text>
+  <!-- Path (2): Straight segment from M to N along x-axis -->
+  <line x1="300" y1="180" x2="80" y2="180" stroke="#dc2626" stroke-width="2.5"/>
+  <line x1="250" y1="180" x2="220" y2="180" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr_red)"/>
+  <text x="235" y="165" font-size="13" font-style="italic" fill="#dc2626" text-anchor="middle">L₂: 直线段</text>
 </svg>

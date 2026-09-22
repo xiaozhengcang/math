@@ -1,32 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <path d="M 60 70 Q 200 90 340 70" fill="none" stroke="#718096" stroke-width="1.5"/>
-  <path d="M 60 170 Q 200 190 340 170" fill="none" stroke="#718096" stroke-width="1.5"/>
-  
-  <polygon points="140,80 260,80 200,182" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="2"/>
-  <circle cx="140" cy="80" r="3.5" fill="#2d3748"/>
-  <text x="125" y="75" font-family="serif" font-size="13">A</text>
-  <circle cx="260" cy="80" r="3.5" fill="#2d3748"/>
-  <text x="268" y="75" font-family="serif" font-size="13">B</text>
-  <circle cx="200" cy="182" r="3.5" fill="#2d3748"/>
-  <text x="195" y="200" font-family="serif" font-size="13">C</text>
+  <!-- Cylinder outlines -->
+  <ellipse cx="190" cy="45" rx="100" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.8"/>
+  <line x1="90" y1="45" x2="90" y2="225" stroke="#1e293b" stroke-width="1.8"/>
+  <line x1="290" y1="45" x2="290" y2="225" stroke="#1e293b" stroke-width="1.8"/>
+  <ellipse cx="190" cy="225" rx="100" ry="22" fill="none" stroke="#1e293b" stroke-width="1.8"/>
 
-  <line x1="200" y1="80" x2="200" y2="182" stroke="#e53e3e" stroke-width="1.5" stroke-dasharray="3,3"/>
-  <circle cx="200" cy="80" r="2.5" fill="#e53e3e"/>
-  <text x="205" y="130" font-family="serif" font-size="12" fill="#e53e3e">h</text>
+  <!-- Intermediate layer ellipses at y = 105, y = 165 -->
+  <ellipse cx="190" cy="105" rx="100" ry="22" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+  <ellipse cx="190" cy="165" rx="100" ry="22" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
 
-  <text x="200" y="230" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.1.7 内接折面多面体的单个三角形面元</text>
+  <!-- Schwarz lantern triangular triangulation (pleated surface) -->
+  <!-- Layer 0 to 1: y=45 to y=105 -->
+  <!-- Top vertices (approx x-coords): 95, 130, 190, 250, 285 -->
+  <!-- Middle 1 vertices shifted: 110, 160, 220, 270 -->
+  <polyline points="95,50 110,118 130,62 160,125 190,67 220,124 250,62 270,118 285,50" fill="none" stroke="#1e40af" stroke-width="1.5"/>
+  <polyline points="110,118 130,62 160,125 190,67 220,124 250,62 270,118" fill="#bae6fd" fill-opacity="0.3" stroke="#1e40af" stroke-width="1.5"/>
+
+  <!-- Layer 1 to 2: y=105 to y=165 -->
+  <polyline points="110,118 130,182 160,125 190,187 220,124 250,182 270,118" fill="none" stroke="#1e40af" stroke-width="1.5"/>
+
+  <!-- Layer 2 to 3: y=165 to y=225 -->
+  <polyline points="95,230 130,182 160,245 190,187 220,244 250,182 285,230" fill="none" stroke="#1e40af" stroke-width="1.5"/>
+
+  <!-- Dimension annotations -->
+  <line x1="305" y1="45" x2="305" y2="225" stroke="#64748b" stroke-width="1.2"/>
+  <line x1="300" y1="45" x2="310" y2="45" stroke="#64748b" stroke-width="1.2"/>
+  <line x1="300" y1="225" x2="310" y2="225" stroke="#64748b" stroke-width="1.2"/>
+  <text x="315" y="140" font-style="italic" fill="#64748b">h (n 等分)</text>
+
+  <text x="190" y="270" text-anchor="middle" font-size="13" fill="#1e40af">底圆 m 等分，高 n 等分 (共 2mn 个全等三角形)</text>
 </svg>

@@ -1,34 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 220" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 230" width="100%" height="auto" style="max-width:500px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="40" y1="170" x2="410" y2="170" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="415" y="175" font-family="serif" font-size="14" font-style="italic">x</text>
-  <line x1="60" y1="190" x2="60" y2="30" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="50" y="25" font-family="serif" font-size="14" font-style="italic">y</text>
-  <text x="48" y="185" font-family="serif" font-size="13">O</text>
+  <!-- Left panel: uv-plane rectangle sigma -->
+  <g transform="translate(25, 20)">
+    <line x1="20" y1="160" x2="175" y2="160" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="170" y="178" font-style="italic">u</text>
+    <line x1="35" y1="175" x2="35" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="22" y="25" font-style="italic">v</text>
 
-  <path d="M 60 170 C 100 168, 140 60, 210 60 C 280 60, 320 168, 360 170" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
-  
-  <circle cx="210" cy="115" r="55" fill="none" stroke="#cbd5e0" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <circle cx="210" cy="60" r="3.5" fill="#e53e3e"/>
-  <text x="215" y="55" font-family="serif" font-size="13" fill="#e53e3e">(πa, 2a)</text>
+    <!-- Rectangle sigma with vertices P1, P2, P3, P4 -->
+    <rect x="65" y="65" width="70" height="55" fill="#bae6fd" fill-opacity="0.6" stroke="#0284c7" stroke-width="1.6"/>
+    <circle cx="65" cy="120" r="2.5" fill="#1e293b"/>
+    <text x="50" y="132" font-size="12">P₁</text>
+    <circle cx="135" cy="120" r="2.5" fill="#1e293b"/>
+    <text x="140" y="132" font-size="12">P₂</text>
+    <circle cx="135" cy="65" r="2.5" fill="#1e293b"/>
+    <text x="140" y="62" font-size="12">P₃</text>
+    <circle cx="65" cy="65" r="2.5" fill="#1e293b"/>
+    <text x="50" y="62" font-size="12">P₄</text>
 
-  <line x1="360" y1="170" x2="360" y2="175" stroke="#4a5568" stroke-width="1.5"/>
-  <text x="345" y="190" font-family="serif" font-size="13">2πa</text>
+    <text x="95" y="97" font-size="15" font-style="italic" fill="#0369a1" font-weight="bold" text-anchor="middle">σ</text>
+    <text x="95" y="140" font-size="12" fill="#64748b">Δu</text>
+    <text x="145" y="95" font-size="12" fill="#64748b">Δv</text>
+  </g>
 
-  <text x="120" y="90" font-family="serif" font-size="13" fill="#2b6cb0">x = a(t - sin t)</text>
-  <text x="120" y="110" font-family="serif" font-size="13" fill="#2b6cb0">y = a(1 - cos t)</text>
-  <text x="220" y="212" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.1.3 摆线的一拱</text>
+  <!-- Mapping arrow r(u, v) -->
+  <g transform="translate(215, 90)">
+    <path d="M 0 10 L 40 10" stroke="#1e40af" stroke-width="2" marker-end="url(#arr_blue)"/>
+    <text x="10" y="-4" font-style="italic" fill="#1e40af" font-weight="bold">r(u, v)</text>
+  </g>
+
+  <!-- Right panel: 3D surface patch Sigma -->
+  <g transform="translate(285, 20)">
+    <line x1="15" y1="165" x2="185" y2="165" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="180" y="180" font-style="italic">y</text>
+    <line x1="25" y1="180" x2="25" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+    <text x="15" y="25" font-style="italic">z</text>
+
+    <!-- Curved surface Sigma -->
+    <path d="M 45 135 C 75 65, 145 55, 185 85 C 165 145, 105 160, 45 135 Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.2"/>
+    
+    <!-- Micro patch with vertices Q1, Q2, Q3, Q4 -->
+    <!-- Q1=(70, 115), Q2=(120, 125), Q3=(140, 85), Q4=(85, 75) -->
+    <path d="M 70 115 C 85 120, 105 123, 120 125 C 128 110, 134 95, 140 85 C 120 80, 100 77, 85 75 C 78 90, 73 103, 70 115 Z" 
+          fill="#fed7aa" fill-opacity="0.7" stroke="#d97706" stroke-width="1.6"/>
+
+    <circle cx="70" cy="115" r="2.5" fill="#1e293b"/>
+    <text x="55" y="125" font-size="12">Q₁</text>
+    <circle cx="120" cy="125" r="2.5" fill="#1e293b"/>
+    <text x="125" y="135" font-size="12">Q₂</text>
+    <circle cx="140" cy="85" r="2.5" fill="#1e293b"/>
+    <text x="145" y="85" font-size="12">Q₃</text>
+    <circle cx="85" cy="75" r="2.5" fill="#1e293b"/>
+    <text x="75" y="70" font-size="12">Q₄</text>
+
+    <!-- Tangent vectors r_u Delta u and r_v Delta v from Q1 -->
+    <line x1="70" y1="115" x2="120" y2="125" stroke="#1e40af" stroke-width="1.8" marker-end="url(#arr_blue)"/>
+    <text x="80" y="140" font-size="11" fill="#1e40af">r_u Δu</text>
+    <line x1="70" y1="115" x2="85" y2="75" stroke="#dc2626" stroke-width="1.8" marker-end="url(#arr_red)"/>
+    <text x="50" y="92" font-size="11" fill="#dc2626">r_v Δv</text>
+
+    <text x="105" y="105" font-size="14" font-style="italic" fill="#b45309" font-weight="bold">σ̃</text>
+    <text x="165" y="65" font-size="16" font-style="italic" fill="#1e40af" font-weight="bold">Σ</text>
+  </g>
 </svg>

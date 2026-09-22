@@ -1,18 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 240" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Axes: origin at (60, 180) -->
+  <line x1="30" y1="180" x2="310" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="305" y="198" font-style="italic">x</text>
+  <line x1="60" y1="205" x2="60" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="48" y="30" font-style="italic">y</text>
+  <text x="48" y="195">O</text>
 
-  <line x1="20" y1="100" x2="340" y2="100" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="180" y1="190" x2="180" y2="10" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <ellipse cx="180" cy="100" rx="120" ry="70" fill="rgba(26, 115, 232, 0.2)" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-  <text x="305" y="118" font-size="12" fill="var(--text-primary, #333)">a</text>
-  <text x="185" y="25" font-size="12" fill="var(--text-primary, #333)">b</text>
-  <text x="180" y="195" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.4 椭圆面积 S = πab</text>
+  <!-- Hyperbola x^2 - y^2 = 1, vertex at (140, 180) (a = 80 px) -->
+  <!-- Point P(cosh t, sinh t): x = 140*1.54 = 215, y = 180 - 80*1.17 = 86 -->
+  <!-- Sector bounded by x-axis, ray OP, and hyperbola arc -->
+  <path d="M 60 180 L 140 180 Q 155 130 215 86 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="none"/>
+
+  <!-- Hyperbola curve -->
+  <path d="M 140 180 Q 160 120 240 50" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="245" y="55" font-size="12" font-style="italic" fill="#1e40af">x² - y² = 1</text>
+
+  <!-- Ray OP -->
+  <line x1="60" y1="180" x2="215" y2="86" stroke="#dc2626" stroke-width="1.8"/>
+  <circle cx="215" cy="86" r="3" fill="#dc2626"/>
+  <text x="220" y="90" font-size="12" fill="#dc2626">P(cosh t, sinh t)</text>
+
+  <text x="135" y="150" font-size="15" font-style="italic" fill="#0369a1" font-weight="bold">S = t/2</text>
+  <line x1="140" y1="177" x2="140" y2="183" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="136" y="198">1</text>
 </svg>

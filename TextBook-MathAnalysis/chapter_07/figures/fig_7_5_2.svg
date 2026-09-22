@@ -1,22 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 230" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Water surface line at y = 40 -->
+  <line x1="30" y1="40" x2="330" y2="40" stroke="#0284c7" stroke-width="2"/>
+  <!-- Wave symbols on water surface -->
+  <path d="M 40 37 Q 50 33 60 37 Q 70 41 80 37 M 120 37 Q 130 33 140 37" fill="none" stroke="#0284c7" stroke-width="1.2"/>
+  <text x="270" y="32" font-size="12" fill="#0284c7">水面</text>
 
-  <!-- Water surface -->
-  <line x1="30" y1="40" x2="350" y2="40" stroke="#3498db" stroke-width="2"/>
-  <text x="320" y="32" font-size="12" fill="#3498db">水面</text>
-  <!-- Submerged vertical circular disk -->
-  <circle cx="190" cy="130" r="50" fill="rgba(52, 152, 219, 0.2)" stroke="var(--text-primary, #333)" stroke-width="2"/>
-  <!-- Horizontal pressure strip -->
-  <rect x="150" y="120" width="80" height="8" fill="rgba(231, 76, 60, 0.5)" stroke="#e74c3c" stroke-width="1"/>
-  <line x1="190" y1="40" x2="190" y2="124" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="195" y="85" font-size="12" font-style="italic" fill="var(--text-muted, #888)">h</text>
-  <text x="190" y="215" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.5.2 垂直沉浸水中圆盘所受水压力计算</text>
+  <!-- Submerged vertical circular disk centered at (180, 145), radius R = 65 -->
+  <circle cx="180" cy="145" r="65" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.8"/>
+  <circle cx="180" cy="145" r="2.5" fill="#1e293b"/>
+  <text x="185" y="150">C</text>
+
+  <!-- Horizontal strip element at depth h = (y = 125), thickness dh = 12 px -->
+  <!-- Width: 2*sqrt(R^2 - y^2) = 2*sqrt(65^2 - 20^2) = 123.6 -->
+  <rect x="118.2" y="120" width="123.6" height="10" fill="#bae6fd" fill-opacity="0.8" stroke="#0284c7" stroke-width="1.2"/>
+
+  <!-- Depth h dimension line from water surface to strip -->
+  <line x1="85" y1="40" x2="85" y2="125" stroke="#dc2626" stroke-width="1.2"/>
+  <line x1="80" y1="40" x2="90" y2="40" stroke="#dc2626" stroke-width="1.2"/>
+  <line x1="80" y1="125" x2="90" y2="125" stroke="#dc2626" stroke-width="1.2"/>
+  <text x="70" y="85" font-style="italic" fill="#dc2626">h</text>
+
+  <!-- Width dimension line -->
+  <line x1="118.2" y1="115" x2="241.8" y2="115" stroke="#0284c7" stroke-width="1"/>
+  <text x="180" y="110" font-size="11" fill="#0284c7" text-anchor="middle">2√(R² - y²)</text>
+
+  <text x="180" y="240" text-anchor="middle" font-size="13" fill="#1e40af">dP = ρ g h · 2√(R² - y²) dh</text>
 </svg>

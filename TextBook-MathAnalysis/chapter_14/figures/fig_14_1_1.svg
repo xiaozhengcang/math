@@ -1,43 +1,46 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 280" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <path d="M 60 190 C 110 70, 200 60, 280 140 C 330 190, 370 180, 400 90" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
-  <circle cx="60" cy="190" r="4" fill="#2d3748"/>
-  <text x="45" y="215" font-family="serif" font-size="14" font-weight="bold">P₀ = A</text>
-  
-  <circle cx="105" cy="122" r="3" fill="#4a5568"/>
-  <text x="85" y="115" font-family="serif" font-size="13">P₁</text>
-  
-  <circle cx="160" cy="82" r="3" fill="#4a5568"/>
-  <text x="155" y="70" font-family="serif" font-size="13">P₂</text>
+  <!-- 3D Axes -->
+  <line x1="80" y1="210" x2="80" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="90" y="28" font-style="italic">z</text>
+  <line x1="80" y1="210" x2="400" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="395" y="228" font-style="italic">y</text>
+  <line x1="80" y1="210" x2="25" y2="265" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="15" y="275" font-style="italic">x</text>
+  <text x="65" y="222">O</text>
 
-  <path d="M 215 95 C 245 118, 275 137, 285 142" fill="none" stroke="#e53e3e" stroke-width="3.5"/>
-  <circle cx="215" cy="95" r="3.5" fill="#e53e3e"/>
-  <text x="180" y="105" font-family="serif" font-size="13" fill="#e53e3e">P_{i-1}</text>
-  <circle cx="285" cy="142" r="3.5" fill="#e53e3e"/>
-  <text x="295" y="145" font-family="serif" font-size="13" fill="#e53e3e">P_i</text>
-  
-  <circle cx="250" cy="120" r="3" fill="#2f855a"/>
-  <text x="250" y="105" font-family="serif" font-size="13" fill="#2f855a">(ξ_i, η_i, ζ_i)</text>
-  
-  <circle cx="345" cy="170" r="3" fill="#4a5568"/>
-  <text x="330" y="195" font-family="serif" font-size="13">P_{n-1}</text>
-  
-  <circle cx="400" cy="90" r="4" fill="#2d3748"/>
-  <text x="375" y="75" font-family="serif" font-size="14" font-weight="bold">P_n = B</text>
+  <!-- Space curve L from A to B -->
+  <path d="M 110 180 C 140 100, 220 70, 290 120 C 330 150, 360 130, 380 90" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="385" y="85" font-size="16" font-style="italic" fill="#1e40af" font-weight="bold">L</text>
 
-  <text x="140" y="170" font-family="serif" font-size="16" font-style="italic" fill="#2b6cb0">L</text>
-  <text x="225" y="245" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.1.1 曲线的划分与采样点</text>
+  <!-- Endpoints A and B -->
+  <circle cx="110" cy="180" r="3" fill="#1e293b"/>
+  <text x="95" y="195">A</text>
+  <circle cx="380" cy="90" r="3" fill="#1e293b"/>
+  <text x="385" y="105">B</text>
+
+  <!-- Partition points P_i-1, P_i -->
+  <circle cx="215" cy="85" r="3" fill="#1e293b"/>
+  <text x="190" y="78">P_{i-1}</text>
+  <circle cx="270" cy="105" r="3" fill="#1e293b"/>
+  <text x="275" y="102">P_i</text>
+
+  <!-- Sub-arc L_i highlighted in red -->
+  <path d="M 215 85 C 235 90, 255 98, 270 105" fill="none" stroke="#dc2626" stroke-width="3"/>
+  <text x="245" y="120" font-size="13" font-style="italic" fill="#dc2626">L_i</text>
+
+  <!-- Sample point (xi_i, eta_i, zeta_i) -->
+  <circle cx="242" cy="95" r="3.5" fill="#dc2626"/>
+  <line x1="242" y1="95" x2="280" y2="60" stroke="#dc2626" stroke-width="1"/>
+  <text x="285" y="60" font-size="12" fill="#dc2626">(ξᵢ, ηᵢ, ζᵢ)</text>
 </svg>

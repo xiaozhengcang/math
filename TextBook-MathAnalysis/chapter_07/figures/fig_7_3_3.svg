@@ -1,26 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 240" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" width="100%" height="auto" style="max-width:320px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Axes: origin at (60, 180) -->
+  <line x1="30" y1="180" x2="290" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="285" y="198" font-style="italic">x</text>
+  <line x1="60" y1="210" x2="60" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="48" y="30" font-style="italic">y</text>
+  <text x="48" y="195">O</text>
 
-  <!-- Axes -->
-  <line x1="20" y1="120" x2="280" y2="120" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="140" y1="220" x2="140" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="275" y="135" font-size="13" font-style="italic" fill="var(--text-primary, #333)">x</text>
-  <text x="128" y="25" font-size="13" font-style="italic" fill="var(--text-primary, #333)">y</text>
-  <text x="128" y="135" font-size="12" font-style="italic" fill="var(--text-primary, #333)">O</text>
+  <!-- Quarter circle: radius R = 140 px -->
+  <path d="M 60 180 L 200 180 A 140 140 0 0 0 60 40 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="#1e40af" stroke-width="2"/>
 
-  <!-- Full Circle outline -->
-  <circle cx="140" cy="120" r="80" fill="none" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
+  <!-- Ticks at R -->
+  <line x1="200" y1="177" x2="200" y2="183" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="195" y="198" font-style="italic">R</text>
+  <line x1="57" y1="40" x2="63" y2="40" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="45" y="45" font-style="italic">R</text>
 
-  <!-- Shaded First Quadrant sector: from (140,120) to (220,120) arc to (140,40) back to (140,120) -->
-  <path d="M 140 120 L 220 120 A 80 80 0 0 0 140 40 Z" fill="rgba(26, 115, 232, 0.25)" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-
-  <!-- Radius label r -->
-  <text x="180" y="135" font-size="13" font-style="italic" fill="var(--text-primary, #333)">r</text>
-  <line x1="220" y1="117" x2="220" y2="123" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-
-  <text x="140" y="225" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.3.3</text>
+  <text x="110" y="130" font-size="15" font-style="italic" fill="#0369a1" font-weight="bold">A = ¼ πR²</text>
+  <text x="150" y="80" font-size="13" font-style="italic" fill="#1e40af">y = √(R² - x²)</text>
 </svg>

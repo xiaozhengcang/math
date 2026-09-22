@@ -1,18 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 200" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 240" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Curved arc AB -->
+  <path d="M 60 170 C 130 165, 210 130, 290 60" fill="none" stroke="#1e40af" stroke-width="2.5"/>
 
-  <!-- Curvature comparison -->
-  <path d="M 50 160 C 100 80, 180 60, 240 160" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2.5"/>
-  <text x="140" y="80" font-size="13" fill="var(--primary-accent, #1a73e8)">C₁ (弯曲程度大，曲率大)</text>
-  <path d="M 60 170 C 120 130, 220 120, 300 170" fill="none" stroke="var(--text-muted, #888)" stroke-width="2"/>
-  <text x="210" y="135" font-size="13" fill="var(--text-muted, #888)">C₂ (弯曲程度小)</text>
-  <text x="190" y="195" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.18 曲线弯曲程度与曲率比较</text>
+  <!-- Point M at (140, 150) with tangent angle alpha -->
+  <circle cx="140" cy="150" r="3.5" fill="#1e293b"/>
+  <text x="130" y="170" font-weight="bold">M</text>
+  <line x1="90" y1="165" x2="210" y2="120" stroke="#0284c7" stroke-width="1.8"/>
+  
+  <!-- Point M' at (240, 100) with tangent angle alpha + Delta alpha -->
+  <circle cx="240" cy="100" r="3.5" fill="#1e293b"/>
+  <text x="245" y="120" font-weight="bold">M'</text>
+  <line x1="180" y1="150" x2="290" y2="50" stroke="#dc2626" stroke-width="1.8"/>
+
+  <!-- Parallel shifted tangent to show turning angle Delta alpha -->
+  <line x1="200" y1="115" x2="270" y2="88" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <path d="M 245 100 A 30 30 0 0 1 230 75" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="245" y="80" font-style="italic" fill="#dc2626" font-weight="bold">Δα</text>
+
+  <text x="180" y="115" font-size="13" font-style="italic" fill="#1e40af">Δs</text>
+  <text x="190" y="215" text-anchor="middle" font-size="13" fill="#1e40af">平均曲率 K̄ = |Δα / Δs| ⟹ K = |dα / ds|</text>
 </svg>

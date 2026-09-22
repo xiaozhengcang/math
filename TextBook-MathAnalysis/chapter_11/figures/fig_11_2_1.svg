@@ -1,42 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="100%" height="auto" style="max-width: 460px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="100%" height="auto" style="max-width:460px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arr1121" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
   </defs>
-
-  <!-- Axes -->
-  <!-- z axis -->
-  <line x1="220" y1="210" x2="220" y2="100" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,3"/>
-  <line x1="220" y1="100" x2="220" y2="25" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr1121)"/>
-  <text x="205" y="35" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">z</text>
-
-  <!-- y axis -->
-  <line x1="60" y1="210" x2="420" y2="210" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr1121)"/>
-  <text x="425" y="215" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">y</text>
-
-  <!-- x axis (oblique perspective) -->
-  <line x1="220" y1="210" x2="120" y2="280" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arr1121)"/>
-  <text x="105" y="285" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">x</text>
-  <text x="225" y="225" font-family="KaTeX_Math, serif" font-style="italic" font-size="15" fill="#1e293b">O</text>
-
-  <!-- Base ellipse: center (220, 210), rx=140, ry=45 -->
-  <!-- Back half (dashed) -->
-  <path d="M 80 210 A 140 45 0 0 1 360 210" fill="none" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <!-- Front half (solid) -->
-  <path d="M 80 210 A 140 45 0 0 0 360 210" fill="none" stroke="#1e293b" stroke-width="1.5"/>
-
-  <!-- Upper ellipsoid dome: top at (220, 95) -->
-  <path d="M 80 210 C 80 130, 150 95, 220 95 C 290 95, 360 130, 360 210" fill="none" stroke="#1e293b" stroke-width="1.8"/>
-
-  <!-- Front cross section curve -->
-  <path d="M 220 95 C 190 140, 165 210, 155 240" fill="none" stroke="#64748b" stroke-width="1.2"/>
-
-  <!-- Formula annotation -->
-  <line x1="330" y1="130" x2="365" y2="110" stroke="#64748b" stroke-width="1"/>
-  <text x="370" y="115" font-family="KaTeX_Math, serif" font-size="14" fill="#1e293b">
-    <tspan font-style="italic">z</tspan> = <tspan font-style="normal">√</tspan>(1 - <tspan font-style="italic">x</tspan>²/<tspan font-style="italic">a</tspan>² - <tspan font-style="italic">y</tspan>²/<tspan font-style="italic">b</tspan>²)
-  </text>
-
-  <text x="220" y="305" text-anchor="middle" font-family="SimSun, 'Songti SC', serif" font-size="15" fill="#1e293b">图 11.2.1</text>
+  <!-- 3D Coordinate Axes -->
+  <line x1="220" y1="190" x2="430" y2="190" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="220" y1="190" x2="80" y2="270" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="220" y1="190" x2="220" y2="30" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="435" y="194" font-style="italic">y</text>
+  <text x="75" y="280" font-style="italic">x</text>
+  <text x="208" y="30" font-style="italic">z</text>
+  <text x="206" y="206" font-style="italic">O</text>
+  <!-- Equatorial boundary (z = 0) -->
+  <ellipse cx="220" cy="190" rx="140" ry="45" fill="#f1f5f9" stroke="#1e293b" stroke-width="1.5"/>
+  <!-- Upper dome -->
+  <path d="M 80 190 C 80 110, 160 65, 220 65 C 280 65, 360 110, 360 190 Z" fill="#e0f2fe" fill-opacity="0.5" stroke="#1e40af" stroke-width="2"/>
+  <path d="M 220 65 C 220 110, 140 190, 130 240" fill="none" stroke="#0284c7" stroke-width="1.3" stroke-dasharray="4,3"/>
+  <path d="M 120 130 C 170 150, 270 150, 320 130" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <circle cx="220" cy="65" r="3.5" fill="#1e40af"/>
+  <text x="228" y="70" font-style="italic" font-weight="bold">c</text>
+  <circle cx="360" cy="190" r="3" fill="#1e40af"/>
+  <text x="365" y="204" font-style="italic" font-weight="bold">b</text>
+  <circle cx="125" cy="245" r="3" fill="#1e40af"/>
+  <text x="110" y="250" font-style="italic" font-weight="bold">a</text>
+  <text x="320" y="90" font-style="italic" font-weight="bold" fill="#1e40af">z = c√(1 − x²/a² − y²/b²)</text>
 </svg>

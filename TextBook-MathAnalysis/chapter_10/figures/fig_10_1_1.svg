@@ -1,56 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 380" width="100%" height="auto" style="max-width: 520px;">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="100%" height="auto" style="max-width:480px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow-1011" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
   </defs>
-
-  <!-- Coordinate Axes -->
-  <line x1="160" y1="310" x2="480" y2="310" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arrow-1011)"/>
-  <line x1="200" y1="330" x2="200" y2="60" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arrow-1011)"/>
-  <text x="185" y="325" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">O</text>
-  <text x="475" y="330" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">x</text>
-  <text x="185" y="70" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">y</text>
-
-  <!-- Domain D vertical dashed bounds -->
-  <!-- Left bound x = 250, Right bound x = 440 -->
-  <line x1="250" y1="325" x2="250" y2="100" stroke="#64748b" stroke-width="1.2" stroke-dasharray="6,4"/>
-  <line x1="440" y1="325" x2="440" y2="65" stroke="#64748b" stroke-width="1.2" stroke-dasharray="6,4"/>
-
-  <!-- Domain D indicator double arrow -->
-  <line x1="252" y1="330" x2="438" y2="330" stroke="#1e293b" stroke-width="1.2" marker-start="url(#arrow-1011)" marker-end="url(#arrow-1011)"/>
-  <rect x="335" y="322" width="20" height="18" fill="#ffffff"/>
-  <text x="340" y="335" font-family="KaTeX_Math, serif" font-style="italic" font-size="16" fill="#1e293b">D</text>
-
-  <!-- Strip boundaries: S(x) + eps (top dashed), S(x) - eps (bottom dashed) -->
-  <!-- Central curve S(x): passes through (250, 200), (300, 150), (370, 160), (440, 120) -->
-  <!-- Top boundary: S(x) - 45 (upward in SVG): (250, 155) -> (300, 105) -> (370, 115) -> (440, 75) -->
-  <!-- Bottom boundary: S(x) + 45 (downward in SVG): (250, 245) -> (300, 195) -> (370, 205) -> (440, 165) -->
-
-  <path d="M 250 155 C 280 115, 330 115, 370 115 C 400 115, 420 85, 440 75" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"/>
-  <path d="M 250 245 C 280 205, 330 205, 370 205 C 400 205, 420 175, 440 165" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"/>
-
-  <!-- Central Curve y = S(x) -->
-  <path d="M 250 200 C 280 160, 330 160, 370 160 C 400 160, 420 130, 440 120" fill="none" stroke="#1e293b" stroke-width="2"/>
-  <text x="448" y="118" font-family="KaTeX_Math, serif" font-size="15" fill="#1e293b">
-    <tspan font-style="italic">y</tspan> = <tspan font-style="italic">S</tspan>(<tspan font-style="italic">x</tspan>)
-  </text>
-
-  <!-- Curve y = Sn(x) staying within strip -->
-  <path d="M 250 220 C 255 170, 280 170, 305 175 C 330 180, 350 145, 380 135 C 410 125, 430 150, 440 148" fill="none" stroke="#2563eb" stroke-width="2"/>
-  <text x="260" y="125" font-family="KaTeX_Math, serif" font-size="15" fill="#2563eb">
-    <tspan font-style="italic">y</tspan> = <tspan font-style="italic">S</tspan><tspan font-size="11" dy="3">n</tspan><tspan font-size="15" dy="-3">(<tspan font-style="italic">x</tspan>)</tspan>
-  </text>
-
-  <!-- Epsilon interval indicators at left boundary x = 250 -->
-  <line x1="244" y1="155" x2="248" y2="155" stroke="#1e293b" stroke-width="1"/>
-  <line x1="244" y1="200" x2="248" y2="200" stroke="#1e293b" stroke-width="1"/>
-  <line x1="244" y1="245" x2="248" y2="245" stroke="#1e293b" stroke-width="1"/>
-  <line x1="246" y1="157" x2="246" y2="198" stroke="#1e293b" stroke-width="1" marker-start="url(#arrow-1011)" marker-end="url(#arrow-1011)"/>
-  <line x1="246" y1="202" x2="246" y2="243" stroke="#1e293b" stroke-width="1" marker-start="url(#arrow-1011)" marker-end="url(#arrow-1011)"/>
-  <text x="230" y="182" font-family="KaTeX_Math, serif" font-style="italic" font-size="15" fill="#1e293b">ε</text>
-  <text x="230" y="228" font-family="KaTeX_Math, serif" font-style="italic" font-size="15" fill="#1e293b">ε</text>
-
-  <!-- Caption -->
-  <text x="345" y="370" text-anchor="middle" font-family="SimSun, 'Songti SC', serif" font-size="16" fill="#1e293b">图 10.1.1</text>
+  <!-- Axes -->
+  <line x1="40" y1="220" x2="450" y2="220" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="60" y1="250" x2="60" y2="30" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="455" y="224" font-style="italic">x</text>
+  <text x="48" y="30" font-style="italic">y</text>
+  <text x="46" y="236" font-style="italic">O</text>
+  <!-- Epsilon-Band S(x) ± ε -->
+  <path d="M 100 135 C 180 135, 260 85, 400 45 L 400 95 C 260 135, 180 185, 100 185 Z" fill="#e0f2fe" fill-opacity="0.7"/>
+  <path d="M 100 135 C 180 135, 260 85, 400 45" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <path d="M 100 185 C 180 185, 260 135, 400 95" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <!-- Limit function S(x) -->
+  <path d="M 100 160 C 180 160, 260 110, 400 70" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="405" y="70" font-style="italic" font-weight="bold" fill="#1e40af">S(x)</text>
+  <!-- Sequence S_n(x) inside band -->
+  <path d="M 100 152 C 140 170, 220 120, 310 98 S 360 62, 400 60" fill="none" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="405" y="55" font-style="italic" fill="#dc2626">Sₙ(x) (n &gt; N)</text>
+  <line x1="100" y1="{oy}" x2="100" y2="185" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="400" y1="{oy}" x2="400" y2="95" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="100" y="238" text-anchor="middle" font-style="italic">a</text>
+  <text x="400" y="238" text-anchor="middle" font-style="italic">b</text>
+  <line x1="230" y1="120" x2="230" y2="170" stroke="#0284c7" stroke-width="1.3" marker-end="url(#arr)" marker-start="url(#arr)"/>
+  <text x="240" y="148" font-size="12px" fill="#0284c7">2ε 带宽</text>
+  <text x="250" y="260" text-anchor="middle" font-size="13px" fill="#1e293b">一致收敛几何意义：当 n &gt; N 时，Sₙ(x) 图像全部落入 S(x) ± ε 带状区域</text>
 </svg>

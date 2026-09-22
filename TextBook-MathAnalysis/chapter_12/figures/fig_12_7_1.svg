@@ -1,12 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="auto">
-  <line x1="190" y1="240" x2="190" y2="30" stroke="#4a5568" stroke-width="1.5"/>
-  <line x1="70" y1="200" x2="330" y2="200" stroke="#4a5568" stroke-width="1.5"/>
-  <!-- Cylinder -->
-  <line x1="120" y1="80" x2="120" y2="220" stroke="#718096" stroke-width="1.5"/>
-  <line x1="260" y1="80" x2="260" y2="220" stroke="#718096" stroke-width="1.5"/>
-  <ellipse cx="190" cy="220" rx="70" ry="25" fill="none" stroke="#718096" stroke-width="1.5"/>
-  <!-- Plane cut creating ellipse -->
-  <polygon points="80,160 260,90 310,140 130,210" fill="#ebf8ff" fill-opacity="0.5" stroke="#3182ce" stroke-width="1.5"/>
-  <ellipse cx="190" cy="150" rx="55" ry="30" transform="rotate(-15 190 150)" fill="none" stroke="#c53030" stroke-width="2"/>
-  <text x="190" y="270" text-anchor="middle" font-family="serif" font-size="14">图 12.7.1 柱面与平面相交的椭圆</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 360" width="100%" height="auto" style="max-width:480px; font-family:'Times New Roman', serif; font-size:14px;">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+  </defs>
+  <!-- 3D Axes -->
+  <line x1="240" y1="190" x2="440" y2="190" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="240" y1="190" x2="100" y2="270" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="240" y1="190" x2="240" y2="35" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="445" y="194" font-style="italic">y</text>
+  <text x="95" y="280" font-style="italic">x</text>
+  <text x="228" y="35" font-style="italic">z</text>
+  <text x="226" y="206" font-style="italic">O</text>
+  <!-- Ellipsoid back surface -->
+  <ellipse cx="240" cy="190" rx="130" ry="42" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <!-- Ellipsoid 3D Shell -->
+  <ellipse cx="240" cy="190" rx="130" ry="75" fill="#f1f5f9" fill-opacity="0.6" stroke="#1e293b" stroke-width="1.8"/>
+  <!-- Cutting plane x + y + z = 0 -->
+  <polygon points="120,110 330,110 360,270 150,270" fill="#bae6fd" fill-opacity="0.35" stroke="#0284c7" stroke-width="1.4" stroke-dasharray="5,4"/>
+  <text x="340" y="125" font-size="13px" fill="#0284c7" font-weight="bold">平面 x + y + z = 0</text>
+  <!-- Intersection Ellipse -->
+  <g transform="rotate(-28 240 190)">
+    <ellipse cx="240" cy="190" rx="115" ry="38" fill="#e0f2fe" fill-opacity="0.7" stroke="#dc2626" stroke-width="2.2"/>
+    <line x1="125" y1="190" x2="355" y2="190" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="4,3"/>
+    <line x1="240" y1="152" x2="240" y2="228" stroke="#dc2626" stroke-width="1.3" stroke-dasharray="4,3"/>
+    <text x="305" y="184" font-style="italic" fill="#dc2626" font-weight="bold">a</text>
+    <text x="248" y="170" font-style="italic" fill="#dc2626" font-weight="bold">b</text>
+  </g>
+  <circle cx="240" cy="190" r="3.5" fill="#1e293b"/>
+  <text x="60" y="70" font-size="13px" fill="#1e40af" font-weight="bold">椭球面：x² + y² + 4z² = 1</text>
+  <text x="60" y="92" font-size="13px" fill="#dc2626">截面椭圆面积 S = πab</text>
 </svg>

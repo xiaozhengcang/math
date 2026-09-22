@@ -1,31 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 280" width="100%" height="auto" style="max-width:360px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <path d="M 80 180 L 220 180 M 80 210 L 220 210 M 80 240 L 220 240" stroke="#cbd5e0" stroke-width="1.2"/>
-  <path d="M 100 170 L 100 250 M 140 170 L 140 250 M 180 170 L 180 250" stroke="#cbd5e0" stroke-width="1.2"/>
-  <rect x="140" y="180" width="40" height="30" fill="#cbd5e0" fill-opacity="0.6" stroke="#4a5568" stroke-width="1.5"/>
-  <text x="145" y="200" font-family="serif" font-size="12">ΔD_{ij}</text>
+  <!-- 3D Axes -->
+  <line x1="170" y1="250" x2="170" y2="20" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="180" y="25" font-style="italic">z</text>
+  <line x1="170" y1="225" x2="330" y2="225" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="325" y="242" font-style="italic">y</text>
+  <line x1="170" y1="225" x2="90" y2="270" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="80" y="278" font-style="italic">x</text>
+  <text x="155" y="235">O</text>
 
-  <path d="M 120 70 C 170 50, 230 60, 280 80 C 260 120, 180 130, 130 110 Z" fill="#ebf8ff" stroke="#3182ce" stroke-width="1.5"/>
-  <polygon points="170,75 220,68 235,95 185,102" fill="#feebc8" stroke="#dd6b20" stroke-width="1.8"/>
-  <text x="190" y="90" font-family="serif" font-size="12" fill="#c05621">ΔT_{ij}</text>
+  <!-- Sphere passes through origin, center at (170, 140), top at (170, 55), radius = 85 -->
+  <!-- Cone z^2 = 3(x^2+y^2) has angle 30 deg with z-axis, apex at O -->
+  <!-- Intersection at z = 3R/2 (y = 97.5) -->
+  <!-- Intersection radius = (3R/2)/sqrt(3) = R*sqrt(3)/2 = 85 * 0.866 = 73.6 -->
 
-  <line x1="140" y1="180" x2="170" y2="75" stroke="#a0aec0" stroke-width="1" stroke-dasharray="3,3"/>
-  <line x1="180" y1="180" x2="220" y2="68" stroke="#a0aec0" stroke-width="1" stroke-dasharray="3,3"/>
-  <line x1="180" y1="210" x2="235" y2="95" stroke="#a0aec0" stroke-width="1" stroke-dasharray="3,3"/>
-  <line x1="140" y1="210" x2="185" y2="102" stroke="#a0aec0" stroke-width="1" stroke-dasharray="3,3"/>
+  <!-- Full sphere outline (subtle background) -->
+  <circle cx="170" cy="140" r="85" fill="none" stroke="#cbd5e1" stroke-width="1.2" stroke-dasharray="3,3"/>
 
-  <text x="200" y="255" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.1.5 曲面面积微元的切平面逼近</text>
+  <!-- Cone outline -->
+  <line x1="170" y1="225" x2="115" y2="90" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <line x1="170" y1="225" x2="225" y2="90" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Spherical cap Sigma inside cone: from (115, 90) up over dome to (225, 90) -->
+  <path d="M 115 90 C 115 50, 225 50, 225 90 Z" fill="#e0f2fe" fill-opacity="0.7" stroke="#1e40af" stroke-width="2.2"/>
+  <ellipse cx="170" cy="90" rx="55" ry="16" fill="#bae6fd" fill-opacity="0.4" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- Center of sphere at (170, 140) -->
+  <circle cx="170" cy="140" r="2.5" fill="#1e293b"/>
+  <text x="155" y="145" font-style="italic">R</text>
+  <circle cx="170" cy="55" r="2.5" fill="#1e293b"/>
+  <text x="145" y="60" font-style="italic">2R</text>
+
+  <text x="165" y="75" font-size="16" font-style="italic" fill="#1e40af" font-weight="bold">Σ</text>
+  <text x="235" y="125" font-size="12" font-style="italic" fill="#64748b">z² = 3(x² + y²)</text>
+  <text x="235" y="180" font-size="12" font-style="italic" fill="#1e40af">x² + y² + z² = 2Rz</text>
 </svg>

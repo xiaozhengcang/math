@@ -1,36 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 280" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 290" width="100%" height="auto" style="max-width:400px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="170" y1="260" x2="170" y2="30" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="160" y="25" font-family="serif" font-size="14" font-style="italic">z</text>
-  <line x1="70" y1="210" x2="370" y2="210" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="375" y="215" font-family="serif" font-size="14" font-style="italic">y</text>
-  <line x1="170" y1="210" x2="80" y2="265" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="70" y="275" font-family="serif" font-size="14" font-style="italic">x</text>
+  <!-- 3D Axes -->
+  <line x1="120" y1="260" x2="120" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="130" y="28" font-style="italic">z</text>
+  <line x1="120" y1="210" x2="380" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="375" y="228" font-style="italic">y</text>
+  <line x1="120" y1="210" x2="45" y2="275" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="35" y="285" font-style="italic">x</text>
+  <text x="105" y="222">O</text>
 
-  <path d="M 180 70 C 230 55, 290 65, 310 90 C 270 115, 200 110, 180 70 Z" fill="#ebf8ff" stroke="#2b6cb0" stroke-width="1.8"/>
-  <text x="270" y="60" font-family="serif" font-size="13" fill="#2b6cb0">z = z₂(x, y)</text>
+  <!-- Projection domain Omega_xy in xy-plane -->
+  <ellipse cx="230" cy="245" rx="80" ry="24" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <text x="230" y="250" font-size="14" font-style="italic" fill="#64748b" text-anchor="middle">Ω_{xy}</text>
 
-  <path d="M 180 150 C 230 135, 290 145, 310 170 C 270 195, 200 190, 180 150 Z" fill="#bee3f8" stroke="#2b6cb0" stroke-width="1.8"/>
-  <text x="270" y="185" font-family="serif" font-size="13" fill="#2b6cb0">z = z₁(x, y)</text>
+  <!-- Lower surface Sigma_1: z = z1(x, y) at y ~ 165 -->
+  <path d="M 150 165 C 190 185, 270 185, 310 165 C 270 145, 190 145, 150 165 Z" fill="#bae6fd" fill-opacity="0.4" stroke="#0284c7" stroke-width="1.5"/>
+  <line x1="230" y1="165" x2="230" y2="195" stroke="#dc2626" stroke-width="2" marker-end="url(#arr_red)"/>
+  <text x="240" y="195" font-size="12" fill="#dc2626">n₁ (下侧)</text>
+  <text x="315" y="170" font-size="12" fill="#0284c7">Σ₁: z = z₁(x, y)</text>
 
-  <line x1="180" y1="70" x2="180" y2="150" stroke="#718096" stroke-width="1.2"/>
-  <line x1="310" y1="90" x2="310" y2="170" stroke="#718096" stroke-width="1.2"/>
+  <!-- Upper surface Sigma_2: z = z2(x, y) at y ~ 85 -->
+  <path d="M 150 85 C 190 105, 270 105, 310 85 C 270 65, 190 65, 150 85 Z" fill="#bae6fd" fill-opacity="0.65" stroke="#0284c7" stroke-width="1.8"/>
+  <line x1="230" y1="85" x2="230" y2="45" stroke="#dc2626" stroke-width="2" marker-end="url(#arr_red)"/>
+  <text x="240" y="55" font-size="12" fill="#dc2626">n₂ (上侧)</text>
+  <text x="315" y="85" font-size="12" fill="#0284c7">Σ₂: z = z₂(x, y)</text>
 
-  <path d="M 180 220 C 230 210, 290 220, 310 235 C 270 255, 200 250, 180 220 Z" fill="#e2e8f0" stroke="#718096" stroke-width="1.2" stroke-dasharray="3,3"/>
-  <text x="240" y="240" font-family="serif" font-size="12" fill="#4a5568">D_{xy}</text>
+  <!-- Vertical cylinder side Sigma_3 -->
+  <line x1="150" y1="85" x2="150" y2="165" stroke="#1e40af" stroke-width="1.5"/>
+  <line x1="310" y1="85" x2="310" y2="165" stroke="#1e40af" stroke-width="1.5"/>
+  <text x="135" y="125" font-size="12" fill="#1e40af">Σ₃</text>
 
-  <text x="210" y="275" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.3.14 Gauss 公式标准区域 Ω</text>
+  <text x="230" y="125" font-size="18" font-style="italic" fill="#1e40af" font-weight="bold" text-anchor="middle">Ω</text>
 </svg>

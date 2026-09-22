@@ -1,29 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 220" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 240" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Axes -->
+  <line x1="30" y1="190" x2="410" y2="190" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="405" y="208" font-style="italic">x</text>
+  <line x1="55" y1="215" x2="55" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="42" y="30" font-style="italic">y</text>
+  <text x="42" y="205">O</text>
 
-  <!-- Subfigure (a) -->
-  <g transform="translate(20, 10)">
-    <polygon points="40,150 200,150 200,30" fill="none" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-    <path d="M 40 150 C 100 140, 150 100, 200 30" fill="rgba(26, 115, 232, 0.2)" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-    <text x="120" y="180" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-primary, #333)">(a) 曲边直角三角形</text>
-  </g>
-  <!-- Subfigure (b) -->
-  <g transform="translate(300, 10)">
-    <path d="M 40 150 C 100 140, 150 100, 200 30" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-    <!-- Micro-triangles -->
-    <path d="M 40 150 L 80 150 L 80 142 Z" fill="rgba(26, 115, 232, 0.3)" stroke="var(--text-primary, #333)"/>
-    <path d="M 80 142 L 120 142 L 120 120 Z" fill="rgba(26, 115, 232, 0.3)" stroke="var(--text-primary, #333)"/>
-    <path d="M 120 120 L 160 120 L 160 80 Z" fill="rgba(26, 115, 232, 0.3)" stroke="var(--text-primary, #333)"/>
-    <path d="M 160 80 L 200 80 L 200 30 Z" fill="rgba(26, 115, 232, 0.3)" stroke="var(--text-primary, #333)"/>
-    <text x="120" y="180" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-primary, #333)">(b) 阶梯微分三角形拼接</text>
-  </g>
-  <text x="300" y="210" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.3.2 微积分基本定理的直观构作模型</text>
+  <!-- Curve y = f(t) -->
+  <path d="M 70 170 C 130 140, 200 80, 360 50" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="365" y="45" font-style="italic" fill="#1e40af">y = f(t)</text>
+
+  <!-- Area F(x) from a=90 to x=240 -->
+  <path d="M 90 190 L 90 155 C 130 140, 180 100, 240 76 L 240 190 Z" fill="#e0f2fe" fill-opacity="0.6" stroke="none"/>
+  
+  <!-- Increment strip from x=240 to x+Delta x=285 -->
+  <path d="M 240 190 L 240 76 C 255 70, 270 65, 285 62 L 285 190 Z" fill="#fed7aa" fill-opacity="0.8" stroke="#ea580c" stroke-width="1.5"/>
+
+  <!-- Vertical lines -->
+  <line x1="90" y1="190" x2="90" y2="155" stroke="#64748b" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <line x1="240" y1="190" x2="240" y2="76" stroke="#1e40af" stroke-width="1.5"/>
+  <line x1="285" y1="190" x2="285" y2="62" stroke="#ea580c" stroke-width="1.5"/>
+
+  <text x="86" y="208" font-style="italic">a</text>
+  <text x="236" y="208" font-style="italic">x</text>
+  <text x="275" y="208" font-style="italic">x+Δx</text>
+
+  <text x="150" y="145" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">F(x)</text>
+  <text x="250" y="125" font-size="13" font-style="italic" fill="#c2410c">ΔF</text>
+  <text x="180" y="232" text-anchor="middle" font-size="13" fill="#1e293b">ΔF ≈ f(x)Δx  ⟹  F'(x) = f(x)</text>
 </svg>

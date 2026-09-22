@@ -1,20 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 220" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Curve through point A(190, 180) -->
+  <path d="M 70 210 Q 190 180 310 90" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <text x="315" y="85" font-style="italic" fill="#1e40af">y = f(x)</text>
 
-  <!-- Osculating circle -->
-  <path d="M 60 160 C 130 90, 210 90, 280 160" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2.5"/>
-  <circle cx="170" cy="150" r="55" fill="rgba(26, 115, 232, 0.15)" stroke="#e74c3c" stroke-width="1.8" stroke-dasharray="4 3"/>
-  <circle cx="170" cy="150" r="3.5" fill="#e74c3c"/>
-  <text x="175" y="150" font-size="12" fill="#e74c3c">曲率中心</text>
-  <circle cx="170" cy="95" r="3.5" fill="var(--primary-accent, #1a73e8)"/>
-  <text x="175" y="90" font-size="12" font-style="italic" fill="var(--primary-accent, #1a73e8)">P</text>
-  <text x="190" y="210" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.19 曲线的密切圆与曲率半径</text>
+  <!-- Point A -->
+  <circle cx="190" cy="180" r="3.5" fill="#1e293b"/>
+  <text x="195" y="195" font-weight="bold">A</text>
+
+  <!-- Osculating circle of radius R = 75 centered at C(155, 115) -->
+  <circle cx="155" cy="115" r="75" fill="#e0f2fe" fill-opacity="0.5" stroke="#dc2626" stroke-width="2"/>
+  
+  <!-- Center of curvature C -->
+  <circle cx="155" cy="115" r="3.5" fill="#dc2626"/>
+  <text x="160" y="110" font-weight="bold" fill="#dc2626">C (曲率中心)</text>
+
+  <!-- Radius vector CA -->
+  <line x1="155" y1="115" x2="190" y2="180" stroke="#dc2626" stroke-width="1.8"/>
+  <text x="180" y="150" font-style="italic" fill="#dc2626" font-weight="bold">R</text>
+
+  <!-- Common tangent line at A -->
+  <line x1="125" y1="215" x2="255" y2="145" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <text x="190" y="245" text-anchor="middle" font-size="13" fill="#1e40af">曲率半径 R = 1 / K</text>
 </svg>

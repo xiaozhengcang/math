@@ -1,30 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 230" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="40" y1="160" x2="340" y2="160" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="345" y="165" font-family="serif" font-size="14" font-style="italic">x</text>
-  <line x1="190" y1="190" x2="190" y2="40" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="180" y="35" font-family="serif" font-size="14" font-style="italic">y</text>
-  <text x="175" y="175" font-family="serif" font-size="13">O</text>
+  <!-- 3D Axes -->
+  <line x1="130" y1="180" x2="130" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="140" y="28" font-style="italic">z</text>
+  <line x1="130" y1="180" x2="350" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="345" y="198" font-style="italic">y</text>
+  <line x1="130" y1="180" x2="50" y2="255" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="40" y="265" font-style="italic">x</text>
+  <text x="115" y="192">O</text>
 
-  <path d="M 310 160 A 120 70 0 0 0 70 160" fill="none" stroke="#2b6cb0" stroke-width="2.5"/>
-  <line x1="195" y1="90" x2="175" y2="90" stroke="#2b6cb0" stroke-width="2.5" marker-end="url(#arrow-blue)"/>
+  <!-- Unit sphere intercepts:
+       A on x-axis: (70, 235)
+       B on y-axis: (270, 180)
+       C on z-axis: (130, 40)
+  -->
 
-  <text x="310" y="180" font-family="serif" font-size="13">a</text>
-  <text x="60" y="180" font-family="serif" font-size="13">-a</text>
-  <text x="195" y="80" font-family="serif" font-size="13">b</text>
+  <!-- Shaded first octant spherical triangle -->
+  <path d="M 70 235 C 150 240, 240 220, 270 180 C 265 110, 200 50, 130 40 C 95 100, 75 170, 70 235 Z" 
+        fill="#e0f2fe" fill-opacity="0.6" stroke="none"/>
 
-  <text x="190" y="215" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.2.4 逆时针定向的上半椭圆弧</text>
+  <!-- Boundary arcs with direction (clockwise when viewed from outside: A -> C -> B -> A) -->
+  <!-- Arc CA (or AC) -->
+  <path d="M 130 40 C 95 100, 75 170, 70 235" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <!-- Arc BC (or CB) -->
+  <path d="M 270 180 C 265 110, 200 50, 130 40" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <!-- Arc AB -->
+  <path d="M 70 235 C 150 240, 240 220, 270 180" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+
+  <!-- Direction arrows: A -> B -> C -> A or clockwise -->
+  <!-- A -> B: halfway at (175, 232) -->
+  <line x1="150" y1="233" x2="185" y2="231" stroke="#1e40af" stroke-width="2.2" marker-end="url(#arr_blue)"/>
+  <!-- B -> C: halfway at (215, 95) -->
+  <line x1="225" y1="110" x2="205" y2="85" stroke="#1e40af" stroke-width="2.2" marker-end="url(#arr_blue)"/>
+  <!-- C -> A: halfway at (90, 140) -->
+  <line x1="100" y1="120" x2="85" y2="155" stroke="#1e40af" stroke-width="2.2" marker-end="url(#arr_blue)"/>
+
+  <!-- Vertices -->
+  <circle cx="70" cy="235" r="3" fill="#1e293b"/>
+  <text x="50" y="240" font-weight="bold">A(1,0,0)</text>
+  <circle cx="270" cy="180" r="3" fill="#1e293b"/>
+  <text x="275" y="195" font-weight="bold">B(0,1,0)</text>
+  <circle cx="130" cy="40" r="3" fill="#1e293b"/>
+  <text x="135" y="38" font-weight="bold">C(0,0,1)</text>
+
+  <text x="175" y="145" font-size="16" font-style="italic" fill="#0369a1" font-weight="bold">L</text>
 </svg>

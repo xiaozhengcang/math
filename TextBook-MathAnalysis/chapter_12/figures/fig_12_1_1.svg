@@ -1,58 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 380" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 360" width="100%" height="auto" style="max-width:500px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748" />
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0" />
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
   </defs>
-  <style>
-    .axis { stroke: #2d3748; stroke-width: 1.5; fill: none; }
-    .plane { fill: rgba(226, 232, 240, 0.5); stroke: #4a5568; stroke-width: 1.5; }
-    .surface { fill: rgba(66, 153, 225, 0.15); stroke: #3182ce; stroke-width: 1.5; }
-    .curve { stroke: #e53e3e; stroke-width: 2.2; fill: none; }
-    .tangent { stroke: #2b6cb0; stroke-width: 2; stroke-dasharray: none; fill: none; }
-    .dash { stroke: #718096; stroke-width: 1.2; stroke-dasharray: 4,4; fill: none; }
-    .label { font-family: "Times New Roman", STSong, serif; font-style: italic; font-size: 15px; fill: #1a202c; }
-    .sub { font-size: 11px; }
-  </style>
-
-  <!-- Axes -->
-  <!-- Z axis -->
-  <line x1="250" y1="280" x2="250" y2="40" class="axis" marker-end="url(#arrow)" />
-  <text x="240" y="35" class="label">z</text>
-
-  <!-- X axis (oblique down-left) -->
-  <line x1="250" y1="280" x2="110" y2="355" class="axis" marker-end="url(#arrow)" />
-  <text x="100" y="360" class="label">x</text>
-
-  <!-- Y axis (right) -->
-  <line x1="250" y1="280" x2="440" y2="280" class="axis" marker-end="url(#arrow)" />
-  <text x="445" y="285" class="label">y</text>
-  <text x="235" y="295" class="label">O</text>
-
-  <!-- Surface patch z = f(x, y) -->
-  <path d="M 180 230 C 230 140, 310 110, 420 160 C 370 230, 300 250, 220 280 Z" class="surface" />
-  <text x="375" y="145" class="label">z = f(x, y)</text>
-
-  <!-- Intersecting plane y = y_0 -->
-  <polygon points="170 330 360 215 360 90 170 205" class="plane" />
-  
-  <!-- Coordinate y0 -->
-  <text x="345" y="235" class="label">y<tspan class="sub">0</tspan></text>
-  <text x="145" y="325" class="label">x<tspan class="sub">0</tspan></text>
-
-  <!-- Intersection Curve l -->
-  <path d="M 185 205 Q 260 140 335 155" class="curve" />
-  <text x="325" y="135" class="label" fill="#e53e3e">l</text>
-
-  <!-- Point P0 on curve -->
-  <!-- Tangent line T -->
-  <line x1="220" y1="210" x2="290" y2="120" class="tangent" marker-end="url(#arrow-blue)" />
-  <text x="268" y="130" class="label" fill="#2b6cb0">T</text>
-  
-  <!-- Dashed vertical projections -->
-  <line x1="255" y1="165" x2="255" y2="280" class="dash" />
-  <circle cx="255" cy="165" r="3" fill="#2b6cb0" />
+  <!-- 3D Axes -->
+  <line x1="150" y1="240" x2="450" y2="240" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="150" y1="240" x2="50" y2="310" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="150" y1="240" x2="150" y2="35" stroke="#1e293b" stroke-width="1.4" marker-end="url(#arr)"/>
+  <text x="455" y="244" font-style="italic">y</text>
+  <text x="45" y="320" font-style="italic">x</text>
+  <text x="138" y="35" font-style="italic">z</text>
+  <text x="136" y="256" font-style="italic">O</text>
+  <!-- Surface z = f(x, y) -->
+  <path d="M 170 170 C 240 130, 330 120, 420 140 C 370 210, 280 230, 200 250 Z" fill="#e0f2fe" fill-opacity="0.4" stroke="#94a3b8" stroke-width="1"/>
+  <!-- Section curve C1 (y = y0) -->
+  <path d="M 210 200 C 240 170, 270 150, 330 135" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="335" y="135" font-style="italic" fill="#1e40af">C₁ (y = y₀)</text>
+  <!-- Section curve C2 (x = x0) -->
+  <path d="M 200 160 C 240 152, 270 150, 360 165" fill="none" stroke="#0284c7" stroke-width="2.2"/>
+  <text x="365" y="170" font-style="italic" fill="#0284c7">C₂ (x = x₀)</text>
+  <!-- Tangent Tx (slope ∂f/∂x) -->
+  <line x1="220" y1="183" x2="320" y2="117" stroke="#dc2626" stroke-width="2" marker-end="url(#arr_red)"/>
+  <text x="325" y="115" font-style="italic" font-weight="bold" fill="#dc2626">T_x (斜率 ∂f/∂x)</text>
+  <!-- Tangent Ty (slope ∂f/∂y) -->
+  <line x1="210" y1="147" x2="330" y2="153" stroke="#ea580c" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="335" y="153" font-style="italic" font-weight="bold" fill="#ea580c">T_y (斜率 ∂f/∂y)</text>
+  <circle cx="270" cy="150" r="4" fill="#1e293b"/>
+  <text x="265" y="140" font-style="italic" font-weight="bold">P₀(x₀, y₀, z₀)</text>
+  <line x1="270" y1="150" x2="230" y2="270" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <circle cx="230" cy="270" r="3" fill="#64748b"/>
+  <text x="238" y="285" font-style="italic">(x₀, y₀)</text>
 </svg>

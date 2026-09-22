@@ -1,23 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 220" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 240" width="100%" height="auto" style="max-width:340px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Axes: origin at (70, 180) -->
+  <line x1="40" y1="180" x2="300" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="295" y="198" font-style="italic">x</text>
+  <line x1="70" y1="205" x2="70" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="58" y="30" font-style="italic">y</text>
+  <text x="55" y="195">O</text>
 
-  <line x1="30" y1="180" x2="340" y2="180" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="60" y1="200" x2="60" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- x = g1(y) and x = g2(y) -->
-  <path d="M 140 150 C 220 120, 240 80, 180 40" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-  <path d="M 90 150 C 130 110, 140 70, 100 40" fill="none" stroke="#27ae60" stroke-width="2"/>
-  <path d="M 90 150 C 130 110, 140 70, 100 40 L 180 40 C 240 80, 220 120, 140 150 Z" fill="rgba(26, 115, 232, 0.25)"/>
-  <line x1="60" y1="150" x2="140" y2="150" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <line x1="60" y1="40" x2="180" y2="40" stroke="var(--text-muted, #888)" stroke-dasharray="3 3"/>
-  <text x="45" y="155" font-size="12" fill="var(--text-primary, #333)">c</text>
-  <text x="45" y="45" font-size="12" fill="var(--text-primary, #333)">d</text>
-  <text x="190" y="210" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.3 沿 y 轴积分计算的平面面积</text>
+  <!-- Intersection from (70, 180) to (210, 40), scale: 1 unit = 140 px -->
+  <!-- Shaded region between y = x^2 and y = sqrt(x) -->
+  <path d="M 70 180 Q 140 180 210 40 Q 90 110 70 180 Z" fill="#e0f2fe" fill-opacity="0.65" stroke="none"/>
+
+  <!-- Parabola y = x^2 -->
+  <path d="M 70 180 Q 140 180 230 15" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="235" y="45" font-style="italic" fill="#1e40af">y = x²</text>
+
+  <!-- Parabola x = y^2 (y = sqrt(x)) -->
+  <path d="M 70 180 Q 90 110 210 40" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+  <text x="135" y="65" font-style="italic" fill="#dc2626">x = y²</text>
+
+  <!-- Intersection point (1, 1) -->
+  <circle cx="210" cy="40" r="3.5" fill="#1e293b"/>
+  <line x1="210" y1="40" x2="210" y2="180" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="70" y1="40" x2="210" y2="40" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="215" y="40">(1, 1)</text>
+  <text x="206" y="198">1</text>
+  <text x="55" y="45">1</text>
+
+  <text x="135" y="130" font-size="15" font-style="italic" fill="#0369a1" font-weight="bold">A = ⅓</text>
 </svg>

@@ -1,35 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 260" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 250" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <ellipse cx="200" cy="130" rx="160" ry="95" fill="none" stroke="#a0aec0" stroke-width="1.5"/>
-  <text x="365" y="135" font-family="serif" font-size="12" fill="#718096">c₁</text>
+  <!-- Concentric elliptical contour lines f(x, y) = c -->
+  <!-- Center at (190, 130) -->
+  <ellipse cx="190" cy="130" rx="140" ry="85" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="315" y="125" font-size="12" fill="#64748b">c = 100</text>
+  <ellipse cx="190" cy="130" rx="100" ry="60" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="275" y="125" font-size="12" fill="#64748b">c = 200</text>
+  <ellipse cx="190" cy="130" rx="60" ry="35" fill="none" stroke="#94a3b8" stroke-width="1.2"/>
+  <text x="235" y="125" font-size="12" fill="#64748b">c = 300</text>
+
+  <!-- Point P on contour c = 200 -->
+  <circle cx="140" cy="88" r="3.5" fill="#1e293b"/>
+  <text x="125" y="105" font-weight="bold">P</text>
+
+  <!-- Gradient vector perpendicular to contour pointing inward (toward higher values) -->
+  <line x1="140" y1="88" x2="165" y2="67" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arr_red)"/>
+  <text x="170" y="62" font-size="14" font-weight="bold" fill="#dc2626">grad f</text>
+
+  <!-- Tangent line to contour at P -->
+  <line x1="110" y1="70" x2="170" y2="106" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,3"/>
   
-  <ellipse cx="200" cy="130" rx="120" ry="70" fill="none" stroke="#a0aec0" stroke-width="1.5"/>
-  <text x="325" y="135" font-family="serif" font-size="12" fill="#718096">c₂</text>
+  <!-- Right angle symbol -->
+  <path d="M 148 78 L 157 84 L 149 94" fill="none" stroke="#1e293b" stroke-width="1.2"/>
 
-  <ellipse cx="200" cy="130" rx="75" ry="45" fill="none" stroke="#a0aec0" stroke-width="1.5"/>
-  <text x="280" y="135" font-family="serif" font-size="12" fill="#718096">c₃</text>
-
-  <circle cx="160" cy="95" r="3.5" fill="#2d3748"/>
-  <text x="145" y="90" font-family="serif" font-size="13">P</text>
-
-  <line x1="160" y1="95" x2="190" y2="120" stroke="#e53e3e" stroke-width="2" marker-end="url(#arrow-red)"/>
-  <text x="195" y="115" font-family="serif" font-size="13" font-weight="bold" fill="#e53e3e">grad f</text>
-
-  <line x1="160" y1="95" x2="125" y2="65" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow-blue)"/>
-  <text x="75" y="60" font-family="serif" font-size="13" font-weight="bold" fill="#2b6cb0">-grad f (流水)</text>
-
-  <text x="200" y="248" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.5.1 等高线与梯度方向及流水最速下降线</text>
+  <text x="190" y="235" text-anchor="middle" font-size="13" fill="#1e40af">梯度方向垂直于等高线且指向函数值增加最快的方向</text>
 </svg>

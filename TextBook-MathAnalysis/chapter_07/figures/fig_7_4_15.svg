@@ -1,17 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 230" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 280" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- 3D Axes: O at center of bottom circle (200, 180) -->
+  <!-- y-axis: pointing right-up (200, 180) to (370, 180) -->
+  <!-- x-axis: pointing down-left (200, 180) to (110, 245) -->
+  <!-- z-axis: pointing straight up (200, 180) to (200, 30) -->
+  <line x1="200" y1="220" x2="200" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="210" y="28" font-style="italic">z</text>
+  <line x1="80" y1="180" x2="380" y2="180" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="375" y="198" font-style="italic">y</text>
+  <line x1="200" y1="180" x2="90" y2="255" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="80" y="265" font-style="italic">x</text>
+  <text x="188" y="192">O</text>
 
-  <!-- Cylinder intersection (Steinmetz solid / 牟合方盖) -->
-  <rect x="110" y="50" width="160" height="120" rx="20" fill="rgba(26, 115, 232, 0.2)" stroke="var(--primary-accent, #1a73e8)" stroke-width="2"/>
-  <ellipse cx="190" cy="110" rx="80" ry="30" fill="none" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <ellipse cx="190" cy="110" rx="30" ry="60" fill="none" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <text x="190" y="215" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.4.15 双圆柱正交相交体积（牟合方盖）</text>
+  <!-- Base cylinder circle x^2 + y^2 <= a^2 in xy-plane (radius a = 80 px) -->
+  <!-- Oval rx = 80, ry = 25 -->
+  <ellipse cx="200" cy="180" rx="80" ry="25" fill="#f1f5f9" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <circle cx="120" cy="180" r="3" fill="#1e293b"/>
+  <text x="100" y="175" font-style="italic">-a</text>
+  <circle cx="280" cy="180" r="3" fill="#1e293b"/>
+  <text x="285" y="175" font-style="italic">a</text>
+
+  <!-- Inclined cutting plane P1: passes through (0, -a, 0) = (120, 180) with angle theta -->
+  <!-- At y = a (280, 180), height is 2a*tan(theta) = 110 px -> top at (280, 70) -->
+  <!-- Elliptical cut face P1: inclined ellipse connecting (120, 180) to (280, 70) -->
+  <path d="M 120 180 C 140 100, 240 50, 280 70 C 300 85, 220 160, 120 180 Z" fill="#bae6fd" fill-opacity="0.6" stroke="#0284c7" stroke-width="1.8"/>
+
+  <!-- Vertical cylindrical side connecting base to cut plane -->
+  <line x1="280" y1="180" x2="280" y2="70" stroke="#1e40af" stroke-width="2"/>
+  
+  <!-- Slice at generic y: perpendicular to y-axis (vertical rectangle) -->
+  <!-- Base along x: 2*sqrt(a^2 - y^2), height: (y+a)*tan(theta) -->
+  <!-- Let y = 0.3a: (224, 180) -->
+  <!-- Rectangle height: 60 px, base in x-direction: 45 px -->
+  <polygon points="205,192 243,168 243,108 205,132" fill="#fed7aa" fill-opacity="0.8" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="215" y="145" font-size="12" font-style="italic" fill="#c2410c">A(y)</text>
+
+  <!-- Angle theta annotation at (-a, 0, 0) -->
+  <path d="M 150 180 A 30 30 0 0 0 145 165" fill="none" stroke="#dc2626" stroke-width="1.5"/>
+  <text x="155" y="170" font-style="italic" fill="#dc2626" font-weight="bold">θ</text>
+
+  <text x="290" y="85" font-size="13" fill="#0284c7">平面 P₁ (夹角 θ)</text>
+  <text x="200" y="260" text-anchor="middle" font-size="13" fill="#1e40af">A(y) = 2√(a² - y²)(y + a)tan θ  ⟹  V = π a³ tan θ</text>
 </svg>

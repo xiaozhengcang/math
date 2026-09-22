@@ -1,31 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 250" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 280" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <line x1="50" y1="190" x2="330" y2="190" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="335" y="195" font-family="serif" font-size="14" font-style="italic">x</text>
-  <line x1="80" y1="210" x2="80" y2="40" stroke="#4a5568" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="70" y="35" font-family="serif" font-size="14" font-style="italic">y</text>
-  <text x="68" y="205" font-family="serif" font-size="13">O</text>
+  <!-- 3D Axes: vertical z-axis -->
+  <line x1="80" y1="230" x2="80" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="90" y="28" font-style="italic">z</text>
+  <line x1="80" y1="210" x2="340" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="335" y="228" font-style="italic">y</text>
+  <line x1="80" y1="210" x2="25" y2="265" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="15" y="275" font-style="italic">x</text>
+  <text x="65" y="222">O</text>
 
-  <polygon points="80,190 240,190 240,70" fill="#ebf8ff" fill-opacity="0.5" stroke="#2b6cb0" stroke-width="2"/>
-  <line x1="80" y1="190" x2="170" y2="190" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow-blue)"/>
-  <line x1="240" y1="190" x2="240" y2="120" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow-blue)"/>
-  <line x1="240" y1="70" x2="150" y2="137" stroke="#2b6cb0" stroke-width="2" marker-end="url(#arrow-blue)"/>
+  <!-- Curve L from A(x1, y1, z1) to B(x2, y2, z2) -->
+  <!-- A at height z1 = 70 (higher): (140, 70) -->
+  <!-- B at height z2 = 180 (lower): (310, 180) -->
+  <path d="M 140 70 C 180 110, 240 130, 310 180" fill="none" stroke="#1e40af" stroke-width="2.5"/>
+  <line x1="210" y1="115" x2="240" y2="132" stroke="#1e40af" stroke-width="2.5" marker-end="url(#arr_blue)"/>
+  <text x="245" y="125" font-size="16" font-style="italic" fill="#1e40af" font-weight="bold">L</text>
 
-  <text x="245" y="205" font-family="serif" font-size="13">A(1, 0)</text>
-  <text x="245" y="65" font-family="serif" font-size="13">B(1, 1)</text>
+  <circle cx="140" cy="70" r="3.5" fill="#1e293b"/>
+  <text x="145" y="65">A(x₁, y₁, z₁)</text>
+  <circle cx="310" cy="180" r="3.5" fill="#1e293b"/>
+  <text x="290" y="200">B(x₂, y₂, z₂)</text>
 
-  <text x="190" y="235" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.2.3 闭合折线回路 OABO</text>
+  <!-- Gravity vector mg directed downward at point on curve -->
+  <circle cx="210" cy="115" r="3" fill="#dc2626"/>
+  <line x1="210" y1="115" x2="210" y2="175" stroke="#dc2626" stroke-width="2.2" marker-end="url(#arr_red)"/>
+  <text x="215" y="160" font-size="14" font-weight="bold" fill="#dc2626">-mg k</text>
+
+  <!-- Horizontal projections to z-axis -->
+  <line x1="140" y1="70" x2="80" y2="70" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <circle cx="80" cy="70" r="2.5" fill="#1e293b"/>
+  <text x="65" y="75" font-style="italic">z₁</text>
+
+  <line x1="310" y1="180" x2="80" y2="180" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3"/>
+  <circle cx="80" cy="180" r="2.5" fill="#1e293b"/>
+  <text x="65" y="185" font-style="italic">z₂</text>
+
+  <text x="210" y="250" font-size="13" fill="#1e40af">W = -mg(z₂ - z₁)</text>
 </svg>

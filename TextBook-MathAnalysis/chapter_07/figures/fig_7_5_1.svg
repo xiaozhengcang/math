@@ -1,21 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 180" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 180" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- x-axis -->
+  <line x1="30" y1="110" x2="390" y2="110" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="385" y="128" font-style="italic">x</text>
+  <text x="50" y="125">O</text>
 
-  <line x1="30" y1="120" x2="370" y2="120" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <!-- Non-uniform rod -->
-  <rect x="70" y="80" width="240" height="20" fill="url(#rod-grad)" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <!-- Micro element dx -->
-  <rect x="180" y="78" width="25" height="24" fill="rgba(231, 76, 60, 0.4)" stroke="#e74c3c" stroke-width="1.5"/>
-  <text x="185" y="70" font-size="12" font-style="italic" fill="#e74c3c">dx</text>
-  <text x="65" y="140" font-size="12" fill="var(--text-primary, #333)">a</text>
-  <text x="305" y="140" font-size="12" fill="var(--text-primary, #333)">b</text>
-  <text x="200" y="168" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.5.1 非均匀金属棒的质量微元 dM = ρ(x) dx</text>
+  <!-- Metal rod: from x=50 to x=330, thickness 24 px -->
+  <rect x="50" y="60" width="280" height="24" rx="3" fill="#e2e8f0" stroke="#475569" stroke-width="1.8"/>
+
+  <!-- Micro element dx at x = 200, width = 20 px -->
+  <rect x="200" y="60" width="20" height="24" fill="#fca5a5" stroke="#dc2626" stroke-width="1.5"/>
+  <line x1="210" y1="84" x2="210" y2="110" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <text x="205" y="128" font-style="italic" fill="#dc2626">x</text>
+  <text x="210" y="50" font-size="12" fill="#dc2626" text-anchor="middle">dm = ρ(x) dx</text>
+
+  <!-- Ticks at 0 and L -->
+  <line x1="50" y1="107" x2="50" y2="113" stroke="#1e293b" stroke-width="1.2"/>
+  <line x1="330" y1="107" x2="330" y2="113" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="326" y="128" font-style="italic">L</text>
+
+  <text x="210" y="160" text-anchor="middle" font-size="14" fill="#1e40af">M = ∫₀ᴸ ρ(x) dx</text>
 </svg>

@@ -1,30 +1,39 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 220" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 230" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
+  <!-- Elliptical orbit: center (210, 115), a = 160, b = 90 -->
+  <ellipse cx="210" cy="115" rx="160" ry="90" fill="none" stroke="#64748b" stroke-width="1.8"/>
 
-  <!-- Ellipse orbit -->
-  <ellipse cx="210" cy="110" rx="180" ry="85" fill="none" stroke="var(--text-primary, #333)" stroke-width="2"/>
-  
-  <!-- Sun at left focus -->
-  <circle cx="120" cy="110" r="8" fill="#e67e22" stroke="var(--text-primary, #333)" stroke-width="1.5"/>
-  <text x="80" y="115" font-size="14" font-family="KaTeX_Main, serif" fill="var(--text-primary, #333)">太阳</text>
-  
-  <!-- Sector 1 near perihelion (wide angle, short radius) -->
-  <path d="M 120 110 L 135 27 A 180 85 0 0 1 175 33 Z" fill="rgba(26, 115, 232, 0.25)" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.5"/>
-  <circle cx="155" cy="30" r="5" fill="var(--primary-accent, #1a73e8)"/>
-  <text x="145" y="18" font-size="14" font-family="KaTeX_Main, serif" fill="var(--text-primary, #333)">行星</text>
-  
-  <!-- Sector 2 near aphelion (narrow angle, long radius) -->
-  <path d="M 120 110 L 375 80 A 180 85 0 0 1 385 125 Z" fill="rgba(26, 115, 232, 0.25)" stroke="var(--primary-accent, #1a73e8)" stroke-width="1.5"/>
-  <circle cx="380" cy="100" r="5" fill="var(--primary-accent, #1a73e8)"/>
-  
-  <!-- Caption/Label -->
-  <text x="210" y="210" text-anchor="middle" font-size="14" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.1.1 开普勒第二定律（相等时间内扫过相等面积）</text>
+  <!-- Sun at focus S: c = sqrt(160^2 - 90^2) = sqrt(25600 - 8100) = sqrt(17500) = 132.3 -->
+  <!-- Left focus S at (210 - 100, 115) = (110, 115) (scaled slightly for visual balance) -->
+  <!-- Sun -->
+  <circle cx="120" cy="115" r="7" fill="#f59e0b" stroke="#d97706" stroke-width="1.5"/>
+  <text x="115" y="138" font-weight="bold" fill="#d97706">S (太阳)</text>
+
+  <!-- Sector 1 near perihelion: from angle 160 deg to 200 deg from center -->
+  <!-- Sun at (120, 115), P1=(54.5, 90), P2=(54.5, 140) approx -->
+  <path d="M 120 115 L 53 95 C 50 108, 50 122, 53 135 Z" fill="#bae6fd" fill-opacity="0.8" stroke="#0284c7" stroke-width="1.5"/>
+  <text x="75" y="118" font-weight="bold" fill="#0369a1">S₁</text>
+  <text x="35" y="85" font-size="12" fill="#64748b">近日点</text>
+
+  <!-- Sector 2 near aphelion: from angle 15 deg to -15 deg from center -->
+  <!-- P3=(364, 95), P4=(364, 135) -->
+  <path d="M 120 115 L 365 95 C 370 108, 370 122, 365 135 Z" fill="#fed7aa" fill-opacity="0.8" stroke="#ea580c" stroke-width="1.5"/>
+  <text x="310" y="118" font-weight="bold" fill="#c2410c">S₂</text>
+  <text x="375" y="118" font-size="12" fill="#64748b">远日点</text>
+
+  <!-- Orbital direction arrow -->
+  <line x1="210" y1="25" x2="190" y2="25" stroke="#1e40af" stroke-width="2" marker-end="url(#arr_blue)"/>
+
+  <!-- Legend -->
+  <text x="210" y="215" text-anchor="middle" font-size="13" fill="#1e293b">相等时间内扫过相等面积：S₁ = S₂ (Δt₁ = Δt₂)</text>
 </svg>

@@ -1,36 +1,44 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 240" width="100%" height="auto">
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 250" width="100%" height="auto" style="max-width:440px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--text-primary, #333)"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-accent" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="var(--primary-accent, #1a73e8)"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+    </marker>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-
   <!-- Axes -->
-  <line x1="30" y1="190" x2="420" y2="190" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <line x1="60" y1="210" x2="60" y2="20" stroke="var(--text-primary, #333)" stroke-width="1.5" marker-end="url(#arrow)"/>
-  <text x="415" y="210" font-size="13" font-style="italic" fill="var(--text-primary, #333)">x</text>
-  <text x="45" y="25" font-size="13" font-style="italic" fill="var(--text-primary, #333)">y</text>
-  
-  <!-- Curve y = f(x) -->
-  <path d="M 110 150 C 160 80, 260 60, 350 140" fill="none" stroke="var(--primary-accent, #1a73e8)" stroke-width="2.5"/>
-  <text x="345" y="125" font-size="13" font-style="italic" fill="var(--primary-accent, #1a73e8)">y = f(x)</text>
-  
-  <!-- Interval [a, b] -->
-  <line x1="110" y1="190" x2="110" y2="150" stroke="var(--text-primary, #333)" stroke-width="1.2"/>
-  <text x="105" y="210" font-size="13" font-style="italic" fill="var(--text-primary, #333)">a</text>
-  <line x1="350" y1="190" x2="350" y2="140" stroke="var(--text-primary, #333)" stroke-width="1.2"/>
-  <text x="345" y="210" font-size="13" font-style="italic" fill="var(--text-primary, #333)">b</text>
-  
-  <!-- Mean value height f(xi) rectangle -->
-  <line x1="110" y1="105" x2="350" y2="105" stroke="var(--text-primary, #333)" stroke-width="1.8" stroke-dasharray="5 3"/>
-  <circle cx="215" cy="105" r="4" fill="var(--primary-accent, #1a73e8)"/>
-  <line x1="215" y1="105" x2="215" y2="190" stroke="var(--primary-accent, #1a73e8)" stroke-dasharray="3 3"/>
-  <text x="210" y="210" font-size="13" font-style="italic" fill="var(--primary-accent, #1a73e8)">ξ</text>
-  <text x="75" y="109" font-size="13" font-style="italic" fill="var(--primary-accent, #1a73e8)">f(ξ)</text>
-  
-  <text x="230" y="232" text-anchor="middle" font-size="13" font-family="KaTeX_Main, serif" fill="var(--text-muted, #666)">图 7.2.1 定积分第一中值定理的几何意义（曲边梯形面积等于矩形面积）</text>
+  <line x1="30" y1="210" x2="410" y2="210" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="405" y="228" font-style="italic">x</text>
+  <line x1="55" y1="230" x2="55" y2="25" stroke="#1e293b" stroke-width="1.2" marker-end="url(#arr)"/>
+  <text x="42" y="30" font-style="italic">y</text>
+  <text x="42" y="225">O</text>
+
+  <!-- Curve y = f(x) over [a, b] = [100, 360] -->
+  <path d="M 80 180 C 130 90, 220 70, 300 130 C 330 150, 360 130, 380 90" fill="none" stroke="#1e40af" stroke-width="2.2"/>
+  <text x="385" y="85" font-style="italic" fill="#1e40af">y = f(x)</text>
+
+  <!-- Mean value height y = f(xi) = 120 -->
+  <!-- xi at (215, 120) -->
+  <!-- Mean value rectangle [100, 360] x [0, f(xi)] -->
+  <rect x="100" y="120" width="260" height="90" fill="#bae6fd" fill-opacity="0.45" stroke="#0284c7" stroke-width="1.6" stroke-dasharray="4,3"/>
+  <line x1="55" y1="120" x2="360" y2="120" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="3,3"/>
+  <text x="15" y="125" font-style="italic" fill="#0284c7">f(ξ)</text>
+
+  <!-- Point (xi, f(xi)) -->
+  <circle cx="215" cy="120" r="3.5" fill="#dc2626"/>
+  <line x1="215" y1="210" x2="215" y2="120" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <circle cx="215" cy="210" r="2.5" fill="#dc2626"/>
+  <text x="212" y="228" font-style="italic" fill="#dc2626" font-weight="bold">ξ</text>
+
+  <!-- Ticks at a and b -->
+  <line x1="100" y1="207" x2="100" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="96" y="228" font-style="italic">a</text>
+  <line x1="360" y1="207" x2="360" y2="213" stroke="#1e293b" stroke-width="1.2"/>
+  <text x="356" y="228" font-style="italic">b</text>
+
+  <text x="230" y="170" font-size="14" font-style="italic" fill="#0369a1" font-weight="bold">∫ₐᵇ f(x) dx = f(ξ)(b - a)</text>
 </svg>

@@ -1,24 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="100%" height="auto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" width="100%" height="auto" style="max-width:420px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
-    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2d3748"/>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2b6cb0"/>
+    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
     </marker>
-    <marker id="arrow-red" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#e53e3e"/>
-    </marker>
-    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2f855a"/>
+    <marker id="arr_red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#dc2626"/>
     </marker>
   </defs>
-  <ellipse cx="200" cy="115" rx="140" ry="70" fill="#ebf8ff" fill-opacity="0.5" stroke="#2b6cb0" stroke-width="2.2"/>
-  <path d="M 155 110 C 165 130, 235 130, 245 110" fill="#ffffff" stroke="#2b6cb0" stroke-width="2"/>
-  <path d="M 165 115 C 180 100, 220 100, 235 115" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+  <!-- Torus outer silhouette -->
+  <ellipse cx="200" cy="120" rx="145" ry="75" fill="#e0f2fe" fill-opacity="0.6" stroke="#1e40af" stroke-width="2.2"/>
+  
+  <!-- Torus central hole (lip curves) -->
+  <path d="M 155 115 C 165 135, 235 135, 245 115" fill="#ffffff" stroke="#1e40af" stroke-width="2"/>
+  <path d="M 165 122 C 180 108, 220 108, 235 122" fill="none" stroke="#1e40af" stroke-width="2"/>
 
-  <ellipse cx="140" cy="115" rx="20" ry="50" fill="none" stroke="#e53e3e" stroke-width="2"/>
-  <text x="100" y="90" font-family="serif" font-size="13" fill="#e53e3e">不可缩闭圈</text>
+  <!-- NOT 1-connected demonstration: non-contractible 1D loop gamma threading the hole (red) -->
+  <ellipse cx="130" cy="120" rx="20" ry="52" fill="none" stroke="#dc2626" stroke-width="2.2"/>
+  <line x1="150" y1="120" x2="150" y2="135" stroke="#dc2626" stroke-width="2.2" marker-end="url(#arr_red)"/>
+  <text x="45" y="105" font-size="12" font-weight="bold" fill="#dc2626">闭曲线 γ 绕中心孔</text>
+  <text x="45" y="122" font-size="12" fill="#dc2626">不可缩为一点 (非单连通)</text>
 
-  <text x="200" y="225" text-anchor="middle" font-family="serif" font-size="13" fill="#4a5568">图 14.5.7 环面内部（二维单连通，但非三维单连通）</text>
+  <!-- 2-connected demonstration: any 2D closed surface S inside solid torus CAN contract to a point (green) -->
+  <ellipse cx="265" cy="120" rx="26" ry="18" fill="#bbf7d0" fill-opacity="0.5" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="295" y="115" font-size="12" font-weight="bold" fill="#16a34a">闭曲面 S 局限在管内</text>
+  <text x="295" y="132" font-size="12" fill="#16a34a">可缩为一点 (二维单连通)</text>
+
+  <text x="200" y="245" text-anchor="middle" font-size="13" font-style="italic" fill="#1e40af" font-weight="bold">环面内部：二维单连通，但不是单连通</text>
 </svg>
