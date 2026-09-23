@@ -1,54 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
     <marker id="arr412" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
-    </marker>
-    <marker id="arr_blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e40af"/>
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
   </defs>
 
   <!-- Axes -->
-  <line x1="40" y1="210" x2="350" y2="210" stroke="#222" stroke-width="1.4" marker-end="url(#arr412)"/>
-  <line x1="60" y1="230" x2="60" y2="25" stroke="#222" stroke-width="1.4" marker-end="url(#arr412)"/>
-  <text x="355" y="215" font-style="italic">x</text>
-  <text x="48" y="25" font-style="italic">y</text>
-  <text x="48" y="225" font-style="italic">O</text>
+  <line x1="50" y1="210" x2="350" y2="210" stroke="#1e293b" stroke-width="1.3" marker-end="url(#arr412)"/>
+  <line x1="80" y1="230" x2="80" y2="30" stroke="#1e293b" stroke-width="1.3" marker-end="url(#arr412)"/>
+  <text x="355" y="214" font-style="italic">x</text>
+  <text x="68" y="32" font-style="italic">y</text>
+  <text x="66" y="224" font-style="italic">O</text>
 
-  <!-- Curve y = f(x): starts at (75, 180), through P(150, 135), Q(240, 65), ends at (290, 35) -->
-  <path d="M 75 180 C 115 160 130 145 150 135 C 190 115 210 90 240 65 C 260 48 275 40 295 35" fill="none" stroke="#1e40af" stroke-width="2"/>
-  <text x="302" y="40" fill="#1e40af" font-style="italic" font-weight="bold">y = f(x)</text>
+  <!-- Dashed projections to axes -->
+  <line x1="170" y1="210" x2="170" y2="150" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="255" y1="210" x2="255" y2="75" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="150" x2="170" y2="150" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="75" x2="255" y2="75" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
 
-  <!-- Projections to x-axis -->
-  <line x1="150" y1="210" x2="150" y2="135" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <line x1="240" y1="210" x2="240" y2="65" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <!-- Difference triangle legs -->
+  <line x1="170" y1="150" x2="255" y2="150" stroke="#1e293b" stroke-width="1.2"/>
+  <line x1="255" y1="150" x2="255" y2="75" stroke="#1e293b" stroke-width="1.2"/>
 
-  <!-- Projections to y-axis -->
-  <line x1="60" y1="135" x2="150" y2="135" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
-  <line x1="60" y1="65" x2="240" y2="65" stroke="#64748b" stroke-width="1.2" stroke-dasharray="4,4"/>
+  <!-- Secant Chord connecting (x, f(x)) and (x+Δx, f(x+Δx)) -->
+  <line x1="170" y1="150" x2="255" y2="75" stroke="#1e293b" stroke-width="1.6"/>
 
-  <!-- Difference triangle P(150, 135) -> M(240, 135) -> Q(240, 65) -->
-  <polygon points="150,135 240,135 240,65" fill="#e0f2fe" fill-opacity="0.4"/>
-  <line x1="150" y1="135" x2="240" y2="135" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="3,2"/>
-  <line x1="240" y1="135" x2="240" y2="65" stroke="#dc2626" stroke-width="2"/>
+  <!-- Curve y = f(x) -->
+  <path d="M 100,175 C 135,168 152,160 170,150 C 200,150 230,120 255,75 C 265,55 269,42 273,30" fill="none" stroke="#1e40af" stroke-width="2"/>
 
-  <!-- Right angle at M(240, 135) -->
-  <path d="M 230 135 L 230 125 L 240 125" fill="none" stroke="#64748b" stroke-width="1"/>
+  <!-- Axis tick / coordinate labels -->
+  <text x="166" y="226" font-style="italic">x</text>
+  <text x="238" y="226" font-style="italic">x+Δx</text>
+  <text x="44" y="154" font-style="italic">f(x)</text>
+  <text x="24" y="79" font-style="italic">f(x+Δx)</text>
 
-  <!-- Points P and Q -->
-  <circle cx="150" cy="135" r="3.5" fill="#1e40af"/>
-  <circle cx="240" cy="65" r="3.5" fill="#1e40af"/>
-  <text x="120" y="130" fill="#1e40af">P(x, f(x))</text>
-  <text x="248" y="60" fill="#1e40af">Q(x+Δx, f(x+Δx))</text>
-
-  <!-- Delta x indicator on triangle -->
-  <text x="185" y="150" fill="#0284c7" font-weight="bold">Δx</text>
-  <!-- Delta y indicator on triangle -->
-  <text x="248" y="105" fill="#dc2626" font-weight="bold">Δy</text>
-
-  <!-- Labels on axes -->
-  <text x="146" y="226" font-style="italic">x</text>
-  <text x="225" y="226">x + Δx</text>
-  <text x="30" y="140">f(x)</text>
-  <text x="12" y="70">f(x+Δx)</text>
+  <!-- Increments labels -->
+  <text x="204" y="166" font-style="italic">Δx</text>
+  <text x="264" y="117" font-style="italic">Δy</text>
 </svg>

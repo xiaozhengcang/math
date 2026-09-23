@@ -1,46 +1,51 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 260" width="100%" height="auto" style="max-width:380px; font-family:'Times New Roman', serif; font-size:14px;">
   <defs>
     <marker id="arr423" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#222"/>
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
-    <marker id="arr_sec" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#ea580c"/>
+    <marker id="arr_rot" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1e293b"/>
     </marker>
   </defs>
 
   <!-- Axes -->
-  <line x1="40" y1="210" x2="350" y2="210" stroke="#222" stroke-width="1.4" marker-end="url(#arr423)"/>
-  <line x1="60" y1="230" x2="60" y2="25" stroke="#222" stroke-width="1.4" marker-end="url(#arr423)"/>
-  <text x="355" y="215" font-style="italic">x</text>
-  <text x="45" y="25" font-style="italic">y</text>
-  <text x="45" y="226" font-style="italic">O</text>
+  <line x1="50" y1="210" x2="350" y2="210" stroke="#1e293b" stroke-width="1.3" marker-end="url(#arr423)"/>
+  <line x1="80" y1="230" x2="80" y2="25" stroke="#1e293b" stroke-width="1.3" marker-end="url(#arr423)"/>
+  <text x="355" y="214" font-style="italic">x</text>
+  <text x="68" y="28" font-style="italic">y</text>
+  <text x="66" y="224" font-style="italic">O</text>
+
+  <!-- Projections to axes -->
+  <line x1="170" y1="210" x2="170" y2="150" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="245" y1="210" x2="245" y2="85" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="150" x2="170" y2="150" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+  <line x1="80" y1="85" x2="245" y2="85" stroke="#64748b" stroke-width="1.1" stroke-dasharray="4,4"/>
+
+  <!-- Difference triangle -->
+  <line x1="170" y1="150" x2="245" y2="150" stroke="#1e293b" stroke-width="1.2"/>
+  <line x1="245" y1="150" x2="245" y2="85" stroke="#1e293b" stroke-width="1.2"/>
+
+  <!-- Tangent line (切线) -->
+  <line x1="105" y1="179" x2="330" y2="78" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="336" y="82" fill="#1e293b">切线</text>
+
+  <!-- Secant line (割线) through (170, 150) and (245, 85) -->
+  <line x1="125" y1="189" x2="285" y2="50" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="288" y="46" fill="#1e293b">割线</text>
+
+  <!-- Limit rotation arrow: dashed arc from secant to tangent line -->
+  <path d="M 268,64 A 120,120 0 0,1 292,95" fill="none" stroke="#1e293b" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arr_rot)"/>
 
   <!-- Curve y = f(x) -->
-  <path d="M 75 180 C 115 160 130 145 150 135 C 190 115 210 90 240 65 C 260 48 275 40 295 35" fill="none" stroke="#1e40af" stroke-width="2"/>
-  <text x="300" y="40" fill="#1e40af" font-style="italic" font-weight="bold">y = f(x)</text>
+  <path d="M 115,183 C 145,172 155,162 170,150 C 200,124 230,105 245,85 C 255,70 258,55 260,38" fill="none" stroke="#1e40af" stroke-width="2"/>
 
-  <!-- Secant line (passing P and Q) -->
-  <line x1="100.0" y1="173.9" x2="270.0" y2="41.7" stroke="#ea580c" stroke-width="1.8"/>
-  <text x="276.0" y="46.7" fill="#ea580c" font-weight="bold">割线 PQ</text>
+  <!-- Axis coordinate labels -->
+  <text x="166" y="226" font-style="italic">x</text>
+  <text x="232" y="226" font-style="italic">x+Δx</text>
+  <text x="44" y="154" font-style="italic">f(x)</text>
+  <text x="24" y="89" font-style="italic">f(x+Δx)</text>
 
-  <!-- Tangent line at P -->
-  <line x1="90.0" y1="177.0" x2="230.0" y2="79.0" stroke="#16a34a" stroke-width="2"/>
-  <text x="236.0" y="87.0" fill="#16a34a" font-weight="bold">切线 PT</text>
-
-  <!-- Projections to x-axis -->
-  <line x1="150" y1="210" x2="150" y2="135" stroke="#64748b" stroke-width="1" stroke-dasharray="4,4"/>
-  <line x1="240" y1="210" x2="240" y2="65" stroke="#64748b" stroke-width="1" stroke-dasharray="4,4"/>
-
-  <!-- Points P and Q -->
-  <circle cx="150" cy="135" r="3.5" fill="#1e40af"/>
-  <circle cx="240" cy="65" r="3.5" fill="#ea580c"/>
-  <text x="128" y="127" fill="#1e40af" font-weight="bold">P</text>
-  <text x="248" y="59" fill="#ea580c" font-weight="bold">Q</text>
-
-  <!-- Movement arrow Q -> P -->
-  <path d="M 225 78 C 210 95 195 108 170 125" fill="none" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#arr423)"/>
-  <text x="210" y="105" fill="#dc2626" font-size="12px">Q → P (Δx → 0)</text>
-
-  <text x="146" y="226" font-style="italic">x</text>
-  <text x="224" y="226">x + Δx</text>
+  <!-- Increments labels -->
+  <text x="200" y="166" font-style="italic">Δx</text>
+  <text x="254" y="124" font-style="italic">Δy</text>
 </svg>
